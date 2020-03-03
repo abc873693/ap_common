@@ -5,11 +5,13 @@ author:
 homepage:
 
 environment:
-  sdk: ">=2.1.0 <3.0.0"
+  sdk: ">=2.2.2 <3.0.0"
 
 dependencies:
   flutter:
     sdk: flutter
+
+  outline_material_icons: ">=0.1.0"
 
 dev_dependencies:
   flutter_test:
