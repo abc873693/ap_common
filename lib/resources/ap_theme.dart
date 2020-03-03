@@ -1,28 +1,28 @@
 import 'package:flutter/material.dart';
 
-import 'colors.dart' as Resource;
+import 'ap_colors.dart';
 
-class AppTheme {
+class ApTheme {
   static const String DARK = 'dark';
   static const String LIGHT = 'light';
 
-  static String code = AppTheme.LIGHT;
+  static String code = ApTheme.LIGHT;
 
   static ThemeData get data {
-    switch (AppTheme.code) {
-      case AppTheme.DARK:
+    switch (ApTheme.code) {
+      case ApTheme.DARK:
         return dark;
-      case AppTheme.LIGHT:
+      case ApTheme.LIGHT:
       default:
         return light;
     }
   }
 
   static double get drawerIconOpacity {
-    switch (AppTheme.code) {
-      case AppTheme.DARK:
+    switch (ApTheme.code) {
+      case ApTheme.DARK:
         return 0.75;
-      case AppTheme.LIGHT:
+      case ApTheme.LIGHT:
       default:
         return 1.0;
     }
@@ -32,10 +32,10 @@ class AppTheme {
         //platform: TargetPlatform.iOS,
         brightness: Brightness.light,
         appBarTheme: AppBarTheme(
-          color: Resource.Colors.blue,
+          color: ApColors.blue,
         ),
-        accentColor: Resource.Colors.blueText,
-        unselectedWidgetColor: Resource.Colors.grey,
+        accentColor: ApColors.blueText,
+        unselectedWidgetColor: ApColors.grey,
         backgroundColor: Colors.black12,
         inputDecorationTheme: InputDecorationTheme(
           labelStyle: TextStyle(color: Colors.white),
@@ -48,9 +48,9 @@ class AppTheme {
   static ThemeData get dark => ThemeData(
         //platform: TargetPlatform.iOS,
         brightness: Brightness.dark,
-        scaffoldBackgroundColor: Resource.Colors.onyx,
-        accentColor: Resource.Colors.blueAccent,
-        unselectedWidgetColor: Resource.Colors.grey,
+        scaffoldBackgroundColor: ApColors.onyx,
+        accentColor: ApColors.blueAccent,
+        unselectedWidgetColor: ApColors.grey,
         backgroundColor: Colors.black12,
         inputDecorationTheme: InputDecorationTheme(
           labelStyle: TextStyle(color: Colors.white),

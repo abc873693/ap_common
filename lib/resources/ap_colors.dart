@@ -1,135 +1,135 @@
 import 'package:flutter/material.dart';
 
-import 'app_theme.dart';
+import 'ap_theme.dart';
 
-class Colors {
-  Colors._();
+class ApColors {
+  ApColors._();
 
   static Color get blue {
-    switch (AppTheme.code) {
-      case AppTheme.DARK:
+    switch (ApTheme.code) {
+      case ApTheme.DARK:
         return blueDark;
-      case AppTheme.LIGHT:
+      case ApTheme.LIGHT:
       default:
         return blue500;
     }
   }
 
   static Color get blueText {
-    switch (AppTheme.code) {
-      case AppTheme.DARK:
+    switch (ApTheme.code) {
+      case ApTheme.DARK:
         return grey100;
-      case AppTheme.LIGHT:
+      case ApTheme.LIGHT:
       default:
         return blue500;
     }
   }
 
   static get blueAccent {
-    switch (AppTheme.code) {
-      case AppTheme.DARK:
+    switch (ApTheme.code) {
+      case ApTheme.DARK:
         return blue300;
-      case AppTheme.LIGHT:
+      case ApTheme.LIGHT:
       default:
         return blue500;
     }
   }
 
   static get semesterText {
-    switch (AppTheme.code) {
-      case AppTheme.DARK:
+    switch (ApTheme.code) {
+      case ApTheme.DARK:
         return Color(0xffffffff);
-      case AppTheme.LIGHT:
+      case ApTheme.LIGHT:
       default:
         return blue500;
     }
   }
 
   static Color get grey {
-    switch (AppTheme.code) {
-      case AppTheme.DARK:
+    switch (ApTheme.code) {
+      case ApTheme.DARK:
         return grey200;
-      case AppTheme.LIGHT:
+      case ApTheme.LIGHT:
       default:
         return grey500;
     }
   }
 
   static Color get greyText {
-    switch (AppTheme.code) {
-      case AppTheme.DARK:
+    switch (ApTheme.code) {
+      case ApTheme.DARK:
         return grey200;
-      case AppTheme.LIGHT:
+      case ApTheme.LIGHT:
       default:
         return grey500;
     }
   }
 
   static get disabled {
-    switch (AppTheme.code) {
-      case AppTheme.DARK:
+    switch (ApTheme.code) {
+      case ApTheme.DARK:
         return Color(0xFF424242);
-      case AppTheme.LIGHT:
+      case ApTheme.LIGHT:
       default:
         return Color(0xFFBDBDBD);
     }
   }
 
   static Color get calendarTileSelect {
-    switch (AppTheme.code) {
-      case AppTheme.DARK:
+    switch (ApTheme.code) {
+      case ApTheme.DARK:
         return Color(0xff000000);
-      case AppTheme.LIGHT:
+      case ApTheme.LIGHT:
       default:
         return Color(0xffffffff);
     }
   }
 
   static Color get yellow {
-    switch (AppTheme.code) {
-      case AppTheme.DARK:
+    switch (ApTheme.code) {
+      case ApTheme.DARK:
         return yellow200;
-      case AppTheme.LIGHT:
+      case ApTheme.LIGHT:
       default:
         return yellow500;
     }
   }
 
   static Color get red {
-    switch (AppTheme.code) {
-      case AppTheme.DARK:
+    switch (ApTheme.code) {
+      case ApTheme.DARK:
         return red200;
-      case AppTheme.LIGHT:
+      case ApTheme.LIGHT:
       default:
         return red500;
     }
   }
 
   static Color get bottomNavigationSelect {
-    switch (AppTheme.code) {
-      case AppTheme.DARK:
+    switch (ApTheme.code) {
+      case ApTheme.DARK:
         return grey100;
-      case AppTheme.LIGHT:
+      case ApTheme.LIGHT:
       default:
         return Color(0xff737373);
     }
   }
 
   static Color get segmentControlUnSelect {
-    switch (AppTheme.code) {
-      case AppTheme.DARK:
+    switch (ApTheme.code) {
+      case ApTheme.DARK:
         return onyx;
-      case AppTheme.LIGHT:
+      case ApTheme.LIGHT:
       default:
         return Color(0xffffffff);
     }
   }
 
   static get snackBarActionTextColor {
-    switch (AppTheme.code) {
-      case AppTheme.DARK:
+    switch (ApTheme.code) {
+      case ApTheme.DARK:
         return yellow500;
-      case AppTheme.LIGHT:
+      case ApTheme.LIGHT:
       default:
         return yellow500;
     }
