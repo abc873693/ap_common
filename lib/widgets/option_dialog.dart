@@ -5,15 +5,15 @@ import 'dialog_option.dart';
 
 class SimpleOptionDialog extends StatelessWidget {
   final String title;
-  final List<Item> items;
-  final String value;
-  final Function(Item item) onSelected;
+  final List<String> items;
+  final int index;
+  final Function(int index) onSelected;
 
   const SimpleOptionDialog({
     Key key,
     this.title,
     this.items,
-    this.value,
+    this.index = 0,
     this.onSelected,
   }) : super(key: key);
 
@@ -27,12 +27,12 @@ class SimpleOptionDialog extends StatelessWidget {
       ),
       title: Text(title),
       children: [
-        for (var item in items)
+        for (var i = 0; i < (items?.length ?? 0); i++)
           DialogOption(
-            text: item.text,
-            check: value == item.value,
+            text: items[i],
+            check: i == index,
             onPressed: () {
-              this.onSelected(item);
+              this.onSelected(i);
             },
           ),
       ],

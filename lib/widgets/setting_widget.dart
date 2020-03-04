@@ -1,13 +1,6 @@
 import 'package:ap_common/resources/ap_theme.dart';
 import 'package:flutter/material.dart';
 
-class Item {
-  final String text;
-  final String value;
-
-  Item(this.text, this.value);
-}
-
 class SettingTitle extends StatelessWidget {
   final String text;
 
