@@ -1,5 +1,5 @@
-import 'package:ap_common/resources/ap_colors.dart';
 import 'package:ap_common/resources/ap_icon.dart';
+import 'package:ap_common/resources/ap_theme.dart';
 import 'package:flutter/material.dart';
 
 class DialogOption extends StatelessWidget {
@@ -25,13 +25,14 @@ class DialogOption extends StatelessWidget {
             child: Text(
               text,
               style: TextStyle(
-                  fontSize: 16.0, color: check ? ApColors.blueAccent : null),
+                  fontSize: 16.0,
+                  color: check ? ApTheme.of(context).blueAccent : null),
             ),
           ),
           if (check)
             Icon(
               ApIcon.check,
-              color: ApColors.blueAccent,
+              color: ApTheme.of(context).blueAccent,
             )
         ],
       ),

@@ -1,4 +1,4 @@
-import 'package:ap_common/resources/ap_colors.dart';
+import 'package:ap_common/resources/ap_theme.dart';
 import 'package:flutter/material.dart';
 
 class Item {
@@ -19,7 +19,7 @@ class SettingTitle extends StatelessWidget {
       padding: EdgeInsets.fromLTRB(16.0, 16.0, 16.0, 8.0),
       child: Text(
         text,
-        style: TextStyle(color: ApColors.blueText, fontSize: 14.0),
+        style: TextStyle(color: ApTheme.of(context).blueText, fontSize: 14.0),
         textAlign: TextAlign.start,
       ),
     );
@@ -49,11 +49,11 @@ class SettingSwitch extends StatelessWidget {
       ),
       subtitle: Text(
         subText,
-        style: TextStyle(fontSize: 14.0, color: ApColors.greyText),
+        style: TextStyle(fontSize: 14.0, color: ApTheme.of(context).greyText),
       ),
       value: value,
       onChanged: onChanged,
-      activeColor: ApColors.blueAccent,
+      activeColor: ApTheme.of(context).blueAccent,
     );
   }
 }
@@ -79,7 +79,7 @@ class SettingItem extends StatelessWidget {
       ),
       subtitle: Text(
         subText,
-        style: TextStyle(fontSize: 14.0, color: ApColors.greyText),
+        style: TextStyle(fontSize: 14.0, color: ApTheme.of(context).greyText),
       ),
       onTap: onTap,
     );

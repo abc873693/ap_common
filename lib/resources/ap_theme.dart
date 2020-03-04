@@ -183,8 +183,8 @@ class ApTheme extends InheritedWidget {
         appBarTheme: AppBarTheme(
           color: ApColors.blue500,
         ),
-        accentColor: ApColors.blueText,
-        unselectedWidgetColor: ApColors.grey,
+        accentColor: ApColors.blue500,
+        unselectedWidgetColor: ApColors.grey500,
         backgroundColor: Colors.black12,
         inputDecorationTheme: InputDecorationTheme(
           labelStyle: TextStyle(color: Colors.white),
@@ -198,8 +198,8 @@ class ApTheme extends InheritedWidget {
         //platform: TargetPlatform.iOS,
         brightness: Brightness.dark,
         scaffoldBackgroundColor: ApColors.onyx,
-        accentColor: ApColors.blueAccent,
-        unselectedWidgetColor: ApColors.grey,
+        accentColor: ApColors.blue300,
+        unselectedWidgetColor: ApColors.grey200,
         backgroundColor: Colors.black12,
         inputDecorationTheme: InputDecorationTheme(
           labelStyle: TextStyle(color: Colors.white),
