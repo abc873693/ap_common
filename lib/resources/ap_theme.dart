@@ -1,3 +1,4 @@
+import 'package:ap_common/resources/ap_assets.dart';
 import 'package:flutter/material.dart';
 
 import 'ap_colors.dart';
@@ -170,10 +171,29 @@ class ApTheme extends InheritedWidget {
     switch (_brightness) {
       case Brightness.light:
         return 0.75;
-
       case Brightness.dark:
       default:
         return 1.0;
+    }
+  }
+
+  String get dashLine {
+    switch (_brightness) {
+      case Brightness.light:
+        return ApImageAssets.dashLineDarkTheme;
+      case Brightness.dark:
+      default:
+        return ApImageAssets.dashLineLight;
+    }
+  }
+
+  String get drawerBackground {
+    switch (_brightness) {
+      case Brightness.light:
+        return ApImageAssets.drawerBackgroundDarkTheme;
+      case Brightness.dark:
+      default:
+        return ApImageAssets.drawerBackgroundLight;
     }
   }
 
