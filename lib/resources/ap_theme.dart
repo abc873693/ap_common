@@ -167,6 +167,26 @@ class ApTheme extends InheritedWidget {
     }
   }
 
+  Color get toastBackground {
+    switch (_brightness) {
+      case Brightness.light:
+        return Color(0xAA000000);
+      case Brightness.dark:
+      default:
+        return Color(0xAAFFFFFF);
+    }
+  }
+
+  Color get toastText {
+    switch (_brightness) {
+      case Brightness.light:
+        return Colors.white;
+      case Brightness.dark:
+      default:
+        return Colors.black;
+    }
+  }
+
   double get drawerIconOpacity {
     switch (_brightness) {
       case Brightness.light:
