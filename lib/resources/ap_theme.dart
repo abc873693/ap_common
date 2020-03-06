@@ -189,9 +189,9 @@ class ApTheme extends InheritedWidget {
 
   double get drawerIconOpacity {
     switch (_brightness) {
-      case Brightness.light:
-        return 0.75;
       case Brightness.dark:
+        return 0.75;
+      case Brightness.light:
       default:
         return 1.0;
     }
@@ -210,10 +210,10 @@ class ApTheme extends InheritedWidget {
   String get drawerBackground {
     switch (_brightness) {
       case Brightness.light:
-        return ApImageAssets.drawerBackgroundDarkTheme;
+        return ApImageAssets.drawerBackgroundLight;
       case Brightness.dark:
       default:
-        return ApImageAssets.drawerBackgroundLight;
+        return ApImageAssets.drawerBackgroundDarkTheme;
     }
   }
 
