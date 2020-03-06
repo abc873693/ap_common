@@ -180,10 +180,10 @@ class ApTheme extends InheritedWidget {
   String get dashLine {
     switch (_brightness) {
       case Brightness.light:
-        return ApImageAssets.dashLineDarkTheme;
+        return ApImageAssets.dashLineLight;
       case Brightness.dark:
       default:
-        return ApImageAssets.dashLineLight;
+        return ApImageAssets.dashLineDarkTheme;
     }
   }
 
