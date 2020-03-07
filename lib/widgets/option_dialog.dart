@@ -32,6 +32,7 @@ class SimpleOptionDialog extends StatelessWidget {
             text: items[i],
             check: i == index,
             onPressed: () {
+              Navigator.of(context).pop();
               this.onSelected(i);
             },
           ),
