@@ -49,7 +49,7 @@
     ap_common:
         git:
           url: https://github.com/abc873693/ap_common
-          ref: 37ddec753710f9545c8eb99fa44aa21502c50cfe
+          ref: v0.0.1
           # 不寫ref 預設使用最新的commit 或是改成分支名稱或是commit的hash皆可
 ```
 
