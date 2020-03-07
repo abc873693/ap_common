@@ -38,8 +38,8 @@ class CourseData {
       };
 
   bool get hasHoliday {
-    return ((courseTables.saturday?.isNotEmpty) ?? false) ||
-        ((courseTables.sunday?.isNotEmpty) ?? false);
+    return (courseTables?.saturday?.isNotEmpty ?? false) ||
+        (courseTables?.sunday?.isNotEmpty ?? false);
   }
 }
 
@@ -138,7 +138,15 @@ class CourseTables {
     this.saturday,
     this.sunday,
     this.timeCode,
-  });
+  }) {
+    if (this.monday == null) this.monday = [];
+    if (this.tuesday == null)  this.tuesday = [];
+    if (this.wednesday == null)  this.wednesday = [];
+    if (this.thursday == null)  this.thursday = [];
+    if (this.friday == null) this.friday = [];
+    if (this.saturday == null) this.saturday = [];
+    if (this.sunday == null) this.sunday = [];
+  }
 
   CourseTables.fromJson(Map<String, dynamic> json) {
     if (json['Monday'] != null) {
