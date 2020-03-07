@@ -7,13 +7,13 @@ class DefaultDialog extends StatelessWidget {
   final String actionText;
   final Function actionFunction;
 
-  const DefaultDialog(
-      {Key key,
-      this.title,
-      this.contentWidget,
-      this.actionText,
-      @required this.actionFunction})
-      : super(key: key);
+  const DefaultDialog({
+    Key key,
+    @required this.title,
+    @required this.contentWidget,
+    @required this.actionText,
+    @required this.actionFunction,
+  }) : super(key: key);
 
   static showSample(BuildContext context) => showDialog(
         context: context,

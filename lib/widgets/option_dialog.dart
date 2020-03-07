@@ -1,4 +1,4 @@
-import 'package:ap_common/widgets/setting_widget.dart';
+import 'package:ap_common/widgets/setting_page_widgets.dart';
 import 'package:flutter/material.dart';
 
 import 'dialog_option.dart';
