@@ -28,6 +28,16 @@ class TimeCodeConfig {
             ? null
             : List<dynamic>.from(timeCodes.map((x) => x.toJson())),
       };
+
+  List<String> get textList {
+    List<String> tmp = [];
+    timeCodes?.forEach((timeCode) => tmp.add(timeCode.title));
+    return tmp;
+  }
+
+  int indexOf(String section) {
+    return textList.indexOf(section);
+  }
 }
 
 class TimeCode {
