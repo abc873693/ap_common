@@ -11,32 +11,63 @@ class SimpleOptionDialog extends StatelessWidget {
 
   const SimpleOptionDialog({
     Key key,
-    this.title,
-    this.items,
+    @required this.title,
+    @required this.items,
+    @required this.onSelected,
     this.index = 0,
-    this.onSelected,
   }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    return SimpleDialog(
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.all(
-          Radius.circular(16),
-        ),
-      ),
-      title: Text(title),
-      children: [
-        for (var i = 0; i < (items?.length ?? 0); i++)
-          DialogOption(
-            text: items[i],
-            check: i == index,
-            onPressed: () {
-              Navigator.of(context).pop();
-              this.onSelected(i);
-            },
-          ),
-      ],
-    );
+    return items.length > 5
+        ? AlertDialog(
+            title: Text(title),
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.all(
+                Radius.circular(8),
+              ),
+            ),
+            contentPadding: EdgeInsets.all(0.0),
+            content: SizedBox(
+              width: MediaQuery.of(context).size.width * 0.8,
+              height: MediaQuery.of(context).size.height * 0.8,
+              child: ListView.separated(
+                controller: ScrollController(initialScrollOffset: index * 48.0),
+                itemCount: items.length,
+                separatorBuilder: (BuildContext context, int index) {
+                  return Divider(height: 6.0);
+                },
+                itemBuilder: (BuildContext context, int index) {
+                  return DialogOption(
+                    text: items[index],
+                    check: index == this.index,
+                    onPressed: () {
+                      Navigator.pop(context, index);
+                      this.onSelected(index);
+                    },
+                  );
+                },
+              ),
+            ),
+          )
+        : SimpleDialog(
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.all(
+                Radius.circular(16),
+              ),
+            ),
+            title: Text(title),
+            children: [
+              for (var i = 0; i < (items?.length ?? 0); i++)
+                DialogOption(
+                  text: items[i],
+                  check: i == index,
+                  onPressed: () {
+                    Navigator.of(context).pop();
+                    this.onSelected(i);
+                  },
+                ),
+            ],
+          );
   }
 }
