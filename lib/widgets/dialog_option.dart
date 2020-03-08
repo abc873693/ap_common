@@ -20,13 +20,16 @@ class DialogOption extends StatelessWidget {
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: <Widget>[
-          Padding(
-            padding: EdgeInsets.symmetric(vertical: 2.0),
-            child: Text(
-              text,
-              style: TextStyle(
-                  fontSize: 16.0,
-                  color: check ? ApTheme.of(context).blueAccent : null),
+          Expanded(
+            child: Padding(
+              padding: EdgeInsets.symmetric(vertical: 2.0),
+              child: Text(
+                text,
+                style: TextStyle(
+                    fontSize: 16.0,
+                    color: check ? ApTheme.of(context).blueAccent : null),
+                overflow: TextOverflow.clip,
+              ),
             ),
           ),
           if (check)
