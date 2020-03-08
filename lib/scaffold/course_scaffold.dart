@@ -243,45 +243,49 @@ class CourseScaffoldState extends State<CourseScaffold> {
                           child: Column(
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: <Widget>[
-                              Text(
-                                '${course.required}',
-                                style: TextStyle(
-                                  color: ApTheme.of(context).blueAccent,
-                                  fontSize: 18.0,
+                              if (course.required != null)
+                                Text(
+                                  '${course.required}',
+                                  style: TextStyle(
+                                    color: ApTheme.of(context).blueAccent,
+                                    fontSize: 18.0,
+                                  ),
+                                  textAlign: TextAlign.center,
                                 ),
-                                textAlign: TextAlign.center,
-                              ),
                               SizedBox(height: 16.0),
-                              SelectableText.rich(
-                                TextSpan(
-                                  style: TextStyle(
-                                    color: ApTheme.of(context).grey,
-                                    fontSize: 16.0,
+                              if (course.units != null)
+                                SelectableText.rich(
+                                  TextSpan(
+                                    style: TextStyle(
+                                      color: ApTheme.of(context).grey,
+                                      fontSize: 16.0,
+                                    ),
+                                    children: [
+                                      TextSpan(
+                                          text: '${app.units}：',
+                                          style: TextStyle(
+                                              fontWeight: FontWeight.bold)),
+                                      TextSpan(text: '${course.units}'),
+                                    ],
                                   ),
-                                  children: [
-                                    TextSpan(
-                                        text: '${app.units}：',
-                                        style: TextStyle(
-                                            fontWeight: FontWeight.bold)),
-                                    TextSpan(text: '${course.units}'),
-                                  ],
                                 ),
-                              ),
-                              SelectableText.rich(
-                                TextSpan(
-                                  style: TextStyle(
-                                    color: ApTheme.of(context).grey,
-                                    fontSize: 16.0,
-                                  ),
-                                  children: [
-                                    TextSpan(
+                              if (course.hours != null)
+                                SelectableText.rich(
+                                  TextSpan(
+                                    style: TextStyle(
+                                      color: ApTheme.of(context).grey,
+                                      fontSize: 16.0,
+                                    ),
+                                    children: [
+                                      TextSpan(
                                         text: '${app.courseHours}：',
                                         style: TextStyle(
-                                            fontWeight: FontWeight.bold)),
-                                    TextSpan(text: '${course.hours}'),
-                                  ],
+                                            fontWeight: FontWeight.bold),
+                                      ),
+                                      TextSpan(text: '${course.hours}'),
+                                    ],
+                                  ),
                                 ),
-                              ),
                             ],
                           ),
                         )
