@@ -56,153 +56,151 @@ class AboutUsPageState extends State<AboutUsPage> {
     app = ApLocalizations.of(context);
     var expandedHeight = MediaQuery.of(context).size.height * 0.25;
     return Scaffold(
-      body: NestedScrollView(
-        headerSliverBuilder: (BuildContext context, bool innerBoxIsScrolled) {
-          return <Widget>[
-            SliverAppBar(
-              expandedHeight: expandedHeight,
-              floating: false,
-              pinned: true,
-              title: Text(app.about),
-              actions: <Widget>[
-                IconButton(
-                  icon: Icon(ApIcon.codeIcon),
-                  onPressed: () {
-                    Navigator.of(context).push(
-                      CupertinoPageRoute(
-                        builder: (_) => OpenSourcePage(),
+      body: CustomScrollView(
+        slivers: <Widget>[
+          SliverAppBar(
+            expandedHeight: expandedHeight,
+            floating: false,
+            pinned: true,
+            title: Text(app.about),
+            actions: <Widget>[
+              IconButton(
+                icon: Icon(ApIcon.codeIcon),
+                onPressed: () {
+                  Navigator.of(context).push(
+                    CupertinoPageRoute(
+                      builder: (_) => OpenSourcePage(),
+                    ),
+                  );
+                },
+              )
+            ],
+            backgroundColor: ApTheme.of(context).blue,
+            flexibleSpace: FlexibleSpaceBar(
+              background: Image.asset(
+                widget.assetImage,
+                fit: BoxFit.fitWidth,
+              ),
+            ),
+          ),
+          SliverList(
+              delegate: SliverChildListDelegate(
+            <Widget>[
+              _item(app.aboutAuthorTitle, app.aboutAuthorContent),
+              _item(app.about, app.aboutUsContent),
+              _item(app.aboutRecruitTitle, app.aboutRecruitContent),
+              Stack(
+                children: <Widget>[
+                  _item(app.aboutItcTitle, app.aboutItcContent),
+                  Padding(
+                    padding:
+                        EdgeInsets.symmetric(vertical: 20.0, horizontal: 26.0),
+                    child: Align(
+                      alignment: Alignment.topRight,
+                      child: Image.asset(
+                        ApImageAssets.kuasITC,
+                        width: 64.0,
+                        fit: BoxFit.cover,
                       ),
-                    );
-                  },
-                )
-              ],
-              backgroundColor: ApTheme.of(context).blue,
-              flexibleSpace: FlexibleSpaceBar(
-                background: Image.asset(
-                  widget.assetImage,
-                  fit: BoxFit.cover,
+                    ),
+                  )
+                ],
+              ),
+              Card(
+                margin: EdgeInsets.symmetric(vertical: 8.0, horizontal: 16.0),
+                elevation: 4.0,
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(12.0),
                 ),
-              ),
-            ),
-          ];
-        },
-        body: ListView(
-          physics: const NeverScrollableScrollPhysics(),
-          children: <Widget>[
-            _item(app.aboutAuthorTitle, app.aboutAuthorContent),
-            _item(app.about, app.aboutUsContent),
-            _item(app.aboutRecruitTitle, app.aboutRecruitContent),
-            Stack(
-              children: <Widget>[
-                _item(app.aboutItcTitle, app.aboutItcContent),
-                Padding(
-                  padding:
-                      EdgeInsets.symmetric(vertical: 20.0, horizontal: 26.0),
-                  child: Align(
-                    alignment: Alignment.topRight,
-                    child: Image.asset(
-                      ApImageAssets.kuasITC,
-                      width: 64.0,
-                      fit: BoxFit.cover,
-                    ),
-                  ),
-                )
-              ],
-            ),
-            Card(
-              margin: EdgeInsets.symmetric(vertical: 8.0, horizontal: 16.0),
-              elevation: 4.0,
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(12.0),
-              ),
-              child: Container(
-                padding: EdgeInsets.only(
-                    top: 24.0, left: 16.0, bottom: 16.0, right: 16.0),
-                width: double.infinity,
-                child: Column(
-                  mainAxisSize: MainAxisSize.max,
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: <Widget>[
-                    Text(
-                      app.aboutContactUsTitle,
-                      style: TextStyle(fontSize: 18.0),
-                    ),
-                    SizedBox(
-                      height: 4.0,
-                    ),
-                    Padding(
-                      padding: EdgeInsets.symmetric(horizontal: 16.0),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: <Widget>[
-                          IconButton(
-                            icon: Image.asset(ApImageAssets.fb),
-                            onPressed: () {
-                              if (kIsWeb)
-                                launch(widget.fbFanPageUrl);
-                              else if (Platform.isAndroid)
-                                launch('fb://page/${widget.fbFanPageId}')
-                                    .catchError((onError) =>
-                                        launch(widget.fbFanPageUrl));
-                              else if (Platform.isIOS)
-                                launch('fb://profile/${widget.fbFanPageId}')
-                                    .catchError((onError) =>
-                                        launch(widget.fbFanPageUrl));
-                              else
-                                launch(widget.fbFanPageUrl).catchError(
-                                  (onError) => ApUtils.showToast(
-                                    context,
-                                    app.platformError,
-                                  ),
-                                );
-                            },
-                            iconSize: 48.0,
-                          ),
-                          IconButton(
-                            icon: Image.asset(ApImageAssets.github),
-                            onPressed: () {
-                              if (kIsWeb)
-                                launch(widget.githubUrl);
-                              else if (Platform.isAndroid)
-                                launch('github://organization/${widget.githubName}')
-                                    .catchError(
-                                        (onError) => launch(widget.githubUrl));
-                              else if (Platform.isIOS)
-                                launch(widget.githubUrl);
-                              else
-                                launch(widget.githubUrl).catchError(
-                                  (onError) => ApUtils.showToast(
-                                    context,
-                                    app.platformError,
-                                  ),
-                                );
+                child: Container(
+                  padding: EdgeInsets.only(
+                      top: 24.0, left: 16.0, bottom: 16.0, right: 16.0),
+                  width: double.infinity,
+                  child: Column(
+                    mainAxisSize: MainAxisSize.max,
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: <Widget>[
+                      Text(
+                        app.aboutContactUsTitle,
+                        style: TextStyle(fontSize: 18.0),
+                      ),
+                      SizedBox(
+                        height: 4.0,
+                      ),
+                      Padding(
+                        padding: EdgeInsets.symmetric(horizontal: 16.0),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: <Widget>[
+                            IconButton(
+                              icon: Image.asset(ApImageAssets.fb),
+                              onPressed: () {
+                                if (kIsWeb)
+                                  launch(widget.fbFanPageUrl);
+                                else if (Platform.isAndroid)
+                                  launch('fb://page/${widget.fbFanPageId}')
+                                      .catchError((onError) =>
+                                          launch(widget.fbFanPageUrl));
+                                else if (Platform.isIOS)
+                                  launch('fb://profile/${widget.fbFanPageId}')
+                                      .catchError((onError) =>
+                                          launch(widget.fbFanPageUrl));
+                                else
+                                  launch(widget.fbFanPageUrl).catchError(
+                                    (onError) => ApUtils.showToast(
+                                      context,
+                                      app.platformError,
+                                    ),
+                                  );
+                              },
+                              iconSize: 48.0,
+                            ),
+                            IconButton(
+                              icon: Image.asset(ApImageAssets.github),
+                              onPressed: () {
+                                if (kIsWeb)
+                                  launch(widget.githubUrl);
+                                else if (Platform.isAndroid)
+                                  launch('github://organization/${widget.githubName}')
+                                      .catchError((onError) =>
+                                          launch(widget.githubUrl));
+                                else if (Platform.isIOS)
+                                  launch(widget.githubUrl);
+                                else
+                                  launch(widget.githubUrl).catchError(
+                                    (onError) => ApUtils.showToast(
+                                      context,
+                                      app.platformError,
+                                    ),
+                                  );
 //                              FA.logAction('github', 'click');
-                            },
-                            iconSize: 48.0,
-                          ),
-                          IconButton(
-                            icon: Image.asset(ApImageAssets.email),
-                            onPressed: () {
-                              launch('mailto:${widget.email}').catchError(
-                                (onError) => ApUtils.showToast(
-                                  context,
-                                  app.platformError,
-                                ),
-                              );
+                              },
+                              iconSize: 48.0,
+                            ),
+                            IconButton(
+                              icon: Image.asset(ApImageAssets.email),
+                              onPressed: () {
+                                launch('mailto:${widget.email}').catchError(
+                                  (onError) => ApUtils.showToast(
+                                    context,
+                                    app.platformError,
+                                  ),
+                                );
 //                              FA.logAction('email', 'click');
-                            },
-                            iconSize: 48.0,
-                          ),
-                        ],
+                              },
+                              iconSize: 48.0,
+                            ),
+                          ],
+                        ),
                       ),
-                    ),
-                  ],
+                    ],
+                  ),
                 ),
               ),
-            ),
-            _item(app.aboutOpenSourceTitle, widget.appLicense),
-          ],
-        ),
+              _item(app.aboutOpenSourceTitle, widget.appLicense),
+            ],
+          )),
+        ],
       ),
     );
   }
