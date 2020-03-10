@@ -1,14 +1,29 @@
+import 'dart:convert';
 import 'dart:io';
 
+import 'package:encrypt/encrypt.dart' as encrypt;
 import 'package:flutter/foundation.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class Preferences {
   static SharedPreferences prefs;
 
-  static init() async {
+  static encrypt.Encrypter encrypter;
+
+  static encrypt.IV iv;
+
+  static init({encrypt.Key key, encrypt.IV iv}) async {
     if (kIsWeb || Platform.isIOS || Platform.isAndroid || Platform.isMacOS) {
       prefs = await SharedPreferences.getInstance();
+      if (key != null && iv != null) {
+        encrypter = encrypt.Encrypter(
+          encrypt.AES(
+            key,
+            mode: encrypt.AESMode.cbc,
+          ),
+        );
+        Preferences.iv = iv;
+      }
     }
   }
 
@@ -18,6 +33,21 @@ class Preferences {
 
   static String getString(String key, String defaultValue) {
     return prefs?.getString(key) ?? defaultValue;
+  }
+
+  static Future<Null> setStringSecurity(String key, String data) async {
+    await prefs?.setString(
+      key,
+      encrypter.encrypt(data, iv: iv).base64,
+    );
+  }
+
+  static String getStringSecurity(String key, String defaultValue) {
+    String data = prefs?.getString(key) ?? '';
+    if (data == '')
+      return defaultValue;
+    else
+      return encrypter.decrypt64(data, iv: iv);
   }
 
   static Future<Null> setInt(String key, int data) async {
