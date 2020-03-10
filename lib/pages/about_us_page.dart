@@ -21,6 +21,8 @@ class AboutUsPage extends StatefulWidget {
   final String githubName;
   final String email;
   final String appLicense;
+  final Function(String name, String value) logEvent;
+  final Function() setCurrentScreen;
 
   const AboutUsPage({
     Key key,
@@ -31,6 +33,8 @@ class AboutUsPage extends StatefulWidget {
     @required this.githubName,
     @required this.email,
     @required this.appLicense,
+    this.logEvent,
+    this.setCurrentScreen,
   }) : super(key: key);
 
   @override
@@ -42,7 +46,7 @@ class AboutUsPageState extends State<AboutUsPage> {
 
   @override
   void initState() {
-//    FA.setCurrentScreen("AboutUsPage", "about_us_page.dart");
+    if (widget.setCurrentScreen != null) widget.setCurrentScreen();
     super.initState();
   }
 
@@ -72,6 +76,8 @@ class AboutUsPageState extends State<AboutUsPage> {
                       builder: (_) => OpenSourcePage(),
                     ),
                   );
+                  if (widget.logEvent != null)
+                    widget.logEvent('open_source', 'click');
                 },
               )
             ],
@@ -152,6 +158,8 @@ class AboutUsPageState extends State<AboutUsPage> {
                                       app.platformError,
                                     ),
                                   );
+                                if (widget.logEvent != null)
+                                  widget.logEvent('fb', 'click');
                               },
                               iconSize: 48.0,
                             ),
@@ -173,7 +181,8 @@ class AboutUsPageState extends State<AboutUsPage> {
                                       app.platformError,
                                     ),
                                   );
-//                              FA.logAction('github', 'click');
+                                if (widget.logEvent != null)
+                                  widget.logEvent('github', 'click');
                               },
                               iconSize: 48.0,
                             ),
@@ -186,7 +195,8 @@ class AboutUsPageState extends State<AboutUsPage> {
                                     app.platformError,
                                   ),
                                 );
-//                              FA.logAction('email', 'click');
+                                if (widget.logEvent != null)
+                                  widget.logEvent('email', 'click');
                               },
                               iconSize: 48.0,
                             ),
