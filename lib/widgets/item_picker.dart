@@ -9,6 +9,7 @@ class ItemPicker extends StatelessWidget {
   final int currentIndex;
   final Function(int index) onSelected;
   final String dialogTitle;
+  final double width;
 
   const ItemPicker({
     Key key,
@@ -16,12 +17,13 @@ class ItemPicker extends StatelessWidget {
     @required this.items,
     @required this.dialogTitle,
     @required this.currentIndex,
+    this.width,
   }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return SizedBox(
-      width: MediaQuery.of(context).size.width * 0.9,
+      width: width ?? MediaQuery.of(context).size.width * 0.9,
       child: FlatButton(
         onPressed: () {
           showDialog(
