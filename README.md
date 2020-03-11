@@ -33,9 +33,14 @@
     - [x] 開放原始碼 `open_source_page`
  - 頁面骨架(scaffold)
     - [x] 課表
-    - [ ] 成績
-    - [ ] 首頁
+    - [x] 成績
+    - [x] 首頁
     - [x] 最新消息詳細資訊
+    - [ ] 校園資訊
+      - [ ] 教務處最新消息
+      - [ ] 學校電話
+      - [ ] 行事曆
+    - [ ] 空堂教室查詢
     - [ ] 登入頁(TBD)
  
 ## Getting Started
@@ -49,7 +54,7 @@
     ap_common:
         git:
           url: https://github.com/abc873693/ap_common
-          ref: v0.0.1
+          ref: v0.0.3
           # 不寫ref 預設使用最新的commit 或是改成分支名稱或是commit的hash皆可
 ```
 
