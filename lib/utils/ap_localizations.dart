@@ -120,6 +120,7 @@ class ApLocalizations {
       'midterm': 'Midterm',
       'final': 'Final',
       'conduct_score': 'Conduct Score',
+      'creditsTakenEarned': 'Credits Taken/Earned',
       'average': 'Average',
       'rank': 'You/Total Classmates',
       'percentage': 'Top % in Class',
@@ -473,6 +474,7 @@ class ApLocalizations {
       'midterm': '期中成績',
       'final': '學期成績',
       'conduct_score': '操行成績',
+      'creditsTakenEarned': '修習學分/實得學分',
       'average': '總平均',
       'rank': '班名次/班人數',
       'percentage': '班名次百分比',
@@ -947,6 +949,8 @@ class ApLocalizations {
   String get finalScore => _vocabularies['final'];
 
   String get conductScore => _vocabularies['conduct_score'];
+
+  String get creditsTakenEarned => _vocabularies['creditsTakenEarned'];
 
   String get average => _vocabularies['average'];
 
