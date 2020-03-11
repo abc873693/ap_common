@@ -4,6 +4,9 @@ import 'package:flutter/material.dart';
 
 class OpenSourcePage extends StatefulWidget {
   static const String routerName = "/openSource";
+  final Function() setCurrentScreen;
+
+  const OpenSourcePage({Key key, this.setCurrentScreen}) : super(key: key);
 
   @override
   OpenSourcePageState createState() => OpenSourcePageState();
@@ -387,7 +390,7 @@ class OpenSourcePageState extends State<OpenSourcePage> {
 
   @override
   void initState() {
-//    FA.setCurrentScreen("OpenSourcePage", "open_source_page.dart");
+    widget.setCurrentScreen();
     super.initState();
   }
 

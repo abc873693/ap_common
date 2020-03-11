@@ -23,6 +23,7 @@ class AboutUsPage extends StatefulWidget {
   final String appLicense;
   final Function(String name, String value) logEvent;
   final Function() setCurrentScreen;
+  final List<Widget> actions;
 
   const AboutUsPage({
     Key key,
@@ -35,6 +36,7 @@ class AboutUsPage extends StatefulWidget {
     @required this.appLicense,
     this.logEvent,
     this.setCurrentScreen,
+    this.actions,
   }) : super(key: key);
 
   @override
@@ -67,20 +69,7 @@ class AboutUsPageState extends State<AboutUsPage> {
             floating: false,
             pinned: true,
             title: Text(app.about),
-            actions: <Widget>[
-              IconButton(
-                icon: Icon(ApIcon.codeIcon),
-                onPressed: () {
-                  Navigator.of(context).push(
-                    CupertinoPageRoute(
-                      builder: (_) => OpenSourcePage(),
-                    ),
-                  );
-                  if (widget.logEvent != null)
-                    widget.logEvent('open_source', 'click');
-                },
-              )
-            ],
+            actions: widget.actions,
             backgroundColor: ApTheme.of(context).blue,
             flexibleSpace: FlexibleSpaceBar(
               background: Image.asset(
