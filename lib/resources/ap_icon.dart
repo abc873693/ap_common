@@ -326,4 +326,34 @@ class ApIcon {
         return OMIcons.insertDriveFile;
     }
   }
+
+  static IconData get collectionsBookmark {
+    switch (ApIcon.code) {
+      case ApIcon.FILLED:
+        return Icons.collections_bookmark;
+      case ApIcon.OUTLINED:
+      default:
+        return OMIcons.collectionsBookmark;
+    }
+  }
+
+  static IconData get accessibilityNew {
+    switch (ApIcon.code) {
+      case ApIcon.FILLED:
+        return Icons.accessibility_new;
+      case ApIcon.OUTLINED:
+      default:
+        return OMIcons.accessibilityNew;
+    }
+  }
+
+  static IconData get monetizationOn {
+    switch (ApIcon.code) {
+      case ApIcon.FILLED:
+        return Icons.monetization_on;
+      case ApIcon.OUTLINED:
+      default:
+        return OMIcons.monetizationOn;
+    }
+  }
 }
