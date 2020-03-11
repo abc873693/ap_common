@@ -141,12 +141,14 @@ class DrawerItem extends StatelessWidget {
   final IconData icon;
   final String title;
   final Widget page;
+  final bool needLogin;
 
   const DrawerItem({
     Key key,
     @required this.icon,
     @required this.title,
     @required this.page,
+    this.needLogin = false,
   }) : super(key: key);
 
   @override
@@ -162,7 +164,13 @@ class DrawerItem extends StatelessWidget {
       ),
       onTap: () async {
         Navigator.of(context).pop();
-        ApUtils.pushCupertinoStyle(context, page);
+        if (needLogin)
+          ApUtils.showToast(
+            context,
+            ApLocalizations.of(context).notLoginHint,
+          );
+        else
+          ApUtils.pushCupertinoStyle(context, page);
       },
     );
   }
@@ -172,12 +180,14 @@ class DrawerSubItem extends StatelessWidget {
   final IconData icon;
   final String title;
   final Widget page;
+  final bool needLogin;
 
   const DrawerSubItem({
     Key key,
     @required this.icon,
     @required this.title,
     @required this.page,
+    this.needLogin = false,
   }) : super(key: key);
 
   @override
@@ -194,7 +204,13 @@ class DrawerSubItem extends StatelessWidget {
       ),
       onTap: () async {
         Navigator.of(context).pop();
-        ApUtils.pushCupertinoStyle(context, page);
+        if (needLogin)
+          ApUtils.showToast(
+            context,
+            ApLocalizations.of(context).notLoginHint,
+          );
+        else
+          ApUtils.pushCupertinoStyle(context, page);
       },
     );
   }
