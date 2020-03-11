@@ -320,7 +320,7 @@ class CourseScaffoldState extends State<CourseScaffold> {
                     width: 0,
                   ),
                 ),
-                children: renderCourseList(),
+                children: renderCourseTable(),
               ),
             ),
           );
@@ -328,7 +328,7 @@ class CourseScaffoldState extends State<CourseScaffold> {
     }
   }
 
-  List<TableRow> renderCourseList() {
+  List<TableRow> renderCourseTable() {
     List<String> weeks = [
       'Sunday',
       'Monday',
@@ -400,32 +400,32 @@ class CourseScaffoldState extends State<CourseScaffold> {
                 Navigator.of(context, rootNavigator: true).pop('dialog'),
             contentWidget: RichText(
               text: TextSpan(
-                  style: TextStyle(
-                      color: ApTheme.of(context).grey,
-                      height: 1.3,
-                      fontSize: 16.0),
-                  children: [
-                    TextSpan(
-                        text: '${app.courseDialogName}：',
-                        style: TextStyle(fontWeight: FontWeight.bold)),
-                    TextSpan(text: '${course.title}\n'),
-                    TextSpan(
-                        text: '${app.courseDialogProfessor}：',
-                        style: TextStyle(fontWeight: FontWeight.bold)),
-                    TextSpan(text: '${course.getInstructors()}\n'),
-                    TextSpan(
-                        text: '${app.courseDialogLocation}：',
-                        style: TextStyle(fontWeight: FontWeight.bold)),
-                    TextSpan(
-                        text:
-                            '${course.location.building}${course.location.room}\n'),
-                    TextSpan(
-                        text: '${app.courseDialogTime}：',
-                        style: TextStyle(fontWeight: FontWeight.bold)),
-                    TextSpan(
-                        text:
-                            '${course.date.startTime}-${course.date.endTime}'),
-                  ]),
+                style: TextStyle(
+                    color: ApTheme.of(context).grey,
+                    height: 1.3,
+                    fontSize: 16.0),
+                children: [
+                  TextSpan(
+                      text: '${app.courseDialogName}：',
+                      style: TextStyle(fontWeight: FontWeight.bold)),
+                  TextSpan(text: '${course.title}\n'),
+                  TextSpan(
+                      text: '${app.courseDialogProfessor}：',
+                      style: TextStyle(fontWeight: FontWeight.bold)),
+                  TextSpan(text: '${course.getInstructors()}\n'),
+                  TextSpan(
+                      text: '${app.courseDialogLocation}：',
+                      style: TextStyle(fontWeight: FontWeight.bold)),
+                  TextSpan(
+                      text:
+                          '${course.location.building}${course.location.room}\n'),
+                  TextSpan(
+                      text: '${app.courseDialogTime}：',
+                      style: TextStyle(fontWeight: FontWeight.bold)),
+                  TextSpan(
+                      text: '${course.date.startTime}-${course.date.endTime}'),
+                ],
+              ),
             ),
           ),
         );
@@ -434,7 +434,10 @@ class CourseScaffoldState extends State<CourseScaffold> {
         padding: EdgeInsets.symmetric(vertical: 8.0, horizontal: 4.0),
         alignment: Alignment.center,
         child: Text(
-          (course.title[0] + course.title[1]) ?? '',
+          ((MediaQuery.of(context).size.shortestSide < 600)
+                  ? (course.title[0] + course.title[1])
+                  : course.title) ??
+              '',
           style: TextStyle(fontSize: 16.0),
           textAlign: TextAlign.center,
         ),
