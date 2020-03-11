@@ -91,7 +91,9 @@ class ApDrawerState extends State<ApDrawer> {
                                 ),
                               ),
                     accountName: Text(
-                      userInfo?.name ?? '',
+                      (userInfo == null)
+                          ? app.notLogin
+                          : (userInfo?.name ?? ''),
                       style: TextStyle(color: Colors.white),
                     ),
                     accountEmail: Text(
