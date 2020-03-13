@@ -376,6 +376,7 @@ class ApLocalizations {
       'newsExpireTimeHint': 'No expiration time, please pick time.',
       'setNoExpireTime': 'Set No Expiration Time',
       'noExpiration': 'No Expiration',
+      'showSearchButton': 'Show Search Button',
     },
     'zh': {
       'app_name': '高科校務通',
@@ -713,6 +714,7 @@ class ApLocalizations {
       'newsExpireTimeHint': '無到期時間 請選擇時間',
       'setNoExpireTime': '設定無到期時間',
       'noExpiration': '無到期時間',
+      'showSearchButton': '顯示搜尋按鈕',
     },
   };
 
@@ -1324,6 +1326,8 @@ class ApLocalizations {
   String get setNoExpireTime => _vocabularies['setNoExpireTime'];
 
   String get noExpiration => _vocabularies['noExpiration'];
+
+  String get showSearchButton => _vocabularies['showSearchButton'];
 }
 
 class ApLocalizationsDelegate extends LocalizationsDelegate<ApLocalizations> {

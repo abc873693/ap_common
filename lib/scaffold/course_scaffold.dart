@@ -23,6 +23,8 @@ class CourseScaffold extends StatefulWidget {
   final bool isOffline;
   final Function(int index) onSelect;
   final Function() onRefresh;
+  final List<Widget> actions;
+  final bool isShowSearchButton;
 
   const CourseScaffold({
     Key key,
@@ -35,6 +37,8 @@ class CourseScaffold extends StatefulWidget {
     this.semesterIndex,
     this.onSelect,
     this.onRefresh,
+    this.isShowSearchButton = true,
+    this.actions,
   }) : super(key: key);
 
   @override
@@ -67,6 +71,7 @@ class CourseScaffoldState extends State<CourseScaffold> {
       appBar: AppBar(
         title: Text(app.course),
         backgroundColor: ApTheme.of(context).blue,
+        actions: widget.actions,
       ),
       body: Flex(
         direction: Axis.vertical,
@@ -113,10 +118,12 @@ class CourseScaffoldState extends State<CourseScaffold> {
         ],
       ),
       floatingActionButtonLocation: FloatingActionButtonLocation.endDocked,
-      floatingActionButton: FloatingActionButton(
-        child: Icon(Icons.search),
-        onPressed: _pickSemester,
-      ),
+      floatingActionButton: widget.isShowSearchButton
+          ? FloatingActionButton(
+              child: Icon(Icons.search),
+              onPressed: _pickSemester,
+            )
+          : null,
       bottomNavigationBar: BottomAppBar(
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
@@ -145,7 +152,7 @@ class CourseScaffoldState extends State<CourseScaffold> {
                 });
               },
             ),
-            Container(height: 0),
+            if (widget.isShowSearchButton) Container(height: 0),
           ],
         ),
       ),
