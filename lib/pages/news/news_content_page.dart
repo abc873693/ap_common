@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:ap_common/config/ApConstant.dart';
 import 'package:ap_common/models/new_response.dart';
 import 'package:ap_common/resources/ap_icon.dart';
@@ -5,6 +7,8 @@ import 'package:ap_common/resources/ap_theme.dart';
 import 'package:ap_common/utils/ap_localizations.dart';
 import 'package:ap_common/utils/ap_utils.dart';
 import 'package:ap_common/widgets/ap_network_image.dart';
+import 'package:cached_network_image/cached_network_image.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:photo_view/photo_view.dart';
 import 'package:url_launcher/url_launcher.dart';
@@ -92,7 +96,9 @@ class NewsContentPageState extends State<NewsContentPage> {
               backgroundColor: ApTheme.of(context).blue,
             ),
             body: PhotoView(
-              imageProvider: NetworkImage(widget.news.imageUrl),
+              imageProvider: (!kIsWeb && (Platform.isAndroid || Platform.isIOS))
+                  ? CachedNetworkImageProvider(widget.news.imageUrl)
+                  : NetworkImage(widget.news.imageUrl),
             ),
           ),
         );
