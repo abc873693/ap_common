@@ -29,13 +29,14 @@
     - [x] 設定頁元件 `setting_widget.dart`
     - [x] 是或否對話框 `yes_no_dialog.dart` 
  - 頁面(pages)
-    - [x] 關於我們 `about_us_page`
-    - [x] 開放原始碼 `open_source_page`
+    - [x] 關於我們 `about_us_page.dart`
+    - [x] 開放原始碼 `open_source_page.dart`
+    - [x] 使用者資訊 `user_info_page.dart`
+    - [x] 最新消息詳細資訊 `news_content_page.dart`
  - 頁面骨架(scaffold)
     - [x] 課表
     - [x] 成績
     - [x] 首頁
-    - [x] 最新消息詳細資訊
     - [ ] 校園資訊
       - [ ] 教務處最新消息
       - [ ] 學校電話
