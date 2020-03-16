@@ -63,6 +63,8 @@ class Detail {
 }
 
 class Score {
+  String courseNumber;
+  bool isPreScore;
   String title;
   String units;
   String hours;
@@ -73,6 +75,8 @@ class Score {
   String remark;
 
   Score({
+    this.courseNumber,
+    this.isPreScore = false,
     this.title,
     this.units,
     this.hours,
@@ -88,6 +92,8 @@ class Score {
   String toRawJson() => json.encode(toJson());
 
   factory Score.fromJson(Map<String, dynamic> json) => new Score(
+        courseNumber: json["courseNumber"],
+        isPreScore: json["isPreScore"] ?? false,
         title: json["title"],
         units: json["units"],
         hours: json["hours"],
@@ -99,6 +105,8 @@ class Score {
       );
 
   Map<String, dynamic> toJson() => {
+        "courseNumber": courseNumber,
+        "isPreScore": isPreScore,
         "title": title,
         "units": units,
         "hours": hours,
