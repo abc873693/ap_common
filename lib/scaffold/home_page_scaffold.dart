@@ -245,6 +245,10 @@ class HomePageScaffoldState extends State<HomePageScaffold> {
     _scaffoldKey.currentState.hideCurrentSnackBar();
   }
 
+  void showBasicHint({@required String text}) {
+    showSnackBar(text: text, duration: Duration(seconds: 2));
+  }
+
   ScaffoldFeatureController<SnackBar, SnackBarClosedReason> showSnackBar({
     @required String text,
     String actionText,
