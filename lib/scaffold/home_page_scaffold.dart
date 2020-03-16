@@ -1,6 +1,6 @@
 import 'dart:io';
 
-import 'package:ap_common/config/ApConstant.dart';
+import 'package:ap_common/config/ap_constants.dart';
 import 'package:ap_common/models/new_response.dart';
 import 'package:ap_common/resources/ap_icon.dart';
 import 'package:ap_common/resources/ap_theme.dart';
