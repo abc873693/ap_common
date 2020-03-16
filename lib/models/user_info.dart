@@ -9,6 +9,7 @@ class UserInfo {
   String id;
   String name;
   String pictureUrl;
+  String email;
 
   Uint8List pictureBytes;
 
@@ -20,6 +21,7 @@ class UserInfo {
     this.name,
     this.pictureUrl,
     this.pictureBytes,
+    this.email,
   });
 
   factory UserInfo.fromRawJson(String str) =>
@@ -34,6 +36,7 @@ class UserInfo {
         id: json["id"],
         name: json["name"],
         pictureUrl: json["pictureUrl"],
+        email: json["email"],
       );
 
   Map<String, dynamic> toJson() => {
@@ -43,5 +46,6 @@ class UserInfo {
         "id": id,
         "name": name,
         "pictureUrl": pictureUrl,
+        "email": email
       };
 }

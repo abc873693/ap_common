@@ -10,6 +10,8 @@ class ApLocalizations {
 
   static Locale locale;
 
+  String get email => _vocabularies['email'];
+
   static ApLocalizations of(BuildContext context) {
     return Localizations.of<ApLocalizations>(context, ApLocalizations);
   }
@@ -377,6 +379,7 @@ class ApLocalizations {
       'setNoExpireTime': 'Set No Expiration Time',
       'noExpiration': 'No Expiration',
       'showSearchButton': 'Show Search Button',
+      'email': 'Email',
     },
     'zh': {
       'app_name': '高科校務通',
@@ -715,6 +718,7 @@ class ApLocalizations {
       'setNoExpireTime': '設定無到期時間',
       'noExpiration': '無到期時間',
       'showSearchButton': '顯示搜尋按鈕',
+      'email': '電子信箱',
     },
   };
 
