@@ -16,21 +16,23 @@ class ScoreScaffold extends StatefulWidget {
   final ScoreData scoreData;
   final List<String> semesters;
   final int semesterIndex;
-  final bool isOffline;
   final Function(int index) onSelect;
   final Function() onRefresh;
   final Widget itemPicker;
   final String middleTitle;
   final String finalTitle;
+  final Widget Function(int index) middleScoreBuilder;
+  final Widget Function(int index) finalScoreBuilder;
 
   final bool isShowConductScore;
   final bool isShowCredit;
+
+  final String customHint;
 
   const ScoreScaffold({
     Key key,
     @required this.state,
     @required this.scoreData,
-    @required this.isOffline,
     @required this.onRefresh,
     this.itemPicker,
     this.semesters,
@@ -40,6 +42,9 @@ class ScoreScaffold extends StatefulWidget {
     this.finalTitle,
     this.isShowConductScore = true,
     this.isShowCredit = false,
+    this.middleScoreBuilder,
+    this.finalScoreBuilder,
+    this.customHint,
   }) : super(key: key);
 
   @override
@@ -93,9 +98,9 @@ class ScoreScaffoldState extends State<ScoreScaffold> {
                     currentIndex: widget.semesterIndex,
                   )
                 : widget.itemPicker,
-            if (widget.isOffline)
+            if (widget.customHint != null)
               Text(
-                app.offlineScore,
+                widget.customHint,
                 style: TextStyle(color: ApTheme.of(context).grey),
               ),
             Expanded(
@@ -172,15 +177,43 @@ class ScoreScaffoldState extends State<ScoreScaffold> {
                     children: [
                       TableRow(
                         children: <Widget>[
-                          _scoreTextBorder(app.subject, true),
-                          _scoreTextBorder(
-                              widget.middleTitle ?? app.midtermScore, true),
-                          _scoreTextBorder(
-                              widget.finalTitle ?? app.finalScore, true),
+                          ScoreTextBorder(
+                            text: app.subject,
+                            style: _textBlueStyle,
+                          ),
+                          ScoreTextBorder(
+                            text: widget.middleTitle ?? app.midtermScore,
+                            style: _textBlueStyle,
+                          ),
+                          ScoreTextBorder(
+                            text: widget.finalTitle ?? app.finalScore,
+                            style: _textBlueStyle,
+                          ),
                         ],
                       ),
-                      for (var score in widget.scoreData.scores)
-                        _scoreTableRowTitle(score)
+                      for (var i = 0; i < widget.scoreData.scores.length; i++)
+                        TableRow(
+                          children: <Widget>[
+                            ScoreTextBorder(
+                              text: widget.scoreData.scores[i].title,
+                              style: _textStyle,
+                            ),
+                            if (widget.middleScoreBuilder == null)
+                              ScoreTextBorder(
+                                text: widget.scoreData.scores[i].middleScore,
+                                style: _textStyle,
+                              ),
+                            if (widget.middleScoreBuilder != null)
+                              widget.middleScoreBuilder(i),
+                            if (widget.finalScoreBuilder == null)
+                              ScoreTextBorder(
+                                text: widget.scoreData.scores[i].finalScore,
+                                style: _textStyle,
+                              ),
+                            if (widget.finalScoreBuilder != null)
+                              widget.finalScoreBuilder(i)
+                          ],
+                        )
                     ],
                   ),
                 ),
@@ -251,27 +284,6 @@ class ScoreScaffoldState extends State<ScoreScaffold> {
     );
   }
 
-  TableRow _scoreTableRowTitle(Score score) {
-    return TableRow(children: <Widget>[
-      _scoreTextBorder(score.title, false),
-      _scoreTextBorder(score.middleScore, false),
-      _scoreTextBorder(score.finalScore, false)
-    ]);
-  }
-
-  Widget _scoreTextBorder(String text, bool isTitle) {
-    return Container(
-      width: double.maxFinite,
-      padding: EdgeInsets.symmetric(vertical: 2.0, horizontal: 4.0),
-      alignment: Alignment.center,
-      child: SelectableText(
-        text ?? '',
-        textAlign: TextAlign.center,
-        style: isTitle ? _textBlueStyle : _textStyle,
-      ),
-    );
-  }
-
   void _pickSemester() {
     showDialog(
       context: context,
@@ -280,6 +292,31 @@ class ScoreScaffoldState extends State<ScoreScaffold> {
         items: widget.semesters,
         index: widget.semesterIndex,
         onSelected: widget.onSelect,
+      ),
+    );
+  }
+}
+
+class ScoreTextBorder extends StatelessWidget {
+  final String text;
+  final TextStyle style;
+
+  const ScoreTextBorder({
+    Key key,
+    @required this.text,
+    @required this.style,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      width: double.maxFinite,
+      padding: EdgeInsets.symmetric(vertical: 2.0, horizontal: 4.0),
+      alignment: Alignment.center,
+      child: SelectableText(
+        text ?? '',
+        textAlign: TextAlign.center,
+        style: style,
       ),
     );
   }
