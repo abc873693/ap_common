@@ -20,17 +20,17 @@ class CourseScaffold extends StatefulWidget {
   final int yearIndex;
   final List<String> semesters;
   final int semesterIndex;
-  final bool isOffline;
   final Function(int index) onSelect;
   final Function() onRefresh;
   final List<Widget> actions;
   final bool isShowSearchButton;
+  final String customHint;
 
   const CourseScaffold({
     Key key,
     this.state = CourseState.loading,
     this.courseData,
-    this.isOffline = false,
+    this.customHint,
     this.years,
     this.yearIndex,
     this.semesters,
@@ -95,9 +95,9 @@ class CourseScaffoldState extends State<CourseScaffold> {
               ),
             ],
           ),
-          if (widget.isOffline)
+          if (widget.customHint != null)
             Text(
-              app.offlineCourse,
+              widget.customHint,
               style: TextStyle(color: ApTheme.of(context).grey),
             ),
           if (_contentStyle == _ContentStyle.table)
@@ -404,7 +404,7 @@ class CourseScaffoldState extends State<CourseScaffold> {
             title: app.courseDialogTitle,
             actionText: app.iKnow,
             actionFunction: () =>
-                Navigator.of(context, rootNavigator: true).pop('dialog'),
+                Navigator.of(context, rootNavigator: true).pop(),
             contentWidget: RichText(
               text: TextSpan(
                 style: TextStyle(
