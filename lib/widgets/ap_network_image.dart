@@ -13,12 +13,12 @@ class ApNetworkImage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return (kIsWeb ||
-            (Platform.isWindows || Platform.isWindows || Platform.isWindows))
-        ? CachedNetworkImage(
+            (Platform.isWindows || Platform.isLinux || Platform.isMacOS))
+        ? Image.network(url)
+        : CachedNetworkImage(
             imageUrl: url,
             placeholder: (context, url) => CircularProgressIndicator(),
             errorWidget: (context, url, error) => Icon(ApIcon.error),
-          )
-        : Image.network(url);
+          );
   }
 }
