@@ -8,18 +8,16 @@ import 'package:flutter/material.dart';
 
 enum _Status { loading, finish, error, empty }
 
-class UserInfoPage extends StatefulWidget {
+class UserInfoScaffold extends StatefulWidget {
   final UserInfo userInfo;
   final Uint8List pictureBytes;
   final String heroTag;
-  final Function() setCurrentScreen;
   final List<Widget> actions;
   final Future<UserInfo> Function() onRefresh;
 
-  const UserInfoPage({
+  const UserInfoScaffold({
     Key key,
     @required this.userInfo,
-    this.setCurrentScreen,
     this.pictureBytes,
     this.heroTag,
     this.actions,
@@ -27,10 +25,10 @@ class UserInfoPage extends StatefulWidget {
   }) : super(key: key);
 
   @override
-  UserInfoPageState createState() => UserInfoPageState();
+  UserInfoScaffoldState createState() => UserInfoScaffoldState();
 }
 
-class UserInfoPageState extends State<UserInfoPage> {
+class UserInfoScaffoldState extends State<UserInfoScaffold> {
   _Status state = _Status.finish;
   ApLocalizations app;
 
@@ -39,7 +37,6 @@ class UserInfoPageState extends State<UserInfoPage> {
   @override
   void initState() {
     super.initState();
-    if (widget.setCurrentScreen != null) widget.setCurrentScreen();
     userInfo = widget.userInfo;
   }
 
@@ -103,6 +100,10 @@ class UserInfoPageState extends State<UserInfoPage> {
       body: RefreshIndicator(
         onRefresh: () async {
           if (widget.onRefresh != null) userInfo = await widget.onRefresh();
+          print(userInfo.email);
+          setState(() {
+
+          });
           return null;
         },
         child: ListView(
@@ -125,7 +126,7 @@ class UserInfoPageState extends State<UserInfoPage> {
                 : SizedBox(height: 0.0),
             SizedBox(height: 8.0),
             UserInfoCard(
-              userInfo: widget.userInfo,
+              userInfo: userInfo,
             ),
           ],
         ),
