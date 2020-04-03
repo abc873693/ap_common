@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:ap_common/callback/general_callback.dart';
 import 'package:ap_common/resources/ap_theme.dart';
 import 'package:ap_common/utils/ap_localizations.dart';
 import 'package:ap_common/widgets/default_dialog.dart';
@@ -11,6 +12,7 @@ import 'package:package_info/package_info.dart';
 import 'package:sprintf/sprintf.dart';
 import 'package:toast/toast.dart';
 import 'package:url_launcher/url_launcher.dart';
+export 'package:dio/dio.dart';
 
 class ApUtils {
   static void showToast(BuildContext context, String message) {
@@ -30,6 +32,24 @@ class ApUtils {
         return page;
       }),
     );
+  }
+
+  static void handleDioError(BuildContext context, DioError dioError) {
+    switch (dioError.type) {
+      case DioErrorType.DEFAULT:
+        showToast(context, ApLocalizations.of(context).noInternet);
+        break;
+      case DioErrorType.CONNECT_TIMEOUT:
+      case DioErrorType.RECEIVE_TIMEOUT:
+      case DioErrorType.SEND_TIMEOUT:
+        showToast(context, ApLocalizations.of(context).timeoutMessage);
+        break;
+      case DioErrorType.RESPONSE:
+        showToast(context, dioError.message);
+        break;
+      case DioErrorType.CANCEL:
+        break;
+    }
   }
 
   static showNewVersionDialog({
