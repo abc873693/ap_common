@@ -32,60 +32,14 @@ class UserInfoScaffoldState extends State<UserInfoScaffold> {
   _Status state = _Status.finish;
   ApLocalizations app;
 
-  UserInfo userInfo;
-
   @override
   void initState() {
     super.initState();
-    userInfo = widget.userInfo;
   }
 
   @override
   void dispose() {
     super.dispose();
-  }
-
-  Widget _homebody() {
-    switch (state) {
-      case _Status.loading:
-        return Center(
-          child: CircularProgressIndicator(),
-        );
-      case _Status.finish:
-      default:
-        return SingleChildScrollView(
-          child: RefreshIndicator(
-            onRefresh: () async {
-              if (widget.onRefresh != null) userInfo = await widget.onRefresh();
-              return null;
-            },
-            child: Column(
-              children: <Widget>[
-                SizedBox(height: 8.0),
-                widget.pictureBytes != null
-                    ? SizedBox(
-                        height: 320,
-                        child: AspectRatio(
-                          aspectRatio: 2.0,
-                          child: Hero(
-                            tag: widget.heroTag ??
-                                ApConstants.TAG_STUDENT_PICTURE,
-                            child: Image.memory(
-                              widget.pictureBytes,
-                            ),
-                          ),
-                        ),
-                      )
-                    : SizedBox(height: 0.0),
-                SizedBox(height: 8.0),
-                UserInfoCard(
-                  userInfo: widget.userInfo,
-                ),
-              ],
-            ),
-          ),
-        );
-    }
   }
 
   @override
@@ -99,11 +53,7 @@ class UserInfoScaffoldState extends State<UserInfoScaffold> {
       ),
       body: RefreshIndicator(
         onRefresh: () async {
-          if (widget.onRefresh != null) userInfo = await widget.onRefresh();
-          print(userInfo.email);
-          setState(() {
-
-          });
+          if (widget.onRefresh != null) await widget.onRefresh();
           return null;
         },
         child: ListView(
@@ -126,7 +76,7 @@ class UserInfoScaffoldState extends State<UserInfoScaffold> {
                 : SizedBox(height: 0.0),
             SizedBox(height: 8.0),
             UserInfoCard(
-              userInfo: userInfo,
+              userInfo: widget.userInfo,
             ),
           ],
         ),
