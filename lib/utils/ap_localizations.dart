@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:dio/dio.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
@@ -14,6 +15,25 @@ class ApLocalizations {
 
   static ApLocalizations of(BuildContext context) {
     return Localizations.of<ApLocalizations>(context, ApLocalizations);
+  }
+
+  static String dioError(BuildContext context, DioError dioError) {
+    var ap = ApLocalizations.of(context);
+    switch (dioError.type) {
+      case DioErrorType.DEFAULT:
+        return ap.noInternet;
+      case DioErrorType.CONNECT_TIMEOUT:
+      case DioErrorType.RECEIVE_TIMEOUT:
+      case DioErrorType.SEND_TIMEOUT:
+        return ap.timeoutMessage;
+        break;
+      case DioErrorType.RESPONSE:
+        return dioError.message;
+        break;
+      case DioErrorType.CANCEL:
+      default:
+        return null;
+    }
   }
 
   static Map<String, Map<String, String>> _localizedValues = {
