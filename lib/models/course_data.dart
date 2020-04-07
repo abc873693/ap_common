@@ -284,7 +284,7 @@ class Course {
 
   String getInstructors() {
     String text = "";
-    if (instructors.length > 0) {
+    if (instructors != null && instructors.length > 0) {
       text += instructors[0];
       for (var i = 1; i < instructors.length; i++) text += ",${instructors[i]}";
     }
