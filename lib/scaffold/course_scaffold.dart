@@ -79,22 +79,23 @@ class CourseScaffoldState extends State<CourseScaffold> {
         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
         children: <Widget>[
           SizedBox(height: 8.0),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: <Widget>[
+          if (widget.years != null || widget.semesters != null)
+            Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: <Widget>[
 //              ItemPicker(
 //                onSelected: (int index) {},
 //                items: widget.years,
 //                currentIndex: widget.yearIndex,
 //              ),
-              ItemPicker(
-                dialogTitle: app.picksSemester,
-                onSelected: widget.onSelect,
-                items: widget.semesters,
-                currentIndex: widget.semesterIndex,
-              ),
-            ],
-          ),
+                ItemPicker(
+                  dialogTitle: app.picksSemester,
+                  onSelected: widget.onSelect,
+                  items: widget.semesters,
+                  currentIndex: widget.semesterIndex,
+                ),
+              ],
+            ),
           if (widget.customHint != null)
             Text(
               widget.customHint,
@@ -419,20 +420,21 @@ class CourseScaffoldState extends State<CourseScaffold> {
                       style: TextStyle(fontWeight: FontWeight.bold)),
                   TextSpan(text: '${course.title}\n'),
                   TextSpan(
-                      text: '${app.courseDialogProfessor}：',
+                      text: '${app.courseDialogProfessor ?? ''}：',
                       style: TextStyle(fontWeight: FontWeight.bold)),
                   TextSpan(text: '${course.getInstructors()}\n'),
                   TextSpan(
-                      text: '${app.courseDialogLocation}：',
+                      text: '${app.courseDialogLocation ?? ''}：',
                       style: TextStyle(fontWeight: FontWeight.bold)),
                   TextSpan(
                       text:
-                          '${course.location.building}${course.location.room}\n'),
+                          '${course.location?.building ?? ''}${course.location?.room ?? ''}\n'),
                   TextSpan(
                       text: '${app.courseDialogTime}：',
                       style: TextStyle(fontWeight: FontWeight.bold)),
                   TextSpan(
-                      text: '${course.date.startTime}-${course.date.endTime}'),
+                      text:
+                          '${course.date.startTime ?? ''}-${course.date.endTime ?? ''}'),
                 ],
               ),
             ),
