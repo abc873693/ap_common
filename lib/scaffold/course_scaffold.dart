@@ -48,7 +48,7 @@ class CourseScaffold extends StatefulWidget {
 class CourseScaffoldState extends State<CourseScaffold> {
   ApLocalizations app;
 
-  _ContentStyle _contentStyle = _ContentStyle.table;
+  _ContentStyle _contentStyle = _ContentStyle.card;
 
   int get base => (widget.courseData.hasHoliday) ? 8 : 6;
 
@@ -219,28 +219,30 @@ class CourseScaffoldState extends State<CourseScaffold> {
                                 fontSize: 16.0,
                               ),
                               children: [
+                                if (course.location != null) ...[
+                                  TextSpan(
+                                      text: '${app.studentClass}：',
+                                      style: TextStyle(
+                                          fontWeight: FontWeight.bold)),
+                                  TextSpan(text: '${course.className}\n'),
+                                ],
                                 TextSpan(
-                                    text: '${app.studentClass}：',
-                                    style:
-                                        TextStyle(fontWeight: FontWeight.bold)),
-                                TextSpan(text: '${course.className}\n'),
-                                TextSpan(
-                                    text: '${app.courseDialogProfessor}：',
+                                    text: '${app.courseDialogProfessor ?? ''}：',
                                     style:
                                         TextStyle(fontWeight: FontWeight.bold)),
                                 TextSpan(text: '${course.getInstructors()}\n'),
                                 TextSpan(
-                                    text: '${app.courseDialogLocation}：',
+                                    text: '${app.courseDialogLocation ?? ''}：',
                                     style:
                                         TextStyle(fontWeight: FontWeight.bold)),
                                 TextSpan(
                                     text:
-                                        '${course.location.building}${course.location.room}\n'),
+                                        '${course.location?.building ?? ''}${course.location?.room ?? ''}\n'),
                                 TextSpan(
                                   text: '${app.courseDialogTime}：',
                                   style: TextStyle(fontWeight: FontWeight.bold),
                                 ),
-                                TextSpan(text: '${course.times}'),
+                                TextSpan(text: '${course.times ?? ''}'),
                               ],
                             ),
                           ),
