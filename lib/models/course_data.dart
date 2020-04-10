@@ -1,5 +1,7 @@
 import 'dart:convert';
 
+import 'package:ap_common/utils/preferences.dart';
+
 class CourseData {
   List<CourseDetail> courses;
   CourseTables courseTables;
@@ -29,6 +31,18 @@ class CourseData {
             : List<dynamic>.from(courses.map((x) => x.toJson())),
         "coursetable": courseTables == null ? null : courseTables.toJson(),
       };
+
+  void save(String tag) {
+    Preferences.setString('course_data_$tag', this.toRawJson());
+  }
+
+  factory CourseData.load(String tag) {
+    String rawString = Preferences.getString('course_data_$tag', '');
+    if (rawString == '')
+      return null;
+    else
+      return CourseData.fromRawJson(rawString);
+  }
 
   bool get hasHoliday {
     return (courseTables?.saturday?.isNotEmpty ?? false) ||
@@ -140,6 +154,11 @@ class CourseTables {
     if (this.saturday == null) this.saturday = [];
     if (this.sunday == null) this.sunday = [];
   }
+
+  factory CourseTables.fromRawJson(String str) =>
+      CourseTables.fromJson(json.decode(str));
+
+  String toRawJson() => json.encode(toJson());
 
   CourseTables.fromJson(Map<String, dynamic> json) {
     if (json['Monday'] != null) {
