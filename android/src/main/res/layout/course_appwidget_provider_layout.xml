@@ -15,7 +15,7 @@
             android:layout_height="match_parent"
             android:layout_weight="1"
             android:gravity="center"
-            android:text="上課提醒"
+            android:text="@string/course_hint"
             android:textColor="#ffffff"
             android:textSize="20sp"
             android:textStyle="bold" />
@@ -43,7 +43,6 @@
             android:layout_height="match_parent"
             android:background="#121212"
             android:gravity="center"
-            android:text="今天已經沒有課了"
             android:textColor="#bdbdbd"
             android:textSize="16sp" />
 

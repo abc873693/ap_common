@@ -63,22 +63,22 @@ class CourseAppWidgetProvider : AppWidgetProvider() {
 
             val preference = context.getSharedPreferences("FlutterSharedPreferences", Context.MODE_PRIVATE)
             var rawData = preference.getString("flutter.course_data_latest", "")
-            val content = if (rawData == "") "尚未載入課表" else parseNextCurse(rawData)
+            val content = if (rawData == "") context.getString(R.string.not_load_course_table) else parseNextCurse(context, rawData)
             setTextViewText(R.id.content, content)
         }
     }
 
-    private fun parseNextCurse(rawData: String): String {
+    private fun parseNextCurse(context: Context, rawData: String): String {
         val now = Calendar.getInstance()
         val courseData = JSONObject(rawData)
         val courseTable = courseData.getJSONObject("coursetable")
         val courses = parseCourseList(now, courseTable)
         val sourceDateformat = SimpleDateFormat("HH:mm", Locale.TAIWAN);
-        var text = "太好了今天已經沒有任何課"
+        var text = context.getString(R.string.today_no_course_already)
         var min: Long = now.timeInMillis
         Log.e("now", now.time.toString())
         if (courses.length() == 0)
-            text = "太好了今天沒有任何課"
+            text = context.getString(R.string.today_no_course)
         for (i in 0 until courses.length()) {
             val course = courses.getJSONObject(i)
             val date = course.getJSONObject("date")
@@ -91,10 +91,10 @@ class CourseAppWidgetProvider : AppWidgetProvider() {
                 val diff = time.timeInMillis - now.timeInMillis
                 if (min > diff) {
                     min = diff
-                    text = "下一堂課是\n"
-                    text += date.getString("startTime")
-                    text += " 的 "
-                    text += course.getString("title")
+                    text = String.format(context.getString(R.string.course_hint_content_format),
+                            date.getString("startTime"),
+                            course.getString("title")
+                    )
                 }
             }
         }
