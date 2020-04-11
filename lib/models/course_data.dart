@@ -249,8 +249,6 @@ class CourseTables {
         return friday;
       case "Saturday":
         return saturday;
-      case "Sunday":
-        return sunday;
       default:
         return [];
     }
