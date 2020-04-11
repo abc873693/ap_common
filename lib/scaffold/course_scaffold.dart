@@ -12,7 +12,7 @@ import 'package:flutter/rendering.dart';
 export 'package:ap_common/models/course_data.dart';
 
 enum CourseState { loading, finish, error, empty, offlineEmpty }
-enum _ContentStyle { card, table }
+enum _ContentStyle { list, table }
 
 const _courseHeight = 55.0;
 
@@ -51,7 +51,7 @@ class CourseScaffold extends StatefulWidget {
 class CourseScaffoldState extends State<CourseScaffold> {
   ApLocalizations app;
 
-  _ContentStyle _contentStyle = _ContentStyle.card;
+  _ContentStyle _contentStyle = _ContentStyle.table;
 
   int get base => (widget.courseData.hasHoliday) ? 8 : 6;
 
@@ -139,21 +139,17 @@ class CourseScaffoldState extends State<CourseScaffold> {
                   : ApTheme.of(context).grey,
               icon: Icon(Icons.grid_on),
               onPressed: () {
-                setState(() {
-                  _contentStyle = _ContentStyle.table;
-                });
+                setState(() => _contentStyle = _ContentStyle.table);
               },
             ),
             IconButton(
-              iconSize: _contentStyle == _ContentStyle.card ? 24 : 20,
-              color: _contentStyle == _ContentStyle.card
+              iconSize: _contentStyle == _ContentStyle.list ? 24 : 20,
+              color: _contentStyle == _ContentStyle.list
                   ? ApTheme.of(context).yellow
                   : ApTheme.of(context).grey,
               icon: Icon(Icons.format_list_bulleted),
               onPressed: () {
-                setState(() {
-                  _contentStyle = _ContentStyle.card;
-                });
+                setState(() => _contentStyle = _ContentStyle.list);
               },
             ),
             if (widget.isShowSearchButton) Container(height: 0),
@@ -190,7 +186,7 @@ class CourseScaffoldState extends State<CourseScaffold> {
           content: app.noOfflineData,
         );
       default:
-        if (_contentStyle == _ContentStyle.card) {
+        if (_contentStyle == _ContentStyle.list) {
           return ListView.builder(
             itemBuilder: (_, index) {
               var course = widget.courseData.courses[index];
@@ -314,7 +310,10 @@ class CourseScaffoldState extends State<CourseScaffold> {
         } else {
           return SingleChildScrollView(
             physics: AlwaysScrollableScrollPhysics(),
-            padding: EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
+            padding: EdgeInsets.symmetric(
+              horizontal: 16.0,
+              vertical: 8.0,
+            ),
             child: Container(
               decoration: BoxDecoration(
                 borderRadius: BorderRadius.all(
@@ -322,7 +321,10 @@ class CourseScaffoldState extends State<CourseScaffold> {
                     10.0,
                   ),
                 ),
-                border: Border.all(color: Colors.grey, width: 1.5),
+                border: Border.all(
+                  color: Colors.grey,
+                  width: 1.5,
+                ),
               ),
               child: Row(
                 crossAxisAlignment: CrossAxisAlignment.start,
@@ -467,48 +469,48 @@ class CourseScaffoldState extends State<CourseScaffold> {
     ];
   }
 
-  Widget _weekBorder(String text, Border border) {
-    return Container(
-      padding: EdgeInsets.symmetric(vertical: 2.0),
-      alignment: Alignment.center,
-      decoration: BoxDecoration(
-        border: border,
-      ),
-      height: 30.0,
-      child: Text(
-        text ?? '',
-        style: TextStyle(color: ApTheme.of(context).blueText, fontSize: 14.0),
-      ),
-    );
-  }
+  Widget _weekBorder(String text, Border border) => Container(
+        padding: EdgeInsets.symmetric(vertical: 2.0),
+        alignment: Alignment.center,
+        decoration: BoxDecoration(
+          border: border,
+        ),
+        height: 30.0,
+        child: Text(
+          text ?? '',
+          style: TextStyle(
+            color: ApTheme.of(context).blueText,
+            fontSize: 14.0,
+          ),
+        ),
+      );
 
-  Widget _timeCodeBorder(String text, Border border) {
-    return Container(
-      padding: EdgeInsets.symmetric(vertical: 8.0),
-      alignment: Alignment.center,
-      decoration: BoxDecoration(
-        border: border,
-      ),
-      height: _courseHeight,
-      width: 35.0,
-      child: Text(
-        text ?? '',
-        style: TextStyle(color: ApTheme.of(context).blueText, fontSize: 14.0),
-      ),
-    );
-  }
+  Widget _timeCodeBorder(String text, Border border) => Container(
+        padding: EdgeInsets.symmetric(vertical: 8.0),
+        alignment: Alignment.center,
+        decoration: BoxDecoration(
+          border: border,
+        ),
+        height: _courseHeight,
+        width: 35.0,
+        child: Text(
+          text ?? '',
+          style: TextStyle(
+            color: ApTheme.of(context).blueText,
+            fontSize: 14.0,
+          ),
+        ),
+      );
 
-  void _pickSemester() {
-    showDialog(
-      context: context,
-      builder: (_) => SimpleOptionDialog(
-        title: app.picksSemester,
-        items: widget.semesters,
-        index: widget.semesterIndex,
-        onSelected: widget.onSelect,
-      ),
-    );
-  }
+  void _pickSemester() => showDialog(
+        context: context,
+        builder: (_) => SimpleOptionDialog(
+          title: app.picksSemester,
+          items: widget.semesters,
+          index: widget.semesterIndex,
+          onSelected: widget.onSelect,
+        ),
+      );
 }
 
 class CourseBorder extends StatelessWidget {
