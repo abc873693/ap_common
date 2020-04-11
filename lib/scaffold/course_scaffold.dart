@@ -187,125 +187,8 @@ class CourseScaffoldState extends State<CourseScaffold> {
         );
       default:
         if (_contentStyle == _ContentStyle.list) {
-          return ListView.builder(
-            itemBuilder: (_, index) {
-              var course = widget.courseData.courses[index];
-              return Card(
-                elevation: 4.0,
-                margin: EdgeInsets.all(8.0),
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(12.0),
-                ),
-                child: ListTile(
-                  contentPadding:
-                      EdgeInsets.symmetric(vertical: 8.0, horizontal: 24.0),
-                  title: Text(
-                    widget.courseData.courses[index].title,
-                    style: TextStyle(
-                      height: 1.3,
-                      fontSize: 20.0,
-                    ),
-                  ),
-                  subtitle: Padding(
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: <Widget>[
-                        Expanded(
-                          flex: 2,
-                          child: SelectableText.rich(
-                            TextSpan(
-                              style: TextStyle(
-                                color: ApTheme.of(context).grey,
-                                fontSize: 16.0,
-                              ),
-                              children: [
-                                if (course.location != null) ...[
-                                  TextSpan(
-                                      text: '${app.studentClass}：',
-                                      style: TextStyle(
-                                          fontWeight: FontWeight.bold)),
-                                  TextSpan(text: '${course.className}\n'),
-                                ],
-                                TextSpan(
-                                    text: '${app.courseDialogProfessor ?? ''}：',
-                                    style:
-                                        TextStyle(fontWeight: FontWeight.bold)),
-                                TextSpan(text: '${course.getInstructors()}\n'),
-                                TextSpan(
-                                    text: '${app.courseDialogLocation ?? ''}：',
-                                    style:
-                                        TextStyle(fontWeight: FontWeight.bold)),
-                                TextSpan(
-                                    text:
-                                        '${course.location?.building ?? ''}${course.location?.room ?? ''}\n'),
-                                TextSpan(
-                                  text: '${app.courseDialogTime}：',
-                                  style: TextStyle(fontWeight: FontWeight.bold),
-                                ),
-                                TextSpan(text: '${course.times ?? ''}'),
-                              ],
-                            ),
-                          ),
-                        ),
-                        Expanded(
-                          flex: 1,
-                          child: Column(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: <Widget>[
-                              if (course.required != null)
-                                Text(
-                                  '${course.required}',
-                                  style: TextStyle(
-                                    color: ApTheme.of(context).blueAccent,
-                                    fontSize: 18.0,
-                                  ),
-                                  textAlign: TextAlign.center,
-                                ),
-                              SizedBox(height: 16.0),
-                              if (course.units != null)
-                                SelectableText.rich(
-                                  TextSpan(
-                                    style: TextStyle(
-                                      color: ApTheme.of(context).grey,
-                                      fontSize: 16.0,
-                                    ),
-                                    children: [
-                                      TextSpan(
-                                          text: '${app.units}：',
-                                          style: TextStyle(
-                                              fontWeight: FontWeight.bold)),
-                                      TextSpan(text: '${course.units}'),
-                                    ],
-                                  ),
-                                ),
-                              if (course.hours != null)
-                                SelectableText.rich(
-                                  TextSpan(
-                                    style: TextStyle(
-                                      color: ApTheme.of(context).grey,
-                                      fontSize: 16.0,
-                                    ),
-                                    children: [
-                                      TextSpan(
-                                        text: '${app.courseHours}：',
-                                        style: TextStyle(
-                                            fontWeight: FontWeight.bold),
-                                      ),
-                                      TextSpan(text: '${course.hours}'),
-                                    ],
-                                  ),
-                                ),
-                            ],
-                          ),
-                        )
-                      ],
-                    ),
-                    padding: EdgeInsets.symmetric(vertical: 8.0),
-                  ),
-                ),
-              );
-            },
-            itemCount: widget.courseData?.courses?.length ?? 0,
+          return CourseList(
+            courses: widget.courseData.courses,
           );
         } else {
           return SingleChildScrollView(
@@ -511,6 +394,141 @@ class CourseScaffoldState extends State<CourseScaffold> {
           onSelected: widget.onSelect,
         ),
       );
+}
+
+class CourseList extends StatelessWidget {
+  final List<CourseDetail> courses;
+
+  const CourseList({
+    Key key,
+    @required this.courses,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return ListView.builder(
+      itemBuilder: (_, index) {
+        var course = courses[index];
+        return Card(
+          elevation: 4.0,
+          margin: EdgeInsets.all(8.0),
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(12.0),
+          ),
+          child: ListTile(
+            contentPadding:
+                EdgeInsets.symmetric(vertical: 8.0, horizontal: 24.0),
+            title: Text(
+              courses[index].title,
+              style: TextStyle(
+                height: 1.3,
+                fontSize: 20.0,
+              ),
+            ),
+            subtitle: Padding(
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: <Widget>[
+                  Expanded(
+                    flex: 2,
+                    child: SelectableText.rich(
+                      TextSpan(
+                        style: TextStyle(
+                          color: ApTheme.of(context).grey,
+                          fontSize: 16.0,
+                        ),
+                        children: [
+                          if (course.location != null) ...[
+                            TextSpan(
+                                text:
+                                    '${ApLocalizations.of(context).studentClass}：',
+                                style: TextStyle(fontWeight: FontWeight.bold)),
+                            TextSpan(text: '${course.className}\n'),
+                          ],
+                          TextSpan(
+                              text:
+                                  '${ApLocalizations.of(context).courseDialogProfessor ?? ''}：',
+                              style: TextStyle(fontWeight: FontWeight.bold)),
+                          TextSpan(text: '${course.getInstructors()}\n'),
+                          TextSpan(
+                              text:
+                                  '${ApLocalizations.of(context).courseDialogLocation ?? ''}：',
+                              style: TextStyle(fontWeight: FontWeight.bold)),
+                          TextSpan(
+                              text:
+                                  '${course.location?.building ?? ''}${course.location?.room ?? ''}\n'),
+                          TextSpan(
+                            text:
+                                '${ApLocalizations.of(context).courseDialogTime}：',
+                            style: TextStyle(fontWeight: FontWeight.bold),
+                          ),
+                          TextSpan(text: '${course.times ?? ''}'),
+                        ],
+                      ),
+                    ),
+                  ),
+                  Expanded(
+                    flex: 1,
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: <Widget>[
+                        if (course.required != null)
+                          Text(
+                            '${course.required}',
+                            style: TextStyle(
+                              color: ApTheme.of(context).blueAccent,
+                              fontSize: 18.0,
+                            ),
+                            textAlign: TextAlign.center,
+                          ),
+                        SizedBox(height: 16.0),
+                        if (course.units != null)
+                          SelectableText.rich(
+                            TextSpan(
+                              style: TextStyle(
+                                color: ApTheme.of(context).grey,
+                                fontSize: 16.0,
+                              ),
+                              children: [
+                                TextSpan(
+                                    text:
+                                        '${ApLocalizations.of(context).units}：',
+                                    style:
+                                        TextStyle(fontWeight: FontWeight.bold)),
+                                TextSpan(text: '${course.units}'),
+                              ],
+                            ),
+                          ),
+                        if (course.hours != null)
+                          SelectableText.rich(
+                            TextSpan(
+                              style: TextStyle(
+                                color: ApTheme.of(context).grey,
+                                fontSize: 16.0,
+                              ),
+                              children: [
+                                TextSpan(
+                                  text:
+                                      '${ApLocalizations.of(context).courseHours}：',
+                                  style: TextStyle(fontWeight: FontWeight.bold),
+                                ),
+                                TextSpan(text: '${course.hours}'),
+                              ],
+                            ),
+                          ),
+                      ],
+                    ),
+                  )
+                ],
+              ),
+              padding: EdgeInsets.symmetric(vertical: 8.0),
+            ),
+          ),
+        );
+      },
+      itemCount: courses?.length ?? 0,
+    );
+  }
 }
 
 class CourseBorder extends StatelessWidget {
