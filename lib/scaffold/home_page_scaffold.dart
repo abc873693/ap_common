@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:io';
 
 import 'package:ap_common/config/ap_constants.dart';
@@ -28,6 +29,8 @@ class HomePageScaffold extends StatefulWidget {
   final Widget drawer;
 
   final bool isLogin;
+  final bool autoPlay;
+  final Duration autoPlayDuration;
 
   const HomePageScaffold({
     Key key,
@@ -40,6 +43,8 @@ class HomePageScaffold extends StatefulWidget {
     this.drawer,
     this.title,
     this.onImageTapped,
+    this.autoPlay = true,
+    this.autoPlayDuration = const Duration(milliseconds: 3000),
   }) : super(key: key);
 
   @override
@@ -50,15 +55,37 @@ class HomePageScaffoldState extends State<HomePageScaffold> {
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
   ApLocalizations app;
 
+  PageController pageController;
+
   int _currentNewsIndex = 0;
+
+  Timer _timer;
 
   @override
   void initState() {
+    if (widget.autoPlay)
+      _timer = Timer.periodic(
+        widget.autoPlayDuration,
+        (Timer timer) {
+          if (widget.state == HomeState.finish && widget.newsList.length > 1)
+            setState(() {
+              _currentNewsIndex++;
+              if (_currentNewsIndex >= widget.newsList.length)
+                _currentNewsIndex = 0;
+              pageController.animateToPage(
+                _currentNewsIndex,
+                duration: Duration(milliseconds: 500),
+                curve: Curves.easeOutQuint,
+              );
+            });
+        },
+      );
     super.initState();
   }
 
   @override
   void dispose() {
+    _timer?.cancel();
     super.dispose();
   }
 
@@ -114,8 +141,9 @@ class HomePageScaffoldState extends State<HomePageScaffold> {
       duration: Duration(milliseconds: 500),
       curve: Curves.easeOutQuint,
       margin: EdgeInsets.symmetric(
-          vertical: MediaQuery.of(context).size.height * (active ? 0.05 : 0.15),
-          horizontal: MediaQuery.of(context).size.width * 0.02),
+        vertical: MediaQuery.of(context).size.height * (active ? 0.05 : 0.15),
+        horizontal: MediaQuery.of(context).size.width * 0.02,
+      ),
       child: GestureDetector(
         onTap: () {
           if (widget.onImageTapped != null) widget.onImageTapped(news);
@@ -137,8 +165,7 @@ class HomePageScaffoldState extends State<HomePageScaffold> {
     } else if (orientation == Orientation.landscape) {
       viewportFraction = 0.5;
     }
-    final PageController pageController =
-        PageController(viewportFraction: viewportFraction);
+    pageController = PageController(viewportFraction: viewportFraction);
     pageController.addListener(() {
       int next = pageController.page.round();
       if (_currentNewsIndex != next) {
