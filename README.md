@@ -2,6 +2,10 @@
 
 因為長期校務通相關系列的app，介面與相關功能都極為相似，所以特別將相關的介面與函式庫，製作此套件以方便維護使用
 
+## 相關專案
+- [高科校務通](https://github.com/NKUST-ITC/NKUST-AP-Flutter)
+- [中山校務通](https://github.com/abc873693/NSYSU-AP)
+- [台科校務通](https://github.com/abc873693/NTUST-AP)
 
 ## 目前共用項目 Todo List
 
