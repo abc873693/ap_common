@@ -218,7 +218,7 @@ class ApLocalizations {
           'If you\'re experienced in Objective-C, Swift, Java or you\'re interested in Coding!\n\nMessage us at our Facebook fanpage!\nYour code might one day be operating in everyone\'s hands~',
       'about_itc_content':
           'In year 2014,\nwe founded KUAS Information Technology Club!\n\nIf you\'re enthusiastic or drawn to our projects, join our classes and talks or come by to chat!',
-      'about_itc_title': 'KUAS IT Club',
+      'about_itc_title': 'NKUST IT Club',
       'about_contact_us': 'Contact Us',
       'about_open_source_title': 'Open Source License',
       'about_open_source_content':
