@@ -15,17 +15,19 @@ class CourseData {
 
   String toRawJson() => json.encode(toJson());
 
-  factory CourseData.fromJson(Map<String, dynamic> json) => CourseData(
+  factory CourseData.fromJson(Map<String, dynamic> json) =>
+      CourseData(
         courses: json["courses"] == null
             ? null
             : List<CourseDetail>.from(
-                json["courses"].map((x) => CourseDetail.fromJson(x))),
+            json["courses"].map((x) => CourseDetail.fromJson(x))),
         courseTables: json["coursetable"] == null
             ? null
             : CourseTables.fromJson(json["coursetable"]),
       );
 
-  Map<String, dynamic> toJson() => {
+  Map<String, dynamic> toJson() =>
+      {
         "courses": courses == null
             ? null
             : List<dynamic>.from(courses.map((x) => x.toJson())),
@@ -82,7 +84,8 @@ class CourseDetail {
 
   String toRawJson() => json.encode(toJson());
 
-  factory CourseDetail.fromJson(Map<String, dynamic> json) => CourseDetail(
+  factory CourseDetail.fromJson(Map<String, dynamic> json) =>
+      CourseDetail(
         code: json["code"] == null ? null : json["code"],
         title: json["title"] == null ? null : json["title"],
         className: json["className"] == null ? null : json["className"],
@@ -100,7 +103,8 @@ class CourseDetail {
             : List<String>.from(json["instructors"].map((x) => x)),
       );
 
-  Map<String, dynamic> toJson() => {
+  Map<String, dynamic> toJson() =>
+      {
         "code": code == null ? null : code,
         "title": title == null ? null : title,
         "className": className == null ? null : className,
@@ -120,7 +124,8 @@ class CourseDetail {
     String text = "";
     if (instructors.length > 0) {
       text += instructors[0];
-      for (var i = 1; i < instructors.length; i++) text += ",${instructors[i]}";
+      for (var i = 1; i < instructors.length; i++)
+        text += ",${instructors[i]}";
     }
     return text;
   }
@@ -203,7 +208,9 @@ class CourseTables {
         sunday.add(Course.fromJson(v));
       });
     }
-    timeCode = new List<String>.from(json["timeCodes"].map((x) => x));
+    if (json["timeCodes"] != null) {
+      timeCode = new List<String>.from(json["timeCodes"].map((x) => x));
+    }
   }
 
   Map<String, dynamic> toJson() {
@@ -282,8 +289,9 @@ class Course {
     title = json['title'];
     date = json['date'] != null ? Date.fromJson(json['date']) : null;
     location =
-        json['location'] != null ? Location.fromJson(json['location']) : null;
-    instructors = json['instructors']!=null? json['instructors'].cast<String>(): null;
+    json['location'] != null ? Location.fromJson(json['location']) : null;
+    instructors =
+    json['instructors'] != null ? json['instructors'].cast<String>() : null;
   }
 
   Map<String, dynamic> toJson() {
@@ -303,7 +311,8 @@ class Course {
     String text = "";
     if (instructors != null && instructors.length > 0) {
       text += instructors[0];
-      for (var i = 1; i < instructors.length; i++) text += ",${instructors[i]}";
+      for (var i = 1; i < instructors.length; i++)
+        text += ",${instructors[i]}";
     }
     return text;
   }
