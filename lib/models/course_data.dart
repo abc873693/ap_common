@@ -283,7 +283,7 @@ class Course {
     date = json['date'] != null ? Date.fromJson(json['date']) : null;
     location =
         json['location'] != null ? Location.fromJson(json['location']) : null;
-    instructors = json['instructors'].cast<String>();
+    instructors = json['instructors']!=null? json['instructors'].cast<String>(): null;
   }
 
   Map<String, dynamic> toJson() {
