@@ -34,6 +34,13 @@ class CourseData {
         "coursetable": courseTables == null ? null : courseTables.toJson(),
       };
 
+  int findCourseDetail(Course course) {
+    for (var i = 0; i < courses.length; i++) {
+      if (course.title == courses[i].title) return i;
+    }
+    return -1;
+  }
+
   void save(String tag) {
     Preferences.setString('course_data_$tag', this.toRawJson());
   }
