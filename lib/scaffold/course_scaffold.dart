@@ -1,4 +1,5 @@
 import 'package:ap_common/models/course_data.dart';
+import 'package:ap_common/resources/ap_colors.dart';
 import 'package:ap_common/resources/ap_icon.dart';
 import 'package:ap_common/resources/ap_theme.dart';
 import 'package:ap_common/utils/ap_localizations.dart';
@@ -194,7 +195,6 @@ class CourseScaffoldState extends State<CourseScaffold> {
           return SingleChildScrollView(
             physics: AlwaysScrollableScrollPhysics(),
             padding: EdgeInsets.symmetric(
-              horizontal: 16.0,
               vertical: 8.0,
             ),
             child: Container(
@@ -204,10 +204,10 @@ class CourseScaffoldState extends State<CourseScaffold> {
                     10.0,
                   ),
                 ),
-                border: Border.all(
-                  color: Colors.grey,
-                  width: 1.5,
-                ),
+//                border: Border.all(
+//                  color: Colors.grey,
+//                  width: 1.5,
+//                ),
               ),
               child: Row(
                 crossAxisAlignment: CrossAxisAlignment.start,
@@ -220,8 +220,8 @@ class CourseScaffoldState extends State<CourseScaffold> {
   }
 
   BorderSide get _innerBorderSide => BorderSide(
-        width: 0.25,
-        color: Colors.grey,
+        width: 0.5,
+        color: ApTheme.of(context).courseBorder,
       );
 
   BorderSide get _borderSide => BorderSide(
@@ -230,6 +230,7 @@ class CourseScaffoldState extends State<CourseScaffold> {
       );
 
   List<Widget> renderCourseTable() {
+    DateTime start = DateTime.now();
     List<String> weeks = [
       'Monday',
       'Tuesday',
@@ -245,10 +246,7 @@ class CourseScaffoldState extends State<CourseScaffold> {
     final maxTimeCode = widget.courseData.courseTables.getMaxTimeCode(weeks);
     var columns = <Column>[Column(children: [])];
     columns[0].children.add(
-          _weekBorder(
-            "",
-            Border(),
-          ),
+          _weekBorder(''),
         );
     for (var i = 0; i < maxTimeCode; i++) {
       var text = timeCodes[i].replaceAll(' ', '');
@@ -257,15 +255,7 @@ class CourseScaffoldState extends State<CourseScaffold> {
         text = text.replaceAll('節', '');
       }
       columns[0].children.add(
-            _timeCodeBorder(
-              text,
-              Border(
-                top: _borderSide,
-                right: _innerBorderSide,
-                bottom:
-                    i < maxTimeCode - 1 ? _innerBorderSide : BorderSide.none,
-              ),
-            ),
+            _timeCodeBorder(text),
           );
     }
     for (int i = 0; i < weeks.length; i++) {
@@ -276,7 +266,13 @@ class CourseScaffoldState extends State<CourseScaffold> {
         for (var course in courses) {
           for (int j = 0; j < maxTimeCode; j++) {
             if (timeCodes[j] == course.date.section) {
-              courseBorders[j] = CourseBorder(course: course);
+              final index = widget.courseData.findCourseDetail(course);
+              courseBorders[j] = CourseBorder(
+                course: course,
+                color: (index == -1)
+                    ? null
+                    : widget.courseData.courses[index].color,
+              );
             }
           }
         }
@@ -298,6 +294,7 @@ class CourseScaffoldState extends State<CourseScaffold> {
           courseBorders[j] = CourseBorder(
             course: courseBorders[j].course,
             height: _courseHeight * (repeat + 1),
+            color: courseBorders[j].color,
             border: (j + repeat > courseBorders.length)
                 ? Border(
                     left: _innerBorderSide,
@@ -319,11 +316,12 @@ class CourseScaffoldState extends State<CourseScaffold> {
         } else if (j == courseBorders.length - 1) {
           courseBorders[j] = CourseBorder(
             course: courseBorders[j].course,
+            color: courseBorders[j].color,
             border: Border(
               left: _innerBorderSide,
-              right:
-                  (i == weeks.length - 1) ? BorderSide.none : _innerBorderSide,
+              right: _innerBorderSide,
               top: _innerBorderSide,
+              bottom: _innerBorderSide,
             ),
           );
         }
@@ -331,18 +329,15 @@ class CourseScaffoldState extends State<CourseScaffold> {
       columns.add(
         Column(
           children: [
-            _weekBorder(
-              app.weekdaysCourse[i],
-              Border(
-                left: _borderSide,
-                bottom: _innerBorderSide,
-              ),
-            ),
+            _weekBorder(app.weekdaysCourse[i]),
             ...courseBorders,
           ],
         ),
       );
     }
+    DateTime end = DateTime.now();
+    print(
+        'ui parse time = ${end.millisecondsSinceEpoch - start.millisecondsSinceEpoch} ms');
     return [
       columns[0],
       for (var i = 1; i < columns.length; i++)
@@ -352,11 +347,11 @@ class CourseScaffoldState extends State<CourseScaffold> {
     ];
   }
 
-  Widget _weekBorder(String text, Border border) => Container(
+  Widget _weekBorder(String text) => Container(
         padding: EdgeInsets.symmetric(vertical: 2.0),
         alignment: Alignment.center,
         decoration: BoxDecoration(
-          border: border,
+          border: Border(bottom: _innerBorderSide),
         ),
         height: 30.0,
         child: Text(
@@ -368,11 +363,11 @@ class CourseScaffoldState extends State<CourseScaffold> {
         ),
       );
 
-  Widget _timeCodeBorder(String text, Border border) => Container(
+  Widget _timeCodeBorder(String text) => Container(
         padding: EdgeInsets.symmetric(vertical: 8.0),
         alignment: Alignment.center,
         decoration: BoxDecoration(
-          border: border,
+          border: Border(right: _innerBorderSide),
         ),
         height: _courseHeight,
         width: 35.0,
@@ -438,7 +433,7 @@ class CourseList extends StatelessWidget {
                           fontSize: 16.0,
                         ),
                         children: [
-                          if (course.location != null) ...[
+                          if (course.className != null) ...[
                             TextSpan(
                                 text:
                                     '${ApLocalizations.of(context).studentClass}：',
@@ -536,6 +531,7 @@ class CourseBorder extends StatelessWidget {
   final double height;
   final double width;
   final Border border;
+  final Color color;
 
   const CourseBorder({
     Key key,
@@ -543,79 +539,95 @@ class CourseBorder extends StatelessWidget {
     this.height = _courseHeight,
     this.width,
     this.border,
+    this.color,
   }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return Container(
-      decoration: BoxDecoration(
-        border: border ??
-            Border.all(
-              width: 0.25,
-              color: Colors.grey,
-            ),
+      padding: EdgeInsets.only(
+        bottom: course != null ? 2.0 : 0.0,
+        right: course != null ? 2.0 : 0.0,
       ),
       height: height,
       width: width,
-      child: (course == null)
-          ? null
-          : InkWell(
-              onTap: () {
-                showDialog(
-                  context: context,
-                  builder: (BuildContext context) => DefaultDialog(
-                    title: ApLocalizations.of(context).courseDialogTitle,
-                    actionText: ApLocalizations.of(context).iKnow,
-                    actionFunction: () =>
-                        Navigator.of(context, rootNavigator: true).pop(),
-                    contentWidget: RichText(
-                      text: TextSpan(
-                        style: TextStyle(
-                            color: ApTheme.of(context).grey,
-                            height: 1.3,
-                            fontSize: 16.0),
-                        children: [
-                          TextSpan(
-                            text:
-                                '${ApLocalizations.of(context).courseDialogName}：',
-                            style: TextStyle(fontWeight: FontWeight.bold),
-                          ),
-                          TextSpan(text: '${course.title}\n'),
-                          TextSpan(
+      decoration: BoxDecoration(
+        border: border ??
+            Border.all(
+              width: 0.5,
+              color: ApTheme.of(context).courseBorder,
+            ),
+      ),
+      child: Container(
+        decoration: BoxDecoration(
+          color: course != null ? color : null,
+          borderRadius: BorderRadius.all(
+            Radius.circular(course != null ? 6.0 : 0.0),
+          ),
+        ),
+        child: (course == null)
+            ? null
+            : InkWell(
+                onTap: () {
+                  showDialog(
+                    context: context,
+                    builder: (BuildContext context) => DefaultDialog(
+                      title: ApLocalizations.of(context).courseDialogTitle,
+                      actionText: ApLocalizations.of(context).iKnow,
+                      actionFunction: () =>
+                          Navigator.of(context, rootNavigator: true).pop(),
+                      contentWidget: RichText(
+                        text: TextSpan(
+                          style: TextStyle(
+                              color: ApTheme.of(context).grey,
+                              height: 1.3,
+                              fontSize: 16.0),
+                          children: [
+                            TextSpan(
                               text:
-                                  '${ApLocalizations.of(context).courseDialogProfessor}：',
-                              style: TextStyle(fontWeight: FontWeight.bold)),
-                          TextSpan(text: '${course.getInstructors()}\n'),
-                          TextSpan(
-                              text:
-                                  '${ApLocalizations.of(context).courseDialogLocation}：',
-                              style: TextStyle(fontWeight: FontWeight.bold)),
-                          TextSpan(
-                              text:
-                                  '${course.location.building ?? ''}${course.location.room ?? ''}\n'),
-                          TextSpan(
-                              text:
-                                  '${ApLocalizations.of(context).courseDialogTime}：',
-                              style: TextStyle(fontWeight: FontWeight.bold)),
-                          TextSpan(
-                              text:
-                                  '${course.date.startTime}-${course.date.endTime}'),
-                        ],
+                                  '${ApLocalizations.of(context).courseDialogName}：',
+                              style: TextStyle(fontWeight: FontWeight.bold),
+                            ),
+                            TextSpan(text: '${course.title}\n'),
+                            TextSpan(
+                                text:
+                                    '${ApLocalizations.of(context).courseDialogProfessor}：',
+                                style: TextStyle(fontWeight: FontWeight.bold)),
+                            TextSpan(text: '${course.getInstructors()}\n'),
+                            TextSpan(
+                                text:
+                                    '${ApLocalizations.of(context).courseDialogLocation}：',
+                                style: TextStyle(fontWeight: FontWeight.bold)),
+                            TextSpan(
+                                text:
+                                    '${course.location.building ?? ''}${course.location.room ?? ''}\n'),
+                            TextSpan(
+                                text:
+                                    '${ApLocalizations.of(context).courseDialogTime}：',
+                                style: TextStyle(fontWeight: FontWeight.bold)),
+                            TextSpan(
+                                text:
+                                    '${course.date.startTime}-${course.date.endTime}'),
+                          ],
+                        ),
                       ),
                     ),
+                  );
+                },
+                child: Container(
+                  padding: EdgeInsets.symmetric(vertical: 2.0, horizontal: 4.0),
+                  alignment: Alignment.center,
+                  child: Text(
+                    course.title ?? '',
+                    style: TextStyle(
+                      fontSize: 16.0,
+                      color: ApTheme.of(context).courseText,
+                    ),
+                    textAlign: TextAlign.center,
                   ),
-                );
-              },
-              child: Container(
-                padding: EdgeInsets.symmetric(vertical: 2.0, horizontal: 4.0),
-                alignment: Alignment.center,
-                child: Text(
-                  course.title ?? '',
-                  style: TextStyle(fontSize: 16.0),
-                  textAlign: TextAlign.center,
                 ),
               ),
-            ),
+      ),
     );
   }
 }

@@ -217,6 +217,26 @@ class ApTheme extends InheritedWidget {
     }
   }
 
+  Color get courseBorder {
+    switch (_brightness) {
+      case Brightness.dark:
+        return ApColors.charade;
+      case Brightness.light:
+      default:
+        return ApColors.solitude;
+    }
+  }
+
+  Color get courseText {
+    switch (_brightness) {
+      case Brightness.dark:
+        return Colors.black87;
+      case Brightness.light:
+      default:
+        return Colors.white;
+    }
+  }
+
   static ThemeData get light => ThemeData(
         //platform: TargetPlatform.iOS,
         brightness: Brightness.light,

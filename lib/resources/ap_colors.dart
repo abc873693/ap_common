@@ -20,6 +20,8 @@ class ApColors {
   static const Color grey200 = const Color(0xffbdbdbd);
   static const Color grey500 = const Color(0xff7c7c7c);
   static const Color grey800 = const Color(0xff313131);
+  static const Color charade = const Color(0xff3c4043);
+  static const Color solitude = const Color(0xffe9eaed);
 
   static const Color yellow200 = const Color(0xffffe399);
   static const Color yellow500 = const Color(0xffffba00);
@@ -29,4 +31,23 @@ class ApColors {
   static const Color red200 = const Color(0xffffb6bd);
   static const Color red500 = const Color(0xffff4a5a);
   static const Color red800 = const Color(0xff661d24);
+
+  static const List<MaterialColor> colors = [
+    Colors.red,
+    Colors.pink,
+    Colors.purple,
+    Colors.deepPurple,
+    Colors.indigo,
+    Colors.blue,
+    Colors.lightBlue,
+    Colors.cyan,
+    Colors.teal,
+    Colors.green,
+    Colors.lightGreen,
+    Colors.lime,
+    Colors.yellow,
+    Colors.amber,
+    Colors.orange,
+    Colors.deepOrange,
+  ];
 }

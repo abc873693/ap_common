@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:ui';
 
 import 'package:ap_common/utils/preferences.dart';
 
@@ -71,6 +72,7 @@ class CourseDetail {
   String times;
   Location location;
   List<String> instructors;
+  Color color;
 
   CourseDetail({
     this.code,
@@ -84,6 +86,7 @@ class CourseDetail {
     this.times,
     this.location,
     this.instructors,
+    this.color,
   });
 
   factory CourseDetail.fromRawJson(String str) =>
@@ -108,6 +111,7 @@ class CourseDetail {
         instructors: json["instructors"] == null
             ? null
             : List<String>.from(json["instructors"].map((x) => x)),
+        color: json["color"] == null ? null : Color(json["color"]),
       );
 
   Map<String, dynamic> toJson() =>
@@ -125,6 +129,7 @@ class CourseDetail {
         "instructors": instructors == null
             ? null
             : List<dynamic>.from(instructors.map((x) => x)),
+        "color": color == null ? null : color.value,
       };
 
   String getInstructors() {
@@ -289,8 +294,9 @@ class Course {
   Date date;
   Location location;
   List<String> instructors;
+  Color color;
 
-  Course({this.title, this.date, this.location, this.instructors});
+  Course({this.title, this.date, this.location, this.instructors, this.color});
 
   Course.fromJson(Map<String, dynamic> json) {
     title = json['title'];
