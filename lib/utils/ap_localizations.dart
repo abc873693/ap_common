@@ -11,10 +11,13 @@ class ApLocalizations {
 
   static Locale locale;
 
+  static ApLocalizations instance;
+
   String get email => _vocabularies['email'];
 
   static ApLocalizations of(BuildContext context) {
-    return Localizations.of<ApLocalizations>(context, ApLocalizations);
+    return instance =
+        Localizations.of<ApLocalizations>(context, ApLocalizations);
   }
 
   static String dioError(BuildContext context, DioError dioError) {
