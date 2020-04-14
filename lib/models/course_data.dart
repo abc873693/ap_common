@@ -153,6 +153,16 @@ class CourseTables {
   List<Course> sunday;
   List<String> timeCode;
 
+  List<List<Course>> get weeks => [
+        monday,
+        tuesday,
+        wednesday,
+        thursday,
+        friday,
+        saturday,
+        sunday,
+      ];
+
   CourseTables({
     this.monday,
     this.tuesday,
