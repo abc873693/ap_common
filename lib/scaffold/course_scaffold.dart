@@ -313,6 +313,7 @@ class CourseScaffoldState extends State<CourseScaffold> {
             );
           }
           j += repeat;
+          repeat = 0;
         } else if (j == courseBorders.length - 1) {
           courseBorders[j] = CourseBorder(
             course: courseBorders[j].course,
