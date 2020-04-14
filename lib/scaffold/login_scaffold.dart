@@ -190,7 +190,10 @@ class ApTextField extends StatelessWidget {
   final TextInputAction textInputAction;
   final String labelText;
   final Function(String text) onSubmitted;
+  final Function(String text) onChanged;
   final bool obscureText;
+  final int maxLength;
+  final TextInputType keyboardType;
 
   const ApTextField({
     Key key,
@@ -200,7 +203,10 @@ class ApTextField extends StatelessWidget {
     this.onSubmitted,
     this.labelText = '',
     this.textInputAction = TextInputAction.next,
+    this.keyboardType = TextInputType.text,
     this.obscureText = false,
+    this.maxLength,
+    this.onChanged,
   }) : super(key: key);
 
   @override
@@ -210,7 +216,10 @@ class ApTextField extends StatelessWidget {
       obscureText: obscureText,
       controller: controller,
       textInputAction: textInputAction,
+      keyboardType: keyboardType,
       focusNode: focusNode,
+      maxLength: maxLength,
+      onChanged: onChanged,
       onSubmitted: (text) {
         if (focusNode != null) focusNode.unfocus();
         if (nextFocusNode != null)
@@ -219,6 +228,7 @@ class ApTextField extends StatelessWidget {
       },
       decoration: InputDecoration(
         labelText: labelText,
+        counterText: '',
       ),
       style: TextStyle(
         color: Colors.white,
