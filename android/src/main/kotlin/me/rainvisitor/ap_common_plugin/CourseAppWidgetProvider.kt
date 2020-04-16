@@ -49,16 +49,17 @@ class CourseAppWidgetProvider : AppWidgetProvider() {
     }
 
     private fun refreshView(context: Context): RemoteViews {
-//        val pendingIntent: PendingIntent = Intent(context, MainActivity::class.java)
-//                .let { intent ->
-//                    PendingIntent.getActivity(context, 0, intent, 0)
-//                }
+        val packageName: String = context.packageName
+        val pendingIntent: PendingIntent = context.packageManager.getLaunchIntentForPackage(packageName)
+                .let { intent ->
+                    PendingIntent.getActivity(context, 0, intent, 0)
+                }
         return RemoteViews(
                 context.packageName,
                 R.layout.course_appwidget_provider_layout
         ).apply {
             setOnClickPendingIntent(R.id.refresh, getPendingSelfIntent(context, REFRESH));
-//            setOnClickPendingIntent(R.id.content, pendingIntent)
+            setOnClickPendingIntent(R.id.content, pendingIntent)
 
 
             val preference = context.getSharedPreferences("FlutterSharedPreferences", Context.MODE_PRIVATE)
