@@ -10,17 +10,17 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 class ApDrawer extends StatefulWidget {
+  final UserInfo userInfo;
   final Function onTapHeader;
   final String imageAsset;
   final List<Widget> widgets;
-  final Future<UserInfo> Function() builder;
   final String imageHeroTag;
 
   const ApDrawer({
     Key key,
     @required this.onTapHeader,
     @required this.widgets,
-    @required this.builder,
+    @required this.userInfo,
     this.imageAsset,
     this.imageHeroTag = 'image',
   }) : super(key: key);
@@ -32,13 +32,10 @@ class ApDrawer extends StatefulWidget {
 class ApDrawerState extends State<ApDrawer> {
   ApLocalizations app;
 
-  UserInfo userInfo;
-
   bool displayPicture = true;
 
   @override
   void initState() {
-    _getUserInfo();
     super.initState();
   }
 
@@ -61,7 +58,7 @@ class ApDrawerState extends State<ApDrawer> {
                   UserAccountsDrawerHeader(
                     margin: const EdgeInsets.all(0),
                     currentAccountPicture:
-                        userInfo?.pictureBytes != null && displayPicture
+                        widget.userInfo?.pictureBytes != null && displayPicture
                             ? Hero(
                                 tag: widget.imageHeroTag,
                                 child: Container(
@@ -72,7 +69,7 @@ class ApDrawerState extends State<ApDrawer> {
                                     image: DecorationImage(
                                       fit: BoxFit.fitWidth,
                                       image: MemoryImage(
-                                        userInfo.pictureBytes,
+                                        widget.userInfo.pictureBytes,
                                       ),
                                     ),
                                   ),
@@ -91,13 +88,13 @@ class ApDrawerState extends State<ApDrawer> {
                                 ),
                               ),
                     accountName: Text(
-                      (userInfo == null)
+                      (widget.userInfo == null)
                           ? app.notLogin
-                          : (userInfo?.name ?? ''),
+                          : (widget.userInfo?.name ?? ''),
                       style: TextStyle(color: Colors.white),
                     ),
                     accountEmail: Text(
-                      userInfo?.id ?? '',
+                      widget.userInfo?.id ?? '',
                       style: TextStyle(color: Colors.white),
                     ),
                     decoration: BoxDecoration(
@@ -129,11 +126,6 @@ class ApDrawerState extends State<ApDrawer> {
         ),
       ),
     );
-  }
-
-  void _getUserInfo() async {
-    userInfo = await widget.builder();
-    setState(() {});
   }
 }
 
