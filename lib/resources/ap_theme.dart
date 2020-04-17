@@ -233,6 +233,16 @@ class ApTheme extends InheritedWidget {
         return Colors.black87;
       case Brightness.light:
       default:
+        return Colors.white10;
+    }
+  }
+
+  Color get courseListTabletBackground {
+    switch (_brightness) {
+      case Brightness.dark:
+        return Colors.black12;
+      case Brightness.light:
+      default:
         return Colors.white;
     }
   }

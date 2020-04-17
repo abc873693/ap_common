@@ -22,8 +22,7 @@ class ItemPicker extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return SizedBox(
-      width: width ?? MediaQuery.of(context).size.width * 0.9,
+    return Expanded(
       child: FlatButton(
         onPressed: () {
           showDialog(

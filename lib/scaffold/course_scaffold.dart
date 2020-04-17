@@ -58,6 +58,8 @@ class CourseScaffoldState extends State<CourseScaffold> {
 
   double get childAspectRatio => (widget.courseData.hasHoliday) ? 1.1 : 1.5;
 
+  bool get isTablet => MediaQuery.of(context).size.shortestSide >= 600;
+
   @override
   void initState() {
     super.initState();
@@ -77,49 +79,72 @@ class CourseScaffoldState extends State<CourseScaffold> {
         backgroundColor: ApTheme.of(context).blue,
         actions: widget.actions,
       ),
-      body: Flex(
-        direction: Axis.vertical,
-        mainAxisSize: MainAxisSize.min,
-        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+      body: Row(
         children: <Widget>[
-          SizedBox(height: 8.0),
-          if (widget.years != null || widget.semesters != null)
-            Row(
-              mainAxisAlignment: MainAxisAlignment.center,
+          Expanded(
+            flex: 3,
+            child: Flex(
+              direction: Axis.vertical,
+              mainAxisSize: MainAxisSize.min,
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: <Widget>[
+                SizedBox(height: 8.0),
+                if (widget.years != null || widget.semesters != null)
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    mainAxisSize: MainAxisSize.max,
+                    children: <Widget>[
 //              ItemPicker(
 //                onSelected: (int index) {},
 //                items: widget.years,
 //                currentIndex: widget.yearIndex,
 //              ),
-                ItemPicker(
-                  dialogTitle: app.picksSemester,
-                  onSelected: widget.onSelect,
-                  items: widget.semesters,
-                  currentIndex: widget.semesterIndex,
+                      ItemPicker(
+                        dialogTitle: app.picksSemester,
+                        onSelected: widget.onSelect,
+                        items: widget.semesters,
+                        currentIndex: widget.semesterIndex,
+                      ),
+                    ],
+                  ),
+                if (widget.customHint != null)
+                  Text(
+                    widget.customHint,
+                    style: TextStyle(color: ApTheme.of(context).grey),
+                  ),
+                if (_contentStyle == _ContentStyle.table)
+                  Text(
+                    app.courseClickHint,
+                    style: TextStyle(color: ApTheme.of(context).grey),
+                  ),
+                SizedBox(height: 4.0),
+                Expanded(
+                  child: RefreshIndicator(
+                    onRefresh: () async {
+                      await widget.onRefresh();
+                      return null;
+                    },
+                    child: _body(),
+                  ),
                 ),
               ],
             ),
-          if (widget.customHint != null)
-            Text(
-              widget.customHint,
-              style: TextStyle(color: ApTheme.of(context).grey),
-            ),
-          if (_contentStyle == _ContentStyle.table)
-            Text(
-              app.courseClickHint,
-              style: TextStyle(color: ApTheme.of(context).grey),
-            ),
-          SizedBox(height: 4.0),
-          Expanded(
-            child: RefreshIndicator(
-              onRefresh: () async {
-                await widget.onRefresh();
-                return null;
-              },
-              child: _body(),
-            ),
           ),
+          if (widget.state == CourseState.finish && isTablet) ...[
+            SizedBox(width: 16.0),
+            Expanded(
+              flex: 2,
+              child: Material(
+                elevation: 12.0,
+                child: Container(
+                  color: ApTheme.of(context).courseListTabletBackground,
+                  child: CourseList(
+                    courses: widget.courseData.courses,
+                  ),
+                ),
+              ),
+            ),
+          ]
         ],
       ),
       floatingActionButtonLocation: FloatingActionButtonLocation.endDocked,
@@ -129,34 +154,36 @@ class CourseScaffoldState extends State<CourseScaffold> {
               onPressed: _pickSemester,
             )
           : null,
-      bottomNavigationBar: BottomAppBar(
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-          children: <Widget>[
-            IconButton(
-              iconSize: _contentStyle == _ContentStyle.table ? 24 : 20,
-              color: _contentStyle == _ContentStyle.table
-                  ? ApTheme.of(context).yellow
-                  : ApTheme.of(context).grey,
-              icon: Icon(Icons.grid_on),
-              onPressed: () {
-                setState(() => _contentStyle = _ContentStyle.table);
-              },
+      bottomNavigationBar: isTablet
+          ? null
+          : BottomAppBar(
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                children: <Widget>[
+                  IconButton(
+                    iconSize: _contentStyle == _ContentStyle.table ? 24 : 20,
+                    color: _contentStyle == _ContentStyle.table
+                        ? ApTheme.of(context).yellow
+                        : ApTheme.of(context).grey,
+                    icon: Icon(Icons.grid_on),
+                    onPressed: () {
+                      setState(() => _contentStyle = _ContentStyle.table);
+                    },
+                  ),
+                  IconButton(
+                    iconSize: _contentStyle == _ContentStyle.list ? 24 : 20,
+                    color: _contentStyle == _ContentStyle.list
+                        ? ApTheme.of(context).yellow
+                        : ApTheme.of(context).grey,
+                    icon: Icon(Icons.format_list_bulleted),
+                    onPressed: () {
+                      setState(() => _contentStyle = _ContentStyle.list);
+                    },
+                  ),
+                  if (widget.isShowSearchButton) Container(height: 0),
+                ],
+              ),
             ),
-            IconButton(
-              iconSize: _contentStyle == _ContentStyle.list ? 24 : 20,
-              color: _contentStyle == _ContentStyle.list
-                  ? ApTheme.of(context).yellow
-                  : ApTheme.of(context).grey,
-              icon: Icon(Icons.format_list_bulleted),
-              onPressed: () {
-                setState(() => _contentStyle = _ContentStyle.list);
-              },
-            ),
-            if (widget.isShowSearchButton) Container(height: 0),
-          ],
-        ),
-      ),
     );
   }
 
@@ -164,7 +191,9 @@ class CourseScaffoldState extends State<CourseScaffold> {
     switch (widget.state) {
       case CourseState.loading:
         return Container(
-            child: CircularProgressIndicator(), alignment: Alignment.center);
+          child: CircularProgressIndicator(),
+          alignment: Alignment.center,
+        );
       case CourseState.empty:
       case CourseState.error:
         return FlatButton(
@@ -187,33 +216,22 @@ class CourseScaffoldState extends State<CourseScaffold> {
           content: app.noOfflineData,
         );
       default:
-        if (_contentStyle == _ContentStyle.list) {
-          return CourseList(
-            courses: widget.courseData.courses,
-          );
-        } else {
+        if (isTablet || _contentStyle == _ContentStyle.table) {
           return SingleChildScrollView(
             physics: AlwaysScrollableScrollPhysics(),
             padding: EdgeInsets.symmetric(
               vertical: 8.0,
             ),
             child: Container(
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.all(
-                  Radius.circular(
-                    10.0,
-                  ),
-                ),
-//                border: Border.all(
-//                  color: Colors.grey,
-//                  width: 1.5,
-//                ),
-              ),
               child: Row(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: renderCourseTable(),
               ),
             ),
+          );
+        } else {
+          return CourseList(
+            courses: widget.courseData.courses,
           );
         }
     }
