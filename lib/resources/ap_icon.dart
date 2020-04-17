@@ -356,4 +356,24 @@ class ApIcon {
         return OMIcons.monetizationOn;
     }
   }
+
+  static IconData get map {
+    switch (ApIcon.code) {
+      case ApIcon.FILLED:
+        return Icons.map;
+      case ApIcon.OUTLINED:
+      default:
+        return OMIcons.map;
+    }
+  }
+
+  static IconData get navigation {
+    switch (ApIcon.code) {
+      case ApIcon.FILLED:
+        return Icons.navigation;
+      case ApIcon.OUTLINED:
+      default:
+        return OMIcons.navigation;
+    }
+  }
 }
