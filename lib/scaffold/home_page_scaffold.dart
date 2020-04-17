@@ -27,6 +27,7 @@ class HomePageScaffold extends StatefulWidget {
   final Function(News news) onImageTapped;
 
   final Widget drawer;
+  final Widget floatingActionButton;
 
   final bool isLogin;
   final bool autoPlay;
@@ -41,6 +42,7 @@ class HomePageScaffold extends StatefulWidget {
     this.onTabTapped,
     this.bottomNavigationBarItems,
     this.drawer,
+    this.floatingActionButton,
     this.title,
     this.onImageTapped,
     this.autoPlay = true,
@@ -101,6 +103,7 @@ class HomePageScaffoldState extends State<HomePageScaffold> {
           actions: widget.actions,
         ),
         drawer: widget.drawer,
+        floatingActionButton: widget.floatingActionButton,
         body: OrientationBuilder(
           builder: (_, orientation) {
             return Container(
