@@ -22,6 +22,7 @@ dependencies:
   photo_view: ">=0.9.2 <1.0.0"
   encrypt: ">=4.0.0 <5.0.0"
   dio: ">=3.0.0 <4.0.0"
+  dio_cookie_manager: ">=1.0.0 <2.0.0"
 
 dev_dependencies:
   flutter_test:
