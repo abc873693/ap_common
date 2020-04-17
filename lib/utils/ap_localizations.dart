@@ -15,6 +15,10 @@ class ApLocalizations {
 
   String get email => _vocabularies['email'];
 
+  String get schoolNavigation => _vocabularies['schoolNavigation'];
+
+  String get schoolMap => _vocabularies['schoolMap'];
+
   static ApLocalizations of(BuildContext context) {
     return instance =
         Localizations.of<ApLocalizations>(context, ApLocalizations);
@@ -403,6 +407,8 @@ class ApLocalizations {
       'noExpiration': 'No Expiration',
       'showSearchButton': 'Show Search Button',
       'email': 'Email',
+      'schoolNavigation': 'School Navigation',
+      'schoolMap': 'School Map',
     },
     'zh': {
       'app_name': '高科校務通',
@@ -742,6 +748,8 @@ class ApLocalizations {
       'noExpiration': '無到期時間',
       'showSearchButton': '顯示搜尋按鈕',
       'email': '電子信箱',
+      'schoolNavigation': '校園導覽',
+      'schoolMap': '校園地圖',
     },
   };
 
