@@ -1,6 +1,6 @@
 import 'package:flutter_test/flutter_test.dart';
 
-import 'package:apcommonfirebase/apcommonfirebase.dart';
+import 'package:ap_common_firbase/apcommonfirebase.dart';
 
 void main() {
   test('adds one to input values', () {
