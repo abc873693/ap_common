@@ -7,6 +7,9 @@ import 'package:firebase_analytics/firebase_analytics.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/foundation.dart';
 
+export 'package:firebase_analytics/firebase_analytics.dart';
+export 'package:firebase_analytics/observer.dart';
+
 class FirebaseUtils {
   static FirebaseAnalytics init() {
     if (!kIsWeb && (Platform.isAndroid || Platform.isIOS)) {
