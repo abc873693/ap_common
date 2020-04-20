@@ -233,7 +233,7 @@ class ApTheme extends InheritedWidget {
         return Colors.black87;
       case Brightness.light:
       default:
-        return Colors.white10;
+        return Colors.white;
     }
   }
 
