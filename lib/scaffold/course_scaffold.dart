@@ -290,6 +290,7 @@ class CourseScaffoldState extends State<CourseScaffold> {
                 color: (index == -1)
                     ? null
                     : widget.courseData.courses[index].color,
+                onPressed: _onPressed,
               );
             }
           }
@@ -322,6 +323,7 @@ class CourseScaffoldState extends State<CourseScaffold> {
                     top: _innerBorderSide,
                   )
                 : null,
+            onPressed: _onPressed,
           );
           for (var k = j + 1; k < j + repeat + 1; k++) {
             courseBorders[k] = CourseBorder(
@@ -342,6 +344,7 @@ class CourseScaffoldState extends State<CourseScaffold> {
               top: _innerBorderSide,
               bottom: _innerBorderSide,
             ),
+            onPressed: _onPressed,
           );
         }
       }
@@ -364,6 +367,82 @@ class CourseScaffoldState extends State<CourseScaffold> {
           child: columns[i],
         )
     ];
+  }
+
+  void _onPressed(Course course) {
+    showModalBottomSheet(
+      context: context,
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(10.0),
+      ),
+      builder: (builder) {
+        return Padding(
+          padding: const EdgeInsets.symmetric(
+            horizontal: 16.0,
+            vertical: 12.0,
+          ),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: <Widget>[
+              Row(
+                children: <Widget>[
+                  Expanded(
+                    child: Text(
+                      course.title,
+                      style: TextStyle(
+                        fontWeight: FontWeight.bold,
+                        fontSize: 20.0,
+                        color: ApTheme.of(context).blueAccent,
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+              SizedBox(height: 8.0),
+              Row(
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: <Widget>[
+                  Expanded(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          '${course.getInstructors()}',
+                          style: TextStyle(
+                            fontSize: 18.0,
+                            color: ApTheme.of(context).grey,
+                          ),
+                        ),
+                        Text(
+                          '${course.location.building ?? ''}'
+                          '${course.location.room ?? ''}',
+                          style: TextStyle(
+                            fontSize: 16.0,
+                            color: ApTheme.of(context).greyText,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                  Column(
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: [
+                      Text(
+                        '${course.date.startTime}-${course.date.endTime}',
+                        style: TextStyle(
+                          fontSize: 18.0,
+                          color: ApTheme.of(context).greyText,
+                        ),
+                      ),
+                    ],
+                  ),
+                ],
+              ),
+            ],
+          ),
+        );
+      },
+    );
   }
 
   Widget _weekBorder(String text) => Container(
@@ -551,6 +630,7 @@ class CourseBorder extends StatelessWidget {
   final double width;
   final Border border;
   final Color color;
+  final Function(Course course) onPressed;
 
   const CourseBorder({
     Key key,
@@ -559,6 +639,7 @@ class CourseBorder extends StatelessWidget {
     this.width,
     this.border,
     this.color,
+    this.onPressed,
   }) : super(key: key);
 
   @override
@@ -587,50 +668,7 @@ class CourseBorder extends StatelessWidget {
             ? Container()
             : InkWell(
                 onTap: () {
-                  showDialog(
-                    context: context,
-                    builder: (BuildContext context) => DefaultDialog(
-                      title: ApLocalizations.of(context).courseDialogTitle,
-                      actionText: ApLocalizations.of(context).iKnow,
-                      actionFunction: () =>
-                          Navigator.of(context, rootNavigator: true).pop(),
-                      contentWidget: RichText(
-                        text: TextSpan(
-                          style: TextStyle(
-                              color: ApTheme.of(context).grey,
-                              height: 1.3,
-                              fontSize: 16.0),
-                          children: [
-                            TextSpan(
-                              text:
-                                  '${ApLocalizations.of(context).courseDialogName}：',
-                              style: TextStyle(fontWeight: FontWeight.bold),
-                            ),
-                            TextSpan(text: '${course.title}\n'),
-                            TextSpan(
-                                text:
-                                    '${ApLocalizations.of(context).courseDialogProfessor}：',
-                                style: TextStyle(fontWeight: FontWeight.bold)),
-                            TextSpan(text: '${course.getInstructors()}\n'),
-                            TextSpan(
-                                text:
-                                    '${ApLocalizations.of(context).courseDialogLocation}：',
-                                style: TextStyle(fontWeight: FontWeight.bold)),
-                            TextSpan(
-                                text:
-                                    '${course.location.building ?? ''}${course.location.room ?? ''}\n'),
-                            TextSpan(
-                                text:
-                                    '${ApLocalizations.of(context).courseDialogTime}：',
-                                style: TextStyle(fontWeight: FontWeight.bold)),
-                            TextSpan(
-                                text:
-                                    '${course.date.startTime}-${course.date.endTime}'),
-                          ],
-                        ),
-                      ),
-                    ),
-                  );
+                  this.onPressed(course);
                 },
                 radius: 6.0,
                 child: Padding(
