@@ -290,7 +290,7 @@ class CourseScaffoldState extends State<CourseScaffold> {
                 color: (index == -1)
                     ? null
                     : ApColors.colors[
-                        widget.courseData.courses[index].detailIndex][300],
+                        widget.courseData.courses[index].detailIndex ?? 0][300],
                 onPressed: _onPressed,
               );
             }
