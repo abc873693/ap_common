@@ -577,15 +577,14 @@ class CourseBorder extends StatelessWidget {
               color: ApTheme.of(context).courseBorder,
             ),
       ),
-      child: Container(
-        decoration: BoxDecoration(
-          color: course != null ? color : null,
-          borderRadius: BorderRadius.all(
-            Radius.circular(course != null ? 6.0 : 0.0),
-          ),
+      child: Material(
+        type: course != null ? MaterialType.canvas : MaterialType.transparency,
+        color: course != null ? color : null,
+        borderRadius: BorderRadius.all(
+          Radius.circular(course != null ? 6.0 : 0.0),
         ),
         child: (course == null)
-            ? null
+            ? Container()
             : InkWell(
                 onTap: () {
                   showDialog(
@@ -633,9 +632,9 @@ class CourseBorder extends StatelessWidget {
                     ),
                   );
                 },
-                child: Container(
+                radius: 6.0,
+                child: Padding(
                   padding: EdgeInsets.symmetric(vertical: 2.0, horizontal: 4.0),
-                  alignment: Alignment.center,
                   child: Text(
                     course.title ?? '',
                     style: TextStyle(
