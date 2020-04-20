@@ -70,7 +70,7 @@ class CourseDetail {
   String times;
   Location location;
   List<String> instructors;
-  Color color;
+  int detailIndex;
 
   CourseDetail({
     this.code,
@@ -84,7 +84,7 @@ class CourseDetail {
     this.times,
     this.location,
     this.instructors,
-    this.color,
+    this.detailIndex,
   });
 
   factory CourseDetail.fromRawJson(String str) =>
@@ -108,7 +108,7 @@ class CourseDetail {
         instructors: json["instructors"] == null
             ? null
             : List<String>.from(json["instructors"].map((x) => x)),
-        color: json["color"] == null ? null : Color(json["color"]),
+        detailIndex: json["detailIndex"] == null ? null : json["detailIndex"],
       );
 
   Map<String, dynamic> toJson() => {
@@ -125,7 +125,7 @@ class CourseDetail {
         "instructors": instructors == null
             ? null
             : List<dynamic>.from(instructors.map((x) => x)),
-        "color": color == null ? null : color.value,
+        "detailIndex": detailIndex == null ? null : detailIndex,
       };
 
   String getInstructors() {
@@ -299,9 +299,14 @@ class Course {
   Date date;
   Location location;
   List<String> instructors;
-  Color color;
+  int detailIndex;
 
-  Course({this.title, this.date, this.location, this.instructors, this.color});
+  Course(
+      {this.title,
+      this.date,
+      this.location,
+      this.instructors,
+      this.detailIndex});
 
   Course.fromJson(Map<String, dynamic> json) {
     title = json['title'];
