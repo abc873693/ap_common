@@ -8,7 +8,7 @@ import 'package:sprintf/sprintf.dart';
 export 'package:flutter_local_notifications/flutter_local_notifications.dart';
 
 class NotificationUtils {
-  static const ANDROID_RESOURCE_NAME = '@mipmap/ic_launcher';
+  static const ANDROID_RESOURCE_NAME = '@drawable/ic_stat_name';
 
   // Notification ID
   static const int BUS = 100;
@@ -36,11 +36,14 @@ class NotificationUtils {
       '$COURSE',
       ap.courseNotify,
       ap.courseNotify,
-      largeIcon: DrawableResourceAndroidBitmap(ANDROID_RESOURCE_NAME),
+      icon: ANDROID_RESOURCE_NAME,
       importance: Importance.Max,
       enableVibration: enableVibration,
     );
-    var iOSPlatformChannelSpecifics = IOSNotificationDetails();
+    var iOSPlatformChannelSpecifics = IOSNotificationDetails(
+      presentAlert: true,
+      presentSound: true,
+    );
     var platformChannelSpecifics = NotificationDetails(
       androidPlatformChannelSpecifics,
       iOSPlatformChannelSpecifics,
@@ -60,7 +63,7 @@ class NotificationUtils {
       courseNotify.id,
       ap.courseNotify,
       content,
-      Day.Monday,
+      getDay(courseNotify.weeklyIndex),
       time,
       platformChannelSpecifics,
       payload: content,
@@ -102,7 +105,9 @@ class NotificationUtils {
     );
   }
 
-  static Future<void> cancelCourseNotify(int id) async {
+  static Future<void> cancelCourseNotify({
+    @required int id,
+  }) async {
     final flutterLocalNotificationsPlugin = FlutterLocalNotificationsPlugin();
     await flutterLocalNotificationsPlugin.cancel(id);
   }

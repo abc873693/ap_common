@@ -1,8 +1,12 @@
+import 'package:ap_common/config/ap_constants.dart';
 import 'package:ap_common/models/course_data.dart';
+import 'package:ap_common/models/course_notify_data.dart';
 import 'package:ap_common/resources/ap_colors.dart';
 import 'package:ap_common/resources/ap_icon.dart';
 import 'package:ap_common/resources/ap_theme.dart';
 import 'package:ap_common/utils/ap_localizations.dart';
+import 'package:ap_common/utils/ap_utils.dart';
+import 'package:ap_common/utils/notification_utils.dart';
 import 'package:ap_common/widgets/default_dialog.dart';
 import 'package:ap_common/widgets/hint_content.dart';
 import 'package:ap_common/widgets/item_picker.dart';
@@ -29,6 +33,8 @@ class CourseScaffold extends StatefulWidget {
   final List<Widget> actions;
   final bool isShowSearchButton;
   final String customHint;
+  final bool enableNotifyControl;
+  final CourseNotifyData notifyData;
 
   const CourseScaffold({
     Key key,
@@ -43,6 +49,8 @@ class CourseScaffold extends StatefulWidget {
     this.onRefresh,
     this.isShowSearchButton = true,
     this.actions,
+    this.enableNotifyControl = true,
+    this.notifyData,
   }) : super(key: key);
 
   @override
@@ -286,11 +294,11 @@ class CourseScaffoldState extends State<CourseScaffold> {
             if (timeCodes[j] == course.date.section) {
               final index = widget.courseData.findCourseDetail(course);
               courseBorders[j] = CourseBorder(
+                weekIndex: i,
                 course: course,
                 color: (index == -1)
                     ? null
-                    : ApColors.colors[
-                        widget.courseData.courses[index].detailIndex ?? 0][300],
+                    : ApColors.colors[course.detailIndex ?? 0][300],
                 onPressed: _onPressed,
               );
             }
@@ -312,6 +320,7 @@ class CourseScaffoldState extends State<CourseScaffold> {
           final course = courseBorders[j].course;
           course.date.endTime = courseBorders[j + repeat].course.date.endTime;
           courseBorders[j] = CourseBorder(
+            weekIndex: courseBorders[j].weekIndex,
             course: courseBorders[j].course,
             height: _courseHeight * (repeat + 1),
             color: courseBorders[j].color,
@@ -328,6 +337,7 @@ class CourseScaffoldState extends State<CourseScaffold> {
           );
           for (var k = j + 1; k < j + repeat + 1; k++) {
             courseBorders[k] = CourseBorder(
+              weekIndex: courseBorders[j].weekIndex,
               course: courseBorders[k].course,
               height: 0.0,
               width: 0.0,
@@ -337,6 +347,7 @@ class CourseScaffoldState extends State<CourseScaffold> {
           repeat = 0;
         } else if (j == courseBorders.length - 1) {
           courseBorders[j] = CourseBorder(
+            weekIndex: courseBorders[j].weekIndex,
             course: courseBorders[j].course,
             color: courseBorders[j].color,
             border: Border(
@@ -370,7 +381,8 @@ class CourseScaffoldState extends State<CourseScaffold> {
     ];
   }
 
-  void _onPressed(Course course) {
+  void _onPressed(int weekIndex, Course course) {
+    final courseDetail = widget.courseData.courses[course.detailIndex];
     showModalBottomSheet(
       context: context,
       shape: RoundedRectangleBorder(
@@ -397,6 +409,48 @@ class CourseScaffoldState extends State<CourseScaffold> {
                       ),
                     ),
                   ),
+                  if (widget.enableNotifyControl)
+                    IconButton(
+                      icon: Icon(
+                          widget.notifyData.getByCode(courseDetail.code) == null
+                              ? Icons.alarm_off
+                              : Icons.alarm_on),
+                      onPressed: () async {
+                        var courseNotify =
+                            widget.notifyData.getByCode(courseDetail.code);
+                        if (courseNotify == null) {
+                          courseNotify = CourseNotify.fromCourse(
+                            id: widget.notifyData.lastId + 1,
+                            weeklyIndex: weekIndex,
+                            course: course,
+                            courseDetail: courseDetail,
+                          );
+                          await NotificationUtils.scheduleCourseNotify(
+                            context: context,
+                            courseNotify: courseNotify,
+                            day: NotificationUtils.getDay(weekIndex),
+                          );
+                          widget.notifyData.lastId++;
+                          widget.notifyData.data.add(courseNotify);
+                          ApUtils.showToast(context, app.courseNotifyHint);
+                        } else {
+                          await NotificationUtils.cancelCourseNotify(
+                            id: courseNotify.id,
+                          );
+                          widget.notifyData.data.forEach((e) {
+                            print(e.title);
+                          });
+                          widget.notifyData.data.removeWhere((data) {
+                            return data.id == courseNotify.id;
+                          });
+                          print('afer');
+                          widget.notifyData.data.forEach((e) {
+                            print(e.title);
+                          });
+                        }
+                        setState(() {});
+                      },
+                    )
                 ],
               ),
               SizedBox(height: 8.0),
@@ -626,15 +680,17 @@ class CourseList extends StatelessWidget {
 }
 
 class CourseBorder extends StatelessWidget {
+  final int weekIndex;
   final Course course;
   final double height;
   final double width;
   final Border border;
   final Color color;
-  final Function(Course course) onPressed;
+  final Function(int weekIndex, Course course) onPressed;
 
   const CourseBorder({
     Key key,
+    this.weekIndex,
     this.course,
     this.height = _courseHeight,
     this.width,
@@ -669,7 +725,7 @@ class CourseBorder extends StatelessWidget {
             ? Container()
             : InkWell(
                 onTap: () {
-                  this.onPressed(course);
+                  this.onPressed(weekIndex, course);
                 },
                 radius: 6.0,
                 child: Padding(

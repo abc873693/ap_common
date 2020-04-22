@@ -1,13 +1,19 @@
 import 'dart:convert';
 
+import 'package:ap_common/models/course_data.dart';
+import 'package:flutter/cupertino.dart';
+
 class CourseNotifyData {
+  static const VERSION = 1;
+  static const INITIAL_ID = 1;
+
   int version;
   int lastId;
   List<CourseNotify> data;
 
   CourseNotifyData({
-    this.version,
-    this.lastId,
+    this.version = VERSION,
+    this.lastId = INITIAL_ID,
     this.data,
   });
 
@@ -21,7 +27,7 @@ class CourseNotifyData {
         version: json["version"] == null ? null : json["version"],
         lastId: json["lastId"] == null ? null : json["lastId"],
         data: json["data"] == null
-            ? null
+            ? []
             : List<CourseNotify>.from(
                 json["data"].map((x) => CourseNotify.fromJson(x))),
       );
@@ -33,6 +39,13 @@ class CourseNotifyData {
             ? null
             : List<dynamic>.from(data.map((x) => x.toJson())),
       };
+
+  CourseNotify getByCode(String code) {
+    for (var value in data) {
+      if (value.code == code) return value;
+    }
+    return null;
+  }
 }
 
 class CourseNotify {
@@ -74,4 +87,20 @@ class CourseNotify {
         "weeklyIndex": weeklyIndex == null ? null : weeklyIndex,
         "startTime": startTime == null ? null : startTime,
       };
+
+  factory CourseNotify.fromCourse({
+    @required int id,
+    @required int weeklyIndex,
+    @required Course course,
+    @required CourseDetail courseDetail,
+  }) {
+    return CourseNotify(
+      id: id,
+      title: course.title,
+      code: courseDetail.code,
+      startTime: course.date?.startTime,
+      weeklyIndex: weeklyIndex,
+      location: course.location?.building ?? '' + course.location?.room ?? '',
+    );
+  }
 }
