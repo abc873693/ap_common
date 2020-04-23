@@ -52,6 +52,31 @@ class ApUtils {
     }
   }
 
+  static Future<void> launchUrl(var url) async {
+    if (await canLaunch(url)) {
+      await launch(url);
+    } else {
+      throw 'Could not launch $url';
+    }
+  }
+
+  static Future<void> launchFbFansPage(
+    BuildContext context,
+    String fansPageId,
+  ) async {
+    final fansPageUrl = 'https://www.facebook.com/$fansPageId/';
+    if (Platform.isAndroid)
+      ApUtils.launchUrl('fb://messaging/$fansPageId')
+          .catchError((onError) => ApUtils.launchUrl(fansPageUrl));
+    else if (Platform.isIOS)
+      ApUtils.launchUrl('fb-messenger://user-thread/$fansPageId')
+          .catchError((onError) => ApUtils.launchUrl(fansPageUrl));
+    else {
+      ApUtils.launchUrl(fansPageUrl).catchError((onError) => ApUtils.showToast(
+          context, ApLocalizations.of(context).platformError));
+    }
+  }
+
   static showNewVersionDialog({
     @required BuildContext context,
     @required int newVersionCode,
