@@ -37,12 +37,8 @@ class Preferences {
     if (data == null || data.isEmpty)
       return defaultValue;
     else {
-      try {
-        final decoded = utf8.decode(base64.decode(data));
-        return decoded;
-      } on Exception catch (e) {
-        return data;
-      }
+      final decoded = utf8.decode(base64.decode(data));
+      return decoded;
     }
   }
 
