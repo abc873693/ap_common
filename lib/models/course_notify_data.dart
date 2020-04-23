@@ -1,6 +1,8 @@
 import 'dart:convert';
 
+import 'package:ap_common/config/ap_constants.dart';
 import 'package:ap_common/models/course_data.dart';
+import 'package:ap_common/utils/preferences.dart';
 import 'package:flutter/cupertino.dart';
 
 class CourseNotifyData {
@@ -45,6 +47,26 @@ class CourseNotifyData {
       if (value.code == code) return value;
     }
     return null;
+  }
+
+  void save(String tag) {
+    Preferences.setString(
+      '${ApConstants.PACKAGE_NAME}'
+      '.course_notify_data_$tag',
+      this.toRawJson(),
+    );
+  }
+
+  factory CourseNotifyData.load(String tag) {
+    String rawString = Preferences.getString(
+      '${ApConstants.PACKAGE_NAME}.'
+          'course_notify_data_$tag',
+      '',
+    );
+    if (rawString == '')
+      return null;
+    else
+      return CourseNotifyData.fromRawJson(rawString);
   }
 }
 
