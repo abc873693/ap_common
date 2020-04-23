@@ -204,6 +204,7 @@ class ApLocalizations {
       'notification_item': 'Notification',
       'other_info': 'Other',
       'other_settings': 'Settings',
+      'environment_settings': 'Environment',
       'head_photo_setting': 'Show Photo',
       'head_photo_setting_sub_title': 'Side menu shows the photo sticker',
       'course_notify': 'Class Reminder',
@@ -554,6 +555,7 @@ class ApLocalizations {
       'notification_item': '通知項目',
       'other_info': '其他資訊',
       'other_settings': '其他設定',
+      'environment_settings': '環境設定',
       'head_photo_setting': '顯示大頭貼',
       'head_photo_setting_sub_title': '側選單是否顯示大頭貼',
       'course_notify': '上課提醒',
@@ -1014,6 +1016,8 @@ class ApLocalizations {
   String get otherInfo => _vocabularies['other_info'];
 
   String get otherSettings => _vocabularies['other_settings'];
+
+  String get environmentSettings => _vocabularies['environment_settings'];
 
   String get headPhotoSetting => _vocabularies['head_photo_setting'];
 
