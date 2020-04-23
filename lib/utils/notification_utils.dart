@@ -20,7 +20,7 @@ class NotificationUtils {
     if (i == 7)
       return Day.Sunday;
     else
-      return Day(i - 1);
+      return Day(i + 1);
   }
 
   static Future<void> scheduleCourseNotify({
