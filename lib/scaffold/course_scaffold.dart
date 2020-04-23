@@ -344,7 +344,7 @@ class CourseScaffoldState extends State<CourseScaffold> {
           );
           for (var k = j + 1; k < j + repeat + 1; k++) {
             courseBorders[k] = CourseBorder(
-              weekIndex: courseBorders[j].weekIndex,
+              weekIndex: courseBorders[k].weekIndex,
               course: courseBorders[k].course,
               height: 0.0,
               width: 0.0,

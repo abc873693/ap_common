@@ -16,11 +16,11 @@ class NotificationUtils {
   static const int FCM = 200;
 
   //For taiwan week order
-  static Day getDay(int i) {
-    if (i == 7)
+  static Day getDay(int weekIndex) {
+    if (weekIndex == 6)
       return Day.Sunday;
     else
-      return Day(i + 1);
+      return Day(weekIndex + 2);
   }
 
   static Future<void> scheduleCourseNotify({
