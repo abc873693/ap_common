@@ -7,7 +7,6 @@ import 'package:ap_common/resources/ap_theme.dart';
 import 'package:ap_common/utils/ap_localizations.dart';
 import 'package:ap_common/utils/ap_utils.dart';
 import 'package:ap_common/utils/notification_utils.dart';
-import 'package:ap_common/widgets/default_dialog.dart';
 import 'package:ap_common/widgets/hint_content.dart';
 import 'package:ap_common/widgets/item_picker.dart';
 import 'package:ap_common/widgets/option_dialog.dart';
@@ -16,7 +15,11 @@ import 'package:flutter/rendering.dart';
 
 export 'package:ap_common/models/course_data.dart';
 
+typedef CourseNotifyCallback(
+    CourseNotify courseNotify, CourseNotifyState state);
+
 enum CourseState { loading, finish, error, empty, offlineEmpty }
+enum CourseNotifyState { schedule, cancel }
 enum _ContentStyle { list, table }
 
 const _courseHeight = 55.0;
@@ -35,6 +38,8 @@ class CourseScaffold extends StatefulWidget {
   final String customHint;
   final bool enableNotifyControl;
   final CourseNotifyData notifyData;
+  final bool autoNotifySave;
+  final CourseNotifyCallback onNotifyClick;
 
   const CourseScaffold({
     Key key,
@@ -51,6 +56,8 @@ class CourseScaffold extends StatefulWidget {
     this.actions,
     this.enableNotifyControl = true,
     this.notifyData,
+    this.autoNotifySave = true,
+    this.onNotifyClick,
   }) : super(key: key);
 
   @override
@@ -450,6 +457,8 @@ class CourseContent extends StatefulWidget {
   final CourseDetail courseDetail;
   final int weekIndex;
   final CourseNotifyData notifyData;
+  final bool autoNotifySave;
+  final CourseNotifyCallback onNotifyClick;
 
   const CourseContent({
     Key key,
@@ -458,6 +467,8 @@ class CourseContent extends StatefulWidget {
     @required this.courseDetail,
     @required this.weekIndex,
     this.notifyData,
+    this.autoNotifySave = true,
+    this.onNotifyClick,
   }) : super(key: key);
 
   @override
@@ -467,6 +478,10 @@ class CourseContent extends StatefulWidget {
 class _CourseContentState extends State<CourseContent> {
   @override
   Widget build(BuildContext context) {
+    CourseNotifyState _state =
+        (widget.notifyData.getByCode(widget.courseDetail.code) == null
+            ? CourseNotifyState.cancel
+            : CourseNotifyState.schedule);
     return Padding(
       padding: const EdgeInsets.symmetric(
         horizontal: 16.0,
@@ -489,45 +504,51 @@ class _CourseContentState extends State<CourseContent> {
               ),
               if (widget.enableNotifyControl && widget.notifyData != null)
                 IconButton(
-                  icon: Icon(
-                      widget.notifyData.getByCode(widget.courseDetail.code) ==
-                              null
-                          ? Icons.alarm_off
-                          : Icons.alarm_on),
+                  icon: Icon(_state == CourseNotifyState.schedule
+                      ? Icons.alarm_on
+                      : Icons.alarm_off),
                   onPressed: () async {
                     var courseNotify =
                         widget.notifyData.getByCode(widget.courseDetail.code);
-                    if (courseNotify == null) {
-                      courseNotify = CourseNotify.fromCourse(
-                        id: widget.notifyData.lastId + 1,
-                        weeklyIndex: widget.weekIndex,
-                        course: widget.course,
-                        courseDetail: widget.courseDetail,
-                      );
-                      await NotificationUtils.scheduleCourseNotify(
-                        context: context,
-                        courseNotify: courseNotify,
-                        day: NotificationUtils.getDay(widget.weekIndex),
-                      );
-                      widget.notifyData.lastId++;
-                      widget.notifyData.data.add(courseNotify);
-                      ApUtils.showToast(context,
-                          ApLocalizations.of(context).courseNotifyHint);
-                    } else {
-                      await NotificationUtils.cancelCourseNotify(
-                        id: courseNotify.id,
-                      );
-                      widget.notifyData.data.forEach((e) {
-                        print(e.title);
-                      });
-                      widget.notifyData.data.removeWhere((data) {
-                        return data.id == courseNotify.id;
-                      });
-                      widget.notifyData.data.forEach((e) {
-                        print(e.title);
-                      });
+                    if (widget.autoNotifySave) {
+                      if (courseNotify == null) {
+                        courseNotify = CourseNotify.fromCourse(
+                          id: widget.notifyData.lastId + 1,
+                          weeklyIndex: widget.weekIndex,
+                          course: widget.course,
+                          courseDetail: widget.courseDetail,
+                        );
+                        await NotificationUtils.scheduleCourseNotify(
+                          context: context,
+                          courseNotify: courseNotify,
+                          day: NotificationUtils.getDay(widget.weekIndex),
+                        );
+                        widget.notifyData.lastId++;
+                        widget.notifyData.data.add(courseNotify);
+                        ApUtils.showToast(context,
+                            ApLocalizations.of(context).courseNotifyHint);
+                      } else {
+                        await NotificationUtils.cancelCourseNotify(
+                          id: courseNotify.id,
+                        );
+                        widget.notifyData.data.forEach((e) {
+                          print(e.title);
+                        });
+                        widget.notifyData.data.removeWhere((data) {
+                          return data.id == courseNotify.id;
+                        });
+                        widget.notifyData.data.forEach((e) {
+                          print(e.title);
+                        });
+                      }
+                      widget.notifyData.save(ApConstants.SEMESTER_LATEST);
+                      setState(() {});
                     }
-                    setState(() {});
+                    if (widget.onNotifyClick != null)
+                      widget.onNotifyClick(
+                          courseNotify,
+                          CourseNotifyState.values[(_state.index + 1) %
+                              (CourseNotifyState.values.length)]);
                   },
                 )
             ],

@@ -64,7 +64,7 @@ class CourseNotifyData {
       '',
     );
     if (rawString == '')
-      return null;
+      return CourseNotifyData(data: []);
     else
       return CourseNotifyData.fromRawJson(rawString);
   }
