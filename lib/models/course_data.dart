@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'dart:ui';
 
+import 'package:ap_common/config/ap_constants.dart';
 import 'package:ap_common/utils/preferences.dart';
 
 class CourseData {
@@ -41,11 +42,19 @@ class CourseData {
   }
 
   void save(String tag) {
-    Preferences.setString('course_data_$tag', this.toRawJson());
+    Preferences.setString(
+      '${ApConstants.PACKAGE_NAME}'
+      '.course_data_$tag',
+      this.toRawJson(),
+    );
   }
 
   factory CourseData.load(String tag) {
-    String rawString = Preferences.getString('course_data_$tag', '');
+    String rawString = Preferences.getString(
+      '${ApConstants.PACKAGE_NAME}'
+          '.course_data_$tag',
+      '',
+    );
     if (rawString == '')
       return null;
     else
