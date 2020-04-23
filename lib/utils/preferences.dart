@@ -28,18 +28,11 @@ class Preferences {
   }
 
   static Future<Null> setString(String key, String data) async {
-    final base64Text = base64.encode(utf8.encode(data));
-    await prefs?.setString(key, base64Text);
+    await prefs?.setString(key, data);
   }
 
   static String getString(String key, String defaultValue) {
-    final data = prefs?.getString(key);
-    if (data == null || data.isEmpty)
-      return defaultValue;
-    else {
-      final decoded = utf8.decode(base64.decode(data));
-      return decoded;
-    }
+    return prefs?.getString(key) ?? defaultValue;
   }
 
   static Future<Null> setStringSecurity(String key, String data) async {
