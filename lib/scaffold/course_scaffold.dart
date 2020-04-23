@@ -538,10 +538,11 @@ class _CourseContentState extends State<CourseContent> {
                         await NotificationUtils.cancelCourseNotify(
                           id: courseNotify.id,
                         );
-                        print(widget.notifyData.lastId);
                         widget.notifyData.data.removeWhere((data) {
                           return data.id == courseNotify.id;
                         });
+                        ApUtils.showToast(context,
+                            ApLocalizations.of(context).cancelNotifySuccess);
                       }
                       widget.notifyData.save(ApConstants.SEMESTER_LATEST);
                       setState(() {});

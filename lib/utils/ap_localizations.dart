@@ -190,6 +190,7 @@ class ApLocalizations {
       'course_notify_unknown': 'Outerspace~',
       'course_notify_empty': 'Oops! No class for this semester~',
       'course_notify_error': 'Oops! Something was wrong~',
+      'cancel_notify_success': 'Cancel Success',
       'calendar_app_not_found': 'Can\'t found any calendar apps.',
       'go_to_settings': 'Settings',
       'notifications': 'News',
@@ -532,16 +533,17 @@ class ApLocalizations {
       'donate_error':
           '哎呀！發生了點錯誤 :(\n不過沒關係到 Google Play\n搜尋「高科校務通Donate」\n一樣可以支持喔！',
       'bus_notify_hint': '校車預約將於發車前三十分鐘提醒！\n若在網頁預約或取消校車請重登入此App。',
-      'bus_notify_content': '親，您有一班 %s 從%s出發的校車！',
+      'bus_notify_content': '您有一班 %s 從%s出發的校車！',
       'bus_notify_jiangong': '建工',
       'bus_notify_yanchao': '燕巢',
       'course_vibrate_hint': '將於上課時轉為震動，下課時恢復！',
       'course_vibrate_permission': '需要「零打擾存取權」方能自動轉為震動。',
       'course_notify_hint': '將於上課前十分鐘提醒！',
-      'course_notify_content': '親，%s 上課教室在 %s！',
+      'course_notify_content': '%s 上課教室在 %s！',
       'course_notify_unknown': '外太空',
       'course_notify_empty': 'Oops！本學期沒有任何課哦～',
       'course_notify_error': 'Oops!發生錯誤~',
+      'cancel_notify_success': '取消通知成功',
       'calendar_app_not_found': '找不到支援的行事曆 Apps',
       'go_to_settings': '前往設定',
       'education_system': '學制',
@@ -1134,6 +1136,8 @@ class ApLocalizations {
   String get courseNotifyEmpty => _vocabularies['course_notify_empty'];
 
   String get courseNotifyError => _vocabularies['course_notify_error'];
+
+  String get cancelNotifySuccess => _vocabularies['cancel_notify_success'];
 
   String get callPhoneTitle => _vocabularies['call_phone_title'];
 
