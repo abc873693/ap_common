@@ -42,9 +42,11 @@ class CourseNotifyData {
             : List<dynamic>.from(data.map((x) => x.toJson())),
       };
 
-  CourseNotify getByCode(String code) {
+  CourseNotify getByCode(String code, String startTime, int weekIndex) {
     for (var value in data) {
-      if (value.code == code) return value;
+      if (value.code == code &&
+          value.startTime == startTime &&
+          value.weeklyIndex == weekIndex) return value;
     }
     return null;
   }

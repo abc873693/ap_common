@@ -478,10 +478,14 @@ class CourseContent extends StatefulWidget {
 class _CourseContentState extends State<CourseContent> {
   @override
   Widget build(BuildContext context) {
-    CourseNotifyState _state =
-        (widget.notifyData.getByCode(widget.courseDetail.code) == null
-            ? CourseNotifyState.cancel
-            : CourseNotifyState.schedule);
+    CourseNotifyState _state = (widget.notifyData.getByCode(
+              widget.courseDetail.code,
+              widget.course.date.startTime,
+              widget.weekIndex,
+            ) ==
+            null
+        ? CourseNotifyState.cancel
+        : CourseNotifyState.schedule);
     return Padding(
       padding: const EdgeInsets.symmetric(
         horizontal: 16.0,
@@ -508,8 +512,11 @@ class _CourseContentState extends State<CourseContent> {
                       ? Icons.alarm_on
                       : Icons.alarm_off),
                   onPressed: () async {
-                    var courseNotify =
-                        widget.notifyData.getByCode(widget.courseDetail.code);
+                    var courseNotify = widget.notifyData.getByCode(
+                      widget.courseDetail.code,
+                      widget.course.date.startTime,
+                      widget.weekIndex,
+                    );
                     if (widget.autoNotifySave) {
                       if (courseNotify == null) {
                         courseNotify = CourseNotify.fromCourse(
@@ -531,14 +538,9 @@ class _CourseContentState extends State<CourseContent> {
                         await NotificationUtils.cancelCourseNotify(
                           id: courseNotify.id,
                         );
-                        widget.notifyData.data.forEach((e) {
-                          print(e.title);
-                        });
+                        print(widget.notifyData.lastId);
                         widget.notifyData.data.removeWhere((data) {
                           return data.id == courseNotify.id;
-                        });
-                        widget.notifyData.data.forEach((e) {
-                          print(e.title);
                         });
                       }
                       widget.notifyData.save(ApConstants.SEMESTER_LATEST);
