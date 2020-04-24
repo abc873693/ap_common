@@ -90,14 +90,15 @@ class ScoreScaffoldState extends State<ScoreScaffold> {
           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
           children: <Widget>[
             SizedBox(height: 8.0),
-            (widget.itemPicker == null)
-                ? ItemPicker(
-                    dialogTitle: app.picksSemester,
-                    onSelected: widget.onSelect,
-                    items: widget.semesters,
-                    currentIndex: widget.semesterIndex,
-                  )
-                : widget.itemPicker,
+            if (widget.semesters != null)
+              (widget.itemPicker == null)
+                  ? ItemPicker(
+                      dialogTitle: app.picksSemester,
+                      onSelected: widget.onSelect,
+                      items: widget.semesters,
+                      currentIndex: widget.semesterIndex,
+                    )
+                  : widget.itemPicker,
             if (widget.customHint != null)
               Text(
                 widget.customHint,
