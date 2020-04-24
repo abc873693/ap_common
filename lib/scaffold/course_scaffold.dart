@@ -765,7 +765,7 @@ class CourseBorder extends StatelessWidget {
         right: course != null ? 2.0 : 0.0,
       ),
       height: height,
-      width: width,
+      width: width ?? double.maxFinite,
       decoration: BoxDecoration(
         border: border ??
             Border.all(
@@ -788,13 +788,15 @@ class CourseBorder extends StatelessWidget {
                 radius: 6.0,
                 child: Padding(
                   padding: EdgeInsets.symmetric(vertical: 2.0, horizontal: 4.0),
-                  child: Text(
-                    course.title ?? '',
-                    style: TextStyle(
-                      fontSize: 16.0,
-                      color: ApTheme.of(context).courseText,
+                  child: Center(
+                    child: Text(
+                      course.title ?? '',
+                      style: TextStyle(
+                        fontSize: 16.0,
+                        color: ApTheme.of(context).courseText,
+                      ),
+                      textAlign: TextAlign.center,
                     ),
-                    textAlign: TextAlign.center,
                   ),
                 ),
               ),
