@@ -32,12 +32,16 @@ class Detail {
   double conduct;
   double average;
   String classRank;
+  String departmentRank;
   double classPercentage;
 
   Detail({
+    this.creditTaken,
+    this.creditEarned,
     this.conduct,
     this.average,
     this.classRank,
+    this.departmentRank,
     this.classPercentage,
   });
 
@@ -48,16 +52,22 @@ class Detail {
   String toRawJson() => json.encode(toJson());
 
   factory Detail.fromJson(Map<String, dynamic> json) => new Detail(
+        creditTaken: json["creditTaken"],
+        creditEarned: json["creditEarned"],
         conduct: json["conduct"],
         average: json["average"],
         classRank: json["classRank"],
+        departmentRank: json["departmentRank"],
         classPercentage: json["classPercentage"],
       );
 
   Map<String, dynamic> toJson() => {
+        "creditTaken": creditTaken,
+        "creditEarned": creditEarned,
         "conduct": conduct,
         "average": average,
         "classRank": classRank,
+        "departmentRank": departmentRank,
         "classPercentage": classPercentage,
       };
 }
