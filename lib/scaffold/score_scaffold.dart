@@ -23,9 +23,9 @@ class ScoreScaffold extends StatefulWidget {
   final String finalTitle;
   final Widget Function(int index) middleScoreBuilder;
   final Widget Function(int index) finalScoreBuilder;
+  final List<String> details;
 
-  final bool isShowConductScore;
-  final bool isShowCredit;
+  final bool isShowSearchButton;
 
   final String customHint;
 
@@ -40,11 +40,11 @@ class ScoreScaffold extends StatefulWidget {
     this.onSelect,
     this.middleTitle,
     this.finalTitle,
-    this.isShowConductScore = true,
-    this.isShowCredit = false,
     this.middleScoreBuilder,
     this.finalScoreBuilder,
     this.customHint,
+    this.isShowSearchButton = true,
+    this.details,
   }) : super(key: key);
 
   @override
@@ -58,6 +58,22 @@ class ScoreScaffoldState extends State<ScoreScaffold> {
       TextStyle(color: ApTheme.of(context).blueText, fontSize: 16.0);
 
   TextStyle get _textStyle => TextStyle(fontSize: 15.0);
+
+  BoxDecoration get _boxDecoration => BoxDecoration(
+        borderRadius: BorderRadius.all(
+          Radius.circular(
+            10.0,
+          ),
+        ),
+        border: Border.all(color: Colors.grey, width: 1.5),
+      );
+
+  TableBorder get _tableBorder => TableBorder.symmetric(
+        inside: BorderSide(
+          color: Colors.grey,
+          width: 0.5,
+        ),
+      );
 
   @override
   void initState() {
@@ -77,12 +93,12 @@ class ScoreScaffoldState extends State<ScoreScaffold> {
         title: Text(app.score),
         backgroundColor: ApTheme.of(context).blue,
       ),
-      floatingActionButton: (widget.itemPicker != null)
-          ? null
-          : FloatingActionButton(
+      floatingActionButton: widget.isShowSearchButton
+          ? FloatingActionButton(
               child: Icon(Icons.search),
               onPressed: _pickSemester,
-            ),
+            )
+          : null,
       body: Container(
         child: Flex(
           direction: Axis.vertical,
@@ -154,14 +170,7 @@ class ScoreScaffoldState extends State<ScoreScaffold> {
               mainAxisSize: MainAxisSize.max,
               children: <Widget>[
                 Container(
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.all(
-                      Radius.circular(
-                        10.0,
-                      ),
-                    ),
-                    border: Border.all(color: Colors.grey, width: 1.5),
-                  ),
+                  decoration: _boxDecoration,
                   child: Table(
                     columnWidths: const <int, TableColumnWidth>{
                       0: FlexColumnWidth(2.5),
@@ -169,12 +178,7 @@ class ScoreScaffoldState extends State<ScoreScaffold> {
                       2: FlexColumnWidth(1.0),
                     },
                     defaultVerticalAlignment: TableCellVerticalAlignment.middle,
-                    border: TableBorder.symmetric(
-                      inside: BorderSide(
-                        color: Colors.grey,
-                        width: 0.5,
-                      ),
-                    ),
+                    border: _tableBorder,
                     children: [
                       TableRow(
                         children: <Widget>[
@@ -219,70 +223,40 @@ class ScoreScaffoldState extends State<ScoreScaffold> {
                   ),
                 ),
                 SizedBox(height: 20.0),
-                Container(
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.all(
-                      Radius.circular(
-                        10.0,
-                      ),
+                if (widget.details != null && widget.details.length != 0)
+                  Container(
+                    decoration: _boxDecoration,
+                    child: Table(
+                      columnWidths: const <int, TableColumnWidth>{
+                        0: FlexColumnWidth(1.0),
+                      },
+                      defaultVerticalAlignment:
+                          TableCellVerticalAlignment.middle,
+                      border: _tableBorder,
+                      children: [
+                        for (var text in widget.details)
+                          TableRow(
+                            children: <Widget>[
+                              Container(
+                                width: double.infinity,
+                                padding: EdgeInsets.all(2.0),
+                                alignment: Alignment.center,
+                                child: SelectableText(
+                                  text ?? '',
+                                  textAlign: TextAlign.center,
+                                  style: _textBlueStyle,
+                                ),
+                              ),
+                            ],
+                          ),
+                      ],
                     ),
-                    border: Border.all(color: Colors.grey, width: 1.5),
                   ),
-                  child: Column(
-                    children: <Widget>[
-                      if (widget.isShowConductScore)
-                        _textBorder(
-                          '${app.conductScore}：${widget.scoreData.detail.conduct ?? ''}',
-                          widget.isShowConductScore,
-                        ),
-                      if (widget.isShowCredit)
-                        _textBorder(
-                          '${app.creditsTakenEarned}：'
-                          '${widget.scoreData.detail.creditTaken ?? ''}'
-                          '${widget.scoreData.detail.isCreditEmpty ? '' : ' / '}'
-                          '${widget.scoreData.detail.creditEarned ?? ''}',
-                          !widget.isShowConductScore,
-                        ),
-                      _textBorder(
-                        '${app.average}：${widget.scoreData.detail.average ?? ''}',
-                        !(widget.isShowConductScore || widget.isShowCredit),
-                      ),
-                      _textBorder(
-                        '${app.rank}：${widget.scoreData.detail.classRank ?? ''}',
-                        false,
-                      ),
-                      _textBorder(
-                        '${app.percentage}：${widget.scoreData.detail.classPercentage ?? ''}',
-                        false,
-                      ),
-                    ],
-                  ),
-                ),
               ],
             ),
           ),
         );
     }
-  }
-
-  Widget _textBorder(String text, bool isTop) {
-    return Container(
-      width: double.infinity,
-      padding: EdgeInsets.all(2.0),
-      decoration: BoxDecoration(
-        border: Border(
-          top: isTop
-              ? BorderSide.none
-              : BorderSide(color: ApTheme.of(context).grey, width: 0.5),
-        ),
-      ),
-      alignment: Alignment.center,
-      child: SelectableText(
-        text ?? '',
-        textAlign: TextAlign.center,
-        style: _textBlueStyle,
-      ),
-    );
   }
 
   void _pickSemester() {
