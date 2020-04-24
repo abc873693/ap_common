@@ -150,8 +150,12 @@ class ApLocalizations {
       'final': 'Final',
       'conduct_score': 'Conduct Score',
       'creditsTakenEarned': 'Credits Taken/Earned',
+      'credits': 'Credits',
       'average': 'Average',
-      'rank': 'You/Total Classmates',
+      'rank': 'Rank',
+      'classRank': 'Class Rank',
+      'departmentRank': 'Department Rank',
+      'totalClassmates': 'Total Classmates',
       'percentage': 'Top % in Class',
       'leave_night': 'Rotate screen to see night school absent record',
       'leave_no_leave':
@@ -510,8 +514,12 @@ class ApLocalizations {
       'final': '學期成績',
       'conduct_score': '操行成績',
       'creditsTakenEarned': '修習學分/實得學分',
+      'credits': '學分',
       'average': '總平均',
-      'rank': '班名次/班人數',
+      'rank': '名次',
+      'classRank': '班名次',
+      'departmentRank': '系名次',
+      'totalClassmates': '總人數',
       'percentage': '班名次百分比',
       'leave_night': '旋轉橫向即可查看夜間缺曠',
       'leave_no_leave': 'Oops！本學期沒有任何缺曠課紀錄哦～\n請選擇其他學期 \uD83D\uDE0B',
@@ -993,9 +1001,17 @@ class ApLocalizations {
 
   String get creditsTakenEarned => _vocabularies['creditsTakenEarned'];
 
+  String get credits => _vocabularies['credits'];
+
   String get average => _vocabularies['average'];
 
   String get rank => _vocabularies['rank'];
+
+  String get classRank => _vocabularies['classRank'];
+
+  String get departmentRank => _vocabularies['departmentRank'];
+
+  String get classNumberOfPeople => _vocabularies['classNumberOfPeople'];
 
   String get percentage => _vocabularies['percentage'];
 
