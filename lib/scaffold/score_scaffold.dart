@@ -106,15 +106,14 @@ class ScoreScaffoldState extends State<ScoreScaffold> {
           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
           children: <Widget>[
             SizedBox(height: 8.0),
-            if (widget.semesters != null)
-              (widget.itemPicker == null)
-                  ? ItemPicker(
-                      dialogTitle: app.picksSemester,
-                      onSelected: widget.onSelect,
-                      items: widget.semesters,
-                      currentIndex: widget.semesterIndex,
-                    )
-                  : widget.itemPicker,
+            if (widget.semesters != null && widget.itemPicker == null)
+              ItemPicker(
+                dialogTitle: app.picksSemester,
+                onSelected: widget.onSelect,
+                items: widget.semesters,
+                currentIndex: widget.semesterIndex,
+              ),
+            if (widget.itemPicker != null) widget.itemPicker,
             if (widget.customHint != null)
               Text(
                 widget.customHint,
@@ -260,15 +259,18 @@ class ScoreScaffoldState extends State<ScoreScaffold> {
   }
 
   void _pickSemester() {
-    showDialog(
-      context: context,
-      builder: (_) => SimpleOptionDialog(
-        title: app.picksSemester,
-        items: widget.semesters,
-        index: widget.semesterIndex,
-        onSelected: widget.onSelect,
-      ),
-    );
+    if (widget.semesters != null)
+      showDialog(
+        context: context,
+        builder: (_) => SimpleOptionDialog(
+          title: app.picksSemester,
+          items: widget.semesters,
+          index: widget.semesterIndex,
+          onSelected: widget.onSelect,
+        ),
+      );
+    else
+      throw 'semesters can\'t null';
   }
 }
 
