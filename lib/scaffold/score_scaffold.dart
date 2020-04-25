@@ -29,6 +29,8 @@ class ScoreScaffold extends StatefulWidget {
 
   final String customHint;
 
+  final Widget bottom;
+
   const ScoreScaffold({
     Key key,
     @required this.state,
@@ -45,6 +47,7 @@ class ScoreScaffold extends StatefulWidget {
     this.customHint,
     this.isShowSearchButton = true,
     this.details,
+    this.bottom,
   }) : super(key: key);
 
   @override
@@ -92,6 +95,7 @@ class ScoreScaffoldState extends State<ScoreScaffold> {
       appBar: AppBar(
         title: Text(app.score),
         backgroundColor: ApTheme.of(context).blue,
+        bottom: widget.bottom,
       ),
       floatingActionButton: widget.isShowSearchButton
           ? FloatingActionButton(
