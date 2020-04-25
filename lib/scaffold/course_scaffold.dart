@@ -478,14 +478,17 @@ class CourseContent extends StatefulWidget {
 class _CourseContentState extends State<CourseContent> {
   @override
   Widget build(BuildContext context) {
-    CourseNotifyState _state = (widget.notifyData.getByCode(
-              widget.courseDetail.code,
-              widget.course.date.startTime,
-              widget.weekIndex,
-            ) ==
-            null
-        ? CourseNotifyState.cancel
-        : CourseNotifyState.schedule);
+    CourseNotifyState _state;
+    if (widget.enableNotifyControl && widget.notifyData != null) {
+      _state = (widget.notifyData.getByCode(
+                widget.courseDetail.code,
+                widget.course.date.startTime,
+                widget.weekIndex,
+              ) ==
+              null
+          ? CourseNotifyState.cancel
+          : CourseNotifyState.schedule);
+    }
     return Padding(
       padding: const EdgeInsets.symmetric(
         horizontal: 16.0,
