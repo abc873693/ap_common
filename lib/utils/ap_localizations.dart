@@ -19,6 +19,22 @@ class ApLocalizations {
 
   String get schoolMap => _vocabularies['schoolMap'];
 
+  String get birthMonth => _vocabularies['birthMonth'];
+
+  String get birthDay => _vocabularies['birthDay'];
+
+  String get idCardLastCode => _vocabularies['idCardLastCode'];
+
+  String get captcha => _vocabularies['captcha'];
+
+  String get usernameError => _vocabularies['usernameError'];
+
+  String get captchaError => _vocabularies['captchaError'];
+
+  String get passwordError => _vocabularies['passwordError'];
+
+  String get unkwonError => _vocabularies['unkwonError'];
+
   static ApLocalizations of(BuildContext context) {
     return instance =
         Localizations.of<ApLocalizations>(context, ApLocalizations);
@@ -45,9 +61,7 @@ class ApLocalizations {
 
   static Map<String, Map<String, String>> _localizedValues = {
     'en': {
-      'app_name': 'NKUST AP',
       'update_note_title': 'Update Notes',
-      'update_note_content': '1.Fix offline error',
       'splash_content': '我們全都包了\n只剩下學校不包我們',
       'share': 'Share',
       'teacher_confirm_title': 'Are you a teacher?',
@@ -415,11 +429,17 @@ class ApLocalizations {
       'email': 'Email',
       'schoolNavigation': 'School Navigation',
       'schoolMap': 'School Map',
+      'birthMonth': 'Birth Month',
+      'birthDay': 'Birth Day',
+      'idCardLastCode': 'ID card',
+      'captcha': 'Captcha',
+      'usernameError': 'Username Error',
+      'captchaError': 'Captcha Error',
+      'passwordError': 'Password Error',
+      'unkwonError': 'Unkwon Error',
     },
     'zh': {
-      'app_name': '高科校務通',
       'update_note_title': '更新日誌',
-      'update_note_content': '1.修復離線登入錯誤',
       'splash_content': '我們全都包了\n只剩下學校不包我們',
       'share': '分享',
       'teacher_confirm_title': '您是老師嗎？',
@@ -762,6 +782,14 @@ class ApLocalizations {
       'email': '電子信箱',
       'schoolNavigation': '校園導覽',
       'schoolMap': '校園地圖',
+      'birthMonth': '出生月',
+      'birthDay': '出生日',
+      'idCardLastCode': '身分證末四碼',
+      'captcha': '驗證碼',
+      'usernameError': '學號輸入錯誤',
+      'captchaError': '密碼輸入錯誤',
+      'passwordError': '驗證碼錯誤',
+      'unkwonError': '未知錯誤',
     },
   };
 
