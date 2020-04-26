@@ -1,4 +1,5 @@
 import 'package:ap_common/resources/ap_theme.dart';
+import 'package:ap_common/utils/ap_localizations.dart';
 import 'package:flutter/material.dart';
 
 class DefaultDialog extends StatelessWidget {
@@ -26,6 +27,20 @@ class DefaultDialog extends StatelessWidget {
             '預約日期：2017/09/05\n上車地點：燕巢校區\n預約班次：08:20',
             style: TextStyle(color: ApTheme.of(context).grey, height: 1.3),
           ),
+        ),
+      );
+
+  static showUpdateContent(BuildContext context, String content) => showDialog(
+        context: context,
+        builder: (BuildContext context) => DefaultDialog(
+          title: ApLocalizations.of(context).updateNoteTitle,
+          contentWidget: Text(
+            content,
+            textAlign: TextAlign.center,
+            style: TextStyle(color: ApTheme.of(context).grey),
+          ),
+          actionText: ApLocalizations.of(context).iKnow,
+          actionFunction: () => Navigator.of(context).pop(),
         ),
       );
 
