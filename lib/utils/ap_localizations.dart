@@ -33,7 +33,9 @@ class ApLocalizations {
 
   String get passwordError => _vocabularies['passwordError'];
 
-  String get unkwonError => _vocabularies['unkwonError'];
+  String get unknownError => _vocabularies['unknownError'];
+
+  String get onlySupportInSchool => _vocabularies['onlySupportInSchool'];
 
   static ApLocalizations of(BuildContext context) {
     return instance =
@@ -436,7 +438,8 @@ class ApLocalizations {
       'usernameError': 'Username Error',
       'captchaError': 'Captcha Error',
       'passwordError': 'Password Error',
-      'unkwonError': 'Unkwon Error',
+      'unknownError': 'Unkwon Error',
+      'onlySupportInSchool': 'Only current student',
     },
     'zh': {
       'update_note_title': '更新日誌',
@@ -787,9 +790,10 @@ class ApLocalizations {
       'idCardLastCode': '身分證末四碼',
       'captcha': '驗證碼',
       'usernameError': '學號輸入錯誤',
-      'captchaError': '密碼輸入錯誤',
-      'passwordError': '驗證碼錯誤',
-      'unkwonError': '未知錯誤',
+      'captchaError': '驗證碼錯誤',
+      'passwordError': '密碼輸入錯誤',
+      'unknownError': '未知錯誤',
+      'onlySupportInSchool': '僅限在校生使用',
     },
   };
 
