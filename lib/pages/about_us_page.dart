@@ -1,7 +1,6 @@
 import 'dart:io';
 
 import 'package:ap_common/resources/ap_assets.dart';
-import 'package:ap_common/resources/ap_icon.dart';
 import 'package:ap_common/resources/ap_theme.dart';
 import 'package:ap_common/utils/ap_localizations.dart';
 import 'package:ap_common/utils/ap_utils.dart';
@@ -10,7 +9,6 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:url_launcher/url_launcher.dart';
 
-import 'open_source_page.dart';
 
 class AboutUsPage extends StatefulWidget {
   static const String routerName = "/aboutus";

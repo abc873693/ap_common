@@ -267,11 +267,6 @@ class CourseScaffoldState extends State<CourseScaffold> {
         color: ApTheme.of(context).courseBorder,
       );
 
-  BorderSide get _borderSide => BorderSide(
-        width: 0.5,
-        color: Colors.grey,
-      );
-
   List<Widget> renderCourseTable() {
     DateTime start = DateTime.now();
     List<String> weeks = [

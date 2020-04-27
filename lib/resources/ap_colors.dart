@@ -1,7 +1,5 @@
 import 'package:flutter/material.dart';
 
-import 'ap_theme.dart';
-
 class ApColors {
   ApColors._();
 

@@ -1,7 +1,5 @@
-import 'dart:typed_data';
 
 import 'package:ap_common/models/user_info.dart';
-import 'package:ap_common/resources/ap_assets.dart';
 import 'package:ap_common/resources/ap_icon.dart';
 import 'package:ap_common/resources/ap_theme.dart';
 import 'package:ap_common/utils/ap_localizations.dart';

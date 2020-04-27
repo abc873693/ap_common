@@ -1,5 +1,4 @@
 import 'dart:convert';
-import 'dart:ui';
 
 import 'package:ap_common/config/ap_constants.dart';
 import 'package:ap_common/utils/preferences.dart';
