@@ -40,6 +40,7 @@ class CourseScaffold extends StatefulWidget {
   final CourseNotifyData notifyData;
   final bool autoNotifySave;
   final CourseNotifyCallback onNotifyClick;
+  final String courseNotifySaveKey;
 
   const CourseScaffold({
     Key key,
@@ -58,6 +59,7 @@ class CourseScaffold extends StatefulWidget {
     this.notifyData,
     this.autoNotifySave = true,
     this.onNotifyClick,
+    this.courseNotifySaveKey = ApConstants.SEMESTER_LATEST,
   }) : super(key: key);
 
   @override
@@ -402,6 +404,7 @@ class CourseScaffoldState extends State<CourseScaffold> {
           courseDetail: courseDetail,
           notifyData: widget.notifyData,
           weekIndex: weekIndex,
+          courseNotifySaveKey: widget.courseNotifySaveKey,
         );
       },
     );
@@ -459,6 +462,7 @@ class CourseContent extends StatefulWidget {
   final CourseNotifyData notifyData;
   final bool autoNotifySave;
   final CourseNotifyCallback onNotifyClick;
+  final String courseNotifySaveKey;
 
   const CourseContent({
     Key key,
@@ -469,6 +473,7 @@ class CourseContent extends StatefulWidget {
     this.notifyData,
     this.autoNotifySave = true,
     this.onNotifyClick,
+    this.courseNotifySaveKey = ApConstants.SEMESTER_LATEST,
   }) : super(key: key);
 
   @override
@@ -547,7 +552,7 @@ class _CourseContentState extends State<CourseContent> {
                         ApUtils.showToast(context,
                             ApLocalizations.of(context).cancelNotifySuccess);
                       }
-                      widget.notifyData.save(ApConstants.SEMESTER_LATEST);
+                      widget.notifyData.save(widget.courseNotifySaveKey);
                       setState(() {});
                     }
                     if (widget.onNotifyClick != null)
