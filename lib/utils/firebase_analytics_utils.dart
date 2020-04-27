@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:firebase_analytics/firebase_analytics.dart';
 import 'package:ap_common/utils/analytics_utils.dart';
+import 'package:flutter/cupertino.dart';
 
 class FirebaseAnalyticsUtils extends AnalyticsUtils {
   static FirebaseAnalyticsUtils _instance;
@@ -26,7 +27,7 @@ class FirebaseAnalyticsUtils extends AnalyticsUtils {
 
   Future<void> setUserId(String id) async {
     await analytics?.setUserId(id);
-    print('setUserId succeeded');
+    debugPrint('setUserId succeeded');
   }
 
   Future<void> setUserProperty(
@@ -37,7 +38,7 @@ class FirebaseAnalyticsUtils extends AnalyticsUtils {
       name: name,
       value: value,
     );
-    print('setUserProperty succeeded');
+    debugPrint('setUserProperty succeeded');
   }
 
   Future<void> logUserInfo(String department) async {
@@ -47,7 +48,7 @@ class FirebaseAnalyticsUtils extends AnalyticsUtils {
         'department': department,
       },
     );
-    print('setUserProperty succeeded');
+    debugPrint('setUserProperty succeeded');
   }
 
   Future<void> logApiEvent(String type, int status,
@@ -60,7 +61,7 @@ class FirebaseAnalyticsUtils extends AnalyticsUtils {
         'message': message,
       },
     );
-    print('logEvent succeeded');
+    debugPrint('logEvent succeeded');
   }
 
   Future<void> logCalculateUnits(double seconds) async {
@@ -70,7 +71,7 @@ class FirebaseAnalyticsUtils extends AnalyticsUtils {
         'time': seconds,
       },
     );
-    print('log CalculateUnits succeeded');
+    debugPrint('log CalculateUnits succeeded');
   }
 
   Future<void> logTimeEvent(String name, double seconds) async {
@@ -80,7 +81,17 @@ class FirebaseAnalyticsUtils extends AnalyticsUtils {
         'time': seconds,
       },
     );
-    print('log TimeEvent succeeded');
+    debugPrint('log TimeEvent succeeded');
+  }
+
+  Future<void> logCaptchaErrorEvent(String tag, int count) async {
+    await analytics?.logEvent(
+      name: '${tag}_captcha_error',
+      parameters: <String, dynamic>{
+        'count': count,
+      },
+    );
+    debugPrint('log CaptchaErrorEvent succeeded');
   }
 
   Future<void> logAction(String name, String action,
