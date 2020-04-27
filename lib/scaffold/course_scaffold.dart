@@ -18,7 +18,7 @@ export 'package:ap_common/models/course_data.dart';
 typedef CourseNotifyCallback(
     CourseNotify courseNotify, CourseNotifyState state);
 
-enum CourseState { loading, finish, error, empty, offlineEmpty }
+enum CourseState { loading, finish, error, empty, offlineEmpty, custom }
 enum CourseNotifyState { schedule, cancel }
 enum _ContentStyle { list, table }
 
@@ -26,6 +26,7 @@ const _courseHeight = 55.0;
 
 class CourseScaffold extends StatefulWidget {
   final CourseState state;
+  final String customStateHint;
   final CourseData courseData;
   final List<String> years;
   final int yearIndex;
@@ -42,25 +43,26 @@ class CourseScaffold extends StatefulWidget {
   final CourseNotifyCallback onNotifyClick;
   final String courseNotifySaveKey;
 
-  const CourseScaffold({
-    Key key,
-    this.state = CourseState.loading,
-    this.courseData,
-    this.customHint,
-    this.years,
-    this.yearIndex,
-    this.semesters,
-    this.semesterIndex,
-    this.onSelect,
-    this.onRefresh,
-    this.isShowSearchButton = true,
-    this.actions,
-    this.enableNotifyControl = true,
-    this.notifyData,
-    this.autoNotifySave = true,
-    this.onNotifyClick,
-    this.courseNotifySaveKey = ApConstants.SEMESTER_LATEST,
-  }) : super(key: key);
+  const CourseScaffold(
+      {Key key,
+      this.state = CourseState.loading,
+      this.courseData,
+      this.customHint,
+      this.years,
+      this.yearIndex,
+      this.semesters,
+      this.semesterIndex,
+      this.onSelect,
+      this.onRefresh,
+      this.isShowSearchButton = true,
+      this.actions,
+      this.enableNotifyControl = true,
+      this.notifyData,
+      this.autoNotifySave = true,
+      this.onNotifyClick,
+      this.courseNotifySaveKey = ApConstants.SEMESTER_LATEST,
+      this.customStateHint})
+      : super(key: key);
 
   @override
   CourseScaffoldState createState() => CourseScaffoldState();
@@ -215,7 +217,7 @@ class CourseScaffoldState extends State<CourseScaffold> {
       case CourseState.error:
         return FlatButton(
           onPressed: () {
-            if (widget.state == CourseState.error)
+            if (widget.state == CourseState.error || widget.semesters == null)
               widget.onRefresh();
             else
               _pickSemester();
@@ -232,6 +234,12 @@ class CourseScaffoldState extends State<CourseScaffold> {
           icon: ApIcon.classIcon,
           content: app.noOfflineData,
         );
+      case CourseState.custom:
+        return HintContent(
+          icon: ApIcon.classIcon,
+          content: widget.customStateHint ?? app.unknownError,
+        );
+
       default:
         if (isTablet || _contentStyle == _ContentStyle.table) {
           return SingleChildScrollView(
