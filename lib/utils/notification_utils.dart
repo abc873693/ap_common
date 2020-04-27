@@ -23,6 +23,37 @@ class NotificationUtils {
       return Day(weekIndex + 2);
   }
 
+  static Future<void> show({
+    @required id,
+    @required String androidChannelId,
+    @required String androidChannelDescription,
+    @required String title,
+    @required String content,
+    bool enableVibration = true,
+  }) async {
+    final flutterLocalNotificationsPlugin = FlutterLocalNotificationsPlugin();
+    var androidPlatformChannelSpecifics = AndroidNotificationDetails(
+      androidChannelId,
+      androidChannelDescription,
+      androidChannelDescription,
+      icon: ANDROID_RESOURCE_NAME,
+      importance: Importance.Max,
+      enableVibration: enableVibration,
+    );
+    var iOSPlatformChannelSpecifics = IOSNotificationDetails();
+    var platformChannelSpecifics = NotificationDetails(
+      androidPlatformChannelSpecifics,
+      iOSPlatformChannelSpecifics,
+    );
+    await flutterLocalNotificationsPlugin.show(
+      id,
+      title,
+      content,
+      platformChannelSpecifics,
+      payload: content,
+    );
+  }
+
   static Future<void> scheduleCourseNotify({
     @required BuildContext context,
     @required CourseNotify courseNotify,
