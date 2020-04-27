@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:ap_common/callback/general_callback.dart';
 import 'package:ap_common/models/ap_support_language.dart';
 import 'package:ap_common/models/new_response.dart';
@@ -28,18 +30,26 @@ class GitHubHelper {
     return _instance;
   }
 
-  Future<List<News>> getNews({
+  Future<Map<String, List<News>>> getNews({
     @required String gitHubUsername,
     @required String hashCode,
-    @required String languageCode,
-    @required GeneralCallback<List<News>> callback,
+    @required String tag,
+    @required GeneralCallback<Map<String, List<News>>> callback,
   }) async {
     try {
       var response = await Dio().get(
         '$BASE_PATH/$gitHubUsername/$hashCode/raw/'
-        'nsysu_news_$languageCode.json',
+            '${tag}_news.json',
       );
-      return callback?.onSuccess(NewsResponse.fromRawJson(response.data).data);
+      Map<String, List<News>> map = Map();
+      Map<String, dynamic> json = jsonDecode(response.data);
+      json.forEach((key, data) {
+        if (key != 'data')
+          map[key] = NewsResponse
+              .fromJson(data)
+              .data;
+      });
+      return callback?.onSuccess(map);
     } on DioError catch (e) {
       if (callback != null)
         callback?.onFailure(e);
