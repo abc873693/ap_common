@@ -2,8 +2,10 @@ import 'dart:convert';
 
 import 'package:ap_common/config/ap_constants.dart';
 import 'package:ap_common/models/course_data.dart';
+import 'package:ap_common/utils/ap_localizations.dart';
 import 'package:ap_common/utils/preferences.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:sprintf/sprintf.dart';
 
 class CourseNotifyData {
   static const VERSION = 1;
@@ -55,6 +57,28 @@ class CourseNotifyData {
     Preferences.setString(
       '${ApConstants.PACKAGE_NAME}'
       '.course_notify_data_$tag',
+      this.toRawJson(),
+    );
+  }
+
+  void update(BuildContext context, String tag, CourseData courseData) {
+    final key = '${ApConstants.PACKAGE_NAME}.course_notify_data_$tag';
+    final ap = ApLocalizations.of(context);
+    var cache = CourseNotifyData.load(key);
+    cache.data.forEach((courseNotify) {
+      courseData?.courses?.forEach((courseDetail) {
+        if (courseDetail.code == courseNotify.code) {
+          courseNotify.title = sprintf(ap.courseNotifyContent, [
+            courseNotify.title,
+            courseNotify.location.isEmpty
+                ? ap.courseNotifyUnknown
+                : courseNotify.location
+          ]);
+        }
+      });
+    });
+    Preferences.setString(
+      key,
       this.toRawJson(),
     );
   }
