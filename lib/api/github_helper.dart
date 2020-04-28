@@ -37,15 +37,12 @@ class GitHubHelper {
     try {
       var response = await Dio().get(
         '$BASE_PATH/$gitHubUsername/$hashCode/raw/'
-            '${tag}_news.json',
+        '${tag}_news.json',
       );
       Map<String, List<News>> map = Map();
       Map<String, dynamic> json = jsonDecode(response.data);
       json.forEach((key, data) {
-        if (key != 'data')
-          map[key] = NewsResponse
-              .fromJson(data)
-              .data;
+        if (key != 'data') map[key] = NewsResponse.fromJson(data).data;
       });
       return callback?.onSuccess(map);
     } on DioError catch (e) {
