@@ -645,6 +645,14 @@ class ApLocalizations {
 
   String get onlySupportInSchool => _vocabularies['onlySupportInSchool'];
 
+  String get admissionGuide => _vocabularies['admissionGuide'];
+
+  String get share => _vocabularies['share'];
+
+  String get printing => _vocabularies['printing'];
+
+  String get changeEmail => _vocabularies['changeEmail'];
+
   static ApLocalizations of(BuildContext context) {
     return instance =
         Localizations.of<ApLocalizations>(context, ApLocalizations);
@@ -1038,6 +1046,10 @@ class ApLocalizations {
       'passwordError': 'Password Error',
       'unknownError': 'Unkwon Error',
       'onlySupportInSchool': 'Only current student',
+      'admissionGuide': 'Admission Guide',
+      'share': 'Sharing',
+      'printing': 'Printing',
+      'changeEmail': 'Change Email',
     },
     'zh': {
       'update_note_title': '更新日誌',
@@ -1353,7 +1365,7 @@ class ApLocalizations {
       'loginSuccess': '登入成功',
       'retry': '重試',
       'title': '標題',
-      'description': '描述',
+      'description': '說明',
       'imageUrl': '圖片網址',
       'url': '連結網址',
       'expireTime': '到期時間',
@@ -1380,6 +1392,10 @@ class ApLocalizations {
       'passwordError': '密碼輸入錯誤',
       'unknownError': '未知錯誤',
       'onlySupportInSchool': '僅限在校生使用',
+      'admissionGuide': '入學指南',
+      'share': '分享',
+      'printing': '印表機',
+      'changeEmail': '更改電子信箱',
     },
   };
 }
