@@ -130,11 +130,13 @@ class CourseScaffoldState extends State<CourseScaffold> {
                   Text(
                     widget.customHint,
                     style: TextStyle(color: ApTheme.of(context).grey),
+                    textAlign: TextAlign.center,
                   ),
                 if (_contentStyle == _ContentStyle.table)
                   Text(
                     app.courseClickHint,
                     style: TextStyle(color: ApTheme.of(context).grey),
+                    textAlign: TextAlign.center,
                   ),
                 SizedBox(height: 4.0),
                 Expanded(
@@ -206,6 +208,21 @@ class CourseScaffoldState extends State<CourseScaffold> {
     );
   }
 
+  String get hintContent {
+    switch (widget.state) {
+      case CourseState.error:
+        return app.clickToRetry;
+      case CourseState.empty:
+        return app.courseEmpty;
+      case CourseState.offlineEmpty:
+        return app.noOfflineData;
+      case CourseState.custom:
+        return widget.customStateHint ?? app.unknownError;
+      default:
+        return '';
+    }
+  }
+
   Widget _body() {
     switch (widget.state) {
       case CourseState.loading:
@@ -215,6 +232,8 @@ class CourseScaffoldState extends State<CourseScaffold> {
         );
       case CourseState.empty:
       case CourseState.error:
+      case CourseState.offlineEmpty:
+      case CourseState.custom:
         return FlatButton(
           onPressed: () {
             if (widget.state == CourseState.error || widget.semesters == null)
@@ -224,22 +243,9 @@ class CourseScaffoldState extends State<CourseScaffold> {
           },
           child: HintContent(
             icon: ApIcon.classIcon,
-            content: widget.state == CourseState.error
-                ? app.clickToRetry
-                : app.courseEmpty,
+            content: hintContent,
           ),
         );
-      case CourseState.offlineEmpty:
-        return HintContent(
-          icon: ApIcon.classIcon,
-          content: app.noOfflineData,
-        );
-      case CourseState.custom:
-        return HintContent(
-          icon: ApIcon.classIcon,
-          content: widget.customStateHint ?? app.unknownError,
-        );
-
       default:
         if (isTablet || _contentStyle == _ContentStyle.table) {
           return SingleChildScrollView(
