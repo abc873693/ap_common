@@ -607,6 +607,7 @@ class _CourseContentState extends State<CourseContent> {
               ),
             ],
           ),
+          SizedBox(height: 8.0),
         ],
       ),
     );
