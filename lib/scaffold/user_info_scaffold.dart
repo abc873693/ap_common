@@ -10,7 +10,6 @@ enum _Status { loading, finish, error, empty }
 
 class UserInfoScaffold extends StatefulWidget {
   final UserInfo userInfo;
-  final Uint8List pictureBytes;
   final String heroTag;
   final List<Widget> actions;
   final Future<UserInfo> Function() onRefresh;
@@ -18,7 +17,6 @@ class UserInfoScaffold extends StatefulWidget {
   const UserInfoScaffold({
     Key key,
     @required this.userInfo,
-    this.pictureBytes,
     this.heroTag,
     this.actions,
     this.onRefresh,
@@ -60,7 +58,7 @@ class UserInfoScaffoldState extends State<UserInfoScaffold> {
           physics: const AlwaysScrollableScrollPhysics(),
           children: <Widget>[
             SizedBox(height: 8.0),
-            widget.pictureBytes != null
+            widget.userInfo.pictureBytes != null
                 ? SizedBox(
                     height: 320,
                     child: AspectRatio(
@@ -68,7 +66,7 @@ class UserInfoScaffoldState extends State<UserInfoScaffold> {
                       child: Hero(
                         tag: widget.heroTag ?? ApConstants.TAG_STUDENT_PICTURE,
                         child: Image.memory(
-                          widget.pictureBytes,
+                          widget.userInfo.pictureBytes,
                         ),
                       ),
                     ),
