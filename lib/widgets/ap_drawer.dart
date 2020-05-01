@@ -1,3 +1,4 @@
+import 'package:ap_common/config/ap_constants.dart';
 import 'package:ap_common/models/user_info.dart';
 import 'package:ap_common/resources/ap_icon.dart';
 import 'package:ap_common/resources/ap_theme.dart';
@@ -12,6 +13,7 @@ class ApDrawer extends StatefulWidget {
   final String imageAsset;
   final List<Widget> widgets;
   final String imageHeroTag;
+  final bool displayPicture;
 
   const ApDrawer({
     Key key,
@@ -20,6 +22,7 @@ class ApDrawer extends StatefulWidget {
     @required this.userInfo,
     this.imageAsset,
     this.imageHeroTag = 'image',
+    this.displayPicture = false,
   }) : super(key: key);
 
   @override
@@ -28,8 +31,6 @@ class ApDrawer extends StatefulWidget {
 
 class ApDrawerState extends State<ApDrawer> {
   ApLocalizations app;
-
-  bool displayPicture = true;
 
   @override
   void initState() {
@@ -55,9 +56,11 @@ class ApDrawerState extends State<ApDrawer> {
                   UserAccountsDrawerHeader(
                     margin: const EdgeInsets.all(0),
                     currentAccountPicture:
-                        widget.userInfo?.pictureBytes != null && displayPicture
+                        widget.userInfo?.pictureBytes != null &&
+                                widget.displayPicture
                             ? Hero(
-                                tag: widget.imageHeroTag,
+                                tag: widget.imageHeroTag ??
+                                    ApConstants.TAG_STUDENT_PICTURE,
                                 child: Container(
                                   width: 72.0,
                                   height: 72.0,
