@@ -1,7 +1,7 @@
 import 'dart:io';
 
 import 'package:ap_common/config/ap_constants.dart';
-import 'package:ap_common/models/new_response.dart';
+import 'package:ap_common/models/announcement_data.dart';
 import 'package:ap_common/resources/ap_icon.dart';
 import 'package:ap_common/resources/ap_theme.dart';
 import 'package:ap_common/utils/ap_localizations.dart';
@@ -15,18 +15,17 @@ import 'package:url_launcher/url_launcher.dart';
 
 enum _Status { loading, finish, error, empty }
 
-class NewsContentPage extends StatefulWidget {
-  static const String routerName = "/news/content";
+class AnnouncementContentPage extends StatefulWidget {
 
-  final News news;
+  final Announcement announcement;
 
-  const NewsContentPage({Key key, this.news}) : super(key: key);
+  const AnnouncementContentPage({Key key, this.announcement}) : super(key: key);
 
   @override
-  NewsContentPageState createState() => NewsContentPageState();
+  AnnouncementContentPageState createState() => AnnouncementContentPageState();
 }
 
-class NewsContentPageState extends State<NewsContentPage> {
+class AnnouncementContentPageState extends State<AnnouncementContentPage> {
   _Status state = _Status.finish;
   ApLocalizations app;
 
@@ -45,7 +44,7 @@ class NewsContentPageState extends State<NewsContentPage> {
     app = ApLocalizations.of(context);
     return Scaffold(
       appBar: AppBar(
-        title: Text(app.news),
+        title: Text(app.announcements),
         backgroundColor: ApTheme.of(context).blue,
       ),
       body: _homebody(),
@@ -81,9 +80,9 @@ class NewsContentPageState extends State<NewsContentPage> {
       child: AspectRatio(
         aspectRatio: orientation == Orientation.portrait ? 4 / 3 : 9 / 16,
         child: Hero(
-          tag: widget.news.hashCode,
+          tag: widget.announcement.hashCode,
           child: ApNetworkImage(
-            url: widget.news.imageUrl,
+            url: widget.announcement.imgUrl,
           ),
         ),
       ),
@@ -92,25 +91,25 @@ class NewsContentPageState extends State<NewsContentPage> {
           context,
           Scaffold(
             appBar: AppBar(
-              title: Text(widget.news.title),
+              title: Text(widget.announcement.title),
               backgroundColor: ApTheme.of(context).blue,
             ),
             body: PhotoView(
               imageProvider: (!kIsWeb && (Platform.isAndroid || Platform.isIOS))
-                  ? CachedNetworkImageProvider(widget.news.imageUrl)
-                  : NetworkImage(widget.news.imageUrl),
+                  ? CachedNetworkImageProvider(widget.announcement.imgUrl)
+                  : NetworkImage(widget.announcement.imgUrl),
             ),
           ),
         );
       },
     );
-    final List<Widget> newsContent = <Widget>[
+    final List<Widget> content = <Widget>[
       Hero(
-        tag: ApConstants.TAG_NEWS_TITLE,
+        tag: ApConstants.TAG_ANNOUNCEMENT_TITLE,
         child: Material(
           color: Colors.transparent,
           child: SelectableText(
-            widget.news.title,
+            widget.announcement.title,
             textAlign: TextAlign.center,
             style: TextStyle(
               fontSize: 20.0,
@@ -121,14 +120,14 @@ class NewsContentPageState extends State<NewsContentPage> {
         ),
       ),
       Hero(
-        tag: ApConstants.TAG_NEWS_ICON,
+        tag: ApConstants.TAG_ANNOUNCEMENT_ICON,
         child: Icon(ApIcon.arrowDropDown),
       ),
       Padding(
         padding: EdgeInsets.symmetric(
             horizontal: orientation == Orientation.portrait ? 16.0 : 0.0),
         child: SelectableText(
-          widget.news.description,
+          widget.announcement.description,
           textAlign: TextAlign.center,
           style: TextStyle(
             fontSize: 16.0,
@@ -136,7 +135,8 @@ class NewsContentPageState extends State<NewsContentPage> {
           ),
         ),
       ),
-      if (widget.news.url != null && widget.news.url.isNotEmpty) ...[
+      if (widget.announcement.url != null &&
+          widget.announcement.url.isNotEmpty) ...[
         SizedBox(height: 16.0),
         RaisedButton(
           shape: RoundedRectangleBorder(
@@ -145,7 +145,7 @@ class NewsContentPageState extends State<NewsContentPage> {
             ),
           ),
           onPressed: () {
-            launch(widget.news.url);
+            launch(widget.announcement.url);
           },
           padding: EdgeInsets.symmetric(vertical: 12.0, horizontal: 0.0),
           color: ApTheme.of(context).yellow,
@@ -160,7 +160,7 @@ class NewsContentPageState extends State<NewsContentPage> {
       return <Widget>[
         image,
         SizedBox(height: 16.0),
-        ...newsContent,
+        ...content,
       ];
     } else {
       return <Widget>[
@@ -169,7 +169,7 @@ class NewsContentPageState extends State<NewsContentPage> {
         Expanded(
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
-            children: newsContent,
+            children: content,
           ),
         ),
       ];

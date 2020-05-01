@@ -8,9 +8,9 @@ class ApConstants {
   static const PACKAGE_NAME = 'ap_common';
 
   static const TAG_STUDENT_PICTURE = "tag_student_picture";
-  static const TAG_NEWS_PICTURE = "tag_news_picture";
-  static const TAG_NEWS_ICON = "tag_news_icon";
-  static const TAG_NEWS_TITLE = "tag_news_title";
+  static const TAG_ANNOUNCEMENT_PICTURE = "tag_announcement_picture";
+  static const TAG_ANNOUNCEMENT_ICON = "tag_announcement_icon";
+  static const TAG_ANNOUNCEMENT_TITLE = "tag_announcement_title";
 
   static const APP_VERSION = "app_version";
   static const NEW_VERSION_CONTENT = "new_version_content";

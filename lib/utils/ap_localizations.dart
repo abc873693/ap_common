@@ -340,7 +340,7 @@ class ApLocalizations {
 
   String get logout => _vocabularies['logout'];
 
-  String get news => _vocabularies['news'];
+  String get announcements => _vocabularies['news'];
 
   String get logoutCheck => _vocabularies['logout_check'];
 

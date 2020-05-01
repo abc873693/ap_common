@@ -1,7 +1,7 @@
 import 'dart:convert';
 
 import 'package:ap_common/callback/general_callback.dart';
-import 'package:ap_common/models/new_response.dart';
+import 'package:ap_common/models/announcement_data.dart';
 import 'package:dio/dio.dart';
 import 'package:dio_cookie_manager/dio_cookie_manager.dart';
 import 'package:cookie_jar/cookie_jar.dart';
@@ -28,21 +28,21 @@ class GitHubHelper {
     return _instance;
   }
 
-  Future<Map<String, List<News>>> getNews({
+  Future<Map<String, List<Announcement>>> getAnnouncement({
     @required String gitHubUsername,
     @required String hashCode,
     @required String tag,
-    @required GeneralCallback<Map<String, List<News>>> callback,
+    @required GeneralCallback<Map<String, List<Announcement>>> callback,
   }) async {
     try {
       var response = await Dio().get(
         '$BASE_PATH/$gitHubUsername/$hashCode/raw/'
-        '${tag}_news.json',
+        '${tag}_announcement.json',
       );
-      Map<String, List<News>> map = Map();
+      Map<String, List<Announcement>> map = Map();
       Map<String, dynamic> json = jsonDecode(response.data);
       json.forEach((key, data) {
-        if (key != 'data') map[key] = NewsResponse.fromJson(data).data;
+        if (key != 'data') map[key] = AnnouncementData.fromJson(data).data;
       });
       return callback?.onSuccess(map);
     } on DioError catch (e) {

@@ -2,7 +2,7 @@ import 'dart:async';
 import 'dart:io';
 
 import 'package:ap_common/config/ap_constants.dart';
-import 'package:ap_common/models/new_response.dart';
+import 'package:ap_common/models/announcement_data.dart';
 import 'package:ap_common/resources/ap_icon.dart';
 import 'package:ap_common/resources/ap_theme.dart';
 import 'package:ap_common/utils/ap_localizations.dart';
@@ -14,17 +14,19 @@ import 'package:flutter/services.dart';
 import 'package:ap_common/widgets/hint_content.dart';
 import 'package:ap_common/widgets/yes_no_dialog.dart';
 
+export 'package:ap_common/models/announcement_data.dart';
+
 enum HomeState { loading, finish, error, empty, offline }
 
 class HomePageScaffold extends StatefulWidget {
   final HomeState state;
   final String title;
-  final List<News> newsList;
+  final List<Announcement> announcements;
   final List<Widget> actions;
   final List<BottomNavigationBarItem> bottomNavigationBarItems;
 
   final Function(int index) onTabTapped;
-  final Function(News news) onImageTapped;
+  final Function(Announcement announcement) onImageTapped;
 
   final Widget drawer;
   final Widget floatingActionButton;
@@ -36,7 +38,7 @@ class HomePageScaffold extends StatefulWidget {
   const HomePageScaffold({
     Key key,
     @required this.state,
-    @required this.newsList,
+    @required this.announcements,
     @required this.isLogin,
     this.actions,
     this.onTabTapped,
@@ -69,10 +71,10 @@ class HomePageScaffoldState extends State<HomePageScaffold> {
       _timer = Timer.periodic(
         widget.autoPlayDuration,
         (Timer timer) {
-          if (widget.state == HomeState.finish && widget.newsList.length > 1)
+          if (widget.state == HomeState.finish && widget.announcements.length > 1)
             setState(() {
               _currentNewsIndex++;
-              if (_currentNewsIndex >= widget.newsList.length)
+              if (_currentNewsIndex >= widget.announcements.length)
                 _currentNewsIndex = 0;
               pageController.animateToPage(
                 _currentNewsIndex,
@@ -139,7 +141,7 @@ class HomePageScaffoldState extends State<HomePageScaffold> {
     );
   }
 
-  Widget _newsImage(News news, Orientation orientation, bool active) {
+  Widget _newsImage(Announcement announcement, Orientation orientation, bool active) {
     return AnimatedContainer(
       duration: Duration(milliseconds: 500),
       curve: Curves.easeOutQuint,
@@ -149,12 +151,12 @@ class HomePageScaffoldState extends State<HomePageScaffold> {
       ),
       child: GestureDetector(
         onTap: () {
-          if (widget.onImageTapped != null) widget.onImageTapped(news);
+          if (widget.onImageTapped != null) widget.onImageTapped(announcement);
         },
         child: Hero(
-          tag: news.hashCode,
+          tag: announcement.hashCode,
           child: ApNetworkImage(
-            url: news.imageUrl,
+            url: announcement.imgUrl,
           ),
         ),
       ),
@@ -188,11 +190,11 @@ class HomePageScaffoldState extends State<HomePageScaffold> {
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
             Hero(
-              tag: ApConstants.TAG_NEWS_TITLE,
+              tag: ApConstants.TAG_ANNOUNCEMENT_TITLE,
               child: Material(
                 color: Colors.transparent,
                 child: Text(
-                  widget.newsList[_currentNewsIndex].title,
+                  widget.announcements[_currentNewsIndex].title,
                   textAlign: TextAlign.center,
                   style: TextStyle(
                       fontSize: 20.0,
@@ -202,17 +204,17 @@ class HomePageScaffoldState extends State<HomePageScaffold> {
               ),
             ),
             Hero(
-              tag: ApConstants.TAG_NEWS_ICON,
+              tag: ApConstants.TAG_ANNOUNCEMENT_ICON,
               child: Icon(Icons.arrow_drop_down),
             ),
             Expanded(
               child: PageView.builder(
                 controller: pageController,
-                itemCount: widget.newsList.length,
+                itemCount: widget.announcements.length,
                 itemBuilder: (context, int currentIndex) {
                   bool active = (currentIndex == _currentNewsIndex);
                   return _newsImage(
-                    widget.newsList[currentIndex],
+                    widget.announcements[currentIndex],
                     orientation,
                     active,
                   );
@@ -228,10 +230,10 @@ class HomePageScaffoldState extends State<HomePageScaffold> {
                 children: [
                   TextSpan(
                       text:
-                          '${widget.newsList.length >= 10 && _currentNewsIndex < 9 ? '0' : ''}'
+                          '${widget.announcements.length >= 10 && _currentNewsIndex < 9 ? '0' : ''}'
                           '${_currentNewsIndex + 1}',
                       style: TextStyle(color: ApTheme.of(context).red)),
-                  TextSpan(text: ' / ${widget.newsList.length}'),
+                  TextSpan(text: ' / ${widget.announcements.length}'),
                 ],
               ),
             ),
