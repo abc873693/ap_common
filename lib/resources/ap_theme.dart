@@ -23,7 +23,7 @@ class ApTheme extends InheritedWidget {
 
   static String code = ApTheme.LIGHT;
 
-  Brightness get _brightness {
+  Brightness get brightness {
     switch (themeMode) {
       case ThemeMode.system:
         return WidgetsBinding.instance.window.platformBrightness;
@@ -36,7 +36,7 @@ class ApTheme extends InheritedWidget {
   }
 
   Color get blue {
-    switch (_brightness) {
+    switch (brightness) {
       case Brightness.light:
         return ApColors.blue500;
         break;
@@ -48,7 +48,7 @@ class ApTheme extends InheritedWidget {
   }
 
   Color get blueText {
-    switch (_brightness) {
+    switch (brightness) {
       case Brightness.dark:
         return ApColors.grey100;
       case Brightness.light:
@@ -58,7 +58,7 @@ class ApTheme extends InheritedWidget {
   }
 
   get blueAccent {
-    switch (_brightness) {
+    switch (brightness) {
       case Brightness.dark:
         return ApColors.blue300;
       case Brightness.light:
@@ -68,7 +68,7 @@ class ApTheme extends InheritedWidget {
   }
 
   get semesterText {
-    switch (_brightness) {
+    switch (brightness) {
       case Brightness.dark:
         return Color(0xffffffff);
       case Brightness.light:
@@ -78,7 +78,7 @@ class ApTheme extends InheritedWidget {
   }
 
   Color get grey {
-    switch (_brightness) {
+    switch (brightness) {
       case Brightness.dark:
         return ApColors.grey200;
       case Brightness.light:
@@ -88,7 +88,7 @@ class ApTheme extends InheritedWidget {
   }
 
   Color get greyText {
-    switch (_brightness) {
+    switch (brightness) {
       case Brightness.dark:
         return ApColors.grey200;
       case Brightness.light:
@@ -98,7 +98,7 @@ class ApTheme extends InheritedWidget {
   }
 
   get disabled {
-    switch (_brightness) {
+    switch (brightness) {
       case Brightness.dark:
         return Color(0xFF424242);
       case Brightness.light:
@@ -108,7 +108,7 @@ class ApTheme extends InheritedWidget {
   }
 
   Color get calendarTileSelect {
-    switch (_brightness) {
+    switch (brightness) {
       case Brightness.dark:
         return Color(0xff000000);
       case Brightness.light:
@@ -118,7 +118,7 @@ class ApTheme extends InheritedWidget {
   }
 
   Color get yellow {
-    switch (_brightness) {
+    switch (brightness) {
       case Brightness.dark:
         return ApColors.yellow200;
       case Brightness.light:
@@ -128,7 +128,7 @@ class ApTheme extends InheritedWidget {
   }
 
   Color get red {
-    switch (_brightness) {
+    switch (brightness) {
       case Brightness.dark:
         return ApColors.red200;
       case Brightness.light:
@@ -138,7 +138,7 @@ class ApTheme extends InheritedWidget {
   }
 
   Color get bottomNavigationSelect {
-    switch (_brightness) {
+    switch (brightness) {
       case Brightness.dark:
         return ApColors.grey100;
       case Brightness.light:
@@ -148,7 +148,7 @@ class ApTheme extends InheritedWidget {
   }
 
   Color get segmentControlUnSelect {
-    switch (_brightness) {
+    switch (brightness) {
       case Brightness.dark:
         return ApColors.onyx;
       case Brightness.light:
@@ -158,7 +158,7 @@ class ApTheme extends InheritedWidget {
   }
 
   get snackBarActionTextColor {
-    switch (_brightness) {
+    switch (brightness) {
       case Brightness.dark:
         return ApColors.yellow500;
       case Brightness.light:
@@ -168,7 +168,7 @@ class ApTheme extends InheritedWidget {
   }
 
   Color get toastBackground {
-    switch (_brightness) {
+    switch (brightness) {
       case Brightness.light:
         return Color(0xAA000000);
       case Brightness.dark:
@@ -178,7 +178,7 @@ class ApTheme extends InheritedWidget {
   }
 
   Color get toastText {
-    switch (_brightness) {
+    switch (brightness) {
       case Brightness.light:
         return Colors.white;
       case Brightness.dark:
@@ -188,7 +188,7 @@ class ApTheme extends InheritedWidget {
   }
 
   double get drawerIconOpacity {
-    switch (_brightness) {
+    switch (brightness) {
       case Brightness.dark:
         return 0.75;
       case Brightness.light:
@@ -198,7 +198,7 @@ class ApTheme extends InheritedWidget {
   }
 
   String get dashLine {
-    switch (_brightness) {
+    switch (brightness) {
       case Brightness.light:
         return ApImageAssets.dashLineLight;
       case Brightness.dark:
@@ -208,7 +208,7 @@ class ApTheme extends InheritedWidget {
   }
 
   String get drawerBackground {
-    switch (_brightness) {
+    switch (brightness) {
       case Brightness.light:
         return ApImageAssets.drawerBackgroundLight;
       case Brightness.dark:
@@ -218,7 +218,7 @@ class ApTheme extends InheritedWidget {
   }
 
   Color get courseBorder {
-    switch (_brightness) {
+    switch (brightness) {
       case Brightness.dark:
         return ApColors.charade;
       case Brightness.light:
@@ -228,7 +228,7 @@ class ApTheme extends InheritedWidget {
   }
 
   Color get courseText {
-    switch (_brightness) {
+    switch (brightness) {
       case Brightness.dark:
         return Colors.black87;
       case Brightness.light:
@@ -238,7 +238,7 @@ class ApTheme extends InheritedWidget {
   }
 
   Color get courseListTabletBackground {
-    switch (_brightness) {
+    switch (brightness) {
       case Brightness.dark:
         return Colors.black12;
       case Brightness.light:
