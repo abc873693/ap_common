@@ -268,6 +268,9 @@ class ApTheme extends InheritedWidget {
   static ThemeData get dark => ThemeData(
         //platform: TargetPlatform.iOS,
         brightness: Brightness.dark,
+        appBarTheme: AppBarTheme(
+          color: ApColors.blueDark,
+        ),
         scaffoldBackgroundColor: ApColors.onyx,
         accentColor: ApColors.blue300,
         unselectedWidgetColor: ApColors.grey200,
