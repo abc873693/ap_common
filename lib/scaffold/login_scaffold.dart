@@ -178,6 +178,31 @@ class ApButton extends StatelessWidget {
   }
 }
 
+class ApFlatButton extends StatelessWidget {
+  final Function onPressed;
+  final String text;
+
+  const ApFlatButton({
+    Key key,
+    this.onPressed,
+    this.text,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Center(
+      child: FlatButton(
+        padding: EdgeInsets.all(0.0),
+        onPressed: onPressed,
+        child: Text(
+          text,
+          style: TextStyle(color: Colors.white, fontSize: 16.0),
+        ),
+      ),
+    );
+  }
+}
+
 class TextLogo extends StatelessWidget {
   final String text;
 
