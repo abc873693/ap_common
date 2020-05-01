@@ -1,3 +1,15 @@
+## [0.2.0] - 2020/05/01
+**Break Change**
+### 此版本基於Flutter v1.17開發
+
+* 配合高科大版本重構最新消息API
+* 登入骨架加入LOGO可選擇圖片或文字
+* 加入最新消息規則對話框工具
+* 更改ApTheme的brightness成public parameter
+* 修正抽屜是否顯示照片的參數
+* 部分頁面加入setCurrentContent參數
+* 使用者資訊骨架中圖片藉由UserInfo取得
+
 ## [0.1.8] - 2020/04/28
 
 * 改善課表提示字
