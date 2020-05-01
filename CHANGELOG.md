@@ -1,5 +1,5 @@
 ## [0.2.0] - 2020/05/01
-### **Break Change** 此版本基於Flutter v1.17開發
+### [Break Change] 此版本基於Flutter v1.17開發
 
 * 配合高科大版本重構最新消息API
 * 登入骨架加入LOGO可選擇圖片或文字
