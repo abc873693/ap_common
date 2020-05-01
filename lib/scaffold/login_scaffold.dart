@@ -3,15 +3,19 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
+enum LogoMode { text, image }
+
 class LoginScaffold extends StatefulWidget {
   static const String routerName = "/login";
-  final String logoText;
+  final LogoMode logoMode;
+  final String logoSource;
   final List<Widget> forms;
 
   const LoginScaffold({
     Key key,
-    @required this.logoText,
+    @required this.logoSource,
     @required this.forms,
+    this.logoMode = LogoMode.text,
   }) : super(key: key);
 
   @override
@@ -56,21 +60,33 @@ class LoginScaffoldState extends State<LoginScaffold> {
     );
   }
 
+  Widget get logo {
+    switch (widget.logoMode) {
+      case LogoMode.image:
+        return Image.asset(
+          widget.logoSource,
+          width: 120.0,
+          height: 120.0,
+        );
+      case LogoMode.text:
+      default:
+        return TextLogo(
+          text: widget.logoSource,
+        );
+    }
+  }
+
   _renderContent(Orientation orientation) {
     List<Widget> list = orientation == Orientation.portrait
         ? <Widget>[
             Center(
-              child: TextLogo(
-                text: widget.logoText,
-              ),
+              child: logo,
             ),
             SizedBox(height: orientation == Orientation.portrait ? 30.0 : 0.0),
           ]
         : <Widget>[
             Expanded(
-              child: TextLogo(
-                text: widget.logoText,
-              ),
+              child: logo,
             ),
             SizedBox(height: orientation == Orientation.portrait ? 30.0 : 0.0),
           ];
