@@ -390,7 +390,7 @@ class OpenSourcePageState extends State<OpenSourcePage> {
 
   @override
   void initState() {
-    widget.setCurrentScreen();
+    if (widget.setCurrentScreen != null) widget.setCurrentScreen();
     super.initState();
   }
 

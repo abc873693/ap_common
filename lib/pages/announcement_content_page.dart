@@ -16,10 +16,12 @@ import 'package:url_launcher/url_launcher.dart';
 enum _Status { loading, finish, error, empty }
 
 class AnnouncementContentPage extends StatefulWidget {
-
   final Announcement announcement;
+  final Function() setCurrentScreen;
 
-  const AnnouncementContentPage({Key key, this.announcement}) : super(key: key);
+  const AnnouncementContentPage(
+      {Key key, this.announcement, this.setCurrentScreen})
+      : super(key: key);
 
   @override
   AnnouncementContentPageState createState() => AnnouncementContentPageState();
@@ -31,6 +33,7 @@ class AnnouncementContentPageState extends State<AnnouncementContentPage> {
 
   @override
   void initState() {
+    if (widget.setCurrentScreen != null) widget.setCurrentScreen();
     super.initState();
   }
 
