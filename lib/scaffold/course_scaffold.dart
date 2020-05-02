@@ -28,10 +28,12 @@ class CourseScaffold extends StatefulWidget {
   final CourseState state;
   final String customStateHint;
   final CourseData courseData;
+  final Widget itemPicker;
   final List<String> years;
   final int yearIndex;
   final List<String> semesters;
   final int semesterIndex;
+  final Function onSearchButtonClick;
   final Function(int index) onSelect;
   final Function() onRefresh;
   final List<Widget> actions;
@@ -61,7 +63,9 @@ class CourseScaffold extends StatefulWidget {
       this.autoNotifySave = true,
       this.onNotifyClick,
       this.courseNotifySaveKey = ApConstants.SEMESTER_LATEST,
-      this.customStateHint})
+      this.customStateHint,
+      this.itemPicker,
+      this.onSearchButtonClick})
       : super(key: key);
 
   @override
@@ -108,7 +112,9 @@ class CourseScaffoldState extends State<CourseScaffold> {
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: <Widget>[
                 SizedBox(height: 8.0),
-                if (widget.years != null || widget.semesters != null)
+                if (widget.years != null ||
+                    widget.semesters != null ||
+                    widget.itemPicker != null)
                   Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     mainAxisSize: MainAxisSize.max,
@@ -118,12 +124,15 @@ class CourseScaffoldState extends State<CourseScaffold> {
 //                items: widget.years,
 //                currentIndex: widget.yearIndex,
 //              ),
-                      ItemPicker(
-                        dialogTitle: app.picksSemester,
-                        onSelected: widget.onSelect,
-                        items: widget.semesters,
-                        currentIndex: widget.semesterIndex,
-                      ),
+                      if (widget.semesters != null && widget.itemPicker == null)
+                        ItemPicker(
+                          dialogTitle: app.picksSemester,
+                          onSelected: widget.onSelect,
+                          items: widget.semesters,
+                          currentIndex: widget.semesterIndex,
+                        ),
+                      if (widget.itemPicker != null)
+                        widget.itemPicker,
                     ],
                   ),
                 if (widget.customHint != null)
@@ -294,7 +303,7 @@ class CourseScaffoldState extends State<CourseScaffold> {
         );
     for (var i = 0; i < maxTimeCode; i++) {
       var text = timeCodes[i].replaceAll(' ', '');
-      if (!widget.courseData.hasHoliday) {
+      if (widget.courseData.hasHoliday) {
         text = text.replaceAll('第', '');
         text = text.replaceAll('節', '');
       }
@@ -442,7 +451,7 @@ class CourseScaffoldState extends State<CourseScaffold> {
           border: Border(right: _innerBorderSide),
         ),
         height: _courseHeight,
-        width: 35.0,
+        width: widget.courseData.hasHoliday ? 35.0 : 50.0,
         child: Text(
           text ?? '',
           style: TextStyle(
@@ -452,7 +461,9 @@ class CourseScaffoldState extends State<CourseScaffold> {
         ),
       );
 
-  void _pickSemester() => showDialog(
+  void _pickSemester() {
+    if (widget.semesters != null)
+      showDialog(
         context: context,
         builder: (_) => SimpleOptionDialog(
           title: app.picksSemester,
@@ -461,6 +472,8 @@ class CourseScaffoldState extends State<CourseScaffold> {
           onSelected: widget.onSelect,
         ),
       );
+    else if (widget.onSearchButtonClick != null) widget.onSearchButtonClick();
+  }
 }
 
 class CourseContent extends StatefulWidget {
