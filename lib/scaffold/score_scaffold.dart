@@ -17,6 +17,7 @@ class ScoreScaffold extends StatefulWidget {
   final List<String> semesters;
   final int semesterIndex;
   final Function(int index) onSelect;
+  final Function onSearchButtonClick;
   final Function() onRefresh;
   final Widget itemPicker;
   final String middleTitle;
@@ -40,6 +41,7 @@ class ScoreScaffold extends StatefulWidget {
     this.semesters,
     this.semesterIndex,
     this.onSelect,
+    this.onSearchButtonClick,
     this.middleTitle,
     this.finalTitle,
     this.middleScoreBuilder,
@@ -126,10 +128,9 @@ class ScoreScaffoldState extends State<ScoreScaffold> {
       case ScoreState.empty:
         return FlatButton(
           onPressed: () {
-            if (widget.itemPicker == null && widget.state == ScoreState.empty)
+            if (widget.state == ScoreState.empty)
               _pickSemester();
-            else
-              widget.onRefresh();
+            else if (widget.onRefresh != null) widget.onRefresh();
           },
           child: HintContent(
             icon: ApIcon.assignment,
@@ -167,8 +168,7 @@ class ScoreScaffoldState extends State<ScoreScaffold> {
           onSelected: widget.onSelect,
         ),
       );
-    else
-      throw 'semesters can\'t null';
+    if (widget.onSearchButtonClick != null) widget.onSearchButtonClick();
   }
 }
 
