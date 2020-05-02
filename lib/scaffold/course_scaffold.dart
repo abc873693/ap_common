@@ -245,10 +245,9 @@ class CourseScaffoldState extends State<CourseScaffold> {
       case CourseState.custom:
         return FlatButton(
           onPressed: () {
-            if (widget.state == CourseState.error || widget.semesters == null)
-              widget.onRefresh();
-            else
+            if (widget.state == CourseState.empty)
               _pickSemester();
+            else if (widget.onRefresh != null) widget.onRefresh();
           },
           child: HintContent(
             icon: ApIcon.classIcon,
@@ -472,7 +471,7 @@ class CourseScaffoldState extends State<CourseScaffold> {
           onSelected: widget.onSelect,
         ),
       );
-    else if (widget.onSearchButtonClick != null) widget.onSearchButtonClick();
+    if (widget.onSearchButtonClick != null) widget.onSearchButtonClick();
   }
 }
 
