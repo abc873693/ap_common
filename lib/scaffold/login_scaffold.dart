@@ -1,7 +1,12 @@
 import 'package:ap_common/resources/ap_theme.dart';
+import 'package:ap_common/utils/ap_localizations.dart';
+import 'package:ap_common/utils/ap_utils.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:keyboard_visibility/keyboard_visibility.dart';
+
+export 'package:keyboard_visibility/keyboard_visibility.dart';
 
 enum LogoMode { text, image }
 
@@ -10,12 +15,14 @@ class LoginScaffold extends StatefulWidget {
   final LogoMode logoMode;
   final String logoSource;
   final List<Widget> forms;
+  final bool enableKeyboardDoneButton;
 
   const LoginScaffold({
     Key key,
     @required this.logoSource,
     @required this.forms,
     this.logoMode = LogoMode.text,
+    this.enableKeyboardDoneButton = false,
   }) : super(key: key);
 
   @override
@@ -23,13 +30,27 @@ class LoginScaffold extends StatefulWidget {
 }
 
 class LoginScaffoldState extends State<LoginScaffold> {
+  KeyboardVisibilityNotification keyboardVisibilityNotification;
+
   @override
   void initState() {
+    if (widget.enableKeyboardDoneButton) {
+      keyboardVisibilityNotification = KeyboardVisibilityNotification();
+      keyboardVisibilityNotification?.addNewListener(
+        onHide: () {
+          ApUtils.removeOverlay();
+        },
+        onShow: () {
+          ApUtils.showOverlay(context, ApLocalizations.of(context).done);
+        },
+      );
+    }
     super.initState();
   }
 
   @override
   void dispose() {
+    keyboardVisibilityNotification?.removeListener(0);
     super.dispose();
   }
 

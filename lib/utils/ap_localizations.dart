@@ -666,6 +666,8 @@ class ApLocalizations {
 
   String get changeEmail => _vocabularies['changeEmail'];
 
+  String get done => _vocabularies['done'];
+
   static ApLocalizations of(BuildContext context) {
     return instance =
         Localizations.of<ApLocalizations>(context, ApLocalizations);
@@ -1018,7 +1020,8 @@ class ApLocalizations {
       'leaveSubmitSuccess': 'Leave submit successful.',
       'leaveDelayHint': 'Because over time, need to fill delay reason.',
       'leaveProofHint': 'Please pick image',
-      'imageCompressHint': 'Because file big than %.1fMB, so compress to %.2f MB',
+      'imageCompressHint':
+          'Because file big than %.1fMB, so compress to %.2f MB',
       'imageTooBigHint':
           'Image size is too big, can\'t compress in except. Plese pick another one.',
       'leaveDateAndSection': 'Date & Section',
@@ -1060,9 +1063,9 @@ class ApLocalizations {
       'unknownError': 'Unkwon Error',
       'onlySupportInSchool': 'Only current student',
       'admissionGuide': 'Admission Guide',
-      'share': 'Sharing',
       'printing': 'Printing',
       'changeEmail': 'Change Email',
+      'done': 'Done',
     },
     'zh': {
       'update_note_title': '更新日誌',
@@ -1406,9 +1409,9 @@ class ApLocalizations {
       'unknownError': '未知錯誤',
       'onlySupportInSchool': '僅限在校生使用',
       'admissionGuide': '入學指南',
-      'share': '分享',
       'printing': '印表機',
       'changeEmail': '更改電子信箱',
+      'done': '完成',
     },
   };
 }

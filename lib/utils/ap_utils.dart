@@ -14,13 +14,15 @@ import 'package:toast/toast.dart';
 import 'package:url_launcher/url_launcher.dart';
 export 'package:dio/dio.dart';
 
+export 'package:toast/toast.dart';
+
 class ApUtils {
-  static void showToast(BuildContext context, String message) {
+  static void showToast(BuildContext context, String message, {int gravity}) {
     Toast.show(
       message,
       context,
       duration: Toast.LENGTH_LONG,
-      gravity: Toast.BOTTOM,
+      gravity: gravity ?? Toast.BOTTOM,
       textColor: ApTheme.of(context).toastText,
       backgroundColor: ApTheme.of(context).toastBackground,
     );
@@ -143,5 +145,61 @@ class ApUtils {
         ),
       );
     }
+  }
+
+  static var overlayEntry;
+
+  static showOverlay(BuildContext context, String text) {
+    if (overlayEntry != null) return;
+    OverlayState overlayState = Overlay.of(context);
+    overlayEntry = OverlayEntry(
+      builder: (context) {
+        return Positioned(
+          bottom: MediaQuery.of(context).viewInsets.bottom,
+          right: 0.0,
+          left: 0.0,
+          child: InputDoneView(text: text),
+        );
+      },
+    );
+
+    overlayState.insert(overlayEntry);
+  }
+
+  static removeOverlay() {
+    if (overlayEntry != null) {
+      overlayEntry.remove();
+      overlayEntry = null;
+    }
+  }
+}
+
+class InputDoneView extends StatelessWidget {
+  final String text;
+
+  const InputDoneView({Key key, @required this.text}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      width: double.infinity,
+      color: Colors.white,
+      child: Align(
+        alignment: Alignment.topRight,
+        child: FlatButton(
+          padding: EdgeInsets.only(right: 12.0, top: 8.0, bottom: 8.0),
+          onPressed: () {
+            FocusScope.of(context).requestFocus(FocusNode());
+          },
+          child: Text(
+            text,
+            style: TextStyle(
+              fontWeight: FontWeight.bold,
+              color: ApTheme.of(context).blue,
+            ),
+          ),
+        ),
+      ),
+    );
   }
 }
