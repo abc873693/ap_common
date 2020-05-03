@@ -136,6 +136,42 @@ class NotificationUtils {
     );
   }
 
+  static Future<void> schedule({
+    @required id,
+    @required String androidChannelId,
+    @required String androidChannelDescription,
+    @required DateTime dateTime,
+    @required String title,
+    @required String content,
+    int beforeMinutes = 10,
+  }) async {
+    final flutterLocalNotificationsPlugin = FlutterLocalNotificationsPlugin();
+    var androidPlatformChannelSpecifics = AndroidNotificationDetails(
+      androidChannelId,
+      androidChannelDescription,
+      androidChannelDescription,
+      largeIcon: DrawableResourceAndroidBitmap(ANDROID_RESOURCE_NAME),
+      importance: Importance.Max,
+      enableVibration: false,
+    );
+    var iOSPlatformChannelSpecifics = IOSNotificationDetails();
+    var platformChannelSpecifics = NotificationDetails(
+      androidPlatformChannelSpecifics,
+      iOSPlatformChannelSpecifics,
+    );
+    dateTime = dateTime.add(
+      Duration(minutes: -beforeMinutes),
+    );
+    await flutterLocalNotificationsPlugin.schedule(
+      id,
+      title,
+      content,
+      dateTime,
+      platformChannelSpecifics,
+      payload: content,
+    );
+  }
+
   static Future<void> cancelCourseNotify({
     @required int id,
   }) async {
