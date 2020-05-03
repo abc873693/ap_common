@@ -9,6 +9,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:package_info/package_info.dart';
+import 'package:share/share.dart';
 import 'package:sprintf/sprintf.dart';
 import 'package:toast/toast.dart';
 import 'package:url_launcher/url_launcher.dart';
@@ -74,6 +75,12 @@ class ApUtils {
     } else {
       throw 'Could not launch $url';
     }
+  }
+
+  static void shareTo(String content) async {
+    PackageInfo packageInfo = await PackageInfo.fromPlatform();
+    Share.share("$content\n\n"
+        "Send from ${packageInfo.appName} ${Platform.operatingSystem}");
   }
 
   static Future<void> launchFbFansPage(

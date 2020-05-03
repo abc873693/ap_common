@@ -16,6 +16,7 @@ dependencies:
   outline_material_icons: ">=0.1.0 <1.0.0"
   shared_preferences: ">=0.5.6 <1.0.0"
   url_launcher: ">=5.4.1 <6.0.0"
+  share: ^0.6.3+5
   package_info: ">=0.4.0 <1.0.0"
   sprintf: ">=4.0.0 <5.0.0"
   toast: ">=0.1.4 <1.0.0"
