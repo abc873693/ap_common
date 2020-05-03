@@ -23,6 +23,14 @@ class NotificationUtils {
       return Day(weekIndex + 2);
   }
 
+  static Time parseTime(String text, {beforeMinutes = 0}) {
+    var formatter = DateFormat('HH:mm', 'zh');
+    DateTime dateTime = formatter.parse(text).add(
+          Duration(minutes: -beforeMinutes),
+        );
+    return Time(dateTime.hour, dateTime.minute);
+  }
+
   static Future<void> show({
     @required id,
     @required String androidChannelId,
@@ -79,11 +87,8 @@ class NotificationUtils {
       androidPlatformChannelSpecifics,
       iOSPlatformChannelSpecifics,
     );
-    var formatter = DateFormat('HH:mm', 'zh');
-    DateTime dateTime = formatter.parse(courseNotify.startTime).add(
-          Duration(minutes: -beforeMinutes),
-        );
-    final time = Time(dateTime.hour, dateTime.minute);
+    final time =
+        parseTime(courseNotify.startTime, beforeMinutes: beforeMinutes);
     String content = sprintf(ap.courseNotifyContent, [
       courseNotify.title,
       courseNotify.location.isEmpty
@@ -109,7 +114,6 @@ class NotificationUtils {
     @required Time time,
     @required String title,
     @required String content,
-    int beforeMinutes = 10,
   }) async {
     final flutterLocalNotificationsPlugin = FlutterLocalNotificationsPlugin();
     var androidPlatformChannelSpecifics = AndroidNotificationDetails(
