@@ -38,13 +38,14 @@ class NotificationUtils {
     @required String title,
     @required String content,
     bool enableVibration = true,
+    String androidResourceIcon = ANDROID_RESOURCE_NAME,
   }) async {
     final flutterLocalNotificationsPlugin = FlutterLocalNotificationsPlugin();
     var androidPlatformChannelSpecifics = AndroidNotificationDetails(
       androidChannelId,
       androidChannelDescription,
       androidChannelDescription,
-      icon: ANDROID_RESOURCE_NAME,
+      icon: androidResourceIcon,
       importance: Importance.Max,
       enableVibration: enableVibration,
     );
@@ -68,6 +69,7 @@ class NotificationUtils {
     @required Day day,
     bool enableVibration = true,
     int beforeMinutes = 10,
+    String androidResourceIcon = ANDROID_RESOURCE_NAME,
   }) async {
     final ap = ApLocalizations.of(context);
     final flutterLocalNotificationsPlugin = FlutterLocalNotificationsPlugin();
@@ -75,7 +77,7 @@ class NotificationUtils {
       '$COURSE',
       ap.courseNotify,
       ap.courseNotify,
-      icon: ANDROID_RESOURCE_NAME,
+      icon: androidResourceIcon,
       importance: Importance.Max,
       enableVibration: enableVibration,
     );
@@ -114,13 +116,14 @@ class NotificationUtils {
     @required Time time,
     @required String title,
     @required String content,
+    String androidResourceIcon = ANDROID_RESOURCE_NAME,
   }) async {
     final flutterLocalNotificationsPlugin = FlutterLocalNotificationsPlugin();
     var androidPlatformChannelSpecifics = AndroidNotificationDetails(
       androidChannelId,
       androidChannelDescription,
       androidChannelDescription,
-      largeIcon: DrawableResourceAndroidBitmap(ANDROID_RESOURCE_NAME),
+      largeIcon: DrawableResourceAndroidBitmap(androidResourceIcon),
       importance: Importance.Max,
       enableVibration: false,
     );
@@ -148,13 +151,14 @@ class NotificationUtils {
     @required String title,
     @required String content,
     int beforeMinutes = 10,
+    String androidResourceIcon = ANDROID_RESOURCE_NAME,
   }) async {
     final flutterLocalNotificationsPlugin = FlutterLocalNotificationsPlugin();
     var androidPlatformChannelSpecifics = AndroidNotificationDetails(
       androidChannelId,
       androidChannelDescription,
       androidChannelDescription,
-      largeIcon: DrawableResourceAndroidBitmap(ANDROID_RESOURCE_NAME),
+      largeIcon: DrawableResourceAndroidBitmap(androidResourceIcon),
       importance: Importance.Max,
       enableVibration: false,
     );
