@@ -21,7 +21,7 @@ class ApDrawer extends StatefulWidget {
     @required this.widgets,
     @required this.userInfo,
     this.imageAsset,
-    this.imageHeroTag = 'image',
+    this.imageHeroTag = ApConstants.TAG_STUDENT_PICTURE,
     this.displayPicture = false,
   }) : super(key: key);
 
@@ -59,8 +59,7 @@ class ApDrawerState extends State<ApDrawer> {
                         widget.userInfo?.pictureBytes != null &&
                                 widget.displayPicture
                             ? Hero(
-                                tag: widget.imageHeroTag ??
-                                    ApConstants.TAG_STUDENT_PICTURE,
+                                tag: widget.imageHeroTag,
                                 child: Container(
                                   width: 72.0,
                                   height: 72.0,
