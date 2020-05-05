@@ -32,6 +32,8 @@ class LoginScaffold extends StatefulWidget {
 class LoginScaffoldState extends State<LoginScaffold> {
   KeyboardVisibilityNotification keyboardVisibilityNotification;
 
+  bool get isTablet => MediaQuery.of(context).size.shortestSide >= 600;
+
   @override
   void initState() {
     if (widget.enableKeyboardDoneButton) {
@@ -56,28 +58,27 @@ class LoginScaffoldState extends State<LoginScaffold> {
 
   @override
   Widget build(BuildContext context) {
-    return OrientationBuilder(
-      builder: (_, orientation) {
-        return Scaffold(
-          backgroundColor: ApTheme.of(context).blue,
-          resizeToAvoidBottomPadding: orientation == Orientation.portrait,
-          body: Container(
-            alignment: Alignment(0, 0),
-            padding: EdgeInsets.symmetric(horizontal: 30.0),
-            child: orientation == Orientation.portrait
-                ? Column(
-                    crossAxisAlignment: CrossAxisAlignment.stretch,
-                    mainAxisAlignment: MainAxisAlignment.spaceAround,
-                    mainAxisSize: MainAxisSize.min,
-                    children: _renderContent(orientation),
-                  )
-                : Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: _renderContent(orientation),
-                  ),
-          ),
-        );
-      },
+    final orientation = (kIsWeb)
+        ? (isTablet ? Orientation.landscape : Orientation.portrait)
+        : MediaQuery.of(context).orientation;
+    return Scaffold(
+      backgroundColor: ApTheme.of(context).blue,
+      resizeToAvoidBottomPadding: orientation == Orientation.portrait,
+      body: Container(
+        alignment: Alignment(0, 0),
+        padding: EdgeInsets.symmetric(horizontal: 30.0),
+        child: orientation == Orientation.portrait
+            ? Column(
+                crossAxisAlignment: CrossAxisAlignment.stretch,
+                mainAxisAlignment: MainAxisAlignment.spaceAround,
+                mainAxisSize: MainAxisSize.min,
+                children: _renderContent(orientation),
+              )
+            : Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: _renderContent(orientation),
+              ),
+      ),
     );
   }
 
