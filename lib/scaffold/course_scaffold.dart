@@ -77,10 +77,6 @@ class CourseScaffoldState extends State<CourseScaffold> {
 
   _ContentStyle _contentStyle = _ContentStyle.table;
 
-  int get base => (widget.courseData.hasHoliday) ? 8 : 6;
-
-  double get childAspectRatio => (widget.courseData.hasHoliday) ? 1.1 : 1.5;
-
   bool get isTablet => MediaQuery.of(context).size.shortestSide >= 600;
 
   @override
@@ -111,7 +107,6 @@ class CourseScaffoldState extends State<CourseScaffold> {
               mainAxisSize: MainAxisSize.min,
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: <Widget>[
-                SizedBox(height: 8.0),
                 if (widget.years != null ||
                     widget.semesters != null ||
                     widget.itemPicker != null)
@@ -135,7 +130,7 @@ class CourseScaffoldState extends State<CourseScaffold> {
                         widget.itemPicker,
                     ],
                   ),
-                if (widget.customHint != null)
+                if (widget.customHint != null && widget.customHint.isNotEmpty)
                   Text(
                     widget.customHint,
                     style: TextStyle(color: ApTheme.of(context).grey),
