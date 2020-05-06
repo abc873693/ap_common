@@ -136,13 +136,6 @@ class CourseScaffoldState extends State<CourseScaffold> {
                     style: TextStyle(color: ApTheme.of(context).grey),
                     textAlign: TextAlign.center,
                   ),
-                if (_contentStyle == _ContentStyle.table)
-                  Text(
-                    app.courseClickHint,
-                    style: TextStyle(color: ApTheme.of(context).grey),
-                    textAlign: TextAlign.center,
-                  ),
-                SizedBox(height: 4.0),
                 Expanded(
                   child: RefreshIndicator(
                     onRefresh: () async {
