@@ -37,18 +37,21 @@ class ApUtils {
     );
   }
 
-  static void handleDioError(BuildContext context, DioError dioError) {
+  static void handleDioError(BuildContext context, DioError dioError,
+      {int gravity}) {
     switch (dioError.type) {
       case DioErrorType.DEFAULT:
-        showToast(context, ApLocalizations.of(context).noInternet);
+        showToast(context, ApLocalizations.of(context).noInternet,
+            gravity: gravity);
         break;
       case DioErrorType.CONNECT_TIMEOUT:
       case DioErrorType.RECEIVE_TIMEOUT:
       case DioErrorType.SEND_TIMEOUT:
-        showToast(context, ApLocalizations.of(context).timeoutMessage);
+        showToast(context, ApLocalizations.of(context).timeoutMessage,
+            gravity: gravity);
         break;
       case DioErrorType.RESPONSE:
-        showToast(context, dioError.message);
+        showToast(context, dioError.message, gravity: gravity);
         break;
       case DioErrorType.CANCEL:
         break;
