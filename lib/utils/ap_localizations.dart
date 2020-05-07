@@ -665,6 +665,8 @@ class ApLocalizations {
 
   String get done => _vocabularies['done'];
 
+  String get addToCalendar => _vocabularies['add_to_calendar'];
+
   static ApLocalizations of(BuildContext context) {
     return instance =
         Localizations.of<ApLocalizations>(context, ApLocalizations);
@@ -1061,6 +1063,7 @@ class ApLocalizations {
       'printing': 'Printing',
       'changeEmail': 'Change Email',
       'done': 'Done',
+      'add_to_calendar': '加到行事曆',
     },
     'zh': {
       'update_note_title': '更新日誌',
@@ -1405,6 +1408,7 @@ class ApLocalizations {
       'printing': '印表機',
       'changeEmail': '更改電子信箱',
       'done': '完成',
+      'add_to_calendar': '加到行事曆',
     },
   };
 }

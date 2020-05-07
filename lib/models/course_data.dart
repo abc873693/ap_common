@@ -305,12 +305,13 @@ class Course {
   List<String> instructors;
   int detailIndex;
 
-  Course(
-      {this.title,
-      this.date,
-      this.location,
-      this.instructors,
-      this.detailIndex});
+  Course({
+    this.title,
+    this.date,
+    this.location,
+    this.instructors,
+    this.detailIndex,
+  });
 
   Course.fromJson(Map<String, dynamic> json) {
     title = json['title'];

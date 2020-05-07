@@ -1,3 +1,6 @@
+import 'dart:io';
+
+import 'package:add_2_calendar/add_2_calendar.dart';
 import 'package:ap_common/config/ap_constants.dart';
 import 'package:ap_common/models/course_data.dart';
 import 'package:ap_common/models/course_notify_data.dart';
@@ -10,8 +13,11 @@ import 'package:ap_common/utils/notification_utils.dart';
 import 'package:ap_common/widgets/hint_content.dart';
 import 'package:ap_common/widgets/item_picker.dart';
 import 'package:ap_common/widgets/option_dialog.dart';
+import 'package:flutter/foundation.dart';
+import 'package:intl/intl.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
+import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
 
 export 'package:ap_common/models/course_data.dart';
 
@@ -44,29 +50,31 @@ class CourseScaffold extends StatefulWidget {
   final bool autoNotifySave;
   final CourseNotifyCallback onNotifyClick;
   final String courseNotifySaveKey;
+  final bool enableAddToCalendar;
 
-  const CourseScaffold(
-      {Key key,
-      this.state = CourseState.loading,
-      this.courseData,
-      this.customHint,
-      this.years,
-      this.yearIndex,
-      this.semesters,
-      this.semesterIndex,
-      this.onSelect,
-      this.onRefresh,
-      this.isShowSearchButton = true,
-      this.actions,
-      this.enableNotifyControl = true,
-      this.notifyData,
-      this.autoNotifySave = true,
-      this.onNotifyClick,
-      this.courseNotifySaveKey = ApConstants.SEMESTER_LATEST,
-      this.customStateHint,
-      this.itemPicker,
-      this.onSearchButtonClick})
-      : super(key: key);
+  const CourseScaffold({
+    Key key,
+    this.state = CourseState.loading,
+    this.courseData,
+    this.customHint,
+    this.years,
+    this.yearIndex,
+    this.semesters,
+    this.semesterIndex,
+    this.onSelect,
+    this.onRefresh,
+    this.isShowSearchButton = true,
+    this.actions,
+    this.enableNotifyControl = true,
+    this.notifyData,
+    this.autoNotifySave = true,
+    this.onNotifyClick,
+    this.courseNotifySaveKey = ApConstants.SEMESTER_LATEST,
+    this.customStateHint,
+    this.itemPicker,
+    this.onSearchButtonClick,
+    this.enableAddToCalendar = true,
+  }) : super(key: key);
 
   @override
   CourseScaffoldState createState() => CourseScaffoldState();
@@ -468,6 +476,7 @@ class CourseContent extends StatefulWidget {
   final bool autoNotifySave;
   final CourseNotifyCallback onNotifyClick;
   final String courseNotifySaveKey;
+  final bool enableAddToCalendar;
 
   const CourseContent({
     Key key,
@@ -479,6 +488,7 @@ class CourseContent extends StatefulWidget {
     this.autoNotifySave = true,
     this.onNotifyClick,
     this.courseNotifySaveKey = ApConstants.SEMESTER_LATEST,
+    this.enableAddToCalendar = true,
   }) : super(key: key);
 
   @override
@@ -519,6 +529,27 @@ class _CourseContentState extends State<CourseContent> {
                   ),
                 ),
               ),
+              if ((!kIsWeb && (Platform.isAndroid || Platform.isIOS)) &&
+                  widget.enableAddToCalendar)
+                IconButton(
+                  tooltip: ApLocalizations.of(context).addToCalendar,
+                  icon: Icon(MdiIcons.calendarImport),
+                  onPressed: () async {
+                    final format = DateFormat('HH:mm');
+                    final startTime =
+                        format.parse(widget.course.date.startTime);
+                    final endTime = format.parse(widget.course.date.endTime);
+                    final Event event = Event(
+                      title: widget.course.title,
+                      description: '',
+                      location: '${widget.course.location.building ?? ''}'
+                          '${widget.course.location.room ?? ''}',
+                      startDate: startTime.weekTime(widget.weekIndex),
+                      endDate: endTime.weekTime(widget.weekIndex),
+                    );
+                    Add2Calendar.addEvent2Cal(event);
+                  },
+                ),
               if (widget.enableNotifyControl && widget.notifyData != null)
                 IconButton(
                   icon: Icon(_state == CourseNotifyState.schedule
@@ -814,6 +845,25 @@ class CourseBorder extends StatelessWidget {
                   ),
                 ),
               ),
+      ),
+    );
+  }
+}
+
+extension DateTimeExtension on DateTime {
+  DateTime weekTime(int weekIndex) {
+    int dayOfWeek = (weekIndex + 1) % 7;
+    var now = DateTime.now();
+    return DateTime(
+      now.year,
+      now.month,
+      now.day,
+      hour,
+      minute,
+    ).add(
+      Duration(
+        days: dayOfWeek - weekday,
+        hours: (Platform.isAndroid ? 8 : 0),
       ),
     );
   }
