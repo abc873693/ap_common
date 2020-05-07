@@ -30,6 +30,7 @@ dependencies:
   flutter_local_notifications: ^1.4.2
   keyboard_visibility: ^0.5.6
 
+  material_design_icons_flutter: ^4.0.5145
 
 dev_dependencies:
   flutter_test:
