@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:ap_common/resources/ap_theme.dart';
 import 'package:ap_common/utils/ap_localizations.dart';
 import 'package:ap_common/utils/ap_utils.dart';
@@ -36,7 +38,8 @@ class LoginScaffoldState extends State<LoginScaffold> {
 
   @override
   void initState() {
-    if (widget.enableKeyboardDoneButton) {
+    if ((!kIsWeb && (Platform.isAndroid || Platform.isIOS)) &&
+        widget.enableKeyboardDoneButton) {
       keyboardVisibilityNotification = KeyboardVisibilityNotification();
       keyboardVisibilityNotification?.addNewListener(
         onHide: () {
