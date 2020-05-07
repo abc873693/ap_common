@@ -270,7 +270,6 @@ class CourseScaffoldState extends State<CourseScaffold> {
       );
 
   List<Widget> renderCourseTable() {
-    DateTime start = DateTime.now();
     List<String> weeks = [
       'Monday',
       'Tuesday',
@@ -383,9 +382,6 @@ class CourseScaffoldState extends State<CourseScaffold> {
         ),
       );
     }
-    DateTime end = DateTime.now();
-    print(
-        'ui parse time = ${end.millisecondsSinceEpoch - start.millisecondsSinceEpoch} ms');
     return [
       columns[0],
       for (var i = 1; i < columns.length; i++)
