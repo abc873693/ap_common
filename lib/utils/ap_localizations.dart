@@ -667,6 +667,10 @@ class ApLocalizations {
 
   String get addToCalendar => _vocabularies['add_to_calendar'];
 
+  String get apiSeverError => _vocabularies['api_server_error'];
+
+  String get schoolSeverError => _vocabularies['school_sever_error'];
+
   static ApLocalizations of(BuildContext context) {
     return instance =
         Localizations.of<ApLocalizations>(context, ApLocalizations);
@@ -1063,7 +1067,9 @@ class ApLocalizations {
       'printing': 'Printing',
       'changeEmail': 'Change Email',
       'done': 'Done',
-      'add_to_calendar': '加到行事曆',
+      'add_to_calendar': 'Add to Calendar',
+      'api_server_error': 'AP Server Error\nPlease report to fans page',
+      'school_server_error': 'School Server Error\nPlease report to school',
     },
     'zh': {
       'update_note_title': '更新日誌',
@@ -1409,6 +1415,8 @@ class ApLocalizations {
       'changeEmail': '更改電子信箱',
       'done': '完成',
       'add_to_calendar': '加到行事曆',
+      'api_server_error': '校務通伺服器錯誤\n可向粉絲專頁回報',
+      'school_server_error': '學校伺服器錯誤\n可向學校回報',
     },
   };
 }
