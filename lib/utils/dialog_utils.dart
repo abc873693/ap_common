@@ -10,6 +10,31 @@ import 'package:sprintf/sprintf.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class DialogUtils {
+  static showDefault({
+    @required BuildContext context,
+    @required String title,
+    @required String content,
+  }) {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) => DefaultDialog(
+        title: title,
+        contentWidget: Text(
+          content,
+          style: TextStyle(
+            color: ApTheme.of(context).grey,
+            height: 1.3,
+            fontSize: 16.0,
+          ),
+        ),
+        actionText: ApLocalizations.of(context).iKnow,
+        actionFunction: () {
+          Navigator.of(context, rootNavigator: true).pop();
+        },
+      ),
+    );
+  }
+
   static showAnnouncementRule({
     @required BuildContext context,
     @required Function onRightButtonClick,
