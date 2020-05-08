@@ -9,7 +9,7 @@ export 'package:ap_common/models/general_response.dart';
 
 class GeneralCallback<T> {
   final Function(DioError e) onFailure;
-  final Function(GeneralResponse e) onError;
+  final Function(GeneralResponse response) onError;
   final Function(T data) onSuccess;
 
   GeneralCallback({
