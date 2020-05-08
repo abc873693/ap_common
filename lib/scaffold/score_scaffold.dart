@@ -7,12 +7,13 @@ import 'package:ap_common/widgets/item_picker.dart';
 import 'package:ap_common/widgets/option_dialog.dart';
 import 'package:flutter/material.dart';
 
-enum ScoreState { loading, finish, error, empty, offlineEmpty }
+enum ScoreState { loading, finish, error, empty, offlineEmpty, custom }
 
 class ScoreScaffold extends StatefulWidget {
   static const String routerName = '/score';
 
   final ScoreState state;
+  final String customStateHint;
   final ScoreData scoreData;
   final List<String> semesters;
   final int semesterIndex;
@@ -50,6 +51,7 @@ class ScoreScaffold extends StatefulWidget {
     this.isShowSearchButton = true,
     this.details,
     this.bottom,
+    this.customStateHint,
   }) : super(key: key);
 
   @override
@@ -99,10 +101,11 @@ class ScoreScaffoldState extends State<ScoreScaffold> {
                 currentIndex: widget.semesterIndex,
               ),
             if (widget.itemPicker != null) widget.itemPicker,
-            if (widget.customHint != null)
+            if (widget.customHint != null && widget.customHint.isNotEmpty)
               Text(
                 widget.customHint,
                 style: TextStyle(color: ApTheme.of(context).grey),
+                textAlign: TextAlign.center,
               ),
             Expanded(
               child: RefreshIndicator(
@@ -119,6 +122,21 @@ class ScoreScaffoldState extends State<ScoreScaffold> {
     );
   }
 
+  String get hintContent {
+    switch (widget.state) {
+      case ScoreState.error:
+        return app.clickToRetry;
+      case ScoreState.empty:
+        return app.scoreEmpty;
+      case ScoreState.offlineEmpty:
+        return app.noOfflineData;
+      case ScoreState.custom:
+        return widget.customStateHint ?? app.unknownError;
+      default:
+        return '';
+    }
+  }
+
   Widget _body() {
     switch (widget.state) {
       case ScoreState.loading:
@@ -126,6 +144,8 @@ class ScoreScaffoldState extends State<ScoreScaffold> {
             child: CircularProgressIndicator(), alignment: Alignment.center);
       case ScoreState.error:
       case ScoreState.empty:
+      case ScoreState.custom:
+      case ScoreState.offlineEmpty:
         return FlatButton(
           onPressed: () {
             if (widget.state == ScoreState.empty)
@@ -134,15 +154,8 @@ class ScoreScaffoldState extends State<ScoreScaffold> {
           },
           child: HintContent(
             icon: ApIcon.assignment,
-            content: widget.state == ScoreState.error
-                ? app.clickToRetry
-                : app.scoreEmpty,
+            content: hintContent,
           ),
-        );
-      case ScoreState.offlineEmpty:
-        return HintContent(
-          icon: ApIcon.classIcon,
-          content: app.noOfflineData,
         );
       default:
         return ScoreContent(
