@@ -14,6 +14,7 @@ class ApConstants {
 
   static const APP_VERSION = "app_version";
   static const NEW_VERSION_CONTENT = "new_version_content";
+  static const IS_FORCE_UPDATE = "is_force_update";
   static const NEW_VERSION_CONTENT_ZH = "new_version_content_zh";
   static const NEW_VERSION_CONTENT_EN = "new_version_content_en";
 

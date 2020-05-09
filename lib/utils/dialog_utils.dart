@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:ap_common/models/version_info.dart';
 import 'package:ap_common/resources/ap_theme.dart';
 import 'package:ap_common/utils/ap_localizations.dart';
 import 'package:ap_common/widgets/default_dialog.dart';
@@ -84,12 +85,10 @@ class DialogUtils {
 
   static showNewVersionContent({
     @required BuildContext context,
-    @required int newVersionCode,
+    @required VersionInfo versionInfo,
     @required String appName,
     @required String iOSAppId,
     @required String defaultUrl,
-    @required String newVersionContent,
-    int minVersionDiff = 5,
   }) async {
     PackageInfo packageInfo = await PackageInfo.fromPlatform();
     var app = ApLocalizations.of(context);
@@ -101,10 +100,10 @@ class DialogUtils {
     } else {
       url = defaultUrl;
     }
-    int versionDiff = newVersionCode - int.parse(packageInfo.buildNumber);
+    int versionDiff = versionInfo.code - int.parse(packageInfo.buildNumber);
     String versionContent =
-        "v${newVersionCode ~/ 10000}.${newVersionCode % 1000 ~/ 100}.${newVersionCode % 100}\n" +
-            newVersionContent;
+        "\nv${versionInfo.code ~/ 10000}.${versionInfo.code % 1000 ~/ 100}.${versionInfo.code % 100}\n" +
+            versionInfo.content;
     final contentWidget = RichText(
       textAlign: TextAlign.center,
       text: TextSpan(
@@ -119,34 +118,35 @@ class DialogUtils {
         ],
       ),
     );
-    if (versionDiff < minVersionDiff && versionDiff > 0) {
-      showDialog(
-        context: context,
-        builder: (BuildContext context) => YesNoDialog(
-          title: app.updateTitle,
-          contentWidget: contentWidget,
-          leftActionText: app.skip,
-          rightActionText: app.update,
-          leftActionFunction: null,
-          rightActionFunction: () => launch(url),
-        ),
-      );
-    } else if (versionDiff >= minVersionDiff) {
-      showDialog(
-        context: context,
-        barrierDismissible: false,
-        builder: (BuildContext context) => WillPopScope(
-          child: DefaultDialog(
-            title: app.updateTitle,
-            actionText: app.update,
-            contentWidget: contentWidget,
-            actionFunction: () => launch(url),
+    if (versionDiff > 0) {
+      if (versionInfo.isForceUpdate)
+        showDialog(
+          context: context,
+          barrierDismissible: false,
+          builder: (BuildContext context) => WillPopScope(
+            child: DefaultDialog(
+              title: app.updateTitle,
+              actionText: app.update,
+              contentWidget: contentWidget,
+              actionFunction: () => launch(url),
+            ),
+            onWillPop: () async {
+              return false;
+            },
           ),
-          onWillPop: () async {
-            return false;
-          },
-        ),
-      );
+        );
+      else
+        showDialog(
+          context: context,
+          builder: (BuildContext context) => YesNoDialog(
+            title: app.updateTitle,
+            contentWidget: contentWidget,
+            leftActionText: app.skip,
+            rightActionText: app.update,
+            leftActionFunction: null,
+            rightActionFunction: () => launch(url),
+          ),
+        );
     }
   }
 }
