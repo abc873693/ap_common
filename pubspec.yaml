@@ -32,6 +32,8 @@ dependencies:
   add_2_calendar: ^1.4.0
   material_design_icons_flutter: ^4.0.5145
   app_review: ^1.1.0+1
+  native_pdf_view: ^3.2.0-dev.1
+
 
 dev_dependencies:
   flutter_test:
