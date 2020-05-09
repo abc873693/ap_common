@@ -51,6 +51,7 @@ class CourseScaffold extends StatefulWidget {
   final CourseNotifyCallback onNotifyClick;
   final String courseNotifySaveKey;
   final bool enableAddToCalendar;
+  final String androidResourceIcon;
 
   const CourseScaffold({
     Key key,
@@ -74,6 +75,7 @@ class CourseScaffold extends StatefulWidget {
     this.itemPicker,
     this.onSearchButtonClick,
     this.enableAddToCalendar = true,
+    this.androidResourceIcon,
   }) : super(key: key);
 
   @override
@@ -477,6 +479,7 @@ class CourseContent extends StatefulWidget {
   final CourseNotifyCallback onNotifyClick;
   final String courseNotifySaveKey;
   final bool enableAddToCalendar;
+  final String androidResourceIcon;
 
   const CourseContent({
     Key key,
@@ -489,6 +492,7 @@ class CourseContent extends StatefulWidget {
     this.onNotifyClick,
     this.courseNotifySaveKey = ApConstants.SEMESTER_LATEST,
     this.enableAddToCalendar = true,
+    this.androidResourceIcon,
   }) : super(key: key);
 
   @override
@@ -550,7 +554,9 @@ class _CourseContentState extends State<CourseContent> {
                     Add2Calendar.addEvent2Cal(event);
                   },
                 ),
-              if (widget.enableNotifyControl && widget.notifyData != null)
+              if (widget.enableNotifyControl &&
+                  widget.notifyData != null &&
+                  NotificationUtils.isSupport)
                 IconButton(
                   icon: Icon(_state == CourseNotifyState.schedule
                       ? Icons.alarm_on
@@ -570,10 +576,10 @@ class _CourseContentState extends State<CourseContent> {
                           courseDetail: widget.courseDetail,
                         );
                         await NotificationUtils.scheduleCourseNotify(
-                          context: context,
-                          courseNotify: courseNotify,
-                          day: NotificationUtils.getDay(widget.weekIndex),
-                        );
+                            context: context,
+                            courseNotify: courseNotify,
+                            day: NotificationUtils.getDay(widget.weekIndex),
+                            androidResourceIcon: widget.androidResourceIcon);
                         widget.notifyData.lastId++;
                         widget.notifyData.data.add(courseNotify);
                         ApUtils.showToast(context,

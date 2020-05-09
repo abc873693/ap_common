@@ -94,6 +94,22 @@ class CourseNotifyData {
     else
       return CourseNotifyData.fromRawJson(rawString);
   }
+
+  factory CourseNotifyData.loadCurrent() {
+    var semester = Preferences.getString(
+      ApConstants.CURRENT_SEMESTER_CODE,
+      ApConstants.SEMESTER_LATEST,
+    );
+    String rawString = Preferences.getString(
+      '${ApConstants.PACKAGE_NAME}.'
+          'course_notify_data_$semester',
+      '',
+    );
+    if (rawString == '')
+      return CourseNotifyData(data: []);
+    else
+      return CourseNotifyData.fromRawJson(rawString);
+  }
 }
 
 class CourseNotify {

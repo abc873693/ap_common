@@ -1,6 +1,9 @@
+import 'dart:io';
+
 import 'package:ap_common/models/course_notify_data.dart';
 import 'package:ap_common/utils/ap_localizations.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:intl/intl.dart';
 import 'package:sprintf/sprintf.dart';
@@ -14,6 +17,8 @@ class NotificationUtils {
   static const int BUS = 100;
   static const int COURSE = 101;
   static const int FCM = 200;
+
+  static get isSupport => !kIsWeb && (Platform.isAndroid || Platform.isIOS);
 
   //For taiwan week order
   static Day getDay(int weekIndex) {

@@ -1,5 +1,11 @@
+import 'package:ap_common/models/course_notify_data.dart';
 import 'package:ap_common/resources/ap_theme.dart';
+import 'package:ap_common/utils/ap_localizations.dart';
+import 'package:ap_common/utils/ap_utils.dart';
+import 'package:ap_common/utils/notification_utils.dart';
 import 'package:flutter/material.dart';
+
+import 'option_dialog.dart';
 
 class SettingTitle extends StatelessWidget {
   final String text;
@@ -75,6 +81,38 @@ class SettingItem extends StatelessWidget {
         style: TextStyle(fontSize: 14.0, color: ApTheme.of(context).greyText),
       ),
       onTap: onTap,
+    );
+  }
+}
+
+class CheckCourseNotifyItem extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    final ap = ApLocalizations.of(context);
+    return SettingItem(
+      text: ap.courseNotify,
+      subText: ap.courseNotifySubTitle,
+      onTap: () {
+        CourseNotifyData notifyData = CourseNotifyData.loadCurrent();
+        if (NotificationUtils.isSupport) {
+          if (notifyData != null && notifyData.data.length != 0) {
+            showDialog(
+              context: context,
+              builder: (_) => SimpleOptionDialog(
+                title: ap.courseNotify ?? '',
+                items: [
+                  for (var notify in notifyData.data)
+                    '${notify.startTime} ${notify.title}',
+                ],
+                index: -1,
+                onSelected: (index) {},
+              ),
+            );
+          } else
+            ApUtils.showToast(context, ap.courseNotifyEmpty);
+        } else
+          ApUtils.showToast(context, ap.platformError);
+      },
     );
   }
 }
