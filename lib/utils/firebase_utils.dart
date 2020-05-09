@@ -3,7 +3,7 @@ import 'dart:io';
 
 import 'package:ap_common/config/ap_constants.dart';
 import 'package:ap_common/utils/notification_utils.dart';
-import 'package:ap_common_firbase/utils/firebase_analytics_utils.dart';
+import 'package:ap_common_firebase/utils/firebase_analytics_utils.dart';
 import 'package:firebase_analytics/firebase_analytics.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/foundation.dart';

@@ -3,6 +3,7 @@ import 'package:ap_common/models/version_info.dart';
 import 'package:firebase_remote_config/firebase_remote_config.dart';
 
 export 'package:ap_common/models/version_info.dart';
+export 'package:firebase_remote_config/firebase_remote_config.dart';
 
 class FirebaseRemoteConfigUtils {
   static Future<VersionInfo> getVersionInfo() async {

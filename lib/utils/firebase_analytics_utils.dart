@@ -4,6 +4,8 @@ import 'package:firebase_analytics/firebase_analytics.dart';
 import 'package:ap_common/utils/analytics_utils.dart';
 import 'package:flutter/cupertino.dart';
 
+export 'package:firebase_analytics/firebase_analytics.dart';
+
 class FirebaseAnalyticsUtils extends AnalyticsUtils {
   static FirebaseAnalyticsUtils _instance;
   static FirebaseAnalytics analytics;
