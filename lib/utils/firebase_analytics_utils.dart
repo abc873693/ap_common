@@ -1,8 +1,12 @@
 import 'dart:async';
+import 'dart:io';
 
+import 'package:ap_common/resources/ap_theme.dart';
+import 'package:ap_common_firebase/constants/fiirebase_constants.dart';
 import 'package:firebase_analytics/firebase_analytics.dart';
 import 'package:ap_common/utils/analytics_utils.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
 
 export 'package:firebase_analytics/firebase_analytics.dart';
 
@@ -41,6 +45,10 @@ class FirebaseAnalyticsUtils extends AnalyticsUtils {
       value: value,
     );
     debugPrint('setUserProperty succeeded');
+  }
+
+  Future<void> logEvent(String name) async {
+    await analytics?.logEvent(name: name ?? '');
   }
 
   Future<void> logUserInfo(String department) async {
@@ -104,6 +112,45 @@ class FirebaseAnalyticsUtils extends AnalyticsUtils {
         'action': action ?? '',
         'message': message ?? '',
       },
+    );
+  }
+
+  Future<void> logLeavesImageSize(File source) async {
+    await analytics?.logEvent(
+      name: 'leaves_image_pick',
+      parameters: <String, dynamic>{
+        'image_size': source.lengthSync() / 1024 / 1024,
+      },
+    );
+  }
+
+  Future<void> logLeavesImageCompressSize(File source, File result) async {
+    await analytics?.logEvent(
+      name: 'leaves_image_compress',
+      parameters: <String, dynamic>{
+        'image_original_size': source.lengthSync() / 1024 / 1024,
+        'image_compress_size': result.lengthSync() / 1024 / 1024,
+      },
+    );
+  }
+
+  void logThemeEvent(ThemeMode themeMode) async {
+    Brightness brightness;
+    switch (themeMode) {
+      case ThemeMode.system:
+        brightness = WidgetsBinding.instance.window.platformBrightness;
+        break;
+      case ThemeMode.light:
+        brightness = Brightness.light;
+        break;
+      case ThemeMode.dark:
+      default:
+        brightness = Brightness.dark;
+        break;
+    }
+    setUserProperty(
+      FirebaseConstants.THEME,
+      brightness == Brightness.light ? ApTheme.LIGHT : ApTheme.DARK,
     );
   }
 }
