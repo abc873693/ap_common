@@ -18,4 +18,5 @@ class ApConstants {
   static const NEW_VERSION_CONTENT_EN = "new_version_content_en";
 
   static const SEMESTER_LATEST = "latest";
+  static const CURRENT_SEMESTER_CODE = "ap_common.current_semester_code";
 }
