@@ -14,7 +14,14 @@ packages:
       name: ap_common
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "0.2.3"
+    version: "0.2.4"
+  app_review:
+    dependency: transitive
+    description:
+      name: app_review
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "1.1.0+1"
   archive:
     dependency: transitive
     description:
@@ -99,6 +106,13 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "2.1.4"
+  device_info:
+    dependency: transitive
+    description:
+      name: device_info
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "0.4.2+3"
   dio:
     dependency: transitive
     description:
@@ -120,6 +134,27 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "4.0.0"
+  extended_image:
+    dependency: transitive
+    description:
+      name: extended_image
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "0.7.3-dev"
+  extended_image_library:
+    dependency: transitive
+    description:
+      name: extended_image_library
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "0.2.3"
+  extension:
+    dependency: transitive
+    description:
+      name: extension
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "0.0.5"
   file:
     dependency: transitive
     description:
@@ -210,6 +245,13 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "0.12.0+4"
+  http_client_helper:
+    dependency: transitive
+    description:
+      name: http_client_helper
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "0.2.1"
   http_parser:
     dependency: transitive
     description:
@@ -259,6 +301,20 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "1.1.8"
+  native_pdf_renderer:
+    dependency: transitive
+    description:
+      name: native_pdf_renderer
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "2.0.1"
+  native_pdf_view:
+    dependency: transitive
+    description:
+      name: native_pdf_view
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "3.2.0-dev.1"
   outline_material_icons:
     dependency: transitive
     description:
