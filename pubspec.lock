@@ -7,7 +7,7 @@ packages:
       name: ap_common
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "0.1.8+1"
+    version: "0.2.3"
   archive:
     dependency: transitive
     description:
