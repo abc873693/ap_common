@@ -31,6 +31,7 @@ dependencies:
   keyboard_visibility: ^0.5.6
   add_2_calendar: ^1.4.0
   material_design_icons_flutter: ^4.0.5145
+  app_review: ^1.1.0+1
 
 dev_dependencies:
   flutter_test:
