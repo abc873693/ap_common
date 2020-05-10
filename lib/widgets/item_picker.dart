@@ -22,39 +22,37 @@ class ItemPicker extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Expanded(
-      child: FlatButton(
-        onPressed: () {
-          showDialog(
-            context: context,
-            builder: (_) => SimpleOptionDialog(
-              title: dialogTitle ?? '',
-              items: items ?? [],
-              index: currentIndex ?? 0,
-              onSelected: onSelected,
-            ),
-          );
-        },
-        child: Row(
-          mainAxisSize: MainAxisSize.min,
-          children: <Widget>[
-            Expanded(
-              child: Text(
-                items != null ? items[currentIndex] ?? '' : '',
-                style: TextStyle(
-                  color: ApTheme.of(context).semesterText,
-                  fontSize: 18.0,
-                ),
-                textAlign: TextAlign.center,
+    return FlatButton(
+      onPressed: () {
+        showDialog(
+          context: context,
+          builder: (_) => SimpleOptionDialog(
+            title: dialogTitle ?? '',
+            items: items ?? [],
+            index: currentIndex ?? 0,
+            onSelected: onSelected,
+          ),
+        );
+      },
+      child: Row(
+        mainAxisSize: MainAxisSize.min,
+        children: <Widget>[
+          Expanded(
+            child: Text(
+              items != null ? items[currentIndex] ?? '' : '',
+              style: TextStyle(
+                color: ApTheme.of(context).semesterText,
+                fontSize: 18.0,
               ),
+              textAlign: TextAlign.center,
             ),
-            SizedBox(width: 8.0),
-            Icon(
-              ApIcon.keyboardArrowDown,
-              color: ApTheme.of(context).semesterText,
-            )
-          ],
-        ),
+          ),
+          SizedBox(width: 8.0),
+          Icon(
+            ApIcon.keyboardArrowDown,
+            color: ApTheme.of(context).semesterText,
+          )
+        ],
       ),
     );
   }
