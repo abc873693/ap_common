@@ -376,4 +376,14 @@ class ApIcon {
         return OMIcons.navigation;
     }
   }
+
+  static IconData get room {
+    switch (ApIcon.code) {
+      case ApIcon.FILLED:
+        return Icons.room;
+      case ApIcon.OUTLINED:
+      default:
+        return OMIcons.room;
+    }
+  }
 }
