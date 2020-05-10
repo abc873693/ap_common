@@ -33,6 +33,21 @@ class CourseData {
         "coursetable": courseTables == null ? null : courseTables.toJson(),
       };
 
+  void updateIndex() {
+    for (var i = 0; i < courses.length; i++) {
+      final courseDetail = courses[i];
+      for (var weekIndex = 0;
+          weekIndex < courseTables.weeks.length;
+          weekIndex++) {
+        for (var course in courseTables.weeks[weekIndex]) {
+          if (course.title == courseDetail.title) {
+            course.detailIndex = i;
+          }
+        }
+      }
+    }
+  }
+
   int findCourseDetail(Course course) {
     for (var i = 0; i < courses.length; i++) {
       if (course.title == courses[i].title) return i;
@@ -388,5 +403,10 @@ class Location {
     data['building'] = this.building;
     data['room'] = this.room;
     return data;
+  }
+
+  @override
+  String toString() {
+    return '${building ?? ''}${room ?? ''}';
   }
 }

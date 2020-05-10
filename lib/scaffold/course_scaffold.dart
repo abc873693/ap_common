@@ -34,6 +34,7 @@ class CourseScaffold extends StatefulWidget {
   final CourseState state;
   final String customStateHint;
   final CourseData courseData;
+  final String title;
   final Widget itemPicker;
   final List<String> years;
   final int yearIndex;
@@ -55,8 +56,9 @@ class CourseScaffold extends StatefulWidget {
 
   const CourseScaffold({
     Key key,
-    this.state = CourseState.loading,
-    this.courseData,
+    @required this.state,
+    @required this.courseData,
+    this.title,
     this.customHint,
     this.years,
     this.yearIndex,
@@ -104,8 +106,7 @@ class CourseScaffoldState extends State<CourseScaffold> {
     app = ApLocalizations.of(context);
     return Scaffold(
       appBar: AppBar(
-        title: Text(app.course),
-        backgroundColor: ApTheme.of(context).blue,
+        title: Text(widget.title ?? app.course),
         actions: widget.actions,
       ),
       body: Row(
@@ -546,8 +547,7 @@ class _CourseContentState extends State<CourseContent> {
                     final Event event = Event(
                       title: widget.course.title,
                       description: '',
-                      location: '${widget.course.location.building ?? ''}'
-                          '${widget.course.location.room ?? ''}',
+                      location: widget.course.location ?? '',
                       startDate: startTime.weekTime(widget.weekIndex),
                       endDate: endTime.weekTime(widget.weekIndex),
                     );
@@ -621,14 +621,14 @@ class _CourseContentState extends State<CourseContent> {
                         color: ApTheme.of(context).grey,
                       ),
                     ),
-                    Text(
-                      '${widget.course.location.building ?? ''}'
-                      '${widget.course.location.room ?? ''}',
-                      style: TextStyle(
-                        fontSize: 16.0,
-                        color: ApTheme.of(context).greyText,
+                    if (widget.course.location != null)
+                      Text(
+                        widget.course.location ?? '',
+                        style: TextStyle(
+                          fontSize: 16.0,
+                          color: ApTheme.of(context).greyText,
+                        ),
                       ),
-                    ),
                   ],
                 ),
               ),
@@ -711,14 +711,14 @@ class CourseList extends StatelessWidget {
                               text:
                                   '${ApLocalizations.of(context).courseDialogLocation ?? ''}：',
                               style: TextStyle(fontWeight: FontWeight.bold)),
-                          TextSpan(
+                          if (course.location != null) ...[
+                            TextSpan(text: '${course.location ?? ''}\n'),
+                            TextSpan(
                               text:
-                                  '${course.location?.building ?? ''}${course.location?.room ?? ''}\n'),
-                          TextSpan(
-                            text:
-                                '${ApLocalizations.of(context).courseDialogTime}：',
-                            style: TextStyle(fontWeight: FontWeight.bold),
-                          ),
+                                  '${ApLocalizations.of(context).courseDialogTime}：',
+                              style: TextStyle(fontWeight: FontWeight.bold),
+                            ),
+                          ],
                           TextSpan(text: '${course.times ?? ''}'),
                         ],
                       ),
