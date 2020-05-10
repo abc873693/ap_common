@@ -674,6 +674,8 @@ class ApLocalizations {
   String get roomList => _vocabularies['room_list'];
 
   String get emptyClassroomSearch => _vocabularies['empty_classroom_search'];
+  
+  String get classroomCourseTableSearch => _vocabularies['classroom_coursetable_search'];
 
   static ApLocalizations of(BuildContext context) {
     return instance =
@@ -1076,6 +1078,7 @@ class ApLocalizations {
       'school_server_error': 'School Server Error\nPlease report to school',
       'room_list': 'Classoom List',
       'empty_classroom_search': 'Empty classroom search',
+      'classroom_coursetable_search': 'Classroom Coursetable Search',
     },
     'zh': {
       'update_note_title': '更新日誌',
@@ -1425,6 +1428,7 @@ class ApLocalizations {
       'school_server_error': '學校伺服器錯誤\n可向學校回報',
       'room_list': '教室列表',
       'empty_classroom_search': '空教室查詢',
+      'classroom_coursetable_search': '教室課表查詢',
     },
   };
 }
