@@ -671,6 +671,10 @@ class ApLocalizations {
 
   String get schoolSeverError => _vocabularies['school_sever_error'];
 
+  String get roomList => _vocabularies['room_list'];
+
+  String get emptyClassroomSearch => _vocabularies['empty_classroom_search'];
+
   static ApLocalizations of(BuildContext context) {
     return instance =
         Localizations.of<ApLocalizations>(context, ApLocalizations);
@@ -1070,6 +1074,8 @@ class ApLocalizations {
       'add_to_calendar': 'Add to Calendar',
       'api_server_error': 'AP Server Error\nPlease report to fans page',
       'school_server_error': 'School Server Error\nPlease report to school',
+      'room_list': 'Classoom List',
+      'empty_classroom_search': 'Empty classroom search',
     },
     'zh': {
       'update_note_title': '更新日誌',
@@ -1417,6 +1423,8 @@ class ApLocalizations {
       'add_to_calendar': '加到行事曆',
       'api_server_error': '校務通伺服器錯誤\n可向粉絲專頁回報',
       'school_server_error': '學校伺服器錯誤\n可向學校回報',
+      'room_list': '教室列表',
+      'empty_classroom_search': '空教室查詢',
     },
   };
 }
