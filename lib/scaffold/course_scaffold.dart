@@ -547,7 +547,7 @@ class _CourseContentState extends State<CourseContent> {
                     final Event event = Event(
                       title: widget.course.title,
                       description: '',
-                      location: widget.course.location ?? '',
+                      location: widget.course.location?.toString() ?? '',
                       startDate: startTime.weekTime(widget.weekIndex),
                       endDate: endTime.weekTime(widget.weekIndex),
                     );
@@ -623,7 +623,7 @@ class _CourseContentState extends State<CourseContent> {
                     ),
                     if (widget.course.location != null)
                       Text(
-                        widget.course.location ?? '',
+                        widget.course.location?.toString() ?? '',
                         style: TextStyle(
                           fontSize: 16.0,
                           color: ApTheme.of(context).greyText,
@@ -712,7 +712,8 @@ class CourseList extends StatelessWidget {
                                   '${ApLocalizations.of(context).courseDialogLocation ?? ''}：',
                               style: TextStyle(fontWeight: FontWeight.bold)),
                           if (course.location != null) ...[
-                            TextSpan(text: '${course.location ?? ''}\n'),
+                            TextSpan(
+                                text: '${course.location.toString() ?? ''}\n'),
                             TextSpan(
                               text:
                                   '${ApLocalizations.of(context).courseDialogTime}：',
