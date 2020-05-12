@@ -37,7 +37,7 @@ class NotificationUtils {
   }
 
   static Future<void> show({
-    @required id,
+    @required int id,
     @required String androidChannelId,
     @required String androidChannelDescription,
     @required String title,
@@ -114,7 +114,7 @@ class NotificationUtils {
   }
 
   static Future<void> scheduleWeeklyNotify({
-    @required id,
+    @required int id,
     @required String androidChannelId,
     @required String androidChannelDescription,
     @required Day day,
@@ -149,7 +149,7 @@ class NotificationUtils {
   }
 
   static Future<void> schedule({
-    @required id,
+    @required int id,
     @required String androidChannelId,
     @required String androidChannelDescription,
     @required DateTime dateTime,
