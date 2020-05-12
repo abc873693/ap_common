@@ -53,6 +53,7 @@ class NotificationUtils {
       icon: androidResourceIcon,
       importance: Importance.Max,
       enableVibration: enableVibration,
+      styleInformation: BigTextStyleInformation(content),
     );
     var iOSPlatformChannelSpecifics = IOSNotificationDetails();
     var platformChannelSpecifics = NotificationDetails(
@@ -78,6 +79,12 @@ class NotificationUtils {
   }) async {
     final ap = ApLocalizations.of(context);
     final flutterLocalNotificationsPlugin = FlutterLocalNotificationsPlugin();
+    String content = sprintf(ap.courseNotifyContent, [
+      courseNotify.title,
+      courseNotify.location.isEmpty
+          ? ap.courseNotifyUnknown
+          : courseNotify.location
+    ]);
     var androidPlatformChannelSpecifics = AndroidNotificationDetails(
       '$COURSE',
       ap.courseNotify,
@@ -85,6 +92,7 @@ class NotificationUtils {
       icon: androidResourceIcon,
       importance: Importance.Max,
       enableVibration: enableVibration,
+      styleInformation: BigTextStyleInformation(content),
     );
     var iOSPlatformChannelSpecifics = IOSNotificationDetails(
       presentAlert: true,
@@ -96,12 +104,6 @@ class NotificationUtils {
     );
     final time =
         parseTime(courseNotify.startTime, beforeMinutes: beforeMinutes);
-    String content = sprintf(ap.courseNotifyContent, [
-      courseNotify.title,
-      courseNotify.location.isEmpty
-          ? ap.courseNotifyUnknown
-          : courseNotify.location
-    ]);
     await flutterLocalNotificationsPlugin.showWeeklyAtDayAndTime(
       courseNotify.id,
       ap.courseNotify,
@@ -131,6 +133,7 @@ class NotificationUtils {
       largeIcon: DrawableResourceAndroidBitmap(androidResourceIcon),
       importance: Importance.Max,
       enableVibration: false,
+      styleInformation: BigTextStyleInformation(content),
     );
     var iOSPlatformChannelSpecifics = IOSNotificationDetails();
     var platformChannelSpecifics = NotificationDetails(
@@ -166,6 +169,7 @@ class NotificationUtils {
       largeIcon: DrawableResourceAndroidBitmap(androidResourceIcon),
       importance: Importance.Max,
       enableVibration: false,
+      styleInformation: BigTextStyleInformation(content),
     );
     var iOSPlatformChannelSpecifics = IOSNotificationDetails();
     var platformChannelSpecifics = NotificationDetails(
