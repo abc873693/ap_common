@@ -646,7 +646,7 @@ class _CourseContentState extends State<CourseContent> {
               ),
             ],
           ),
-          SizedBox(height: 8.0),
+          SizedBox(height: MediaQuery.of(context).padding.bottom),
         ],
       ),
     );
