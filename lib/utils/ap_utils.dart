@@ -61,11 +61,7 @@ class ApUtils {
   }
 
   static Future<void> launchUrl(var url) async {
-    if (await canLaunch(url)) {
-      await launch(url);
-    } else {
-      throw 'Could not launch $url';
-    }
+    await launch(url);
   }
 
   static callPhone(String url) async {
