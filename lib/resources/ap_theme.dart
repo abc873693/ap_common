@@ -247,6 +247,16 @@ class ApTheme extends InheritedWidget {
     }
   }
 
+  Color get barCode {
+    switch (brightness) {
+      case Brightness.dark:
+        return Colors.white;
+      case Brightness.light:
+      default:
+        return Colors.black;
+    }
+  }
+
   static ThemeData get light => ThemeData(
         //platform: TargetPlatform.iOS,
         brightness: Brightness.light,
