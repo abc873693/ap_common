@@ -48,7 +48,7 @@ class HomePageScaffold extends StatefulWidget {
     this.title,
     this.onImageTapped,
     this.autoPlay = true,
-    this.autoPlayDuration = const Duration(milliseconds: 3000),
+    this.autoPlayDuration = const Duration(milliseconds: 5000),
   }) : super(key: key);
 
   @override
@@ -67,23 +67,7 @@ class HomePageScaffoldState extends State<HomePageScaffold> {
 
   @override
   void initState() {
-    if (widget.autoPlay)
-      _timer = Timer.periodic(
-        widget.autoPlayDuration,
-        (Timer timer) {
-          if (widget.state == HomeState.finish && widget.announcements.length > 1)
-            setState(() {
-              _currentNewsIndex++;
-              if (_currentNewsIndex >= widget.announcements.length)
-                _currentNewsIndex = 0;
-              pageController.animateToPage(
-                _currentNewsIndex,
-                duration: Duration(milliseconds: 500),
-                curve: Curves.easeOutQuint,
-              );
-            });
-        },
-      );
+    setTimer();
     super.initState();
   }
 
@@ -141,18 +125,52 @@ class HomePageScaffoldState extends State<HomePageScaffold> {
     );
   }
 
-  Widget _newsImage(Announcement announcement, Orientation orientation, bool active) {
-    return AnimatedContainer(
-      duration: Duration(milliseconds: 500),
-      curve: Curves.easeOutQuint,
-      margin: EdgeInsets.symmetric(
-        vertical: MediaQuery.of(context).size.height * (active ? 0.05 : 0.15),
-        horizontal: MediaQuery.of(context).size.width * 0.02,
-      ),
-      child: GestureDetector(
-        onTap: () {
-          if (widget.onImageTapped != null) widget.onImageTapped(announcement);
+  setTimer() {
+    if (widget.autoPlay)
+      _timer = Timer.periodic(
+        widget.autoPlayDuration,
+        (Timer timer) {
+          if (widget.state == HomeState.finish &&
+              widget.announcements.length > 1)
+            setState(() {
+              _currentNewsIndex++;
+              if (_currentNewsIndex >= widget.announcements.length)
+                _currentNewsIndex = 0;
+              pageController.animateToPage(
+                _currentNewsIndex,
+                duration: Duration(milliseconds: 500),
+                curve: Curves.easeOutQuint,
+              );
+            });
         },
+      );
+  }
+
+  Widget _newsImage(
+    Announcement announcement,
+    Orientation orientation,
+    bool active,
+  ) {
+    return GestureDetector(
+      onTap: () {
+        if (widget.onImageTapped != null) widget.onImageTapped(announcement);
+      },
+      onTapDown: (detail) {
+        _timer?.cancel();
+      },
+      onTapUp: (detail) {
+        setTimer();
+      },
+      onTapCancel: () {
+        setTimer();
+      },
+      child: AnimatedContainer(
+        duration: Duration(milliseconds: 500),
+        curve: Curves.easeOutQuint,
+        margin: EdgeInsets.symmetric(
+          vertical: MediaQuery.of(context).size.height * (active ? 0.05 : 0.15),
+          horizontal: MediaQuery.of(context).size.width * 0.02,
+        ),
         child: Hero(
           tag: announcement.hashCode,
           child: ApNetworkImage(
