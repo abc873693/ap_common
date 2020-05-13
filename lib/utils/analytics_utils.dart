@@ -1,3 +1,5 @@
+import 'package:ap_common/models/user_info.dart';
+
 abstract class AnalyticsUtils {
   Future<void> setCurrentScreen(String screenName, String screenClassOverride);
 
@@ -5,7 +7,7 @@ abstract class AnalyticsUtils {
 
   Future<void> setUserProperty(String name, String value);
 
-  Future<void> logUserInfo(String department);
+  Future<void> logUserInfo(UserInfo userInfo);
 
   Future<void> logApiEvent(String type, int status, {String message = ''});
 
