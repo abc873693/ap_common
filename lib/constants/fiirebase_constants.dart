@@ -2,6 +2,7 @@ class FirebaseConstants {
   // user property
   static const STUDENT_ID = 'student_id';
   static const DEPARTMENT = 'department';
+  static const CLASS_NAME = 'class_name';
   static const THEME = 'theme';
   static const ICON_STYLE = 'icon_style';
   static const LANGUAGE = 'language';

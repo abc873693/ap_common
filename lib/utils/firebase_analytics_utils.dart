@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'dart:io';
 
+import 'package:ap_common/models/user_info.dart';
 import 'package:ap_common/resources/ap_theme.dart';
 import 'package:ap_common_firebase/constants/fiirebase_constants.dart';
 import 'package:firebase_analytics/firebase_analytics.dart';
@@ -51,14 +52,34 @@ class FirebaseAnalyticsUtils extends AnalyticsUtils {
     await analytics?.logEvent(name: name ?? '');
   }
 
-  Future<void> logUserInfo(String department) async {
-    await analytics?.logEvent(
-      name: 'user_info',
-      parameters: <String, dynamic>{
-        'department': department,
-      },
-    );
-    debugPrint('setUserProperty succeeded');
+  Future<void> logUserInfo(UserInfo userInfo) async {
+    if (userInfo == null) return;
+    if (userInfo.department != null && userInfo.department.isNotEmpty) {
+      await analytics?.logEvent(
+        name: 'user_info',
+        parameters: <String, dynamic>{
+          FirebaseConstants.DEPARTMENT: userInfo.department,
+        },
+      );
+      FirebaseAnalyticsUtils.instance.setUserProperty(
+        FirebaseConstants.DEPARTMENT,
+        userInfo.department,
+      );
+    }
+    if (userInfo.className != null && userInfo.className.isNotEmpty) {
+      FirebaseAnalyticsUtils.instance.setUserProperty(
+        FirebaseConstants.CLASS_NAME,
+        userInfo.className,
+      );
+    }
+    if (userInfo.id != null && userInfo.id.isNotEmpty) {
+      await analytics?.setUserId(userInfo.id);
+      FirebaseAnalyticsUtils.instance.setUserProperty(
+        FirebaseConstants.STUDENT_ID,
+        userInfo.id,
+      );
+    }
+    debugPrint('logUserInfo succeeded');
   }
 
   Future<void> logApiEvent(String type, int status,
