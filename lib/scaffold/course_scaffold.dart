@@ -131,11 +131,13 @@ class CourseScaffoldState extends State<CourseScaffold> {
 //                currentIndex: widget.yearIndex,
 //              ),
                       if (widget.semesters != null && widget.itemPicker == null)
-                        ItemPicker(
-                          dialogTitle: app.picksSemester,
-                          onSelected: widget.onSelect,
-                          items: widget.semesters,
-                          currentIndex: widget.semesterIndex,
+                        Expanded(
+                          child: ItemPicker(
+                            dialogTitle: app.picksSemester,
+                            onSelected: widget.onSelect,
+                            items: widget.semesters,
+                            currentIndex: widget.semesterIndex,
+                          ),
                         ),
                       if (widget.itemPicker != null)
                         widget.itemPicker,
@@ -317,12 +319,15 @@ class CourseScaffoldState extends State<CourseScaffold> {
           for (int j = 0; j < maxTimeCode; j++) {
             if (timeCodes[j] == course.date.section) {
               final index = widget.courseData.findCourseDetail(course);
+              final detailIndex = course.detailIndex ?? 0;
+              final len = ApColors.colors.length;
               courseBorders[j] = CourseBorder(
                 weekIndex: i,
                 course: course,
                 color: (index == -1)
                     ? null
-                    : ApColors.colors[course.detailIndex ?? 0][300],
+                    : ApColors.colors[detailIndex % len]
+                        [300 + 100 * (detailIndex ~/ len)],
                 onPressed: _onPressed,
               );
             }

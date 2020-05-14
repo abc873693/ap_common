@@ -47,5 +47,7 @@ class ApColors {
     Colors.amber,
     Colors.orange,
     Colors.deepOrange,
+    Colors.brown,
+    Colors.blueGrey,
   ];
 }
