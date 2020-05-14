@@ -34,6 +34,7 @@ dependencies:
   app_review: ^1.1.0+1
   native_pdf_view: ^3.2.0
   barcode_widget: ^1.2.3
+  barcode: ^1.9.1
 
 
 dev_dependencies:
