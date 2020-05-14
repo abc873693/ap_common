@@ -1,4 +1,5 @@
 import 'dart:io';
+import 'dart:math';
 
 import 'package:add_2_calendar/add_2_calendar.dart';
 import 'package:ap_common/config/ap_constants.dart';
@@ -325,7 +326,7 @@ class CourseScaffoldState extends State<CourseScaffold> {
                 weekIndex: i,
                 course: course,
                 color: (index == -1)
-                    ? null
+                    ? ApColors.colors[Random().nextInt(len)][300]
                     : ApColors.colors[detailIndex % len]
                         [300 + 100 * (detailIndex ~/ len)],
                 onPressed: _onPressed,
@@ -408,7 +409,7 @@ class CourseScaffoldState extends State<CourseScaffold> {
   }
 
   void _onPressed(int weekIndex, Course course) {
-    final courseDetail = widget.courseData.courses[course.detailIndex];
+    final courseDetail = widget.courseData.courses[course.detailIndex ?? 0];
     showModalBottomSheet(
       context: context,
       shape: RoundedRectangleBorder(
