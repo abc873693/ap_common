@@ -1,3 +1,11 @@
+## [0.2.7] - 2020/05/14
+
+* 加入學號QR Code和Bar Code顯示
+* 改善首頁自動輪播時間與行為
+* 改善AnalyticsUtils interface
+* ApTheme加入Green
+* ApLocalization加入DatetimeLocale
+
 ## [0.2.6] - 2020/05/12
 
 * 修正課表骨架的位置名稱錯誤
