@@ -20,6 +20,13 @@ class ApLocalizations {
     return _localizedValues[locale.languageCode] ?? _localizedValues['en'];
   }
 
+  static get dateTimeLocale {
+    if (locale.languageCode.contains('zh'))
+      return 'zh-TW';
+    else
+      return 'en-US';
+  }
+
   String get iconText {
     switch (ApIcon.code) {
       case ApIcon.FILLED:
@@ -674,8 +681,9 @@ class ApLocalizations {
   String get roomList => _vocabularies['room_list'];
 
   String get emptyClassroomSearch => _vocabularies['empty_classroom_search'];
-  
-  String get classroomCourseTableSearch => _vocabularies['classroom_coursetable_search'];
+
+  String get classroomCourseTableSearch =>
+      _vocabularies['classroom_coursetable_search'];
 
   static ApLocalizations of(BuildContext context) {
     return instance =
