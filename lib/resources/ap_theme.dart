@@ -137,6 +137,18 @@ class ApTheme extends InheritedWidget {
     }
   }
 
+  Color get green {
+    switch (brightness) {
+      case Brightness.light:
+        return Colors.green;
+        break;
+      case Brightness.dark:
+      default:
+        return Colors.green[300];
+        break;
+    }
+  }
+
   Color get bottomNavigationSelect {
     switch (brightness) {
       case Brightness.dark:
