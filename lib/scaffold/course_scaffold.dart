@@ -712,19 +712,19 @@ class CourseList extends StatelessWidget {
                                   '${ApLocalizations.of(context).courseDialogProfessor ?? ''}：',
                               style: TextStyle(fontWeight: FontWeight.bold)),
                           TextSpan(text: '${course.getInstructors()}\n'),
-                          TextSpan(
-                              text:
-                                  '${ApLocalizations.of(context).courseDialogLocation ?? ''}：',
-                              style: TextStyle(fontWeight: FontWeight.bold)),
                           if (course.location != null) ...[
                             TextSpan(
-                                text: '${course.location.toString() ?? ''}\n'),
+                                text:
+                                    '${ApLocalizations.of(context).courseDialogLocation ?? ''}：',
+                                style: TextStyle(fontWeight: FontWeight.bold)),
                             TextSpan(
-                              text:
-                                  '${ApLocalizations.of(context).courseDialogTime}：',
-                              style: TextStyle(fontWeight: FontWeight.bold),
-                            ),
+                                text: '${course.location.toString() ?? ''}\n'),
                           ],
+                          TextSpan(
+                            text:
+                                '${ApLocalizations.of(context).courseDialogTime}：',
+                            style: TextStyle(fontWeight: FontWeight.bold),
+                          ),
                           TextSpan(text: '${course.times ?? ''}'),
                         ],
                       ),
