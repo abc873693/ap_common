@@ -1,6 +1,8 @@
 # 校務通系列介面與函式共用(施工中)
 
-因為長期校務通相關系列的app，介面與相關功能都極為相似，所以特別將相關的介面與函式庫，製作此套件以方便維護使用
+[![](https://img.shields.io/pub/v/ap_common.svg?style=flat-square)](https://pub.dev/packages/ap_common/)
+
+長期校務通相關系列的app，介面與相關功能都極為相似，將相關的介面與函式庫，製作此套件以方便維護。
 
 ## 相關專案
 - [高科校務通](https://github.com/NKUST-ITC/NKUST-AP-Flutter)
@@ -56,11 +58,7 @@
     # 官方多國語套件
     flutter_localizations:
         sdk: flutter
-    ap_common:
-        git:
-          url: https://github.com/abc873693/ap_common
-          ref: v0.0.3
-          # 不寫ref 預設使用最新的commit 或是改成分支名稱或是commit的hash皆可
+    ap_common: ^0.2.8
 ```
 
 執行加入套件
@@ -90,7 +88,7 @@
 
 ```
 ### 多國語言支援列表
- - 繁體中文(zh)
+ - 繁體中文(zh-TW)
  - 英文(en)
 
 在MaterialApp 加入多國語言支援(有使用到ApLocalization才需要)
