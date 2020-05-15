@@ -1,5 +1,8 @@
 import 'dart:convert';
 
+import 'package:ap_common/config/ap_constants.dart';
+import 'package:ap_common/utils/preferences.dart';
+
 class ScoreData {
   List<Score> scores;
   Detail detail;
@@ -24,6 +27,26 @@ class ScoreData {
         "scores": new List<dynamic>.from(scores.map((x) => x.toJson())),
         "detail": detail.toJson(),
       };
+
+  void save(String tag) {
+    Preferences.setString(
+      '${ApConstants.PACKAGE_NAME}'
+      '.score_data_$tag',
+      this.toRawJson(),
+    );
+  }
+
+  factory ScoreData.load(String tag) {
+    String rawString = Preferences.getString(
+      '${ApConstants.PACKAGE_NAME}'
+          '.score_data_$tag',
+      '',
+    );
+    if (rawString == '')
+      return null;
+    else
+      return ScoreData.fromRawJson(rawString);
+  }
 }
 
 class Detail {

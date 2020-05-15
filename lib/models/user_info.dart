@@ -2,6 +2,9 @@ import 'dart:convert';
 
 import 'dart:typed_data';
 
+import 'package:ap_common/config/ap_constants.dart';
+import 'package:ap_common/utils/preferences.dart';
+
 class UserInfo {
   String educationSystem;
   String department;
@@ -48,4 +51,24 @@ class UserInfo {
         "pictureUrl": pictureUrl,
         "email": email
       };
+
+  void save(String tag) {
+    Preferences.setString(
+      '${ApConstants.PACKAGE_NAME}'
+      '.user_info_$tag',
+      this.toRawJson(),
+    );
+  }
+
+  factory UserInfo.load(String tag) {
+    String rawString = Preferences.getString(
+      '${ApConstants.PACKAGE_NAME}'
+          '.user_info_$tag',
+      '',
+    );
+    if (rawString == '')
+      return null;
+    else
+      return UserInfo.fromRawJson(rawString);
+  }
 }
