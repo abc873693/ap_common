@@ -10,6 +10,7 @@ import 'package:flutter/foundation.dart';
 
 export 'package:firebase_analytics/firebase_analytics.dart';
 export 'package:firebase_analytics/observer.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class FirebaseUtils {
   static const NOTIFY_ID = 9919;
@@ -25,7 +26,7 @@ class FirebaseUtils {
     return null;
   }
 
-  static initFcm() async {
+  static initFcm({Function(dynamic) onClick}) async {
     FirebaseMessaging firebaseMessaging = FirebaseMessaging();
     await Future.delayed(Duration(seconds: 2));
     firebaseMessaging.configure(
@@ -41,10 +42,15 @@ class FirebaseUtils {
       },
       onLaunch: (Map<String, dynamic> message) async {
         if (ApConstants.isInDebugMode) print("onLaunch: $message");
-        //_navigateToItemDetail(message);
+        if (Platform.isAndroid)
+          navigateToItemDetail(message['data'], onClick);
+        else if (Platform.isIOS) navigateToItemDetail(message, onClick);
       },
       onResume: (Map<String, dynamic> message) async {
         if (ApConstants.isInDebugMode) print("onResume: $message");
+        if (Platform.isAndroid) {
+          await navigateToItemDetail(message['data'], onClick);
+        } else if (Platform.isIOS) await navigateToItemDetail(message, onClick);
       },
     );
     firebaseMessaging.requestNotificationPermissions(
@@ -59,5 +65,16 @@ class FirebaseUtils {
         print("Push Messaging token: $token");
       }
     });
+  }
+
+  static Future<void> navigateToItemDetail(
+    message,
+    Function(dynamic) onClick,
+  ) async {
+    if (message['type'] == "1") {
+      launch(message['url']);
+    } else {
+      if (onClick != null) onClick(message);
+    }
   }
 }
