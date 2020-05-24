@@ -14,7 +14,7 @@ packages:
       name: ap_common
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "0.2.7"
+    version: "0.3.0"
   app_review:
     dependency: transitive
     description:
@@ -56,7 +56,7 @@ packages:
       name: barcode
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "1.9.1"
+    version: "1.10.0"
   barcode_widget:
     dependency: transitive
     description:
@@ -154,7 +154,7 @@ packages:
       name: extended_image
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "0.7.3+1"
+    version: "0.8.0"
   extended_image_library:
     dependency: transitive
     description:
@@ -287,6 +287,13 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "0.16.1"
+  js:
+    dependency: transitive
+    description:
+      name: js
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "0.6.1+1"
   keyboard_visibility:
     dependency: transitive
     description:
@@ -321,14 +328,14 @@ packages:
       name: native_pdf_renderer
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "2.1.1"
+    version: "2.3.0"
   native_pdf_view:
     dependency: transitive
     description:
       name: native_pdf_view
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "3.2.0"
+    version: "3.5.2"
   outline_material_icons:
     dependency: transitive
     description:

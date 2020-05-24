@@ -11,7 +11,7 @@ dependencies:
   flutter:
     sdk: flutter
 
-  ap_common: ^0.2.7
+  ap_common: ">=0.2.7 <1.0.0"
 #    path: ../../GitHub-NKUST-ITC/ap_common
   #firebase must use particular version
   firebase_analytics: 5.0.11
