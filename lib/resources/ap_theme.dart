@@ -285,6 +285,7 @@ class ApTheme extends InheritedWidget {
             borderSide: BorderSide(color: Colors.white),
           ),
         ),
+        visualDensity: VisualDensity.adaptivePlatformDensity,
       );
 
   static ThemeData get dark => ThemeData(
@@ -304,5 +305,6 @@ class ApTheme extends InheritedWidget {
             borderSide: BorderSide(color: Colors.white),
           ),
         ),
+        visualDensity: VisualDensity.adaptivePlatformDensity,
       );
 }
