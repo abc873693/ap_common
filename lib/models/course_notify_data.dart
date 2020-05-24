@@ -164,7 +164,7 @@ class CourseNotify {
       code: courseDetail.code,
       startTime: course.date?.startTime,
       weeklyIndex: weeklyIndex,
-      location: course.location?.building ?? '' + course.location?.room ?? '',
+      location: course.location.toString(),
     );
   }
 }
