@@ -61,9 +61,7 @@ class LoginScaffoldState extends State<LoginScaffold> {
 
   @override
   Widget build(BuildContext context) {
-    final orientation = (kIsWeb)
-        ? (isTablet ? Orientation.landscape : Orientation.portrait)
-        : MediaQuery.of(context).orientation;
+    final orientation = MediaQuery.of(context).orientation;
     return Scaffold(
       backgroundColor: ApTheme.of(context).blue,
       resizeToAvoidBottomPadding: orientation == Orientation.portrait,
