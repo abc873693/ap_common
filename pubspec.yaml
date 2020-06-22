@@ -32,7 +32,7 @@ dependencies:
   add_2_calendar: ^1.4.0
   material_design_icons_flutter: ^4.0.5145
   app_review: ^1.1.0+1
-  native_pdf_view: ^3.5.2
+  native_pdf_view: ^3.6.2
   barcode_widget: ^1.2.3
   barcode: ^1.10.0
 
