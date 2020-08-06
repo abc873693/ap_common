@@ -61,26 +61,26 @@ class LoginScaffoldState extends State<LoginScaffold> {
 
   @override
   Widget build(BuildContext context) {
-    final orientation = (kIsWeb)
-        ? (isTablet ? Orientation.landscape : Orientation.portrait)
-        : MediaQuery.of(context).orientation;
+    final orientation = MediaQuery.of(context).orientation;
     return Scaffold(
       backgroundColor: ApTheme.of(context).blue,
       resizeToAvoidBottomPadding: orientation == Orientation.portrait,
-      body: Container(
-        alignment: Alignment(0, 0),
-        padding: EdgeInsets.symmetric(horizontal: 30.0),
-        child: orientation == Orientation.portrait
-            ? Column(
-                crossAxisAlignment: CrossAxisAlignment.stretch,
-                mainAxisAlignment: MainAxisAlignment.spaceAround,
-                mainAxisSize: MainAxisSize.min,
-                children: _renderContent(orientation),
-              )
-            : Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: _renderContent(orientation),
-              ),
+      body: AutofillGroup(
+        child: Container(
+          alignment: Alignment(0, 0),
+          padding: EdgeInsets.symmetric(horizontal: 30.0),
+          child: orientation == Orientation.portrait
+              ? Column(
+                  crossAxisAlignment: CrossAxisAlignment.stretch,
+                  mainAxisAlignment: MainAxisAlignment.spaceAround,
+                  mainAxisSize: MainAxisSize.min,
+                  children: _renderContent(orientation),
+                )
+              : Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: _renderContent(orientation),
+                ),
+        ),
       ),
     );
   }
@@ -260,6 +260,7 @@ class ApTextField extends StatelessWidget {
   final bool obscureText;
   final int maxLength;
   final TextInputType keyboardType;
+  final Iterable<String> autofillHints;
 
   const ApTextField({
     Key key,
@@ -273,6 +274,7 @@ class ApTextField extends StatelessWidget {
     this.obscureText = false,
     this.maxLength,
     this.onChanged,
+    this.autofillHints,
   }) : super(key: key);
 
   @override
@@ -301,6 +303,7 @@ class ApTextField extends StatelessWidget {
         fontSize: 18.0,
         decorationColor: Colors.white,
       ),
+      autofillHints: autofillHints,
     );
   }
 }
