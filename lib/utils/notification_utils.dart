@@ -23,7 +23,7 @@ class NotificationUtils {
   //For taiwan week order
   static Day getDay(int weekIndex) {
     if (weekIndex == 6)
-      return Day.Sunday;
+      return Day.sunday;
     else
       return Day(weekIndex + 2);
   }
@@ -51,14 +51,14 @@ class NotificationUtils {
       androidChannelDescription,
       androidChannelDescription,
       icon: androidResourceIcon,
-      importance: Importance.Max,
+      importance: Importance.max,
       enableVibration: enableVibration,
       styleInformation: BigTextStyleInformation(content),
     );
     var iOSPlatformChannelSpecifics = IOSNotificationDetails();
     var platformChannelSpecifics = NotificationDetails(
-      androidPlatformChannelSpecifics,
-      iOSPlatformChannelSpecifics,
+      android: androidPlatformChannelSpecifics,
+      iOS: iOSPlatformChannelSpecifics,
     );
     await flutterLocalNotificationsPlugin.show(
       id,
@@ -90,7 +90,7 @@ class NotificationUtils {
       ap.courseNotify,
       ap.courseNotify,
       icon: androidResourceIcon,
-      importance: Importance.Max,
+      importance: Importance.max,
       enableVibration: enableVibration,
       styleInformation: BigTextStyleInformation(content),
     );
@@ -99,8 +99,8 @@ class NotificationUtils {
       presentSound: true,
     );
     var platformChannelSpecifics = NotificationDetails(
-      androidPlatformChannelSpecifics,
-      iOSPlatformChannelSpecifics,
+      android: androidPlatformChannelSpecifics,
+      iOS: iOSPlatformChannelSpecifics,
     );
     final time =
         parseTime(courseNotify.startTime, beforeMinutes: beforeMinutes);
@@ -131,14 +131,14 @@ class NotificationUtils {
       androidChannelDescription,
       androidChannelDescription,
       largeIcon: DrawableResourceAndroidBitmap(androidResourceIcon),
-      importance: Importance.Max,
+      importance: Importance.max,
       enableVibration: false,
       styleInformation: BigTextStyleInformation(content),
     );
     var iOSPlatformChannelSpecifics = IOSNotificationDetails();
     var platformChannelSpecifics = NotificationDetails(
-      androidPlatformChannelSpecifics,
-      iOSPlatformChannelSpecifics,
+      android: androidPlatformChannelSpecifics,
+      iOS: iOSPlatformChannelSpecifics,
     );
     await flutterLocalNotificationsPlugin.showWeeklyAtDayAndTime(
       id,
@@ -167,14 +167,14 @@ class NotificationUtils {
       androidChannelDescription,
       androidChannelDescription,
       largeIcon: DrawableResourceAndroidBitmap(androidResourceIcon),
-      importance: Importance.Max,
+      importance: Importance.max,
       enableVibration: false,
       styleInformation: BigTextStyleInformation(content),
     );
     var iOSPlatformChannelSpecifics = IOSNotificationDetails();
     var platformChannelSpecifics = NotificationDetails(
-      androidPlatformChannelSpecifics,
-      iOSPlatformChannelSpecifics,
+      android: androidPlatformChannelSpecifics,
+      iOS: iOSPlatformChannelSpecifics,
     );
     dateTime = dateTime.add(
       Duration(minutes: -beforeMinutes),
