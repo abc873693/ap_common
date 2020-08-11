@@ -9,6 +9,9 @@
 - [中山校務通](https://github.com/abc873693/NSYSU-AP)
 - [台科校務通](https://github.com/abc873693/NTUST-AP)
 
+## 套件使用要求
+ - Flutter v1.9 以上
+
 ## 目前共用項目 Todo List
 
  - 資源
@@ -58,7 +61,7 @@
     # 官方多國語套件
     flutter_localizations:
         sdk: flutter
-    ap_common: ^0.2.8
+    ap_common: ^0.4.0
 ```
 
 執行加入套件
@@ -66,6 +69,7 @@
 ```bash
   $ flutter package get
 ```
+### 主題色設定
 
 在MaterialApp 上一層加入主題色模式(ThemeMode)設定 否則無法正常顯示  
 此功能只支援flutter v1.9 以上的SDK
@@ -89,9 +93,9 @@
 ```
 ### 多國語言支援列表
  - 繁體中文(zh-TW)
- - 英文(en)
+ - 英文(en-US)
 
-在MaterialApp 加入多國語言支援(有使用到ApLocalization才需要)
+在 `MaterialApp` 加入多國語言支援
 
 ```dart
     ThemeMode themeMode = ThemeMode.system;
