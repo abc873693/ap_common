@@ -6,9 +6,9 @@ import 'package:ap_common/utils/ap_utils.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:keyboard_visibility/keyboard_visibility.dart';
+import 'package:flutter_keyboard_visibility/flutter_keyboard_visibility.dart';
 
-export 'package:keyboard_visibility/keyboard_visibility.dart';
+export 'package:flutter_keyboard_visibility/flutter_keyboard_visibility.dart';
 
 enum LogoMode { text, image }
 
@@ -32,7 +32,6 @@ class LoginScaffold extends StatefulWidget {
 }
 
 class LoginScaffoldState extends State<LoginScaffold> {
-  KeyboardVisibilityNotification keyboardVisibilityNotification;
 
   bool get isTablet => MediaQuery.of(context).size.shortestSide >= 600;
 
@@ -40,13 +39,12 @@ class LoginScaffoldState extends State<LoginScaffold> {
   void initState() {
     if ((!kIsWeb && (Platform.isAndroid || Platform.isIOS)) &&
         widget.enableKeyboardDoneButton) {
-      keyboardVisibilityNotification = KeyboardVisibilityNotification();
-      keyboardVisibilityNotification?.addNewListener(
-        onHide: () {
-          ApUtils.removeOverlay();
-        },
-        onShow: () {
-          ApUtils.showOverlay(context, ApLocalizations.of(context).done);
+      KeyboardVisibility.onChange.listen(
+        (bool visible) {
+          if (visible)
+            ApUtils.showOverlay(context, ApLocalizations.of(context).done);
+          else
+            ApUtils.removeOverlay();
         },
       );
     }
@@ -55,7 +53,7 @@ class LoginScaffoldState extends State<LoginScaffold> {
 
   @override
   void dispose() {
-    keyboardVisibilityNotification?.removeListener(0);
+//    KeyboardVisibility.onChange.
     super.dispose();
   }
 
