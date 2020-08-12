@@ -3,7 +3,6 @@ import 'dart:io';
 import 'package:ap_common/callback/general_callback.dart';
 import 'package:ap_common/resources/ap_theme.dart';
 import 'package:ap_common/utils/ap_localizations.dart';
-import 'package:ap_common/widgets/default_dialog.dart';
 import 'package:ap_common/widgets/yes_no_dialog.dart';
 import 'package:app_review/app_review.dart';
 import 'package:flutter/cupertino.dart';
@@ -12,7 +11,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:package_info/package_info.dart';
 import 'package:share/share.dart';
-import 'package:sprintf/sprintf.dart';
 import 'package:toast/toast.dart';
 import 'package:url_launcher/url_launcher.dart';
 export 'package:dio/dio.dart';
@@ -107,36 +105,32 @@ class ApUtils {
   ) async {
     await Future.delayed(Duration(seconds: 1));
     final app = ApLocalizations.of(context);
-    if (Platform.isAndroid || Platform.isIOS) {
-      showDialog(
-        context: context,
-        builder: (BuildContext context) => YesNoDialog(
-          title: app.ratingDialogTitle,
-          contentWidget: RichText(
-            textAlign: TextAlign.center,
-            text: TextSpan(
-                style: TextStyle(
-                    color: ApTheme.of(context).grey,
-                    height: 1.3,
-                    fontSize: 16.0),
-                children: [
-                  TextSpan(text: app.ratingDialogContent),
-                ]),
-          ),
-          leftActionText: app.later,
-          rightActionText: app.rateNow,
-          leftActionFunction: null,
-          rightActionFunction: () {
-            if (!kIsWeb && (Platform.isAndroid || Platform.isIOS))
-              AppReview.requestReview.then((onValue) {
-                print(onValue);
-              });
-            else
-              launchUrl(defaultUrl);
-          },
+    showDialog(
+      context: context,
+      builder: (BuildContext context) => YesNoDialog(
+        title: app.ratingDialogTitle,
+        contentWidget: RichText(
+          textAlign: TextAlign.center,
+          text: TextSpan(
+              style: TextStyle(
+                  color: ApTheme.of(context).grey, height: 1.3, fontSize: 16.0),
+              children: [
+                TextSpan(text: app.ratingDialogContent),
+              ]),
         ),
-      );
-    }
+        leftActionText: app.later,
+        rightActionText: app.rateNow,
+        leftActionFunction: null,
+        rightActionFunction: () {
+          if (!kIsWeb && (Platform.isAndroid || Platform.isIOS))
+            AppReview.requestReview.then((onValue) {
+              print(onValue);
+            });
+          else
+            launchUrl(defaultUrl);
+        },
+      ),
+    );
   }
 
   static var overlayEntry;
