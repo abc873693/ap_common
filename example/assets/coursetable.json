@@ -1,0 +1,502 @@
+{
+    "courses": [
+        {
+            "code": "5044",
+            "title": "服務教育(二)",
+            "className": "四技服務教育(燕",
+            "group": "07",
+            "units": "0",
+            "hours": "2.0",
+            "required": "【必修】",
+            "at": "【學期】",
+            "times": "(二)A(四)A",
+            "location": {
+                "room": ""
+            },
+            "instructors": [
+                "龔千芬"
+            ]
+        },
+        {
+            "code": "5231",
+            "title": "體育(四)-羽球",
+            "className": "四體二甲(建工)",
+            "group": "06",
+            "units": "0",
+            "hours": "2.0",
+            "required": "【必修】",
+            "at": "【學期】",
+            "times": "(二)7-8",
+            "location": {
+                "room": ""
+            },
+            "instructors": [
+                "劉安球"
+            ]
+        },
+        {
+            "code": "3869",
+            "title": "微積分(二)",
+            "className": "智慧商務系一乙",
+            "group": "01",
+            "units": "3.0",
+            "hours": "3.0",
+            "required": "【必修】",
+            "at": "【學期】",
+            "times": "(一)2-4",
+            "location": {
+                "room": "MA212"
+            },
+            "instructors": [
+                "黃天受"
+            ]
+        },
+        {
+            "code": "3872",
+            "title": "Python程式設計",
+            "className": "智慧商務系一乙",
+            "group": "01",
+            "units": "3.0",
+            "hours": "3.0",
+            "required": "【選修】",
+            "at": "【學期】",
+            "times": "(五)2-4",
+            "location": {
+                "room": "MA218"
+            },
+            "instructors": [
+                "李仕雄"
+            ]
+        },
+        {
+            "code": "3891",
+            "title": "財務管理",
+            "className": "智慧商務系三乙",
+            "group": "01",
+            "units": "3.0",
+            "hours": "3.0",
+            "required": "【必修】",
+            "at": "【學期】",
+            "times": "(一)5-7",
+            "location": {
+                "room": "MA213"
+            },
+            "instructors": [
+                "徐淑芳"
+            ]
+        },
+        {
+            "code": "3892",
+            "title": "實務專題(二)",
+            "className": "智慧商務系三乙",
+            "group": "01",
+            "units": "1.0",
+            "hours": "3.0",
+            "required": "【必修】",
+            "at": "【學期】",
+            "times": "",
+            "location": {
+                "room": "教室未定"
+            },
+            "instructors": [
+                "侯易佑",
+                "傅振瑞",
+                "張俊陽",
+                "徐淑芳",
+                "李仕雄",
+                "柯博昌",
+                "謝文川",
+                "黃河銓"
+            ]
+        },
+        {
+            "code": "3893",
+            "title": "管理資訊系統",
+            "className": "智慧商務系三乙",
+            "group": "01",
+            "units": "3.0",
+            "hours": "3.0",
+            "required": "【必修】",
+            "at": "【學期】",
+            "times": "(二)2-4",
+            "location": {
+                "room": "MA212"
+            },
+            "instructors": [
+                "張俊陽"
+            ]
+        },
+        {
+            "code": "3894",
+            "title": "進階英語口語訓練",
+            "className": "智慧商務系三乙",
+            "group": "01",
+            "units": "3.0",
+            "hours": "3.0",
+            "required": "【選修】",
+            "at": "【學期】",
+            "times": "(四)2-4",
+            "location": {
+                "room": "MA202"
+            },
+            "instructors": [
+                "林黃淑化"
+            ]
+        },
+        {
+            "code": "3875",
+            "title": "統計學(二)",
+            "className": "智慧商務系二甲",
+            "group": "01",
+            "units": "3.0",
+            "hours": "3.0",
+            "required": "【必修】",
+            "at": "【學期】",
+            "times": "(四)5-7",
+            "location": {
+                "room": "MA213"
+            },
+            "instructors": [
+                "張添香"
+            ]
+        }
+    ],
+    "coursetable": {
+        "timeCodes": [
+            "第 M 節",
+            "第 1 節",
+            "第 2 節",
+            "第 3 節",
+            "第 4 節",
+            "第 A 節",
+            "第 5 節",
+            "第 6 節",
+            "第 7 節",
+            "第 8 節",
+            "第 9 節",
+            "第 10 節",
+            "第 11 節",
+            "第 12 節",
+            "第 13 節"
+        ],
+        "Monday": [
+            {
+                "title": "微積分(二)",
+                "date": {
+                    "startTime": "09:10",
+                    "endTime": "10:00",
+                    "section": "第 2 節"
+                },
+                "location": {
+                    "room": "MA212"
+                },
+                "instructors": [
+                    "黃天受"
+                ]
+            },
+            {
+                "title": "微積分(二)",
+                "date": {
+                    "startTime": "10:10",
+                    "endTime": "11:00",
+                    "section": "第 3 節"
+                },
+                "location": {
+                    "room": "MA212"
+                },
+                "instructors": [
+                    "黃天受"
+                ]
+            },
+            {
+                "title": "微積分(二)",
+                "date": {
+                    "startTime": "11:10",
+                    "endTime": "12:00",
+                    "section": "第 4 節"
+                },
+                "location": {
+                    "room": "MA212"
+                },
+                "instructors": [
+                    "黃天受"
+                ]
+            },
+            {
+                "title": "財務管理",
+                "date": {
+                    "startTime": "13:30",
+                    "endTime": "14:20",
+                    "section": "第 5 節"
+                },
+                "location": {
+                    "room": "MA213"
+                },
+                "instructors": [
+                    "徐淑芳"
+                ]
+            },
+            {
+                "title": "財務管理",
+                "date": {
+                    "startTime": "14:30",
+                    "endTime": "15:20",
+                    "section": "第 6 節"
+                },
+                "location": {
+                    "room": "MA213"
+                },
+                "instructors": [
+                    "徐淑芳"
+                ]
+            },
+            {
+                "title": "財務管理",
+                "date": {
+                    "startTime": "15:30",
+                    "endTime": "16:20",
+                    "section": "第 7 節"
+                },
+                "location": {
+                    "room": "MA213"
+                },
+                "instructors": [
+                    "徐淑芳"
+                ]
+            }
+        ],
+        "Tuesday": [
+            {
+                "title": "管理資訊系統",
+                "date": {
+                    "startTime": "09:10",
+                    "endTime": "10:00",
+                    "section": "第 2 節"
+                },
+                "location": {
+                    "room": "MA212"
+                },
+                "instructors": [
+                    "張俊陽"
+                ]
+            },
+            {
+                "title": "管理資訊系統",
+                "date": {
+                    "startTime": "10:10",
+                    "endTime": "11:00",
+                    "section": "第 3 節"
+                },
+                "location": {
+                    "room": "MA212"
+                },
+                "instructors": [
+                    "張俊陽"
+                ]
+            },
+            {
+                "title": "管理資訊系統",
+                "date": {
+                    "startTime": "11:10",
+                    "endTime": "12:00",
+                    "section": "第 4 節"
+                },
+                "location": {
+                    "room": "MA212"
+                },
+                "instructors": [
+                    "張俊陽"
+                ]
+            },
+            {
+                "title": "服務教育(二)",
+                "date": {
+                    "startTime": "12:10",
+                    "endTime": "13:00",
+                    "section": "第 A 節"
+                },
+                "location": {
+                    "room": ""
+                },
+                "instructors": [
+                    "龔千芬"
+                ]
+            },
+            {
+                "title": "體育(四)-羽球",
+                "date": {
+                    "startTime": "15:30",
+                    "endTime": "16:20",
+                    "section": "第 7 節"
+                },
+                "location": {
+                    "room": ""
+                },
+                "instructors": [
+                    "劉安球"
+                ]
+            },
+            {
+                "title": "體育(四)-羽球",
+                "date": {
+                    "startTime": "16:30",
+                    "endTime": "17:20",
+                    "section": "第 8 節"
+                },
+                "location": {
+                    "room": ""
+                },
+                "instructors": [
+                    "劉安球"
+                ]
+            }
+        ],
+        "Wednesday": [],
+        "Thursday": [
+            {
+                "title": "進階英語口語訓練",
+                "date": {
+                    "startTime": "09:10",
+                    "endTime": "10:00",
+                    "section": "第 2 節"
+                },
+                "location": {
+                    "room": "MA202"
+                },
+                "instructors": [
+                    "林黃淑化"
+                ]
+            },
+            {
+                "title": "進階英語口語訓練",
+                "date": {
+                    "startTime": "10:10",
+                    "endTime": "11:00",
+                    "section": "第 3 節"
+                },
+                "location": {
+                    "room": "MA202"
+                },
+                "instructors": [
+                    "林黃淑化"
+                ]
+            },
+            {
+                "title": "進階英語口語訓練",
+                "date": {
+                    "startTime": "11:10",
+                    "endTime": "12:00",
+                    "section": "第 4 節"
+                },
+                "location": {
+                    "room": "MA202"
+                },
+                "instructors": [
+                    "林黃淑化"
+                ]
+            },
+            {
+                "title": "服務教育(二)",
+                "date": {
+                    "startTime": "12:10",
+                    "endTime": "13:00",
+                    "section": "第 A 節"
+                },
+                "location": {
+                    "room": ""
+                },
+                "instructors": [
+                    "龔千芬"
+                ]
+            },
+            {
+                "title": "統計學(二)",
+                "date": {
+                    "startTime": "13:30",
+                    "endTime": "14:20",
+                    "section": "第 5 節"
+                },
+                "location": {
+                    "room": "MA213"
+                },
+                "instructors": [
+                    "張添香"
+                ]
+            },
+            {
+                "title": "統計學(二)",
+                "date": {
+                    "startTime": "14:30",
+                    "endTime": "15:20",
+                    "section": "第 6 節"
+                },
+                "location": {
+                    "room": "MA213"
+                },
+                "instructors": [
+                    "張添香"
+                ]
+            },
+            {
+                "title": "統計學(二)",
+                "date": {
+                    "startTime": "15:30",
+                    "endTime": "16:20",
+                    "section": "第 7 節"
+                },
+                "location": {
+                    "room": "MA213"
+                },
+                "instructors": [
+                    "張添香"
+                ]
+            }
+        ],
+        "Friday": [
+            {
+                "title": "Python程式設計",
+                "date": {
+                    "startTime": "09:10",
+                    "endTime": "10:00",
+                    "section": "第 2 節"
+                },
+                "location": {
+                    "room": "MA218"
+                },
+                "instructors": [
+                    "李仕雄"
+                ]
+            },
+            {
+                "title": "Python程式設計",
+                "date": {
+                    "startTime": "10:10",
+                    "endTime": "11:00",
+                    "section": "第 3 節"
+                },
+                "location": {
+                    "room": "MA218"
+                },
+                "instructors": [
+                    "李仕雄"
+                ]
+            },
+            {
+                "title": "Python程式設計",
+                "date": {
+                    "startTime": "11:10",
+                    "endTime": "12:00",
+                    "section": "第 4 節"
+                },
+                "location": {
+                    "room": "MA218"
+                },
+                "instructors": [
+                    "李仕雄"
+                ]
+            }
+        ],
+        "Saturday": [],
+        "Sunday": []
+    }
+}
