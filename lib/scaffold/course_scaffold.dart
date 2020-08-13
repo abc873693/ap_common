@@ -32,20 +32,19 @@ enum _ContentStyle { list, table }
 const _courseHeight = 55.0;
 
 class CourseScaffold extends StatefulWidget {
+  /// 必要欄位，總共有 `loading` `finish` `error` `empty` `offlineEmpty` `custom` 的狀態，只有`finish`才會顯示課表介面，其餘都是顯示錯誤狀況
   final CourseState state;
   final String customStateHint;
   final CourseData courseData;
   final String title;
   final Widget itemPicker;
-  final List<String> years;
-  final int yearIndex;
   final List<String> semesters;
   final int semesterIndex;
-  final Function onSearchButtonClick;
   final Function(int index) onSelect;
+  final bool isShowSearchButton;
+  final Function onSearchButtonClick;
   final Function() onRefresh;
   final List<Widget> actions;
-  final bool isShowSearchButton;
   final String customHint;
   final bool enableNotifyControl;
   final CourseNotifyData notifyData;
@@ -61,8 +60,6 @@ class CourseScaffold extends StatefulWidget {
     @required this.courseData,
     this.title,
     this.customHint,
-    this.years,
-    this.yearIndex,
     this.semesters,
     this.semesterIndex,
     this.onSelect,
@@ -119,9 +116,7 @@ class CourseScaffoldState extends State<CourseScaffold> {
               mainAxisSize: MainAxisSize.min,
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: <Widget>[
-                if (widget.years != null ||
-                    widget.semesters != null ||
-                    widget.itemPicker != null)
+                if (widget.semesters != null || widget.itemPicker != null)
                   Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     mainAxisSize: MainAxisSize.max,
@@ -140,8 +135,7 @@ class CourseScaffoldState extends State<CourseScaffold> {
                             currentIndex: widget.semesterIndex,
                           ),
                         ),
-                      if (widget.itemPicker != null)
-                        widget.itemPicker,
+                      if (widget.itemPicker != null) widget.itemPicker,
                     ],
                   ),
                 if (widget.customHint != null && widget.customHint.isNotEmpty)
