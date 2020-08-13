@@ -1,11 +1,11 @@
 {
-    "name": "ap_common_example",
-    "short_name": "ap_common_example",
+    "name": "nkust_ap",
+    "short_name": "nkust_ap",
     "start_url": ".",
     "display": "standalone",
     "background_color": "#0175C2",
     "theme_color": "#0175C2",
-    "description": "A new Flutter project.",
+    "description": "史上最強高科大校務系統 APP",
     "orientation": "portrait-primary",
     "prefer_related_applications": false,
     "icons": [
