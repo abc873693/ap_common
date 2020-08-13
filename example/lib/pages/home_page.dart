@@ -1,5 +1,3 @@
-import 'dart:math';
-
 import 'package:ap_common/api/github_helper.dart';
 import 'package:ap_common/callback/general_callback.dart';
 import 'package:ap_common/models/user_info.dart';
@@ -14,7 +12,8 @@ import 'package:ap_common/utils/ap_utils.dart';
 import 'package:ap_common/utils/dialog_utils.dart';
 import 'package:ap_common/utils/preferences.dart';
 import 'package:ap_common/widgets/ap_drawer.dart';
-import 'package:dio/dio.dart';
+import 'package:ap_common_example/pages/user_info_page.dart';
+import 'package:flutter/services.dart';
 import 'package:http/http.dart' as http;
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -137,11 +136,11 @@ class HomePageState extends State<HomePage> {
         imageAsset: drawerIcon,
         onTapHeader: () {
           if (isLogin) {
-//            if (userInfo != null && isLogin)
-//              ApUtils.pushCupertinoStyle(
-//                context,
-//                UserInfoPage(userInfo: userInfo),
-//              );
+            if (userInfo != null)
+              ApUtils.pushCupertinoStyle(
+                context,
+                UserInfoPage(userInfo: userInfo),
+              );
           } else {
             Navigator.of(context).pop();
             openLoginPage();
@@ -217,9 +216,6 @@ class HomePageState extends State<HomePage> {
           context,
           AnnouncementContentPage(announcement: announcement),
         );
-        String message = announcement.description.length > 12
-            ? announcement.description
-            : announcement.description.substring(0, 12);
       },
       onTabTapped: onTabTapped,
       bottomNavigationBarItems: [
@@ -290,34 +286,31 @@ class HomePageState extends State<HomePage> {
   }
 
   _getUserInfo() async {
-    if (Preferences.getBool(Constants.PREF_IS_OFFLINE_LOGIN, false)) {
-//      userInfo = UserInfo.load(Helper.username);
-    } else {}
+    String rawString = await rootBundle.loadString(FileAssets.userInfo);
+    var userInfo = UserInfo.fromRawJson(rawString);
+    setState(() {
+      this.userInfo = userInfo;
+    });
+    if (Preferences.getBool(Constants.PREF_DISPLAY_PICTURE, true))
+      _getUserPicture();
   }
 
-//  _getUserPicture() async {
-//    try {
-//      if ((userInfo?.pictureUrl) == null) return;
-//      var response = await http.get(userInfo.pictureUrl);
-//      if (!response.body.contains('html')) {
-//        if (mounted) {
-//          setState(() {
-//            userInfo.pictureBytes = response.bodyBytes;
-//          });
-//        }
+  _getUserPicture() async {
+    try {
+      if ((userInfo?.pictureUrl) == null) return;
+      var response = await http.get(userInfo.pictureUrl);
+      if (!response.body.contains('html')) {
+        if (mounted) {
+          setState(() {
+            userInfo.pictureBytes = response.bodyBytes;
+          });
+        }
 //        CacheUtils.savePictureData(response.bodyBytes);
-//      } else {
-//        var bytes = await CacheUtils.loadPictureData();
-//        if (mounted) {
-//          setState(() {
-//            userInfo.pictureBytes = bytes;
-//          });
-//        }
-//      }
-//    } catch (e) {
-//      throw e;
-//    }
-//  }
+      }
+    } catch (e) {
+      throw e;
+    }
+  }
 
   void _showInformationDialog() {
     DialogUtils.showAnnouncementRule(
@@ -332,6 +325,7 @@ class HomePageState extends State<HomePage> {
     await Future.delayed(Duration(microseconds: 30));
     var username = Preferences.getString(Constants.PREF_USERNAME, '');
     var password = Preferences.getStringSecurity(Constants.PREF_PASSWORD, '');
+    //to login
     isLogin = true;
     Preferences.setBool(Constants.PREF_IS_OFFLINE_LOGIN, false);
     _getUserInfo();
