@@ -131,3 +131,35 @@
 此項目必須加入多國語言設定，否則會無法正常使用
 
 //TODO 文件
+
+-------
+
+## Scaffold
+
+### CourseScaffold
+
+提供顯示課表(Course Table)骨架，支援響應式介面，另將上課通知加入此頁面，屬於非介面功能
+
+![](images/course_scaffold/tablet.png)
+
+| 參數名稱                         | 型態                             | 描述                             |
+| ------------------------------- | ------------------------------- | ------------------------------- |
+| state | CourseState | 必要欄位，總共有 `loading` `finish` `error` `empty` `offlineEmpty` `custom` 的狀態，只有`finish`才會顯示課表介面，其餘都是顯示錯誤狀況 |
+| customStateHint | String | 當 [state] 是 `custom` 時，會顯示此字串 |
+| title | String | Scaffold 標題 |
+| itemPicker | Widget | 使用自訂元件實作學期選擇器，[itemPicker] 與 [semesters] 擇一使用 |
+| semesters | List<String> | 使用字串列表顯示學期選擇器 |
+| semestersIndex | int | 目前學期列表的索引值，[semesters] 不為 Null 時才有效 |
+| onSelect | Function(int index) | 學期列表點擊事件，回傳[semesters]的索引值，[semesters] 不為 Null 時才有效 |
+| isShowSearchButton | String | 是否顯示搜尋按鍵，預設值為 `true` |
+| onSearchButtonClick | Function | 搜尋按鍵點擊事件 |
+| onRefresh | Function | 下拉更新事件 |
+| actions | List<Widget> | 右上角的元件 |
+| customHint | String | 學期選擇器與課表中間的提示字 |
+| enableNotifyControl | bool | 是否顯示上課通知按鍵，預設值為 `true` |
+| notifyData | Function | 上課通知資料 |
+| autoNotifySave | bool | 是否自動儲存上課更新資料，預設值為 `true` |
+| onNotifyClick | Function | 上課通知按鍵點擊事件 |
+| courseNotifySaveKey | String | 若`autoNotifySave`有開啟，儲存的Preference key |
+| enableAddToCalendar | bool | 是否顯示課表加入行事曆按鍵，預設值為 `true` |
+| androidResourceIcon | String | Android的原生資源圖示 |
