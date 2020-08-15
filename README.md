@@ -1,8 +1,11 @@
 # 校務通系列介面與函式共用(施工中)
 
+[![](https://img.shields.io/badge/Flutter-v1.20.2-blue)](https://pub.dev/packages/ap_common/)
 [![](https://img.shields.io/pub/v/ap_common.svg?style=flat-square)](https://pub.dev/packages/ap_common/)
 
 長期校務通相關系列的app，介面與相關功能都極為相似，將相關的介面與函式庫，製作此套件以方便維護。
+
+[展示網頁](https://abc873693.github.io/ap_common_demo/#/)
 
 ## 相關專案
 - [高科校務通](https://github.com/NKUST-ITC/NKUST-AP-Flutter)
@@ -10,7 +13,7 @@
 - [台科校務通](https://github.com/abc873693/NTUST-AP)
 
 ## 套件使用要求
- - Flutter v1.9 以上
+ - Flutter `v1.20` 以上
 
 ## 目前共用項目 Todo List
 
