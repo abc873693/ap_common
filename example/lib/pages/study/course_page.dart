@@ -1,5 +1,6 @@
 import 'package:ap_common/config/ap_constants.dart';
 import 'package:ap_common/models/course_notify_data.dart';
+import 'package:ap_common/models/semester_data.dart';
 import 'package:ap_common/scaffold/course_scaffold.dart';
 import 'package:ap_common/utils/ap_localizations.dart';
 import 'package:ap_common/utils/preferences.dart';
@@ -7,7 +8,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
 import '../../config/constants.dart';
-import '../../models/semester_data.dart';
 import '../../res/assets.dart';
 
 class CoursePage extends StatefulWidget {
@@ -23,9 +23,6 @@ class CoursePageState extends State<CoursePage> {
   CourseState state = CourseState.loading;
 
   SemesterData semesterData;
-
-  List<String> items;
-  int semesterIndex = 0;
 
   CourseData courseData;
 
@@ -63,10 +60,9 @@ class CoursePageState extends State<CoursePage> {
       enableNotifyControl: true,
       courseNotifySaveKey: courseNotifyCacheKey,
       androidResourceIcon: Constants.ANDROID_DEFAULT_NOTIFICATION_NAME,
-      semesterIndex: semesterIndex,
-      semesters: items,
+      semesterData: semesterData,
       onSelect: (index) {
-        this.semesterIndex = index;
+        semesterData.currentIndex = index;
         _getCourseTables();
       },
       onRefresh: () async {
@@ -77,7 +73,7 @@ class CoursePageState extends State<CoursePage> {
   }
 
   Future<bool> _loadCourseData(String value) async {
-    courseData = CourseData.load(items[semesterIndex]);
+    courseData = CourseData.load(semesterData.currentSemester.text);
     if (mounted) {
       setState(() {
         isOffline = true;
@@ -94,11 +90,10 @@ class CoursePageState extends State<CoursePage> {
   void _getSemester() async {
     String rawString = await rootBundle.loadString(FileAssets.semesters);
     semesterData = SemesterData.fromRawJson(rawString);
-    items = [];
     var i = 0;
+    if(semesterData.defaultSemester!=null)
     semesterData.data.forEach((option) {
-      items.add(option.text);
-      if (option.text == semesterData.defaultSemester.text) semesterIndex = i;
+      if (option.text == semesterData.defaultSemester.text) semesterData.currentIndex = i;
       i++;
     });
     _getCourseTables();
