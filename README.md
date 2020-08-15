@@ -136,9 +136,18 @@
 
 ## Scaffold
 
-### CourseScaffold
+### 課表骨架 CourseScaffold
 
-提供顯示課表(Course Table)骨架，支援響應式介面，另將上課通知加入此頁面，屬於非介面功能
+提供顯示課表(Course Table)骨架，另將課表`CourseContent`與課程列表`CourseList`另拆成兩個Ｗidget
+ - 支援響應式介面
+ - 支援上課通知(Android & iOS & MacOS)
+ - 將課表加入至行事曆App(Android & iOS)
+
+ 手機介面
+
+![](images/course_scaffold/mobile.png)
+
+平板 or 桌面版介面
 
 ![](images/course_scaffold/tablet.png)
 
@@ -147,10 +156,9 @@
 | state | CourseState | 必要欄位，總共有 `loading` `finish` `error` `empty` `offlineEmpty` `custom` 的狀態，只有`finish`才會顯示課表介面，其餘都是顯示錯誤狀況 |
 | customStateHint | String | 當 [state] 是 `custom` 時，會顯示此字串 |
 | title | String | Scaffold 標題 |
-| itemPicker | Widget | 使用自訂元件實作學期選擇器，[itemPicker] 與 [semesters] 擇一使用 |
-| semesters | List<String> | 使用字串列表顯示學期選擇器 |
-| semestersIndex | int | 目前學期列表的索引值，[semesters] 不為 Null 時才有效 |
-| onSelect | Function(int index) | 學期列表點擊事件，回傳[semesters]的索引值，[semesters] 不為 Null 時才有效 |
+| itemPicker | Widget | 使用自訂元件實作學期選擇器，[itemPicker] 與 [semesterData] 擇一使用 |
+| semesterData | List<String> | 學期列表 |
+| onSelect | Function(int index) | 學期列表點擊事件，回傳[semesterData]的索引值，[semesterData] 不為 Null 時才有效 |
 | isShowSearchButton | String | 是否顯示搜尋按鍵，預設值為 `true` |
 | onSearchButtonClick | Function | 搜尋按鍵點擊事件 |
 | onRefresh | Function | 下拉更新事件 |
@@ -163,3 +171,63 @@
 | courseNotifySaveKey | String | 若`autoNotifySave`有開啟，儲存的Preference key |
 | enableAddToCalendar | bool | 是否顯示課表加入行事曆按鍵，預設值為 `true` |
 | androidResourceIcon | String | Android的原生資源圖示 |
+
+### CourseData
+
+| 參數名稱                         | 型態                             | 描述                             |
+| ------------------------------- | ------------------------------- | ------------------------------- |
+| courses | List<CourseDetail> | 課表詳細資訊列表，課程列表 `CourseList` 會使用到此部分 |
+| courseTables | CourseTable | 課表內容 `CourseContent` 會使用到此部分 |
+
+### CourseDetail
+
+此類別會影響課程列表中的介面
+
+![](images/course_scaffold/course_detail.png)
+
+| 參數名稱                         | 型態                             | 描述                             |
+| ------------------------------- | ------------------------------- | ------------------------------- |
+| code | String | 課程代碼 |
+| title | String | 課程名稱 |
+| className | String | 課程班級 |
+| group | String | 課程分組 |
+| units | String | 學分數 |
+| hours | String | 上課時數(單位：小時) |
+| required | String | 課程類型，選修、必修等等，右上角藍字 |
+| times | String | 上課節次 |
+| location | Location | 上課位置 |
+| instructors | List<String> | 授課老師 |
+
+### Coursetables
+
+| 參數名稱                         | 型態                             | 描述                             |
+| ------------------------------- | ------------------------------- | ------------------------------- |
+| monday | List<Course> | 星期一的課程 |
+| tuesday | List<Course> | 星期二的課程 |
+| wednesday | List<Course> | 星期三的課程 |
+| thursday | List<Course> | 星期四的課程 |
+| friday | List<Course> | 星期五的課程 |
+| saturday | List<Course> | 星期六的課程 |
+| sunday| List<Course> | 星期日的課程 |
+| timeCodes | List<String> | 所有節次 |
+
+### Course
+
+![](images/course_scaffold/course_bottom_sheet.jpg)
+
+| 參數名稱                         | 型態                             | 描述                             |
+| ------------------------------- | ------------------------------- | ------------------------------- |
+| title | String | 課程名稱 |
+| date | Date | 上課時間 |
+| location | Location | 上課位置 |
+| detailIndex | int | 對應`CourseDetail`的索引值 |
+| instructors | List<String> | 授課老師 |
+
+
+### Date
+
+| 參數名稱                         | 型態                             | 描述                             |
+| ------------------------------- | ------------------------------- | ------------------------------- |
+| startTime | String | 開始時間，格式 `HH:mm` |
+| endTime | String | 結束時間，格式 `HH:mm` |
+| section | String | 節次，對應 `CourseTable` 中的 `timeCodes` |
