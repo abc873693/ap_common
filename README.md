@@ -43,15 +43,15 @@
     - [x] 使用者資訊 `user_info_page.dart`
     - [x] 最新消息詳細資訊 `news_content_page.dart`
  - 頁面骨架(scaffold)
-    - [x] 課表
-    - [x] 成績
-    - [x] 首頁
+    - [x] [課表](#課表骨架-coursescaffold)
+    - [x] [成績](#成績骨架-scorescaffold)
+    - [x] [首頁](#首頁骨架-homescaffold)
     - [ ] 校園資訊
       - [ ] 教務處最新消息
       - [ ] 學校電話
       - [ ] 行事曆
     - [ ] 空堂教室查詢
-    - [X] 登入頁
+    - [X] [登入頁](#首頁骨架-loginscaffold)
  
 ## Getting Started
 
@@ -135,6 +135,8 @@
 -------
 
 ## Scaffold
+
+### 首頁骨架 ScoreScaffold
 
 ### 課表骨架 CourseScaffold
 
@@ -231,3 +233,7 @@
 | startTime | String | 開始時間，格式 `HH:mm` |
 | endTime | String | 結束時間，格式 `HH:mm` |
 | section | String | 節次，對應 `CourseTable` 中的 `timeCodes` |
+
+### 成績骨架 ScoreScaffold
+
+### 登入骨架 LoginScaffold
