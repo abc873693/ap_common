@@ -1,4 +1,5 @@
 import 'package:ap_common/models/score_data.dart';
+import 'package:ap_common/models/semester_data.dart';
 import 'package:ap_common/resources/ap_icon.dart';
 import 'package:ap_common/resources/ap_theme.dart';
 import 'package:ap_common/utils/ap_localizations.dart';
@@ -15,8 +16,7 @@ class ScoreScaffold extends StatefulWidget {
   final ScoreState state;
   final String customStateHint;
   final ScoreData scoreData;
-  final List<String> semesters;
-  final int semesterIndex;
+  final SemesterData semesterData;
   final Function(int index) onSelect;
   final Function onSearchButtonClick;
   final Function() onRefresh;
@@ -39,8 +39,7 @@ class ScoreScaffold extends StatefulWidget {
     @required this.scoreData,
     @required this.onRefresh,
     this.itemPicker,
-    this.semesters,
-    this.semesterIndex,
+    this.semesterData,
     this.onSelect,
     this.onSearchButtonClick,
     this.middleTitle,
@@ -93,12 +92,12 @@ class ScoreScaffoldState extends State<ScoreScaffold> {
           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
           children: <Widget>[
             SizedBox(height: 8.0),
-            if (widget.semesters != null && widget.itemPicker == null)
+            if (widget.semesterData != null && widget.itemPicker == null)
               ItemPicker(
                 dialogTitle: app.picksSemester,
                 onSelected: widget.onSelect,
-                items: widget.semesters,
-                currentIndex: widget.semesterIndex,
+                items: widget.semesterData.semesters,
+                currentIndex: widget.semesterData.currentIndex,
               ),
             if (widget.itemPicker != null) widget.itemPicker,
             if (widget.customHint != null && widget.customHint.isNotEmpty)
@@ -171,13 +170,13 @@ class ScoreScaffoldState extends State<ScoreScaffold> {
   }
 
   void _pickSemester() {
-    if (widget.semesters != null)
+    if (widget.semesterData != null)
       showDialog(
         context: context,
         builder: (_) => SimpleOptionDialog(
           title: app.picksSemester,
-          items: widget.semesters,
-          index: widget.semesterIndex,
+          items: widget.semesterData.semesters,
+          index: widget.semesterData.currentIndex,
           onSelected: widget.onSelect,
         ),
       );
