@@ -145,11 +145,11 @@
 
  手機介面
 
-![](images/course_scaffold/mobile.png)
+ <img src="images/course_scaffold/mobile.png" alt="drawing" width="200"/>
 
 平板 or 桌面版介面
 
-![](images/course_scaffold/tablet.png)
+ <img src="images/course_scaffold/tablet.png" alt="drawing" width="600"/>
 
 | 參數名稱                         | 型態                             | 描述                             |
 | ------------------------------- | ------------------------------- | ------------------------------- |
@@ -183,7 +183,7 @@
 
 此類別會影響課程列表中的介面
 
-![](images/course_scaffold/course_detail.png)
+ <img src="images/course_scaffold/course_detail.png" alt="drawing" width="300"/>
 
 | 參數名稱                         | 型態                             | 描述                             |
 | ------------------------------- | ------------------------------- | ------------------------------- |
@@ -213,7 +213,7 @@
 
 ### Course
 
-![](images/course_scaffold/course_bottom_sheet.jpg)
+ <img src="images/course_scaffold/course_bottom_sheet.jpg" alt="drawing" width="300"/>
 
 | 參數名稱                         | 型態                             | 描述                             |
 | ------------------------------- | ------------------------------- | ------------------------------- |
