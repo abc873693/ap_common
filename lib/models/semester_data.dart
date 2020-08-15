@@ -1,30 +1,37 @@
-// To parse this JSON data, do
-//
-//     final semesterData = semesterDataFromJson(jsonString);
-
 import 'dart:convert';
 
+import 'package:ap_common/config/ap_constants.dart';
 import 'package:ap_common/utils/preferences.dart';
-
-import '../config/constants.dart';
 
 class SemesterData {
   List<Semester> data;
   Semester defaultSemester;
-  int defaultIndex;
+  int currentIndex;
 
-  SemesterData({
-    this.data,
-    this.defaultSemester,
-  }) {
-    defaultIndex = getDefaultIndex();
-  }
-
-  getDefaultIndex() {
+  int get defaultIndex {
+    if (defaultSemester == null) return -1;
     for (var i = 0; i < data.length; i++)
       if (defaultSemester.text == data[i].text) return i;
     return 0;
   }
+
+  Semester get currentSemester {
+    return data[currentIndex];
+  }
+
+  List<String> get semesters {
+    List<String> texts = [];
+    data?.forEach((element) => texts.add(element.text));
+    return texts;
+  }
+
+  SemesterData({
+    this.data,
+    this.defaultSemester,
+    this.currentIndex = 0,
+  });
+
+  getDefaultIndex() {}
 
   factory SemesterData.fromRawJson(String str) =>
       SemesterData.fromJson(json.decode(str));
@@ -35,23 +42,27 @@ class SemesterData {
         data: new List<Semester>.from(
             json["data"].map((x) => Semester.fromJson(x))),
         defaultSemester: Semester.fromJson(json["default"]),
+        currentIndex: json['currentIndex'],
       );
 
   Map<String, dynamic> toJson() => {
         "data": new List<dynamic>.from(data.map((x) => x.toJson())),
         "default": defaultSemester.toJson(),
+        "currentIndex": currentIndex,
       };
 
   void save() {
     Preferences.setString(
-      Constants.PREF_SEMESTER_DATA,
+      '${ApConstants.PACKAGE_NAME}'
+      'semester_data',
       this.toRawJson(),
     );
   }
 
   factory SemesterData.load() {
     String rawString = Preferences.getString(
-      Constants.PREF_SEMESTER_DATA,
+      '${ApConstants.PACKAGE_NAME}'
+          'semester_data',
       '',
     );
     if (rawString == '')

@@ -5,6 +5,7 @@ import 'package:add_2_calendar/add_2_calendar.dart';
 import 'package:ap_common/config/ap_constants.dart';
 import 'package:ap_common/models/course_data.dart';
 import 'package:ap_common/models/course_notify_data.dart';
+import 'package:ap_common/models/semester_data.dart';
 import 'package:ap_common/resources/ap_colors.dart';
 import 'package:ap_common/resources/ap_icon.dart';
 import 'package:ap_common/resources/ap_theme.dart';
@@ -38,8 +39,7 @@ class CourseScaffold extends StatefulWidget {
   final CourseData courseData;
   final String title;
   final Widget itemPicker;
-  final List<String> semesters;
-  final int semesterIndex;
+  final SemesterData semesterData;
   final Function(int index) onSelect;
   final bool isShowSearchButton;
   final Function onSearchButtonClick;
@@ -60,8 +60,7 @@ class CourseScaffold extends StatefulWidget {
     @required this.courseData,
     this.title,
     this.customHint,
-    this.semesters,
-    this.semesterIndex,
+    this.semesterData,
     this.onSelect,
     this.onRefresh,
     this.isShowSearchButton = true,
@@ -116,7 +115,7 @@ class CourseScaffoldState extends State<CourseScaffold> {
               mainAxisSize: MainAxisSize.min,
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: <Widget>[
-                if (widget.semesters != null || widget.itemPicker != null)
+                if (widget.semesterData != null || widget.itemPicker != null)
                   Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     mainAxisSize: MainAxisSize.max,
@@ -126,13 +125,14 @@ class CourseScaffoldState extends State<CourseScaffold> {
 //                items: widget.years,
 //                currentIndex: widget.yearIndex,
 //              ),
-                      if (widget.semesters != null && widget.itemPicker == null)
+                      if (widget.semesterData != null &&
+                          widget.itemPicker == null)
                         Expanded(
                           child: ItemPicker(
                             dialogTitle: app.picksSemester,
                             onSelected: widget.onSelect,
-                            items: widget.semesters,
-                            currentIndex: widget.semesterIndex,
+                            items: widget.semesterData.semesters,
+                            currentIndex: widget.semesterData.currentIndex,
                           ),
                         ),
                       if (widget.itemPicker != null) widget.itemPicker,
@@ -456,13 +456,13 @@ class CourseScaffoldState extends State<CourseScaffold> {
       );
 
   void _pickSemester() {
-    if (widget.semesters != null)
+    if (widget.semesterData != null)
       showDialog(
         context: context,
         builder: (_) => SimpleOptionDialog(
           title: app.picksSemester,
-          items: widget.semesters,
-          index: widget.semesterIndex,
+          items: widget.semesterData.semesters,
+          index: widget.semesterData.currentIndex,
           onSelected: widget.onSelect,
         ),
       );
