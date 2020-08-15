@@ -89,7 +89,6 @@ class CourseDetail {
   String units;
   String hours;
   String required;
-  String at;
   String times;
   Location location;
   List<String> instructors;
@@ -102,7 +101,6 @@ class CourseDetail {
     this.units,
     this.hours,
     this.required,
-    this.at,
     this.times,
     this.location,
     this.instructors,
@@ -121,7 +119,6 @@ class CourseDetail {
         units: json["units"] == null ? null : json["units"],
         hours: json["hours"] == null ? null : json["hours"],
         required: json["required"] == null ? null : json["required"],
-        at: json["at"] == null ? null : json["at"],
         times: json["times"] == null ? null : json["times"],
         location: json["location"] == null
             ? null
@@ -139,7 +136,6 @@ class CourseDetail {
         "units": units == null ? null : units,
         "hours": hours == null ? null : hours,
         "required": required == null ? null : required,
-        "at": at == null ? null : at,
         "times": times == null ? null : times,
         "location": location == null ? null : location.toJson(),
         "instructors": instructors == null
@@ -365,15 +361,17 @@ class Course {
 class Date {
   String startTime;
   String endTime;
-  String weekday;
   String section;
 
-  Date({this.startTime, this.endTime, this.weekday, this.section});
+  Date({
+    this.startTime,
+    this.endTime,
+    this.section,
+  });
 
   Date.fromJson(Map<String, dynamic> json) {
     startTime = json['startTime'] ?? '';
     endTime = json['endTime'] ?? '';
-    weekday = json['weekday'] ?? '';
     section = json['section'] ?? '';
   }
 
@@ -381,7 +379,6 @@ class Date {
     final Map<String, dynamic> data = Map<String, dynamic>();
     data['startTime'] = this.startTime;
     data['endTime'] = this.endTime;
-    data['weekday'] = this.weekday;
     data['section'] = this.section;
     return data;
   }
