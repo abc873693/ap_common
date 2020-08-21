@@ -11,12 +11,12 @@ dependencies:
   flutter:
     sdk: flutter
 
-  ap_common: ">=0.2.7 <1.0.0"
-#    path: ../../GitHub-NKUST-ITC/ap_common
+  ap_common:
+    path: ../../GitHub-NKUST-ITC/ap_common
   #firebase must use particular version
-  firebase_analytics: 5.0.11
-  firebase_remote_config: 0.3.0+3
-  firebase_messaging: 6.0.13
+  firebase_analytics: 5.0.16
+  firebase_remote_config: 0.3.1+1
+  firebase_messaging: 6.0.16
   firebase_crashlytics: 0.1.3+3
 
 dev_dependencies:
