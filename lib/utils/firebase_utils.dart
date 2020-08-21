@@ -7,10 +7,10 @@ import 'package:ap_common_firebase/utils/firebase_analytics_utils.dart';
 import 'package:firebase_analytics/firebase_analytics.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/foundation.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 export 'package:firebase_analytics/firebase_analytics.dart';
 export 'package:firebase_analytics/observer.dart';
-import 'package:url_launcher/url_launcher.dart';
 
 class FirebaseUtils {
   static const NOTIFY_ID = 9919;
