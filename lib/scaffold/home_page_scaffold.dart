@@ -65,6 +65,8 @@ class HomePageScaffoldState extends State<HomePageScaffold> {
 
   Timer _timer;
 
+  bool get isTablet => MediaQuery.of(context).size.shortestSide >= 680;
+
   @override
   void initState() {
     setTimer();
@@ -81,39 +83,49 @@ class HomePageScaffoldState extends State<HomePageScaffold> {
   Widget build(BuildContext context) {
     app = ApLocalizations.of(context);
     return WillPopScope(
-      child: Scaffold(
-        key: _scaffoldKey,
-        appBar: AppBar(
-          title: Text(widget.title ?? ''),
-          backgroundColor: ApTheme.of(context).blue,
-          actions: widget.actions,
-        ),
-        drawer: widget.drawer,
-        floatingActionButton: widget.floatingActionButton,
-        body: OrientationBuilder(
-          builder: (_, orientation) {
-            return Container(
-              padding: EdgeInsets.symmetric(
-                vertical: orientation == Orientation.portrait ? 32.0 : 4.0,
+      child: Row(
+        children: [
+          if (isTablet) widget.drawer,
+          Expanded(
+            child: Scaffold(
+              key: _scaffoldKey,
+              appBar: AppBar(
+                title: Text(widget.title ?? ''),
+                backgroundColor: ApTheme.of(context).blue,
+                actions: widget.actions,
               ),
-              alignment: Alignment.center,
-              child: _homebody(orientation),
-            );
-          },
-        ),
-        bottomNavigationBar: (widget.bottomNavigationBarItems == null)
-            ? null
-            : BottomNavigationBar(
-                elevation: 12.0,
-                fixedColor: ApTheme.of(context).bottomNavigationSelect,
-                unselectedItemColor: ApTheme.of(context).bottomNavigationSelect,
-                type: BottomNavigationBarType.fixed,
-                selectedFontSize: 12.0,
-                unselectedFontSize: 12.0,
-                selectedIconTheme: IconThemeData(size: 24.0),
-                onTap: widget.onTabTapped,
-                items: widget.bottomNavigationBarItems,
+              drawer: isTablet ? null : widget.drawer,
+              floatingActionButton: widget.floatingActionButton,
+              body: OrientationBuilder(
+                builder: (_, orientation) {
+                  return Container(
+                    padding: EdgeInsets.symmetric(
+                      vertical:
+                          orientation == Orientation.portrait ? 32.0 : 4.0,
+                    ),
+                    alignment: Alignment.center,
+                    child: _homebody(orientation),
+                  );
+                },
               ),
+              bottomNavigationBar: (widget.bottomNavigationBarItems == null ||
+                      isTablet)
+                  ? null
+                  : BottomNavigationBar(
+                      elevation: 12.0,
+                      fixedColor: ApTheme.of(context).bottomNavigationSelect,
+                      unselectedItemColor:
+                          ApTheme.of(context).bottomNavigationSelect,
+                      type: BottomNavigationBarType.fixed,
+                      selectedFontSize: 12.0,
+                      unselectedFontSize: 12.0,
+                      selectedIconTheme: IconThemeData(size: 24.0),
+                      onTap: widget.onTabTapped,
+                      items: widget.bottomNavigationBarItems,
+                    ),
+            ),
+          ),
+        ],
       ),
       onWillPop: () async {
         if (Platform.isAndroid) {
