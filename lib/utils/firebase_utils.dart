@@ -17,10 +17,16 @@ class FirebaseUtils {
   static const NOTIFY_ANDROID_CHANNEL_ID = '1000';
   static String androidChannelDescription = 'FCM';
 
+  static bool get isSupportAnalytics =>
+      (kIsWeb || Platform.isAndroid || Platform.isIOS);
+
+  static bool get isSupportCloudMessage =>
+      (!kIsWeb && (Platform.isAndroid || Platform.isIOS));
+
   static FirebaseAnalytics init() {
-    if (!kIsWeb && (Platform.isAndroid || Platform.isIOS)) {
+    if (isSupportCloudMessage) initFcm();
+    if (isSupportAnalytics) {
       FirebaseAnalyticsUtils.analytics = FirebaseAnalytics();
-      initFcm();
       return FirebaseAnalyticsUtils.analytics;
     }
     return null;
