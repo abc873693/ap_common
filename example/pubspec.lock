@@ -56,7 +56,7 @@ packages:
       name: barcode
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "1.16.1"
+    version: "1.17.0"
   barcode_widget:
     dependency: transitive
     description:
@@ -133,7 +133,7 @@ packages:
       name: device_info
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "0.4.2+4"
+    version: "0.4.2+6"
   dio:
     dependency: transitive
     description:
@@ -229,7 +229,7 @@ packages:
       name: flutter_local_notifications
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "1.5.0-beta.6"
+    version: "1.5.0-beta.7"
   flutter_local_notifications_platform_interface:
     dependency: transitive
     description:
@@ -384,7 +384,7 @@ packages:
       name: path_provider_platform_interface
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "1.0.2"
+    version: "1.0.3"
   pedantic:
     dependency: transitive
     description:
@@ -405,7 +405,7 @@ packages:
       name: photo_view
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "0.10.0"
+    version: "0.10.1"
   platform:
     dependency: transitive
     description:
@@ -634,7 +634,7 @@ packages:
       name: url_launcher_web
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "0.1.2"
+    version: "0.1.2+1"
   uuid:
     dependency: transitive
     description:
