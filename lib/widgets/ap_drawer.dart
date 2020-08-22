@@ -131,15 +131,13 @@ class ApDrawerState extends State<ApDrawer> {
 class DrawerItem extends StatelessWidget {
   final IconData icon;
   final String title;
-  final Widget page;
-  final bool needLogin;
+  final Function onTap;
 
   const DrawerItem({
     Key key,
     @required this.icon,
     @required this.title,
-    @required this.page,
-    this.needLogin = false,
+    @required this.onTap,
   }) : super(key: key);
 
   @override
@@ -153,16 +151,7 @@ class DrawerItem extends StatelessWidget {
           fontSize: 16.0,
         ),
       ),
-      onTap: () async {
-        Navigator.of(context).pop();
-        if (needLogin)
-          ApUtils.showToast(
-            context,
-            ApLocalizations.of(context).notLoginHint,
-          );
-        else
-          ApUtils.pushCupertinoStyle(context, page);
-      },
+      onTap: onTap,
     );
   }
 }
@@ -170,15 +159,13 @@ class DrawerItem extends StatelessWidget {
 class DrawerSubItem extends StatelessWidget {
   final IconData icon;
   final String title;
-  final Widget page;
-  final bool needLogin;
+  final Function onTap;
 
   const DrawerSubItem({
     Key key,
     @required this.icon,
     @required this.title,
-    @required this.page,
-    this.needLogin = false,
+    @required this.onTap,
   }) : super(key: key);
 
   @override
@@ -193,16 +180,7 @@ class DrawerSubItem extends StatelessWidget {
           fontSize: 16.0,
         ),
       ),
-      onTap: () async {
-        Navigator.of(context).pop();
-        if (needLogin)
-          ApUtils.showToast(
-            context,
-            ApLocalizations.of(context).notLoginHint,
-          );
-        else
-          ApUtils.pushCupertinoStyle(context, page);
-      },
+      onTap: onTap,
     );
   }
 }
