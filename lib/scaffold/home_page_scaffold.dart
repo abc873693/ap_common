@@ -29,6 +29,7 @@ class HomePageScaffold extends StatefulWidget {
   final Function(Announcement announcement) onImageTapped;
 
   final Widget drawer;
+  final Widget content;
   final Widget floatingActionButton;
 
   final bool isLogin;
@@ -44,6 +45,7 @@ class HomePageScaffold extends StatefulWidget {
     this.onTabTapped,
     this.bottomNavigationBarItems,
     this.drawer,
+    this.content,
     this.floatingActionButton,
     this.title,
     this.onImageTapped,
@@ -87,43 +89,47 @@ class HomePageScaffoldState extends State<HomePageScaffold> {
         children: [
           if (isTablet) widget.drawer,
           Expanded(
-            child: Scaffold(
-              key: _scaffoldKey,
-              appBar: AppBar(
-                title: Text(widget.title ?? ''),
-                backgroundColor: ApTheme.of(context).blue,
-                actions: widget.actions,
-              ),
-              drawer: isTablet ? null : widget.drawer,
-              floatingActionButton: widget.floatingActionButton,
-              body: OrientationBuilder(
-                builder: (_, orientation) {
-                  return Container(
-                    padding: EdgeInsets.symmetric(
-                      vertical:
-                          orientation == Orientation.portrait ? 32.0 : 4.0,
+            child: (isTablet && widget.content != null)
+                ? widget.content
+                : Scaffold(
+                    key: _scaffoldKey,
+                    appBar: AppBar(
+                      title: Text(widget.title ?? ''),
+                      backgroundColor: ApTheme.of(context).blue,
+                      actions: widget.actions,
                     ),
-                    alignment: Alignment.center,
-                    child: _homebody(orientation),
-                  );
-                },
-              ),
-              bottomNavigationBar: (widget.bottomNavigationBarItems == null ||
-                      isTablet)
-                  ? null
-                  : BottomNavigationBar(
-                      elevation: 12.0,
-                      fixedColor: ApTheme.of(context).bottomNavigationSelect,
-                      unselectedItemColor:
-                          ApTheme.of(context).bottomNavigationSelect,
-                      type: BottomNavigationBarType.fixed,
-                      selectedFontSize: 12.0,
-                      unselectedFontSize: 12.0,
-                      selectedIconTheme: IconThemeData(size: 24.0),
-                      onTap: widget.onTabTapped,
-                      items: widget.bottomNavigationBarItems,
+                    drawer: isTablet ? null : widget.drawer,
+                    floatingActionButton: widget.floatingActionButton,
+                    body: OrientationBuilder(
+                      builder: (_, orientation) {
+                        return Container(
+                          padding: EdgeInsets.symmetric(
+                            vertical: orientation == Orientation.portrait
+                                ? 32.0
+                                : 4.0,
+                          ),
+                          alignment: Alignment.center,
+                          child: _homebody(orientation),
+                        );
+                      },
                     ),
-            ),
+                    bottomNavigationBar:
+                        (widget.bottomNavigationBarItems == null || isTablet)
+                            ? null
+                            : BottomNavigationBar(
+                                elevation: 12.0,
+                                fixedColor:
+                                    ApTheme.of(context).bottomNavigationSelect,
+                                unselectedItemColor:
+                                    ApTheme.of(context).bottomNavigationSelect,
+                                type: BottomNavigationBarType.fixed,
+                                selectedFontSize: 12.0,
+                                unselectedFontSize: 12.0,
+                                selectedIconTheme: IconThemeData(size: 24.0),
+                                onTap: widget.onTabTapped,
+                                items: widget.bottomNavigationBarItems,
+                              ),
+                  ),
           ),
         ],
       ),
