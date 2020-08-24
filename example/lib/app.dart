@@ -1,12 +1,11 @@
 import 'dart:io';
 import 'dart:typed_data';
 
-import 'package:ap_common/models/ap_support_language.dart';
 import 'package:ap_common/pages/about_us_page.dart';
 import 'package:ap_common/pages/open_source_page.dart';
 import 'package:ap_common/resources/ap_icon.dart';
 import 'package:ap_common/resources/ap_theme.dart';
-import 'package:ap_common/generated/l10n.dart' as ap_common;
+import 'package:ap_common/utils/ap_localizations.dart';
 import 'package:ap_common/utils/preferences.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
@@ -95,7 +94,7 @@ class MyAppState extends State<MyApp> with WidgetsBindingObserver {
           themeMode: themeMode,
           localizationsDelegates: [
             const AppLocalizationsDelegate(),
-            const ap_common.AppLocalizationDelegate(),
+            const ApLocalizationsDelegate(),
             GlobalMaterialLocalizations.delegate,
             GlobalWidgetsLocalizations.delegate,
             GlobalCupertinoLocalizations.delegate,
@@ -118,7 +117,7 @@ class MyAppState extends State<MyApp> with WidgetsBindingObserver {
   void loadLocale(Locale locale) {
     setState(() {
       AppLocalizationsDelegate().load(locale);
-      ap_common.AppLocalizationDelegate().load(locale);
+      ApLocalizationsDelegate().load(locale);
     });
   }
 }
