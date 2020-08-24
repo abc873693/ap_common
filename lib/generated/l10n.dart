@@ -274,10 +274,10 @@ class ApLocalizations {
   }
 
   /// `Logging...`
-  String get logining {
+  String get loginIng {
     return Intl.message(
       'Logging...',
-      name: 'logining',
+      name: 'loginIng',
       desc: '',
       args: [],
     );

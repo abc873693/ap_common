@@ -23,7 +23,7 @@
   "rememberPassword": "記住密碼",
   "autoLogin": "自動登入",
   "version": "v.%s",
-  "logining": "登入中...",
+  "loginIng": "登入中...",
   "callPhoneTitle": "撥出電話",
   "callPhoneContent": "確定要撥給「%s」？",
   "callPhone": "撥出",
