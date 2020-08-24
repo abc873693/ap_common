@@ -1,7 +1,7 @@
 import 'dart:io';
 
 import 'package:ap_common/models/course_notify_data.dart';
-import 'package:ap_common/utils/ap_localizations.dart';
+import 'package:ap_common/generated/l10n.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';

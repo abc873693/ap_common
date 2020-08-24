@@ -2,7 +2,7 @@ import 'dart:io';
 
 import 'package:ap_common/models/version_info.dart';
 import 'package:ap_common/resources/ap_theme.dart';
-import 'package:ap_common/utils/ap_localizations.dart';
+import 'package:ap_common/generated/l10n.dart';
 import 'package:ap_common/widgets/default_dialog.dart';
 import 'package:ap_common/widgets/yes_no_dialog.dart';
 import 'package:flutter/material.dart';

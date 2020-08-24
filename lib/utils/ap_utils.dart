@@ -2,7 +2,7 @@ import 'dart:io';
 
 import 'package:ap_common/callback/general_callback.dart';
 import 'package:ap_common/resources/ap_theme.dart';
-import 'package:ap_common/utils/ap_localizations.dart';
+import 'package:ap_common/generated/l10n.dart';
 import 'package:ap_common/widgets/yes_no_dialog.dart';
 import 'package:app_review/app_review.dart';
 import 'package:flutter/cupertino.dart';
