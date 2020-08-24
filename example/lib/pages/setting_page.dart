@@ -3,7 +3,7 @@ import 'dart:io';
 import 'package:ap_common/models/ap_support_language.dart';
 import 'package:ap_common/resources/ap_icon.dart';
 import 'package:ap_common/resources/ap_theme.dart';
-import 'package:ap_common/utils/ap_localizations.dart';
+import 'package:ap_common/generated/l10n.dart';
 import 'package:ap_common/utils/ap_utils.dart';
 import 'package:ap_common/utils/preferences.dart';
 import 'package:ap_common/widgets/dialog_option.dart';
@@ -33,6 +33,16 @@ class SettingPageState extends State<SettingPage> {
   bool isOffline = false;
 
   var autoSendEvent = false;
+
+  String get iconText {
+    switch (ApIcon.code) {
+      case ApIcon.FILLED:
+        return ap.filled;
+      case ApIcon.OUTLINED:
+      default:
+        return ap.outlined;
+    }
+  }
 
   @override
   void initState() {
@@ -134,7 +144,7 @@ class SettingPageState extends State<SettingPage> {
             ),
             SettingItem(
               text: ap.iconStyle,
-              subText: ap.iconText,
+              subText: iconText,
               onTap: () {
                 showDialog<int>(
                   context: context,

@@ -1,7 +1,7 @@
 import 'dart:io';
 
 import 'package:ap_common/scaffold/login_scaffold.dart';
-import 'package:ap_common/utils/ap_localizations.dart';
+import 'package:ap_common/generated/l10n.dart';
 import 'package:ap_common/utils/ap_utils.dart';
 import 'package:ap_common/utils/preferences.dart';
 import 'package:ap_common/widgets/progress_dialog.dart';
@@ -62,7 +62,7 @@ class LoginPageState extends State<LoginPage> {
           textInputAction: TextInputAction.next,
           focusNode: usernameFocusNode,
           nextFocusNode: passwordFocusNode,
-          labelText: ap.username,
+          labelText: ap.idHint,
           autofillHints: [AutofillHints.username],
         ),
         ApTextField(
@@ -74,7 +74,7 @@ class LoginPageState extends State<LoginPage> {
             passwordFocusNode.unfocus();
             _login();
           },
-          labelText: ap.password,
+          labelText: ap.passwordHint,
           autofillHints: [AutofillHints.password],
         ),
         SizedBox(height: 8.0),
@@ -87,7 +87,7 @@ class LoginPageState extends State<LoginPage> {
               onChanged: _onAutoLoginChanged,
             ),
             TextCheckBox(
-              text: ap.remember,
+              text: ap.rememberPassword,
               value: isRememberPassword,
               onChanged: _onRememberPasswordChanged,
             ),
