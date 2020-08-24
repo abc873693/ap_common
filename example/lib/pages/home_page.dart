@@ -7,7 +7,7 @@ import 'package:ap_common/pages/open_source_page.dart';
 import 'package:ap_common/resources/ap_icon.dart';
 import 'package:ap_common/resources/ap_theme.dart';
 import 'package:ap_common/scaffold/home_page_scaffold.dart';
-import 'package:ap_common/generated/l10n.dart';
+import 'package:ap_common/utils/ap_localizations.dart';
 import 'package:ap_common/utils/ap_utils.dart';
 import 'package:ap_common/utils/dialog_utils.dart';
 import 'package:ap_common/utils/preferences.dart';
