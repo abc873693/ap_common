@@ -49,12 +49,6 @@ flutter:
 
   assets:
     - assets/images/
-
-flutter_intl:
-  enabled: true
-  class_name: ApLocalizations
-  main_locale: en
-
   # To add assets to your package, add an assets section, like this:
   # assets:
   #  - images/a_dot_burr.jpeg

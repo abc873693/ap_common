@@ -1,7 +1,7 @@
 import 'package:ap_common/config/ap_constants.dart';
 import 'package:ap_common/models/user_info.dart';
 import 'package:ap_common/resources/ap_theme.dart';
-import 'package:ap_common/generated/l10n.dart';
+import 'package:ap_common/utils/ap_localizations.dart';
 import 'package:barcode/barcode.dart';
 import 'package:barcode_widget/barcode_widget.dart';
 import 'package:flutter/material.dart';

@@ -9,7 +9,7 @@ import 'package:ap_common/models/semester_data.dart';
 import 'package:ap_common/resources/ap_colors.dart';
 import 'package:ap_common/resources/ap_icon.dart';
 import 'package:ap_common/resources/ap_theme.dart';
-import 'package:ap_common/generated/l10n.dart';
+import 'package:ap_common/utils/ap_localizations.dart';
 import 'package:ap_common/utils/ap_utils.dart';
 import 'package:ap_common/utils/notification_utils.dart';
 import 'package:ap_common/widgets/hint_content.dart';
@@ -88,16 +88,6 @@ class CourseScaffoldState extends State<CourseScaffold> {
 
   bool get isTablet => MediaQuery.of(context).size.longestSide >= 880;
 
-  List<String> get weekdaysCourse => [
-        app.mon,
-        app.tue,
-        app.wed,
-        app.thu,
-        app.fri,
-        app.sat,
-        app.sun,
-      ];
-
   @override
   void initState() {
     super.initState();
@@ -139,7 +129,7 @@ class CourseScaffoldState extends State<CourseScaffold> {
                           widget.itemPicker == null)
                         Expanded(
                           child: ItemPicker(
-                            dialogTitle: app.pickSemester,
+                            dialogTitle: app.picksSemester,
                             onSelected: widget.onSelect,
                             items: widget.semesterData.semesters,
                             currentIndex: widget.semesterData.currentIndex,
@@ -397,7 +387,7 @@ class CourseScaffoldState extends State<CourseScaffold> {
       columns.add(
         Column(
           children: [
-            _weekBorder(weekdaysCourse[i]),
+            _weekBorder(app.weekdaysCourse[i]),
             ...courseBorders,
           ],
         ),
@@ -470,7 +460,7 @@ class CourseScaffoldState extends State<CourseScaffold> {
       showDialog(
         context: context,
         builder: (_) => SimpleOptionDialog(
-          title: app.pickSemester,
+          title: app.picksSemester,
           items: widget.semesterData.semesters,
           index: widget.semesterData.currentIndex,
           onSelected: widget.onSelect,

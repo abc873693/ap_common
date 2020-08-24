@@ -1,9 +1,8 @@
 import 'dart:convert';
 
 import 'package:ap_common/config/ap_constants.dart';
-import 'package:ap_common/generated/l10n.dart';
 import 'package:ap_common/models/course_data.dart';
-import 'package:ap_common/generated/l10n.dart';
+import 'package:ap_common/utils/ap_localizations.dart';
 import 'package:ap_common/utils/preferences.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:sprintf/sprintf.dart';

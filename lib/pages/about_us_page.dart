@@ -2,7 +2,7 @@ import 'dart:io';
 
 import 'package:ap_common/resources/ap_assets.dart';
 import 'package:ap_common/resources/ap_theme.dart';
-import 'package:ap_common/generated/l10n.dart';
+import 'package:ap_common/utils/ap_localizations.dart';
 import 'package:ap_common/utils/ap_utils.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
@@ -113,7 +113,7 @@ class AboutUsPageState extends State<AboutUsPage> {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: <Widget>[
                       Text(
-                        app.aboutContactUs,
+                        app.aboutContactUsTitle,
                         style: TextStyle(fontSize: 18.0),
                       ),
                       SizedBox(
