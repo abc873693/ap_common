@@ -28,3 +28,8 @@ flutter:
   assets:
     - assets/images/
     - assets/
+
+flutter_intl:
+  enabled: true
+  class_name: AppLocalizations
+  main_locale: en

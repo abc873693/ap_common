@@ -1,5 +1,6 @@
 import 'package:ap_common/api/github_helper.dart';
 import 'package:ap_common/callback/general_callback.dart';
+import 'package:ap_common/generated/l10n.dart';
 import 'package:ap_common/models/user_info.dart';
 import 'package:ap_common/pages/announcement_content_page.dart';
 import 'package:ap_common/pages/about_us_page.dart';
@@ -7,11 +8,11 @@ import 'package:ap_common/pages/open_source_page.dart';
 import 'package:ap_common/resources/ap_icon.dart';
 import 'package:ap_common/resources/ap_theme.dart';
 import 'package:ap_common/scaffold/home_page_scaffold.dart';
-import 'package:ap_common/generated/l10n.dart';
 import 'package:ap_common/utils/ap_utils.dart';
 import 'package:ap_common/utils/dialog_utils.dart';
 import 'package:ap_common/utils/preferences.dart';
 import 'package:ap_common/widgets/ap_drawer.dart';
+import 'package:ap_common_example/generated/l10n.dart';
 import 'package:ap_common_example/pages/setting_page.dart';
 import 'package:ap_common_example/pages/user_info_page.dart';
 import 'package:flutter/services.dart';
@@ -21,7 +22,6 @@ import 'package:flutter/material.dart';
 
 import '../config/constants.dart';
 import '../res/assets.dart';
-import '../utils/app_localizations.dart';
 import 'login_page.dart';
 import 'study/course_page.dart';
 import 'study/score_page.dart';
@@ -49,7 +49,7 @@ class HomePageState extends State<HomePage> {
   Widget content;
 
   List<Announcement> get announcements =>
-      (newsMap == null) ? null : newsMap[AppLocalizations.locale.languageCode];
+      (newsMap == null) ? null : newsMap[Localizations.localeOf(context).languageCode];
 
   var isLogin = false;
   bool displayPicture = true;
@@ -155,7 +155,7 @@ class HomePageState extends State<HomePage> {
         widgets: <Widget>[
           DrawerItem(
             icon: ApIcon.face,
-            title: 'Home',
+            title: AppLocalizations.of(context).appName,
             onTap: () => setState(() => content = null),
           ),
           ExpansionTile(
