@@ -23,7 +23,7 @@
   "rememberPassword": "Remember",
   "autoLogin": "Auto login",
   "version": "v.%s",
-  "loginIng": "Logging...",
+  "logining": "Logging...",
   "callPhoneTitle": "Call this number",
   "callPhoneContent": "Are you sure to call \"%s\"?",
   "callPhone": "Call",
