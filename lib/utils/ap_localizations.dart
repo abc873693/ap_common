@@ -57,6 +57,8 @@ class ApLocalizations {
         saturday,
       ];
 
+  String get home => _vocabularies['home'];
+
   String get updateNoteTitle => _vocabularies['update_note_title'];
 
   String get ok => _vocabularies['ok'];
@@ -712,6 +714,7 @@ class ApLocalizations {
   static Map<String, Map<String, String>> _localizedValues = {
     'en': {
       'update_note_title': 'Update Notes',
+      'home': 'Home',
       'splash_content': '我們全都包了\n只剩下學校不包我們',
       'share': 'Share',
       'teacher_confirm_title': 'Are you a teacher?',
@@ -1090,6 +1093,7 @@ class ApLocalizations {
     },
     'zh': {
       'update_note_title': '更新日誌',
+      'home': '首頁',
       'splash_content': '我們全都包了\n只剩下學校不包我們',
       'share': '分享',
       'teacher_confirm_title': '您是老師嗎？',

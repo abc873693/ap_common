@@ -155,7 +155,7 @@ class HomePageState extends State<HomePage> {
         widgets: <Widget>[
           DrawerItem(
             icon: ApIcon.face,
-            title: 'Home',
+            title: ap.home,
             onTap: () => setState(() => content = null),
           ),
           ExpansionTile(
