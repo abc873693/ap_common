@@ -323,7 +323,7 @@ class HomePageScaffoldState extends State<HomePageScaffold> {
     Function onSnackBarTapped,
     Duration duration,
   }) {
-    return _scaffoldKey.currentState.showSnackBar(
+    return _scaffoldKey?.currentState?.showSnackBar(
       SnackBar(
         content: Text(text),
         duration: duration ?? Duration(days: 1),
