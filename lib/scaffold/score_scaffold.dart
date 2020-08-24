@@ -230,97 +230,109 @@ class _ScoreContentState extends State<ScoreContent> {
         ),
       );
 
+  bool get isTablet => MediaQuery.of(context).size.longestSide >= 880;
+
   @override
   Widget build(BuildContext context) {
     return SingleChildScrollView(
       physics: const AlwaysScrollableScrollPhysics(),
       child: Container(
         padding: EdgeInsets.symmetric(horizontal: 16.0, vertical: 8),
-        child: Column(
+        child: Flex(
+          direction: isTablet ? Axis.horizontal : Axis.vertical,
           mainAxisSize: MainAxisSize.max,
           children: <Widget>[
-            Container(
-              decoration: _boxDecoration,
-              child: Table(
-                columnWidths: const <int, TableColumnWidth>{
-                  0: FlexColumnWidth(2.5),
-                  1: FlexColumnWidth(1.0),
-                  2: FlexColumnWidth(1.0),
-                },
-                defaultVerticalAlignment: TableCellVerticalAlignment.middle,
-                border: _tableBorder,
-                children: [
-                  TableRow(
-                    children: <Widget>[
-                      ScoreTextBorder(
-                        text: ApLocalizations.of(context).subject,
-                        style: _textBlueStyle,
-                      ),
-                      ScoreTextBorder(
-                        text: widget.middleTitle ??
-                            ApLocalizations.of(context).midtermScore,
-                        style: _textBlueStyle,
-                      ),
-                      ScoreTextBorder(
-                        text: widget.finalTitle ??
-                            ApLocalizations.of(context).finalScore,
-                        style: _textBlueStyle,
-                      ),
-                    ],
-                  ),
-                  for (var i = 0; i < widget.scoreData.scores.length; i++)
-                    TableRow(
-                      children: <Widget>[
-                        ScoreTextBorder(
-                          text: widget.scoreData.scores[i].title,
-                          style: _textStyle,
-                        ),
-                        if (widget.middleScoreBuilder == null)
-                          ScoreTextBorder(
-                            text: widget.scoreData.scores[i].middleScore,
-                            style: _textStyle,
-                          ),
-                        if (widget.middleScoreBuilder != null)
-                          widget.middleScoreBuilder(i),
-                        if (widget.finalScoreBuilder == null)
-                          ScoreTextBorder(
-                            text: widget.scoreData.scores[i].finalScore,
-                            style: _textStyle,
-                          ),
-                        if (widget.finalScoreBuilder != null)
-                          widget.finalScoreBuilder(i)
-                      ],
-                    )
-                ],
-              ),
-            ),
-            SizedBox(height: 20.0),
-            if (widget.details != null && widget.details.length != 0)
-              Container(
+            Flexible(
+              flex: isTablet ? 2 : 0,
+              child: Container(
                 decoration: _boxDecoration,
                 child: Table(
                   columnWidths: const <int, TableColumnWidth>{
-                    0: FlexColumnWidth(1.0),
+                    0: FlexColumnWidth(2.5),
+                    1: FlexColumnWidth(1.0),
+                    2: FlexColumnWidth(1.0),
                   },
                   defaultVerticalAlignment: TableCellVerticalAlignment.middle,
                   border: _tableBorder,
                   children: [
-                    for (var text in widget.details)
+                    TableRow(
+                      children: <Widget>[
+                        ScoreTextBorder(
+                          text: ApLocalizations.of(context).subject,
+                          style: _textBlueStyle,
+                        ),
+                        ScoreTextBorder(
+                          text: widget.middleTitle ??
+                              ApLocalizations.of(context).midtermScore,
+                          style: _textBlueStyle,
+                        ),
+                        ScoreTextBorder(
+                          text: widget.finalTitle ??
+                              ApLocalizations.of(context).finalScore,
+                          style: _textBlueStyle,
+                        ),
+                      ],
+                    ),
+                    for (var i = 0; i < widget.scoreData.scores.length; i++)
                       TableRow(
                         children: <Widget>[
-                          Container(
-                            width: double.infinity,
-                            padding: EdgeInsets.all(2.0),
-                            alignment: Alignment.center,
-                            child: SelectableText(
-                              text ?? '',
-                              textAlign: TextAlign.center,
-                              style: _textBlueStyle,
-                            ),
+                          ScoreTextBorder(
+                            text: widget.scoreData.scores[i].title,
+                            style: _textStyle,
                           ),
+                          if (widget.middleScoreBuilder == null)
+                            ScoreTextBorder(
+                              text: widget.scoreData.scores[i].middleScore,
+                              style: _textStyle,
+                            ),
+                          if (widget.middleScoreBuilder != null)
+                            widget.middleScoreBuilder(i),
+                          if (widget.finalScoreBuilder == null)
+                            ScoreTextBorder(
+                              text: widget.scoreData.scores[i].finalScore,
+                              style: _textStyle,
+                            ),
+                          if (widget.finalScoreBuilder != null)
+                            widget.finalScoreBuilder(i)
                         ],
-                      ),
+                      )
                   ],
+                ),
+              ),
+            ),
+            SizedBox(
+              height: isTablet ? 0.0 : 20.0,
+              width: isTablet ? 20 : 0.0,
+            ),
+            if (widget.details != null && widget.details.length != 0)
+              Flexible(
+                flex: isTablet ? 1 : 0,
+                child: Container(
+                  decoration: _boxDecoration,
+                  child: Table(
+                    columnWidths: const <int, TableColumnWidth>{
+                      0: FlexColumnWidth(1.0),
+                    },
+                    defaultVerticalAlignment: TableCellVerticalAlignment.middle,
+                    border: _tableBorder,
+                    children: [
+                      for (var text in widget.details)
+                        TableRow(
+                          children: <Widget>[
+                            Container(
+                              width: double.infinity,
+                              padding: EdgeInsets.all(2.0),
+                              alignment: Alignment.center,
+                              child: SelectableText(
+                                text ?? '',
+                                textAlign: TextAlign.center,
+                                style: _textBlueStyle,
+                              ),
+                            ),
+                          ],
+                        ),
+                    ],
+                  ),
                 ),
               ),
           ],
