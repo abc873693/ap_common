@@ -7,7 +7,7 @@ import 'package:ap_common/pages/open_source_page.dart';
 import 'package:ap_common/resources/ap_icon.dart';
 import 'package:ap_common/resources/ap_theme.dart';
 import 'package:ap_common/scaffold/home_page_scaffold.dart';
-import 'package:ap_common/utils/ap_localizations.dart';
+import 'package:ap_common/generated/l10n.dart';
 import 'package:ap_common/utils/ap_utils.dart';
 import 'package:ap_common/utils/dialog_utils.dart';
 import 'package:ap_common/utils/preferences.dart';
@@ -37,12 +37,16 @@ class HomePageState extends State<HomePage> {
   final GlobalKey<HomePageScaffoldState> _homeKey =
       GlobalKey<HomePageScaffoldState>();
 
+  bool get isTablet => MediaQuery.of(context).size.shortestSide < 680;
+
   var state = HomeState.loading;
 
   AppLocalizations app;
   ApLocalizations ap;
 
   Map<String, List<Announcement>> newsMap;
+
+  Widget content;
 
   List<Announcement> get announcements =>
       (newsMap == null) ? null : newsMap[AppLocalizations.locale.languageCode];
@@ -130,6 +134,7 @@ class HomePageState extends State<HomePage> {
           onPressed: _showInformationDialog,
         ),
       ],
+      content: content,
       drawer: ApDrawer(
         userInfo: userInfo,
         displayPicture:
@@ -143,11 +148,16 @@ class HomePageState extends State<HomePage> {
                 UserInfoPage(userInfo: userInfo),
               );
           } else {
-            Navigator.of(context).pop();
+            if (isTablet) Navigator.of(context).pop();
             openLoginPage();
           }
         },
         widgets: <Widget>[
+          DrawerItem(
+            icon: ApIcon.face,
+            title: 'Home',
+            onTap: () => setState(() => content = null),
+          ),
           ExpansionTile(
             initiallyExpanded: isStudyExpanded,
             onExpansionChanged: (bool) {
@@ -166,12 +176,18 @@ class HomePageState extends State<HomePage> {
               DrawerSubItem(
                 icon: ApIcon.classIcon,
                 title: ap.course,
-                page: CoursePage(),
+                onTap: () => _openPage(
+                  CoursePage(),
+                  needLogin: true,
+                ),
               ),
               DrawerSubItem(
                 icon: ApIcon.assignment,
                 title: ap.score,
-                page: ScorePage(),
+                onTap: () => _openPage(
+                  ScorePage(),
+                  needLogin: true,
+                ),
               ),
 //              DrawerSubItem(
 //                icon: ApIcon.room,
@@ -188,27 +204,29 @@ class HomePageState extends State<HomePage> {
           DrawerItem(
             icon: ApIcon.face,
             title: ap.about,
-            page: aboutPage(context, assetImage: ImageAssets.sectionJiangong),
+            onTap: () => _openPage(
+              aboutPage(context, assetImage: ImageAssets.sectionJiangong),
+            ),
           ),
           DrawerItem(
             icon: ApIcon.settings,
             title: ap.settings,
-            page: SettingPage(),
+            onTap: () => _openPage(
+              SettingPage(),
+            ),
           ),
           if (isLogin)
-            ListTile(
-              leading: Icon(
-                ApIcon.powerSettingsNew,
-                color: ApTheme.of(context).grey,
-              ),
+            DrawerItem(
+              icon: ApIcon.powerSettingsNew,
+              title: ap.logout,
               onTap: () async {
                 await Preferences.setBool(Constants.PREF_AUTO_LOGIN, false);
                 isLogin = false;
                 userInfo = null;
-                Navigator.of(context).pop();
+                content = null;
+                if (isTablet) Navigator.of(context).pop();
                 checkLogin();
               },
-              title: Text(ap.logout, style: _defaultStyle),
             ),
         ],
       ),
@@ -371,6 +389,21 @@ class HomePageState extends State<HomePage> {
           checkLogin();
         },
       );
+    }
+  }
+
+  _openPage(Widget page, {needLogin = false}) {
+    if (isTablet) Navigator.of(context).pop();
+    if (needLogin && !isLogin)
+      ApUtils.showToast(
+        context,
+        ApLocalizations.of(context).notLoginHint,
+      );
+    else {
+      if (isTablet) {
+        ApUtils.pushCupertinoStyle(context, page);
+      } else
+        setState(() => content = page);
     }
   }
 }
