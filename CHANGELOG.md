@@ -1,3 +1,10 @@
+## [0.5.0] - 2020/08/25
+
+* 首頁骨架可支援響應式
+* 將 app review API 替換成 in_app_review 好支援 macOS版本
+* 新增學校資訊頁面
+* 新增電話資訊頁面
+
 ## [0.4.1] - 2020/08/11
 
 * 將 keyboard_visibility 替換成 flutter_keyboard_visibility
