@@ -5,6 +5,8 @@ PODS:
   - FMDB (2.7.5):
     - FMDB/standard (= 2.7.5)
   - FMDB/standard (2.7.5)
+  - in_app_review (0.2.0):
+    - FlutterMacOS
   - native_pdf_renderer (1.0.0):
     - FlutterMacOS
   - package_info (0.0.1):
@@ -25,6 +27,7 @@ PODS:
 DEPENDENCIES:
   - flutter_local_notifications (from `Flutter/ephemeral/.symlinks/plugins/flutter_local_notifications/macos`)
   - FlutterMacOS (from `Flutter/ephemeral/.symlinks/flutter/darwin-x64`)
+  - in_app_review (from `Flutter/ephemeral/.symlinks/plugins/in_app_review/macos`)
   - native_pdf_renderer (from `Flutter/ephemeral/.symlinks/plugins/native_pdf_renderer/macos`)
   - package_info (from `Flutter/ephemeral/.symlinks/plugins/package_info/macos`)
   - path_provider (from `Flutter/ephemeral/.symlinks/plugins/path_provider/macos`)
@@ -44,6 +47,8 @@ EXTERNAL SOURCES:
     :path: Flutter/ephemeral/.symlinks/plugins/flutter_local_notifications/macos
   FlutterMacOS:
     :path: Flutter/ephemeral/.symlinks/flutter/darwin-x64
+  in_app_review:
+    :path: Flutter/ephemeral/.symlinks/plugins/in_app_review/macos
   native_pdf_renderer:
     :path: Flutter/ephemeral/.symlinks/plugins/native_pdf_renderer/macos
   package_info:
@@ -67,6 +72,7 @@ SPEC CHECKSUMS:
   flutter_local_notifications: 3805ca215b2fb7f397d78b66db91f6a747af52e4
   FlutterMacOS: 15bea8a44d2fa024068daa0140371c020b4b6ff9
   FMDB: 2ce00b547f966261cd18927a3ddb07cb6f3db82a
+  in_app_review: a850789fad746e89bce03d4aeee8078b45a53fd0
   native_pdf_renderer: 88fab8a66bc2da5107316894eb288749d9d356b2
   package_info: 6eba2fd8d3371dda2d85c8db6fe97488f24b74b2
   path_provider: e0848572d1d38b9a7dd099e79cf83f5b7e2cde9f
