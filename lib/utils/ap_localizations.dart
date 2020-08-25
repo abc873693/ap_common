@@ -1087,7 +1087,7 @@ class ApLocalizations {
       'add_to_calendar': 'Add to Calendar',
       'api_server_error': 'AP Server Error\nPlease report to fans page',
       'school_server_error': 'School Server Error\nPlease report to school',
-      'room_list': 'Classoom List',
+      'room_list': 'Classroom List',
       'empty_classroom_search': 'Empty classroom search',
       'classroom_coursetable_search': 'Classroom Coursetable Search',
     },
