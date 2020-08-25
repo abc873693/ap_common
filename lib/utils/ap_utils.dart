@@ -121,17 +121,82 @@ class ApUtils {
         leftActionText: app.later,
         rightActionText: app.rateNow,
         leftActionFunction: null,
-        rightActionFunction: () async {
-          final InAppReview inAppReview = InAppReview.instance;
-          if (!kIsWeb &&
-              (Platform.isAndroid || Platform.isIOS || Platform.isMacOS) &&
-              (await inAppReview.isAvailable())) {
-            inAppReview.requestReview();
-          } else
-            launchUrl(defaultUrl);
-        },
+        rightActionFunction: () => openAppReview(defaultUrl: defaultUrl),
       ),
     );
+  }
+
+  static void showAppReviewSheet(
+    BuildContext context,
+    String defaultUrl,
+  ) async {
+    // await Future.delayed(Duration(seconds: 1));
+    final app = ApLocalizations.of(context);
+    showModalBottomSheet(
+      context: context,
+      builder: (BuildContext context) => Column(
+        mainAxisSize: MainAxisSize.min,
+        children: <Widget>[
+          Padding(
+            padding: EdgeInsets.symmetric(vertical: 8, horizontal: 16),
+            child: Align(
+              alignment: Alignment.center,
+              child: Text(
+                app.ratingDialogTitle,
+                style:
+                    TextStyle(color: ApTheme.of(context).blue, fontSize: 20.0),
+              ),
+            ),
+          ),
+          RichText(
+            textAlign: TextAlign.center,
+            text: TextSpan(
+                style: TextStyle(
+                    color: ApTheme.of(context).grey,
+                    height: 1.3,
+                    fontSize: 18.0),
+                children: [
+                  TextSpan(text: app.ratingDialogContent),
+                ]),
+          ),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.end,
+            children: <Widget>[
+              FlatButton(
+                onPressed: () {
+                  Navigator.of(context).pop();
+                },
+                child: Text(
+                  app.later,
+                  style: TextStyle(
+                      color: ApTheme.of(context).blue, fontSize: 16.0),
+                ),
+              ),
+              FlatButton(
+                onPressed: () => openAppReview(defaultUrl: defaultUrl),
+                child: Text(
+                  app.rateNow,
+                  style: TextStyle(
+                      color: ApTheme.of(context).blue, fontSize: 16.0),
+                ),
+              ),
+            ],
+          )
+        ],
+      ),
+    );
+  }
+
+  Future<void> openAppReview({
+    String defaultUrl = '',
+  }) async {
+    final InAppReview inAppReview = InAppReview.instance;
+    if (!kIsWeb &&
+        (Platform.isAndroid || Platform.isIOS || Platform.isMacOS) &&
+        (await inAppReview.isAvailable())) {
+      inAppReview.requestReview();
+    } else
+      launchUrl(defaultUrl);
   }
 
   static var overlayEntry;
