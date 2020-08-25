@@ -13,6 +13,7 @@ import 'package:ap_common/utils/dialog_utils.dart';
 import 'package:ap_common/utils/preferences.dart';
 import 'package:ap_common/widgets/ap_drawer.dart';
 import 'package:ap_common_example/pages/setting_page.dart';
+import 'package:ap_common_example/pages/shcool_info_page.dart';
 import 'package:ap_common_example/pages/user_info_page.dart';
 import 'package:flutter/services.dart';
 import 'package:http/http.dart' as http;
@@ -196,11 +197,14 @@ class HomePageState extends State<HomePage> {
 //              ),
             ],
           ),
-//          DrawerItem(
-//            icon: ApIcon.info,
-//            title: ap.schoolInfo,
-//            page: SchoolInfoPage(),
-//          ),
+          DrawerItem(
+            icon: ApIcon.info,
+            title: ap.schoolInfo,
+            onTap: () => _openPage(
+              SchoolInfoPage(),
+              needLogin: true,
+            ),
+          ),
           DrawerItem(
             icon: ApIcon.face,
             title: ap.about,
