@@ -187,7 +187,7 @@ class ApUtils {
     );
   }
 
-  Future<void> openAppReview({
+  static Future<void> openAppReview({
     String defaultUrl = '',
   }) async {
     final InAppReview inAppReview = InAppReview.instance;
