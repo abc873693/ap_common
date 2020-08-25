@@ -141,6 +141,37 @@
 
 ### 首頁骨架 ScoreScaffold
 
+提供校務通首頁(Home Page)骨架
+ - 支援響應式介面
+   - shortestSide >= 680 會開啟平板模式
+ - 正中間由 `announcements` 顯示輪播資訊
+ - 可註冊 `HomePageScaffoldState` 存取 Snacker Bar 的行為，詳細可參考 example
+
+手機介面
+
+ <img src="images/home_scaffold/mobile.png" alt="drawing" width="200"/>
+
+平板 or 桌面版介面
+
+ <img src="images/home_scaffold/tablet.png" alt="drawing" width="600"/>
+
+| 參數名稱                         | 型態                             | 描述                             |
+| ------------------------------- | ------------------------------- | ------------------------------- |
+| state | CourseState | 必要欄位，總共有 `loading` `finish` `error` `empty` `offlineEmpty` `custom` 的狀態，只有`finish`才會顯示課表介面，其餘都是顯示錯誤狀況 |
+| title | String | Scaffold 標題 |
+| announcements | List<Announcements> | 最新消息列表 |
+| isLogin | bool | 控制下方的Snacker Bar是否顯示要登入 |
+| actions | List<Widget> | 在右上角可顯示元件列表，為Flutter Scaffold原生的API |
+| onTabTapped | Function(int index) | 底下`BottomNavigationBar`點擊時的事件，回傳點擊的索引值 |
+| bottomNavigationBarItems | List<BottomNavigationBarItem> | 底下`BottomNavigationBar`的元素，為Flutter Scaffold原生的API |
+| drawer | Widget | 左方的抽屜(Drawer)元件，為Flutter Scaffold原生的API |
+| content | Widget | 使用平板介面時，右方會顯示Content的內容，`null`時則顯示首頁 |
+| actions | List<Widget> | 右上角的元件 |
+| floatingActionButton | Widget | Material Design 的 FloatingActionButton 位置放的元件，為Flutter Scaffold原生的API |
+| onImageTapped | Function(Announcement announcement) | 點擊最新消息的圖片事件，回傳`Announcement` |
+| autoPlay | Function | 是否自動輪播最新消息，預設值為 `true` |
+| autoPlayDuration | bool | 最新消息自動輪播的時間間距，預設值為 `5秒` |
+
 ### 課表骨架 CourseScaffold
 
 提供顯示課表(Course Table)骨架，另將課表`CourseContent`與課程列表`CourseList`另拆成兩個Ｗidget
