@@ -4,11 +4,11 @@ import 'package:ap_common/callback/general_callback.dart';
 import 'package:ap_common/resources/ap_theme.dart';
 import 'package:ap_common/utils/ap_localizations.dart';
 import 'package:ap_common/widgets/yes_no_dialog.dart';
-import 'package:app_review/app_review.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
+import 'package:in_app_review/in_app_review.dart';
 import 'package:package_info/package_info.dart';
 import 'package:share/share.dart';
 import 'package:toast/toast.dart';
@@ -121,12 +121,13 @@ class ApUtils {
         leftActionText: app.later,
         rightActionText: app.rateNow,
         leftActionFunction: null,
-        rightActionFunction: () {
-          if (!kIsWeb && (Platform.isAndroid || Platform.isIOS))
-            AppReview.requestReview.then((onValue) {
-              print(onValue);
-            });
-          else
+        rightActionFunction: () async {
+          final InAppReview inAppReview = InAppReview.instance;
+          if (!kIsWeb &&
+              (Platform.isAndroid || Platform.isIOS || Platform.isMacOS) &&
+              (await inAppReview.isAvailable())) {
+            inAppReview.requestReview();
+          } else
             launchUrl(defaultUrl);
         },
       ),
