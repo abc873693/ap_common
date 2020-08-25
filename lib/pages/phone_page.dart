@@ -135,7 +135,7 @@ class PhonePageState extends State<PhonePage>
         if (widget.logEvent != null) widget.logEvent('call_phone', 'click');
         try {
           ApUtils.callPhone(phone.number);
-          if (widget.logEvent != null) widget.logEvent('call_phone_succes', '');
+          if (widget.logEvent != null) widget.logEvent('call_phone_success', '');
         } catch (e) {
           if (widget.logEvent != null) widget.logEvent('call_phone_error', '');
         }
