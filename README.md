@@ -145,8 +145,10 @@
 
 提供顯示課表(Course Table)骨架，另將課表`CourseContent`與課程列表`CourseList`另拆成兩個Ｗidget
  - 支援響應式介面
- - 支援上課通知(Android & iOS & MacOS)
- - 將課表加入至行事曆App(Android & iOS)
+ - 支援上課通知 (Android & iOS & MacOS)
+ - 將課表加入至行事曆App (Android & iOS)
+ - 提供學期列表的區域，預設只提供學期資料`SemesterData`，即可使用相關的 Callback
+ - `CourseContent`中的顏色由`CourseData`中的`updateIndex()` 找出該課堂在 `CourseList` 的索引值決定，順序為Material Design的500系列顏色
 
  手機介面
 
