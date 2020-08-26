@@ -386,4 +386,14 @@ class ApIcon {
         return OMIcons.room;
     }
   }
+
+  static IconData get home {
+    switch (ApIcon.code) {
+      case ApIcon.FILLED:
+        return Icons.home;
+      case ApIcon.OUTLINED:
+      default:
+        return OMIcons.home;
+    }
+  }
 }
