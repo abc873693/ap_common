@@ -154,11 +154,12 @@ class HomePageState extends State<HomePage> {
           }
         },
         widgets: <Widget>[
-          DrawerItem(
-            icon: ApIcon.face,
-            title: ap.home,
-            onTap: () => setState(() => content = null),
-          ),
+          if (isTablet)
+            DrawerItem(
+              icon: ApIcon.home,
+              title: ap.home,
+              onTap: () => setState(() => content = null),
+            ),
           ExpansionTile(
             initiallyExpanded: isStudyExpanded,
             onExpansionChanged: (bool) {

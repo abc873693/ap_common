@@ -62,6 +62,8 @@ class SchoolInfoPageState extends State<SchoolInfoPage>
 
   PhoneState phoneState = PhoneState.finish;
 
+  PdfState pdfState = PdfState.loading;
+
   Uint8List byteList;
 
   ApLocalizations ap;
@@ -98,7 +100,7 @@ class SchoolInfoPageState extends State<SchoolInfoPage>
           NotificationScaffold(
             state: notificationState,
             notificationList: notificationList,
-            onRefresh: (){
+            onRefresh: () {
               setState(() {
                 notificationList.clear();
               });
@@ -110,7 +112,9 @@ class SchoolInfoPageState extends State<SchoolInfoPage>
             phoneModelList: phoneModelList,
           ),
           PdfScaffold(
+            state: pdfState,
             byteList: byteList,
+            onRefresh: () => _getSchedules(),
           ),
         ],
         controller: controller,
@@ -165,8 +169,14 @@ class SchoolInfoPageState extends State<SchoolInfoPage>
         options: Options(responseType: ResponseType.bytes),
       );
       setState(() {
+        pdfState = PdfState.finish;
         byteList = response.data;
       });
-    } catch (e) {}
+    } catch (e) {
+      setState(() {
+        pdfState = PdfState.error;
+      });
+      throw e;
+    }
   }
 }
