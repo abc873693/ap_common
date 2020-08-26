@@ -1,3 +1,9 @@
+## [0.5.2] - 2020/08/26
+
+* 恢復 flutter_local_notification 至穩定版本
+* 重構 NotificationPage 及 PhonePage 至 Scaffold
+* 加入大多數 API 文件
+
 ## [0.5.1] - 2020/08/25
 
 * 修正 app review API 參考錯誤
