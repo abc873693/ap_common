@@ -13,12 +13,14 @@ class PdfScaffold extends StatefulWidget {
   final Uint8List byteList;
   final Function onRefresh;
 
-  const PdfScaffold({
+  PdfScaffold({
     Key key,
     @required this.state,
     @required this.byteList,
     this.onRefresh,
-  }) : super(key: key);
+  }) : super(key: key) {
+    assert(this.state != null);
+  }
 
   @override
   _PdfScaffoldState createState() => _PdfScaffoldState();
