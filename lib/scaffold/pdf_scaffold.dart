@@ -41,21 +41,26 @@ class _PdfScaffoldState extends State<PdfScaffold> {
           alignment: Alignment.center,
         );
       case PdfState.error:
-        return FlatButton(
-          onPressed: () {
-            if (widget.onRefresh != null) widget.onRefresh();
-          },
-          child: HintContent(
-            icon: ApIcon.error,
-            content: ApLocalizations.of(context).clickToRetry,
-          ),
-        );
+        return errorContent;
       default:
-        return PdfView(
-          controller: PdfController(
-            document: PdfDocument.openData(widget.byteList),
-          ),
-        );
+        if (widget.byteList == null)
+          return errorContent;
+        else
+          return PdfView(
+            controller: PdfController(
+              document: PdfDocument.openData(widget.byteList),
+            ),
+          );
     }
   }
+
+  Widget get errorContent => FlatButton(
+        onPressed: () {
+          if (widget.onRefresh != null) widget.onRefresh();
+        },
+        child: HintContent(
+          icon: ApIcon.error,
+          content: ApLocalizations.of(context).clickToRetry,
+        ),
+      );
 }
