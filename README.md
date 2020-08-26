@@ -144,6 +144,8 @@
 提供校務通首頁(Home Page)骨架
  - 支援響應式介面
    - shortestSide >= 680 會開啟平板模式
+   - 平板模式開啟時 `BottomNavigationBar` 會隱藏
+   - 平板模式開啟時 `Scaffold` 中的 `最新消息` 與 `BottomNavigationBar` 會被 `content` 設定的 Widget 取代，目的是可實作不跳頁顯示內容，詳細可參考 example
  - 正中間由 `announcements` 顯示輪播資訊
  - 可註冊 `HomePageScaffoldState` 存取 Snacker Bar 的行為，詳細可參考 example
 
@@ -171,6 +173,27 @@
 | onImageTapped | Function(Announcement announcement) | 點擊最新消息的圖片事件，回傳`Announcement` |
 | autoPlay | Function | 是否自動輪播最新消息，預設值為 `true` |
 | autoPlayDuration | bool | 最新消息自動輪播的時間間距，預設值為 `5秒` |
+
+### AnnouncementData
+
+| 參數名稱                         | 型態                             | 描述                             |
+| ------------------------------- | ------------------------------- | ------------------------------- |
+| data | List<Announcement> | 最新消息列表 |
+
+### Announcement
+
+| 參數名稱                         | 型態                             | 描述                             |
+| ------------------------------- | ------------------------------- | ------------------------------- |
+| title | String | 標題 |
+| id | Date | 最新消息id |
+| nextId | Location | 下一個最新消息id |
+| lastId | int | 最後一個最新消息的id |
+| weight | int | 權重 `HomeScaffold` 會從權重大的排序顯示 |
+| imgUrl | int | 圖片網址 |
+| url | int | 連結 |
+| description | int | 描述 會在 `AnnouncementContentPage` 顯示 |
+| publishTime | int | 發布時間，格式 `YYYY-MM-DDTHH:mm::ss` |
+| expireTime | int | 過期時間 `HomeScaffold` 會讓超過此時間的最新消息不顯示，格式 `YYYY-MM-DDTHH:mm::ss` |
 
 ### 課表骨架 CourseScaffold
 
