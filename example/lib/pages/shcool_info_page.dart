@@ -155,7 +155,7 @@ class SchoolInfoPageState extends State<SchoolInfoPage>
 
   _getSchedules() async {
     downloadFdf(
-        'https://raw.githubusercontent.com/NKUST-ITC/NKUST-AP-Flutter/039ac35f41173f6c2eacfd9cc73052a257e8d68a/cal108-2.pdf');
+        'https://raw.githubusercontent.com/NKUST-ITC/NKUST-AP-Flutter/master/school_schedule.pdf');
   }
 
   void downloadFdf(String url) async {
