@@ -10,6 +10,7 @@ enum NotificationState { loading, finish, loadingMore, error, empty, offline }
 
 class NotificationScaffold extends StatefulWidget {
   static const String routerName = "/info/notification";
+
   final NotificationState state;
   final List<Notifications> notificationList;
   final Function onRefresh;

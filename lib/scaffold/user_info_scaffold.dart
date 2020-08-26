@@ -11,6 +11,7 @@ enum _Status { loading, finish, error, empty }
 enum BarCodeMode { code39, qrCode }
 
 class UserInfoScaffold extends StatefulWidget {
+
   final UserInfo userInfo;
   final String heroTag;
   final List<Widget> actions;

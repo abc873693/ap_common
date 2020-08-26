@@ -18,9 +18,9 @@ class AboutUsPage extends StatefulWidget {
   final String githubName;
   final String email;
   final String appLicense;
+  final List<Widget> actions;
   final Function(String name, String value) logEvent;
   final Function() setCurrentScreen;
-  final List<Widget> actions;
 
   const AboutUsPage({
     Key key,
