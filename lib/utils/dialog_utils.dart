@@ -95,7 +95,7 @@ class DialogUtils {
     String url = "";
     if (Platform.isAndroid) {
       url = "market://details?id=${packageInfo.packageName}";
-    } else if (Platform.isIOS) {
+    } else if (Platform.isIOS || Platform.isMacOS) {
       url = "itms-apps://itunes.apple.com/tw/app/apple-store/$iOSAppId?mt=8";
     } else {
       url = defaultUrl;
