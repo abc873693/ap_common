@@ -47,15 +47,16 @@
     - [x] [開放原始碼](#開放原始碼-OpenSourcePage)
     - [x] [最新消息詳細資訊](#最新消息詳細資訊-AnnouncementContentPage)
  - 頁面骨架(scaffold)
-    - [x] [課表](#課表骨架-coursescaffold)
-    - [x] [成績](#成績骨架-scorescaffold)
-    - [x] [首頁](#首頁骨架-homescaffold)
-    - [x] 校園資訊
-      - [x] 教務處最新消息
-      - [x] 學校電話
-      - [ ] 行事曆
+    - [x] [課表](#課表骨架-CoursesCaffold)
+    - [x] [成績](#成績骨架-ScoresSaffold)
+    - [x] [首頁](#首頁骨架-HomeScaffold)
     - [ ] 空堂教室查詢
-    - [X] [登入頁](#首頁骨架-loginscaffold)
+    - [x] [登入頁](#首頁骨架-LoginScaffold)
+    - [x] [圖片瀏覽器](#圖片瀏覽器骨架-ImageViewerScaffold)
+    - [x] [PDF](#PDF骨架-PdfScaffold)
+    - [x] [使用者資訊](#使用者資訊骨架-UserInfoScaffold)
+    - [x] [校園最新消息](#校園最新消息骨架-NotificationScaffold)
+    - [x] [學校電話](#學校電話骨架-PhoneScaffold)
  
 ## Getting Started
 
@@ -352,11 +353,11 @@
 
 手機介面
 
- <img src="images/home_scaffold/mobile.png" alt="drawing" width="200"/>
+ <img src="images/scaffolds/home/mobile.png" alt="drawing" width="200"/>
 
 平板 or 桌面版介面
 
- <img src="images/home_scaffold/tablet.png" alt="drawing" width="600"/>
+ <img src="images/scaffolds/home/tablet.png" alt="drawing" width="600"/>
 
 | 參數名稱                         | 型態                             | 描述                             |
 | ------------------------------- | ------------------------------- | ------------------------------- |
@@ -408,11 +409,11 @@
 
  手機介面
 
- <img src="images/course_scaffold/mobile.png" alt="drawing" width="200"/>
+ <img src="images/scaffolds/course/mobile.png" alt="drawing" width="200"/>
 
 平板 or 桌面版介面
 
- <img src="images/course_scaffold/tablet.png" alt="drawing" width="600"/>
+ <img src="images/scaffolds/course/tablet.png" alt="drawing" width="600"/>
 
 | 參數名稱                         | 型態                             | 描述                             |
 | ------------------------------- | ------------------------------- | ------------------------------- |
@@ -447,7 +448,7 @@
 
 此類別會影響課程列表中的介面
 
- <img src="images/course_scaffold/course_detail.png" alt="drawing" width="300"/>
+ <img src="images/scaffolds/course/course_detail.png" alt="drawing" width="300"/>
 
 | 參數名稱                         | 型態                             | 描述                             |
 | ------------------------------- | ------------------------------- | ------------------------------- |
@@ -477,7 +478,7 @@
 
 ### Course
 
- <img src="images/course_scaffold/course_bottom_sheet.jpg" alt="drawing" width="300"/>
+ <img src="images/scaffolds/course/course_bottom_sheet.jpg" alt="drawing" width="300"/>
 
 | 參數名稱                         | 型態                             | 描述                             |
 | ------------------------------- | ------------------------------- | ------------------------------- |
@@ -506,11 +507,11 @@
 
  手機介面
 
- <img src="images/score_scaffold/mobile.png" alt="drawing" width="200"/>
+ <img src="images/scaffolds/score/mobile.png" alt="drawing" width="200"/>
 
 平板 or 桌面版介面
 
- <img src="images/score_scaffold/tablet.png" alt="drawing" width="600"/>
+ <img src="images/scaffolds/score/tablet.png" alt="drawing" width="600"/>
 
 | 參數名稱                         | 型態                             | 描述                             |
 | ------------------------------- | ------------------------------- | ------------------------------- |
@@ -547,11 +548,11 @@
 
  手機介面
 
- <img src="images/login_scaffold/mobile.png" alt="drawing" width="200"/>
+ <img src="images/scaffolds/login/mobile.png" alt="drawing" width="200"/>
 
 平板 or 桌面版介面 or 手機水平模式
 
- <img src="images/login_scaffold/tablet.png" alt="drawing" width="600"/>
+ <img src="images/scaffolds/login/tablet.png" alt="drawing" width="600"/>
 
 | 參數名稱                         | 型態                             | 描述                             |
 | ------------------------------- | ------------------------------- | ------------------------------- |
@@ -559,3 +560,122 @@
 | form | List<Widget> | 必要欄位，骨架正中間的表單資訊，採自由實作 |
 | logoMode | LogoMode | LogoMode，logoMode 為 `text`時顯示 `logoSource` 的資訊，logoMode 為 `image` 時載入 `logoSource` 路徑的 asset image|
 | enableKeyboardDoneButton | bool | 是否顯示鍵盤完成按鍵，會顯示在虛擬鍵盤正上方 |
+
+### 圖片瀏覽器骨架 ImageViewerScaffold
+
+以 Package [photo_view](https://pub.dev/packages/photo_view) 封裝的圖片瀏覽器，可設定複數的圖片，透過TabBarView瀏覽，若 `imageViewers` 的數量為1時則不顯示Tab
+
+| 參數名稱                         | 型態                             | 描述                             |
+| ------------------------------- | ------------------------------- | ------------------------------- |
+| title | String | Scaffold 標題 |
+| imageViewers | List<ImageViewer> | 圖片瀏覽器物件，載入assetName的圖片 |
+| actions | List<Widget> | 右上角的元件列表，為Flutter Scaffold原生的API |
+
+### PDF骨架 PdfScaffold
+
+以 Plugin [native_pdf_view](https://pub.dev/packages/native_pdf_view) 封裝的PDF瀏覽器，只支援Android iOS Web macOS 平台
+
+手機介面，不包含 `AppBar` 及 `BottomNavigationBar` 的區塊
+
+<img src="images/scaffolds/pdf/mobile.png" alt="drawing" width="200"/>
+
+| 參數名稱                         | 型態                             | 描述                             |
+| ------------------------------- | ------------------------------- | ------------------------------- |
+| byteList | Uint8List | PDF 的 Raw Data |
+
+### 使用者資訊骨架 UserInfoScaffold
+
+提供使用者資訊骨架
+ - 可點擊右上角的icon，切換顯示Qr Code 或 Bar Code
+ - Qr Code 或 Bar Code 顯示時內容是學號
+ - 部分欄位為 `Null` 時則不顯示
+
+手機介面
+
+<center class="half">
+  <img src="images/scaffolds/user_info/mobile_1.png" alt="drawing" width="180"/>
+  <img src="images/scaffolds/user_info/mobile_2.png" alt="drawing" width="180"/>
+</center>
+
+| 參數名稱                         | 型態                             | 描述                             |
+| ------------------------------- | ------------------------------- | ------------------------------- |
+| userInfo | UserInfo | 使用者資訊物件 |
+| heroTag | String | 照片的 Hero Tag，預設為 `tag_student_picture` |
+| actions | List<Widget> | 右上角的元件列表，為Flutter Scaffold原生的API |
+| onRefresh | Future<UserInfo> Function() | 下拉更新事件，需回傳更新後的使用者資訊 |
+| enableBarCode | bool | 是否顯示Bar Code |
+
+### UserInfo
+
+| 參數名稱                         | 型態                             | 描述                             |
+| ------------------------------- | ------------------------------- | ------------------------------- |
+| educationSystem | String | 學制 |
+| department | String | 科系 |
+| className | String | 班級名稱 |
+| id | String | 學號 |
+| name | String | 名字 |
+| pictureUrl | String | 照片網址，但 `UserInfoScaffold` 不使用此載入圖片 |
+| email | String | 電子信箱 |
+| pictureBytes | Uint8List | 照片Raw Data，`UserInfoScaffold` 使用此載入圖片 |
+
+### 校園最新消息骨架 NotificationScaffold
+
+提供校園最新消息列表的骨架
+  - 點擊時會開啟 `Notification` 中的 `link` 設定的連結
+  - 長按時會啟動原生的分享功能，使用 [share](https://pub.dev/packages/share) 實作
+  - 此骨架沒有使用Scaffold包裝
+
+手機介面，不包含 `AppBar` 及 `BottomNavigationBar` 的區塊
+
+<img src="images/scaffolds/notification/mobile.png" alt="drawing" width="200"/>
+
+| 參數名稱                         | 型態                             | 描述                             |
+| ------------------------------- | ------------------------------- | ------------------------------- |
+| state | NotificationState | 必要欄位，總共有 `loading` `finish` `error` `empty` `offlineEmpty` 的狀態，只有`finish`才會顯示，其餘都是顯示錯誤狀況 |
+| notificationList | List<Notifications> | 校園最新消息列表 |
+| onRefresh | Function | 下拉更新事件 |
+| onLoadingMore | Function | 滾動最底事件 |
+| logEvent | Function(String name, String value) | 可搜集使用者行為的事件 |
+| setCurrentScreen | Function | 可搜集目前畫面的事件 |
+
+### Notifications
+
+| 參數名稱                         | 型態                             | 描述                             |
+| ------------------------------- | ------------------------------- | ------------------------------- |
+| link | String | 連結 |
+| info | Info | 校園最新消息資訊 |
+
+### Info
+
+| 參數名稱                         | 型態                             | 描述                             |
+| ------------------------------- | ------------------------------- | ------------------------------- |
+| id | String | id |
+| title | String | 標題 |
+| deparment | String | 發布處室 |
+| date | String | 日期 格式 `YYYY-MM-DD` |
+
+### 學校電話骨架 PhoneScaffold
+
+提供電話列表的骨架
+  - 點擊會撥打`PhoneModel` 中的 `number`
+  - 此骨架沒有使用Scaffold包裝
+  - `PhoneModel` 中的 `number` 為 `Null` 時則作為標題區隔
+
+手機介面，不包含 `AppBar` 及 `BottomNavigationBar` 的區塊
+
+<img src="images/scaffolds/phone/mobile.png" alt="drawing" width="200"/>
+
+
+| 參數名稱                         | 型態                             | 描述                             |
+| ------------------------------- | ------------------------------- | ------------------------------- |
+| state | NotificationState | 必要欄位，總共有 `loading` `finish` `error` 的狀態，只有`finish`才會顯示，其餘都是顯示錯誤狀況 |
+| notificationList | List<PhoneModel> | 電話列表 |
+| logEvent | Function(String name, String value) | 可搜集使用者行為的事件 |
+| setCurrentScreen | Function | 可搜集目前畫面的事件 |
+
+### PhoneModel
+
+| 參數名稱                         | 型態                             | 描述                             |
+| ------------------------------- | ------------------------------- | ------------------------------- |
+| name | String | 名稱 |
+| number | String | 電話號碼 |
