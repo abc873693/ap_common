@@ -1,4 +1,4 @@
-# 校務通系列介面與函式共用(施工中)
+# 校務通系列介面與函式共用
 
 [![](https://img.shields.io/badge/Flutter-v1.20.2-blue)](https://pub.dev/packages/ap_common/)
 [![](https://img.shields.io/pub/v/ap_common.svg?style=flat-square)](https://pub.dev/packages/ap_common/)
@@ -18,17 +18,13 @@
 ## 共用項目
 
  - 資源
-    - [x] 主題色
-        - [x] 淺色主題
-        - [x] 深色主題
+    - [x] [主題切換](#主題色設定)
     - [x] 圖示
         - [x] Outline 
         - [x] Filled 
     - [x] 圖片資源(97KB)
  - 工具類
-    - [x] [多國語言](#多國語言)
-      - [x] 英文 (en)
-      - [x] 繁體中文(zh_TW)
+    - [x] [多國語言](#多國語言支援列表)
     - [x] [共用函式](#共用函式)
     - [x] [Notification 工具](#Notification-工具)
     - [x] [Dialog 工具](#Dialog-工具)
@@ -78,7 +74,11 @@
 ```
 ### 主題色設定
 
-在MaterialApp 上一層加入主題色模式(ThemeMode)設定 否則無法正常顯示  
+支援列表
+  - 淺色主題
+  - 深色主題
+
+在 MaterialApp 上一層加入主題色模式(ThemeMode)設定 否則無法正常顯示  
 此功能只支援flutter v1.9 以上的SDK
 
 ```dart
@@ -89,7 +89,6 @@
         return ApTheme(
             themeMode,
             child: MaterialApp(
-              // (選擇)是否加入 
               theme: ApTheme.light,
               darkTheme: ApTheme.dark,
               themeMode: themeMode,
@@ -99,8 +98,11 @@
 
 ```
 ### 多國語言支援列表
+
+使用官方的 flutter_localization 實作，預設使用英文(en)
+
  - 繁體中文(zh-TW)
- - 英文(en-US)
+ - 英文(en)
 
 在 `MaterialApp` 加入多國語言支援
 
@@ -119,7 +121,7 @@
                 const ApLocalizationsDelegate(),
               ],
               supportedLocales: [
-                const Locale('en', 'US'), // English
+                const Locale('en'), // English
                 const Locale('zh', 'TW'), // Chinese
               ],
             );
@@ -128,10 +130,6 @@
 ```
 
 ## 工具類
-
-### 多國語言
-
-使用官方的 flutter_localization 實作，預設使用英文(en)
 
 ### 共用函式
 
