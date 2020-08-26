@@ -12,8 +12,7 @@ class ApNetworkImage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return (kIsWeb ||
-            (Platform.isWindows || Platform.isLinux || Platform.isMacOS))
+    return (!kIsWeb && (Platform.isWindows || Platform.isLinux))
         ? Image.network(url)
         : CachedNetworkImage(
             imageUrl: url,
