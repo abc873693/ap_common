@@ -199,6 +199,7 @@
 
 提供顯示課表(Course Table)骨架，另將課表`CourseContent`與課程列表`CourseList`另拆成兩個Ｗidget
  - 支援響應式介面
+   - longestSide >= 880 顯示平板模式
  - 支援上課通知 (Android & iOS & MacOS)
  - 將課表加入至行事曆App (Android & iOS)
  - 提供學期列表的區域，預設只提供學期資料`SemesterData`，即可使用相關的 Callback
@@ -217,6 +218,7 @@
 | state | CourseState | 必要欄位，總共有 `loading` `finish` `error` `empty` `offlineEmpty` `custom` 的狀態，只有`finish`才會顯示課表介面，其餘都是顯示錯誤狀況 |
 | customStateHint | String | 當 [state] 是 `custom` 時，會顯示此字串 |
 | title | String | Scaffold 標題 |
+| courseData | SourseData | 課表資料，會利用其中的 課表`CourseContent`與課程列表`CourseList`顯示 |
 | itemPicker | Widget | 使用自訂元件實作學期選擇器，[itemPicker] 與 [semesterData] 擇一使用 |
 | semesterData | List<String> | 學期列表 |
 | onSelect | Function(int index) | 學期列表點擊事件，回傳[semesterData]的索引值，[semesterData] 不為 Null 時才有效 |
@@ -294,5 +296,39 @@
 | section | String | 節次，對應 `CourseTable` 中的 `timeCodes` |
 
 ### 成績骨架 ScoreScaffold
+
+提供顯示成績(Score)骨架，顯示 `ScoreData` 中的成績列表`List<Score>`資訊
+ - 支援響應式介面
+   - longestSide >= 880 顯示平板模式
+   - 平板模式時，列表於詳細資訊會水平顯示
+ - 提供學期列表的區域，預設只提供學期資料`SemesterData`，即可使用相關的 Callback
+
+ 手機介面
+
+ <img src="images/score_scaffold/mobile.png" alt="drawing" width="200"/>
+
+平板 or 桌面版介面
+
+ <img src="images/score_scaffold/tablet.png" alt="drawing" width="600"/>
+
+| 參數名稱                         | 型態                             | 描述                             |
+| ------------------------------- | ------------------------------- | ------------------------------- |
+| state | ScoreState | 必要欄位，總共有 `loading` `finish` `error` `empty` `offlineEmpty` `custom` 的狀態，只有`finish`才會顯示課表介面，其餘都是顯示錯誤狀況 |
+| customStateHint | String | 當 [state] 是 `custom` 時，會顯示此字串 |
+| title | String | Scaffold 標題 |
+| scoreData | ScoreData | 成績資料，會利用其中的 `List<Score>` 顯示成績 |
+| itemPicker | Widget | 使用自訂元件實作學期選擇器，[itemPicker] 與 [semesterData] 擇一使用 |
+| semesterData | SemesterData | 學期列表 |
+| onSelect | Function(int index) | 學期列表點擊事件，回傳[semesterData]的索引值，[semesterData] 不為 Null 時才有效 |
+| isShowSearchButton | String | 是否顯示搜尋按鍵，預設值為 `true` |
+| onSearchButtonClick | Function | 搜尋按鍵點擊事件 |
+| onRefresh | Function | 下拉更新事件 |
+| actions | List<Widget> | 右上角的元件 |
+| customHint | String | 學期選擇器與課表中間的提示字 |
+| middleTitle | String | 成績列表第一列的標題，預設為 `ApLocalizations` 的 `midtermScore` |
+| finalTitle | String | 成績列表第二列的標題，預設為 `ApLocalizations` 的 `finalScore` |
+| middleScoreBuilder | Widget Function(int index) | 成績列表第一列Builder，`Null`時預設顯示為 `Score` 參數中的 `midtermScore` |
+| finalScoreBuilder | Widget Function(int index) | 成績列表第二列Builder，`Null`時預設顯示為 `Score` 參數中的 `finalScore` |
+| details | List<String> | 第二區塊，列表顯示其中的資訊 |
 
 ### 登入骨架 LoginScaffold
