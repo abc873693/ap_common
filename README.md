@@ -332,3 +332,29 @@
 | details | List<String> | 第二區塊，列表顯示其中的資訊 |
 
 ### 登入骨架 LoginScaffold
+
+提供校務通v3版本登入頁面骨架
+ - 支援響應式介面
+   - 利用手機水平與垂直顯示區隔，水平模式視為平板模式
+   - 平板模式時，Logo 與 `forms` 會水平顯示
+ - `forms` 會包裝在 Flutter v1.20 支援的 `AutofillGroup` 使區塊內的`TextFeild` 支援自動填入(Autofill)
+ - 提供校務通風格的元件
+   - ApButton : RaisedButton封裝
+   - ApFlatButton : FlatButton封裝
+   - ApTextFeild : TextFeild封裝
+   - ApCheckBox : CheckBox封裝
+
+ 手機介面
+
+ <img src="images/login_scaffold/mobile.png" alt="drawing" width="200"/>
+
+平板 or 桌面版介面 or 手機水平模式
+
+ <img src="images/login_scaffold/tablet.png" alt="drawing" width="600"/>
+
+| 參數名稱                         | 型態                             | 描述                             |
+| ------------------------------- | ------------------------------- | ------------------------------- |
+| logoSource | String | 必要欄位，Logo的來源，由 `loginMode` 決定Logo顯示方式 |
+| form | List<Widget> | 必要欄位，骨架正中間的表單資訊，採自由實作 |
+| logoMode | LogoMode | LogoMode，logoMode 為 `text`時顯示 `logoSource` 的資訊，logoMode 為 `image` 時載入 `logoSource` 路徑的 asset image|
+| enableKeyboardDoneButton | bool | 是否顯示鍵盤完成按鍵，會顯示在虛擬鍵盤正上方 |
