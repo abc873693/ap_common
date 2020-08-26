@@ -15,6 +15,7 @@ class ScoreScaffold extends StatefulWidget {
 
   final ScoreState state;
   final String customStateHint;
+  final String title;
   final ScoreData scoreData;
   final SemesterData semesterData;
   final Function(int index) onSelect;
@@ -38,6 +39,7 @@ class ScoreScaffold extends StatefulWidget {
     @required this.state,
     @required this.scoreData,
     @required this.onRefresh,
+    this.title,
     this.itemPicker,
     this.semesterData,
     this.onSelect,
@@ -75,7 +77,7 @@ class ScoreScaffoldState extends State<ScoreScaffold> {
     app = ApLocalizations.of(context);
     return Scaffold(
       appBar: AppBar(
-        title: Text(app.score),
+        title: Text(widget.title ?? app.score),
         backgroundColor: ApTheme.of(context).blue,
         bottom: widget.bottom,
       ),
