@@ -8,7 +8,7 @@ import 'package:flutter/material.dart';
 
 enum PhoneState { loading, finish, error }
 
-class PhonePage extends StatefulWidget {
+class PhoneScaffold extends StatefulWidget {
   static const String routerName = "/info/phone";
 
   final PhoneState state;
@@ -16,7 +16,7 @@ class PhonePage extends StatefulWidget {
   final Function() setCurrentScreen;
   final Function(String name, String value) logEvent;
 
-  const PhonePage({
+  const PhoneScaffold({
     Key key,
     @required this.state,
     @required this.phoneModelList,
@@ -25,10 +25,10 @@ class PhonePage extends StatefulWidget {
   }) : super(key: key);
 
   @override
-  PhonePageState createState() => PhonePageState();
+  PhoneScaffoldState createState() => PhoneScaffoldState();
 }
 
-class PhonePageState extends State<PhonePage>
+class PhoneScaffoldState extends State<PhoneScaffold>
     with AutomaticKeepAliveClientMixin {
   @override
   bool get wantKeepAlive => true;

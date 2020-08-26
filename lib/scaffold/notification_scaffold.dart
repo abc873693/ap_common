@@ -8,7 +8,7 @@ import 'package:flutter/material.dart';
 
 enum NotificationState { loading, finish, loadingMore, error, empty, offline }
 
-class NotificationPage extends StatefulWidget {
+class NotificationScaffold extends StatefulWidget {
   static const String routerName = "/info/notification";
   final NotificationState state;
   final List<Notifications> notificationList;
@@ -17,7 +17,7 @@ class NotificationPage extends StatefulWidget {
   final Function() setCurrentScreen;
   final Function(String name, String value) logEvent;
 
-  NotificationPage({
+  NotificationScaffold({
     Key key,
     @required this.state,
     @required this.notificationList,
@@ -28,10 +28,10 @@ class NotificationPage extends StatefulWidget {
   }) : super(key: key);
 
   @override
-  NotificationPageState createState() => NotificationPageState();
+  NotificationScaffoldState createState() => NotificationScaffoldState();
 }
 
-class NotificationPageState extends State<NotificationPage>
+class NotificationScaffoldState extends State<NotificationScaffold>
     with AutomaticKeepAliveClientMixin {
   @override
   bool get wantKeepAlive => true;

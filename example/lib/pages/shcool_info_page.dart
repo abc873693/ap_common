@@ -3,8 +3,8 @@ import 'dart:typed_data';
 import 'package:ap_common/callback/general_callback.dart';
 import 'package:ap_common/models/notification_data.dart';
 import 'package:ap_common/models/phone_model.dart';
-import 'package:ap_common/pages/notification_page.dart';
-import 'package:ap_common/pages/phone_page.dart';
+import 'package:ap_common/scaffold/notification_scaffold.dart';
+import 'package:ap_common/scaffold/phone_scaffold.dart';
 import 'package:ap_common/resources/ap_icon.dart';
 import 'package:ap_common/resources/ap_theme.dart';
 import 'package:ap_common/scaffold/pdf_scaffold.dart';
@@ -95,7 +95,7 @@ class SchoolInfoPageState extends State<SchoolInfoPage>
       ),
       body: TabBarView(
         children: [
-          NotificationPage(
+          NotificationScaffold(
             state: notificationState,
             notificationList: notificationList,
             onRefresh: (){
@@ -105,7 +105,7 @@ class SchoolInfoPageState extends State<SchoolInfoPage>
               _getNotifications();
             },
           ),
-          PhonePage(
+          PhoneScaffold(
             state: phoneState,
             phoneModelList: phoneModelList,
           ),
