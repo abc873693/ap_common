@@ -202,7 +202,6 @@ class HomePageState extends State<HomePage> {
             title: ap.schoolInfo,
             onTap: () => _openPage(
               SchoolInfoPage(),
-              needLogin: true,
             ),
           ),
           DrawerItem(
