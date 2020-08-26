@@ -43,10 +43,9 @@
     - [x] [設定頁元件](#設定頁元件-SettingPageWidget)
     - [x] [是或否對話框](#是或否對話框-YesNoDialog) 
  - 頁面(pages)
-    - [x] 關於我們 `about_us_page.dart`
-    - [x] 開放原始碼 `open_source_page.dart`
-    - [x] 使用者資訊 `user_info_page.dart`
-    - [x] 最新消息詳細資訊 `news_content_page.dart`
+    - [x] [關於我們](#關於我們-AboutUsPage)
+    - [x] [開放原始碼](#開放原始碼-OpenSourcePage)
+    - [x] [最新消息詳細資訊](#最新消息詳細資訊-AnnouncementContentPage)
  - 頁面骨架(scaffold)
     - [x] [課表](#課表骨架-coursescaffold)
     - [x] [成績](#成績骨架-scorescaffold)
@@ -287,11 +286,55 @@
 | leftActionFunction | Function | 左邊按鍵點擊事件 |
 | rightActionFunction | Function | 右邊按鍵點擊事件 |
 
-## pages
+## Pages
 
 此項目必須加入多國語言設定，否則會無法正常使用
 
-//TODO 文件
+### 關於我們 AboutUsPage
+
+提供校務通系列的歷任作者及社群介紹，可在此頁面放置自己專案的License，期望您使用這份套件時可以加入此頁面，以及PR這個頁面加入您的資訊，我會同步到所有校務通專案中
+
+<center class="half">
+  <img src="images/pages/about_us_page/mobile_1.png" alt="drawing" width="180"/>
+  <img src="images/pages/about_us_page/mobile_2.png" alt="drawing" width="180"/>
+  <img src="images/pages/about_us_page/mobile_3.png" alt="drawing" width="180"/>
+</center>
+
+| 參數名稱                         | 型態                             | 描述                             |
+| ------------------------------- | ------------------------------- | ------------------------------- |
+| assetImage | String | 頂端 Header 的圖片，採Asset Image 載入 |
+| fbFanPageUrl | String | Facebook 粉絲專頁網址 |
+| fbFanPageId | String | Facebook 粉絲專頁id，點擊facebook logo時優先以 app link 的方法開啟 |
+| githubUrl | String | GitHub 網址 |
+| githubName | String | GitHub 的 username 或 Oraganization GitHub logo時優先以 app link 的方法開啟 |
+| email | String | 聯絡 email |
+| appLicense | String | App的License |
+| actions | List<Widget> | 右上角的元件列表，為Flutter Scaffold原生的API |
+| logEvent | Function(String name, String value) | 可搜集使用者行為的事件 |
+| setCurrentScreen | Function | 可搜集目前畫面的事件 |
+
+### 開放原始碼 OpenSourcePage
+
+列出校務通系統有使用到的開放原始碼的License
+
+### 最新消息詳細資訊 AnnouncementContentPage
+
+最新消息詳細資訊，採用頁面顯示
+
+手機介面
+
+ <img src="images/pages/announcement_content_page/mobile.jpg" alt="drawing" width="200"/>
+
+平板 or 桌面版介面
+
+ <img src="images/pages/announcement_content_page/tablet.png" alt="drawing" width="600"/>
+
+
+| 參數名稱                         | 型態                             | 描述                             |
+| ------------------------------- | ------------------------------- | ------------------------------- |
+| announcement | Announcement | 最新消息 |
+| logEvent | Function(String name, String value) | 可搜集使用者行為的事件 |
+| setCurrentScreen | Function | 可搜集目前畫面的事件 |
 
 -------
 
@@ -326,7 +369,7 @@
 | bottomNavigationBarItems | List<BottomNavigationBarItem> | 底下`BottomNavigationBar`的元素，為Flutter Scaffold原生的API |
 | drawer | Widget | 左方的抽屜(Drawer)元件，為Flutter Scaffold原生的API |
 | content | Widget | 使用平板介面時，右方會顯示Content的內容，`null`時則顯示首頁 |
-| actions | List<Widget> | 右上角的元件 |
+| actions | List<Widget> | 右上角的元件列表，為Flutter Scaffold原生的API  |
 | floatingActionButton | Widget | Material Design 的 FloatingActionButton 位置放的元件，為Flutter Scaffold原生的API |
 | onImageTapped | Function(Announcement announcement) | 點擊最新消息的圖片事件，回傳`Announcement` |
 | autoPlay | Function | 是否自動輪播最新消息，預設值為 `true` |
