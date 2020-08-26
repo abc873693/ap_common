@@ -3,8 +3,6 @@ import 'package:ap_common/models/user_info.dart';
 import 'package:ap_common/resources/ap_icon.dart';
 import 'package:ap_common/resources/ap_theme.dart';
 import 'package:ap_common/utils/ap_localizations.dart';
-import 'package:ap_common/utils/ap_utils.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 class ApDrawer extends StatefulWidget {

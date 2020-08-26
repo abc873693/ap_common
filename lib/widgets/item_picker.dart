@@ -9,7 +9,6 @@ class ItemPicker extends StatelessWidget {
   final int currentIndex;
   final Function(int index) onSelected;
   final String dialogTitle;
-  final double width;
 
   const ItemPicker({
     Key key,
@@ -17,7 +16,6 @@ class ItemPicker extends StatelessWidget {
     @required this.items,
     @required this.dialogTitle,
     @required this.currentIndex,
-    this.width,
   }) : super(key: key);
 
   @override
