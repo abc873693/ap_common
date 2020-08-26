@@ -1,3 +1,8 @@
+## [0.5.3] - 2020/08/27
+
+* PdfScaffold 加入狀態管理
+* ApIcon 加入 `home` icon
+
 ## [0.5.2] - 2020/08/26
 
 * 恢復 flutter_local_notification 至穩定版本
