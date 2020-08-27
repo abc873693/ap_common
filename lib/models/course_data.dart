@@ -307,6 +307,21 @@ class CourseTables {
     }
     return maxTimeCodes;
   }
+
+  int getMinTimeCode(List<String> weeks) {
+    int minTimeCodes = 10;
+    for (int i = 0; i < weeks.length; i++) {
+      if (getCourseList(weeks[i]) != null)
+        for (Course data in getCourseList(weeks[i])) {
+          for (int j = 0; j < timeCode.length; j++) {
+            if (timeCode[j] == data.date.section) {
+              if ((j + 1) < minTimeCodes) minTimeCodes = (j + 1);
+            }
+          }
+        }
+    }
+    return minTimeCodes;
+  }
 }
 
 class Course {

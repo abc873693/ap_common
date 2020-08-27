@@ -291,11 +291,12 @@ class CourseScaffoldState extends State<CourseScaffold> {
     ];
     final timeCodes = widget.courseData.courseTables.timeCode;
     final maxTimeCode = widget.courseData.courseTables.getMaxTimeCode(weeks);
+    final minTimeCode = widget.courseData.courseTables.getMinTimeCode(weeks);
     var columns = <Column>[Column(children: [])];
     columns[0].children.add(
           _weekBorder(''),
         );
-    for (var i = 0; i < maxTimeCode; i++) {
+    for (var i = minTimeCode; i < maxTimeCode; i++) {
       var text = timeCodes[i].replaceAll(' ', '');
       if (widget.courseData.hasHoliday) {
         text = text.replaceAll('第', '');
@@ -307,12 +308,14 @@ class CourseScaffoldState extends State<CourseScaffold> {
     }
     for (int i = 0; i < weeks.length; i++) {
       final List<CourseBorder> courseBorders = [];
-      for (var j = 0; j < maxTimeCode; j++) courseBorders.add(CourseBorder());
+      for (var j = 0; j < maxTimeCode - minTimeCode; j++)
+        courseBorders.add(CourseBorder());
       var courses = widget.courseData.courseTables.getCourseList(weeks[i]);
       if (courses != null) {
         for (var course in courses) {
-          for (int j = 0; j < maxTimeCode; j++) {
-            if (timeCodes[j] == course.date.section) {
+          for (int j = 0; j < maxTimeCode - minTimeCode; j++) {
+            final timeCodeIndex = j + minTimeCode;
+            if (timeCodes[timeCodeIndex] == course.date.section) {
               final index = widget.courseData.findCourseDetail(course);
               final detailIndex = course.detailIndex ?? 0;
               final len = ApColors.colors.length;
