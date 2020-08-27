@@ -178,7 +178,7 @@ class NotificationScaffoldState extends State<NotificationScaffold>
   void _scrollListener() {
     if (controller.position.extentAfter < 500) {
       if (widget.state == NotificationState.finish) {
-        widget.onLoadingMore();
+        if (widget.onLoadingMore != null) widget.onLoadingMore();
       }
     }
   }
