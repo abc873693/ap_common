@@ -106,6 +106,10 @@ class SchoolInfoPageState extends State<SchoolInfoPage>
               });
               _getNotifications();
             },
+            onLoadingMore: () {
+              setState(() => notificationState = NotificationState.loadingMore);
+              _getNotifications();
+            },
           ),
           PhoneScaffold(
             state: phoneState,
