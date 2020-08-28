@@ -320,7 +320,7 @@ class CourseTables {
           }
         }
     }
-    return minTimeCodes;
+    return minTimeCodes < 10 ? 0 : 10;
   }
 }
 
