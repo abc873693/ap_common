@@ -678,7 +678,7 @@ class ApLocalizations {
 
   String get apiSeverError => _vocabularies['api_server_error'];
 
-  String get schoolSeverError => _vocabularies['school_sever_error'];
+  String get schoolSeverError => _vocabularies['school_server_error'];
 
   String get roomList => _vocabularies['room_list'];
 
