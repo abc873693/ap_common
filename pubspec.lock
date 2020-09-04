@@ -208,7 +208,7 @@ packages:
       name: flutter_keyboard_visibility
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "3.2.1"
+    version: "3.2.2"
   flutter_local_notifications:
     dependency: "direct main"
     description:
@@ -272,7 +272,7 @@ packages:
       name: in_app_review
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "0.2.0+3"
+    version: "0.2.0+4"
   intl:
     dependency: "direct main"
     description:
@@ -308,6 +308,13 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "1.1.8"
+  mime:
+    dependency: transitive
+    description:
+      name: mime
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "0.9.7"
   native_pdf_renderer:
     dependency: transitive
     description:
@@ -342,7 +349,7 @@ packages:
       name: package_info
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "0.4.1"
+    version: "0.4.3"
   path:
     dependency: transitive
     description:
@@ -398,7 +405,7 @@ packages:
       name: photo_view
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "0.10.1"
+    version: "0.10.2"
   platform:
     dependency: transitive
     description:
@@ -461,14 +468,14 @@ packages:
       name: share
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "0.6.4+3"
+    version: "0.6.5"
   shared_preferences:
     dependency: "direct main"
     description:
       name: shared_preferences
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "0.5.8"
+    version: "0.5.10"
   shared_preferences_linux:
     dependency: transitive
     description:
@@ -599,7 +606,7 @@ packages:
       name: url_launcher
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "5.5.0"
+    version: "5.5.2"
   url_launcher_linux:
     dependency: transitive
     description:
@@ -620,14 +627,14 @@ packages:
       name: url_launcher_platform_interface
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "1.0.7"
+    version: "1.0.8"
   url_launcher_web:
     dependency: transitive
     description:
       name: url_launcher_web
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "0.1.2+1"
+    version: "0.1.3+1"
   uuid:
     dependency: transitive
     description:

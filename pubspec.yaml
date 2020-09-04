@@ -14,24 +14,24 @@ dependencies:
   flutter_cupertino_localizations: ^1.0.1
 
   outline_material_icons: ^0.1.1
-  shared_preferences: ^0.5.8
-  url_launcher: ^5.5.0
-  share: ^0.6.4+3
-  package_info: ^0.4.1
+  shared_preferences: ^0.5.10
+  url_launcher: ^5.5.2
+  share: ^0.6.5
+  package_info: ^0.4.3
   sprintf: ^4.1.0
   toast: ">=0.1.4 <1.0.0"
   intl: ">=0.16.0 <1.0.0"
   cached_network_image: ^2.3.1
-  photo_view: ">=0.10.1 <1.0.0"
+  photo_view: ">=0.10.2 <1.0.0"
   encrypt: ">=4.0.0 <5.0.0"
   dio: ">=3.0.0 <4.0.0"
   dio_cookie_manager: ">=1.0.0 <2.0.0"
   cookie_jar: ">=1.0.0 <2.0.0"
   flutter_local_notifications: ^1.4.4+4
-  flutter_keyboard_visibility: ^3.2.1
+  flutter_keyboard_visibility: ^3.2.2
   add_2_calendar: ^1.4.0
   material_design_icons_flutter: ^4.0.5345
-  in_app_review: ^0.2.0+3
+  in_app_review: ^0.2.0+4
   native_pdf_view: ^3.8.0
   barcode_widget: ^1.5.0
   barcode: ^1.16.1
