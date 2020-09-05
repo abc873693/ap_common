@@ -201,6 +201,33 @@ class NotificationUtils {
     );
   }
 
+  static Future<bool> requestPermissions({
+    bool sound = true,
+    bool alert = true,
+    bool badge = true,
+  }) async {
+    if (!kIsWeb && Platform.isIOS)
+      return await FlutterLocalNotificationsPlugin()
+          .resolvePlatformSpecificImplementation<
+              MacOSFlutterLocalNotificationsPlugin>()
+          ?.requestPermissions(
+            alert: sound,
+            badge: badge,
+            sound: sound,
+          );
+    else if (!kIsWeb && Platform.isMacOS)
+      return await FlutterLocalNotificationsPlugin()
+          .resolvePlatformSpecificImplementation<
+              MacOSFlutterLocalNotificationsPlugin>()
+          ?.requestPermissions(
+            alert: sound,
+            badge: badge,
+            sound: sound,
+          );
+    else
+      return null;
+  }
+
   static Future<void> cancelCourseNotify({
     @required int id,
   }) async {
