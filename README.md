@@ -1,6 +1,6 @@
 # 校務通系列介面與函式共用
 
-[![](https://img.shields.io/badge/Flutter-v1.20.2-blue)](https://pub.dev/packages/ap_common/)
+[![](https://img.shields.io/badge/Flutter-v1.20.3-blue)](https://pub.dev/packages/ap_common/)
 [![](https://img.shields.io/pub/v/ap_common.svg?style=flat-square)](https://pub.dev/packages/ap_common/)
 
 長期校務通相關系列的app，介面與相關功能都極為相似，將相關的介面與函式庫，製作此套件以方便維護。
@@ -132,6 +132,12 @@
 ### 本地通知支援
 
 使用 [`flutter_local_notification`](https://pub.dev/packages/flutter_local_notifications) 實作
+
+目前只支援 `Android` 、 `iOS` 、 `macOS` 系統，並有以下限制
+
+* **Android 4.1+**. 使用 [NotificationCompat APIs](https://developer.android.com/reference/androidx/core/app/NotificationCompat) 所以能跑在較舊的 Android 裝置
+* **iOS 8.0+**. iOS 10 以下使用 UILocalNotification APIs. iOS 10 以上(包含)使用 [UserNotification APIs](https://developer.apple.com/documentation/usernotifications) (aka the User Notifications Framework)
+* **macOS 10.11+**. 在 macOS 10.14 以下使用 [NSUserNotification APIs](https://developer.apple.com/documentation/foundation/nsusernotification) 在 macOS 10.14 以下使用 [UserNotification APIs](https://developer.apple.com/documentation/usernotifications) (aka the User Notifications Framework)
 
 #### Android 
 
