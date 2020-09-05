@@ -207,4 +207,14 @@ class NotificationUtils {
     final flutterLocalNotificationsPlugin = FlutterLocalNotificationsPlugin();
     await flutterLocalNotificationsPlugin.cancel(id);
   }
+
+  static Future<List<PendingNotificationRequest>>
+      getPendingNotificationList() async {
+    return await FlutterLocalNotificationsPlugin()
+        .pendingNotificationRequests();
   }
+
+  static Future<void> cancelAll() async {
+    await FlutterLocalNotificationsPlugin().cancelAll();
+  }
+}
