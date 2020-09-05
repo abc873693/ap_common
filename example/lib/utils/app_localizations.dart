@@ -144,6 +144,19 @@ class AppLocalizations {
               "• Violation point recording until the end of the semester(1st Semester ended at 1/31，2nd Semester ended at 8/31)，violation point will restart recording. When you not paid off fine，next semester will stop your reservation right until you pay off fine.\n" +
               "• Go to the auto payment machine or Office of General Affairs cashier pay off fine after you print violation statement by yourself, After paid off, go to Office of General Affairs General Affairs Division write off payment by receipt(Write off payment need receipt on the day.)，After write off and the next day 4A.M. will be reserve class after 9.A.M..\n" +
               "• If you have any suspicion about violation point，please go to Office of General Affairs General Affairs Division check violation directly in 10 days(included holidays).\n",
+      'localNotificationTest': 'Local Notification Test',
+      'testTitle': 'Test Title',
+      'testContent': 'Content\nSecond lines',
+      'requestPermission': 'Request Permission',
+      'showNow': 'Show now',
+      'showInFiveSeconds': 'Show in 5 second',
+      'setWeekDay': 'Set Week Day',
+      'setTimeOfDay': 'Set Time Of Day',
+      'scheduleWeeklyNotifyTitle': 'Schedule Weekly Notify',
+      'scheduleWeeklyNotifyContent': 'Schedule in every %s %s',
+      'getPendingNotificationList':
+          'Pending Notification List(Click to cancel)',
+      'cancelAll': 'Cancel All',
     },
     'zh': {
       'app_name': '高科校務通',
@@ -257,6 +270,18 @@ class AppLocalizations {
           "• 違規點數統計至學期末為止(上學期學期末1/31，下學期8/31)，新學期違規點數重新計算。當學期罰款未繳清者，次學期停止預約權限至罰款繳清為止\n" +
           "• 罰款請自行列印違規明細後至自動繳費機或總務處出納組繳費，繳費後憑收據至總務處事務組銷帳(當天開列之收據須於當天銷帳)，銷帳完後隔天凌晨4點後才可預約當天9點後的校車。\n" +
           "• 罰款點數如有疑義，請於違規發生日起10日內(含星期例假日)逕向總務處事務組確認。\n",
+      'localNotificationTest': '本地通知測試',
+      'testTitle': '測試標題',
+      'testContent': '內容\n第二行',
+      'requestPermission': '要求權限',
+      'showNow': '立即顯示',
+      'showInFiveSeconds': '顯示於五秒後',
+      'setWeekDay': '設定星期',
+      'setTimeOfDay': '設定時間',
+      'scheduleWeeklyNotifyTitle': '規劃每週通知',
+      'scheduleWeeklyNotifyContent': '設定在每 %s %s',
+      'getPendingNotificationList': '等待通知列表(點擊可取消)',
+      'cancelAll': '取消全部',
     },
   };
 
@@ -452,6 +477,33 @@ class AppLocalizations {
   String get busRuleFineTitle => _vocabularies['bus_rule_fine_title'];
 
   String get busRuleFineRule => _vocabularies['bus_rule_fine_rule'];
+
+  String get localNotificationTest => _vocabularies['localNotificationTest'];
+
+  String get testTitle => _vocabularies['testTitle'];
+
+  String get testContent => _vocabularies['testContent'];
+
+  String get requestPermission => _vocabularies['requestPermission'];
+
+  String get showNow => _vocabularies['showNow'];
+
+  String get showInFiveSeconds => _vocabularies['showInFiveSeconds'];
+
+  String get setWeekDay => _vocabularies['setWeekDay'];
+
+  String get setTimeOfDay => _vocabularies['setTimeOfDay'];
+
+  String get scheduleWeeklyNotifyTitle =>
+      _vocabularies['scheduleWeeklyNotifyTitle'];
+
+  String get scheduleWeeklyNotifyContent =>
+      _vocabularies['scheduleWeeklyNotifyContent'];
+
+  String get getPendingNotificationList =>
+      _vocabularies['getPendingNotificationList'];
+
+  String get cancelAll => _vocabularies['cancelAll'];
 }
 
 class AppLocalizationsDelegate extends LocalizationsDelegate<AppLocalizations> {

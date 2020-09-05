@@ -12,6 +12,7 @@ import 'package:ap_common/utils/ap_utils.dart';
 import 'package:ap_common/utils/dialog_utils.dart';
 import 'package:ap_common/utils/preferences.dart';
 import 'package:ap_common/widgets/ap_drawer.dart';
+import 'package:ap_common_example/pages/notification_utils_page.dart';
 import 'package:ap_common_example/pages/setting_page.dart';
 import 'package:ap_common_example/pages/shcool_info_page.dart';
 import 'package:ap_common_example/pages/user_info_page.dart';
@@ -203,6 +204,13 @@ class HomePageState extends State<HomePage> {
             title: ap.schoolInfo,
             onTap: () => _openPage(
               SchoolInfoPage(),
+            ),
+          ),
+          DrawerItem(
+            icon: ApIcon.info,
+            title: '測試通知',
+            onTap: () => _openPage(
+              NotificationUtilsTestPage(),
             ),
           ),
           DrawerItem(
