@@ -20,7 +20,8 @@ class NotificationUtils {
   static const int COURSE = 101;
   static const int FCM = 200;
 
-  static get isSupport => !kIsWeb && (Platform.isAndroid || Platform.isIOS);
+  static get isSupport =>
+      !kIsWeb && (Platform.isAndroid || Platform.isIOS || Platform.isMacOS);
 
   //For taiwan week order
   static Day getDay(int weekIndex) {
@@ -65,19 +66,18 @@ class NotificationUtils {
     String androidResourceIcon = ANDROID_RESOURCE_NAME,
   }) async {
     final flutterLocalNotificationsPlugin = FlutterLocalNotificationsPlugin();
-    var androidPlatformChannelSpecifics = AndroidNotificationDetails(
-      androidChannelId,
-      androidChannelDescription,
-      androidChannelDescription,
-      icon: androidResourceIcon,
-      importance: Importance.max,
-      enableVibration: enableVibration,
-      styleInformation: BigTextStyleInformation(content),
-    );
-    var iOSPlatformChannelSpecifics = IOSNotificationDetails();
     var platformChannelSpecifics = NotificationDetails(
-      android: androidPlatformChannelSpecifics,
-      iOS: iOSPlatformChannelSpecifics,
+      android: AndroidNotificationDetails(
+        androidChannelId,
+        androidChannelDescription,
+        androidChannelDescription,
+        icon: androidResourceIcon,
+        importance: Importance.max,
+        enableVibration: enableVibration,
+        styleInformation: BigTextStyleInformation(content),
+      ),
+      iOS: IOSNotificationDetails(presentAlert: true),
+      macOS: MacOSNotificationDetails(presentAlert: true),
     );
     await flutterLocalNotificationsPlugin.show(
       id,
@@ -127,19 +127,18 @@ class NotificationUtils {
     String androidResourceIcon = ANDROID_RESOURCE_NAME,
   }) async {
     final flutterLocalNotificationsPlugin = FlutterLocalNotificationsPlugin();
-    var androidPlatformChannelSpecifics = AndroidNotificationDetails(
-      androidChannelId,
-      androidChannelDescription,
-      androidChannelDescription,
-      largeIcon: DrawableResourceAndroidBitmap(androidResourceIcon),
-      importance: Importance.max,
-      enableVibration: false,
-      styleInformation: BigTextStyleInformation(content),
-    );
-    var iOSPlatformChannelSpecifics = IOSNotificationDetails();
     var platformChannelSpecifics = NotificationDetails(
-      android: androidPlatformChannelSpecifics,
-      iOS: iOSPlatformChannelSpecifics,
+      android: AndroidNotificationDetails(
+        androidChannelId,
+        androidChannelDescription,
+        androidChannelDescription,
+        icon: androidResourceIcon,
+        importance: Importance.max,
+        enableVibration: false,
+        styleInformation: BigTextStyleInformation(content),
+      ),
+      iOS: IOSNotificationDetails(presentAlert: true),
+      macOS: MacOSNotificationDetails(presentAlert: true),
     );
     tz.initializeTimeZones();
     var scheduleDateTime = tz.TZDateTime.from(
@@ -171,19 +170,18 @@ class NotificationUtils {
     String androidResourceIcon = ANDROID_RESOURCE_NAME,
   }) async {
     final flutterLocalNotificationsPlugin = FlutterLocalNotificationsPlugin();
-    var androidPlatformChannelSpecifics = AndroidNotificationDetails(
-      androidChannelId,
-      androidChannelDescription,
-      androidChannelDescription,
-      largeIcon: DrawableResourceAndroidBitmap(androidResourceIcon),
-      importance: Importance.max,
-      enableVibration: false,
-      styleInformation: BigTextStyleInformation(content),
-    );
-    var iOSPlatformChannelSpecifics = IOSNotificationDetails();
     var platformChannelSpecifics = NotificationDetails(
-      android: androidPlatformChannelSpecifics,
-      iOS: iOSPlatformChannelSpecifics,
+      android: AndroidNotificationDetails(
+        androidChannelId,
+        androidChannelDescription,
+        androidChannelDescription,
+        icon: androidResourceIcon,
+        importance: Importance.max,
+        enableVibration: false,
+        styleInformation: BigTextStyleInformation(content),
+      ),
+      iOS: IOSNotificationDetails(presentAlert: true),
+      macOS: MacOSNotificationDetails(presentAlert: true),
     );
     tz.initializeTimeZones();
     var scheduleDateTime = tz.TZDateTime.from(
