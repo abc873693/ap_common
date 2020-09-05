@@ -10,6 +10,7 @@ import 'package:ap_common/scaffold/home_page_scaffold.dart';
 import 'package:ap_common/utils/ap_localizations.dart';
 import 'package:ap_common/utils/ap_utils.dart';
 import 'package:ap_common/utils/dialog_utils.dart';
+import 'package:ap_common/utils/notification_utils.dart';
 import 'package:ap_common/utils/preferences.dart';
 import 'package:ap_common/widgets/ap_drawer.dart';
 import 'package:ap_common_example/pages/notification_utils_page.dart';
@@ -206,13 +207,14 @@ class HomePageState extends State<HomePage> {
               SchoolInfoPage(),
             ),
           ),
-          DrawerItem(
-            icon: ApIcon.dateRange,
-            title: app.localNotificationTest,
-            onTap: () => _openPage(
-              NotificationUtilsTestPage(),
+          if (NotificationUtils.isSupport)
+            DrawerItem(
+              icon: ApIcon.dateRange,
+              title: app.localNotificationTest,
+              onTap: () => _openPage(
+                NotificationUtilsTestPage(),
+              ),
             ),
-          ),
           DrawerItem(
             icon: ApIcon.face,
             title: ap.about,
