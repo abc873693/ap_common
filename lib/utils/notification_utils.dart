@@ -209,7 +209,7 @@ class NotificationUtils {
     if (!kIsWeb && Platform.isIOS)
       return await FlutterLocalNotificationsPlugin()
           .resolvePlatformSpecificImplementation<
-              MacOSFlutterLocalNotificationsPlugin>()
+              IOSFlutterLocalNotificationsPlugin>()
           ?.requestPermissions(
             alert: sound,
             badge: badge,
