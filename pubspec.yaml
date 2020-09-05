@@ -1,6 +1,6 @@
 name: ap_common
 description: The school affairs(AP) series shares the engineering kit, rapid development of the school affairs series(AP) app
-version: 0.6.1
+version: 0.7.0-beta
 homepage: https://github.com/abc873693/ap_common
 
 environment:
@@ -28,6 +28,7 @@ dependencies:
   dio_cookie_manager: ">=1.0.0 <2.0.0"
   cookie_jar: ">=1.0.0 <2.0.0"
   flutter_local_notifications: ^1.5.0-beta.8
+  timezone: ^0.5.6
   flutter_keyboard_visibility: ^3.2.2
   add_2_calendar: ^1.4.0
   material_design_icons_flutter: ^4.0.5345

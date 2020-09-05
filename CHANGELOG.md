@@ -1,3 +1,8 @@
+## [0.7.0-beta] - 2020/09/05
+
+* NotificationUtils API 支援 macOS Desktop
+* 修正 NotificationUtils API 支援 `flutter_local_notification` plugin `v1.5.0` 以後的 API
+
 ## [0.6.1] - 2020/09/05
 
 * Preferences 支援 Linux Desktop
