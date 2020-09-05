@@ -39,7 +39,7 @@ class HomePageState extends State<HomePage> {
   final GlobalKey<HomePageScaffoldState> _homeKey =
       GlobalKey<HomePageScaffoldState>();
 
-  bool get isTablet => MediaQuery.of(context).size.shortestSide < 680;
+  bool get isTablet => MediaQuery.of(context).size.shortestSide > 680;
 
   var state = HomeState.loading;
 
@@ -150,7 +150,7 @@ class HomePageState extends State<HomePage> {
                 UserInfoPage(userInfo: userInfo),
               );
           } else {
-            if (isTablet) Navigator.of(context).pop();
+            if (!isTablet) Navigator.of(context).pop();
             openLoginPage();
           }
         },
@@ -207,8 +207,8 @@ class HomePageState extends State<HomePage> {
             ),
           ),
           DrawerItem(
-            icon: ApIcon.info,
-            title: '測試通知',
+            icon: ApIcon.dateRange,
+            title: app.localNotificationTest,
             onTap: () => _openPage(
               NotificationUtilsTestPage(),
             ),
@@ -236,7 +236,7 @@ class HomePageState extends State<HomePage> {
                 isLogin = false;
                 userInfo = null;
                 content = null;
-                if (isTablet) Navigator.of(context).pop();
+                if (!isTablet) Navigator.of(context).pop();
                 checkLogin();
               },
             ),
@@ -405,7 +405,7 @@ class HomePageState extends State<HomePage> {
   }
 
   _openPage(Widget page, {needLogin = false}) {
-    if (isTablet) Navigator.of(context).pop();
+    if (!isTablet) Navigator.of(context).pop();
     if (needLogin && !isLogin)
       ApUtils.showToast(
         context,
@@ -413,9 +413,9 @@ class HomePageState extends State<HomePage> {
       );
     else {
       if (isTablet) {
-        ApUtils.pushCupertinoStyle(context, page);
-      } else
         setState(() => content = page);
+      } else
+        ApUtils.pushCupertinoStyle(context, page);
     }
   }
 }
