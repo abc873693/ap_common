@@ -129,6 +129,69 @@
 
 ```
 
+### 本地通知支援
+
+使用 [`flutter_local_notification`](https://pub.dev/packages/flutter_local_notifications) 實作
+
+#### Android 
+
+需在原生專案中的 `app/scr/main/AndroidManifest.xml` 中
+
+加入 `RECEIVE_BOOT_COMPLETED` 及 `VIBRATE` 權限 
+
+```xml
+<uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED"/>
+<uses-permission android:name="android.permission.VIBRATE" />
+```
+
+確保App更新保持規劃通知保持運作，需加入
+
+```xml
+<receiver android:name="com.dexterous.flutterlocalnotifications.ScheduledNotificationBootReceiver">
+    <intent-filter>
+        <action android:name="android.intent.action.BOOT_COMPLETED"/>
+        <action android:name="android.intent.action.MY_PACKAGE_REPLACED"/>
+    </intent-filter>
+</receiver>
+<receiver android:name="com.dexterous.flutterlocalnotifications.ScheduledNotificationReceiver" />
+```
+
+更多 `AndroidManifest.xml` 設定 [可參考](https://github.com/MaikuB/flutter_local_notifications/blob/master/flutter_local_notifications/example/android/app/src/main/AndroidManifest.xml)
+
+並在 `app/scr/main/res/drawable` 加入 `ic_stat_name.png`，此圖是在通知顯示時在狀態列(status bar)顯示的圖案
+
+## iOS
+
+在 `Runner` 中的 `AppDelegate.m/AppDelegate.swift`
+
+加入下列程式碼在 `didFinishLaunchingWithOptions` 方法下
+
+Objective-C:
+```objc
+if (@available(iOS 10.0, *)) {
+  [UNUserNotificationCenter currentNotificationCenter].delegate = (id<UNUserNotificationCenterDelegate>) self;
+}
+if(![[NSUserDefaults standardUserDefaults]objectForKey:@"Notification"]){
+    [[UIApplication sharedApplication] cancelAllLocalNotifications];
+    [[NSUserDefaults standardUserDefaults]setBool:YES forKey:@"Notification"];
+}
+```
+
+Swift:
+```swift
+if #available(iOS 10.0, *) {
+  UNUserNotificationCenter.current().delegate = self as? UNUserNotificationCenterDelegate
+}
+if(!UserDefaults.standard.bool(forKey: "Notification")) {
+    UIApplication.shared.cancelAllLocalNotifications()
+    UserDefaults.standard.set(true, forKey: "Notification")
+}
+```
+
+開啟 `Xcode` 在 `Runner` 中的 `Signing & Capabilities` 加入 `Push Notification` 的權限
+
+------
+
 ## 工具類
 
 ### 共用函式
