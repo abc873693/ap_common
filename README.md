@@ -196,6 +196,21 @@ if(!UserDefaults.standard.bool(forKey: "Notification")) {
 
 開啟 `Xcode` 在 `Runner` 中的 `Signing & Capabilities` 加入 `Push Notification` 的權限
 
+### 課表加入行事曆App
+
+#### Android
+
+無須設定
+
+#### iOS
+
+在 `ios/Runner/Info.plist` `dict` 中加入
+
+```plist
+  <key>NSCalendarsUsageDescription</key>
+	<string>Feature calendar would be add schedule to calendar app</string>
+```
+
 ------
 
 ## 工具類
