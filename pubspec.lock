@@ -11,10 +11,10 @@ packages:
   ap_common:
     dependency: "direct main"
     description:
-      path: "../../GitHub-NKUST-ITC/ap_common"
-      relative: true
-    source: path
-    version: "0.7.0-beta"
+      name: ap_common
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "0.6.1"
   archive:
     dependency: transitive
     description:
