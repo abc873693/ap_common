@@ -11,6 +11,7 @@ import 'package:url_launcher/url_launcher.dart';
 
 export 'package:firebase_analytics/firebase_analytics.dart';
 export 'package:firebase_analytics/observer.dart';
+export 'package:firebase_core/firebase_core.dart';
 
 class FirebaseUtils {
   static const NOTIFY_ID = 9919;
@@ -22,6 +23,12 @@ class FirebaseUtils {
 
   static bool get isSupportCloudMessage =>
       (!kIsWeb && (Platform.isAndroid || Platform.isIOS));
+
+  static bool get isSupportCrashlytics =>
+      (!kIsWeb && (Platform.isAndroid || Platform.isIOS || Platform.isMacOS));
+
+  static bool get isSupportRemoteConfig =>
+      (!kIsWeb && (Platform.isAndroid || Platform.isIOS || Platform.isMacOS));
 
   static FirebaseAnalytics init() {
     if (isSupportCloudMessage) initFcm();
