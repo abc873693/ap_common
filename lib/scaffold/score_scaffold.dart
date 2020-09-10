@@ -232,7 +232,10 @@ class _ScoreContentState extends State<ScoreContent> {
         ),
       );
 
-  bool get isTablet => MediaQuery.of(context).size.longestSide >= 880;
+
+  bool get isTablet =>
+      MediaQuery.of(context).size.shortestSide >= 680 ||
+          MediaQuery.of(context).orientation == Orientation.landscape;
 
   @override
   Widget build(BuildContext context) {

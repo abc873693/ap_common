@@ -86,7 +86,9 @@ class CourseScaffoldState extends State<CourseScaffold> {
 
   _ContentStyle _contentStyle = _ContentStyle.table;
 
-  bool get isTablet => MediaQuery.of(context).size.longestSide >= 880;
+  bool get isTablet =>
+      MediaQuery.of(context).size.shortestSide >= 680 ||
+      MediaQuery.of(context).orientation == Orientation.landscape;
 
   @override
   void initState() {
