@@ -9,7 +9,7 @@ class SemesterData {
   int currentIndex;
 
   int get defaultIndex {
-    if (defaultSemester == null) return -1;
+    if (defaultSemester == null) return 0;
     for (var i = 0; i < data.length; i++)
       if (defaultSemester.text == data[i].text) return i;
     return 0;
@@ -30,8 +30,6 @@ class SemesterData {
     this.defaultSemester,
     this.currentIndex = 0,
   });
-
-  getDefaultIndex() {}
 
   factory SemesterData.fromRawJson(String str) =>
       SemesterData.fromJson(json.decode(str));
