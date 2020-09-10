@@ -1,3 +1,8 @@
+## [0.7.0-beta.2] - 2020/09/05
+
+# 修正自動輪播空指針錯誤
+# 修正課表與學期成績骨架平板 breakpoint 錯誤
+
 ## [0.7.0-beta] - 2020/09/05
 
 * NotificationUtils API 支援 macOS Desktop
