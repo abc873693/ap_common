@@ -149,12 +149,12 @@ class HomePageScaffoldState extends State<HomePageScaffold> {
         widget.autoPlayDuration,
         (Timer timer) {
           if (widget.state == HomeState.finish &&
-              widget.announcements.length > 1)
+              widget.announcements.length > 1 && pageController.hasClients)
             setState(() {
               _currentNewsIndex++;
               if (_currentNewsIndex >= widget.announcements.length)
                 _currentNewsIndex = 0;
-              pageController.animateToPage(
+              pageController?.animateToPage(
                 _currentNewsIndex,
                 duration: Duration(milliseconds: 500),
                 curve: Curves.easeOutQuint,
@@ -310,7 +310,7 @@ class HomePageScaffoldState extends State<HomePageScaffold> {
   }
 
   void hideSnackBar() {
-    _scaffoldKey.currentState.hideCurrentSnackBar();
+    _scaffoldKey.currentState?.hideCurrentSnackBar();
   }
 
   void showBasicHint({@required String text}) {
