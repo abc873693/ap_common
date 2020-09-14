@@ -15,6 +15,7 @@ import 'package:ap_common/utils/notification_utils.dart';
 import 'package:ap_common/widgets/hint_content.dart';
 import 'package:ap_common/widgets/item_picker.dart';
 import 'package:ap_common/widgets/option_dialog.dart';
+import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/foundation.dart';
 import 'package:intl/intl.dart';
 import 'package:flutter/material.dart';
@@ -846,7 +847,7 @@ class CourseBorder extends StatelessWidget {
                 child: Padding(
                   padding: EdgeInsets.symmetric(vertical: 2.0, horizontal: 4.0),
                   child: Center(
-                    child: Text(
+                    child: AutoSizeText(
                       course.title ?? '',
                       style: TextStyle(
                         fontSize: 16.0,

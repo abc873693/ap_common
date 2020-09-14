@@ -36,6 +36,7 @@ dependencies:
   native_pdf_view: ^3.8.0
   barcode_widget: ^1.5.0
   barcode: ^1.16.1
+  auto_size_text: 2.1.0
 
 
 dev_dependencies:
