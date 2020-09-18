@@ -94,9 +94,10 @@ class CourseAppWidgetProvider : AppWidgetProvider() {
                 if (min > diff) {
                     min = diff
                     val location = course.getJSONObject("location")
+                    val locationText = "${location.get("building")}${location.get("room")}"
                     text = String.format(context.getString(R.string.course_hint_content_format),
                             date.getString("startTime"),
-                            location.get("building"),
+                            locationText,
                             course.getString("title")
                     )
                 }
