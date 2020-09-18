@@ -556,6 +556,7 @@ class _CourseContentState extends State<CourseContent> {
                       location: widget.course.location?.toString() ?? '',
                       startDate: startTime.weekTime(widget.weekIndex),
                       endDate: endTime.weekTime(widget.weekIndex),
+                      timeZone: 'GMT+8',
                     );
                     Add2Calendar.addEvent2Cal(event);
                   },
@@ -875,8 +876,7 @@ extension DateTimeExtension on DateTime {
       minute,
     ).add(
       Duration(
-        days: dayOfWeek - weekday,
-        hours: (Platform.isAndroid ? 8 : 0),
+        days: dayOfWeek - now.weekday,
       ),
     );
   }
