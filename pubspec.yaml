@@ -14,8 +14,8 @@ dependencies:
   flutter_cupertino_localizations: ^1.0.1
 
   outline_material_icons: ^0.1.1
-  shared_preferences: ^0.5.10
-  url_launcher: ^5.6.0
+  shared_preferences: ^0.5.12
+  url_launcher: ^5.7.2
   share: ^0.6.5
   package_info: ^0.4.3
   sprintf: ^4.1.0
