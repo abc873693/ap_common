@@ -12,11 +12,15 @@ import 'package:url_launcher/url_launcher.dart';
 export 'package:firebase_analytics/firebase_analytics.dart';
 export 'package:firebase_analytics/observer.dart';
 export 'package:firebase_core/firebase_core.dart';
+export 'package:firebase_crashlytics/firebase_crashlytics.dart';
 
 class FirebaseUtils {
   static const NOTIFY_ID = 9919;
   static const NOTIFY_ANDROID_CHANNEL_ID = '1000';
   static String androidChannelDescription = 'FCM';
+
+  static bool get isSupportCore =>
+      (kIsWeb || Platform.isAndroid || Platform.isIOS || Platform.isMacOS);
 
   static bool get isSupportAnalytics =>
       (kIsWeb || Platform.isAndroid || Platform.isIOS);
