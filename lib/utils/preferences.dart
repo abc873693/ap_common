@@ -11,12 +11,16 @@ class Preferences {
 
   static encrypt.IV iv;
 
+  static bool get isSupport =>
+      kIsWeb ||
+      Platform.isIOS ||
+      Platform.isAndroid ||
+      Platform.isMacOS ||
+      Platform.isLinux ||
+      Platform.isWindows;
+
   static init({encrypt.Key key, encrypt.IV iv}) async {
-    if (kIsWeb ||
-        Platform.isIOS ||
-        Platform.isAndroid ||
-        Platform.isMacOS ||
-        Platform.isLinux) {
+    if (isSupport) {
       prefs = await SharedPreferences.getInstance();
       if (key != null && iv != null) {
         encrypter = encrypt.Encrypter(
