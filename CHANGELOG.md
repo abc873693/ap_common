@@ -1,3 +1,7 @@
+## [0.7.0-beta.6] - 2020/09/28
+
+* 修正 `shared_preference` 支援 `windows` 判斷式
+
 ## [0.7.0-beta.5] - 2020/09/26
 
 * `shared_preference` 支援 `windows`
