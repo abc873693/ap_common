@@ -16,6 +16,8 @@ class CourseNotifyData {
   int lastId;
   List<CourseNotify> data;
 
+  String tag;
+
   CourseNotifyData({
     this.version = VERSION,
     this.lastId = INITIAL_ID,
@@ -54,7 +56,7 @@ class CourseNotifyData {
     return null;
   }
 
-  void save(String tag) {
+  void save() {
     Preferences.setString(
       '${ApConstants.PACKAGE_NAME}'
       '.course_notify_data_$tag',
@@ -91,12 +93,11 @@ class CourseNotifyData {
       '',
     );
     if (rawString == '')
-      return CourseNotifyData(data: []);
+      return CourseNotifyData(data: [])..tag = tag;
     else
-      return CourseNotifyData.fromRawJson(rawString);
+      return CourseNotifyData.fromRawJson(rawString)..tag = tag;
   }
 
-  @deprecated
   factory CourseNotifyData.loadCurrent() {
     var semester = Preferences.getString(
       ApConstants.CURRENT_SEMESTER_CODE,
@@ -108,9 +109,9 @@ class CourseNotifyData {
       '',
     );
     if (rawString == '')
-      return CourseNotifyData(data: []);
+      return CourseNotifyData(data: [])..tag = semester;
     else
-      return CourseNotifyData.fromRawJson(rawString);
+      return CourseNotifyData.fromRawJson(rawString)..tag = semester;
   }
 
   static void clearOldVersionNotification({
@@ -128,7 +129,8 @@ class CourseNotifyData {
       courseNotifyData.data.forEach(
           (element) => NotificationUtils.cancelCourseNotify(id: element.id));
       courseNotifyData.data.clear();
-      courseNotifyData.save(newTag);
+      courseNotifyData.tag = newTag;
+      courseNotifyData.save();
     }
     Preferences.setString(
       '${ApConstants.PACKAGE_NAME}.'

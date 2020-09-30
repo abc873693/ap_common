@@ -601,7 +601,7 @@ class _CourseContentState extends State<CourseContent> {
                         ApUtils.showToast(context,
                             ApLocalizations.of(context).cancelNotifySuccess);
                       }
-                      widget.notifyData.save(widget.courseNotifySaveKey);
+                      widget.notifyData.save();
                       setState(() {});
                     }
                     if (widget.onNotifyClick != null)

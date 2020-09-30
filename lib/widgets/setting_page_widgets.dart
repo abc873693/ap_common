@@ -86,6 +86,10 @@ class SettingItem extends StatelessWidget {
 }
 
 class CheckCourseNotifyItem extends StatelessWidget {
+  final String tag;
+
+  const CheckCourseNotifyItem({Key key, this.tag}) : super(key: key);
+
   @override
   Widget build(BuildContext context) {
     final ap = ApLocalizations.of(context);
@@ -93,7 +97,9 @@ class CheckCourseNotifyItem extends StatelessWidget {
       text: ap.courseNotify,
       subText: ap.courseNotifySubTitle,
       onTap: () {
-        CourseNotifyData notifyData = CourseNotifyData.loadCurrent();
+        CourseNotifyData notifyData = tag == null
+            ? CourseNotifyData.loadCurrent()
+            : CourseNotifyData.load(tag);
         if (NotificationUtils.isSupport) {
           if (notifyData != null && notifyData.data.length != 0) {
             showDialog(
@@ -102,14 +108,48 @@ class CheckCourseNotifyItem extends StatelessWidget {
                 title: ap.courseNotify ?? '',
                 items: [
                   for (var notify in notifyData.data)
-                    '${notify.startTime} ${notify.title}',
+                    '${ap.weekdaysCourse[notify.weeklyIndex]} ${notify.startTime} ${notify.title}',
                 ],
                 index: -1,
-                onSelected: (index) {},
+                onSelected: (index) {
+                  NotificationUtils.cancelCourseNotify(
+                    id: notifyData.data[index].id,
+                  );
+                  notifyData.data.removeAt(index);
+                  notifyData.save();
+                  ApUtils.showToast(context, ap.cancelNotifySuccess);
+                },
               ),
             );
           } else
             ApUtils.showToast(context, ap.courseNotifyEmpty);
+        } else
+          ApUtils.showToast(context, ap.platformError);
+      },
+    );
+  }
+}
+
+class ClearAllNotifyItem extends StatelessWidget {
+  final String tag;
+
+  const ClearAllNotifyItem({Key key, this.tag}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    final ap = ApLocalizations.of(context);
+    return SettingItem(
+      text: ap.cancelAllNotify,
+      subText: ap.cancelAllNotifySubTitle,
+      onTap: () {
+        if (NotificationUtils.isSupport) {
+          NotificationUtils.cancelAll();
+          CourseNotifyData notifyData = tag == null
+              ? CourseNotifyData.loadCurrent()
+              : CourseNotifyData.load(tag);
+          notifyData.data.clear();
+          notifyData.save();
+          ApUtils.showToast(context, ap.cancelNotifySuccess);
         } else
           ApUtils.showToast(context, ap.platformError);
       },

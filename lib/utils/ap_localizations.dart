@@ -687,6 +687,11 @@ class ApLocalizations {
   String get classroomCourseTableSearch =>
       _vocabularies['classroom_coursetable_search'];
 
+  String get cancelAllNotify => _vocabularies['cancelAllNotify'];
+
+  String get cancelAllNotifySubTitle =>
+      _vocabularies['cancelAllNotifySubTitle'];
+
   static ApLocalizations of(BuildContext context) {
     return instance =
         Localizations.of<ApLocalizations>(context, ApLocalizations);
@@ -846,7 +851,7 @@ class ApLocalizations {
       'course_vibrate_hint':
           'Will turn on silent mode during class, turn back to normal mode after class!',
       'course_vibrate_permission': 'Need "Do Not Disturb access" to auto mute.',
-      'course_notify_hint': 'Reminder will pop up 10mins before class starts!',
+      'course_notify_hint': 'Reminder will pop up 10 mins before class starts!',
       'course_notify_content': 'Class %s will be at room %s!',
       'course_notify_unknown': 'Outerspace~',
       'course_notify_empty': 'Oops! No class need notify~',
@@ -869,7 +874,7 @@ class ApLocalizations {
       'head_photo_setting': 'Show Photo',
       'head_photo_setting_sub_title': 'Side menu shows the photo sticker',
       'course_notify': 'Class Reminder',
-      'course_notify_sub_title': 'Reminder 10mins before class starts',
+      'course_notify_sub_title': 'Reminder 10 mins before class starts, click item to cancel.',
       'course_vibrate': 'Silent Mode During Class',
       'bus_notify': 'Bus Reservation Reminder',
       'bus_notify_sub_title': 'Reminder 30 mins before reserved bus',
@@ -1090,6 +1095,8 @@ class ApLocalizations {
       'room_list': 'Classroom List',
       'empty_classroom_search': 'Empty classroom search',
       'classroom_coursetable_search': 'Classroom Coursetable Search',
+      'cancelAllNotify': 'Cancel All Notify',
+      'cancelAllNotifySubTitle': '清除包含未知的通知',
     },
     'zh': {
       'update_note_title': '更新日誌',
@@ -1229,7 +1236,7 @@ class ApLocalizations {
       'head_photo_setting': '顯示大頭貼',
       'head_photo_setting_sub_title': '側選單是否顯示大頭貼',
       'course_notify': '上課提醒',
-      'course_notify_sub_title': '上課前十分鐘提醒',
+      'course_notify_sub_title': '上課前十分鐘提醒 點擊可取消通知',
       'course_vibrate': '上課震動',
       'bus_notify': '校車提醒',
       'bus_notify_sub_title': '發車前三十分鐘提醒',
@@ -1441,6 +1448,8 @@ class ApLocalizations {
       'room_list': '教室列表',
       'empty_classroom_search': '空教室查詢',
       'classroom_coursetable_search': '教室課表查詢',
+      'cancelAllNotify': '取消所有提醒',
+      'cancelAllNotifySubTitle': '清除包含未知的通知',
     },
   };
 }
