@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'package:ap_common/config/ap_constants.dart';
 import 'package:ap_common/models/course_data.dart';
 import 'package:ap_common/utils/ap_localizations.dart';
+import 'package:ap_common/utils/notification_utils.dart';
 import 'package:ap_common/utils/preferences.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:sprintf/sprintf.dart';
@@ -95,6 +96,7 @@ class CourseNotifyData {
       return CourseNotifyData.fromRawJson(rawString);
   }
 
+  @deprecated
   factory CourseNotifyData.loadCurrent() {
     var semester = Preferences.getString(
       ApConstants.CURRENT_SEMESTER_CODE,
@@ -109,6 +111,30 @@ class CourseNotifyData {
       return CourseNotifyData(data: []);
     else
       return CourseNotifyData.fromRawJson(rawString);
+  }
+
+  static void clearOldVersionNotification({
+    @required String tag,
+    @required String newTag,
+  }) {
+    String rawString = Preferences.getString(
+      '${ApConstants.PACKAGE_NAME}.'
+          'course_notify_data_$tag',
+      '',
+    );
+    print(rawString);
+    if (rawString.isNotEmpty) {
+      var courseNotifyData = CourseNotifyData.fromRawJson(rawString);
+      courseNotifyData.data.forEach(
+          (element) => NotificationUtils.cancelCourseNotify(id: element.id));
+      courseNotifyData.data.clear();
+      courseNotifyData.save(newTag);
+    }
+    Preferences.setString(
+      '${ApConstants.PACKAGE_NAME}.'
+      'course_notify_data_$tag',
+      null,
+    );
   }
 }
 
