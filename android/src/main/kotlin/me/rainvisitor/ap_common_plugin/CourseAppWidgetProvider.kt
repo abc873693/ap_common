@@ -75,7 +75,8 @@ class CourseAppWidgetProvider : AppWidgetProvider() {
         val courseData = JSONObject(rawData)
         val courseTable = courseData.getJSONObject("coursetable")
         val courses = parseCourseList(now, courseTable)
-        val sourceDateformat = SimpleDateFormat("HH:mm", Locale.TAIWAN);
+        val sourceDateformat = SimpleDateFormat("HH:mm", Locale.TAIWAN)
+        val sourceErrorDateformat = SimpleDateFormat("HHmm", Locale.TAIWAN)
         var text = context.getString(R.string.today_no_course_already)
         var min: Long = now.timeInMillis
         Log.e("now", now.time.toString())
@@ -85,7 +86,8 @@ class CourseAppWidgetProvider : AppWidgetProvider() {
             val course = courses.getJSONObject(i)
             val date = course.getJSONObject("date")
             val starTime = Calendar.getInstance()
-            starTime.time = sourceDateformat.parse(date.getString("startTime"))
+            val startTimeText = date.getString("startTime")
+            starTime.time = if (startTimeText.length == 4) sourceErrorDateformat.parse(startTimeText) else sourceDateformat.parse(startTimeText)
             val time = Calendar.getInstance()
             time.set(Calendar.HOUR_OF_DAY, starTime.get(Calendar.HOUR_OF_DAY))
             time.set(Calendar.MINUTE, starTime.get(Calendar.MINUTE))
