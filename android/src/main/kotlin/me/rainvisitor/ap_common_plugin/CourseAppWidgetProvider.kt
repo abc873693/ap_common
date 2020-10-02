@@ -63,8 +63,8 @@ class CourseAppWidgetProvider : AppWidgetProvider() {
 
 
             val preference = context.getSharedPreferences("FlutterSharedPreferences", Context.MODE_PRIVATE)
-            var currentSemesterCode = preference.getString("flutter.ap_common.current_semester_code", "")
-            var rawData = preference.getString("flutter.ap_common.course_data_${currentSemesterCode}", "")
+            val currentSemesterCode = preference.getString("flutter.ap_common.current_semester_code", "")
+            val rawData = preference.getString("flutter.ap_common.course_data_${currentSemesterCode}", "")
             val content = if (rawData == "") context.getString(R.string.not_load_course_table) else parseNextCurse(context, rawData)
             setTextViewText(R.id.content, content)
         }
