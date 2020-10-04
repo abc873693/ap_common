@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:outline_material_icons/outline_material_icons.dart';
 
 class ApIcon {
   static const String FILLED = 'filled';
@@ -10,10 +9,10 @@ class ApIcon {
   static IconData get directionsBus {
     switch (ApIcon.code) {
       case ApIcon.FILLED:
-        return Icons.directions_bus;
+        return Icons.directions_bike;
       case ApIcon.OUTLINED:
       default:
-        return OMIcons.directionsBus;
+        return Icons.directions_bike_outlined;
     }
   }
 
@@ -23,7 +22,7 @@ class ApIcon {
         return Icons.class_;
       case ApIcon.OUTLINED:
       default:
-        return OMIcons.classIcon;
+        return Icons.class__outlined;
     }
   }
 
@@ -33,7 +32,7 @@ class ApIcon {
         return Icons.assignment;
       case ApIcon.OUTLINED:
       default:
-        return OMIcons.assignment;
+        return Icons.assignment_outlined;
     }
   }
 
@@ -43,7 +42,7 @@ class ApIcon {
         return Icons.account_circle;
       case ApIcon.OUTLINED:
       default:
-        return OMIcons.accountCircle;
+        return Icons.account_circle_outlined;
     }
   }
 
@@ -53,7 +52,7 @@ class ApIcon {
         return Icons.school;
       case ApIcon.OUTLINED:
       default:
-        return OMIcons.school;
+        return Icons.school_outlined;
     }
   }
 
@@ -63,7 +62,7 @@ class ApIcon {
         return Icons.apps;
       case ApIcon.OUTLINED:
       default:
-        return OMIcons.apps;
+        return Icons.apps_outlined;
     }
   }
 
@@ -73,7 +72,7 @@ class ApIcon {
         return Icons.calendar_today;
       case ApIcon.OUTLINED:
       default:
-        return OMIcons.calendarToday;
+        return Icons.calendar_today_outlined;
     }
   }
 
@@ -83,7 +82,7 @@ class ApIcon {
         return Icons.edit;
       case ApIcon.OUTLINED:
       default:
-        return OMIcons.edit;
+        return Icons.edit_outlined;
     }
   }
 
@@ -93,7 +92,7 @@ class ApIcon {
         return Icons.date_range;
       case ApIcon.OUTLINED:
       default:
-        return OMIcons.dateRange;
+        return Icons.date_range_outlined;
     }
   }
 
@@ -103,7 +102,7 @@ class ApIcon {
         return Icons.info;
       case ApIcon.OUTLINED:
       default:
-        return OMIcons.info;
+        return Icons.info_outline;
     }
   }
 
@@ -113,7 +112,7 @@ class ApIcon {
         return Icons.face;
       case ApIcon.OUTLINED:
       default:
-        return OMIcons.face;
+        return Icons.face_outlined;
     }
   }
 
@@ -123,7 +122,7 @@ class ApIcon {
         return Icons.settings;
       case ApIcon.OUTLINED:
       default:
-        return OMIcons.settings;
+        return Icons.settings_outlined;
     }
   }
 
@@ -133,7 +132,7 @@ class ApIcon {
         return Icons.power_settings_new;
       case ApIcon.OUTLINED:
       default:
-        return OMIcons.powerSettingsNew;
+        return Icons.power_settings_new_outlined;
     }
   }
 
@@ -143,7 +142,7 @@ class ApIcon {
         return Icons.perm_identity;
       case ApIcon.OUTLINED:
       default:
-        return OMIcons.permIdentity;
+        return Icons.perm_identity_outlined;
     }
   }
 
@@ -153,7 +152,7 @@ class ApIcon {
         return Icons.access_time;
       case ApIcon.OUTLINED:
       default:
-        return OMIcons.accessTime;
+        return Icons.access_time_outlined;
     }
   }
 
@@ -163,7 +162,7 @@ class ApIcon {
         return Icons.keyboard_arrow_down;
       case ApIcon.OUTLINED:
       default:
-        return OMIcons.keyboardArrowDown;
+        return Icons.keyboard_arrow_down_outlined;
     }
   }
 
@@ -173,7 +172,7 @@ class ApIcon {
         return Icons.offline_bolt;
       case ApIcon.OUTLINED:
       default:
-        return OMIcons.offlineBolt;
+        return Icons.offline_bolt_outlined;
     }
   }
 
@@ -183,7 +182,7 @@ class ApIcon {
         return Icons.error;
       case ApIcon.OUTLINED:
       default:
-        return OMIcons.error;
+        return Icons.error_outline_outlined;
     }
   }
 
@@ -193,7 +192,7 @@ class ApIcon {
         return Icons.fiber_new;
       case ApIcon.OUTLINED:
       default:
-        return OMIcons.fiberNew;
+        return Icons.fiber_new_outlined;
     }
   }
 
@@ -203,7 +202,7 @@ class ApIcon {
         return Icons.phone;
       case ApIcon.OUTLINED:
       default:
-        return OMIcons.phone;
+        return Icons.phone_outlined;
     }
   }
 
@@ -213,7 +212,7 @@ class ApIcon {
         return Icons.code;
       case ApIcon.OUTLINED:
       default:
-        return OMIcons.code;
+        return Icons.code_outlined;
     }
   }
 
@@ -223,7 +222,7 @@ class ApIcon {
         return Icons.cancel;
       case ApIcon.OUTLINED:
       default:
-        return OMIcons.cancel;
+        return Icons.cancel_outlined;
     }
   }
 
@@ -233,7 +232,7 @@ class ApIcon {
         return Icons.check;
       case ApIcon.OUTLINED:
       default:
-        return OMIcons.check;
+        return Icons.check_outlined;
     }
   }
 
@@ -243,7 +242,7 @@ class ApIcon {
         return Icons.arrow_drop_up;
       case ApIcon.OUTLINED:
       default:
-        return OMIcons.arrowDropUp;
+        return Icons.arrow_drop_up_outlined;
     }
   }
 
@@ -253,7 +252,7 @@ class ApIcon {
         return Icons.arrow_drop_down;
       case ApIcon.OUTLINED:
       default:
-        return OMIcons.arrowDropDown;
+        return Icons.arrow_drop_down_outlined;
     }
   }
 
@@ -263,7 +262,7 @@ class ApIcon {
         return Icons.chevron_left;
       case ApIcon.OUTLINED:
       default:
-        return OMIcons.chevronLeft;
+        return Icons.chevron_left_outlined;
     }
   }
 
@@ -273,7 +272,7 @@ class ApIcon {
         return Icons.chevron_right;
       case ApIcon.OUTLINED:
       default:
-        return OMIcons.chevronRight;
+        return Icons.chevron_right_outlined;
     }
   }
 
@@ -283,7 +282,7 @@ class ApIcon {
         return Icons.person;
       case ApIcon.OUTLINED:
       default:
-        return OMIcons.person;
+        return Icons.person_outlined;
     }
   }
 
@@ -293,7 +292,7 @@ class ApIcon {
         return Icons.exit_to_app;
       case ApIcon.OUTLINED:
       default:
-        return OMIcons.exitToApp;
+        return Icons.exit_to_app_outlined;
     }
   }
 
@@ -303,7 +302,7 @@ class ApIcon {
         return Icons.warning;
       case ApIcon.OUTLINED:
       default:
-        return OMIcons.warning;
+        return Icons.warning_outlined;
     }
   }
 
@@ -313,7 +312,7 @@ class ApIcon {
         return Icons.folder;
       case ApIcon.OUTLINED:
       default:
-        return OMIcons.folder;
+        return Icons.folder_outlined;
     }
   }
 
@@ -323,7 +322,7 @@ class ApIcon {
         return Icons.insert_drive_file;
       case ApIcon.OUTLINED:
       default:
-        return OMIcons.insertDriveFile;
+        return Icons.insert_drive_file_outlined;
     }
   }
 
@@ -333,7 +332,7 @@ class ApIcon {
         return Icons.collections_bookmark;
       case ApIcon.OUTLINED:
       default:
-        return OMIcons.collectionsBookmark;
+        return Icons.collections_bookmark_outlined;
     }
   }
 
@@ -343,7 +342,7 @@ class ApIcon {
         return Icons.accessibility_new;
       case ApIcon.OUTLINED:
       default:
-        return OMIcons.accessibilityNew;
+        return Icons.accessibility_new;
     }
   }
 
@@ -353,7 +352,7 @@ class ApIcon {
         return Icons.monetization_on;
       case ApIcon.OUTLINED:
       default:
-        return OMIcons.monetizationOn;
+        return Icons.monetization_on_outlined;
     }
   }
 
@@ -363,7 +362,7 @@ class ApIcon {
         return Icons.map;
       case ApIcon.OUTLINED:
       default:
-        return OMIcons.map;
+        return Icons.map_outlined;
     }
   }
 
@@ -373,7 +372,7 @@ class ApIcon {
         return Icons.navigation;
       case ApIcon.OUTLINED:
       default:
-        return OMIcons.navigation;
+        return Icons.navigation_outlined;
     }
   }
 
@@ -383,7 +382,7 @@ class ApIcon {
         return Icons.room;
       case ApIcon.OUTLINED:
       default:
-        return OMIcons.room;
+        return Icons.room_outlined;
     }
   }
 
@@ -393,7 +392,7 @@ class ApIcon {
         return Icons.home;
       case ApIcon.OUTLINED:
       default:
-        return OMIcons.home;
+        return Icons.home_outlined;
     }
   }
 }
