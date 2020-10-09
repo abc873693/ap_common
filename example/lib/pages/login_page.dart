@@ -8,6 +8,7 @@ import 'package:ap_common/widgets/progress_dialog.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 
 import '../config/constants.dart';
 import '../res/assets.dart';
@@ -179,6 +180,7 @@ class LoginPageState extends State<LoginPage> {
         Preferences.setStringSecurity(Constants.PREF_PASSWORD, _password.text);
       }
       Preferences.setBool(Constants.PREF_IS_OFFLINE_LOGIN, false);
+      TextInput.finishAutofillContext();
       Navigator.of(context).pop(true);
     }
   }
