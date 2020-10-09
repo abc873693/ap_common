@@ -8,6 +8,7 @@ class FirebaseConstants {
   static const LANGUAGE = 'language';
   static const CAN_USE_BUS = 'can_use_bus';
   static const HAS_BUS_VIOLATION = 'has_bus_violation';
+  static const ENABLE_LOCAL_NOTIFICATION = 'enable_local_notification';
 
   static const YES = 'yes';
   static const NO = 'no';
