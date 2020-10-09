@@ -9,10 +9,10 @@ class ApIcon {
   static IconData get directionsBus {
     switch (ApIcon.code) {
       case ApIcon.FILLED:
-        return Icons.directions_bike;
+        return Icons.directions_bus;
       case ApIcon.OUTLINED:
       default:
-        return Icons.directions_bike_outlined;
+        return Icons.directions_bus_outlined;
     }
   }
 
