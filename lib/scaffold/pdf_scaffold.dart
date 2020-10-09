@@ -6,17 +6,19 @@ import 'package:ap_common/widgets/hint_content.dart';
 import 'package:flutter/material.dart';
 import 'package:native_pdf_view/native_pdf_view.dart';
 
+export 'package:native_pdf_view/native_pdf_view.dart';
+
 enum PdfState { loading, finish, error }
 
 class PdfScaffold extends StatefulWidget {
   final PdfState state;
-  final Uint8List byteList;
+  final PdfController pdfController;
   final Function onRefresh;
 
   PdfScaffold({
     Key key,
     @required this.state,
-    @required this.byteList,
+    @required this.pdfController,
     this.onRefresh,
   }) : super(key: key) {
     assert(this.state != null);
@@ -43,14 +45,13 @@ class _PdfScaffoldState extends State<PdfScaffold> {
       case PdfState.error:
         return errorContent;
       default:
-        if (widget.byteList == null)
+        if (widget.pdfController == null)
           return errorContent;
-        else
+        else {
           return PdfView(
-            controller: PdfController(
-              document: PdfDocument.openData(widget.byteList),
-            ),
+            controller: widget.pdfController,
           );
+        }
     }
   }
 
