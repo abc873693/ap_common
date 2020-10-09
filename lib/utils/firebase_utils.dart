@@ -1,7 +1,6 @@
 import 'dart:async';
 import 'dart:io';
 
-import 'package:ap_common/config/ap_constants.dart';
 import 'package:ap_common/utils/notification_utils.dart';
 import 'package:ap_common_firebase/utils/firebase_analytics_utils.dart';
 import 'package:firebase_analytics/firebase_analytics.dart';
@@ -48,7 +47,7 @@ class FirebaseUtils {
     await Future.delayed(Duration(seconds: 2));
     firebaseMessaging.configure(
       onMessage: (Map<String, dynamic> message) async {
-        if (ApConstants.isInDebugMode) print("onMessage: $message");
+        if (kDebugMode) print("onMessage: $message");
         NotificationUtils.show(
           id: NOTIFY_ID,
           androidChannelId: NOTIFY_ANDROID_CHANNEL_ID,
@@ -58,13 +57,13 @@ class FirebaseUtils {
         );
       },
       onLaunch: (Map<String, dynamic> message) async {
-        if (ApConstants.isInDebugMode) print("onLaunch: $message");
+        if (kDebugMode) print("onLaunch: $message");
         if (Platform.isAndroid)
           navigateToItemDetail(message['data'], onClick);
         else if (Platform.isIOS) navigateToItemDetail(message, onClick);
       },
       onResume: (Map<String, dynamic> message) async {
-        if (ApConstants.isInDebugMode) print("onResume: $message");
+        if (kDebugMode) print("onResume: $message");
         if (Platform.isAndroid) {
           await navigateToItemDetail(message['data'], onClick);
         } else if (Platform.isIOS) await navigateToItemDetail(message, onClick);
@@ -78,7 +77,7 @@ class FirebaseUtils {
       print("Settings registered: $settings");
     });
     firebaseMessaging.getToken().then((String token) {
-      if (token != null && ApConstants.isInDebugMode) {
+      if (token != null && kDebugMode) {
         print("Push Messaging token: $token");
       }
     });
