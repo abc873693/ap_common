@@ -32,7 +32,6 @@ class LoginScaffold extends StatefulWidget {
 }
 
 class LoginScaffoldState extends State<LoginScaffold> {
-
   bool get isTablet => MediaQuery.of(context).size.shortestSide >= 600;
 
   @override
@@ -190,7 +189,9 @@ class ApButton extends StatelessWidget {
           ),
         ),
         padding: EdgeInsets.all(14.0),
-        onPressed: onPressed,
+        onPressed: () {
+          if (onPressed != null) onPressed();
+        },
         color: Colors.white,
         child: Text(
           text,
