@@ -1,3 +1,10 @@
+## [0.8.0] - 2020/10/10
+### [Break Change] 此版本之後基於Flutter v1.22開發
+
+* [API Break Change] 修正 PdfView 初始化錯誤
+* 改善 `ApButton` 無法讓 `TextInput.finishAutofillContext()` 啟用錯誤
+* 移除 `outline_material_icons` 套件，因為Flutter v1.22 已支援
+
 ## [0.8.0-beta.1] - 2020/09/30
 
 * 改善取消通知元件
