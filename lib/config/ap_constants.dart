@@ -1,10 +1,4 @@
 class ApConstants {
-  static bool get isInDebugMode {
-    bool inDebugMode = false;
-    assert(inDebugMode = true);
-    return inDebugMode;
-  }
-
   static const PACKAGE_NAME = 'ap_common';
 
   static const TAG_STUDENT_PICTURE = "tag_student_picture";
