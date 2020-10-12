@@ -9,12 +9,13 @@ import 'package:ap_common/utils/preferences.dart';
 import 'package:ap_common/widgets/dialog_option.dart';
 import 'package:ap_common/widgets/option_dialog.dart';
 import 'package:ap_common/widgets/setting_page_widgets.dart';
-import 'package:ap_common_example/config/constants.dart';
-import 'package:ap_common_example/models/item.dart';
-import 'package:ap_common_example/widgets/share_data_widget.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:package_info/package_info.dart';
+
+import '../config/constants.dart';
+import '../models/item.dart';
+import '../widgets/share_data_widget.dart';
 
 class SettingPage extends StatefulWidget {
   static const String routerName = "/setting";

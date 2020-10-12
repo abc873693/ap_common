@@ -9,9 +9,10 @@ import 'package:ap_common/resources/ap_icon.dart';
 import 'package:ap_common/resources/ap_theme.dart';
 import 'package:ap_common/scaffold/pdf_scaffold.dart';
 import 'package:ap_common/utils/ap_localizations.dart';
-import 'package:ap_common_example/res/assets.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+
+import '../res/assets.dart';
 
 class SchoolInfoPage extends StatefulWidget {
   static const String routerName = "/ShcoolInfo";

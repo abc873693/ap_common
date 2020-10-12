@@ -4,9 +4,10 @@ import 'package:ap_common/utils/ap_localizations.dart';
 import 'package:ap_common/utils/dialog_utils.dart';
 import 'package:ap_common/utils/notification_utils.dart';
 import 'package:ap_common/widgets/option_dialog.dart';
-import 'package:ap_common_example/utils/app_localizations.dart';
 import 'package:flutter/material.dart';
 import 'package:sprintf/sprintf.dart';
+
+import '../utils/app_localizations.dart';
 
 class NotificationUtilsTestPage extends StatefulWidget {
   @override
