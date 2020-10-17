@@ -10,6 +10,7 @@ import 'package:ap_common/widgets/ap_network_image.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_linkify/flutter_linkify.dart';
 import 'package:photo_view/photo_view.dart';
 import 'package:url_launcher/url_launcher.dart';
 
@@ -129,13 +130,15 @@ class AnnouncementContentPageState extends State<AnnouncementContentPage> {
       Padding(
         padding: EdgeInsets.symmetric(
             horizontal: orientation == Orientation.portrait ? 16.0 : 0.0),
-        child: SelectableText(
-          widget.announcement.description,
+        child: SelectableLinkify(
+          text: widget.announcement.description,
           textAlign: TextAlign.center,
           style: TextStyle(
             fontSize: 16.0,
             color: ApTheme.of(context).greyText,
           ),
+          options: LinkifyOptions(humanize: false),
+          onOpen: (link) async => ApUtils.launchUrl(link?.url),
         ),
       ),
       if (widget.announcement.url != null &&

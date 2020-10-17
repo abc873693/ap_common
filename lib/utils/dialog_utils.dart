@@ -45,8 +45,8 @@ class DialogUtils {
       context: context,
       builder: (BuildContext context) => YesNoDialog(
         title: ap.newsRuleTitle,
-        contentWidget: RichText(
-          text: TextSpan(
+        contentWidget: SelectableText.rich(
+          TextSpan(
             style: TextStyle(color: ApTheme.of(context).grey, fontSize: 16.0),
             children: [
               TextSpan(

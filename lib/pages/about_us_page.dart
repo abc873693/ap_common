@@ -7,6 +7,7 @@ import 'package:ap_common/utils/ap_utils.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_linkify/flutter_linkify.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class AboutUsPage extends StatefulWidget {
@@ -112,7 +113,7 @@ class AboutUsPageState extends State<AboutUsPage> {
                     mainAxisSize: MainAxisSize.max,
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: <Widget>[
-                      Text(
+                      SelectableText(
                         app.aboutContactUsTitle,
                         style: TextStyle(fontSize: 18.0),
                       ),
@@ -215,19 +216,21 @@ class AboutUsPageState extends State<AboutUsPage> {
             mainAxisSize: MainAxisSize.max,
             crossAxisAlignment: CrossAxisAlignment.start,
             children: <Widget>[
-              Text(
-                text,
+              SelectableLinkify(
+                text: text,
                 style: TextStyle(fontSize: 18.0),
               ),
               SizedBox(
                 height: 4.0,
               ),
-              RichText(
-                text: TextSpan(
-                  style: TextStyle(
-                      fontSize: 14.0, color: ApTheme.of(context).grey),
-                  text: subText,
+              SelectableLinkify(
+                text: subText,
+                style: TextStyle(
+                  fontSize: 14.0,
+                  color: ApTheme.of(context).grey,
                 ),
+                options: LinkifyOptions(humanize: false),
+                onOpen: (link) async => ApUtils.launchUrl(link?.url),
               ),
             ],
           ),
