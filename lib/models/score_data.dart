@@ -104,7 +104,9 @@ class Score {
   String required;
   String at;
   String middleScore;
+  String generalScore;
   String finalScore;
+  String semestersScore;
   String remark;
 
   Score({
@@ -116,7 +118,9 @@ class Score {
     this.required,
     this.at,
     this.middleScore,
+    this.generalScore,
     this.finalScore,
+    this.semestersScore,
     this.remark,
   });
 
@@ -133,7 +137,9 @@ class Score {
         required: json["required"],
         at: json["at"],
         middleScore: json["middleScore"],
+        generalScore: json['generalScore'],
         finalScore: json["finalScore"],
+        semestersScore: json["semestersScore"],
         remark: json["remark"],
       );
 
@@ -146,7 +152,9 @@ class Score {
         "required": required,
         "at": at,
         "middleScore": middleScore,
+        "generalScore": generalScore,
         "finalScore": finalScore,
+        "semestersScore": semestersScore,
         "remark": remark,
       };
 }
