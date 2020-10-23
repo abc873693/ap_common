@@ -106,7 +106,7 @@ class Score {
   String middleScore;
   String generalScore;
   String finalScore;
-  String semestersScore;
+  String semesterScore;
   String remark;
 
   Score({
@@ -120,7 +120,7 @@ class Score {
     this.middleScore,
     this.generalScore,
     this.finalScore,
-    this.semestersScore,
+    this.semesterScore,
     this.remark,
   });
 
@@ -139,7 +139,7 @@ class Score {
         middleScore: json["middleScore"],
         generalScore: json['generalScore'],
         finalScore: json["finalScore"],
-        semestersScore: json["semestersScore"],
+        semesterScore: json["semesterScore"],
         remark: json["remark"],
       );
 
@@ -154,7 +154,7 @@ class Score {
         "middleScore": middleScore,
         "generalScore": generalScore,
         "finalScore": finalScore,
-        "semestersScore": semestersScore,
+        "semesterScore": semesterScore,
         "remark": remark,
       };
 }
