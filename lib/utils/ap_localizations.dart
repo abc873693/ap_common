@@ -245,9 +245,17 @@ class ApLocalizations {
 
   String get subject => _vocabularies['subject'];
 
-  String get midtermScore => _vocabularies['midterm'];
+  String get midtermScoreTitle => _vocabularies['midtermScoreTitle'];
 
-  String get finalScore => _vocabularies['final'];
+  String get semesterScoreTitle => _vocabularies['semesterScoreTitle'];
+
+  String get midtermScore => _vocabularies['midtermScore'];
+
+  String get finalScore => _vocabularies['finalScore'];
+
+  String get generalScore => _vocabularies['generalScore'];
+
+  String get semesterScore => _vocabularies['semesterScore'];
 
   String get conductScore => _vocabularies['conduct_score'];
 
@@ -810,8 +818,12 @@ class ApLocalizations {
       'score_no_score':
           'Oops! No record for this semester~\nPlease choose another semester \uD83D\uDE0B',
       'subject': 'Subject',
-      'midterm': 'Midterm',
-      'final': 'Final',
+      'midtermScoreTitle': 'Midterm',
+      'semesterScoreTitle': 'Final',
+      'midtermScore': 'Midterm Score',
+      'finalScore': 'Final Score',
+      'generalScore': 'General Score',
+      'semesterScore': 'Semester Score',
       'conduct_score': 'Conduct Score',
       'creditsTakenEarned': 'Credits Taken/Earned',
       'credits': 'Credits',
@@ -874,7 +886,8 @@ class ApLocalizations {
       'head_photo_setting': 'Show Photo',
       'head_photo_setting_sub_title': 'Side menu shows the photo sticker',
       'course_notify': 'Class Reminder',
-      'course_notify_sub_title': 'Reminder 10 mins before class starts, click item to cancel.',
+      'course_notify_sub_title':
+          'Reminder 10 mins before class starts, click item to cancel.',
       'course_vibrate': 'Silent Mode During Class',
       'bus_notify': 'Bus Reservation Reminder',
       'bus_notify_sub_title': 'Reminder 30 mins before reserved bus',
@@ -885,7 +898,7 @@ class ApLocalizations {
           'The best KUAS Campus App\nKUAS AP\n\nAre you afreshman?\nDon\'t know about school info, telephone numbers, or up coming events?\nBeenhere a few years?\nHave checking class schedule, report card and reserving bus seatsdrove you crazy?\n\nNo more, no more worries, anymore!\n\nKUAS AP lets no matter old or newfellow\nhave control over your life in KUAS!\n\nFrom checking class schedule, report card toyour absence records!\nPlus reserving/canceling bus seats with newest school feeds!\n\n\n\nMuch Simple, Many Convenient, Very instinct, wow!\n\n☆FABULOUS☆',
       'about_author_title': 'Made by',
       'about_author_content':
-      '高科校務通v1 & v2\n呂紹榕(Louie Lu), 姜尚德(JohnThunder), \nregisterAutumn, 詹濬鍵(Evans), \n陳建霖(HearSilent), 陳冠蓁, 徐羽柔\n高科校務通v3\n房志剛(Rainvisitor),林義翔(takidog)\n林鈺軒(Lin YuHsuan),周鈺禮(Gary)\n中山校務通\n房志剛(Rainvisitor),胡智強（JohnHuCC)\n台科校務通\n房志剛(Rainvisitor),林義翔(takidog)\n文藻校務通\n林義翔(takidog),房志剛(Rainvisitor)',
+          '高科校務通v1 & v2\n呂紹榕(Louie Lu), 姜尚德(JohnThunder), \nregisterAutumn, 詹濬鍵(Evans), \n陳建霖(HearSilent), 陳冠蓁, 徐羽柔\n高科校務通v3\n房志剛(Rainvisitor),林義翔(takidog)\n林鈺軒(Lin YuHsuan),周鈺禮(Gary)\n中山校務通\n房志剛(Rainvisitor),胡智強（JohnHuCC)\n台科校務通\n房志剛(Rainvisitor),林義翔(takidog)\n文藻校務通\n林義翔(takidog),房志剛(Rainvisitor)',
       'about_us':
           '“Ask not why nobody is doing this. You are \'nobody\'.”\n\nWe did this cause no one did it.\nWe created KUAS Wifi Login, KUASAP and KUAS Gourmet, Course Selection Sim, etc&#8230;\nTo bring convenience to everyone\'s on campus!',
       'about_recruit_title': 'We Need You !',
@@ -1181,8 +1194,12 @@ class ApLocalizations {
       'setting_internet': '設定網路',
       'score_no_score': 'Oops！本學期沒有任何成績資料哦～\n請選擇其他學期 \uD83D\uDE0B',
       'subject': '科目',
-      'midterm': '期中成績',
-      'final': '學期成績',
+      'midtermScoreTitle': '期中成績',
+      'semesterScoreTitle': '學期成績',
+      'midtermScore': '期中成績',
+      'finalScore': '期末成績',
+      'generalScore': '平時成績',
+      'semesterScore': '學期成績',
       'conduct_score': '操行成績',
       'creditsTakenEarned': '修習學分/實得學分',
       'credits': '學分',

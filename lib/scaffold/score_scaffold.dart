@@ -272,12 +272,12 @@ class _ScoreContentState extends State<ScoreContent> {
                         ),
                         ScoreTextBorder(
                           text: widget.middleTitle ??
-                              ApLocalizations.of(context).midtermScore,
+                              ApLocalizations.of(context).midtermScoreTitle,
                           style: _textBlueStyle,
                         ),
                         ScoreTextBorder(
                           text: widget.finalTitle ??
-                              ApLocalizations.of(context).finalScore,
+                              ApLocalizations.of(context).semesterScoreTitle,
                           style: _textBlueStyle,
                         ),
                       ],
