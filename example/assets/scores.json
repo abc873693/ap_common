@@ -7,7 +7,7 @@
             "required": "【必修】",
             "at": "【學期】",
             "middleScore": "",
-            "finalScore": "",
+            "semesterScore": "",
             "remark": "停修"
         },
         {
@@ -17,7 +17,7 @@
             "required": "【必修】",
             "at": "【學期】",
             "middleScore": "",
-            "finalScore": "67.00",
+            "semesterScore": "67.00",
             "remark": ""
         },
         {
@@ -27,7 +27,7 @@
             "required": "【必修】",
             "at": "【學期】",
             "middleScore": "",
-            "finalScore": "60.00",
+            "semesterScore": "60.00",
             "remark": ""
         },
         {
@@ -37,7 +37,7 @@
             "required": "【必修】",
             "at": "【學期】",
             "middleScore": "",
-            "finalScore": "60.00",
+            "semesterScore": "60.00",
             "remark": ""
         },
         {
@@ -47,7 +47,7 @@
             "required": "【必修】",
             "at": "【學期】",
             "middleScore": "",
-            "finalScore": "98.00",
+            "semesterScore": "98.00",
             "remark": ""
         },
         {
@@ -57,7 +57,7 @@
             "required": "【必修】",
             "at": "【學期】",
             "middleScore": "",
-            "finalScore": "80.00",
+            "semesterScore": "80.00",
             "remark": ""
         },
         {
@@ -67,7 +67,7 @@
             "required": "【選修】",
             "at": "【學期】",
             "middleScore": "",
-            "finalScore": "90.00",
+            "semesterScore": "90.00",
             "remark": ""
         },
         {
@@ -77,7 +77,7 @@
             "required": "【選修】",
             "at": "【學期】",
             "middleScore": "100.00",
-            "finalScore": "97.00",
+            "semesterScore": "97.00",
             "remark": ""
         },
         {
@@ -87,7 +87,7 @@
             "required": "【必修】",
             "at": "【學期】",
             "middleScore": "",
-            "finalScore": "63.00",
+            "semesterScore": "63.00",
             "remark": ""
         },
         {
@@ -97,7 +97,7 @@
             "required": "【必修】",
             "at": "【學期】",
             "middleScore": "",
-            "finalScore": "合格",
+            "semesterScore": "合格",
             "remark": ""
         }
     ],
