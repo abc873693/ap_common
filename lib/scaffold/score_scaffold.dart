@@ -24,6 +24,7 @@ class ScoreScaffold extends StatefulWidget {
   final Widget itemPicker;
   final String middleTitle;
   final String finalTitle;
+  final Function(int index) onScoreSelect;
   final Widget Function(int index) middleScoreBuilder;
   final Widget Function(int index) finalScoreBuilder;
   final List<String> details;
@@ -46,6 +47,7 @@ class ScoreScaffold extends StatefulWidget {
     this.onSearchButtonClick,
     this.middleTitle,
     this.finalTitle,
+    this.onScoreSelect,
     this.middleScoreBuilder,
     this.finalScoreBuilder,
     this.customHint,
@@ -164,6 +166,7 @@ class ScoreScaffoldState extends State<ScoreScaffold> {
           onRefresh: widget.onRefresh,
           middleTitle: widget.middleTitle,
           finalTitle: widget.finalTitle,
+          onScoreSelect: widget.onScoreSelect,
           middleScoreBuilder: widget.middleScoreBuilder,
           finalScoreBuilder: widget.finalScoreBuilder,
           details: widget.details,
@@ -191,6 +194,7 @@ class ScoreContent extends StatefulWidget {
   final Function() onRefresh;
   final String middleTitle;
   final String finalTitle;
+  final Function(int index) onScoreSelect;
   final Widget Function(int index) middleScoreBuilder;
   final Widget Function(int index) finalScoreBuilder;
   final List<String> details;
@@ -201,6 +205,7 @@ class ScoreContent extends StatefulWidget {
     @required this.onRefresh,
     this.middleTitle,
     this.finalTitle,
+    this.onScoreSelect,
     this.middleScoreBuilder,
     this.finalScoreBuilder,
     this.details,
@@ -232,10 +237,9 @@ class _ScoreContentState extends State<ScoreContent> {
         ),
       );
 
-
   bool get isTablet =>
       MediaQuery.of(context).size.shortestSide >= 680 ||
-          MediaQuery.of(context).orientation == Orientation.landscape;
+      MediaQuery.of(context).orientation == Orientation.landscape;
 
   @override
   Widget build(BuildContext context) {
@@ -284,6 +288,9 @@ class _ScoreContentState extends State<ScoreContent> {
                           ScoreTextBorder(
                             text: widget.scoreData.scores[i].title,
                             style: _textStyle,
+                            onTap: (widget.onScoreSelect != null)
+                                ? () => widget.onScoreSelect(i)
+                                : null,
                           ),
                           if (widget.middleScoreBuilder == null)
                             ScoreTextBorder(
@@ -294,7 +301,7 @@ class _ScoreContentState extends State<ScoreContent> {
                             widget.middleScoreBuilder(i),
                           if (widget.finalScoreBuilder == null)
                             ScoreTextBorder(
-                              text: widget.scoreData.scores[i].finalScore,
+                              text: widget.scoreData.scores[i].semesterScore,
                               style: _textStyle,
                             ),
                           if (widget.finalScoreBuilder != null)
@@ -351,22 +358,28 @@ class ScoreTextBorder extends StatelessWidget {
   final String text;
   final TextStyle style;
 
+  final Function onTap;
+
   const ScoreTextBorder({
     Key key,
     @required this.text,
     @required this.style,
+    this.onTap,
   }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      width: double.maxFinite,
-      padding: EdgeInsets.symmetric(vertical: 2.0, horizontal: 4.0),
-      alignment: Alignment.center,
-      child: SelectableText(
-        text ?? '',
-        textAlign: TextAlign.center,
-        style: style,
+    return InkWell(
+      onTap: onTap,
+      child: Container(
+        width: double.maxFinite,
+        padding: EdgeInsets.symmetric(vertical: 2.0, horizontal: 4.0),
+        alignment: Alignment.center,
+        child: SelectableText(
+          text ?? '',
+          textAlign: TextAlign.center,
+          style: style,
+        ),
       ),
     );
   }
