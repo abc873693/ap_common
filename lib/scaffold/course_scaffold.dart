@@ -1,5 +1,7 @@
 import 'dart:io';
 import 'dart:math';
+import 'dart:typed_data';
+import 'dart:ui' as ui;
 
 import 'package:add_2_calendar/add_2_calendar.dart';
 import 'package:ap_common/config/ap_constants.dart';
@@ -54,6 +56,7 @@ class CourseScaffold extends StatefulWidget {
   final String courseNotifySaveKey;
   final bool enableAddToCalendar;
   final String androidResourceIcon;
+  final bool enableCaptureCourseTable;
 
   const CourseScaffold({
     Key key,
@@ -76,6 +79,7 @@ class CourseScaffold extends StatefulWidget {
     this.onSearchButtonClick,
     this.enableAddToCalendar = true,
     this.androidResourceIcon,
+    this.enableCaptureCourseTable = false,
   }) : super(key: key);
 
   @override
@@ -83,6 +87,8 @@ class CourseScaffold extends StatefulWidget {
 }
 
 class CourseScaffoldState extends State<CourseScaffold> {
+  final GlobalKey _repaintBoundaryGlobalKey = GlobalKey();
+
   ApLocalizations app;
 
   _ContentStyle _contentStyle = _ContentStyle.table;
@@ -107,7 +113,15 @@ class CourseScaffoldState extends State<CourseScaffold> {
     return Scaffold(
       appBar: AppBar(
         title: Text(widget.title ?? app.course),
-        actions: widget.actions,
+        actions: [
+          if (widget.actions != null) ...widget.actions,
+          if (widget.enableCaptureCourseTable)
+            IconButton(
+              icon: Icon(ApIcon.download),
+              onPressed: _captureCourseTable,
+              tooltip: ApLocalizations.of(context).exportCourseTable,
+            ),
+        ],
       ),
       body: Row(
         children: <Widget>[
@@ -260,10 +274,14 @@ class CourseScaffoldState extends State<CourseScaffold> {
             padding: EdgeInsets.symmetric(
               vertical: 8.0,
             ),
-            child: Container(
-              child: Row(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: renderCourseTable(),
+            child: RepaintBoundary(
+              key: _repaintBoundaryGlobalKey,
+              child: Container(
+                color: Theme.of(context).scaffoldBackgroundColor,
+                child: Row(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: renderCourseTable(),
+                ),
               ),
             ),
           );
@@ -273,6 +291,21 @@ class CourseScaffoldState extends State<CourseScaffold> {
           );
         }
     }
+  }
+
+  Future<void> _captureCourseTable() async {
+    RenderRepaintBoundary boundary =
+        _repaintBoundaryGlobalKey.currentContext.findRenderObject();
+    ui.Image image = await boundary.toImage(pixelRatio: 3.0);
+    ByteData byteData = await image.toByteData(format: ui.ImageByteFormat.png);
+    DateTime now = DateTime.now();
+    String formattedDate = DateFormat('yyyyMMdd_hhmmss').format(now);
+    await ApUtils.saveImage(
+      context,
+      byteData,
+      "course_table_$formattedDate",
+      ApLocalizations.of(context).exportCourseTableSuccess,
+    );
   }
 
   BorderSide get _innerBorderSide => BorderSide(

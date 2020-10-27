@@ -1,4 +1,5 @@
 import 'dart:io';
+import 'dart:typed_data';
 
 import 'package:ap_common/callback/general_callback.dart';
 import 'package:ap_common/resources/ap_theme.dart';
@@ -8,8 +9,12 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
+import 'package:image_gallery_saver/image_gallery_saver.dart';
 import 'package:in_app_review/in_app_review.dart';
 import 'package:package_info/package_info.dart';
+import 'package:path_provider/path_provider.dart';
+import 'package:path/path.dart' as path;
+import 'package:permission_handler/permission_handler.dart';
 import 'package:share/share.dart';
 import 'package:toast/toast.dart';
 import 'package:url_launcher/url_launcher.dart';
@@ -197,6 +202,49 @@ class ApUtils {
       inAppReview.requestReview();
     } else
       launchUrl(defaultUrl);
+  }
+
+  static Future<void> saveImage(
+    BuildContext context,
+    ByteData byteData,
+    String fileName,
+    String successMessage,
+  ) async {
+    final ap = ApLocalizations.of(context);
+    try {
+      bool hasGrantPermission = true;
+      if (kIsWeb) {
+      } else if (Platform.isAndroid)
+        hasGrantPermission = await Permission.storage.request().isGranted;
+      else if (Platform.isIOS)
+        hasGrantPermission = await Permission.photos.request().isGranted;
+      if (hasGrantPermission) {
+        final pngBytes = byteData.buffer.asUint8List();
+        var downloadDir = '';
+        if (kIsWeb)
+          downloadDir = '';
+        else if (Platform.isMacOS)
+          downloadDir = (await getDownloadsDirectory()).path;
+        else
+          downloadDir = '';
+        print(downloadDir);
+        final filePath = path.join(downloadDir, '$fileName.png');
+        if (!kIsWeb && (Platform.isAndroid || Platform.isIOS)) {
+          await ImageGallerySaver.saveImage(
+            pngBytes,
+            name: fileName,
+          );
+        } else {
+          await File(filePath).writeAsBytes(pngBytes);
+        }
+        ApUtils.showToast(context, successMessage);
+      } else
+        ApUtils.showToast(context, ap.grandPermissionFail);
+    } catch (e) {
+      //TODO : find collect crashlytics method
+      ApUtils.showToast(context, ap.unknownError);
+      throw e;
+    }
   }
 
   static var overlayEntry;

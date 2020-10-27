@@ -6,6 +6,16 @@ class ApIcon {
 
   static String code = ApIcon.OUTLINED;
 
+  static IconData get download {
+    switch (ApIcon.code) {
+      case ApIcon.FILLED:
+        return Icons.download_rounded;
+      case ApIcon.OUTLINED:
+      default:
+        return Icons.download_outlined;
+    }
+  }
+
   static IconData get directionsBus {
     switch (ApIcon.code) {
       case ApIcon.FILLED:

@@ -700,6 +700,13 @@ class ApLocalizations {
   String get cancelAllNotifySubTitle =>
       _vocabularies['cancelAllNotifySubTitle'];
 
+  String get exportCourseTable => _vocabularies['exportCourseTable'];
+
+  String get grandPermissionFail => _vocabularies['grandPermissionFail'];
+
+  String get exportCourseTableSuccess =>
+      _vocabularies['exportCourseTableSuccess'];
+
   static ApLocalizations of(BuildContext context) {
     return instance =
         Localizations.of<ApLocalizations>(context, ApLocalizations);
@@ -1109,7 +1116,11 @@ class ApLocalizations {
       'empty_classroom_search': 'Empty classroom search',
       'classroom_coursetable_search': 'Classroom Coursetable Search',
       'cancelAllNotify': 'Cancel All Notify',
-      'cancelAllNotifySubTitle': '清除包含未知的通知',
+      'cancelAllNotifySubTitle': 'Clean all notify include unknown notify',
+      'exportCourseTable': 'Export courseTable to image',
+      'grandPermissionFail': 'Grand permission fail, please try again.',
+      'exportCourseTableSuccess':
+          'Export Successful~ Please check download directory.',
     },
     'zh': {
       'update_note_title': '更新日誌',
@@ -1467,6 +1478,9 @@ class ApLocalizations {
       'classroom_coursetable_search': '教室課表查詢',
       'cancelAllNotify': '取消所有提醒',
       'cancelAllNotifySubTitle': '清除包含未知的通知',
+      'exportCourseTable': '匯出課表成圖片',
+      'grandPermissionFail': '取得權限失敗 請給於權限功能才能正常運作',
+      'exportCourseTableSuccess': '匯出成功~ 請檢查下載資料夾',
     },
   };
 }
