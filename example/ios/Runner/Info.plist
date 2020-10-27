@@ -43,5 +43,8 @@
 	<false/>
 	<key>NSCalendarsUsageDescription</key>
 	<string>Feature calendar would be add schedule to calendar app</string>
+    <!-- Permission options for the `photos` group -->
+    <key>NSPhotoLibraryUsageDescription</key>
+    <string>photos</string>
 </dict>
 </plist>

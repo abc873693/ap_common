@@ -60,6 +60,7 @@ class CoursePageState extends State<CoursePage> {
       enableNotifyControl: true,
       courseNotifySaveKey: courseNotifyCacheKey,
       androidResourceIcon: Constants.ANDROID_DEFAULT_NOTIFICATION_NAME,
+      enableCaptureCourseTable: true,
       semesterData: semesterData,
       onSelect: (index) {
         semesterData.currentIndex = index;
