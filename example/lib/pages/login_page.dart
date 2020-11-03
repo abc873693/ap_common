@@ -154,35 +154,35 @@ class LoginPageState extends State<LoginPage> {
           ? Preferences.getStringSecurity(Constants.PREF_PASSWORD, '')
           : '';
     });
-    await Future.delayed(Duration(microseconds: 50));
-    if (isAutoLogin) {
-      _login();
-    }
   }
 
   _login() async {
     if (_username.text.isEmpty || _password.text.isEmpty) {
       ApUtils.showToast(context, ap.doNotEmpty, gravity: gravity);
     } else {
-      showDialog(
-        context: context,
-        builder: (BuildContext context) => WillPopScope(
-            child: ProgressDialog(ap.logining),
-            onWillPop: () async {
-              return false;
-            }),
-        barrierDismissible: false,
-      );
-      Preferences.setString(Constants.PREF_USERNAME, _username.text);
-      Navigator.of(context, rootNavigator: true).pop();
-      Preferences.setString(Constants.PREF_USERNAME, _username.text);
-      if (isRememberPassword) {
-        Preferences.setStringSecurity(Constants.PREF_PASSWORD, _password.text);
-      }
-      Preferences.setBool(Constants.PREF_IS_OFFLINE_LOGIN, false);
-      TextInput.finishAutofillContext();
-      Navigator.of(context).pop(true);
+      asyncLogin();
     }
+  }
+
+  asyncLogin() {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) => WillPopScope(
+          child: ProgressDialog(ap.logining),
+          onWillPop: () async {
+            return false;
+          }),
+      barrierDismissible: false,
+    );
+    Preferences.setString(Constants.PREF_USERNAME, _username.text);
+    Navigator.of(context, rootNavigator: true).pop();
+    Preferences.setString(Constants.PREF_USERNAME, _username.text);
+    if (isRememberPassword) {
+      Preferences.setStringSecurity(Constants.PREF_PASSWORD, _password.text);
+    }
+    Preferences.setBool(Constants.PREF_IS_OFFLINE_LOGIN, false);
+    TextInput.finishAutofillContext();
+    Navigator.of(context).pop(true);
   }
 
   _offlineLogin() async {
