@@ -14,8 +14,8 @@ dependencies:
   flutter_cupertino_localizations: ^1.0.1
 
   shared_preferences: ^0.5.12+2
-  url_launcher: ^5.7.7
-  share: '>=0.6.5+3 <2.0.0'
+  url_launcher: ^5.7.8
+  share: '>=0.6.5+4 <2.0.0'
   package_info: ^0.4.3
   sprintf: ^5.0.0
   toast: ">=0.1.4 <1.0.0"
@@ -31,7 +31,7 @@ dependencies:
   flutter_keyboard_visibility: ^3.2.2
   add_2_calendar: ^1.4.0
   material_design_icons_flutter: ^4.0.5755
-  in_app_review: ^0.2.1
+  in_app_review: ^1.0.2
   native_pdf_view: ^3.8.0
   barcode_widget: ^1.5.0
   barcode: ^1.17.1
