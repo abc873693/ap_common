@@ -72,7 +72,7 @@ class AboutUsPageState extends State<AboutUsPage> {
             flexibleSpace: FlexibleSpaceBar(
               background: Image.asset(
                 widget.assetImage,
-                fit: BoxFit.fitWidth,
+                fit: BoxFit.cover,
               ),
             ),
           ),
