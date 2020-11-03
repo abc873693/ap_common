@@ -152,8 +152,7 @@ class NotificationUtils {
       scheduleDateTime,
       platformChannelSpecifics,
       payload: content,
-      scheduledNotificationRepeatFrequency:
-          ScheduledNotificationRepeatFrequency.weekly,
+      matchDateTimeComponents: DateTimeComponents.dayOfWeekAndTime,
       androidAllowWhileIdle: true,
       uiLocalNotificationDateInterpretation:
           UILocalNotificationDateInterpretation.absoluteTime,

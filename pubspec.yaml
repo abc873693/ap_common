@@ -26,7 +26,7 @@ dependencies:
   dio: ">=3.0.0 <4.0.0"
   dio_cookie_manager: ">=1.0.0 <2.0.0"
   cookie_jar: ">=1.0.0 <2.0.0"
-  flutter_local_notifications: ^2.0.2
+  flutter_local_notifications: ^3.0.1+2
   timezone: ^0.5.9
   flutter_keyboard_visibility: ^3.2.2
   add_2_calendar: ^1.4.0
