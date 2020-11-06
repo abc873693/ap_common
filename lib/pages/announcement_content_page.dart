@@ -99,7 +99,7 @@ class AnnouncementContentPageState extends State<AnnouncementContentPage> {
               backgroundColor: ApTheme.of(context).blue,
             ),
             body: PhotoView(
-              imageProvider: (!kIsWeb && (Platform.isAndroid || Platform.isIOS))
+              imageProvider: ApUtils.isSupportCacheNetworkImage
                   ? CachedNetworkImageProvider(widget.announcement.imgUrl)
                   : NetworkImage(widget.announcement.imgUrl),
             ),

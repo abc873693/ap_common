@@ -23,6 +23,9 @@ export 'package:dio/dio.dart';
 export 'package:toast/toast.dart';
 
 class ApUtils {
+  static bool get isSupportCacheNetworkImage =>
+      (kIsWeb || Platform.isAndroid || Platform.isIOS || Platform.isMacOS);
+
   static void showToast(BuildContext context, String message, {int gravity}) {
     Toast.show(
       message,
