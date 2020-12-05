@@ -20,24 +20,24 @@ dependencies:
   sprintf: ^5.0.0
   toast: ">=0.1.4 <1.0.0"
   intl: ">=0.16.0 <1.0.0"
-  cached_network_image: ^2.3.3
-  photo_view: ">=0.10.2 <1.0.0"
+  cached_network_image: ^2.4.1
+  photo_view: ">=0.10.3 <1.0.0"
   encrypt: ">=4.1.0 <5.0.0"
   dio: ">=3.0.0 <4.0.0"
   dio_cookie_manager: ">=1.0.0 <2.0.0"
   cookie_jar: ">=1.0.0 <2.0.0"
-  flutter_local_notifications: ^3.0.1+2
+  flutter_local_notifications: ^3.0.1+7
   timezone: ^0.5.9
-  flutter_keyboard_visibility: ^3.2.2
+  flutter_keyboard_visibility: ^4.0.2
   add_2_calendar: ^1.4.0
   material_design_icons_flutter: ^4.0.5755
-  in_app_review: ^1.0.2
+  in_app_review: ^1.0.3
   native_pdf_view: ^3.8.0
   barcode_widget: ^1.5.0
   barcode: ^1.17.1
   auto_size_text: ^2.1.0
   flutter_linkify: ^4.0.2
-  image_gallery_saver: ^1.6.2
+  image_gallery_saver: ^1.6.7
   permission_handler: ^5.0.1+1
   path: ^1.7.0
   path_provider: ^1.6.22
