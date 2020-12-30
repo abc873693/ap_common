@@ -14,4 +14,15 @@ class ApConstants {
 
   static const SEMESTER_LATEST = "latest";
   static const CURRENT_SEMESTER_CODE = "ap_common.current_semester_code";
+
+  static const String ANNOUNCEMENT_API_HOST =
+      '$PACKAGE_NAME.announcement_api_host';
+  static const String ANNOUNCEMENT_IS_LOGIN =
+      '$PACKAGE_NAME.announcement_is_login';
+  static const String ANNOUNCEMENT_LOGIN_TYPE =
+      '$PACKAGE_NAME.announcement_login_type';
+  static const String ANNOUNCEMENT_USERNAME =
+      '$PACKAGE_NAME.announcement_username';
+  static const String ANNOUNCEMENT_PASSWORD =
+      '$PACKAGE_NAME.announcement_password';
 }
