@@ -19,12 +19,17 @@ import 'package:google_sign_in/google_sign_in.dart';
 
 import 'edit_page.dart';
 
-enum _State { notLogin, loading, user, admin, error, empty, offline }
+enum _State { notLogin, loading, done, error, empty, offline }
+enum _DataType { announcement, application }
 
 class AnnouncementHomePage extends StatefulWidget {
   static const String routerName = "/news/admin";
+  final Widget reviewDescriptionWidget;
 
-  const AnnouncementHomePage({Key key}) : super(key: key);
+  const AnnouncementHomePage({
+    Key key,
+    this.reviewDescriptionWidget,
+  }) : super(key: key);
 
   @override
   _AnnouncementHomePageState createState() => _AnnouncementHomePageState();
@@ -39,8 +44,12 @@ class _AnnouncementHomePageState extends State<AnnouncementHomePage> {
   _State state = _State.notLogin;
 
   List<Announcement> announcements;
+  List<Announcement> applications;
 
   bool isOffline = false;
+
+  AnnouncementLoginData loginData;
+
   FocusNode usernameFocusNode;
   FocusNode passwordFocusNode;
 
@@ -55,6 +64,13 @@ class _AnnouncementHomePageState extends State<AnnouncementHomePage> {
       'https://www.googleapis.com/auth/contacts.readonly',
     ],
   );
+
+  String _reviewStateText(bool reviewStatus) {
+    if (reviewStatus == null)
+      return app.waitingForReview;
+    else
+      return reviewStatus ? app.reviewApproval : app.reviewReject;
+  }
 
   @override
   void initState() {
@@ -75,8 +91,22 @@ class _AnnouncementHomePageState extends State<AnnouncementHomePage> {
       appBar: AppBar(
         title: Text(app.announcements),
         backgroundColor: ApTheme.of(context).blue,
+        actions: [
+          if (Preferences.getBool(ApConstants.ANNOUNCEMENT_IS_LOGIN, false))
+            IconButton(
+              icon: Icon(Icons.exit_to_app),
+              onPressed: () async {
+                if (AnnouncementHelper.loginType ==
+                    AnnouncementLoginType.google) await _googleSignIn.signOut();
+                setState(() {
+                  Preferences.setBool(ApConstants.ANNOUNCEMENT_IS_LOGIN, false);
+                  state = _State.notLogin;
+                });
+              },
+            ),
+        ],
       ),
-      floatingActionButton: state == _State.notLogin
+      floatingActionButton: (loginData?.level == PermissionLevel.user ?? false)
           ? null
           : FloatingActionButton(
               child: Icon(Icons.add),
@@ -127,14 +157,72 @@ class _AnnouncementHomePageState extends State<AnnouncementHomePage> {
           icon: ApIcon.classIcon,
           content: app.noOfflineData,
         );
-      case _State.user:
-      case _State.admin:
-        return ListView.builder(
-          itemBuilder: (_, index) {
-            return _item(announcements[index]);
-          },
-          itemCount: announcements.length,
-        );
+      case _State.done:
+        switch (loginData.level) {
+          case PermissionLevel.user:
+            return SingleChildScrollView(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  SizedBox(height: 8.0),
+                  widget.reviewDescriptionWidget ??
+                      SelectableText.rich(
+                        TextSpan(
+                          style: TextStyle(
+                              color: ApTheme.of(context).grey, fontSize: 16.0),
+                          children: [
+                            TextSpan(
+                                text: '${app.newsRuleDescription1}',
+                                style:
+                                    TextStyle(fontWeight: FontWeight.normal)),
+                            TextSpan(
+                                text: '${app.newsRuleDescription2}',
+                                style: TextStyle(fontWeight: FontWeight.bold)),
+                            TextSpan(
+                                text: '${app.newsRuleDescription3}',
+                                style:
+                                    TextStyle(fontWeight: FontWeight.normal)),
+                          ],
+                        ),
+                      ),
+                  SizedBox(height: 32.0),
+                  Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 8.0),
+                    child: ApButton(
+                      text: app.apply,
+                      onPressed: () async {
+                        var success = await Navigator.push(
+                          context,
+                          CupertinoPageRoute(
+                            builder: (_) => AnnouncementEditPage(
+                              mode: Mode.application,
+                            ),
+                          ),
+                        );
+                        if (success ?? false) _getApplicationData();
+                      },
+                    ),
+                  ),
+                  SizedBox(height: 16.0),
+                  Text(app.myApplications),
+                  SizedBox(height: 8.0),
+                  for (var item in applications)
+                    _item(_DataType.application, item)
+                ],
+              ),
+            );
+          case PermissionLevel.editor:
+          case PermissionLevel.admin:
+            return ListView.builder(
+              itemBuilder: (_, index) {
+                return _item(
+                  _DataType.announcement,
+                  announcements[index],
+                );
+              },
+              itemCount: announcements.length,
+            );
+        }
     }
   }
 
@@ -205,7 +293,7 @@ class _AnnouncementHomePageState extends State<AnnouncementHomePage> {
     );
   }
 
-  Widget _item(Announcement item) {
+  Widget _item(_DataType dataType, Announcement item) {
     return Card(
       elevation: 4.0,
       margin: const EdgeInsets.all(8.0),
@@ -221,54 +309,67 @@ class _AnnouncementHomePageState extends State<AnnouncementHomePage> {
               item.title,
               style: TextStyle(fontSize: 18.0),
             ),
-            trailing: IconButton(
-              icon: Icon(
-                ApIcon.cancel,
-                color: ApTheme.of(context).red,
-              ),
-              onPressed: () async {
-                showDialog(
-                  context: context,
-                  builder: (BuildContext context) => YesNoDialog(
-                    title: app.deleteNewsTitle,
-                    contentWidget: Text(
-                      "${app.deleteNewsContent}",
-                      textAlign: TextAlign.center,
+            trailing: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                if (loginData.level != PermissionLevel.user)
+                  IconButton(
+                    icon: Icon(
+                      ApIcon.cancel,
+                      color: ApTheme.of(context).red,
                     ),
-                    leftActionText: app.back,
-                    rightActionText: app.determine,
-                    rightActionFunction: () {
-                      AnnouncementHelper.instance
-                          .deleteAnnouncement(item)
-                          .then((response) {
-                        ScaffoldMessenger.of(context).showSnackBar(
-                          SnackBar(
-                            content: Text(app.deleteSuccess),
-                            duration: Duration(seconds: 2),
+                    onPressed: () async {
+                      showDialog(
+                        context: context,
+                        builder: (BuildContext context) => YesNoDialog(
+                          title: app.deleteNewsTitle,
+                          contentWidget: Text(
+                            "${app.deleteNewsContent}",
+                            textAlign: TextAlign.center,
                           ),
-                        );
-                        _getData();
-                      }).catchError((e) {
-                        if (e is DioError) {
-                          switch (e.type) {
-                            case DioErrorType.RESPONSE:
-                              ApUtils.showToast(
-                                  context, e.response?.data ?? '');
-                              break;
-                            case DioErrorType.CANCEL:
-                              break;
-                            default:
-                              ApUtils.handleDioError(context, e);
-                              break;
-                          }
-                        } else {
-                          throw e;
-                        }
-                      });
+                          leftActionText: app.back,
+                          rightActionText: app.determine,
+                          rightActionFunction: () {
+                            AnnouncementHelper.instance
+                                .deleteAnnouncement(item)
+                                .then((response) {
+                              ScaffoldMessenger.of(context).showSnackBar(
+                                SnackBar(
+                                  content: Text(app.deleteSuccess),
+                                  duration: Duration(seconds: 2),
+                                ),
+                              );
+                              _getData();
+                            }).catchError((e) {
+                              if (e is DioError) {
+                                switch (e.type) {
+                                  case DioErrorType.RESPONSE:
+                                    ApUtils.showToast(
+                                        context, e.response?.data ?? '');
+                                    break;
+                                  case DioErrorType.CANCEL:
+                                    break;
+                                  default:
+                                    ApUtils.handleDioError(context, e);
+                                    break;
+                                }
+                              } else {
+                                throw e;
+                              }
+                            });
+                          },
+                        ),
+                      );
                     },
                   ),
-                );
-              },
+                Text(
+                  _reviewStateText(item.reviewStatus),
+                  style: TextStyle(
+                    color:
+                        item.reviewStatus ?? false ? Colors.green : Colors.red,
+                  ),
+                ),
+              ],
             ),
             subtitle: Padding(
               padding: const EdgeInsets.symmetric(vertical: 8.0),
@@ -324,28 +425,35 @@ class _AnnouncementHomePageState extends State<AnnouncementHomePage> {
                       style: TextStyle(fontWeight: FontWeight.bold),
                     ),
                     TextSpan(text: '${item.description}'),
+                    TextSpan(
+                      text: '\n${app.reviewDescription}：',
+                      style: TextStyle(fontWeight: FontWeight.bold),
+                    ),
+                    TextSpan(text: '${item.reviewDescription ?? ''}'),
                   ],
                 ),
               ),
             ),
           ),
         ),
-        onTap: () async {
-          var success = await Navigator.push(
-            context,
-            CupertinoPageRoute(
-              builder: (_) => AnnouncementEditPage(
-                mode: Mode.edit,
-                announcement: item,
-              ),
-            ),
-          );
-          if (success is bool && success != null) {
-            if (success) {
-              _getData();
-            }
-          }
-        },
+        onTap: loginData.level == PermissionLevel.user
+            ? null
+            : () async {
+                var success = await Navigator.push(
+                  context,
+                  CupertinoPageRoute(
+                    builder: (_) => AnnouncementEditPage(
+                      mode: Mode.edit,
+                      announcement: item,
+                    ),
+                  ),
+                );
+                if (success is bool && success != null) {
+                  if (success) {
+                    _getData();
+                  }
+                }
+              },
       ),
     );
   }
@@ -354,7 +462,16 @@ class _AnnouncementHomePageState extends State<AnnouncementHomePage> {
     AnnouncementHelper.instance.getAllAnnouncements().then((announcementsData) {
       this.announcements = announcementsData;
       setState(() {
-        state = announcementsData.length == 0 ? _State.empty : _State.admin;
+        state = announcementsData.length == 0 ? _State.empty : _State.done;
+      });
+    });
+  }
+
+  _getApplicationData() async {
+    AnnouncementHelper.instance.getApplications().then((announcementsData) {
+      this.applications = announcementsData;
+      setState(() {
+        state = announcementsData.length == 0 ? _State.empty : _State.done;
       });
     });
   }
@@ -400,9 +517,9 @@ class _AnnouncementHomePageState extends State<AnnouncementHomePage> {
               .login(username: _username.text, password: _password.text);
           break;
         case AnnouncementLoginType.google:
-          print((await _googleSignIn.isSignedIn()));
-          var data = await _googleSignIn.signIn();
-          print((await data.authentication).idToken);
+          var data = await _googleSignIn.isSignedIn()
+              ? await _googleSignIn.signInSilently()
+              : await _googleSignIn.signIn();
           login = AnnouncementHelper.instance
               .googleLogin(idToken: (await data.authentication).idToken);
           break;
@@ -411,6 +528,8 @@ class _AnnouncementHomePageState extends State<AnnouncementHomePage> {
           break;
       }
       login.then((AnnouncementLoginData response) async {
+        loginData = response;
+        if (kDebugMode) print(loginData.key);
         Navigator.of(context, rootNavigator: true).pop();
         Preferences.setStringSecurity(
             ApConstants.ANNOUNCEMENT_PASSWORD, _password.text);
@@ -420,7 +539,8 @@ class _AnnouncementHomePageState extends State<AnnouncementHomePage> {
             ApConstants.ANNOUNCEMENT_LOGIN_TYPE, loginType.index);
         setState(() {
           state = _State.loading;
-          _getData();
+          if (loginData.level != PermissionLevel.user) _getData();
+          _getApplicationData();
         });
       }).catchError((e) {
         Navigator.of(context, rootNavigator: true).pop();

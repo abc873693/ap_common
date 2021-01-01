@@ -38,6 +38,10 @@ class Announcement {
   String description;
   String publishedTime;
   String expireTime;
+  String applicant;
+  String applicationId;
+  bool reviewStatus;
+  String reviewDescription;
 
   Announcement({
     this.title,
@@ -50,6 +54,10 @@ class Announcement {
     this.description,
     this.publishedTime,
     this.expireTime,
+    this.applicant,
+    this.applicationId,
+    this.reviewStatus,
+    this.reviewDescription,
   });
 
   factory Announcement.fromRawJson(String str) =>
@@ -70,6 +78,10 @@ class Announcement {
         description: json["description"],
         publishedTime: json["publishedTime"],
         expireTime: json["expireTime"],
+        applicant: json["applicant"],
+        applicationId: json["application_id"],
+        reviewStatus: json["reviewStatus"],
+        reviewDescription: json["reviewDescription"],
       );
 
   Map<String, dynamic> toJson() => {
@@ -83,6 +95,10 @@ class Announcement {
         "description": description,
         "publishedTime": publishedTime,
         "expireTime": expireTime,
+        "applicant": applicant,
+        "application_id": expireTime,
+        "reviewStatus": reviewStatus,
+        "reviewDescription": reviewDescription,
       };
 
   Map<String, dynamic> toUpdateJson() => {

@@ -10,7 +10,7 @@ import 'package:flutter/widgets.dart';
 import 'package:intl/intl.dart' show DateFormat;
 
 enum _State { loading, finish, error, empty, offline }
-enum Mode { add, edit }
+enum Mode { add, edit, application }
 
 extension ParseDateTimes on DateTime {
   String parseToString() {
@@ -57,6 +57,18 @@ class _AnnouncementEditPageState extends State<AnnouncementEditPage> {
   DateTime expireTime;
 
   final dividerHeight = 16.0;
+
+  String get buttonText {
+    switch (widget.mode) {
+      case Mode.add:
+        return app.submit;
+      case Mode.edit:
+        return app.update;
+      case Mode.application:
+        return app.submit;
+    }
+    return app.submit;
+  }
 
   @override
   void initState() {
@@ -113,31 +125,32 @@ class _AnnouncementEditPageState extends State<AnnouncementEditPage> {
               ),
             ),
             SizedBox(height: dividerHeight),
-            TextFormField(
-              maxLines: 1,
-              controller: _weight,
-              validator: (value) {
-                if (value.isEmpty) {
-                  return app.doNotEmpty;
-                } else {
-                  try {
-                    int.parse(value);
-                  } catch (e) {
-                    return app.formatError;
+            if (widget.mode != Mode.application)
+              TextFormField(
+                maxLines: 1,
+                controller: _weight,
+                validator: (value) {
+                  if (value.isEmpty) {
+                    return app.doNotEmpty;
+                  } else {
+                    try {
+                      int.parse(value);
+                    } catch (e) {
+                      return app.formatError;
+                    }
                   }
-                }
-                return null;
-              },
-              keyboardType: TextInputType.number,
-              decoration: InputDecoration(
-                border: OutlineInputBorder(),
-                fillColor: ApTheme.of(context).blueAccent,
-                labelStyle: TextStyle(
-                  color: ApTheme.of(context).grey,
+                  return null;
+                },
+                keyboardType: TextInputType.number,
+                decoration: InputDecoration(
+                  border: OutlineInputBorder(),
+                  fillColor: ApTheme.of(context).blueAccent,
+                  labelStyle: TextStyle(
+                    color: ApTheme.of(context).grey,
+                  ),
+                  labelText: app.weight,
                 ),
-                labelText: app.weight,
               ),
-            ),
             SizedBox(height: dividerHeight),
             TextFormField(
               maxLines: 1,
@@ -262,7 +275,7 @@ class _AnnouncementEditPageState extends State<AnnouncementEditPage> {
                 },
                 color: ApTheme.of(context).blueAccent,
                 child: Text(
-                  widget.mode == Mode.add ? app.submit : app.update,
+                  buttonText,
                   style: TextStyle(
                     color: Colors.white,
                     fontSize: 18.0,
@@ -304,13 +317,15 @@ class _AnnouncementEditPageState extends State<AnnouncementEditPage> {
   }
 
   void _announcementSubmit() async {
+    print(_weight?.text);
     if (_formKey.currentState.validate()) {
       Future<dynamic> instance;
       announcements.title = _title.text;
       announcements.description = _description.text;
       announcements.imgUrl = _imgUrl.text;
       announcements.url = _url.text;
-      announcements.weight = int.parse(_weight.text);
+      announcements.weight =
+          _weight.text.isNotEmpty ? int.parse(_weight?.text ?? 0) : 0;
       announcements.expireTime =
           (expireTime == null) ? null : expireTime.parseToString();
       switch (widget.mode) {
@@ -321,6 +336,9 @@ class _AnnouncementEditPageState extends State<AnnouncementEditPage> {
           instance =
               AnnouncementHelper.instance.updateAnnouncement(announcements);
           break;
+        case Mode.application:
+          instance = AnnouncementHelper.instance.addApplication(announcements);
+          break;
       }
       instance.then((response) {
         Navigator.of(context).pop(true);
@@ -330,6 +348,9 @@ class _AnnouncementEditPageState extends State<AnnouncementEditPage> {
             break;
           case Mode.edit:
             ApUtils.showToast(context, app.updateSuccess);
+            break;
+          case Mode.application:
+            ApUtils.showToast(context, app.applicationSubmitSuccess);
             break;
         }
       }).catchError((e) {

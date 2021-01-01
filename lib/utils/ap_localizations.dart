@@ -707,6 +707,22 @@ class ApLocalizations {
   String get exportCourseTableSuccess =>
       _vocabularies['exportCourseTableSuccess'];
 
+  String get apply => _vocabularies['apply'];
+
+  String get myApplications => _vocabularies['myApplications'];
+
+  String get reviewState => _vocabularies['reviewState'];
+
+  String get waitingForReview => _vocabularies['waitingForReview'];
+
+  String get reviewApproval => _vocabularies['reviewApproval'];
+
+  String get reviewReject => _vocabularies['reviewReject'];
+
+  String get reviewDescription => _vocabularies['reviewDescription'];
+
+  String get applicationSubmitSuccess => _vocabularies['applicationSubmitSuccess'];
+
   static ApLocalizations of(BuildContext context) {
     return instance =
         Localizations.of<ApLocalizations>(context, ApLocalizations);
@@ -1121,6 +1137,14 @@ class ApLocalizations {
       'grandPermissionFail': 'Grand permission fail, please try again.',
       'exportCourseTableSuccess':
           'Export Successful~ Please check download directory.',
+      'apply': 'Apply',
+      'myApplications': 'My Applications',
+      'reviewState': 'Review State',
+      'waitingForReview': 'Waiting for review',
+      'reviewApproval': 'Approval',
+      'reviewReject': 'Rejected',
+      'reviewDescription': 'Review Description',
+      'applicationSubmitSuccess': 'Application Submit Success',
     },
     'zh': {
       'update_note_title': '更新日誌',
@@ -1481,6 +1505,14 @@ class ApLocalizations {
       'exportCourseTable': '匯出課表成圖片',
       'grandPermissionFail': '取得權限失敗 請給於權限功能才能正常運作',
       'exportCourseTableSuccess': '匯出成功~ 請檢查下載資料夾',
+      'apply': '申請',
+      'myApplications': '我的申請',
+      'reviewState': '審查狀態',
+      'waitingForReview': '等待審查',
+      'reviewApproval': '通過',
+      'reviewReject': '未通過',
+      'reviewDescription': '審查說明',
+      'applicationSubmitSuccess': '申請送出成功',
     },
   };
 }

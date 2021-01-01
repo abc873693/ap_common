@@ -119,6 +119,7 @@ class AnnouncementHelper {
     GeneralCallback<AnnouncementLoginData> callback,
   }) async {
     try {
+      debugPrint(idToken);
       var response = await dio.post(
         '/oauth2/google/token',
         data: {
@@ -222,6 +223,40 @@ class AnnouncementHelper {
     }
   }
 
+  Future<List<Announcement>> getApplications({
+    String locale,
+    GeneralCallback<List<Announcement>> callback,
+  }) async {
+    try {
+      var response = await dio.get(
+        "/application",
+      );
+      var data = AnnouncementData(data: []);
+      if (response.statusCode != 204) {
+        data = AnnouncementData.fromJson(response.data);
+        data.data.sort((a, b) {
+          return b.weight.compareTo(a.weight);
+        });
+      }
+      return (callback == null) ? data.data : callback.onSuccess(data.data);
+    } on DioError catch (dioError) {
+      throw dioError;
+    }
+  }
+
+  Future<Response> addApplication(Announcement announcements) async {
+    try {
+      var response = await dio.post(
+        "/application",
+        data: announcements.toUpdateJson(),
+      );
+      print(response.data);
+      return response;
+    } on DioError catch (dioError) {
+      throw dioError;
+    }
+  }
+
   // v3 api Authorization
   _createBearerTokenAuth(String token) {
     return {
@@ -239,7 +274,7 @@ class AnnouncementHelper {
 extension NewsExtension on Announcement {
   Map<String, dynamic> toUpdateJson() => {
         "title": title,
-        "weight": weight,
+        "weight": weight ?? 0,
         "imgUrl": imgUrl,
         "url": url,
         "description": description,

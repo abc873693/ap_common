@@ -1,5 +1,9 @@
 import 'dart:convert';
 
+import 'package:jwt_decoder/jwt_decoder.dart';
+
+enum PermissionLevel { user, editor, admin }
+
 class AnnouncementLoginData {
   AnnouncementLoginData({
     this.key,
@@ -27,4 +31,15 @@ class AnnouncementLoginData {
   Map<String, dynamic> toJson() => {
         "key": key == null ? null : key,
       };
+
+  Map<String, dynamic> get decodedToken => JwtDecoder.decode(key);
+
+  bool get isExpired => JwtDecoder.isExpired(key);
+
+  PermissionLevel get level =>
+      PermissionLevel.values[decodedToken['user']['permission_level']];
+
+  String get loginType => decodedToken['user']['login_type'];
+
+  String get username => decodedToken['user']['username'];
 }
