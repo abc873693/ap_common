@@ -22,6 +22,8 @@ class AnnouncementHelper {
   static String host = 'nkust.taki.dog';
   static String tag = '/beta';
 
+  static String fcmToken;
+
   static AnnouncementHelper _instance;
   static BaseOptions options;
   static Dio dio;
@@ -270,7 +272,9 @@ class AnnouncementHelper {
     try {
       var response = await dio.post(
         "/application",
-        data: announcements.toUpdateJson(),
+        data: fcmToken == null
+            ? announcements.toUpdateJson()
+            : announcements.toAddApplicationJson(fcmToken),
       );
       print(response.data);
       return response;

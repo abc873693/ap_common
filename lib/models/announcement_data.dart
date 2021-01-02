@@ -118,4 +118,14 @@ class Announcement {
         "description": description,
         "expireTime": expireTime,
       };
+
+  Map<String, dynamic> toAddApplicationJson(String fcmToken) => {
+        "title": title,
+        "weight": weight,
+        "imgUrl": imgUrl,
+        "url": url,
+        "description": description,
+        "expireTime": expireTime,
+        "fcm": fcmToken,
+      };
 }
