@@ -25,4 +25,6 @@ class ApConstants {
       '$PACKAGE_NAME.announcement_username';
   static const String ANNOUNCEMENT_PASSWORD =
       '$PACKAGE_NAME.announcement_password';
+  static const String ANNOUNCEMENT_ID_TOKEN =
+      '$PACKAGE_NAME.announcement_id_token';
 }

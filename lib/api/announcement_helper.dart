@@ -136,6 +136,28 @@ class AnnouncementHelper {
     }
   }
 
+  Future<AnnouncementLoginData> appleLogin({
+    String idToken,
+    GeneralCallback<AnnouncementLoginData> callback,
+  }) async {
+    try {
+      debugPrint(idToken);
+      var response = await dio.post(
+        '/oauth2/apple/token',
+        data: {
+          'token': idToken,
+        },
+      );
+      var loginData = AnnouncementLoginData.fromJson(response.data);
+      options.headers = _createBearerTokenAuth(loginData.key);
+      AnnouncementHelper.code = idToken;
+      AnnouncementHelper.loginType = AnnouncementLoginType.apple;
+      return loginData;
+    } catch (dioError) {
+      throw dioError;
+    }
+  }
+
   Future<Response> deleteToken() async {
     try {
       var response = await dio.delete(

@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:ap_common/api/announcement_helper.dart';
 import 'package:ap_common/config/ap_constants.dart';
 import 'package:ap_common/models/announcement_data.dart';
@@ -16,6 +18,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:google_sign_in/google_sign_in.dart';
+import 'package:sign_in_with_apple/sign_in_with_apple.dart';
 
 import 'edit_page.dart';
 
@@ -293,6 +296,15 @@ class _AnnouncementHomePageState extends State<AnnouncementHomePage> {
               var data = await _googleSignIn.signOut();
             },
           ),
+          if (!kIsWeb && (Platform.isIOS || Platform.isMacOS)) ...[
+            SizedBox(height: 32.0),
+            ApButton(
+              text: 'Sign In With Apple',
+              onPressed: () async {
+                _login(AnnouncementLoginType.apple);
+              },
+            ),
+          ],
         ],
       ),
     );
@@ -593,6 +605,11 @@ class _AnnouncementHomePageState extends State<AnnouncementHomePage> {
         barrierDismissible: false,
       );
       Future<AnnouncementLoginData> login;
+      String idToken =
+          Preferences.getBool(ApConstants.ANNOUNCEMENT_IS_LOGIN, false)
+              ? Preferences.getStringSecurity(
+                  ApConstants.ANNOUNCEMENT_ID_TOKEN, null)
+              : null;
       switch (loginType) {
         case AnnouncementLoginType.normal:
           Preferences.setString(
@@ -604,19 +621,33 @@ class _AnnouncementHomePageState extends State<AnnouncementHomePage> {
           var data = await _googleSignIn.isSignedIn()
               ? await _googleSignIn.signInSilently()
               : await _googleSignIn.signIn();
-          login = AnnouncementHelper.instance
-              .googleLogin(idToken: (await data.authentication).idToken);
+          idToken = (await data.authentication).idToken;
+          login = AnnouncementHelper.instance.googleLogin(idToken: idToken);
           break;
         case AnnouncementLoginType.apple:
-          // TODO: Handle this case.
+          try {
+            if (idToken == null) {
+              final credential = await SignInWithApple.getAppleIDCredential(
+                scopes: [AppleIDAuthorizationScopes.email],
+              );
+              idToken = credential.identityToken;
+            }
+            login = AnnouncementHelper.instance.appleLogin(idToken: idToken);
+          } catch (e) {
+            Navigator.of(context, rootNavigator: true).pop();
+          }
           break;
       }
-      login.then((AnnouncementLoginData response) async {
+      login?.then((AnnouncementLoginData response) async {
         loginData = response;
         if (kDebugMode) print(loginData.key);
         Navigator.of(context, rootNavigator: true).pop();
-        Preferences.setStringSecurity(
-            ApConstants.ANNOUNCEMENT_PASSWORD, _password.text);
+        if (loginType == AnnouncementLoginType.normal)
+          Preferences.setStringSecurity(
+              ApConstants.ANNOUNCEMENT_PASSWORD, _password.text);
+        else
+          Preferences.setStringSecurity(
+              ApConstants.ANNOUNCEMENT_ID_TOKEN, idToken);
         ApUtils.showToast(context, app.loginSuccess);
         Preferences.setBool(ApConstants.ANNOUNCEMENT_IS_LOGIN, true);
         Preferences.setInt(
@@ -626,7 +657,7 @@ class _AnnouncementHomePageState extends State<AnnouncementHomePage> {
           if (loginData.level != PermissionLevel.user) _getData();
           _getApplicationData();
         });
-      }).catchError((e) {
+      })?.catchError((e) {
         Navigator.of(context, rootNavigator: true).pop();
         if (e is DioError) {
           switch (e.type) {
