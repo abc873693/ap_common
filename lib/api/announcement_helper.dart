@@ -216,7 +216,6 @@ class AnnouncementHelper {
         "/announcements/add",
         data: announcements.toUpdateJson(),
       );
-      print(response.data);
       return response;
     } on DioError catch (dioError) {
       throw dioError;
@@ -276,7 +275,6 @@ class AnnouncementHelper {
             ? announcements.toUpdateJson()
             : announcements.toAddApplicationJson(fcmToken),
       );
-      print(response.data);
       return response;
     } on DioError catch (dioError) {
       throw dioError;
@@ -294,7 +292,6 @@ class AnnouncementHelper {
           "description": reviewDescription ?? '',
         },
       );
-      print(response.data);
       return response;
     } on DioError catch (dioError) {
       throw dioError;
