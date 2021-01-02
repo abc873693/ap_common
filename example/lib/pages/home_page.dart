@@ -1,6 +1,7 @@
-import 'package:ap_common/api/github_helper.dart';
+import 'package:ap_common/api/announcement_helper.dart';
 import 'package:ap_common/callback/general_callback.dart';
 import 'package:ap_common/models/user_info.dart';
+import 'package:ap_common/pages/announcement/home_page.dart';
 import 'package:ap_common/pages/announcement_content_page.dart';
 import 'package:ap_common/pages/about_us_page.dart';
 import 'package:ap_common/pages/open_source_page.dart';
@@ -51,8 +52,7 @@ class HomePageState extends State<HomePage> {
 
   Widget content;
 
-  List<Announcement> get announcements =>
-      (newsMap == null) ? null : newsMap[AppLocalizations.locale.languageCode];
+  List<Announcement> announcements;
 
   var isLogin = false;
   bool displayPicture = true;
@@ -133,8 +133,13 @@ class HomePageState extends State<HomePage> {
       isLogin: isLogin,
       actions: <Widget>[
         IconButton(
-          icon: Icon(ApIcon.info),
-          onPressed: _showInformationDialog,
+          icon: Icon(Icons.approval),
+          onPressed: () {
+            ApUtils.pushCupertinoStyle(
+              context,
+              AnnouncementHomePage(),
+            );
+          },
         ),
       ],
       content: content,
@@ -292,20 +297,41 @@ class HomePageState extends State<HomePage> {
   }
 
   _getAnnouncements() async {
-    GitHubHelper.instance.getAnnouncement(
-      gitHubUsername: 'abc873693',
-      hashCode: 'a8e048d24f892ce95a633aa5966c030a',
-      tag: 'nkust',
+    // GitHubHelper.instance.getAnnouncement(
+    //   gitHubUsername: 'abc873693',
+    //   hashCode: 'a8e048d24f892ce95a633aa5966c030a',
+    //   tag: 'nkust',
+    //   callback: GeneralCallback(
+    //     onFailure: (_) => setState(() => state = HomeState.error),
+    //     onError: (_) => setState(() => state = HomeState.error),
+    //     onSuccess: (Map<String, List<Announcement>> data) {
+    //       newsMap = data;
+    //       setState(() {
+    //         if (announcements == null || announcements.length == 0)
+    //           state = HomeState.empty;
+    //         else {
+    //           newsMap.forEach((_, data) {
+    //             data.sort((a, b) {
+    //               return b.weight.compareTo(a.weight);
+    //             });
+    //           });
+    //           state = HomeState.finish;
+    //         }
+    //       });
+    //     },
+    //   ),
+    // );
+    AnnouncementHelper.instance.getAllAnnouncements(
       callback: GeneralCallback(
         onFailure: (_) => setState(() => state = HomeState.error),
         onError: (_) => setState(() => state = HomeState.error),
-        onSuccess: (Map<String, List<Announcement>> data) {
-          newsMap = data;
+        onSuccess: (List<Announcement> data) {
+          announcements = data;
           setState(() {
             if (announcements == null || announcements.length == 0)
               state = HomeState.empty;
             else {
-              newsMap.forEach((_, data) {
+              newsMap?.forEach((_, data) {
                 data.sort((a, b) {
                   return b.weight.compareTo(a.weight);
                 });
