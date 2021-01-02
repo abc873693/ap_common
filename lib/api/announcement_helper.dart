@@ -257,6 +257,67 @@ class AnnouncementHelper {
     }
   }
 
+  Future<Response> approveApplication({
+    @required String applicationId,
+    String reviewDescription,
+  }) async {
+    try {
+      var response = await dio.put(
+        "/application/$applicationId/approve",
+        data: {
+          "description": reviewDescription ?? '',
+        },
+      );
+      print(response.data);
+      return response;
+    } on DioError catch (dioError) {
+      throw dioError;
+    }
+  }
+
+  Future<Response> rejectApplication({
+    @required String applicationId,
+    String reviewDescription,
+  }) async {
+    try {
+      var response = await dio.put(
+        "/application/$applicationId/reject",
+        data: {
+          "description": reviewDescription ?? '',
+        },
+      );
+      return response;
+    } on DioError catch (dioError) {
+      throw dioError;
+    }
+  }
+
+  Future<Response> removeApplication(String applicationId) async {
+    try {
+      var response = await dio.delete(
+        "/application/$applicationId",
+      );
+      return response;
+    } on DioError catch (dioError) {
+      throw dioError;
+    }
+  }
+
+  Future<Response> updateApplication(Announcement announcements) async {
+    try {
+      print('${announcements.applicationId}');
+      var response = await dio.put(
+        "/application/${announcements.applicationId}",
+        data: announcements.toUpdateApplicationJson(),
+      );
+      print(response.data);
+      return response;
+    } on DioError catch (dioError) {
+      print(dioError.response.data);
+      throw dioError;
+    }
+  }
+
   // v3 api Authorization
   _createBearerTokenAuth(String token) {
     return {

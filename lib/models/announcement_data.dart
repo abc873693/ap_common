@@ -109,4 +109,13 @@ class Announcement {
         "description": description,
         "expireTime": expireTime,
       };
+
+  Map<String, dynamic> toUpdateApplicationJson() => {
+        "title": title,
+        "weight": weight,
+        "imgUrl": imgUrl,
+        "url": url,
+        "description": description,
+        "expireTime": expireTime,
+      };
 }

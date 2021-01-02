@@ -10,7 +10,7 @@ import 'package:flutter/widgets.dart';
 import 'package:intl/intl.dart' show DateFormat;
 
 enum _State { loading, finish, error, empty, offline }
-enum Mode { add, edit, application }
+enum Mode { add, edit, application, editApplication }
 
 extension ParseDateTimes on DateTime {
   String parseToString() {
@@ -50,6 +50,7 @@ class _AnnouncementEditPageState extends State<AnnouncementEditPage> {
   var _imgUrl = TextEditingController();
   var _url = TextEditingController();
   var _weight = TextEditingController();
+  var _reviewDescription = TextEditingController();
 
   var formatter = DateFormat('yyyy-MM-ddTHH:mm:ss');
   var dateFormat = DateFormat('yyyy-MM-dd HH:mm:ss');
@@ -64,6 +65,7 @@ class _AnnouncementEditPageState extends State<AnnouncementEditPage> {
         return app.submit;
       case Mode.edit:
         return app.update;
+      case Mode.editApplication:
       case Mode.application:
         return app.submit;
     }
@@ -72,7 +74,7 @@ class _AnnouncementEditPageState extends State<AnnouncementEditPage> {
 
   @override
   void initState() {
-    if (widget.mode == Mode.edit) {
+    if (widget.mode == Mode.edit || widget.mode == Mode.editApplication) {
       announcements = widget.announcement;
       _title.text = announcements.title;
       _imgUrl.text = announcements.imgUrl;
@@ -260,6 +262,24 @@ class _AnnouncementEditPageState extends State<AnnouncementEditPage> {
                 labelText: app.description,
               ),
             ),
+            if (widget.mode == Mode.editApplication) ...[
+              SizedBox(height: dividerHeight),
+              TextFormField(
+                maxLines: 2,
+                controller: _reviewDescription,
+                validator: (value) {
+                  return null;
+                },
+                decoration: InputDecoration(
+                  border: OutlineInputBorder(),
+                  fillColor: ApTheme.of(context).blueAccent,
+                  labelStyle: TextStyle(
+                    color: ApTheme.of(context).grey,
+                  ),
+                  labelText: app.reviewDescription,
+                ),
+              ),
+            ],
             SizedBox(height: 36),
             FractionallySizedBox(
               widthFactor: 0.8,
@@ -283,6 +303,54 @@ class _AnnouncementEditPageState extends State<AnnouncementEditPage> {
                 ),
               ),
             ),
+            if (widget.mode == Mode.editApplication) ...[
+              SizedBox(height: 18),
+              FractionallySizedBox(
+                widthFactor: 0.8,
+                child: RaisedButton(
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.all(
+                      Radius.circular(30.0),
+                    ),
+                  ),
+                  padding: EdgeInsets.all(14.0),
+                  onPressed: () {
+                    _announcementSubmit(isApproval: true);
+                  },
+                  color: ApTheme.of(context).yellow,
+                  child: Text(
+                    '更新並同意',
+                    style: TextStyle(
+                      color: Colors.white,
+                      fontSize: 18.0,
+                    ),
+                  ),
+                ),
+              ),
+              SizedBox(height: 18),
+              FractionallySizedBox(
+                widthFactor: 0.8,
+                child: RaisedButton(
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.all(
+                      Radius.circular(30.0),
+                    ),
+                  ),
+                  padding: EdgeInsets.all(14.0),
+                  onPressed: () {
+                    _announcementSubmit(isApproval: false);
+                  },
+                  color: ApTheme.of(context).red,
+                  child: Text(
+                    '更新並不同意',
+                    style: TextStyle(
+                      color: Colors.white,
+                      fontSize: 18.0,
+                    ),
+                  ),
+                ),
+              ),
+            ],
             SizedBox(height: 36),
           ],
         ),
@@ -316,7 +384,7 @@ class _AnnouncementEditPageState extends State<AnnouncementEditPage> {
     }
   }
 
-  void _announcementSubmit() async {
+  void _announcementSubmit({bool isApproval}) async {
     print(_weight?.text);
     if (_formKey.currentState.validate()) {
       Future<dynamic> instance;
@@ -328,6 +396,7 @@ class _AnnouncementEditPageState extends State<AnnouncementEditPage> {
           _weight.text.isNotEmpty ? int.parse(_weight?.text ?? 0) : 0;
       announcements.expireTime =
           (expireTime == null) ? null : expireTime.parseToString();
+      announcements.reviewDescription = _reviewDescription.text;
       switch (widget.mode) {
         case Mode.add:
           instance = AnnouncementHelper.instance.addAnnouncement(announcements);
@@ -339,9 +408,12 @@ class _AnnouncementEditPageState extends State<AnnouncementEditPage> {
         case Mode.application:
           instance = AnnouncementHelper.instance.addApplication(announcements);
           break;
+        case Mode.editApplication:
+          instance =
+              AnnouncementHelper.instance.updateApplication(announcements);
+          break;
       }
-      instance.then((response) {
-        Navigator.of(context).pop(true);
+      instance.then((response) async {
         switch (widget.mode) {
           case Mode.add:
             ApUtils.showToast(context, app.addSuccess);
@@ -352,7 +424,23 @@ class _AnnouncementEditPageState extends State<AnnouncementEditPage> {
           case Mode.application:
             ApUtils.showToast(context, app.applicationSubmitSuccess);
             break;
+          case Mode.editApplication:
+            ApUtils.showToast(context, app.updateSuccess);
+            if (isApproval != null) {
+              if (isApproval)
+                await AnnouncementHelper.instance.approveApplication(
+                  applicationId: announcements.applicationId,
+                  reviewDescription: announcements.reviewDescription,
+                );
+              else
+                await AnnouncementHelper.instance.rejectApplication(
+                  applicationId: announcements.applicationId,
+                  reviewDescription: announcements.reviewDescription,
+                );
+            }
+            break;
         }
+        Navigator.of(context).pop(true);
       }).catchError((e) {
         ApUtils.showToast(context, app.somethingError);
       });

@@ -707,6 +707,31 @@ class ApLocalizations {
   String get exportCourseTableSuccess =>
       _vocabularies['exportCourseTableSuccess'];
 
+  String get announcementReviewSystem =>
+      _vocabularies['announcementReviewSystem'];
+
+  String get approve => _vocabularies['approve'];
+
+  String get reject => _vocabularies['reject'];
+
+  String get updateAndApprove => _vocabularies['updateAndApprove'];
+
+  String get updateAndReject => _vocabularies['updateAndReject'];
+
+  String get reviewApplication => _vocabularies['reviewApplication'];
+
+  String get allAnnouncements => _vocabularies['allAnnouncement'];
+
+  String get allApplications => _vocabularies['allApplication'];
+
+  String get noPermissionHint => _vocabularies['noPermissionHint'];
+
+  String get noPermissionUpdateHint => _vocabularies['noPermissionUpdateHint'];
+
+  String get noPermissionReviewHint => _vocabularies['noPermissionReviewHint'];
+
+  String get noApplicationHint => _vocabularies['noApplicationHint'];
+
   String get apply => _vocabularies['apply'];
 
   String get myApplications => _vocabularies['myApplications'];
@@ -721,7 +746,8 @@ class ApLocalizations {
 
   String get reviewDescription => _vocabularies['reviewDescription'];
 
-  String get applicationSubmitSuccess => _vocabularies['applicationSubmitSuccess'];
+  String get applicationSubmitSuccess =>
+      _vocabularies['applicationSubmitSuccess'];
 
   static ApLocalizations of(BuildContext context) {
     return instance =
@@ -1137,6 +1163,18 @@ class ApLocalizations {
       'grandPermissionFail': 'Grand permission fail, please try again.',
       'exportCourseTableSuccess':
           'Export Successful~ Please check download directory.',
+      'announcementReviewSystem': 'Announcement Review System',
+      'approve': 'Approve',
+      'reject': 'Reject',
+      'updateAndApprove': 'Update and Approve',
+      'updateAndReject': 'Update and Reject',
+      'reviewApplication': 'Review Application',
+      'allAnnouncement': 'All Announcements',
+      'allApplication': 'All Applications',
+      'noPermissionHint': 'No permission',
+      'noPermissionUpdateHint': 'No permission to update.',
+      'noPermissionReviewHint': 'No permission to review.',
+      'noApplicationHint': 'Not found application by application_id.',
       'apply': 'Apply',
       'myApplications': 'My Applications',
       'reviewState': 'Review State',
@@ -1505,6 +1543,18 @@ class ApLocalizations {
       'exportCourseTable': '匯出課表成圖片',
       'grandPermissionFail': '取得權限失敗 請給於權限功能才能正常運作',
       'exportCourseTableSuccess': '匯出成功~ 請檢查下載資料夾',
+      'announcementReviewSystem': '最新消息審查系統',
+      'approve': '批准',
+      'reject': '駁回',
+      'updateAndApprove': '更新並批准',
+      'updateAndReject': '更新並駁回',
+      'reviewApplication': '審查申請',
+      'allAnnouncement': '所有最新消息',
+      'allApplication': '所有審查',
+      'noPermissionHint': '無權限',
+      'noPermissionUpdateHint': '無權限操作更新',
+      'noPermissionReviewHint': '無權限操作審查',
+      'noApplicationHint': '找不到對應的 application_id.',
       'apply': '申請',
       'myApplications': '我的申請',
       'reviewState': '審查狀態',
