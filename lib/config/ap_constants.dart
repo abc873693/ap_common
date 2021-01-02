@@ -27,4 +27,6 @@ class ApConstants {
       '$PACKAGE_NAME.announcement_password';
   static const String ANNOUNCEMENT_ID_TOKEN =
       '$PACKAGE_NAME.announcement_id_token';
+  static const String ANNOUNCEMENT_ONLY_NOT_REVIEW =
+      '$PACKAGE_NAME.announcement_only_not_review';
 }

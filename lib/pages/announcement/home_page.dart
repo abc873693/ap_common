@@ -57,6 +57,8 @@ class _AnnouncementHomePageState extends State<AnnouncementHomePage> {
   FocusNode usernameFocusNode;
   FocusNode passwordFocusNode;
 
+  bool onlyShowNotReview = false;
+
   TextStyle get _editTextStyle => TextStyle(
         fontSize: 18.0,
         decorationColor: ApTheme.of(context).blueAccent,
@@ -91,9 +93,38 @@ class _AnnouncementHomePageState extends State<AnnouncementHomePage> {
         title: Text(app.announcements),
         backgroundColor: ApTheme.of(context).blue,
         actions: [
+          if (state == _State.done)
+            FlatButton(
+              child: Row(
+                children: [
+                  Checkbox(
+                    value: onlyShowNotReview,
+                    onChanged: (bool value) {
+                      setState(() {
+                        onlyShowNotReview = value;
+                      });
+                      Preferences.setBool(
+                          ApConstants.ANNOUNCEMENT_ONLY_NOT_REVIEW,
+                          onlyShowNotReview);
+                    },
+                    activeColor: ApTheme.of(context).yellow,
+                    checkColor: ApTheme.of(context).blue,
+                  ),
+                  Text(app.onlyShowNotReview),
+                ],
+              ),
+              onPressed: () async {
+                setState(() {
+                  onlyShowNotReview = !onlyShowNotReview;
+                });
+                Preferences.setBool(ApConstants.ANNOUNCEMENT_ONLY_NOT_REVIEW,
+                    onlyShowNotReview);
+              },
+            ),
           if (Preferences.getBool(ApConstants.ANNOUNCEMENT_IS_LOGIN, false))
             IconButton(
               icon: Icon(Icons.exit_to_app),
+              tooltip: app.logout,
               onPressed: () async {
                 if (AnnouncementHelper.loginType ==
                     AnnouncementLoginType.google) await _googleSignIn.signOut();
@@ -204,7 +235,9 @@ class _AnnouncementHomePageState extends State<AnnouncementHomePage> {
                   Text(app.myApplications),
                   SizedBox(height: 8.0),
                   for (var item in applications)
-                    _item(_DataType.application, item)
+                    if ((onlyShowNotReview && item.reviewStatus == null) ||
+                        (!onlyShowNotReview))
+                      _item(_DataType.application, item)
                 ],
               ),
             );
@@ -223,7 +256,9 @@ class _AnnouncementHomePageState extends State<AnnouncementHomePage> {
                   Text(app.allApplications),
                   SizedBox(height: 8.0),
                   for (var item in applications ?? [])
-                    _item(_DataType.application, item)
+                    if ((onlyShowNotReview && item.reviewStatus == null) ||
+                        (!onlyShowNotReview))
+                      _item(_DataType.application, item)
                 ],
               ),
             );
@@ -574,6 +609,8 @@ class _AnnouncementHomePageState extends State<AnnouncementHomePage> {
     await Future.delayed(Duration(microseconds: 50));
     bool isLogin =
         Preferences.getBool(ApConstants.ANNOUNCEMENT_IS_LOGIN, false);
+    onlyShowNotReview =
+        Preferences.getBool(ApConstants.ANNOUNCEMENT_ONLY_NOT_REVIEW, false);
     _username.text =
         Preferences.getString(ApConstants.ANNOUNCEMENT_USERNAME, '');
     _password.text =

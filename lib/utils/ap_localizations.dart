@@ -753,6 +753,8 @@ class ApLocalizations {
 
   String get addApplication => _vocabularies['addApplication'];
 
+  String get onlyShowNotReview => _vocabularies['onlyShowNotReview'];
+
   static ApLocalizations of(BuildContext context) {
     return instance =
         Localizations.of<ApLocalizations>(context, ApLocalizations);
@@ -1189,6 +1191,7 @@ class ApLocalizations {
       'applicationSubmitSuccess': 'Application Submit Success',
       'applicant': 'Applicant',
       'addApplication': 'Add Application',
+      'onlyShowNotReview': 'Only Show Not Review',
     },
     'zh': {
       'update_note_title': '更新日誌',
@@ -1571,6 +1574,7 @@ class ApLocalizations {
       'applicationSubmitSuccess': '申請送出成功',
       'applicant': '申請人',
       'addApplication': '新增申請',
+      'onlyShowNotReview': '只顯示尚未審查',
     },
   };
 }
