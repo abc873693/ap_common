@@ -59,6 +59,18 @@ class _AnnouncementEditPageState extends State<AnnouncementEditPage> {
 
   final dividerHeight = 16.0;
 
+  String get title {
+    switch (widget.mode) {
+      case Mode.add:
+      case Mode.edit:
+      case Mode.editApplication:
+        return app.announcements;
+      case Mode.application:
+        return app.addApplication;
+    }
+    return app.submit;
+  }
+
   String get buttonText {
     switch (widget.mode) {
       case Mode.add:
@@ -99,7 +111,7 @@ class _AnnouncementEditPageState extends State<AnnouncementEditPage> {
     app = ApLocalizations.of(context);
     return Scaffold(
       appBar: AppBar(
-        title: Text(app.announcements),
+        title: Text(title),
         backgroundColor: ApTheme.of(context).blue,
       ),
       body: Form(

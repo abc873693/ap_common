@@ -445,6 +445,14 @@ class _AnnouncementHomePageState extends State<AnnouncementHomePage> {
                           height: 1.3,
                           fontSize: 16.0),
                       children: [
+                        if (loginData.level != PermissionLevel.user &&
+                            dataType == _DataType.application) ...[
+                          TextSpan(
+                            text: '${app.applicant}：',
+                            style: TextStyle(fontWeight: FontWeight.bold),
+                          ),
+                          TextSpan(text: '${item.applicant ?? ''}\n'),
+                        ],
                         if (loginData.level != PermissionLevel.user) ...[
                           TextSpan(
                             text: '${app.weight}：',
