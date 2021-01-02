@@ -22,7 +22,7 @@ import 'package:sign_in_with_apple/sign_in_with_apple.dart';
 
 import 'edit_page.dart';
 
-enum _State { notLogin, loading, done, error, empty, offline }
+enum _State { notLogin, loading, done, error }
 enum _DataType { announcement, application }
 
 class AnnouncementHomePage extends StatefulWidget {
@@ -140,22 +140,19 @@ class _AnnouncementHomePageState extends State<AnnouncementHomePage> {
         return _loginContent();
       case _State.loading:
         return Container(
-            child: CircularProgressIndicator(), alignment: Alignment.center);
-      case _State.empty:
+          child: CircularProgressIndicator(),
+          alignment: Alignment.center,
+        );
       case _State.error:
         return FlatButton(
           onPressed: () {
             _getData();
+            _getApplicationData();
           },
           child: HintContent(
             icon: ApIcon.classIcon,
             content: app.clickToRetry,
           ),
-        );
-      case _State.offline:
-        return HintContent(
-          icon: ApIcon.classIcon,
-          content: app.noOfflineData,
         );
       case _State.done:
         switch (loginData.level) {
@@ -287,13 +284,6 @@ class _AnnouncementHomePageState extends State<AnnouncementHomePage> {
             text: 'Google Sign in',
             onPressed: () async {
               _login(AnnouncementLoginType.google);
-            },
-          ),
-          SizedBox(height: 32.0),
-          ApButton(
-            text: 'Google Sign out',
-            onPressed: () async {
-              var data = await _googleSignIn.signOut();
             },
           ),
           if (!kIsWeb && (Platform.isIOS || Platform.isMacOS)) ...[
