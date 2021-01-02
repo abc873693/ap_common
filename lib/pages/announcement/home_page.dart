@@ -546,7 +546,7 @@ class _AnnouncementHomePageState extends State<AnnouncementHomePage> {
     AnnouncementHelper.instance.getAllAnnouncements().then((announcementsData) {
       this.announcements = announcementsData;
       setState(() {
-        state = announcementsData.length == 0 ? _State.empty : _State.done;
+        state = _State.done;
       });
     });
   }
@@ -555,7 +555,7 @@ class _AnnouncementHomePageState extends State<AnnouncementHomePage> {
     AnnouncementHelper.instance.getApplications().then((announcementsData) {
       this.applications = announcementsData;
       setState(() {
-        state = announcementsData.length == 0 ? _State.empty : _State.done;
+        state = _State.done;
       });
     });
   }
