@@ -102,6 +102,7 @@ class AnnouncementHelper {
         data: {
           'username': username,
           'password': password,
+          "fcmToken": fcmToken,
         },
       );
       print(response.statusCode);
@@ -111,7 +112,8 @@ class AnnouncementHelper {
       AnnouncementHelper.password = password;
       AnnouncementHelper.loginType = AnnouncementLoginType.normal;
       return loginData;
-    } catch (dioError) {
+    } on DioError catch (dioError) {
+      debugPrint(dioError.response.data.toString());
       throw dioError;
     }
   }
@@ -126,6 +128,7 @@ class AnnouncementHelper {
         '/oauth2/google/token',
         data: {
           'token': idToken,
+          "fcmToken": fcmToken,
         },
       );
       var loginData = AnnouncementLoginData.fromJson(response.data);
@@ -133,7 +136,8 @@ class AnnouncementHelper {
       AnnouncementHelper.code = idToken;
       AnnouncementHelper.loginType = AnnouncementLoginType.google;
       return loginData;
-    } catch (dioError) {
+    } on DioError catch (dioError) {
+      debugPrint(dioError.response.data.toString());
       throw dioError;
     }
   }
@@ -148,6 +152,7 @@ class AnnouncementHelper {
         '/oauth2/apple/token',
         data: {
           'token': idToken,
+          "fcmToken": fcmToken,
         },
       );
       var loginData = AnnouncementLoginData.fromJson(response.data);
@@ -155,7 +160,8 @@ class AnnouncementHelper {
       AnnouncementHelper.code = idToken;
       AnnouncementHelper.loginType = AnnouncementLoginType.apple;
       return loginData;
-    } catch (dioError) {
+    } on DioError catch (dioError) {
+      debugPrint(dioError.response.data.toString());
       throw dioError;
     }
   }
@@ -271,9 +277,7 @@ class AnnouncementHelper {
     try {
       var response = await dio.post(
         "/application",
-        data: fcmToken == null
-            ? announcements.toUpdateJson()
-            : announcements.toAddApplicationJson(fcmToken),
+        data: announcements.toUpdateJson(),
       );
       return response;
     } on DioError catch (dioError) {

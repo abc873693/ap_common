@@ -126,6 +126,5 @@ class Announcement {
         "url": url,
         "description": description,
         "expireTime": expireTime,
-        "fcm": fcmToken,
       };
 }
