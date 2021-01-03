@@ -755,6 +755,8 @@ class ApLocalizations {
 
   String get onlyShowNotReview => _vocabularies['onlyShowNotReview'];
 
+  String get account => _vocabularies['account'];
+
   static ApLocalizations of(BuildContext context) {
     return instance =
         Localizations.of<ApLocalizations>(context, ApLocalizations);
@@ -1192,6 +1194,7 @@ class ApLocalizations {
       'applicant': 'Applicant',
       'addApplication': 'Add Application',
       'onlyShowNotReview': 'Only Show Not Review',
+      'account': 'Account',
     },
     'zh': {
       'update_note_title': '更新日誌',
@@ -1453,7 +1456,8 @@ class ApLocalizations {
       'noData': '無資料',
       'contactFansPage': '聯絡粉專',
       'newsRuleTitle': '最新消息刊登規則',
-      'newsRuleDescription1': '本功能提供社團或學生\n刊登學校相關資訊\n\n若需要請聯絡粉絲專頁並提供\n',
+      'newsRuleDescription1':
+          '本系統提供社團或學生\n刊登學校相關資訊\n需使用有學校域名(@nkust.edu.tw)的第三方驗證帳號登入\n',
       'newsRuleDescription2':
           '1. 圖片且上傳至 imgur\n請使用ＪＰＥＧ有壓縮過的檔案\n建議不要超過100KB\n2. 標題建議放活動名稱，不要太長\n3. 活動網址連結\n4. 內容說明\n5.必須為非營利活動\n\n',
       'newsRuleDescription3': '高科校務通團隊有最終修改權利',
@@ -1575,6 +1579,7 @@ class ApLocalizations {
       'applicant': '申請人',
       'addApplication': '新增申請',
       'onlyShowNotReview': '只顯示尚未審查',
+      'account': '帳號',
     },
   };
 }

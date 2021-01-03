@@ -27,10 +27,12 @@ enum _DataType { announcement, application }
 
 class AnnouncementHomePage extends StatefulWidget {
   static const String routerName = "/news/admin";
+  final Widget loginDescriptionWidget;
   final Widget reviewDescriptionWidget;
 
   const AnnouncementHomePage({
     Key key,
+    this.loginDescriptionWidget,
     this.reviewDescriptionWidget,
   }) : super(key: key);
 
@@ -90,7 +92,7 @@ class _AnnouncementHomePageState extends State<AnnouncementHomePage> {
     app = ApLocalizations.of(context);
     return Scaffold(
       appBar: AppBar(
-        title: Text(app.announcements),
+        title: Text(app.announcementReviewSystem),
         backgroundColor: ApTheme.of(context).blue,
         actions: [
           if (state == _State.done)
@@ -136,24 +138,25 @@ class _AnnouncementHomePageState extends State<AnnouncementHomePage> {
             ),
         ],
       ),
-      floatingActionButton: (loginData?.level == PermissionLevel.user ?? false)
-          ? null
-          : FloatingActionButton(
-              child: Icon(Icons.add),
-              onPressed: () async {
-                var success = await Navigator.push(
-                  context,
-                  CupertinoPageRoute(
-                    builder: (_) => AnnouncementEditPage(
-                      mode: Mode.add,
-                    ),
-                  ),
-                );
-                if (success is bool && success != null && success) {
-                  _getData();
-                }
-              },
-            ),
+      floatingActionButton:
+          (loginData == null || loginData?.level == PermissionLevel.user)
+              ? null
+              : FloatingActionButton(
+                  child: Icon(Icons.add),
+                  onPressed: () async {
+                    var success = await Navigator.push(
+                      context,
+                      CupertinoPageRoute(
+                        builder: (_) => AnnouncementEditPage(
+                          mode: Mode.add,
+                        ),
+                      ),
+                    );
+                    if (success is bool && success != null && success) {
+                      _getData();
+                    }
+                  },
+                ),
       body: RefreshIndicator(
         onRefresh: () async {
           await _getData();
@@ -200,18 +203,20 @@ class _AnnouncementHomePageState extends State<AnnouncementHomePage> {
                               color: ApTheme.of(context).grey, fontSize: 16.0),
                           children: [
                             TextSpan(
-                                text: '${app.newsRuleDescription1}',
-                                style:
-                                    TextStyle(fontWeight: FontWeight.normal)),
+                              text: '${app.newsRuleDescription1}\n',
+                              style: TextStyle(fontWeight: FontWeight.normal),
+                            ),
                             TextSpan(
-                                text: '${app.newsRuleDescription2}',
-                                style: TextStyle(fontWeight: FontWeight.bold)),
+                              text: '${app.newsRuleDescription2}',
+                              style: TextStyle(fontWeight: FontWeight.bold),
+                            ),
                             TextSpan(
-                                text: '${app.newsRuleDescription3}',
-                                style:
-                                    TextStyle(fontWeight: FontWeight.normal)),
+                              text: '${app.newsRuleDescription3}',
+                              style: TextStyle(fontWeight: FontWeight.normal),
+                            ),
                           ],
                         ),
+                        textAlign: TextAlign.center,
                       ),
                   SizedBox(height: 32.0),
                   Padding(
@@ -277,12 +282,11 @@ class _AnnouncementHomePageState extends State<AnnouncementHomePage> {
         FocusScope.of(context).requestFocus(passwordFocusNode);
       },
       decoration: InputDecoration(
-        labelText: app.username,
+        labelText: app.account,
       ),
       style: _editTextStyle,
     );
     Widget passwordTextField = TextField(
-      // obscureText: true,
       maxLines: 1,
       textInputAction: TextInputAction.send,
       controller: _password,
@@ -297,7 +301,7 @@ class _AnnouncementHomePageState extends State<AnnouncementHomePage> {
       ),
       style: _editTextStyle,
     );
-    return Padding(
+    return SingleChildScrollView(
       padding: const EdgeInsets.symmetric(
         vertical: 8.0,
         horizontal: 32.0,
@@ -305,26 +309,43 @@ class _AnnouncementHomePageState extends State<AnnouncementHomePage> {
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: <Widget>[
+          widget.loginDescriptionWidget ??
+              SelectableText.rich(
+                TextSpan(
+                  style: TextStyle(
+                      color: ApTheme.of(context).grey, fontSize: 16.0),
+                  children: [
+                    TextSpan(
+                        text: '${app.newsRuleDescription1}',
+                        style: TextStyle(fontWeight: FontWeight.normal)),
+                    TextSpan(
+                        text: '${app.newsRuleDescription3}',
+                        style: TextStyle(fontWeight: FontWeight.normal)),
+                  ],
+                ),
+                textAlign: TextAlign.center,
+              ),
+          SizedBox(height: 8.0),
           usernameTextField,
           passwordTextField,
-          SizedBox(height: 32.0),
+          SizedBox(height: 24.0),
           ApButton(
             text: app.login,
             onPressed: () async {
               _login(AnnouncementLoginType.normal);
             },
           ),
-          SizedBox(height: 32.0),
+          SizedBox(height: 16.0),
           ApButton(
-            text: 'Google Sign in',
+            text: 'Sign In with Google',
             onPressed: () async {
               _login(AnnouncementLoginType.google);
             },
           ),
           if (!kIsWeb && (Platform.isIOS || Platform.isMacOS)) ...[
-            SizedBox(height: 32.0),
+            SizedBox(height: 16.0),
             ApButton(
-              text: 'Sign In With Apple',
+              text: 'Sign In with Apple',
               onPressed: () async {
                 _login(AnnouncementLoginType.apple);
               },
