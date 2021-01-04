@@ -12,6 +12,7 @@ export 'package:firebase_analytics/firebase_analytics.dart';
 export 'package:firebase_analytics/observer.dart';
 export 'package:firebase_core/firebase_core.dart';
 export 'package:firebase_crashlytics/firebase_crashlytics.dart';
+export 'package:firebase_messaging/firebase_messaging.dart';
 
 class FirebaseUtils {
   static const NOTIFY_ID = 9919;
@@ -25,7 +26,7 @@ class FirebaseUtils {
       (kIsWeb || Platform.isAndroid || Platform.isIOS);
 
   static bool get isSupportCloudMessage =>
-      (!kIsWeb && (Platform.isAndroid || Platform.isIOS));
+      (kIsWeb || Platform.isAndroid || Platform.isIOS || Platform.isMacOS);
 
   static bool get isSupportCrashlytics =>
       (!kIsWeb && (Platform.isAndroid || Platform.isIOS || Platform.isMacOS));
@@ -33,8 +34,10 @@ class FirebaseUtils {
   static bool get isSupportRemoteConfig =>
       (!kIsWeb && (Platform.isAndroid || Platform.isIOS || Platform.isMacOS));
 
-  static FirebaseAnalytics init() {
-    if (isSupportCloudMessage) initFcm();
+  static FirebaseAnalytics init({
+    String vapidKey,
+  }) {
+    if (isSupportCloudMessage) initFcm(vapidKey: vapidKey);
     if (isSupportAnalytics) {
       FirebaseAnalyticsUtils.analytics = FirebaseAnalytics();
       return FirebaseAnalyticsUtils.analytics;
@@ -42,41 +45,46 @@ class FirebaseUtils {
     return null;
   }
 
-  static initFcm({Function(dynamic) onClick}) async {
-    FirebaseMessaging firebaseMessaging = FirebaseMessaging();
+  static initFcm({
+    Function(dynamic) onClick,
+    String vapidKey,
+  }) async {
+    FirebaseMessaging firebaseMessaging = FirebaseMessaging.instance;
     await Future.delayed(Duration(seconds: 2));
-    firebaseMessaging.configure(
-      onMessage: (Map<String, dynamic> message) async {
-        if (kDebugMode) print("onMessage: $message");
+    FirebaseMessaging.onMessage.listen((RemoteMessage message) {
+      if (message.notification != null) {
+        debugPrint("onMessage: $message");
         NotificationUtils.show(
           id: NOTIFY_ID,
           androidChannelId: NOTIFY_ANDROID_CHANNEL_ID,
           androidChannelDescription: androidChannelDescription,
-          title: message['notification']['title'] ?? '',
-          content: message['notification']['body'] ?? '',
+          title: message.notification.title ?? '',
+          content: message.notification.body ?? '',
         );
-      },
-      onLaunch: (Map<String, dynamic> message) async {
-        if (kDebugMode) print("onLaunch: $message");
-        if (Platform.isAndroid)
-          navigateToItemDetail(message['data'], onClick);
-        else if (Platform.isIOS) navigateToItemDetail(message, onClick);
-      },
-      onResume: (Map<String, dynamic> message) async {
-        if (kDebugMode) print("onResume: $message");
-        if (Platform.isAndroid) {
-          await navigateToItemDetail(message['data'], onClick);
-        } else if (Platform.isIOS) await navigateToItemDetail(message, onClick);
-      },
-    );
-    firebaseMessaging.requestNotificationPermissions(
-      const IosNotificationSettings(sound: true, badge: true, alert: true),
-    );
-    firebaseMessaging.onIosSettingsRegistered
-        .listen((IosNotificationSettings settings) {
-      print("Settings registered: $settings");
+      }
     });
-    firebaseMessaging.getToken().then((String token) {
+    FirebaseMessaging.onMessageOpenedApp.listen((RemoteMessage message) {
+      debugPrint("onMessageOpenedApp: $message");
+      if (Platform.isAndroid)
+        navigateToItemDetail(message.data, onClick);
+      else if (Platform.isIOS) navigateToItemDetail(message, onClick);
+    });
+    FirebaseMessaging.onBackgroundMessage((message) async {
+      debugPrint("onBackgroundMessage: $message");
+      if (Platform.isAndroid) {
+        await navigateToItemDetail(message.data, onClick);
+      } else if (Platform.isIOS) await navigateToItemDetail(message, onClick);
+    });
+    firebaseMessaging.requestPermission(
+      alert: true,
+      announcement: false,
+      badge: true,
+      carPlay: false,
+      criticalAlert: false,
+      provisional: false,
+      sound: true,
+    );
+    firebaseMessaging.getToken(vapidKey: vapidKey).then((String token) {
       if (token != null && kDebugMode) {
         print("Push Messaging token: $token");
       }
