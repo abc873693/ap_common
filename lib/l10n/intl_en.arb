@@ -350,6 +350,7 @@
   "grandPermissionFail": "Grand permission fail, please try again.",
   "exportCourseTableSuccess": "Export Successful~ Please check download directory.",
   "announcementReviewSystem": "Announcement Review System",
+  "thirdPartyLoginFail": "Third Party Login Fail~",
   "approve": "Approve",
   "reject": "Reject",
   "updateAndApprove": "Update and Approve",

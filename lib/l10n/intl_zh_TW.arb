@@ -351,6 +351,7 @@
   "grandPermissionFail": "取得權限失敗 請給於權限功能才能正常運作",
   "exportCourseTableSuccess": "匯出成功~ 請檢查下載資料夾",
   "announcementReviewSystem": "最新消息審查系統",
+  "thirdPartyLoginFail": "第三方登入失敗",
   "approve": "批准",
   "reject": "駁回",
   "updateAndApprove": "更新並批准",

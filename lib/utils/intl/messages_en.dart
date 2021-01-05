@@ -357,6 +357,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "teacherConfirmContent" : MessageLookupByLibrary.simpleMessage("This App only for students!"),
     "teacherConfirmTitle" : MessageLookupByLibrary.simpleMessage("Are you a teacher?"),
     "theme" : MessageLookupByLibrary.simpleMessage("Theme"),
+    "thirdPartyLoginFail" : MessageLookupByLibrary.simpleMessage("Third Party Login Fail~"),
     "thu" : MessageLookupByLibrary.simpleMessage("Thu."),
     "thursday" : MessageLookupByLibrary.simpleMessage("Thu"),
     "timeoutMessage" : MessageLookupByLibrary.simpleMessage("Try again later, Connection Timeout"),

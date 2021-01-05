@@ -674,11 +674,18 @@ class _AnnouncementHomePageState extends State<AnnouncementHomePage> {
               .login(username: _username.text, password: _password.text);
           break;
         case AnnouncementLoginType.google:
-          var data = await _googleSignIn.isSignedIn()
-              ? await _googleSignIn.signInSilently()
-              : await _googleSignIn.signIn();
-          idToken = (await data.authentication).idToken;
-          login = AnnouncementHelper.instance.googleLogin(idToken: idToken);
+          try {
+            var data = await _googleSignIn.isSignedIn()
+                ? await _googleSignIn.signInSilently()
+                : await _googleSignIn.signIn();
+            final authentication = await data.authentication;
+            print(authentication.serverAuthCode);
+            idToken = (await data.authentication).idToken;
+            login = AnnouncementHelper.instance.googleLogin(idToken: idToken);
+          } catch (e) {
+            ApUtils.showToast(context, app.thirdPartyLoginFail);
+            Navigator.of(context, rootNavigator: true).pop();
+          }
           break;
         case AnnouncementLoginType.apple:
           try {
@@ -690,6 +697,7 @@ class _AnnouncementHomePageState extends State<AnnouncementHomePage> {
             }
             login = AnnouncementHelper.instance.appleLogin(idToken: idToken);
           } catch (e) {
+            ApUtils.showToast(context, app.thirdPartyLoginFail);
             Navigator.of(context, rootNavigator: true).pop();
           }
           break;

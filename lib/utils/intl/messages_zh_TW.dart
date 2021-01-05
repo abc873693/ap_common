@@ -363,6 +363,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "teacherConfirmContent" : MessageLookupByLibrary.simpleMessage("本 App 僅有學生功能！"),
     "teacherConfirmTitle" : MessageLookupByLibrary.simpleMessage("您是老師嗎？"),
     "theme" : MessageLookupByLibrary.simpleMessage("主題"),
+    "thirdPartyLoginFail" : MessageLookupByLibrary.simpleMessage("第三方登入失敗"),
     "thu" : MessageLookupByLibrary.simpleMessage(" 四 "),
     "thursday" : MessageLookupByLibrary.simpleMessage("週四"),
     "timeoutMessage" : MessageLookupByLibrary.simpleMessage("連線逾時，請稍候再試"),

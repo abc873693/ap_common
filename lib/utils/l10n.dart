@@ -3555,6 +3555,16 @@ class ApLocalizations {
     );
   }
 
+  /// `第三方登入失敗`
+  String get thirdPartyLoginFail {
+    return Intl.message(
+      '第三方登入失敗',
+      name: 'thirdPartyLoginFail',
+      desc: '',
+      args: [],
+    );
+  }
+
   /// `批准`
   String get approve {
     return Intl.message(
