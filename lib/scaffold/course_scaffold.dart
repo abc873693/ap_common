@@ -146,7 +146,7 @@ class CourseScaffoldState extends State<CourseScaffold> {
                           widget.itemPicker == null)
                         Expanded(
                           child: ItemPicker(
-                            dialogTitle: app.picksSemester,
+                            dialogTitle: app.pickSemester,
                             onSelected: widget.onSelect,
                             items: widget.semesterData.semesters,
                             currentIndex: widget.semesterData.currentIndex,
@@ -499,7 +499,7 @@ class CourseScaffoldState extends State<CourseScaffold> {
       showDialog(
         context: context,
         builder: (_) => SimpleOptionDialog(
-          title: app.picksSemester,
+          title: app.pickSemester,
           items: widget.semesterData.semesters,
           index: widget.semesterData.currentIndex,
           onSelected: widget.onSelect,

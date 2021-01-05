@@ -1,3 +1,5 @@
+import 'dart:ui';
+
 import 'package:ap_common/api/announcement_helper.dart';
 import 'package:ap_common/models/announcement_data.dart';
 import 'package:ap_common/resources/ap_icon.dart';
@@ -375,14 +377,16 @@ class _AnnouncementEditPageState extends State<AnnouncementEditPage> {
         this.expireTime ?? DateTime.now().add(Duration(days: 7));
     DateTime picked = await showDatePicker(
       context: context,
-      locale: ApLocalizations.locale,
       initialDate: dateTime ?? DateTime.now().add(Duration(days: 7)),
       firstDate: DateTime(1950),
       lastDate: DateTime(2099),
     );
     TimeOfDay timeOfDay =
         TimeOfDay(hour: dateTime.hour, minute: dateTime.minute);
-    timeOfDay = await showTimePicker(context: context, initialTime: timeOfDay);
+    timeOfDay = await showTimePicker(
+      context: context,
+      initialTime: timeOfDay,
+    );
     if (picked != null && timeOfDay != null) {
       setState(
         () => this.expireTime = DateTime(

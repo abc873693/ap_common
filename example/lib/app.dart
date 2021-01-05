@@ -31,6 +31,7 @@ class MyAppState extends State<MyApp> with WidgetsBindingObserver {
   bool hasBusViolationRecords = false;
 
   ThemeMode themeMode = ThemeMode.system;
+  Locale locale;
 
   logout() {
     setState(() {
@@ -73,9 +74,9 @@ class MyAppState extends State<MyApp> with WidgetsBindingObserver {
               ApSupportLanguageConstants.SYSTEM,
             );
             if (languageCode == ApSupportLanguageConstants.SYSTEM)
-              return locale;
+              return this.locale = locale;
             else
-              return Locale(
+              return this.locale = Locale(
                 languageCode,
                 languageCode == ApSupportLanguageConstants.ZH ? 'TW' : null,
               );
@@ -92,17 +93,15 @@ class MyAppState extends State<MyApp> with WidgetsBindingObserver {
           theme: ApTheme.light,
           darkTheme: ApTheme.dark,
           themeMode: themeMode,
+          locale: locale,
           localizationsDelegates: [
+            ApLocalizations.delegate,
             const AppLocalizationsDelegate(),
-            const ApLocalizationsDelegate(),
             GlobalMaterialLocalizations.delegate,
             GlobalWidgetsLocalizations.delegate,
             GlobalCupertinoLocalizations.delegate,
           ],
-          supportedLocales: [
-            const Locale('en', 'US'), // English
-            const Locale('zh', 'TW'), // Chinese
-          ],
+          supportedLocales: ApLocalizations.delegate.supportedLocales,
         ),
       ),
     );
@@ -115,9 +114,11 @@ class MyAppState extends State<MyApp> with WidgetsBindingObserver {
   }
 
   void loadLocale(Locale locale) {
+    debugPrint('loadLocale $locale');
     setState(() {
+      this.locale = locale;
       AppLocalizationsDelegate().load(locale);
-      ApLocalizationsDelegate().load(locale);
+      ApLocalizations.delegate.load(locale);
     });
   }
 }

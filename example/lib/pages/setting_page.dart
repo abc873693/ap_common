@@ -107,9 +107,13 @@ class SettingPageState extends State<SettingPage> {
                     onSelected: (int index) async {
                       Locale locale;
                       String code = ApSupportLanguage.values[index].code;
+                      final String defaultSystemLocale = Platform.localeName;
+                      final List<Locale> systemLocales = WidgetsBinding.instance.window.locales;
+                      debugPrint('defaultSystemLocale $defaultSystemLocale');
+                      debugPrint('systemLocales $systemLocales');
                       switch (index) {
                         case 0:
-                          locale = Localizations.localeOf(context);
+                          locale = WidgetsBinding.instance.window.locales.first;
                           break;
                         default:
                           locale = Locale(
