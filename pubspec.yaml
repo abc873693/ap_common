@@ -59,6 +59,15 @@ flutter:
 
   assets:
     - assets/images/
+
+flutter_intl:
+  enabled: true # Required. Must be set to true to activate the plugin. Default: false
+  class_name: ApLocalizations # Optional. Sets the name for the generated localization class. Default: S
+  main_locale: 'zh_TW' # Optional. Sets the main locale used for generating localization files. Provided value should consist of language code and optional script and country codes separated with underscore (e.g. 'en', 'en_GB', 'zh_Hans', 'zh_Hans_CN'). Default: en
+  arb_dir: lib/l10n # Optional. Sets the directory of your ARB resource files. Provided value should be a valid path on your system. Default: lib/l10n
+  output_dir: lib/utils # Optional. Sets the directory of generated localization files. Provided value should be a valid path on your system. Default: lib/generated
+  use_deferred_loading: true # Optional. Must be set to true to generate localization code that is loaded with deferred loading. Default: false
+
   # To add assets to your package, add an assets section, like this:
   # assets:
   #  - images/a_dot_burr.jpeg
