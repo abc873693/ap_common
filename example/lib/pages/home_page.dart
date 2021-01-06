@@ -133,7 +133,8 @@ class HomePageState extends State<HomePage> {
       isLogin: isLogin,
       actions: <Widget>[
         IconButton(
-          icon: Icon(Icons.approval),
+          icon: Icon(Icons.fiber_new_rounded),
+          tooltip: ap.announcementReviewSystem,
           onPressed: () {
             ApUtils.pushCupertinoStyle(
               context,
