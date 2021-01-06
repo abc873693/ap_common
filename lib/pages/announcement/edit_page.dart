@@ -1,17 +1,23 @@
+import 'dart:io';
 import 'dart:ui';
 
 import 'package:ap_common/api/announcement_helper.dart';
+import 'package:ap_common/api/imgur_helper.dart';
 import 'package:ap_common/models/announcement_data.dart';
 import 'package:ap_common/resources/ap_icon.dart';
 import 'package:ap_common/resources/ap_theme.dart';
 import 'package:ap_common/utils/ap_localizations.dart';
 import 'package:ap_common/utils/ap_utils.dart';
+import 'package:ap_common/widgets/ap_network_image.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/painting.dart';
 import 'package:flutter/widgets.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:intl/intl.dart' show DateFormat;
 
 enum _State { loading, finish, error, empty, offline }
+enum _ImgurUploadState { no_file, uploading, done }
 enum Mode { add, edit, application, editApplication }
 
 extension ParseDateTimes on DateTime {
@@ -61,6 +67,11 @@ class _AnnouncementEditPageState extends State<AnnouncementEditPage> {
 
   final dividerHeight = 16.0;
 
+  var imgurUploadState = _ImgurUploadState.no_file;
+
+  bool get isSupportImgurUpload =>
+      (kIsWeb || Platform.isAndroid || Platform.isIOS);
+
   String get title {
     switch (widget.mode) {
       case Mode.add:
@@ -84,6 +95,34 @@ class _AnnouncementEditPageState extends State<AnnouncementEditPage> {
         return app.submit;
     }
     return app.submit;
+  }
+
+  List<Widget> get _imgurUploadWidget {
+    switch (imgurUploadState) {
+      case _ImgurUploadState.uploading:
+        return [
+          CircularProgressIndicator(),
+          SizedBox(height: 8.0),
+          Text(app.uploading),
+        ];
+        break;
+      case _ImgurUploadState.done:
+        return [
+          Text(app.imagePreview),
+          SizedBox(height: 8.0),
+          SizedBox(
+            height: 300,
+            child: ApNetworkImage(url: _imgUrl.text),
+          ),
+          SizedBox(height: 8.0),
+        ];
+      case _ImgurUploadState.no_file:
+      default:
+        return [
+          Text(app.imgurUploadDescription),
+          SizedBox(height: 8.0),
+        ];
+    }
   }
 
   @override
@@ -171,6 +210,7 @@ class _AnnouncementEditPageState extends State<AnnouncementEditPage> {
             TextFormField(
               maxLines: 1,
               controller: _imgUrl,
+              enabled: !isSupportImgurUpload,
               validator: (value) {
                 if (value.isEmpty) {
                   return app.doNotEmpty;
@@ -187,6 +227,69 @@ class _AnnouncementEditPageState extends State<AnnouncementEditPage> {
                 labelText: app.imageUrl,
               ),
             ),
+            if (isSupportImgurUpload) ...[
+              SizedBox(height: 8.0),
+              Center(
+                child: Column(
+                  children: _imgurUploadWidget,
+                ),
+              ),
+              FractionallySizedBox(
+                widthFactor: 0.3,
+                child: RaisedButton(
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.all(
+                      Radius.circular(30.0),
+                    ),
+                  ),
+                  padding: EdgeInsets.symmetric(
+                    horizontal: 8.0,
+                  ),
+                  color: ApTheme.of(context).blueAccent,
+                  onPressed: () async {
+                    if (kIsWeb || Platform.isAndroid || Platform.isIOS) {
+                      final imagePicker = ImagePicker();
+                      final image = await imagePicker.getImage(
+                        source: ImageSource.gallery,
+                      );
+                      if (image != null) {
+                        setState(() =>
+                            imgurUploadState = _ImgurUploadState.uploading);
+                        ImgurHelper.instance.uploadImageToImgur(
+                          file: image,
+                          callback: GeneralCallback(
+                            onFailure: (dioError) {
+                              ApUtils.showToast(context, dioError.message);
+                              setState(() => imgurUploadState =
+                                  _imgUrl.text.isEmpty
+                                      ? _ImgurUploadState.no_file
+                                      : _ImgurUploadState.done);
+                            },
+                            onError: (generalResponse) {
+                              ApUtils.showToast(
+                                  context, generalResponse.message);
+                              setState(() => imgurUploadState =
+                                  _imgUrl.text.isEmpty
+                                      ? _ImgurUploadState.no_file
+                                      : _ImgurUploadState.done);
+                            },
+                            onSuccess: (data) {
+                              _imgUrl.text = data.link;
+                              setState(() =>
+                                  imgurUploadState = _ImgurUploadState.done);
+                            },
+                          ),
+                        );
+                      }
+                    }
+                  },
+                  child: Text(
+                    app.pickAndUploadToImgur,
+                    style: TextStyle(color: Colors.white),
+                  ),
+                ),
+              ),
+            ],
             SizedBox(height: dividerHeight),
             TextFormField(
               maxLines: 1,
@@ -333,7 +436,7 @@ class _AnnouncementEditPageState extends State<AnnouncementEditPage> {
                   },
                   color: ApTheme.of(context).yellow,
                   child: Text(
-                    '更新並同意',
+                    app.updateAndApprove,
                     style: TextStyle(
                       color: Colors.white,
                       fontSize: 18.0,
@@ -356,7 +459,7 @@ class _AnnouncementEditPageState extends State<AnnouncementEditPage> {
                   },
                   color: ApTheme.of(context).red,
                   child: Text(
-                    '更新並不同意',
+                    app.updateAndReject,
                     style: TextStyle(
                       color: Colors.white,
                       fontSize: 18.0,

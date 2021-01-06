@@ -374,5 +374,10 @@
   "addApplication": "Add Application",
   "onlyShowNotReview": "Only Show Not Review",
   "account": "Account",
-  "password": "Password"
+  "password": "Password",
+  "imgurUploadDescription": "For saving server load,\nImage will upload to Imgur publicly.",
+  "pickAndUploadToImgur": "Pick and Upload to Imgur",
+  "uploading": "Uploading",
+  "imagePreview": "Image Preview",
+  "notSupportImageType": "Not Support Image Type"
 }

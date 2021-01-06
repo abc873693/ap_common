@@ -3804,6 +3804,56 @@ class ApLocalizations {
       args: [],
     );
   }
+
+  /// `為了解省伺服器負擔與方便\n圖片將公開上傳至Imgur`
+  String get imgurUploadDescription {
+    return Intl.message(
+      '為了解省伺服器負擔與方便\n圖片將公開上傳至Imgur',
+      name: 'imgurUploadDescription',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `選擇並上傳至Imgur`
+  String get pickAndUploadToImgur {
+    return Intl.message(
+      '選擇並上傳至Imgur',
+      name: 'pickAndUploadToImgur',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `上傳中`
+  String get uploading {
+    return Intl.message(
+      '上傳中',
+      name: 'uploading',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `圖片預覽`
+  String get imagePreview {
+    return Intl.message(
+      '圖片預覽',
+      name: 'imagePreview',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `不支援圖片格式`
+  String get notSupportImageType {
+    return Intl.message(
+      '不支援圖片格式',
+      name: 'notSupportImageType',
+      desc: '',
+      args: [],
+    );
+  }
 }
 
 class AppLocalizationDelegate extends LocalizationsDelegate<ApLocalizations> {

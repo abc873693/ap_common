@@ -375,5 +375,10 @@
   "addApplication": "新增申請",
   "onlyShowNotReview": "只顯示尚未審查",
   "account": "帳號",
-  "password": "密碼"
+  "password": "密碼",
+  "imgurUploadDescription": "為了解省伺服器負擔與方便\n圖片將公開上傳至Imgur",
+  "pickAndUploadToImgur": "選擇並上傳至Imgur",
+  "uploading": "上傳中",
+  "imagePreview": "圖片預覽",
+  "notSupportImageType": "不支援圖片格式"
 }
