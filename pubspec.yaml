@@ -62,5 +62,5 @@ flutter_intl:
   class_name: ApLocalizations
   main_locale: 'zh_TW'
   arb_dir: lib/l10n
-  output_dir: lib/utils
+  output_dir: lib/l10n
   use_deferred_loading: true
