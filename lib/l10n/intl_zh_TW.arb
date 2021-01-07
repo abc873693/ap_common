@@ -357,6 +357,7 @@
   "updateAndApprove": "更新並批准",
   "updateAndReject": "更新並駁回",
   "reviewApplication": "審查申請",
+  "notFoundData": "找不到此資料",
   "allAnnouncements": "所有最新消息",
   "allApplications": "所有審查",
   "noPermissionHint": "無權限",

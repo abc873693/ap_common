@@ -267,6 +267,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "noPermissionReviewHint" : MessageLookupByLibrary.simpleMessage("No permission to review."),
     "noPermissionUpdateHint" : MessageLookupByLibrary.simpleMessage("No permission to update."),
     "none" : MessageLookupByLibrary.simpleMessage("None"),
+    "notFoundData" : MessageLookupByLibrary.simpleMessage("Not Found Data~"),
     "notLogin" : MessageLookupByLibrary.simpleMessage("Not Login"),
     "notLoginHint" : MessageLookupByLibrary.simpleMessage("Not Login, please check login status."),
     "notSupportImageType" : MessageLookupByLibrary.simpleMessage("Not Support Image Type"),

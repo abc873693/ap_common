@@ -504,9 +504,7 @@ class _AnnouncementEditPageState extends State<AnnouncementEditPage> {
   }
 
   void _announcementSubmit({bool isApproval}) async {
-    print(_weight?.text);
     if (_formKey.currentState.validate()) {
-      Future<dynamic> instance;
       announcements.title = _title.text;
       announcements.description = _description.text;
       announcements.imgUrl = _imgUrl.text;
@@ -516,53 +514,72 @@ class _AnnouncementEditPageState extends State<AnnouncementEditPage> {
       announcements.expireTime =
           (expireTime == null) ? null : expireTime.parseToString();
       announcements.reviewDescription = _reviewDescription.text;
+      final callback = GeneralCallback.simple(
+        context,
+        (Response _) async {
+          switch (widget.mode) {
+            case Mode.add:
+              ApUtils.showToast(context, app.addSuccess);
+              break;
+            case Mode.edit:
+              ApUtils.showToast(context, app.updateSuccess);
+              break;
+            case Mode.application:
+              ApUtils.showToast(context, app.applicationSubmitSuccess);
+              break;
+            case Mode.editApplication:
+              ApUtils.showToast(context, app.updateSuccess);
+              if (isApproval != null) {
+                if (isApproval)
+                  await AnnouncementHelper.instance.approveApplication(
+                    applicationId: announcements.applicationId,
+                    reviewDescription: announcements.reviewDescription,
+                    callback: GeneralCallback.simple(
+                      context,
+                      (_) => _,
+                    ),
+                  );
+                else
+                  await AnnouncementHelper.instance.rejectApplication(
+                    applicationId: announcements.applicationId,
+                    reviewDescription: announcements.reviewDescription,
+                    callback: GeneralCallback.simple(
+                      context,
+                      (_) => _,
+                    ),
+                  );
+              }
+              break;
+          }
+          Navigator.of(context).pop(true);
+        },
+      );
       switch (widget.mode) {
         case Mode.add:
-          instance = AnnouncementHelper.instance.addAnnouncement(announcements);
+          AnnouncementHelper.instance.addAnnouncement(
+            data: announcements,
+            callback: callback,
+          );
           break;
         case Mode.edit:
-          instance =
-              AnnouncementHelper.instance.updateAnnouncement(announcements);
+          AnnouncementHelper.instance.updateAnnouncement(
+            data: announcements,
+            callback: callback,
+          );
           break;
         case Mode.application:
-          instance = AnnouncementHelper.instance.addApplication(announcements);
+          AnnouncementHelper.instance.addApplication(
+            data: announcements,
+            callback: callback,
+          );
           break;
         case Mode.editApplication:
-          instance =
-              AnnouncementHelper.instance.updateApplication(announcements);
+          AnnouncementHelper.instance.updateApplication(
+            data: announcements,
+            callback: callback,
+          );
           break;
       }
-      instance.then((response) async {
-        switch (widget.mode) {
-          case Mode.add:
-            ApUtils.showToast(context, app.addSuccess);
-            break;
-          case Mode.edit:
-            ApUtils.showToast(context, app.updateSuccess);
-            break;
-          case Mode.application:
-            ApUtils.showToast(context, app.applicationSubmitSuccess);
-            break;
-          case Mode.editApplication:
-            ApUtils.showToast(context, app.updateSuccess);
-            if (isApproval != null) {
-              if (isApproval)
-                await AnnouncementHelper.instance.approveApplication(
-                  applicationId: announcements.applicationId,
-                  reviewDescription: announcements.reviewDescription,
-                );
-              else
-                await AnnouncementHelper.instance.rejectApplication(
-                  applicationId: announcements.applicationId,
-                  reviewDescription: announcements.reviewDescription,
-                );
-            }
-            break;
-        }
-        Navigator.of(context).pop(true);
-      }).catchError((e) {
-        ApUtils.showToast(context, app.somethingError);
-      });
     }
   }
 }

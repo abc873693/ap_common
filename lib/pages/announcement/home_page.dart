@@ -12,7 +12,6 @@ import 'package:ap_common/utils/preferences.dart';
 import 'package:ap_common/widgets/hint_content.dart';
 import 'package:ap_common/widgets/progress_dialog.dart';
 import 'package:ap_common/widgets/yes_no_dialog.dart';
-import 'package:dio/dio.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/gestures.dart';
@@ -401,32 +400,18 @@ class _AnnouncementHomePageState extends State<AnnouncementHomePage> {
                                 rightActionText: app.back,
                                 leftActionFunction: () {
                                   AnnouncementHelper.instance
-                                      .deleteAnnouncement(item)
-                                      .then((response) {
-                                    ScaffoldMessenger.of(context).showSnackBar(
-                                      SnackBar(
-                                        content: Text(app.deleteSuccess),
-                                        duration: Duration(seconds: 2),
-                                      ),
-                                    );
-                                    _getAnnouncements();
-                                  }).catchError((e) {
-                                    if (e is DioError) {
-                                      switch (e.type) {
-                                        case DioErrorType.RESPONSE:
-                                          ApUtils.showToast(
-                                              context, e.response?.data ?? '');
-                                          break;
-                                        case DioErrorType.CANCEL:
-                                          break;
-                                        default:
-                                          ApUtils.handleDioError(context, e);
-                                          break;
-                                      }
-                                    } else {
-                                      throw e;
-                                    }
-                                  });
+                                      .deleteAnnouncement(
+                                    data: item,
+                                    callback: GeneralCallback.simple(
+                                      context,
+                                      (_) {
+                                        ApUtils.showToast(
+                                            context, app.updateSuccess);
+                                        _reviewDescription.text = '';
+                                        _getAnnouncements();
+                                      },
+                                    ),
+                                  );
                                 },
                               )
                             : YesNoDialog(
@@ -450,28 +435,33 @@ class _AnnouncementHomePageState extends State<AnnouncementHomePage> {
                                       .approveApplication(
                                     applicationId: item.applicationId,
                                     reviewDescription: _reviewDescription.text,
-                                  )
-                                      .then((response) {
-                                    ApUtils.showToast(
-                                        context, app.updateSuccess);
-                                    _reviewDescription.text = '';
-                                    _getAnnouncements();
-                                    _getApplications();
-                                  });
+                                    callback: GeneralCallback.simple(
+                                      context,
+                                      (_) {
+                                        ApUtils.showToast(
+                                            context, app.updateSuccess);
+                                        _reviewDescription.text = '';
+                                        _getAnnouncements();
+                                        _getApplications();
+                                      },
+                                    ),
+                                  );
                                 },
                                 rightActionFunction: () {
-                                  AnnouncementHelper.instance
-                                      .rejectApplication(
+                                  AnnouncementHelper.instance.rejectApplication(
                                     applicationId: item.applicationId,
                                     reviewDescription: _reviewDescription.text,
-                                  )
-                                      .then((response) {
-                                    ApUtils.showToast(
-                                        context, app.updateSuccess);
-                                    _reviewDescription.text = '';
-                                    _getAnnouncements();
-                                    _getApplications();
-                                  });
+                                    callback: GeneralCallback.simple(
+                                      context,
+                                      (_) {
+                                        ApUtils.showToast(
+                                            context, app.updateSuccess);
+                                        _reviewDescription.text = '';
+                                        _getAnnouncements();
+                                        _getApplications();
+                                      },
+                                    ),
+                                  );
                                 },
                               ),
                       );

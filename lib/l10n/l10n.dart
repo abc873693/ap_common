@@ -3615,6 +3615,16 @@ class ApLocalizations {
     );
   }
 
+  /// `找不到此資料`
+  String get notFoundData {
+    return Intl.message(
+      '找不到此資料',
+      name: 'notFoundData',
+      desc: '',
+      args: [],
+    );
+  }
+
   /// `所有最新消息`
   String get allAnnouncements {
     return Intl.message(

@@ -356,6 +356,7 @@
   "updateAndApprove": "Update and Approve",
   "updateAndReject": "Update and Reject",
   "reviewApplication": "Review Application",
+  "notFoundData": "Not Found Data~",
   "allAnnouncements": "All Announcements",
   "allApplications": "All Applications",
   "noPermissionHint": "No permission",

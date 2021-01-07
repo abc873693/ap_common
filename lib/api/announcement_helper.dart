@@ -22,6 +22,12 @@ enum AnnouncementLoginType {
 extension DioErrorExtension on DioError {
   bool get isUnauthorized =>
       type == DioErrorType.RESPONSE && response.statusCode == 401;
+
+  bool get isNotPermission =>
+      type == DioErrorType.RESPONSE && response.statusCode == 403;
+
+  bool get isNotFoundAnnouncement =>
+      type == DioErrorType.RESPONSE && response.statusCode == 404;
 }
 
 class AnnouncementHelper {
@@ -48,6 +54,9 @@ class AnnouncementHelper {
 
   //LOGIN API
   static const USER_DATA_ERROR = 1401;
+  static const TOKEN_EXPIRE = 401;
+  static const NOT_PERMISSION = 403;
+  static const NOT_FOUND_DATA = 404;
 
   int reLoginCount = 0;
 
@@ -111,7 +120,6 @@ class AnnouncementHelper {
           "fcmToken": fcmToken,
         },
       );
-      print(response.statusCode);
       var loginData = AnnouncementLoginData.fromJson(response.data);
       options.headers = _createBearerTokenAuth(loginData.key);
       AnnouncementHelper.username = username;
@@ -231,40 +239,61 @@ class AnnouncementHelper {
     return null;
   }
 
-  Future<Response> addAnnouncement(Announcement announcements) async {
+  Future<Response> addAnnouncement({
+    @required Announcement data,
+    @required GeneralCallback<Response> callback,
+  }) async {
     try {
       var response = await dio.post(
         "/announcements/add",
-        data: announcements.toUpdateJson(),
+        data: data.toUpdateJson(),
       );
-      return response;
+      return callback == null ? response : callback.onSuccess(response);
     } on DioError catch (dioError) {
-      throw dioError;
+      if (callback == null)
+        throw dioError;
+      else
+        handleCrudError(dioError, callback);
     }
+    return null;
   }
 
-  Future<Response> updateAnnouncement(Announcement announcements) async {
+  Future<Response> updateAnnouncement({
+    @required Announcement data,
+    @required GeneralCallback<Response> callback,
+  }) async {
     try {
       var response = await dio.put(
-        "/announcements/update/${announcements.id}",
-        data: announcements.toUpdateJson(),
+        "/announcements/update/${data.id}",
+        data: data.toUpdateJson(),
       );
-      return response;
+      return callback == null ? response : callback.onSuccess(response);
     } on DioError catch (dioError) {
-      throw dioError;
+      if (callback == null)
+        throw dioError;
+      else
+        handleCrudError(dioError, callback);
     }
+    return null;
   }
 
-  Future<Response> deleteAnnouncement(Announcement announcements) async {
+  Future<Response> deleteAnnouncement({
+    @required Announcement data,
+    @required GeneralCallback<Response> callback,
+  }) async {
     try {
       var response = await dio.delete(
-        "/announcements/delete/${announcements.id}",
-        data: announcements.toUpdateJson(),
+        "/announcements/delete/${data.id}",
+        data: data.toUpdateJson(),
       );
-      return response;
+      return callback == null ? response : callback.onSuccess(response);
     } on DioError catch (dioError) {
-      throw dioError;
+      if (callback == null)
+        throw dioError;
+      else
+        handleCrudError(dioError, callback);
     }
+    return null;
   }
 
   Future<List<Announcement>> getApplications({
@@ -292,21 +321,29 @@ class AnnouncementHelper {
     return null;
   }
 
-  Future<Response> addApplication(Announcement announcements) async {
+  Future<Response> addApplication({
+    @required Announcement data,
+    @required GeneralCallback<Response> callback,
+  }) async {
     try {
       var response = await dio.post(
         "/application",
-        data: announcements.toUpdateJson(),
+        data: data.toUpdateJson(),
       );
-      return response;
+      return callback == null ? response : callback.onSuccess(response);
     } on DioError catch (dioError) {
-      throw dioError;
+      if (callback == null)
+        throw dioError;
+      else
+        handleCrudError(dioError, callback);
     }
+    return null;
   }
 
   Future<Response> approveApplication({
     @required String applicationId,
     String reviewDescription,
+    @required GeneralCallback<Response> callback,
   }) async {
     try {
       var response = await dio.put(
@@ -315,15 +352,20 @@ class AnnouncementHelper {
           "description": reviewDescription ?? '',
         },
       );
-      return response;
+      return callback == null ? response : callback.onSuccess(response);
     } on DioError catch (dioError) {
-      throw dioError;
+      if (callback == null)
+        throw dioError;
+      else
+        handleCrudError(dioError, callback);
     }
+    return null;
   }
 
   Future<Response> rejectApplication({
     @required String applicationId,
     String reviewDescription,
+    @required GeneralCallback<Response> callback,
   }) async {
     try {
       var response = await dio.put(
@@ -332,36 +374,51 @@ class AnnouncementHelper {
           "description": reviewDescription ?? '',
         },
       );
-      return response;
+      return callback == null ? response : callback.onSuccess(response);
     } on DioError catch (dioError) {
-      throw dioError;
+      if (callback == null)
+        throw dioError;
+      else
+        handleCrudError(dioError, callback);
     }
+    return null;
   }
 
-  Future<Response> removeApplication(String applicationId) async {
+  Future<Response> removeApplication({
+    @required String applicationId,
+    @required GeneralCallback<Response> callback,
+  }) async {
     try {
       var response = await dio.delete(
         "/application/$applicationId",
       );
-      return response;
+      return callback == null ? response : callback.onSuccess(response);
     } on DioError catch (dioError) {
-      throw dioError;
+      if (callback == null)
+        throw dioError;
+      else
+        handleCrudError(dioError, callback);
     }
+    return null;
   }
 
-  Future<Response> updateApplication(Announcement announcements) async {
+  Future<Response> updateApplication({
+    @required Announcement data,
+    @required GeneralCallback<Response> callback,
+  }) async {
     try {
-      print('${announcements.applicationId}');
       var response = await dio.put(
-        "/application/${announcements.applicationId}",
-        data: announcements.toUpdateApplicationJson(),
+        "/application/${data.applicationId}",
+        data: data.toUpdateApplicationJson(),
       );
-      print(response.data);
-      return response;
+      return callback == null ? response : callback.onSuccess(response);
     } on DioError catch (dioError) {
-      print(dioError.response.data);
-      throw dioError;
+      if (callback == null)
+        throw dioError;
+      else
+        handleCrudError(dioError, callback);
     }
+    return null;
   }
 
   // v3 api Authorization
@@ -375,6 +432,25 @@ class AnnouncementHelper {
     expireTime = null;
     username = null;
     password = null;
+  }
+
+  void handleCrudError(DioError dioError, GeneralCallback<Response> callback) {
+    if (dioError.isNotPermission)
+      callback.onError(
+        GeneralResponse(
+          statusCode: NOT_PERMISSION,
+          message: ApLocalizations.current.noPermissionHint,
+        ),
+      );
+    else if (dioError.isNotFoundAnnouncement)
+      callback.onError(
+        GeneralResponse(
+          statusCode: NOT_PERMISSION,
+          message: ApLocalizations.current.notFoundData,
+        ),
+      );
+    else
+      callback.onFailure(dioError);
   }
 }
 

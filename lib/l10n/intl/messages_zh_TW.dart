@@ -269,6 +269,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "noPermissionReviewHint" : MessageLookupByLibrary.simpleMessage("無權限操作審查"),
     "noPermissionUpdateHint" : MessageLookupByLibrary.simpleMessage("無權限操作更新"),
     "none" : MessageLookupByLibrary.simpleMessage("無"),
+    "notFoundData" : MessageLookupByLibrary.simpleMessage("找不到此資料"),
     "notLogin" : MessageLookupByLibrary.simpleMessage("尚未登入"),
     "notLoginHint" : MessageLookupByLibrary.simpleMessage("尚未登入 請檢查登入狀態"),
     "notSupportImageType" : MessageLookupByLibrary.simpleMessage("不支援圖片格式"),
