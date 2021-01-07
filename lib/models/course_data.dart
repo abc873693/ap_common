@@ -199,43 +199,43 @@ class CourseTables {
 
   CourseTables.fromJson(Map<String, dynamic> json) {
     if (json['Monday'] != null) {
-      monday = List<Course>();
+      monday = List<Course>.empty();
       json['Monday'].forEach((v) {
         monday.add(Course.fromJson(v));
       });
     }
     if (json['Tuesday'] != null) {
-      tuesday = List<Course>();
+      tuesday = List<Course>.empty();
       json['Tuesday'].forEach((v) {
         tuesday.add(Course.fromJson(v));
       });
     }
     if (json['Wednesday'] != null) {
-      wednesday = List<Course>();
+      wednesday = List<Course>.empty();
       json['Wednesday'].forEach((v) {
         wednesday.add(Course.fromJson(v));
       });
     }
     if (json['Thursday'] != null) {
-      thursday = List<Course>();
+      thursday = List<Course>.empty();
       json['Thursday'].forEach((v) {
         thursday.add(Course.fromJson(v));
       });
     }
     if (json['Friday'] != null) {
-      friday = List<Course>();
+      friday = List<Course>.empty();
       json['Friday'].forEach((v) {
         friday.add(Course.fromJson(v));
       });
     }
     if (json['Saturday'] != null) {
-      saturday = List<Course>();
+      saturday = List<Course>.empty();
       json['Saturday'].forEach((v) {
         saturday.add(Course.fromJson(v));
       });
     }
     if (json['Sunday'] != null) {
-      sunday = List<Course>();
+      sunday = List<Course>.empty();
       json['Sunday'].forEach((v) {
         sunday.add(Course.fromJson(v));
       });
