@@ -453,14 +453,3 @@ class AnnouncementHelper {
       callback.onFailure(dioError);
   }
 }
-
-extension NewsExtension on Announcement {
-  Map<String, dynamic> toUpdateJson() => {
-        "title": title,
-        "weight": weight ?? 0,
-        "imgUrl": imgUrl,
-        "url": url,
-        "description": description,
-        "expireTime": expireTime,
-      };
-}
