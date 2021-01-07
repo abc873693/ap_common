@@ -45,6 +45,7 @@ extension ApExtension on ApLocalizations {
         saturday,
       ];
 
+  @deprecated
   String dioError(DioError dioError) {
     switch (dioError.type) {
       case DioErrorType.DEFAULT:
@@ -56,6 +57,26 @@ extension ApExtension on ApLocalizations {
         break;
       case DioErrorType.RESPONSE:
         return dioError.message;
+        break;
+      case DioErrorType.CANCEL:
+      default:
+        return null;
+    }
+  }
+}
+
+extension DioErrorI18nExtension on DioError {
+  String get i18nMessage {
+    switch (type) {
+      case DioErrorType.DEFAULT:
+        return ApLocalizations.current.noInternet;
+      case DioErrorType.CONNECT_TIMEOUT:
+      case DioErrorType.RECEIVE_TIMEOUT:
+      case DioErrorType.SEND_TIMEOUT:
+        return ApLocalizations.current.timeoutMessage;
+        break;
+      case DioErrorType.RESPONSE:
+        return message;
         break;
       case DioErrorType.CANCEL:
       default:
