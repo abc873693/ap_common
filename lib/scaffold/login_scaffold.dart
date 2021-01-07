@@ -38,7 +38,7 @@ class LoginScaffoldState extends State<LoginScaffold> {
   void initState() {
     if ((!kIsWeb && (Platform.isAndroid || Platform.isIOS)) &&
         widget.enableKeyboardDoneButton) {
-      KeyboardVisibility.onChange.listen(
+      KeyboardVisibilityController().onChange.listen(
         (bool visible) {
           if (visible)
             ApUtils.showOverlay(context, ApLocalizations.of(context).done);

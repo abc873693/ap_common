@@ -38,9 +38,9 @@ class LoginPageState extends State<LoginPage> {
   void initState() {
     _getPreference();
     if ((!kIsWeb && (Platform.isAndroid || Platform.isIOS))) {
-      KeyboardVisibility.onChange.listen(
-        (bool visible) => gravity = visible ? Toast.TOP : Toast.BOTTOM,
-      );
+      KeyboardVisibilityController().onChange.listen(
+            (bool visible) => gravity = visible ? Toast.TOP : Toast.BOTTOM,
+          );
     }
     super.initState();
   }
