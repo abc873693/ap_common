@@ -153,14 +153,14 @@ class _AnnouncementHomePageState extends State<AnnouncementHomePage> {
                       ),
                     );
                     if (success is bool && success != null && success) {
-                      _getData();
+                      _getAnnouncements();
                     }
                   },
                 ),
       body: RefreshIndicator(
         onRefresh: () async {
-          await _getData();
-          await _getApplicationData();
+          await _getAnnouncements();
+          await _getApplications();
           return null;
         },
         child: _body(),
@@ -180,8 +180,8 @@ class _AnnouncementHomePageState extends State<AnnouncementHomePage> {
       case _State.error:
         return FlatButton(
           onPressed: () {
-            _getData();
-            _getApplicationData();
+            _getAnnouncements();
+            _getApplications();
           },
           child: HintContent(
             icon: ApIcon.classIcon,
@@ -232,7 +232,7 @@ class _AnnouncementHomePageState extends State<AnnouncementHomePage> {
                             ),
                           ),
                         );
-                        if (success ?? false) _getApplicationData();
+                        if (success ?? false) _getApplications();
                       },
                     ),
                   ),
@@ -409,7 +409,7 @@ class _AnnouncementHomePageState extends State<AnnouncementHomePage> {
                                         duration: Duration(seconds: 2),
                                       ),
                                     );
-                                    _getData();
+                                    _getAnnouncements();
                                   }).catchError((e) {
                                     if (e is DioError) {
                                       switch (e.type) {
@@ -455,8 +455,8 @@ class _AnnouncementHomePageState extends State<AnnouncementHomePage> {
                                     ApUtils.showToast(
                                         context, app.updateSuccess);
                                     _reviewDescription.text = '';
-                                    _getData();
-                                    _getApplicationData();
+                                    _getAnnouncements();
+                                    _getApplications();
                                   });
                                 },
                                 rightActionFunction: () {
@@ -469,8 +469,8 @@ class _AnnouncementHomePageState extends State<AnnouncementHomePage> {
                                     ApUtils.showToast(
                                         context, app.updateSuccess);
                                     _reviewDescription.text = '';
-                                    _getData();
-                                    _getApplicationData();
+                                    _getAnnouncements();
+                                    _getApplications();
                                   });
                                 },
                               ),
@@ -599,8 +599,8 @@ class _AnnouncementHomePageState extends State<AnnouncementHomePage> {
                     );
                     if (success ?? false) {
                       if (success) {
-                        _getData();
-                        _getApplicationData();
+                        _getAnnouncements();
+                        _getApplications();
                       }
                     }
                   },
@@ -608,22 +608,28 @@ class _AnnouncementHomePageState extends State<AnnouncementHomePage> {
     );
   }
 
-  _getData() async {
-    AnnouncementHelper.instance.getAllAnnouncements().then((announcementsData) {
-      this.announcements = announcementsData;
-        setState(() {
-          state = _State.done;
-        });
-    });
+  Future<void> _getAnnouncements() async {
+    AnnouncementHelper.instance.getAllAnnouncements(
+      callback: GeneralCallback.simple(
+        context,
+        (List<Announcement> data) {
+          this.announcements = data;
+          setState(() => state = _State.done);
+        },
+      ),
+    );
   }
 
-  _getApplicationData() async {
-    AnnouncementHelper.instance.getApplications().then((announcementsData) {
-      this.applications = announcementsData;
-      setState(() {
-        state = _State.done;
-      });
-    });
+  Future<void> _getApplications() async {
+    AnnouncementHelper.instance.getApplications(
+      callback: GeneralCallback.simple(
+        context,
+        (List<Announcement> data) {
+          this.applications = data;
+          setState(() => state = _State.done);
+        },
+      ),
+    );
   }
 
   _getPreference() async {
@@ -691,8 +697,8 @@ class _AnnouncementHomePageState extends State<AnnouncementHomePage> {
               ApConstants.ANNOUNCEMENT_LOGIN_TYPE, loginType.index);
           setState(() {
             state = _State.loading;
-            if (loginData.level != PermissionLevel.user) _getData();
-            _getApplicationData();
+            if (loginData.level != PermissionLevel.user) _getAnnouncements();
+            _getApplications();
           });
         },
       );

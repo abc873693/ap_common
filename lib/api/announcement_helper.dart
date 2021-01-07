@@ -205,7 +205,7 @@ class AnnouncementHelper {
 
   Future<List<Announcement>> getAllAnnouncements({
     String locale,
-    GeneralCallback<List<Announcement>> callback,
+    @required GeneralCallback<List<Announcement>> callback,
   }) async {
     try {
       var response = await dio.get(
@@ -269,7 +269,7 @@ class AnnouncementHelper {
 
   Future<List<Announcement>> getApplications({
     String locale,
-    GeneralCallback<List<Announcement>> callback,
+    @required GeneralCallback<List<Announcement>> callback,
   }) async {
     try {
       var response = await dio.get(
@@ -284,8 +284,12 @@ class AnnouncementHelper {
       }
       return (callback == null) ? data.data : callback.onSuccess(data.data);
     } on DioError catch (dioError) {
-      throw dioError;
+      if (callback == null)
+        throw dioError;
+      else
+        callback.onFailure(dioError);
     }
+    return null;
   }
 
   Future<Response> addApplication(Announcement announcements) async {
