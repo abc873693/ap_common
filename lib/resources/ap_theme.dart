@@ -278,7 +278,9 @@ class ApTheme extends InheritedWidget {
         accentColor: ApColors.blue500,
         unselectedWidgetColor: ApColors.grey500,
         backgroundColor: Colors.black12,
-        textSelectionHandleColor: ApColors.blue200,
+        textSelectionTheme: TextSelectionThemeData(
+          selectionColor: ApColors.blue200,
+        ),
         inputDecorationTheme: InputDecorationTheme(
           labelStyle: TextStyle(color: Colors.white),
           border: UnderlineInputBorder(
@@ -298,7 +300,9 @@ class ApTheme extends InheritedWidget {
         accentColor: ApColors.blue300,
         unselectedWidgetColor: ApColors.grey200,
         backgroundColor: Colors.black12,
-        textSelectionHandleColor: ApColors.blue200,
+        textSelectionTheme: TextSelectionThemeData(
+          selectionColor: ApColors.blue200,
+        ),
         inputDecorationTheme: InputDecorationTheme(
           labelStyle: TextStyle(color: Colors.white),
           border: UnderlineInputBorder(
