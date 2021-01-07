@@ -611,9 +611,9 @@ class _AnnouncementHomePageState extends State<AnnouncementHomePage> {
   _getData() async {
     AnnouncementHelper.instance.getAllAnnouncements().then((announcementsData) {
       this.announcements = announcementsData;
-      setState(() {
-        state = _State.done;
-      });
+        setState(() {
+          state = _State.done;
+        });
     });
   }
 
@@ -660,18 +660,51 @@ class _AnnouncementHomePageState extends State<AnnouncementHomePage> {
             }),
         barrierDismissible: false,
       );
-      Future<AnnouncementLoginData> login;
       String idToken =
           Preferences.getBool(ApConstants.ANNOUNCEMENT_IS_LOGIN, false)
               ? Preferences.getStringSecurity(
                   ApConstants.ANNOUNCEMENT_ID_TOKEN, null)
               : null;
+
+      final callback = GeneralCallback<AnnouncementLoginData>(
+        onError: (response) {
+          Navigator.of(context, rootNavigator: true).pop();
+          ApUtils.showToast(context, response.message);
+        },
+        onFailure: (dioError) {
+          Navigator.of(context, rootNavigator: true).pop();
+          ApUtils.showToast(context, dioError.i18nMessage);
+        },
+        onSuccess: (loginData) {
+          this.loginData = loginData;
+          if (kDebugMode) print(loginData.key);
+          Navigator.of(context, rootNavigator: true).pop();
+          if (loginType == AnnouncementLoginType.normal)
+            Preferences.setStringSecurity(
+                ApConstants.ANNOUNCEMENT_PASSWORD, _password.text);
+          else
+            Preferences.setStringSecurity(
+                ApConstants.ANNOUNCEMENT_ID_TOKEN, idToken);
+          ApUtils.showToast(context, app.loginSuccess);
+          Preferences.setBool(ApConstants.ANNOUNCEMENT_IS_LOGIN, true);
+          Preferences.setInt(
+              ApConstants.ANNOUNCEMENT_LOGIN_TYPE, loginType.index);
+          setState(() {
+            state = _State.loading;
+            if (loginData.level != PermissionLevel.user) _getData();
+            _getApplicationData();
+          });
+        },
+      );
       switch (loginType) {
         case AnnouncementLoginType.normal:
           Preferences.setString(
               ApConstants.ANNOUNCEMENT_USERNAME, _username.text);
-          login = AnnouncementHelper.instance
-              .login(username: _username.text, password: _password.text);
+          AnnouncementHelper.instance.login(
+            username: _username.text,
+            password: _password.text,
+            callback: callback,
+          );
           break;
         case AnnouncementLoginType.google:
           try {
@@ -681,7 +714,8 @@ class _AnnouncementHomePageState extends State<AnnouncementHomePage> {
             final authentication = await data.authentication;
             print(authentication.serverAuthCode);
             idToken = (await data.authentication).idToken;
-            login = AnnouncementHelper.instance.googleLogin(idToken: idToken);
+            AnnouncementHelper.instance
+                .googleLogin(idToken: idToken, callback: callback);
           } catch (e) {
             ApUtils.showToast(context, app.thirdPartyLoginFail);
             Navigator.of(context, rootNavigator: true).pop();
@@ -695,49 +729,14 @@ class _AnnouncementHomePageState extends State<AnnouncementHomePage> {
               );
               idToken = credential.identityToken;
             }
-            login = AnnouncementHelper.instance.appleLogin(idToken: idToken);
+            AnnouncementHelper.instance
+                .appleLogin(idToken: idToken, callback: callback);
           } catch (e) {
             ApUtils.showToast(context, app.thirdPartyLoginFail);
             Navigator.of(context, rootNavigator: true).pop();
           }
           break;
       }
-      login?.then((AnnouncementLoginData response) async {
-        loginData = response;
-        if (kDebugMode) print(loginData.key);
-        Navigator.of(context, rootNavigator: true).pop();
-        if (loginType == AnnouncementLoginType.normal)
-          Preferences.setStringSecurity(
-              ApConstants.ANNOUNCEMENT_PASSWORD, _password.text);
-        else
-          Preferences.setStringSecurity(
-              ApConstants.ANNOUNCEMENT_ID_TOKEN, idToken);
-        ApUtils.showToast(context, app.loginSuccess);
-        Preferences.setBool(ApConstants.ANNOUNCEMENT_IS_LOGIN, true);
-        Preferences.setInt(
-            ApConstants.ANNOUNCEMENT_LOGIN_TYPE, loginType.index);
-        setState(() {
-          state = _State.loading;
-          if (loginData.level != PermissionLevel.user) _getData();
-          _getApplicationData();
-        });
-      })?.catchError((e) {
-        Navigator.of(context, rootNavigator: true).pop();
-        if (e is DioError) {
-          switch (e.type) {
-            case DioErrorType.RESPONSE:
-              ApUtils.showToast(context, app.loginFail);
-              break;
-            case DioErrorType.CANCEL:
-              break;
-            default:
-              ApUtils.handleDioError(context, e);
-              break;
-          }
-        } else {
-          throw e;
-        }
-      });
     }
   }
 }

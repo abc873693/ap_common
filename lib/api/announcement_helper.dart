@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'dart:io' show Platform;
 
 import 'package:ap_common/callback/general_callback.dart';
+import 'package:ap_common/l10n/l10n.dart';
 import 'package:ap_common/models/announcement_data.dart';
 import 'package:ap_common/models/announcement_login_data.dart';
 import 'package:ap_common/utils/ap_utils.dart';
@@ -16,6 +17,11 @@ enum AnnouncementLoginType {
   normal,
   google,
   apple,
+}
+
+extension DioErrorExtension on DioError {
+  bool get isUnauthorized =>
+      type == DioErrorType.RESPONSE && response.statusCode == 401;
 }
 
 class AnnouncementHelper {
@@ -92,9 +98,9 @@ class AnnouncementHelper {
   }
 
   Future<AnnouncementLoginData> login({
-    String username,
-    String password,
-    GeneralCallback<AnnouncementLoginData> callback,
+    @required String username,
+    @required String password,
+    @required GeneralCallback<AnnouncementLoginData> callback,
   }) async {
     try {
       var response = await dio.post(
@@ -111,19 +117,29 @@ class AnnouncementHelper {
       AnnouncementHelper.username = username;
       AnnouncementHelper.password = password;
       AnnouncementHelper.loginType = AnnouncementLoginType.normal;
-      return loginData;
+      return callback == null ? loginData : callback.onSuccess(loginData);
     } on DioError catch (dioError) {
-      debugPrint(dioError.response.data.toString());
-      throw dioError;
+      if (callback == null)
+        throw dioError;
+      else {
+        if (dioError.isUnauthorized)
+          callback.onError(
+            GeneralResponse(
+              statusCode: 401,
+              message: ApLocalizations.current.loginFail,
+            ),
+          );
+        callback.onFailure(dioError);
+      }
     }
+    return null;
   }
 
   Future<AnnouncementLoginData> googleLogin({
-    String idToken,
-    GeneralCallback<AnnouncementLoginData> callback,
+    @required String idToken,
+    @required GeneralCallback<AnnouncementLoginData> callback,
   }) async {
     try {
-      debugPrint(idToken);
       var response = await dio.post(
         '/oauth2/google/token',
         data: {
@@ -135,19 +151,29 @@ class AnnouncementHelper {
       options.headers = _createBearerTokenAuth(loginData.key);
       AnnouncementHelper.code = idToken;
       AnnouncementHelper.loginType = AnnouncementLoginType.google;
-      return loginData;
+      return callback == null ? loginData : callback.onSuccess(loginData);
     } on DioError catch (dioError) {
-      debugPrint(dioError.response.data.toString());
-      throw dioError;
+      if (callback == null)
+        throw dioError;
+      else {
+        if (dioError.isUnauthorized)
+          callback.onError(
+            GeneralResponse(
+              statusCode: 401,
+              message: dioError.response.data,
+            ),
+          );
+        callback.onFailure(dioError);
+      }
     }
+    return null;
   }
 
   Future<AnnouncementLoginData> appleLogin({
-    String idToken,
-    GeneralCallback<AnnouncementLoginData> callback,
+    @required String idToken,
+    @required GeneralCallback<AnnouncementLoginData> callback,
   }) async {
     try {
-      debugPrint(idToken);
       var response = await dio.post(
         '/oauth2/apple/token',
         data: {
@@ -159,33 +185,22 @@ class AnnouncementHelper {
       options.headers = _createBearerTokenAuth(loginData.key);
       AnnouncementHelper.code = idToken;
       AnnouncementHelper.loginType = AnnouncementLoginType.apple;
-      return loginData;
+      return callback == null ? loginData : callback.onSuccess(loginData);
     } on DioError catch (dioError) {
-      debugPrint(dioError.response.data.toString());
-      throw dioError;
+      if (callback == null)
+        throw dioError;
+      else {
+        if (dioError.isUnauthorized)
+          callback.onError(
+            GeneralResponse(
+              statusCode: 401,
+              message: dioError.response.data,
+            ),
+          );
+        callback.onFailure(dioError);
+      }
     }
-  }
-
-  Future<Response> deleteToken() async {
-    try {
-      var response = await dio.delete(
-        '/oauth/token',
-      );
-      return response;
-    } on DioError catch (dioError) {
-      throw dioError;
-    }
-  }
-
-  Future<Response> deleteAllToken() async {
-    try {
-      var response = await dio.delete(
-        '/oauth/token/all',
-      );
-      return response;
-    } on DioError catch (dioError) {
-      throw dioError;
-    }
+    return null;
   }
 
   Future<List<Announcement>> getAllAnnouncements({
