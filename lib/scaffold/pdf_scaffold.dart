@@ -1,4 +1,3 @@
-import 'dart:typed_data';
 
 import 'package:ap_common/resources/ap_icon.dart';
 import 'package:ap_common/utils/ap_localizations.dart';

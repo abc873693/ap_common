@@ -1,4 +1,3 @@
-import 'dart:typed_data';
 
 import 'package:ap_common/callback/general_callback.dart';
 import 'package:ap_common/models/notification_data.dart';
@@ -137,15 +136,15 @@ class SchoolInfoPageState extends State<SchoolInfoPage>
         items: [
           BottomNavigationBarItem(
             icon: Icon(ApIcon.fiberNew),
-            title: Text(ap.notifications),
+            label: ap.notifications,
           ),
           BottomNavigationBarItem(
             icon: Icon(ApIcon.phone),
-            title: Text(ap.phones),
+            label: ap.phones,
           ),
           BottomNavigationBarItem(
             icon: Icon(ApIcon.dateRange),
-            title: Text(ap.events),
+            label: ap.events,
           ),
         ],
       ),

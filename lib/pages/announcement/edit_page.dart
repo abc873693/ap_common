@@ -16,7 +16,6 @@ import 'package:flutter/widgets.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:intl/intl.dart' show DateFormat;
 
-enum _State { loading, finish, error, empty, offline }
 enum _ImgurUploadState { no_file, uploading, done }
 enum Mode { add, edit, application, editApplication }
 
@@ -48,8 +47,6 @@ class _AnnouncementEditPageState extends State<AnnouncementEditPage> {
   final _formKey = GlobalKey<FormState>();
 
   ApLocalizations app;
-
-  _State state = _State.loading;
 
   Announcement announcements;
 

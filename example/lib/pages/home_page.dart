@@ -10,7 +10,6 @@ import 'package:ap_common/resources/ap_theme.dart';
 import 'package:ap_common/scaffold/home_page_scaffold.dart';
 import 'package:ap_common/utils/ap_localizations.dart';
 import 'package:ap_common/utils/ap_utils.dart';
-import 'package:ap_common/utils/dialog_utils.dart';
 import 'package:ap_common/utils/notification_utils.dart';
 import 'package:ap_common/utils/preferences.dart';
 import 'package:ap_common/widgets/ap_drawer.dart';
@@ -372,19 +371,10 @@ class HomePageState extends State<HomePage> {
     }
   }
 
-  void _showInformationDialog() {
-    DialogUtils.showAnnouncementRule(
-      context: context,
-      onRightButtonClick: () {
-        ApUtils.launchFbFansPage(context, Constants.FANS_PAGE_ID);
-      },
-    );
-  }
-
   Future _login() async {
     await Future.delayed(Duration(microseconds: 30));
-    var username = Preferences.getString(Constants.PREF_USERNAME, '');
-    var password = Preferences.getStringSecurity(Constants.PREF_PASSWORD, '');
+    // var username = Preferences.getString(Constants.PREF_USERNAME, '');
+    // var password = Preferences.getStringSecurity(Constants.PREF_PASSWORD, '');
     //to login
     isLogin = true;
     Preferences.setBool(Constants.PREF_IS_OFFLINE_LOGIN, false);

@@ -7,7 +7,6 @@ import 'package:barcode_widget/barcode_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
 
-enum _Status { loading, finish, error, empty }
 enum BarCodeMode { code39, qrCode }
 
 class UserInfoScaffold extends StatefulWidget {
@@ -32,7 +31,6 @@ class UserInfoScaffold extends StatefulWidget {
 }
 
 class UserInfoScaffoldState extends State<UserInfoScaffold> {
-  _Status state = _Status.finish;
 
   ApLocalizations app;
 
