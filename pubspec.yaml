@@ -13,26 +13,26 @@ dependencies:
     sdk: flutter
   flutter_cupertino_localizations: ^1.0.1
 
-  shared_preferences: ^0.5.12+2
-  url_launcher: ^5.7.8
+  shared_preferences: ^0.5.12+4
+  url_launcher: ^5.7.10
   share: '>=0.6.5+4 <2.0.0'
-  package_info: ^0.4.3
+  package_info: ^0.4.3+2
   sprintf: ^5.0.0
   toast: ">=0.1.4 <1.0.0"
   intl: ">=0.16.0 <1.0.0"
-  cached_network_image: ^2.4.1
+  cached_network_image: ^2.5.0
   photo_view: ">=0.10.3 <1.0.0"
   encrypt: ">=4.1.0 <5.0.0"
   dio: ">=3.0.0 <4.0.0"
   dio_cookie_manager: ">=1.0.0 <2.0.0"
   cookie_jar: ">=1.0.0 <2.0.0"
-  flutter_local_notifications: ^3.0.1+7
+  flutter_local_notifications: ^3.0.2
   timezone: ^0.5.9
   flutter_keyboard_visibility: ^4.0.2
   add_2_calendar: ^1.4.0
   material_design_icons_flutter: ^4.0.5755
-  in_app_review: ^1.0.3
-  native_pdf_view: ^3.8.0
+  in_app_review: ^1.0.4
+  native_pdf_view: ^3.9.0
   barcode_widget: ^1.5.0
   barcode: ^1.17.1
   auto_size_text: ^2.1.0
@@ -40,7 +40,7 @@ dependencies:
   image_gallery_saver: ^1.6.7
   permission_handler: ^5.0.1+1
   path: ^1.7.0
-  path_provider: ^1.6.22
+  path_provider: ^1.6.24
   google_sign_in: ^4.5.6
   google_sign_in_dartio: ^0.0.6
   jwt_decoder: ^1.0.3
