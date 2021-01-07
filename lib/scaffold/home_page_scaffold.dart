@@ -58,7 +58,7 @@ class HomePageScaffold extends StatefulWidget {
 }
 
 class HomePageScaffoldState extends State<HomePageScaffold> {
-  final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
+  final _scaffoldMessengerKey = GlobalKey<ScaffoldMessengerState>();
   ApLocalizations app;
 
   PageController pageController;
@@ -91,44 +91,46 @@ class HomePageScaffoldState extends State<HomePageScaffold> {
           Expanded(
             child: (isTablet && widget.content != null)
                 ? widget.content
-                : Scaffold(
-                    key: _scaffoldKey,
-                    appBar: AppBar(
-                      title: Text(widget.title ?? ''),
-                      backgroundColor: ApTheme.of(context).blue,
-                      actions: widget.actions,
+                : ScaffoldMessenger(
+                    key: _scaffoldMessengerKey,
+                    child: Scaffold(
+                      appBar: AppBar(
+                        title: Text(widget.title ?? ''),
+                        backgroundColor: ApTheme.of(context).blue,
+                        actions: widget.actions,
+                      ),
+                      drawer: isTablet ? null : widget.drawer,
+                      floatingActionButton: widget.floatingActionButton,
+                      body: OrientationBuilder(
+                        builder: (_, orientation) {
+                          return Container(
+                            padding: EdgeInsets.symmetric(
+                              vertical: orientation == Orientation.portrait
+                                  ? 32.0
+                                  : 4.0,
+                            ),
+                            alignment: Alignment.center,
+                            child: _homebody(orientation),
+                          );
+                        },
+                      ),
+                      bottomNavigationBar:
+                          (widget.bottomNavigationBarItems == null || isTablet)
+                              ? null
+                              : BottomNavigationBar(
+                                  elevation: 12.0,
+                                  fixedColor: ApTheme.of(context)
+                                      .bottomNavigationSelect,
+                                  unselectedItemColor: ApTheme.of(context)
+                                      .bottomNavigationSelect,
+                                  type: BottomNavigationBarType.fixed,
+                                  selectedFontSize: 12.0,
+                                  unselectedFontSize: 12.0,
+                                  selectedIconTheme: IconThemeData(size: 24.0),
+                                  onTap: widget.onTabTapped,
+                                  items: widget.bottomNavigationBarItems,
+                                ),
                     ),
-                    drawer: isTablet ? null : widget.drawer,
-                    floatingActionButton: widget.floatingActionButton,
-                    body: OrientationBuilder(
-                      builder: (_, orientation) {
-                        return Container(
-                          padding: EdgeInsets.symmetric(
-                            vertical: orientation == Orientation.portrait
-                                ? 32.0
-                                : 4.0,
-                          ),
-                          alignment: Alignment.center,
-                          child: _homebody(orientation),
-                        );
-                      },
-                    ),
-                    bottomNavigationBar:
-                        (widget.bottomNavigationBarItems == null || isTablet)
-                            ? null
-                            : BottomNavigationBar(
-                                elevation: 12.0,
-                                fixedColor:
-                                    ApTheme.of(context).bottomNavigationSelect,
-                                unselectedItemColor:
-                                    ApTheme.of(context).bottomNavigationSelect,
-                                type: BottomNavigationBarType.fixed,
-                                selectedFontSize: 12.0,
-                                unselectedFontSize: 12.0,
-                                selectedIconTheme: IconThemeData(size: 24.0),
-                                onTap: widget.onTabTapped,
-                                items: widget.bottomNavigationBarItems,
-                              ),
                   ),
           ),
         ],
@@ -149,7 +151,8 @@ class HomePageScaffoldState extends State<HomePageScaffold> {
         widget.autoPlayDuration,
         (Timer timer) {
           if (widget.state == HomeState.finish &&
-              widget.announcements.length > 1 && pageController.hasClients)
+              widget.announcements.length > 1 &&
+              pageController.hasClients)
             setState(() {
               _currentNewsIndex++;
               if (_currentNewsIndex >= widget.announcements.length)
@@ -310,7 +313,7 @@ class HomePageScaffoldState extends State<HomePageScaffold> {
   }
 
   void hideSnackBar() {
-    _scaffoldKey.currentState?.hideCurrentSnackBar();
+    _scaffoldMessengerKey.currentState?.hideCurrentSnackBar();
   }
 
   void showBasicHint({@required String text}) {
@@ -323,7 +326,7 @@ class HomePageScaffoldState extends State<HomePageScaffold> {
     Function onSnackBarTapped,
     Duration duration,
   }) {
-    return _scaffoldKey?.currentState?.showSnackBar(
+    return _scaffoldMessengerKey?.currentState?.showSnackBar(
       SnackBar(
         content: Text(text),
         duration: duration ?? Duration(days: 1),
