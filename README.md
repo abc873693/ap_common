@@ -64,7 +64,7 @@
     # 官方多國語套件
     flutter_localizations:
         sdk: flutter
-    ap_common: ^0.8.0
+    ap_common: ^0.10.0
 ```
 
 執行加入套件
@@ -108,6 +108,7 @@
 
 ```dart
     ThemeMode themeMode = ThemeMode.system;
+    Locale locale;
 
     @override
       Widget build(BuildContext context) {
@@ -115,11 +116,12 @@
               // 在此設定使用的語言，否則會按照系統提供語言，若為不支援語言 預設為英文
               localeResolutionCallback:
                     (Locale locale, Iterable<Locale> supportedLocales) {
-                  return locale;
+                  return this.locale = locale;
                 },
                localizationsDelegates: [
-                const ApLocalizationsDelegate(),
+                  ApLocalizations.delegate,
               ],
+              locale: locale,
               supportedLocales: [
                 const Locale('en'), // English
                 const Locale('zh', 'TW'), // Chinese
