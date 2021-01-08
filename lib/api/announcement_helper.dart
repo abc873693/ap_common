@@ -32,7 +32,7 @@ extension DioErrorExtension on DioError {
 
 class AnnouncementHelper {
   static String host = 'nkust.taki.dog';
-  static String tag = '/beta';
+  static String tag = 'ap';
 
   static String fcmToken;
 
@@ -80,7 +80,7 @@ class AnnouncementHelper {
 
   AnnouncementHelper() {
     options = BaseOptions(
-      baseUrl: 'https://$host$tag',
+      baseUrl: 'https://$host/$tag',
       connectTimeout: 10000,
       receiveTimeout: 10000,
     );
