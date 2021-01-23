@@ -28,11 +28,13 @@ class AnnouncementHomePage extends StatefulWidget {
   static const String routerName = "/news/admin";
   final Widget loginDescriptionWidget;
   final Widget reviewDescriptionWidget;
+  final Function(dynamic, StackTrace) catchException;
 
   const AnnouncementHomePage({
     Key key,
     this.loginDescriptionWidget,
     this.reviewDescriptionWidget,
+    this.catchException,
   }) : super(key: key);
 
   @override
@@ -712,9 +714,10 @@ class _AnnouncementHomePageState extends State<AnnouncementHomePage> {
             idToken = (await data.authentication).idToken;
             AnnouncementHelper.instance
                 .googleLogin(idToken: idToken, callback: callback);
-          } catch (e) {
+          } catch (e, s) {
             ApUtils.showToast(context, app.thirdPartyLoginFail);
             Navigator.of(context, rootNavigator: true).pop();
+            if (widget.catchException != null) widget.catchException(e, s);
           }
           break;
         case AnnouncementLoginType.apple:
@@ -727,9 +730,10 @@ class _AnnouncementHomePageState extends State<AnnouncementHomePage> {
             }
             AnnouncementHelper.instance
                 .appleLogin(idToken: idToken, callback: callback);
-          } catch (e) {
+          } catch (e, s) {
             ApUtils.showToast(context, app.thirdPartyLoginFail);
             Navigator.of(context, rootNavigator: true).pop();
+            if (widget.catchException != null) widget.catchException(e, s);
           }
           break;
       }
