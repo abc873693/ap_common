@@ -5,7 +5,7 @@
 
 長期校務通相關系列的app，介面與相關功能都極為相似，將相關的介面與函式庫，製作此套件以方便維護。
 
-[展示網頁](https://abc873693.github.io/ap_common_demo/#/)
+[展示網頁](https://abc873693.github.io/ap_common/#/)
 
 ## 相關專案
 - [高科校務通](https://github.com/NKUST-ITC/NKUST-AP-Flutter)
