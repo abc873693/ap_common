@@ -91,7 +91,7 @@ class DialogUtils {
     @required String defaultUrl,
   }) async {
     PackageInfo packageInfo = await PackageInfo.fromPlatform();
-    var app = ApLocalizations.of(context);
+    var app = ApLocalizations.current;
     String url = "";
     if (Platform.isAndroid) {
       url = "market://details?id=${packageInfo.packageName}";
