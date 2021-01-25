@@ -709,11 +709,12 @@ class _AnnouncementHomePageState extends State<AnnouncementHomePage> {
             var data = await _googleSignIn.isSignedIn()
                 ? await _googleSignIn.signInSilently()
                 : await _googleSignIn.signIn();
-            final authentication = await data.authentication;
-            print(authentication.serverAuthCode);
-            idToken = (await data.authentication).idToken;
-            AnnouncementHelper.instance
-                .googleLogin(idToken: idToken, callback: callback);
+            if (data != null) {
+              final authentication = await data.authentication;
+              idToken = authentication.idToken;
+              AnnouncementHelper.instance
+                  .googleLogin(idToken: idToken, callback: callback);
+            }
           } catch (e, s) {
             ApUtils.showToast(context, app.thirdPartyLoginFail);
             Navigator.of(context, rootNavigator: true).pop();
