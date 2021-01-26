@@ -182,16 +182,16 @@ class CourseNotify {
 
   factory CourseNotify.fromCourse({
     @required int id,
-    @required int weeklyIndex,
     @required Course course,
-    @required CourseDetail courseDetail,
+    @required int weekDay,
+    @required TimeCode timeCode,
   }) {
     return CourseNotify(
       id: id,
       title: course.title,
-      code: courseDetail.code,
-      startTime: course.date?.startTime,
-      weeklyIndex: weeklyIndex,
+      code: course.code,
+      startTime: timeCode.startTime,
+      weeklyIndex: weekDay,
       location: course.location.toString(),
     );
   }

@@ -1,5 +1,4 @@
 import 'dart:io';
-import 'dart:math';
 import 'dart:typed_data';
 import 'dart:ui' as ui;
 
@@ -314,60 +313,54 @@ class CourseScaffoldState extends State<CourseScaffold> {
       );
 
   List<Widget> renderCourseTable() {
-    List<String> weeks = [
-      'Monday',
-      'Tuesday',
-      'Wednesday',
-      'Thursday',
-      'Friday',
-      if (widget.courseData.hasHoliday) ...[
-        'Saturday',
-        'Sunday',
-      ]
-    ];
-    final timeCodes = widget.courseData.courseTables.timeCode;
-    final maxTimeCode = widget.courseData.courseTables.getMaxTimeCode(weeks);
-    final minTimeCode = widget.courseData.courseTables.getMinTimeCode(weeks);
+    final timeCodes = widget.courseData.timeCodes;
+    final maxTimeCode = widget.courseData.maxTimeCodeIndex;
+    final minTimeCode = widget.courseData.minTimeCodeIndex;
+    final hasHoliday = widget.courseData.hasHoliday;
     var columns = <Column>[Column(children: [])];
     columns[0].children.add(
           _weekBorder(''),
         );
     for (var i = minTimeCode; i < maxTimeCode; i++) {
-      var text = timeCodes[i].replaceAll(' ', '');
-      if (widget.courseData.hasHoliday) {
-        text = text.replaceAll('第', '');
-        text = text.replaceAll('節', '');
-      }
       columns[0].children.add(
-            _timeCodeBorder(text),
+            _timeCodeBorder(timeCodes[i]),
           );
     }
-    for (int i = 0; i < weeks.length; i++) {
-      final List<CourseBorder> courseBorders = [];
+    final List<List<CourseBorder>> courseBorderCollection = [
+      [],
+      [],
+      [],
+      [],
+      [],
+      if (hasHoliday) ...[
+        [],
+        [],
+      ]
+    ];
+    for (var i = 0; i < courseBorderCollection.length; i++) {
       for (var j = 0; j < maxTimeCode - minTimeCode; j++)
-        courseBorders.add(CourseBorder());
-      var courses = widget.courseData.courseTables.getCourseList(weeks[i]);
-      if (courses != null) {
-        for (var course in courses) {
-          for (int j = 0; j < maxTimeCode - minTimeCode; j++) {
-            final timeCodeIndex = j + minTimeCode;
-            if (timeCodes[timeCodeIndex] == course.date.section) {
-              final index = widget.courseData.findCourseDetail(course);
-              final detailIndex = course.detailIndex ?? 0;
-              final len = ApColors.colors.length;
-              courseBorders[j] = CourseBorder(
-                weekIndex: i,
-                course: course,
-                color: (index == -1)
-                    ? ApColors.colors[Random().nextInt(len)][300]
-                    : ApColors.colors[detailIndex % len]
-                        [300 + 100 * (detailIndex ~/ len)],
-                onPressed: _onPressed,
-              );
-            }
-          }
-        }
+        courseBorderCollection[i].add(CourseBorder());
+    }
+    for (var i = 0; i < widget.courseData.courses.length; i++) {
+      final course = widget.courseData.courses[i];
+      for (var j = 0; j < (course.times?.length ?? 0); j++) {
+        final time = course.times[j];
+        final timeCodeIndex = widget.courseData.getTimeCodeIndex(time.section);
+        final courseBorderIndex = timeCodeIndex - minTimeCode;
+        final len = ApColors.colors.length;
+        final color = ApColors.colors[i % len][300 + 100 * (i ~/ len)];
+        courseBorderCollection[time.weekDay - 1][courseBorderIndex] =
+            CourseBorder(
+          sectionTime: time,
+          timeCode: widget.courseData.timeCodes[timeCodeIndex],
+          course: course,
+          color: color,
+          onPressed: _onPressed,
+        );
       }
+    }
+    for (var i = 0; i < courseBorderCollection.length; i++) {
+      final courseBorders = courseBorderCollection[i];
       for (var j = 0; j < courseBorders.length; j++) {
         int repeat = 0;
         if (courseBorders[j].course != null)
@@ -380,17 +373,18 @@ class CourseScaffoldState extends State<CourseScaffold> {
               break;
           }
         if (repeat != 0) {
-          final course = courseBorders[j].course;
-          course.date.endTime = courseBorders[j + repeat].course.date.endTime;
+          final timeCode = courseBorders[j].timeCode;
+          timeCode.endTime = courseBorders[j + repeat].timeCode.endTime;
           courseBorders[j] = CourseBorder(
-            weekIndex: courseBorders[j].weekIndex,
+            timeCode: timeCode,
+            sectionTime: courseBorders[j].sectionTime,
             course: courseBorders[j].course,
             height: _courseHeight * (repeat + 1),
             color: courseBorders[j].color,
             border: (j + repeat > courseBorders.length)
                 ? Border(
                     left: _innerBorderSide,
-                    right: (i == weeks.length - 1)
+                    right: (i == courseBorderCollection.length - 1)
                         ? BorderSide.none
                         : _innerBorderSide,
                     top: _innerBorderSide,
@@ -400,7 +394,6 @@ class CourseScaffoldState extends State<CourseScaffold> {
           );
           for (var k = j + 1; k < j + repeat + 1; k++) {
             courseBorders[k] = CourseBorder(
-              weekIndex: courseBorders[k].weekIndex,
               course: courseBorders[k].course,
               height: 0.0,
               width: 0.0,
@@ -410,7 +403,6 @@ class CourseScaffoldState extends State<CourseScaffold> {
           repeat = 0;
         } else if (j == courseBorders.length - 1) {
           courseBorders[j] = CourseBorder(
-            weekIndex: courseBorders[j].weekIndex,
             course: courseBorders[j].course,
             color: courseBorders[j].color,
             border: Border(
@@ -427,7 +419,7 @@ class CourseScaffoldState extends State<CourseScaffold> {
         Column(
           children: [
             _weekBorder(app.weekdaysCourse[i]),
-            ...courseBorders,
+            ...(courseBorderCollection[i]),
           ],
         ),
       );
@@ -441,8 +433,9 @@ class CourseScaffoldState extends State<CourseScaffold> {
     ];
   }
 
-  void _onPressed(int weekIndex, Course course) {
-    final courseDetail = widget.courseData.courses[course.detailIndex ?? 0];
+  void _onPressed(SectionTime sectionTime, Course course) {
+    final timeCodeIndex =
+        widget.courseData.getTimeCodeIndex(sectionTime.section);
     showModalBottomSheet(
       context: context,
       shape: RoundedRectangleBorder(
@@ -452,10 +445,10 @@ class CourseScaffoldState extends State<CourseScaffold> {
         return CourseContent(
           enableNotifyControl: widget.enableNotifyControl,
           course: course,
-          courseDetail: courseDetail,
           notifyData: widget.notifyData,
-          weekIndex: weekIndex,
+          weekIndex: sectionTime.weekDay,
           courseNotifySaveKey: widget.courseNotifySaveKey,
+          timeCode: widget.courseData.timeCodes[timeCodeIndex],
         );
       },
     );
@@ -477,8 +470,7 @@ class CourseScaffoldState extends State<CourseScaffold> {
         ),
       );
 
-  Widget _timeCodeBorder(String text) => Container(
-        padding: EdgeInsets.symmetric(vertical: 8.0),
+  Widget _timeCodeBorder(TimeCode timeCode) => Container(
         alignment: Alignment.center,
         decoration: BoxDecoration(
           border: Border(right: _innerBorderSide),
@@ -486,7 +478,8 @@ class CourseScaffoldState extends State<CourseScaffold> {
         height: _courseHeight,
         width: widget.courseData.hasHoliday ? 35.0 : 50.0,
         child: Text(
-          text ?? '',
+          timeCode.title ?? '',
+          textAlign: TextAlign.center,
           style: TextStyle(
             color: ApTheme.of(context).blueText,
             fontSize: 14.0,
@@ -512,7 +505,7 @@ class CourseScaffoldState extends State<CourseScaffold> {
 class CourseContent extends StatefulWidget {
   final bool enableNotifyControl;
   final Course course;
-  final CourseDetail courseDetail;
+  final TimeCode timeCode;
   final int weekIndex;
   final CourseNotifyData notifyData;
   final bool autoNotifySave;
@@ -525,7 +518,7 @@ class CourseContent extends StatefulWidget {
     Key key,
     @required this.enableNotifyControl,
     @required this.course,
-    @required this.courseDetail,
+    @required this.timeCode,
     @required this.weekIndex,
     this.notifyData,
     this.autoNotifySave = true,
@@ -545,8 +538,8 @@ class _CourseContentState extends State<CourseContent> {
     CourseNotifyState _state;
     if (widget.enableNotifyControl && widget.notifyData != null) {
       _state = (widget.notifyData.getByCode(
-                widget.courseDetail.code,
-                widget.course.date.startTime,
+                widget.course.code,
+                widget.timeCode.startTime,
                 widget.weekIndex,
               ) ==
               null
@@ -580,9 +573,8 @@ class _CourseContentState extends State<CourseContent> {
                   icon: Icon(MdiIcons.calendarImport),
                   onPressed: () async {
                     final format = DateFormat('HH:mm');
-                    final startTime =
-                        format.parse(widget.course.date.startTime);
-                    final endTime = format.parse(widget.course.date.endTime);
+                    final startTime = format.parse(widget.timeCode.startTime);
+                    final endTime = format.parse(widget.timeCode.endTime);
                     final Event event = Event(
                       title: widget.course.title,
                       description: '',
@@ -603,17 +595,17 @@ class _CourseContentState extends State<CourseContent> {
                       : Icons.alarm_off),
                   onPressed: () async {
                     var courseNotify = widget.notifyData.getByCode(
-                      widget.courseDetail.code,
-                      widget.course.date.startTime,
+                      widget.course.code,
+                      widget.timeCode.startTime,
                       widget.weekIndex,
                     );
                     if (widget.autoNotifySave) {
                       if (courseNotify == null) {
                         courseNotify = CourseNotify.fromCourse(
                           id: widget.notifyData.lastId + 1,
-                          weeklyIndex: widget.weekIndex,
                           course: widget.course,
-                          courseDetail: widget.courseDetail,
+                          weekDay: widget.weekIndex + 1,
+                          timeCode: widget.timeCode,
                         );
                         await NotificationUtils.scheduleCourseNotify(
                             context: context,
@@ -676,7 +668,7 @@ class _CourseContentState extends State<CourseContent> {
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
                   Text(
-                    '${widget.course.date.startTime}-${widget.course.date.endTime}',
+                    '${widget.timeCode.startTime}-${widget.timeCode.endTime}',
                     style: TextStyle(
                       fontSize: 18.0,
                       color: ApTheme.of(context).greyText,
@@ -694,7 +686,7 @@ class _CourseContentState extends State<CourseContent> {
 }
 
 class CourseList extends StatelessWidget {
-  final List<CourseDetail> courses;
+  final List<Course> courses;
 
   const CourseList({
     Key key,
@@ -830,18 +822,20 @@ class CourseList extends StatelessWidget {
 }
 
 class CourseBorder extends StatelessWidget {
-  final int weekIndex;
   final Course course;
+  final SectionTime sectionTime;
+  final TimeCode timeCode;
   final double height;
   final double width;
   final Border border;
   final Color color;
-  final Function(int weekIndex, Course course) onPressed;
+  final Function(SectionTime weekIndex, Course course) onPressed;
 
   const CourseBorder({
     Key key,
-    this.weekIndex,
     this.course,
+    this.sectionTime,
+    this.timeCode,
     this.height = _courseHeight,
     this.width,
     this.border,
@@ -875,7 +869,7 @@ class CourseBorder extends StatelessWidget {
             ? Container()
             : InkWell(
                 onTap: () {
-                  this.onPressed(weekIndex, course);
+                  this.onPressed(sectionTime, course);
                 },
                 radius: 6.0,
                 child: Padding(
