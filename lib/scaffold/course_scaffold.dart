@@ -182,6 +182,7 @@ class CourseScaffoldState extends State<CourseScaffold> {
                   color: ApTheme.of(context).courseListTabletBackground,
                   child: CourseList(
                     courses: widget.courseData.courses,
+                    timeCodes: widget.courseData.timeCodes,
                   ),
                 ),
               ),
@@ -287,6 +288,7 @@ class CourseScaffoldState extends State<CourseScaffold> {
         } else {
           return CourseList(
             courses: widget.courseData.courses,
+            timeCodes: widget.courseData.timeCodes,
           );
         }
     }
@@ -345,11 +347,11 @@ class CourseScaffoldState extends State<CourseScaffold> {
       final course = widget.courseData.courses[i];
       for (var j = 0; j < (course.times?.length ?? 0); j++) {
         final time = course.times[j];
-        final timeCodeIndex = widget.courseData.getTimeCodeIndex(time.section);
+        final timeCodeIndex = time.index;
         final courseBorderIndex = timeCodeIndex - minTimeCode;
         final len = ApColors.colors.length;
         final color = ApColors.colors[i % len][300 + 100 * (i ~/ len)];
-        courseBorderCollection[time.weekDay - 1][courseBorderIndex] =
+        courseBorderCollection[time.weekDayIndex][courseBorderIndex] =
             CourseBorder(
           sectionTime: time,
           timeCode: widget.courseData.timeCodes[timeCodeIndex],
@@ -434,8 +436,7 @@ class CourseScaffoldState extends State<CourseScaffold> {
   }
 
   void _onPressed(SectionTime sectionTime, Course course) {
-    final timeCodeIndex =
-        widget.courseData.getTimeCodeIndex(sectionTime.section);
+    final timeCodeIndex = sectionTime.index;
     showModalBottomSheet(
       context: context,
       shape: RoundedRectangleBorder(
@@ -446,7 +447,7 @@ class CourseScaffoldState extends State<CourseScaffold> {
           enableNotifyControl: widget.enableNotifyControl,
           course: course,
           notifyData: widget.notifyData,
-          weekIndex: sectionTime.weekDay,
+          weekday: sectionTime.weekday,
           courseNotifySaveKey: widget.courseNotifySaveKey,
           timeCode: widget.courseData.timeCodes[timeCodeIndex],
         );
@@ -506,7 +507,7 @@ class CourseContent extends StatefulWidget {
   final bool enableNotifyControl;
   final Course course;
   final TimeCode timeCode;
-  final int weekIndex;
+  final int weekday;
   final CourseNotifyData notifyData;
   final bool autoNotifySave;
   final CourseNotifyCallback onNotifyClick;
@@ -519,7 +520,7 @@ class CourseContent extends StatefulWidget {
     @required this.enableNotifyControl,
     @required this.course,
     @required this.timeCode,
-    @required this.weekIndex,
+    @required this.weekday,
     this.notifyData,
     this.autoNotifySave = true,
     this.onNotifyClick,
@@ -540,7 +541,7 @@ class _CourseContentState extends State<CourseContent> {
       _state = (widget.notifyData.getByCode(
                 widget.course.code,
                 widget.timeCode.startTime,
-                widget.weekIndex,
+                widget.weekday,
               ) ==
               null
           ? CourseNotifyState.cancel
@@ -579,8 +580,8 @@ class _CourseContentState extends State<CourseContent> {
                       title: widget.course.title,
                       description: '',
                       location: widget.course.location?.toString() ?? '',
-                      startDate: startTime.weekTime(widget.weekIndex),
-                      endDate: endTime.weekTime(widget.weekIndex),
+                      startDate: startTime.weekTime(widget.weekday),
+                      endDate: endTime.weekTime(widget.weekday),
                       timeZone: 'GMT+8',
                     );
                     Add2Calendar.addEvent2Cal(event);
@@ -597,20 +598,20 @@ class _CourseContentState extends State<CourseContent> {
                     var courseNotify = widget.notifyData.getByCode(
                       widget.course.code,
                       widget.timeCode.startTime,
-                      widget.weekIndex,
+                      widget.weekday,
                     );
                     if (widget.autoNotifySave) {
                       if (courseNotify == null) {
                         courseNotify = CourseNotify.fromCourse(
                           id: widget.notifyData.lastId + 1,
                           course: widget.course,
-                          weekDay: widget.weekIndex + 1,
+                          weekday: widget.weekday,
                           timeCode: widget.timeCode,
                         );
                         await NotificationUtils.scheduleCourseNotify(
                             context: context,
                             courseNotify: courseNotify,
-                            day: NotificationUtils.getDay(widget.weekIndex),
+                            day: NotificationUtils.getDay(widget.weekday),
                             androidResourceIcon: widget.androidResourceIcon);
                         widget.notifyData.lastId++;
                         widget.notifyData.data.add(courseNotify);
@@ -687,10 +688,12 @@ class _CourseContentState extends State<CourseContent> {
 
 class CourseList extends StatelessWidget {
   final List<Course> courses;
+  final List<TimeCode> timeCodes;
 
   const CourseList({
     Key key,
     @required this.courses,
+    this.timeCodes,
   }) : super(key: key);
 
   @override
@@ -752,7 +755,9 @@ class CourseList extends StatelessWidget {
                                 '${ApLocalizations.of(context).courseDialogTime}：',
                             style: TextStyle(fontWeight: FontWeight.bold),
                           ),
-                          TextSpan(text: '${course.times ?? ''}'),
+                          TextSpan(
+                              text:
+                                  '${course.getTimesShortName(timeCodes) ?? ''}'),
                         ],
                       ),
                     ),

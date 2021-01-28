@@ -108,7 +108,7 @@ class CheckCourseNotifyItem extends StatelessWidget {
                 title: ap.courseNotify ?? '',
                 items: [
                   for (var notify in notifyData.data)
-                    '${ap.weekdaysCourse[notify.weeklyIndex]} ${notify.startTime} ${notify.title}',
+                    '${ap.weekdaysCourse[notify.weekdayIndex]} ${notify.startTime} ${notify.title}',
                 ],
                 index: -1,
                 onSelected: (index) {

@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import 'package:ap_common/config/ap_constants.dart';
+import 'package:ap_common/l10n/l10n.dart';
 import 'package:ap_common/utils/ap_localizations.dart';
 import 'package:ap_common/utils/preferences.dart';
 
@@ -17,7 +18,8 @@ class CourseData {
     for (var course in courses) {
       if (course.times == null) continue;
       for (var section in course.times)
-        if (section.weekDay == 6 || section.weekDay == 7) return true;
+        if (section.weekday == DateTime.saturday ||
+            section.weekday == DateTime.sunday) return true;
     }
     return false;
   }
@@ -28,7 +30,7 @@ class CourseData {
       if (course.times == null) continue;
       for (var time in course.times) {
         for (int i = 0; i < timeCodes.length; i++) {
-          if (time.section == timeCodes[i].title && ((i + 1) > index)) {
+          if (time.index == i && ((i + 1) > index)) {
             index = i;
           }
         }
@@ -43,7 +45,7 @@ class CourseData {
       if (course.times == null) continue;
       for (var time in course.times) {
         for (int i = 0; i < timeCodes.length; i++) {
-          if (time.section == timeCodes[i].title && ((i + 1) < index)) {
+          if (time.index == i && ((i + 1) < index)) {
             index = i;
           }
         }
@@ -120,7 +122,7 @@ class CourseData {
     for (var course in courses) {
       for (var time in course.times) {
         for (int i = 0; i < timeCodes.length; i++) {
-          list[time.weekDay - 1].add(course);
+          list[time.weekday - 1].add(course);
         }
       }
     }
@@ -240,6 +242,35 @@ class Course {
     }
     return text;
   }
+
+  String getTimesShortName(List<TimeCode> timeCode) {
+    String text = '';
+    if ((times?.length ?? 0) == 0) return text;
+    int startIndex = -1, startTimeCodeIndex = -1, repeat = 0;
+    for (var i = 0; i < (times?.length ?? 0); i++) {
+      final time = times[i];
+      if (startIndex != -1 &&
+          startTimeCodeIndex != -1 &&
+          time.index - 1 == startTimeCodeIndex &&
+          times[i - 1].weekday == times[i].weekday) {
+        repeat++;
+      } else if (startIndex != -1 && repeat != 0) {
+        final endTime = times[startIndex + repeat];
+        text += '-'
+            '${timeCode[endTime.index].title}';
+        repeat = 0;
+        startIndex = -1;
+        startTimeCodeIndex = -1;
+      } else {
+        startIndex = i;
+        startTimeCodeIndex = time.index;
+        text +=
+            '${text.isEmpty ? '' : ' '}(${ApLocalizations.current.weekdaysCourse[time.weekDayIndex]}) '
+            '${timeCode[time.index].title}';
+      }
+    }
+    return text;
+  }
 }
 
 class Location {
@@ -283,20 +314,26 @@ class Location {
 
 class SectionTime {
   SectionTime({
-    this.weekDay,
-    this.section,
+    this.weekday,
+    this.index,
   });
 
-  int weekDay;
-  String section;
+  ///The day of the week [DateTime.monday]..[DateTime.sunday].
+  ///In accordance with ISO 8601 a week starts with Monday, which has the value 1.
+  int weekday;
+
+  /// index of [CourseData.timeCodes]
+  int index;
+
+  int get weekDayIndex => weekday - 1;
 
   SectionTime copyWith({
     int weekDay,
-    String section,
+    String index,
   }) =>
       SectionTime(
-        weekDay: weekDay ?? this.weekDay,
-        section: section ?? this.section,
+        weekday: weekDay ?? this.weekday,
+        index: index ?? this.index,
       );
 
   factory SectionTime.fromRawJson(String str) =>
@@ -305,19 +342,14 @@ class SectionTime {
   String toRawJson() => json.encode(toJson());
 
   factory SectionTime.fromJson(Map<String, dynamic> json) => SectionTime(
-        weekDay: json["weekDay"] == null ? null : json["weekDay"],
-        section: json["section"] == null ? null : json["section"],
+        weekday: json["weekday"] == null ? null : json["weekday"],
+        index: json["index"] == null ? null : json["index"],
       );
 
   Map<String, dynamic> toJson() => {
-        "weekDay": weekDay == null ? null : weekDay,
-        "section": section == null ? null : section,
+        "weekday": weekday == null ? null : weekday,
+        "index": index == null ? null : index,
       };
-
-  @override
-  String toString() {
-    return '(${ApLocalizations.current.weekdays[weekDay - 1] ?? ''})$section';
-  }
 }
 
 class TimeCode {
@@ -358,4 +390,13 @@ class TimeCode {
         "startTime": startTime == null ? null : startTime,
         "endTime": endTime == null ? null : endTime,
       };
+}
+
+extension TimeCodeExtension on List<TimeCode> {
+  int getIndex(String section) {
+    for (int i = 0; i < length; i++) {
+      if (this[i].title == section) return i;
+    }
+    return -1;
+  }
 }

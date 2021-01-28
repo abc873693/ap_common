@@ -51,7 +51,7 @@ class CourseNotifyData {
     for (var value in data) {
       if (value.code == code &&
           value.startTime == startTime &&
-          value.weeklyIndex == weekIndex) return value;
+          value.weekday == weekIndex) return value;
     }
     return null;
   }
@@ -108,6 +108,7 @@ class CourseNotifyData {
           'course_notify_data_$semester',
       '',
     );
+    print(rawString);
     if (rawString == '')
       return CourseNotifyData(data: [])..tag = semester;
     else
@@ -145,15 +146,21 @@ class CourseNotify {
   String title;
   String location;
   String code;
-  int weeklyIndex;
+
+  ///The day of the week [DateTime.monday]..[DateTime.sunday].
+  ///In accordance with ISO 8601 a week starts with Monday, which has the value 1.
+  int weekday;
+
   String startTime;
+
+  int get weekdayIndex => weekday - 1;
 
   CourseNotify({
     this.id,
     this.title,
     this.location,
     this.code,
-    this.weeklyIndex,
+    this.weekday,
     this.startTime,
   });
 
@@ -167,7 +174,9 @@ class CourseNotify {
         title: json["title"] == null ? null : json["title"],
         location: json["location"] == null ? null : json["location"],
         code: json["code"] == null ? null : json["code"],
-        weeklyIndex: json["weeklyIndex"] == null ? null : json["weeklyIndex"],
+        weekday: json["weekday"] == null
+            ? (json["weeklyIndex"] == null ? null : json["weeklyIndex"] + 1)
+            : json["weekday"],
         startTime: json["startTime"] == null ? null : json["startTime"],
       );
 
@@ -176,14 +185,14 @@ class CourseNotify {
         "title": title == null ? null : title,
         "location": location == null ? null : location,
         "code": code == null ? null : code,
-        "weeklyIndex": weeklyIndex == null ? null : weeklyIndex,
+        "weekday": weekday == null ? null : weekday,
         "startTime": startTime == null ? null : startTime,
       };
 
   factory CourseNotify.fromCourse({
     @required int id,
     @required Course course,
-    @required int weekDay,
+    @required int weekday,
     @required TimeCode timeCode,
   }) {
     return CourseNotify(
@@ -191,7 +200,7 @@ class CourseNotify {
       title: course.title,
       code: course.code,
       startTime: timeCode.startTime,
-      weeklyIndex: weekDay,
+      weekday: weekday,
       location: course.location.toString(),
     );
   }

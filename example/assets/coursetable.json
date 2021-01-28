@@ -11,12 +11,12 @@
       "at": "【學期】",
       "sectionTimes": [
         {
-          "weekDay": 2,
-          "section": "A"
+          "weekday": 2,
+          "index": 5
         },
         {
-          "weekDay": 4,
-          "section": "A"
+          "weekday": 4,
+          "index": 5
         }
       ],
       "location": {
@@ -38,12 +38,12 @@
       "at": "【學期】",
       "sectionTimes": [
         {
-          "weekDay": 2,
-          "section": "7"
+          "weekday": 2,
+          "index": 8
         },
         {
-          "weekDay": 2,
-          "section": "8"
+          "weekday": 2,
+          "index": 9
         }
       ],
       "location": {
@@ -64,16 +64,16 @@
       "at": "【學期】",
       "sectionTimes": [
         {
-          "weekDay": 1,
-          "section": "2"
+          "weekday": 1,
+          "index": 2
         },
         {
-          "weekDay": 1,
-          "section": "3"
+          "weekday": 1,
+          "index": 3
         },
         {
-          "weekDay": 1,
-          "section": "4"
+          "weekday": 1,
+          "index": 4
         }
       ],
       "location": {
@@ -94,16 +94,16 @@
       "at": "【學期】",
       "sectionTimes": [
         {
-          "weekDay": 5,
-          "section": "2"
+          "weekday": 5,
+          "index": 2
         },
         {
-          "weekDay": 5,
-          "section": "3"
+          "weekday": 5,
+          "index": 3
         },
         {
-          "weekDay": 5,
-          "section": "4"
+          "weekday": 5,
+          "index": 4
         }
       ],
       "location": {
@@ -124,16 +124,16 @@
       "at": "【學期】",
       "sectionTimes": [
         {
-          "weekDay": 1,
-          "section": "5"
+          "weekday": 1,
+          "index": 6
         },
         {
-          "weekDay": 1,
-          "section": "6"
+          "weekday": 1,
+          "index": 7
         },
         {
-          "weekDay": 1,
-          "section": "7"
+          "weekday": 1,
+          "index": 8
         }
       ],
       "location": {
@@ -178,16 +178,16 @@
       "at": "【學期】",
       "sectionTimes": [
         {
-          "weekDay": 2,
-          "section": "2"
+          "weekday": 2,
+          "index": 2
         },
         {
-          "weekDay": 2,
-          "section": "3"
+          "weekday": 2,
+          "index": 3
         },
         {
-          "weekDay": 2,
-          "section": "4"
+          "weekday": 2,
+          "index": 4
         }
       ],
       "location": {
@@ -208,16 +208,16 @@
       "at": "【學期】",
       "sectionTimes": [
         {
-          "weekDay": 4,
-          "section": "2"
+          "weekday": 4,
+          "index": 2
         },
         {
-          "weekDay": 4,
-          "section": "3"
+          "weekday": 4,
+          "index": 3
         },
         {
-          "weekDay": 4,
-          "section": "4"
+          "weekday": 4,
+          "index": 4
         }
       ],
       "location": {
@@ -238,16 +238,16 @@
       "at": "【學期】",
       "sectionTimes": [
         {
-          "weekDay": 4,
-          "section": "5"
+          "weekday": 4,
+          "index": 6
         },
         {
-          "weekDay": 4,
-          "section": "6"
+          "weekday": 4,
+          "index": 7
         },
         {
-          "weekDay": 4,
-          "section": "7"
+          "weekday": 4,
+          "index": 8
         }
       ],
       "location": {
