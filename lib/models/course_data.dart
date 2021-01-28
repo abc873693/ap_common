@@ -4,6 +4,7 @@ import 'package:ap_common/config/ap_constants.dart';
 import 'package:ap_common/l10n/l10n.dart';
 import 'package:ap_common/utils/ap_localizations.dart';
 import 'package:ap_common/utils/preferences.dart';
+import 'package:flutter/material.dart';
 
 class CourseData {
   CourseData({
@@ -105,6 +106,15 @@ class CourseData {
       return null;
     else
       return CourseData.fromRawJson(rawString);
+  }
+
+  static migrateFrom0_10() async {
+    Preferences.prefs.getKeys()?.forEach((key) {
+      if (key.contains('course_data')) {
+        debugPrint(key);
+        Preferences.setString(key, null);
+      }
+    });
   }
 
   List<List<Course>> get weekDayCourseList {
