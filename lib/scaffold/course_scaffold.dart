@@ -59,6 +59,8 @@ class CourseScaffold extends StatefulWidget {
   final String androidResourceIcon;
   final bool enableCaptureCourseTable;
   final bool showSectionTime;
+  final bool showInstructors;
+  final bool showClassroomLocation;
 
   const CourseScaffold({
     Key key,
@@ -83,6 +85,8 @@ class CourseScaffold extends StatefulWidget {
     this.androidResourceIcon,
     this.enableCaptureCourseTable = false,
     this.showSectionTime,
+    this.showInstructors,
+    this.showClassroomLocation,
   }) : super(key: key);
 
   @override
@@ -97,6 +101,8 @@ class CourseScaffoldState extends State<CourseScaffold> {
   _ContentStyle _contentStyle = _ContentStyle.table;
 
   bool showSectionTime;
+  bool showInstructors;
+  bool showClassroomLocation;
 
   bool get isTablet =>
       MediaQuery.of(context).size.shortestSide >= 680 ||
@@ -106,6 +112,10 @@ class CourseScaffoldState extends State<CourseScaffold> {
   void initState() {
     showSectionTime = widget.showSectionTime ??
         Preferences.getBool(ApConstants.SHOW_SECTION_TIME, true);
+    showInstructors = widget.showInstructors ??
+        Preferences.getBool(ApConstants.SHOW_INSTRUCTORS, true);
+    showClassroomLocation = widget.showClassroomLocation ??
+        Preferences.getBool(ApConstants.SHOW_CLASSROOM_LOCATION, true);
     super.initState();
   }
 
@@ -135,10 +145,22 @@ class CourseScaffoldState extends State<CourseScaffold> {
                 context: context,
                 builder: (_) => CourseScaffoldSettingDialog(
                   showSectionTime: showSectionTime,
+                  showInstructors: showInstructors,
+                  showClassroomLocation: showClassroomLocation,
                   showSectionTimeOnChanged: (value) {
                     setState(() => showSectionTime = value);
                     Preferences.setBool(
                         ApConstants.SHOW_SECTION_TIME, showSectionTime);
+                  },
+                  showInstructorsOnChanged: (value) {
+                    setState(() => showInstructors = value);
+                    Preferences.setBool(
+                        ApConstants.SHOW_INSTRUCTORS, showInstructors);
+                  },
+                  showClassroomLocationOnChanged: (value) {
+                    setState(() => showClassroomLocation = value);
+                    Preferences.setBool(ApConstants.SHOW_CLASSROOM_LOCATION,
+                        showClassroomLocation);
                   },
                 ),
               );
@@ -383,6 +405,8 @@ class CourseScaffoldState extends State<CourseScaffold> {
           course: course,
           color: color,
           onPressed: _onPressed,
+          showInstructors: showInstructors,
+          showClassroomLocation: showClassroomLocation,
         );
       }
     }
@@ -408,6 +432,8 @@ class CourseScaffoldState extends State<CourseScaffold> {
             course: courseBorders[j].course,
             height: _courseHeight * (repeat + 1),
             color: courseBorders[j].color,
+            showInstructors: showInstructors,
+            showClassroomLocation: showClassroomLocation,
             border: (j + repeat > courseBorders.length)
                 ? Border(
                     left: _innerBorderSide,
@@ -424,6 +450,8 @@ class CourseScaffoldState extends State<CourseScaffold> {
               course: courseBorders[k].course,
               height: 0.0,
               width: 0.0,
+              showInstructors: showInstructors,
+              showClassroomLocation: showClassroomLocation,
             );
           }
           j += repeat;
@@ -438,6 +466,8 @@ class CourseScaffoldState extends State<CourseScaffold> {
               top: _innerBorderSide,
               bottom: _innerBorderSide,
             ),
+            showInstructors: showInstructors,
+            showClassroomLocation: showClassroomLocation,
             onPressed: _onPressed,
           );
         }
@@ -873,6 +903,8 @@ class CourseBorder extends StatelessWidget {
   final double width;
   final Border border;
   final Color color;
+  final bool showInstructors;
+  final bool showClassroomLocation;
   final Function(SectionTime weekIndex, Course course) onPressed;
 
   const CourseBorder({
@@ -885,6 +917,8 @@ class CourseBorder extends StatelessWidget {
     this.border,
     this.color,
     this.onPressed,
+    this.showInstructors,
+    this.showClassroomLocation,
   }) : super(key: key);
 
   @override
@@ -919,10 +953,28 @@ class CourseBorder extends StatelessWidget {
                 child: Padding(
                   padding: EdgeInsets.symmetric(vertical: 2.0, horizontal: 4.0),
                   child: Center(
-                    child: AutoSizeText(
-                      course.title ?? '',
+                    child: AutoSizeText.rich(
+                      TextSpan(
+                        children: [
+                          TextSpan(
+                            text: '${course.title ?? ' '}',
+                            style: TextStyle(
+                              fontSize: 16.0,
+                              fontWeight:
+                                  (showInstructors || showClassroomLocation)
+                                      ? FontWeight.bold
+                                      : FontWeight.normal,
+                            ),
+                          ),
+                          if (showInstructors)
+                            TextSpan(
+                                text: '\n${course.getInstructors() ?? ' '}'),
+                          if (showClassroomLocation)
+                            TextSpan(text: '\n${course.location ?? ' '}'),
+                        ],
+                      ),
                       style: TextStyle(
-                        fontSize: 16.0,
+                        fontSize: 14.0,
                         color: ApTheme.of(context).courseText,
                       ),
                       textAlign: TextAlign.center,
@@ -937,11 +989,21 @@ class CourseBorder extends StatelessWidget {
 
 class CourseScaffoldSettingDialog extends StatefulWidget {
   final bool showSectionTime;
+  final bool showInstructors;
+  final bool showClassroomLocation;
   final Function(bool) showSectionTimeOnChanged;
+  final Function(bool) showInstructorsOnChanged;
+  final Function(bool) showClassroomLocationOnChanged;
 
-  const CourseScaffoldSettingDialog(
-      {Key key, this.showSectionTime, this.showSectionTimeOnChanged})
-      : super(key: key);
+  const CourseScaffoldSettingDialog({
+    Key key,
+    this.showSectionTime,
+    this.showInstructors,
+    this.showClassroomLocation,
+    this.showSectionTimeOnChanged,
+    this.showInstructorsOnChanged,
+    this.showClassroomLocationOnChanged,
+  }) : super(key: key);
 
   @override
   _CourseScaffoldSettingDialogState createState() =>
@@ -951,10 +1013,14 @@ class CourseScaffoldSettingDialog extends StatefulWidget {
 class _CourseScaffoldSettingDialogState
     extends State<CourseScaffoldSettingDialog> {
   bool showSectionTime;
+  bool showInstructors;
+  bool showClassroomLocation;
 
   @override
   void initState() {
     showSectionTime = widget.showSectionTime;
+    showInstructors = widget.showInstructors;
+    showClassroomLocation = widget.showClassroomLocation;
     super.initState();
   }
 
@@ -973,6 +1039,26 @@ class _CourseScaffoldSettingDialogState
             onChanged: (value) {
               setState(() => showSectionTime = value);
               widget.showSectionTimeOnChanged(value);
+            },
+            checkColor: ApTheme.of(context).background,
+            activeColor: ApTheme.of(context).yellow,
+          ),
+          CheckboxListTile(
+            title: Text(ap.showInstructors),
+            value: showInstructors,
+            onChanged: (value) {
+              setState(() => showInstructors = value);
+              widget.showInstructorsOnChanged(value);
+            },
+            checkColor: ApTheme.of(context).background,
+            activeColor: ApTheme.of(context).yellow,
+          ),
+          CheckboxListTile(
+            title: Text(ap.showClassroomLocation),
+            value: showClassroomLocation,
+            onChanged: (value) {
+              setState(() => showClassroomLocation = value);
+              widget.showClassroomLocationOnChanged(value);
             },
             checkColor: ApTheme.of(context).background,
             activeColor: ApTheme.of(context).yellow,

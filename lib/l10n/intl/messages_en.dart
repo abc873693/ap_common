@@ -343,6 +343,8 @@ class MessageLookup extends MessageLookupByLibrary {
     "settings" : MessageLookupByLibrary.simpleMessage("Settings"),
     "share" : MessageLookupByLibrary.simpleMessage("Share"),
     "shareTo" : MessageLookupByLibrary.simpleMessage("Share to…"),
+    "showClassroomLocation" : MessageLookupByLibrary.simpleMessage("Show Classroom Location"),
+    "showInstructors" : MessageLookupByLibrary.simpleMessage("Show Instructors"),
     "showSearchButton" : MessageLookupByLibrary.simpleMessage("Show Search Button"),
     "showSectionTime" : MessageLookupByLibrary.simpleMessage("Show Section Time"),
     "simcourse" : MessageLookupByLibrary.simpleMessage("Course Selection Sim"),

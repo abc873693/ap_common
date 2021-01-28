@@ -349,6 +349,8 @@ class MessageLookup extends MessageLookupByLibrary {
     "settings" : MessageLookupByLibrary.simpleMessage("設定"),
     "share" : MessageLookupByLibrary.simpleMessage("分享"),
     "shareTo" : MessageLookupByLibrary.simpleMessage("分享至…"),
+    "showClassroomLocation" : MessageLookupByLibrary.simpleMessage("顯示教室位置"),
+    "showInstructors" : MessageLookupByLibrary.simpleMessage("顯示教師名稱"),
     "showSearchButton" : MessageLookupByLibrary.simpleMessage("顯示搜尋按鈕"),
     "showSectionTime" : MessageLookupByLibrary.simpleMessage("顯示課堂時間"),
     "simcourse" : MessageLookupByLibrary.simpleMessage("模擬選課"),

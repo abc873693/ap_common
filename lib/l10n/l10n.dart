@@ -3565,6 +3565,26 @@ class ApLocalizations {
     );
   }
 
+  /// `顯示教師名稱`
+  String get showInstructors {
+    return Intl.message(
+      '顯示教師名稱',
+      name: 'showInstructors',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `顯示教室位置`
+  String get showClassroomLocation {
+    return Intl.message(
+      '顯示教室位置',
+      name: 'showClassroomLocation',
+      desc: '',
+      args: [],
+    );
+  }
+
   /// `最新消息審查系統`
   String get announcementReviewSystem {
     return Intl.message(
