@@ -92,24 +92,26 @@ class CoursePageState extends State<CoursePage> {
     String rawString = await rootBundle.loadString(FileAssets.semesters);
     semesterData = SemesterData.fromRawJson(rawString);
     var i = 0;
-    if(semesterData.defaultSemester!=null)
-    semesterData.data.forEach((option) {
-      if (option.text == semesterData.defaultSemester.text) semesterData.currentIndex = i;
-      i++;
-    });
+    if (semesterData.defaultSemester != null)
+      semesterData.data.forEach((option) {
+        if (option.text == semesterData.defaultSemester.text)
+          semesterData.currentIndex = i;
+        i++;
+      });
     _getCourseTables();
   }
 
   _getCourseTables() async {
     String rawString = await rootBundle.loadString(FileAssets.courses);
     courseData = CourseData.fromRawJson(rawString);
-    courseData.updateIndex();
     if (mounted && courseData != null)
       setState(() {
-        if (courseData?.courseTables == null)
+        if (courseData?.courses == null)
           state = CourseState.empty;
-        else
+        else {
           state = CourseState.finish;
+          notifyData= CourseNotifyData.load(courseNotifyCacheKey);
+        }
       });
   }
 }

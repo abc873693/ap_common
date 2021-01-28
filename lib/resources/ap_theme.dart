@@ -267,6 +267,16 @@ class ApTheme extends InheritedWidget {
       default:
         return Colors.black;
     }
+
+  }
+  Color get background {
+    switch (brightness) {
+      case Brightness.dark:
+        return Color(0xff121212);
+      case Brightness.light:
+      default:
+        return Colors.white;
+    }
   }
 
   static ThemeData get light => ThemeData(

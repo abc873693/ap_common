@@ -1945,70 +1945,70 @@ class ApLocalizations {
     );
   }
 
-  /// ` 一 `
+  /// `一`
   String get mon {
     return Intl.message(
-      ' 一 ',
+      '一',
       name: 'mon',
       desc: '',
       args: [],
     );
   }
 
-  /// ` 二 `
+  /// `二`
   String get tue {
     return Intl.message(
-      ' 二 ',
+      '二',
       name: 'tue',
       desc: '',
       args: [],
     );
   }
 
-  /// ` 三 `
+  /// `三`
   String get wed {
     return Intl.message(
-      ' 三 ',
+      '三',
       name: 'wed',
       desc: '',
       args: [],
     );
   }
 
-  /// ` 四 `
+  /// `四`
   String get thu {
     return Intl.message(
-      ' 四 ',
+      '四',
       name: 'thu',
       desc: '',
       args: [],
     );
   }
 
-  /// ` 五 `
+  /// `五`
   String get fri {
     return Intl.message(
-      ' 五 ',
+      '五',
       name: 'fri',
       desc: '',
       args: [],
     );
   }
 
-  /// ` 六 `
+  /// `六`
   String get sat {
     return Intl.message(
-      ' 六 ',
+      '六',
       name: 'sat',
       desc: '',
       args: [],
     );
   }
 
-  /// ` 日 `
+  /// `日`
   String get sun {
     return Intl.message(
-      ' 日 ',
+      '日',
       name: 'sun',
       desc: '',
       args: [],
@@ -3540,6 +3540,46 @@ class ApLocalizations {
     return Intl.message(
       '匯出成功~ 請檢查下載資料夾',
       name: 'exportCourseTableSuccess',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `課表設定`
+  String get courseScaffoldSetting {
+    return Intl.message(
+      '課表設定',
+      name: 'courseScaffoldSetting',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `顯示課堂時間`
+  String get showSectionTime {
+    return Intl.message(
+      '顯示課堂時間',
+      name: 'showSectionTime',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `顯示教師名稱`
+  String get showInstructors {
+    return Intl.message(
+      '顯示教師名稱',
+      name: 'showInstructors',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `顯示教室位置`
+  String get showClassroomLocation {
+    return Intl.message(
+      '顯示教室位置',
+      name: 'showClassroomLocation',
       desc: '',
       args: [],
     );
