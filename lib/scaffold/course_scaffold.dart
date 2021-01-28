@@ -13,6 +13,8 @@ import 'package:ap_common/resources/ap_theme.dart';
 import 'package:ap_common/utils/ap_localizations.dart';
 import 'package:ap_common/utils/ap_utils.dart';
 import 'package:ap_common/utils/notification_utils.dart';
+import 'package:ap_common/utils/preferences.dart';
+import 'package:ap_common/widgets/default_dialog.dart';
 import 'package:ap_common/widgets/hint_content.dart';
 import 'package:ap_common/widgets/item_picker.dart';
 import 'package:ap_common/widgets/option_dialog.dart';
@@ -56,6 +58,7 @@ class CourseScaffold extends StatefulWidget {
   final bool enableAddToCalendar;
   final String androidResourceIcon;
   final bool enableCaptureCourseTable;
+  final bool showSectionTime;
 
   const CourseScaffold({
     Key key,
@@ -79,6 +82,7 @@ class CourseScaffold extends StatefulWidget {
     this.enableAddToCalendar = true,
     this.androidResourceIcon,
     this.enableCaptureCourseTable = false,
+    this.showSectionTime,
   }) : super(key: key);
 
   @override
@@ -92,12 +96,16 @@ class CourseScaffoldState extends State<CourseScaffold> {
 
   _ContentStyle _contentStyle = _ContentStyle.table;
 
+  bool showSectionTime;
+
   bool get isTablet =>
       MediaQuery.of(context).size.shortestSide >= 680 ||
       MediaQuery.of(context).orientation == Orientation.landscape;
 
   @override
   void initState() {
+    showSectionTime = widget.showSectionTime ??
+        Preferences.getBool(ApConstants.SHOW_SECTION_TIME, true);
     super.initState();
   }
 
@@ -120,6 +128,23 @@ class CourseScaffoldState extends State<CourseScaffold> {
               onPressed: _captureCourseTable,
               tooltip: ApLocalizations.of(context).exportCourseTable,
             ),
+          IconButton(
+            icon: Icon(ApIcon.settings),
+            onPressed: () {
+              showDialog(
+                context: context,
+                builder: (_) => CourseScaffoldSettingDialog(
+                  showSectionTime: showSectionTime,
+                  showSectionTimeOnChanged: (value) {
+                    setState(() => showSectionTime = value);
+                    Preferences.setBool(
+                        ApConstants.SHOW_SECTION_TIME, showSectionTime);
+                  },
+                ),
+              );
+            },
+            tooltip: ApLocalizations.of(context).exportCourseTable,
+          ),
         ],
       ),
       body: Row(
@@ -478,12 +503,26 @@ class CourseScaffoldState extends State<CourseScaffold> {
         ),
         height: _courseHeight,
         width: widget.courseData.hasHoliday ? 35.0 : 50.0,
-        child: Text(
-          timeCode.title ?? '',
+        child: RichText(
           textAlign: TextAlign.center,
-          style: TextStyle(
-            color: ApTheme.of(context).blueText,
-            fontSize: 14.0,
+          text: TextSpan(
+            style: TextStyle(
+              color: ApTheme.of(context).greyText,
+              fontSize: 14.0,
+            ),
+            children: [
+              if (showSectionTime) TextSpan(text: '${timeCode.startTime}\n'),
+              TextSpan(
+                text: '${timeCode.title}\n',
+                style: TextStyle(
+                  fontWeight:
+                      showSectionTime ? FontWeight.bold : FontWeight.normal,
+                  color: ApTheme.of(context).blueText,
+                  fontSize: showSectionTime ? 16.0 : 14.0,
+                ),
+              ),
+              if (showSectionTime) TextSpan(text: '${timeCode.endTime}'),
+            ],
           ),
         ),
       );
@@ -891,6 +930,54 @@ class CourseBorder extends StatelessWidget {
                   ),
                 ),
               ),
+      ),
+    );
+  }
+}
+
+class CourseScaffoldSettingDialog extends StatefulWidget {
+  final bool showSectionTime;
+  final Function(bool) showSectionTimeOnChanged;
+
+  const CourseScaffoldSettingDialog(
+      {Key key, this.showSectionTime, this.showSectionTimeOnChanged})
+      : super(key: key);
+
+  @override
+  _CourseScaffoldSettingDialogState createState() =>
+      _CourseScaffoldSettingDialogState();
+}
+
+class _CourseScaffoldSettingDialogState
+    extends State<CourseScaffoldSettingDialog> {
+  bool showSectionTime;
+
+  @override
+  void initState() {
+    showSectionTime = widget.showSectionTime;
+    super.initState();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final ap = ApLocalizations.current;
+    return DefaultDialog(
+      title: ap.courseScaffoldSetting,
+      actionText: ApLocalizations.current.confirm,
+      actionFunction: () => Navigator.of(context, rootNavigator: true).pop(),
+      contentWidget: Column(
+        children: [
+          CheckboxListTile(
+            title: Text(ap.showSectionTime),
+            value: showSectionTime,
+            onChanged: (value) {
+              setState(() => showSectionTime = value);
+              widget.showSectionTimeOnChanged(value);
+            },
+            checkColor: ApTheme.of(context).background,
+            activeColor: ApTheme.of(context).yellow,
+          ),
+        ],
       ),
     );
   }

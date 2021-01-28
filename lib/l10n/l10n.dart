@@ -3545,6 +3545,26 @@ class ApLocalizations {
     );
   }
 
+  /// `課表設定`
+  String get courseScaffoldSetting {
+    return Intl.message(
+      '課表設定',
+      name: 'courseScaffoldSetting',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `顯示課堂時間`
+  String get showSectionTime {
+    return Intl.message(
+      '顯示課堂時間',
+      name: 'showSectionTime',
+      desc: '',
+      args: [],
+    );
+  }
+
   /// `最新消息審查系統`
   String get announcementReviewSystem {
     return Intl.message(

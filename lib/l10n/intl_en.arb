@@ -349,6 +349,8 @@
   "exportCourseTable": "Export courseTable to image",
   "grandPermissionFail": "Grand permission fail, please try again.",
   "exportCourseTableSuccess": "Export Successful~ Please check download directory.",
+  "courseScaffoldSetting": "Course Table Setting",
+  "showSectionTime": "Show Section Time",
   "announcementReviewSystem": "Announcement Review System",
   "thirdPartyLoginFail": "Third Party Login Fail~",
   "approve": "Approve",
