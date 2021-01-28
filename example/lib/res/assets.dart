@@ -19,7 +19,7 @@ class ImageAssets {
 }
 
 class FileAssets {
-  static const String basePath = 'assets/';
+  static const String basePath = 'assets';
 
   static String courses = '$basePath/coursetable.json';
   static String scores = '$basePath/scores.json';
