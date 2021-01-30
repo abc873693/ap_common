@@ -424,7 +424,7 @@ class CourseScaffoldState extends State<CourseScaffold> {
               break;
           }
         if (repeat != 0) {
-          final timeCode = courseBorders[j].timeCode;
+          final timeCode = courseBorders[j].timeCode.copyWith();
           timeCode.endTime = courseBorders[j + repeat].timeCode.endTime;
           courseBorders[j] = CourseBorder(
             timeCode: timeCode,
