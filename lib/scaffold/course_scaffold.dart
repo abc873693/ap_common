@@ -469,6 +469,8 @@ class CourseScaffoldState extends State<CourseScaffold> {
             showInstructors: showInstructors,
             showClassroomLocation: showClassroomLocation,
             onPressed: _onPressed,
+            sectionTime: courseBorders[j].sectionTime,
+            timeCode: courseBorders[j].timeCode,
           );
         }
       }
@@ -912,11 +914,11 @@ class CourseBorder extends StatelessWidget {
     this.course,
     this.sectionTime,
     this.timeCode,
+    this.onPressed,
     this.height = _courseHeight,
     this.width,
     this.border,
     this.color,
-    this.onPressed,
     this.showInstructors,
     this.showClassroomLocation,
   }) : super(key: key);
