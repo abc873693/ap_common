@@ -6,9 +6,7 @@ import android.appwidget.AppWidgetProvider
 import android.content.ComponentName
 import android.content.Context
 import android.content.Intent
-import android.util.Log
 import android.widget.RemoteViews
-import org.json.JSONArray
 import org.json.JSONObject
 import java.text.SimpleDateFormat
 import java.util.*
@@ -73,20 +71,17 @@ class CourseAppWidgetProvider : AppWidgetProvider() {
     private fun parseNextCurse(context: Context, rawData: String): String {
         val now = Calendar.getInstance()
         val courseData = JSONObject(rawData)
-        val courseTable = courseData.getJSONObject("coursetable")
-        val courses = parseCourseList(now, courseTable)
+        val todayCourses = parseCourseList(now, courseData)
         val sourceDateformat = SimpleDateFormat("HH:mm", Locale.TAIWAN)
         val sourceErrorDateformat = SimpleDateFormat("HHmm", Locale.TAIWAN)
         var text = context.getString(R.string.today_no_course_already)
         var min: Long = now.timeInMillis
-        Log.e("now", now.time.toString())
-        if (courses.length() == 0)
+        if (todayCourses.isEmpty())
             text = context.getString(R.string.today_no_course)
-        for (i in 0 until courses.length()) {
-            val course = courses.getJSONObject(i)
-            val date = course.getJSONObject("date")
+        for (i in todayCourses.indices) {
+            val course = todayCourses[i]
             val starTime = Calendar.getInstance()
-            val startTimeText = date.getString("startTime")
+            val startTimeText = course.startTime
             starTime.time = if (startTimeText.length == 4) sourceErrorDateformat.parse(startTimeText) else sourceDateformat.parse(startTimeText)
             val time = Calendar.getInstance()
             time.set(Calendar.HOUR_OF_DAY, starTime.get(Calendar.HOUR_OF_DAY))
@@ -95,12 +90,10 @@ class CourseAppWidgetProvider : AppWidgetProvider() {
                 val diff = time.timeInMillis - now.timeInMillis
                 if (min > diff) {
                     min = diff
-                    val location = course.getJSONObject("location")
-                    val locationText = "${location.get("building")}${location.get("room")}"
                     text = String.format(context.getString(R.string.course_hint_content_format),
-                            date.getString("startTime"),
-                            locationText,
-                            course.getString("title")
+                            course.startTime,
+                            course.location,
+                            course.title
                     )
                 }
             }
@@ -108,15 +101,24 @@ class CourseAppWidgetProvider : AppWidgetProvider() {
         return text
     }
 
-    private fun parseCourseList(today: Calendar, courseTable: JSONObject): JSONArray {
-        return when (today.get(Calendar.DAY_OF_WEEK)) {
-            1 -> courseTable.getJSONArray("Sunday")
-            2 -> courseTable.getJSONArray("Monday")
-            3 -> courseTable.getJSONArray("Tuesday")
-            4 -> courseTable.getJSONArray("Wednesday")
-            5 -> courseTable.getJSONArray("Thursday")
-            6 -> courseTable.getJSONArray("Friday")
-            else -> courseTable.getJSONArray("Saturday")
+    private fun parseCourseList(today: Calendar, courseData: JSONObject): List<Course> {
+        val allCourses = courseData.getJSONArray("courses")
+        val timeCodes = courseData.getJSONArray("timeCodes")
+        val todayCourses = mutableListOf<Course>()
+        val weekday = today.get(Calendar.DAY_OF_WEEK)
+
+        for (i in 0 until allCourses.length()) {
+            val course = allCourses.getJSONObject(i)
+            val times = course.getJSONArray("sectionTimes")
+            for (j in 0 until times.length()) {
+                if (times.getJSONObject(j).getInt("weekday") == weekday) {
+                    val location = course.getJSONObject("location")
+                    val sectionIndex = times.getJSONObject(j).getInt("index")
+                    val startTime = timeCodes.getJSONObject(sectionIndex).getString("startTime")
+                    todayCourses.add(Course(location = "${location.get("building")}${location.get("room")}", title = course.getString("title"), startTime = startTime))
+                }
+            }
         }
+        return todayCourses
     }
 }
