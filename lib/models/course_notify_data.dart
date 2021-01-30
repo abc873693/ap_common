@@ -9,7 +9,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:sprintf/sprintf.dart';
 
 class CourseNotifyData {
-  static const VERSION = 1;
+  static const VERSION = 2;
   static const INITIAL_ID = 1;
 
   int version;
