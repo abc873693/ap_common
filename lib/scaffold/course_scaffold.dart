@@ -533,9 +533,8 @@ class CourseScaffoldState extends State<CourseScaffold> {
         ),
         height: _courseHeight,
         width: widget.courseData.hasHoliday ? 35.0 : 50.0,
-        child: RichText(
-          textAlign: TextAlign.center,
-          text: TextSpan(
+        child: AutoSizeText.rich(
+          TextSpan(
             style: TextStyle(
               color: ApTheme.of(context).greyText,
               fontSize: 14.0,
@@ -554,6 +553,7 @@ class CourseScaffoldState extends State<CourseScaffold> {
               if (showSectionTime) TextSpan(text: '${timeCode.endTime}'),
             ],
           ),
+          textAlign: TextAlign.center,
         ),
       );
 
