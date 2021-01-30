@@ -61,7 +61,7 @@ class LoginScaffoldState extends State<LoginScaffold> {
     final orientation = MediaQuery.of(context).orientation;
     return Scaffold(
       backgroundColor: ApTheme.of(context).blue,
-      resizeToAvoidBottomPadding: orientation == Orientation.portrait,
+      resizeToAvoidBottomInset: orientation == Orientation.portrait,
       body: AutofillGroup(
         child: Container(
           alignment: Alignment(0, 0),
