@@ -372,7 +372,11 @@ class CourseScaffoldState extends State<CourseScaffold> {
         );
     for (var i = minTimeCode; i < maxTimeCode + 1; i++) {
       columns[0].children.add(
-            _timeCodeBorder(timeCodes[i]),
+            TimeCodeBorder(
+              timeCode: timeCodes[i],
+              hasHoliday: hasHoliday,
+              showSectionTime: showSectionTime,
+            ),
           );
     }
     final List<List<CourseBorder>> courseBorderCollection = [
@@ -752,6 +756,58 @@ class _CourseContentState extends State<CourseContent> {
           ),
           SizedBox(height: MediaQuery.of(context).padding.bottom),
         ],
+      ),
+    );
+  }
+}
+
+class TimeCodeBorder extends StatelessWidget {
+  final TimeCode timeCode;
+  final bool hasHoliday;
+  final bool showSectionTime;
+
+  const TimeCodeBorder({
+    Key key,
+    this.timeCode,
+    this.hasHoliday,
+    this.showSectionTime,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      alignment: Alignment.center,
+      decoration: BoxDecoration(
+        border: Border(
+          right: BorderSide(
+            width: 0.5,
+            color: ApTheme.of(context).courseBorder,
+          ),
+        ),
+      ),
+      height: _courseHeight,
+      width: hasHoliday ? 35.0 : 50.0,
+      child: AutoSizeText.rich(
+        TextSpan(
+          style: TextStyle(
+            color: ApTheme.of(context).greyText,
+            fontSize: 14.0,
+          ),
+          children: [
+            if (showSectionTime) TextSpan(text: '${timeCode.startTime}\n'),
+            TextSpan(
+              text: '${timeCode.title}\n',
+              style: TextStyle(
+                fontWeight:
+                    showSectionTime ? FontWeight.bold : FontWeight.normal,
+                color: ApTheme.of(context).blueText,
+                fontSize: showSectionTime ? 16.0 : 14.0,
+              ),
+            ),
+            if (showSectionTime) TextSpan(text: '${timeCode.endTime}'),
+          ],
+        ),
+        textAlign: TextAlign.center,
       ),
     );
   }
