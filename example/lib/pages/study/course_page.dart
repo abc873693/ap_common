@@ -104,6 +104,11 @@ class CoursePageState extends State<CoursePage> {
   _getCourseTables() async {
     String rawString = await rootBundle.loadString(FileAssets.courses);
     courseData = CourseData.fromRawJson(rawString);
+    Preferences.setString(
+      ApConstants.CURRENT_SEMESTER_CODE,
+      ApConstants.SEMESTER_LATEST,
+    );
+    courseData.save(courseNotifyCacheKey);
     if (mounted && courseData != null)
       setState(() {
         if (courseData?.courses == null)
