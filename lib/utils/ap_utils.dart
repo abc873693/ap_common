@@ -232,15 +232,18 @@ class ApUtils {
           downloadDir = '';
         print(downloadDir);
         final filePath = path.join(downloadDir, '$fileName.png');
+        bool success = true;
         if (!kIsWeb && (Platform.isAndroid || Platform.isIOS)) {
-          await ImageGallerySaver.saveImage(
+          final result = await ImageGallerySaver.saveImage(
             pngBytes,
             name: fileName,
           );
+          if (kDebugMode) print(result);
+          success = result['isSuccess'];
         } else {
           await File(filePath).writeAsBytes(pngBytes);
         }
-        ApUtils.showToast(context, successMessage);
+        ApUtils.showToast(context, success ? successMessage : ap.unknownError);
       } else
         ApUtils.showToast(context, ap.grandPermissionFail);
     } catch (e) {
