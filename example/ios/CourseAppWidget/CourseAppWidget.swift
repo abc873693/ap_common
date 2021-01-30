@@ -23,7 +23,7 @@ struct Provider: IntentTimelineProvider {
         var entries: [SimpleEntry] = []
         
         var myUserDefaults :UserDefaults!
-        myUserDefaults = UserDefaults(suiteName: "group.com.nkust.ap")
+        myUserDefaults = UserDefaults(suiteName: "group.me.rainvisitor.apCommonExample")
         var text = "尚無課程資料"
         if let json = myUserDefaults.string(forKey: "course_notify"){
             print(json)

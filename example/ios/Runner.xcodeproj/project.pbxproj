@@ -21,6 +21,7 @@
 		A4CEC6E025C59EB5002BF55B /* CourseAppWidget.intentdefinition in Sources */ = {isa = PBXBuildFile; fileRef = A4CEC6DB25C59EB2002BF55B /* CourseAppWidget.intentdefinition */; };
 		A4CEC6E325C59EB5002BF55B /* CourseAppWidgetExtension.appex in Embed App Extensions */ = {isa = PBXBuildFile; fileRef = A4CEC6D325C59EB2002BF55B /* CourseAppWidgetExtension.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
 		A4CEC6EB25C59EED002BF55B /* CourseData.swift in Sources */ = {isa = PBXBuildFile; fileRef = A4CEC6EA25C59EED002BF55B /* CourseData.swift */; };
+		A4CEC6ED25C5A02F002BF55B /* CourseData.swift in Sources */ = {isa = PBXBuildFile; fileRef = A4CEC6EA25C59EED002BF55B /* CourseData.swift */; };
 		A645A6ABADD053D02121E572 /* Pods_Runner.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 50C194F152AAF516B460DF41 /* Pods_Runner.framework */; };
 /* End PBXBuildFile section */
 
@@ -85,6 +86,7 @@
 		A4CEC6DC25C59EB5002BF55B /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		A4CEC6DE25C59EB5002BF55B /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		A4CEC6EA25C59EED002BF55B /* CourseData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CourseData.swift; sourceTree = "<group>"; };
+		A4CEC71125C5ADC4002BF55B /* CourseAppWidgetExtension.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = CourseAppWidgetExtension.entitlements; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -122,6 +124,7 @@
 		97C146E51CF9000F007C117D = {
 			isa = PBXGroup;
 			children = (
+				A4CEC71125C5ADC4002BF55B /* CourseAppWidgetExtension.entitlements */,
 				9740EEB11CF90186004384FC /* Flutter */,
 				97C146F01CF9000F007C117D /* Runner */,
 				A4CEC6D825C59EB2002BF55B /* CourseAppWidget */,
@@ -398,6 +401,7 @@
 			files = (
 				A4CEC6DF25C59EB5002BF55B /* CourseAppWidget.intentdefinition in Sources */,
 				A4CEC6DA25C59EB2002BF55B /* CourseAppWidget.swift in Sources */,
+				A4CEC6ED25C5A02F002BF55B /* CourseData.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -699,6 +703,7 @@
 				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
 				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
 				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CODE_SIGN_ENTITLEMENTS = CourseAppWidgetExtension.entitlements;
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = R7BC26UNC9;
 				GCC_C_LANGUAGE_STANDARD = gnu11;
@@ -709,6 +714,7 @@
 					"@executable_path/Frameworks",
 					"@executable_path/../../Frameworks",
 				);
+				MARKETING_VERSION = 1.0.0;
 				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
 				MTL_FAST_MATH = YES;
 				PRODUCT_BUNDLE_IDENTIFIER = me.rainvisitor.apCommonExample.CourseAppWidget;
@@ -732,6 +738,7 @@
 				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
 				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
 				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CODE_SIGN_ENTITLEMENTS = CourseAppWidgetExtension.entitlements;
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = R7BC26UNC9;
 				GCC_C_LANGUAGE_STANDARD = gnu11;
@@ -742,6 +749,7 @@
 					"@executable_path/Frameworks",
 					"@executable_path/../../Frameworks",
 				);
+				MARKETING_VERSION = 1.0.0;
 				MTL_FAST_MATH = YES;
 				PRODUCT_BUNDLE_IDENTIFIER = me.rainvisitor.apCommonExample.CourseAppWidget;
 				PRODUCT_NAME = "$(TARGET_NAME)";
@@ -762,6 +770,7 @@
 				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
 				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
 				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CODE_SIGN_ENTITLEMENTS = CourseAppWidgetExtension.entitlements;
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = R7BC26UNC9;
 				GCC_C_LANGUAGE_STANDARD = gnu11;
@@ -772,6 +781,7 @@
 					"@executable_path/Frameworks",
 					"@executable_path/../../Frameworks",
 				);
+				MARKETING_VERSION = 1.0.0;
 				MTL_FAST_MATH = YES;
 				PRODUCT_BUNDLE_IDENTIFIER = me.rainvisitor.apCommonExample.CourseAppWidget;
 				PRODUCT_NAME = "$(TARGET_NAME)";
