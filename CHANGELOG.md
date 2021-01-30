@@ -1,3 +1,11 @@
+## [0.11.0-dev.2] - 2021/01/30
+### [Break Change]
+### 基於 Flutter v1.26.0-12.0.pre 開發
+
+* 修正TimeCode範圍錯誤
+* 雙平台儲存照片檢查執行結果
+* 修正上課通知weekday錯誤
+
 ## [0.11.0-dev.1] - 2021/01/28
 ### [Break Change]
 ### 基於 Flutter v1.26.0-12.0.pre 開發
