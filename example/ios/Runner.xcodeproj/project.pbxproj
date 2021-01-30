@@ -13,8 +13,26 @@
 		97C146FC1CF9000F007C117D /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 97C146FA1CF9000F007C117D /* Main.storyboard */; };
 		97C146FE1CF9000F007C117D /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 97C146FD1CF9000F007C117D /* Assets.xcassets */; };
 		97C147011CF9000F007C117D /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 97C146FF1CF9000F007C117D /* LaunchScreen.storyboard */; };
+		A4CEC6D525C59EB2002BF55B /* WidgetKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A4CEC6D425C59EB2002BF55B /* WidgetKit.framework */; };
+		A4CEC6D725C59EB2002BF55B /* SwiftUI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A4CEC6D625C59EB2002BF55B /* SwiftUI.framework */; };
+		A4CEC6DA25C59EB2002BF55B /* CourseAppWidget.swift in Sources */ = {isa = PBXBuildFile; fileRef = A4CEC6D925C59EB2002BF55B /* CourseAppWidget.swift */; };
+		A4CEC6DD25C59EB5002BF55B /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = A4CEC6DC25C59EB5002BF55B /* Assets.xcassets */; };
+		A4CEC6DF25C59EB5002BF55B /* CourseAppWidget.intentdefinition in Sources */ = {isa = PBXBuildFile; fileRef = A4CEC6DB25C59EB2002BF55B /* CourseAppWidget.intentdefinition */; };
+		A4CEC6E025C59EB5002BF55B /* CourseAppWidget.intentdefinition in Sources */ = {isa = PBXBuildFile; fileRef = A4CEC6DB25C59EB2002BF55B /* CourseAppWidget.intentdefinition */; };
+		A4CEC6E325C59EB5002BF55B /* CourseAppWidgetExtension.appex in Embed App Extensions */ = {isa = PBXBuildFile; fileRef = A4CEC6D325C59EB2002BF55B /* CourseAppWidgetExtension.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
+		A4CEC6EB25C59EED002BF55B /* CourseData.swift in Sources */ = {isa = PBXBuildFile; fileRef = A4CEC6EA25C59EED002BF55B /* CourseData.swift */; };
 		A645A6ABADD053D02121E572 /* Pods_Runner.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 50C194F152AAF516B460DF41 /* Pods_Runner.framework */; };
 /* End PBXBuildFile section */
+
+/* Begin PBXContainerItemProxy section */
+		A4CEC6E125C59EB5002BF55B /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 97C146E61CF9000F007C117D /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = A4CEC6D225C59EB2002BF55B;
+			remoteInfo = CourseAppWidgetExtension;
+		};
+/* End PBXContainerItemProxy section */
 
 /* Begin PBXCopyFilesBuildPhase section */
 		9705A1C41CF9048500538489 /* Embed Frameworks */ = {
@@ -25,6 +43,17 @@
 			files = (
 			);
 			name = "Embed Frameworks";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		A4CEC6E425C59EB5002BF55B /* Embed App Extensions */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 13;
+			files = (
+				A4CEC6E325C59EB5002BF55B /* CourseAppWidgetExtension.appex in Embed App Extensions */,
+			);
+			name = "Embed App Extensions";
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXCopyFilesBuildPhase section */
@@ -48,6 +77,14 @@
 		97C147001CF9000F007C117D /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		97C147021CF9000F007C117D /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		A476B4212503D409000E6819 /* Runner.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = Runner.entitlements; sourceTree = "<group>"; };
+		A4CEC6D325C59EB2002BF55B /* CourseAppWidgetExtension.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = CourseAppWidgetExtension.appex; sourceTree = BUILT_PRODUCTS_DIR; };
+		A4CEC6D425C59EB2002BF55B /* WidgetKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = WidgetKit.framework; path = System/Library/Frameworks/WidgetKit.framework; sourceTree = SDKROOT; };
+		A4CEC6D625C59EB2002BF55B /* SwiftUI.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SwiftUI.framework; path = System/Library/Frameworks/SwiftUI.framework; sourceTree = SDKROOT; };
+		A4CEC6D925C59EB2002BF55B /* CourseAppWidget.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CourseAppWidget.swift; sourceTree = "<group>"; };
+		A4CEC6DB25C59EB2002BF55B /* CourseAppWidget.intentdefinition */ = {isa = PBXFileReference; lastKnownFileType = file.intentdefinition; path = CourseAppWidget.intentdefinition; sourceTree = "<group>"; };
+		A4CEC6DC25C59EB5002BF55B /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
+		A4CEC6DE25C59EB5002BF55B /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		A4CEC6EA25C59EED002BF55B /* CourseData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CourseData.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -56,6 +93,15 @@
 			buildActionMask = 2147483647;
 			files = (
 				A645A6ABADD053D02121E572 /* Pods_Runner.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		A4CEC6D025C59EB2002BF55B /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				A4CEC6D725C59EB2002BF55B /* SwiftUI.framework in Frameworks */,
+				A4CEC6D525C59EB2002BF55B /* WidgetKit.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -78,6 +124,7 @@
 			children = (
 				9740EEB11CF90186004384FC /* Flutter */,
 				97C146F01CF9000F007C117D /* Runner */,
+				A4CEC6D825C59EB2002BF55B /* CourseAppWidget */,
 				97C146EF1CF9000F007C117D /* Products */,
 				B67C8CBBE927B2F6041337A2 /* Pods */,
 				E8355A73C6822418120E1C98 /* Frameworks */,
@@ -88,6 +135,7 @@
 			isa = PBXGroup;
 			children = (
 				97C146EE1CF9000F007C117D /* Runner.app */,
+				A4CEC6D325C59EB2002BF55B /* CourseAppWidgetExtension.appex */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -108,6 +156,18 @@
 			path = Runner;
 			sourceTree = "<group>";
 		};
+		A4CEC6D825C59EB2002BF55B /* CourseAppWidget */ = {
+			isa = PBXGroup;
+			children = (
+				A4CEC6D925C59EB2002BF55B /* CourseAppWidget.swift */,
+				A4CEC6DB25C59EB2002BF55B /* CourseAppWidget.intentdefinition */,
+				A4CEC6DC25C59EB5002BF55B /* Assets.xcassets */,
+				A4CEC6DE25C59EB5002BF55B /* Info.plist */,
+				A4CEC6EA25C59EED002BF55B /* CourseData.swift */,
+			);
+			path = CourseAppWidget;
+			sourceTree = "<group>";
+		};
 		B67C8CBBE927B2F6041337A2 /* Pods */ = {
 			isa = PBXGroup;
 			children = (
@@ -122,6 +182,8 @@
 			isa = PBXGroup;
 			children = (
 				50C194F152AAF516B460DF41 /* Pods_Runner.framework */,
+				A4CEC6D425C59EB2002BF55B /* WidgetKit.framework */,
+				A4CEC6D625C59EB2002BF55B /* SwiftUI.framework */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
@@ -142,15 +204,34 @@
 				3B06AD1E1E4923F5004D2608 /* Thin Binary */,
 				57DF80B6BF6725655743403F /* [CP] Embed Pods Frameworks */,
 				C0927DD84EC8B701E70C95ED /* [CP] Copy Pods Resources */,
+				A4CEC6E425C59EB5002BF55B /* Embed App Extensions */,
 			);
 			buildRules = (
 			);
 			dependencies = (
+				A4CEC6E225C59EB5002BF55B /* PBXTargetDependency */,
 			);
 			name = Runner;
 			productName = Runner;
 			productReference = 97C146EE1CF9000F007C117D /* Runner.app */;
 			productType = "com.apple.product-type.application";
+		};
+		A4CEC6D225C59EB2002BF55B /* CourseAppWidgetExtension */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = A4CEC6E825C59EB5002BF55B /* Build configuration list for PBXNativeTarget "CourseAppWidgetExtension" */;
+			buildPhases = (
+				A4CEC6CF25C59EB2002BF55B /* Sources */,
+				A4CEC6D025C59EB2002BF55B /* Frameworks */,
+				A4CEC6D125C59EB2002BF55B /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = CourseAppWidgetExtension;
+			productName = CourseAppWidgetExtension;
+			productReference = A4CEC6D325C59EB2002BF55B /* CourseAppWidgetExtension.appex */;
+			productType = "com.apple.product-type.app-extension";
 		};
 /* End PBXNativeTarget section */
 
@@ -158,12 +239,16 @@
 		97C146E61CF9000F007C117D /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
+				LastSwiftUpdateCheck = 1230;
 				LastUpgradeCheck = 1020;
 				ORGANIZATIONNAME = "";
 				TargetAttributes = {
 					97C146ED1CF9000F007C117D = {
 						CreatedOnToolsVersion = 7.3.1;
 						LastSwiftMigration = 1100;
+					};
+					A4CEC6D225C59EB2002BF55B = {
+						CreatedOnToolsVersion = 12.3;
 					};
 				};
 			};
@@ -181,6 +266,7 @@
 			projectRoot = "";
 			targets = (
 				97C146ED1CF9000F007C117D /* Runner */,
+				A4CEC6D225C59EB2002BF55B /* CourseAppWidgetExtension */,
 			);
 		};
 /* End PBXProject section */
@@ -194,6 +280,14 @@
 				3B3967161E833CAA004F5970 /* AppFrameworkInfo.plist in Resources */,
 				97C146FE1CF9000F007C117D /* Assets.xcassets in Resources */,
 				97C146FC1CF9000F007C117D /* Main.storyboard in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		A4CEC6D125C59EB2002BF55B /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				A4CEC6DD25C59EB5002BF55B /* Assets.xcassets in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -291,12 +385,31 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				A4CEC6E025C59EB5002BF55B /* CourseAppWidget.intentdefinition in Sources */,
 				74858FAF1ED2DC5600515810 /* AppDelegate.swift in Sources */,
+				A4CEC6EB25C59EED002BF55B /* CourseData.swift in Sources */,
 				1498D2341E8E89220040F4C2 /* GeneratedPluginRegistrant.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		A4CEC6CF25C59EB2002BF55B /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				A4CEC6DF25C59EB5002BF55B /* CourseAppWidget.intentdefinition in Sources */,
+				A4CEC6DA25C59EB2002BF55B /* CourseAppWidget.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 /* End PBXSourcesBuildPhase section */
+
+/* Begin PBXTargetDependency section */
+		A4CEC6E225C59EB5002BF55B /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = A4CEC6D225C59EB2002BF55B /* CourseAppWidgetExtension */;
+			targetProxy = A4CEC6E125C59EB5002BF55B /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
 
 /* Begin PBXVariantGroup section */
 		97C146FA1CF9000F007C117D /* Main.storyboard */ = {
@@ -372,6 +485,7 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = 7AFA3C8E1D35360C0083082E /* Release.xcconfig */;
 			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_ENTITLEMENTS = Runner/Runner.entitlements;
@@ -511,6 +625,7 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = 9740EEB21CF90195004384FC /* Debug.xcconfig */;
 			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_ENTITLEMENTS = Runner/Runner.entitlements;
@@ -544,6 +659,7 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = 7AFA3C8E1D35360C0083082E /* Release.xcconfig */;
 			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_ENTITLEMENTS = Runner/Runner.entitlements;
@@ -572,6 +688,99 @@
 			};
 			name = Release;
 		};
+		A4CEC6E525C59EB5002BF55B /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				ASSETCATALOG_COMPILER_WIDGET_BACKGROUND_COLOR_NAME = WidgetBackground;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = R7BC26UNC9;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				INFOPLIST_FILE = CourseAppWidget/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 14.3;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@executable_path/../../Frameworks",
+				);
+				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
+				MTL_FAST_MATH = YES;
+				PRODUCT_BUNDLE_IDENTIFIER = me.rainvisitor.apCommonExample.CourseAppWidget;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SKIP_INSTALL = YES;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Debug;
+		};
+		A4CEC6E625C59EB5002BF55B /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				ASSETCATALOG_COMPILER_WIDGET_BACKGROUND_COLOR_NAME = WidgetBackground;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = R7BC26UNC9;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				INFOPLIST_FILE = CourseAppWidget/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 14.3;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@executable_path/../../Frameworks",
+				);
+				MTL_FAST_MATH = YES;
+				PRODUCT_BUNDLE_IDENTIFIER = me.rainvisitor.apCommonExample.CourseAppWidget;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SKIP_INSTALL = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Release;
+		};
+		A4CEC6E725C59EB5002BF55B /* Profile */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				ASSETCATALOG_COMPILER_WIDGET_BACKGROUND_COLOR_NAME = WidgetBackground;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = R7BC26UNC9;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				INFOPLIST_FILE = CourseAppWidget/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 14.3;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@executable_path/../../Frameworks",
+				);
+				MTL_FAST_MATH = YES;
+				PRODUCT_BUNDLE_IDENTIFIER = me.rainvisitor.apCommonExample.CourseAppWidget;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SKIP_INSTALL = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Profile;
+		};
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
@@ -591,6 +800,16 @@
 				97C147061CF9000F007C117D /* Debug */,
 				97C147071CF9000F007C117D /* Release */,
 				249021D4217E4FDB00AE95B9 /* Profile */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		A4CEC6E825C59EB5002BF55B /* Build configuration list for PBXNativeTarget "CourseAppWidgetExtension" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				A4CEC6E525C59EB5002BF55B /* Debug */,
+				A4CEC6E625C59EB5002BF55B /* Release */,
+				A4CEC6E725C59EB5002BF55B /* Profile */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
