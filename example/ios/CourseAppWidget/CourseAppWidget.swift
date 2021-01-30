@@ -5,6 +5,7 @@
 //  Created by rainvisitor on 2020/10/1.
 //  Copyright © 2020 The Chromium Authors. All rights reserved.
 //
+
 import WidgetKit
 import SwiftUI
 import Intents
@@ -30,16 +31,19 @@ struct Provider: IntentTimelineProvider {
             let courseData = try? JSONDecoder().decode(CourseData.self, from: Data(json.utf8))
             let today = Date()
             let dateComponents = Calendar.current.dateComponents(in: TimeZone.current, from: today)
-            let courses = courseData?.coursetable.getCourses(weekdayIndex: dateComponents.weekday ?? 0)
+            let courses = courseData?.courses
             let dateFormatter = DateFormatter()
             dateFormatter.dateFormat = "HH:mm"
             var minDiff = today.timeIntervalSince1970
             courses?.forEach({ (course) in
-                let time = time2Date(timeText:course?.date.startTime ?? "00:00")
-                let diff = time.timeIntervalSince1970 - today.timeIntervalSince1970
-                if( diff > 0.0  && diff < minDiff){
-                    minDiff = diff
-                    text = "下一節課是\(course?.date.startTime ?? "")\n在 \(course?.location.building ?? "")\(course?.location.room ?? "") 的 \(course?.title ?? "")"
+                course.sectionTimes.forEach { (sectionTime) in
+                    let timeCode = courseData?.timeCodes[sectionTime.index]
+                    let time = time2Date(timeText: timeCode?.startTime ?? "00:00")
+                    let diff = time.timeIntervalSince1970 - today.timeIntervalSince1970
+                    if( diff > 0.0  && diff < minDiff){
+                        minDiff = diff
+                        text = "下一節課是\(timeCode?.startTime ?? "")\n在 \(course.location.building )\(course.location.room ) 的 \(course.title )"
+                    }
                 }
             })
             if(courses?.count == 0){
@@ -78,21 +82,40 @@ struct SimpleEntry: TimelineEntry {
 
 struct CourseAppWidgetEntryView: View {
     var entry: Provider.Entry
+    @Environment(\.colorScheme) var colorScheme
+    
+    func getTitleBackgroudColor() -> Color {
+        return Color.init(
+            colorScheme == .dark ?
+                UIColor(red: 0.08, green: 0.12, blue: 0.18, alpha: 1.00):
+                UIColor(red: 0.15, green: 0.45, blue: 1.00, alpha: 1.00)
+        )
+    }
+    
+    func getContentBackgroudColor() -> Color {
+        return colorScheme == .dark ? Color.init(  UIColor(red: 0.07, green: 0.07, blue: 0.07, alpha: 1.00)):Color.white
+    }
+    
+    func getContentTextColor() -> Color {
+        return colorScheme == .dark ? Color.white : Color.black
+    }
     
     var body: some View {
         GeometryReader { geometry in
             VStack{
                 HStack{
                     Text("上課提醒")
+                        .foregroundColor(Color.white)
                         .frame(width: geometry.size.width, height: 36)
                 }
-                .background(Color.init(UIColor(red: 0.08, green: 0.12, blue: 0.18, alpha: 1.00)))
+                .background(getTitleBackgroudColor())
                 Text("\(entry.text)")
+                    .foregroundColor(getContentTextColor())
                     .frame(height: geometry.size.height - 36)
                     .padding([.trailing, .leading], 8)
                     .multilineTextAlignment(.center)
             }
-            .background(Color.init(UIColor(red: 0.07, green: 0.07, blue: 0.07, alpha: 1.00)))
+            .background(getContentBackgroudColor())
         }
     }
 }
