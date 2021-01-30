@@ -30,10 +30,8 @@ class CourseData {
     for (var course in courses) {
       if (course.times == null) continue;
       for (var time in course.times) {
-        for (int i = 0; i < timeCodes.length; i++) {
-          if (time.index == i && ((i + 1) > index)) {
-            index = i;
-          }
+        if (time.index > index) {
+          index = time.index;
         }
       }
     }
@@ -45,14 +43,12 @@ class CourseData {
     for (var course in courses) {
       if (course.times == null) continue;
       for (var time in course.times) {
-        for (int i = 0; i < timeCodes.length; i++) {
-          if (time.index == i && ((i + 1) < index)) {
-            index = i;
-          }
+        if (time.index < index) {
+          index = time.index;
         }
       }
     }
-    return index < 10 ? 0 : 10;
+    return index < 10 ? 0 : index;
   }
 
   CourseData copyWith({

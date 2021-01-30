@@ -370,7 +370,7 @@ class CourseScaffoldState extends State<CourseScaffold> {
     columns[0].children.add(
           _weekBorder(''),
         );
-    for (var i = minTimeCode; i < maxTimeCode; i++) {
+    for (var i = minTimeCode; i < maxTimeCode + 1; i++) {
       columns[0].children.add(
             _timeCodeBorder(timeCodes[i]),
           );
@@ -387,7 +387,7 @@ class CourseScaffoldState extends State<CourseScaffold> {
       ]
     ];
     for (var i = 0; i < courseBorderCollection.length; i++) {
-      for (var j = 0; j < maxTimeCode - minTimeCode; j++)
+      for (var j = 0; j < maxTimeCode - minTimeCode + 1; j++)
         courseBorderCollection[i].add(CourseBorder());
     }
     for (var i = 0; i < widget.courseData.courses.length; i++) {
