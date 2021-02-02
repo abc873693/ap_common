@@ -28,7 +28,7 @@ dependencies:
   cookie_jar: ">=1.0.0 <2.0.0"
   flutter_local_notifications: ^3.0.2
   timezone: ^0.5.9
-  flutter_keyboard_visibility: ^4.0.2
+  flutter_keyboard_visibility: ^4.0.3
   add_2_calendar: ^1.4.0
   material_design_icons_flutter: ^4.0.5755
   in_app_review: ^1.0.4

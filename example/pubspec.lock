@@ -14,7 +14,16 @@ packages:
       path: ".."
       relative: true
     source: path
-    version: "0.10.2"
+    version: "0.11.0-dev.2"
+  ap_common_plugin:
+    dependency: "direct main"
+    description:
+      path: "."
+      ref: "v0.1.1"
+      resolved-ref: "0f6e28ddacb92345c81f2755bbbcc6d184b970cc"
+      url: "https://github.com/abc873693/ap_common_plugin"
+    source: git
+    version: "0.1.1"
   archive:
     dependency: transitive
     description:
@@ -127,6 +136,13 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "2.1.5"
+  cupertino_back_gesture:
+    dependency: transitive
+    description:
+      name: cupertino_back_gesture
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "0.0.4+1"
   device_info:
     dependency: transitive
     description:
@@ -236,7 +252,7 @@ packages:
       name: flutter_keyboard_visibility
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "4.0.2"
+    version: "4.0.3"
   flutter_keyboard_visibility_platform_interface:
     dependency: transitive
     description:
