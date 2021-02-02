@@ -6,6 +6,7 @@ import android.appwidget.AppWidgetProvider
 import android.content.ComponentName
 import android.content.Context
 import android.content.Intent
+import android.util.Log
 import android.widget.RemoteViews
 import org.json.JSONObject
 import java.text.SimpleDateFormat
@@ -71,6 +72,8 @@ class CourseAppWidgetProvider : AppWidgetProvider() {
     private fun parseNextCurse(context: Context, rawData: String): String {
         val now = Calendar.getInstance()
         val courseData = JSONObject(rawData)
+        if (courseData.has("coursetable"))
+            return context.getString(R.string.please_enter_app_reload)
         val todayCourses = parseCourseList(now, courseData)
         val sourceDateformat = SimpleDateFormat("HH:mm", Locale.TAIWAN)
         val sourceErrorDateformat = SimpleDateFormat("HHmm", Locale.TAIWAN)
