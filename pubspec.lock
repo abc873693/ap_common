@@ -120,6 +120,13 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "2.1.5"
+  cupertino_back_gesture:
+    dependency: "direct main"
+    description:
+      name: cupertino_back_gesture
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "0.0.4+1"
   device_info:
     dependency: transitive
     description:
@@ -833,4 +840,4 @@ packages:
     version: "4.5.1"
 sdks:
   dart: ">=2.12.0-0.0 <3.0.0"
-  flutter: ">=1.22.2 <2.0.0"
+  flutter: ">=1.22.2"

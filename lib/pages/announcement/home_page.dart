@@ -147,7 +147,7 @@ class _AnnouncementHomePageState extends State<AnnouncementHomePage> {
                   onPressed: () async {
                     var success = await Navigator.push(
                       context,
-                      CupertinoPageRoute(
+                      MaterialPageRoute(
                         builder: (_) => AnnouncementEditPage(
                           mode: Mode.add,
                         ),
@@ -227,7 +227,7 @@ class _AnnouncementHomePageState extends State<AnnouncementHomePage> {
                       onPressed: () async {
                         var success = await Navigator.push(
                           context,
-                          CupertinoPageRoute(
+                          MaterialPageRoute(
                             builder: (_) => AnnouncementEditPage(
                               mode: Mode.application,
                             ),
@@ -580,7 +580,7 @@ class _AnnouncementHomePageState extends State<AnnouncementHomePage> {
                 : () async {
                     var success = await Navigator.push(
                       context,
-                      CupertinoPageRoute(
+                      MaterialPageRoute(
                         builder: (_) => AnnouncementEditPage(
                           mode: dataType == _DataType.announcement
                               ? Mode.edit

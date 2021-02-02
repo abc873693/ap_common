@@ -1,12 +1,25 @@
 import 'package:ap_common/resources/ap_assets.dart';
+import 'package:cupertino_back_gesture/cupertino_back_gesture.dart';
 import 'package:flutter/material.dart';
 
 import 'ap_colors.dart';
 
+export 'package:cupertino_back_gesture/cupertino_back_gesture.dart';
+
 class ApTheme extends InheritedWidget {
   final ThemeMode themeMode;
 
-  ApTheme(this.themeMode, {Widget child}) : super(child: child);
+  ApTheme(
+    this.themeMode, {
+    Widget child,
+    BackGestureWidth backGestureWidth,
+  }) : super(
+          child: BackGestureWidthTheme(
+            backGestureWidth:
+                backGestureWidth ?? BackGestureWidth.fraction(1 / 2),
+            child: child,
+          ),
+        );
 
   static ApTheme of(BuildContext context) {
     return context.dependOnInheritedWidgetOfExactType();
@@ -267,8 +280,8 @@ class ApTheme extends InheritedWidget {
       default:
         return Colors.black;
     }
-
   }
+
   Color get background {
     switch (brightness) {
       case Brightness.dark:
@@ -285,6 +298,7 @@ class ApTheme extends InheritedWidget {
         appBarTheme: AppBarTheme(
           color: ApColors.blue500,
         ),
+        pageTransitionsTheme: _pageTransitionsTheme,
         accentColor: ApColors.blue500,
         unselectedWidgetColor: ApColors.grey500,
         backgroundColor: Colors.black12,
@@ -303,6 +317,7 @@ class ApTheme extends InheritedWidget {
   static ThemeData get dark => ThemeData(
         //platform: TargetPlatform.iOS,
         brightness: Brightness.dark,
+        pageTransitionsTheme: _pageTransitionsTheme,
         appBarTheme: AppBarTheme(
           color: ApColors.blueDark,
         ),
@@ -322,3 +337,19 @@ class ApTheme extends InheritedWidget {
         visualDensity: VisualDensity.adaptivePlatformDensity,
       );
 }
+
+const _pageTransitionsTheme = PageTransitionsTheme(
+  builders: {
+    TargetPlatform.android:
+        CupertinoPageTransitionsBuilderCustomBackGestureWidth(),
+    TargetPlatform.iOS: CupertinoPageTransitionsBuilderCustomBackGestureWidth(),
+    TargetPlatform.macOS:
+        CupertinoPageTransitionsBuilderCustomBackGestureWidth(),
+    TargetPlatform.windows:
+        CupertinoPageTransitionsBuilderCustomBackGestureWidth(),
+    TargetPlatform.linux:
+        CupertinoPageTransitionsBuilderCustomBackGestureWidth(),
+    TargetPlatform.fuchsia:
+        CupertinoPageTransitionsBuilderCustomBackGestureWidth(),
+  },
+);

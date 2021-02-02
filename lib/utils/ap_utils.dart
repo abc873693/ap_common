@@ -39,7 +39,7 @@ class ApUtils {
 
   static pushCupertinoStyle(BuildContext context, Widget page) {
     Navigator.of(context).push(
-      CupertinoPageRoute(builder: (BuildContext context) {
+      MaterialPageRoute(builder: (BuildContext context) {
         return page;
       }),
     );
