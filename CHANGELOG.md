@@ -1,3 +1,9 @@
+## [0.11.0] - 2021/01/30
+### [Break Change]
+### 基於 Flutter v1.26.0-17.1.pre 開發
+
+* 強制將ApTheme過場主題套用 [cupertino_back_gesture](https://pub.dev/packages/cupertino_back_gesture) 若不支援請將使用 `MaterialPageRoute`
+
 ## [0.11.0-dev.2] - 2021/01/30
 ### [Break Change]
 ### 基於 Flutter v1.26.0-12.0.pre 開發
