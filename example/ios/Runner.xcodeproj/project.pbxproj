@@ -208,6 +208,7 @@
 				57DF80B6BF6725655743403F /* [CP] Embed Pods Frameworks */,
 				C0927DD84EC8B701E70C95ED /* [CP] Copy Pods Resources */,
 				A4CEC6E425C59EB5002BF55B /* Embed App Extensions */,
+				A4CEC73425C5B816002BF55B /* ShellScript */,
 			);
 			buildRules = (
 			);
@@ -362,7 +363,24 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "/bin/sh \"$FLUTTER_ROOT/packages/flutter_tools/bin/xcode_backend.sh\" build";
+			shellScript = "/bin/sh \"$FLUTTER_ROOT/packages/flutter_tools/bin/xcode_backend.sh\" build\n";
+		};
+		A4CEC73425C5B816002BF55B /* ShellScript */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+			);
+			outputFileListPaths = (
+			);
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "generatedPath=\"$SRCROOT/Flutter/Generated.xcconfig\"\nversionNumber=$(grep FLUTTER_BUILD_NAME $generatedPath | cut -d '=' -f2)\nbuildNumber=$(grep FLUTTER_BUILD_NUMBER $generatedPath | cut -d '=' -f2)\n/usr/libexec/PlistBuddy -c \"Set :CFBundleVersion $buildNumber\" \"$SRCROOT/HomeExampleWidget/Info.plist\"\n/usr/libexec/PlistBuddy -c \"Set :CFBundleShortVersionString $versionNumber\" \"$SRCROOT/CourseAppWidget/Info.plist\"\n";
 		};
 		C0927DD84EC8B701E70C95ED /* [CP] Copy Pods Resources */ = {
 			isa = PBXShellScriptBuildPhase;
