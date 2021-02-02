@@ -11,8 +11,8 @@ jobs:
           java-version: '12.x'
       - uses: subosito/flutter-action@v1
         with:
-          flutter-version: '1.25.x' # you can use 1.12
-          channel: 'beta' # Currently you have to use beta channel for Flutter web.
+          flutter-version: '1.26.x' # you can use 1.12
+          channel: 'dev' # Currently you have to use beta channel for Flutter web.
       - name: Upgrades flutter
         run: flutter upgrade
         working-directory: ./example
@@ -34,5 +34,5 @@ jobs:
           git remote add secure-origin https://${{ secrets.ACCESS_TOKEN }}@github.com/abc873693/ap_common.git
           git checkout -b gh-pages
           git add .
-          git commit -m "Updated docs"
+          git commit -m "Updated site"
           git push --force secure-origin gh-pages
