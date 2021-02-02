@@ -19,6 +19,12 @@ dependencies:
       path: ../
   extended_image: 1.3.1-dev
 
+  ap_common_plugin:
+    git:
+      url: https://github.com/abc873693/ap_common_plugin
+      ref: v0.1.1
+#    path: ../../../GitHub/ap_common_plugin
+
 dev_dependencies:
   flutter_test:
     sdk: flutter
