@@ -69,7 +69,7 @@ class CourseAppWidgetProvider : AppWidgetProvider() {
         }
     }
 
-    private fun parseNextCurse(context: Context, rawData: String): String {
+    private fun parseNextCurse(context: Context, rawData: String?): String {
         val now = Calendar.getInstance()
         val courseData = JSONObject(rawData)
         if (courseData.has("coursetable"))
