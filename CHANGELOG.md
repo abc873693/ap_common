@@ -1,3 +1,8 @@
+## [0.11.1] - 2021/02/08
+### 基於 Flutter v1.26.0-17.2.pre 開發
+
+* 更新 `GeneralResponse` 參數
+
 ## [0.11.0] - 2021/01/30
 ### [Break Change]
 ### 基於 Flutter v1.26.0-17.1.pre 開發
