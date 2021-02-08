@@ -2,6 +2,7 @@ import 'dart:async';
 import 'dart:io';
 
 import 'package:ap_common/utils/notification_utils.dart';
+import 'package:ap_common_firebase/constants/fiirebase_constants.dart';
 import 'package:ap_common_firebase/utils/firebase_analytics_utils.dart';
 import 'package:firebase_analytics/firebase_analytics.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
@@ -75,15 +76,23 @@ class FirebaseUtils {
         await navigateToItemDetail(message.data, onClick);
       } else if (Platform.isIOS) await navigateToItemDetail(message, onClick);
     });
-    firebaseMessaging.requestPermission(
-      alert: true,
-      announcement: false,
-      badge: true,
-      carPlay: false,
-      criticalAlert: false,
-      provisional: false,
-      sound: true,
-    );
+    firebaseMessaging
+        .requestPermission(
+          alert: true,
+          announcement: false,
+          badge: true,
+          carPlay: false,
+          criticalAlert: false,
+          provisional: false,
+          sound: true,
+        )
+        .then(
+          (value) => FirebaseAnalyticsUtils.instance.setUserProperty(
+            FirebaseConstants.HAS_ENABLE_NOTIFICATION,
+            (value.authorizationStatus == AuthorizationStatus.authorized)
+                .toString(),
+          ),
+        );
     firebaseMessaging.getToken(vapidKey: vapidKey).then((String token) {
       if (token != null && kDebugMode) {
         print("Push Messaging token: $token");
