@@ -11,11 +11,18 @@ class GeneralResponse {
     @required this.message,
   });
 
+  static const SUCCESS = 200;
+  static const UNKNOWN_ERROR = 1000;
+  static const PLATFORM_NOT_SUPPORT = 1001;
+
   static GeneralResponse success() =>
-      GeneralResponse(statusCode: 200, message: '');
+      GeneralResponse(statusCode: SUCCESS, message: '');
 
   static GeneralResponse unknownError() =>
-      GeneralResponse(statusCode: 1000, message: '');
+      GeneralResponse(statusCode: UNKNOWN_ERROR, message: '');
+
+  static GeneralResponse platformNotSupport() => GeneralResponse(
+      statusCode: PLATFORM_NOT_SUPPORT, message: 'platform not support');
 
   factory GeneralResponse.fromRawJson(String str) =>
       GeneralResponse.fromJson(json.decode(str));
