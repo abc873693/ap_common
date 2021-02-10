@@ -1,8 +1,7 @@
 name: ap_common_plugin
 description: A new Flutter plugin.
 version: 0.1.2
-author:
-homepage:
+homepage: https://github.com/abc873693/ap_common_plugin
 
 environment:
   sdk: ">=2.1.0 <3.0.0"
