@@ -1,6 +1,6 @@
 name: ap_common_firebase
 description: A new Flutter package.
-version: 0.5.0
+version: 0.6.0-dev.1
 homepage: https://github.com/abc873693/ap_common_firebase
 
 environment:
@@ -12,7 +12,9 @@ dependencies:
 
   ap_common: ">=0.4.0 <1.0.0"
 #    path: ../../GitHub-NKUST-ITC/ap_common
+  url_launcher: ">=5.0.0 <6.0.0"
   #firebase must use particular version
+  firebase_core: ^0.7.0
   firebase_analytics: ^7.0.1
   firebase_crashlytics: ^0.4.0+1
   firebase_messaging: ^8.0.0-dev.14
