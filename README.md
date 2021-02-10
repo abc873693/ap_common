@@ -1,4 +1,4 @@
-# 校務通系列 Firebase 共用
+# 校務通系列 Native Plugin 共用
 
 基於應用校務通系列使用到原生(Native)的功能製作的Plugin
 
