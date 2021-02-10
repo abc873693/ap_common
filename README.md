@@ -1,14 +1,42 @@
-# ap_common_plugin
+# 校務通系列 Firebase 共用
 
-A new Flutter plugin.
+基於應用校務通系列使用到原生(Native)的功能製作的Plugin
+
+## 套件使用要求
+ - Flutter `v1.20` 以上
+ - [ap_common](https://pub.dev/packages/ap_common) `v0.11` 以上
+
+
+## 支援列表
+
+|    名稱    | Android | iOS | MacOS | Web |
+|:---------:|:-------:|:---:|:-----:|:---:|
+| 桌面小工具 |    ✔️    |  ✔️  |   ️   |  ️  |
+
+## Demo
 
 ## Getting Started
 
-This project is a starting point for a Flutter
-[plug-in package](https://flutter.dev/developing-packages/),
-a specialized package that includes platform-specific implementation code for
-Android and/or iOS.
+在 `pubspec.yaml` 中加入 package
 
-For help getting started with Flutter, view our 
-[online documentation](https://flutter.dev/docs), which offers tutorials, 
-samples, guidance on mobile development, and a full API reference.
+v0.1.2 版本以後
+
+```yaml
+    ap_common_firebase: ^0.1.2
+```
+
+
+v0.5.0 版本以前
+
+```yaml
+  ap_common_firebase:
+    git:
+      url: https://github.com/abc873693/ap_common_plugin
+      ref: v0.1.2
+```
+
+執行加入套件
+
+```bash
+  $ flutter package get
+```
