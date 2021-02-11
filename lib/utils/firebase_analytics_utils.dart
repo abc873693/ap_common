@@ -1,12 +1,11 @@
 import 'dart:async';
 import 'dart:io';
 
+import 'package:ap_common/config/analytics_constants.dart';
 import 'package:ap_common/models/user_info.dart';
 import 'package:ap_common/resources/ap_theme.dart';
-import 'package:ap_common_firebase/constants/fiirebase_constants.dart';
 import 'package:firebase_analytics/firebase_analytics.dart';
 import 'package:ap_common/utils/analytics_utils.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 export 'package:firebase_analytics/firebase_analytics.dart';
@@ -48,8 +47,14 @@ class FirebaseAnalyticsUtils extends AnalyticsUtils {
     debugPrint('setUserProperty succeeded');
   }
 
-  Future<void> logEvent(String name) async {
-    await analytics?.logEvent(name: name ?? '');
+  Future<void> logEvent(
+    String name, {
+    Map<String, dynamic> parameters,
+  }) async {
+    await analytics?.logEvent(
+      name: name ?? '',
+      parameters: parameters,
+    );
   }
 
   Future<void> logUserInfo(UserInfo userInfo) async {
@@ -58,24 +63,24 @@ class FirebaseAnalyticsUtils extends AnalyticsUtils {
       await analytics?.logEvent(
         name: 'user_info',
         parameters: <String, dynamic>{
-          FirebaseConstants.DEPARTMENT: userInfo.department,
+          AnalyticsConstants.DEPARTMENT: userInfo.department,
         },
       );
       FirebaseAnalyticsUtils.instance.setUserProperty(
-        FirebaseConstants.DEPARTMENT,
+        AnalyticsConstants.DEPARTMENT,
         userInfo.department,
       );
     }
     if (userInfo.className != null && userInfo.className.isNotEmpty) {
       FirebaseAnalyticsUtils.instance.setUserProperty(
-        FirebaseConstants.CLASS_NAME,
+        AnalyticsConstants.CLASS_NAME,
         userInfo.className,
       );
     }
     if (userInfo.id != null && userInfo.id.isNotEmpty) {
       await analytics?.setUserId(userInfo.id);
       FirebaseAnalyticsUtils.instance.setUserProperty(
-        FirebaseConstants.STUDENT_ID,
+        AnalyticsConstants.STUDENT_ID,
         userInfo.id,
       );
     }
@@ -155,7 +160,7 @@ class FirebaseAnalyticsUtils extends AnalyticsUtils {
     );
   }
 
-  void logThemeEvent(ThemeMode themeMode) async {
+  Future<void> logThemeEvent(ThemeMode themeMode) async {
     Brightness brightness;
     switch (themeMode) {
       case ThemeMode.system:
@@ -170,7 +175,7 @@ class FirebaseAnalyticsUtils extends AnalyticsUtils {
         break;
     }
     setUserProperty(
-      FirebaseConstants.THEME,
+      AnalyticsConstants.THEME,
       brightness == Brightness.light ? ApTheme.LIGHT : ApTheme.DARK,
     );
   }
