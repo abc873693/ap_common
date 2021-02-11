@@ -1,3 +1,11 @@
+## [0.12.0-dev.1] - 2021/02/11
+### [Break Change]
+### 基於 Flutter v1.26.0-17.2.pre 開發
+
+* 改善 `AnalyticsUtils` Interface
+* 加入 `CrashlyticsUtils` Interface
+* 頁面移除 AnalyticsUtils 相關參數
+
 ## [0.11.1] - 2021/02/08
 ### 基於 Flutter v1.26.0-17.2.pre 開發
 
