@@ -73,21 +73,6 @@ class CoursePageState extends State<CoursePage> {
     );
   }
 
-  Future<bool> _loadCourseData(String value) async {
-    courseData = CourseData.load(semesterData.currentSemester.text);
-    if (mounted) {
-      setState(() {
-        isOffline = true;
-        if (this.courseData == null) {
-          state = CourseState.offlineEmpty;
-        } else {
-          state = CourseState.finish;
-        }
-      });
-    }
-    return this.courseData == null;
-  }
-
   void _getSemester() async {
     String rawString = await rootBundle.loadString(FileAssets.semesters);
     semesterData = SemesterData.fromRawJson(rawString);

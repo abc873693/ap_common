@@ -532,37 +532,6 @@ class CourseScaffoldState extends State<CourseScaffold> {
         ),
       );
 
-  Widget _timeCodeBorder(TimeCode timeCode) => Container(
-        alignment: Alignment.center,
-        decoration: BoxDecoration(
-          border: Border(right: _innerBorderSide),
-        ),
-        height: _courseHeight,
-        width: widget.courseData.hasHoliday ? 35.0 : 50.0,
-        child: AutoSizeText.rich(
-          TextSpan(
-            style: TextStyle(
-              color: ApTheme.of(context).greyText,
-              fontSize: 14.0,
-            ),
-            children: [
-              if (showSectionTime) TextSpan(text: '${timeCode.startTime}\n'),
-              TextSpan(
-                text: '${timeCode.title}\n',
-                style: TextStyle(
-                  fontWeight:
-                      showSectionTime ? FontWeight.bold : FontWeight.normal,
-                  color: ApTheme.of(context).blueText,
-                  fontSize: showSectionTime ? 16.0 : 14.0,
-                ),
-              ),
-              if (showSectionTime) TextSpan(text: '${timeCode.endTime}'),
-            ],
-          ),
-          textAlign: TextAlign.center,
-        ),
-      );
-
   void _pickSemester() {
     if (widget.semesterData != null)
       showDialog(
