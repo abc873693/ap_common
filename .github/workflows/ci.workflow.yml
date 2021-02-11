@@ -3,7 +3,7 @@ on: [push, pull_request]
 
 jobs:
   build:
-    name: Flutter Test
+    name: Flutter Build Test
     runs-on: ubuntu-latest
 
     steps:
@@ -19,6 +19,9 @@ jobs:
         run: flutter upgrade
       - name: Analyze files
         run: flutter analyze .
-      - name: Run Flutter Driver tests
-        run: flutter drive
+      - name: Build Web
+        run: flutter build web
         working-directory: ./example
+#      - name: Run Flutter Driver tests
+#        run: flutter drive
+#        working-directory: ./example
