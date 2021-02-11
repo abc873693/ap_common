@@ -1,3 +1,8 @@
+## [0.12.0-dev.2] - 2021/02/11
+### [Break Change]
+
+* 移除 `AnnouncementHomePage` catchException 參數
+
 ## [0.12.0-dev.1] - 2021/02/11
 ### [Break Change]
 ### 基於 Flutter v1.26.0-17.2.pre 開發
