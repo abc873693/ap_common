@@ -1,7 +1,11 @@
-name: Flutter Web
-on: [push]
+name: Build Web Page
+on:
+  release:
+    types: # This configuration does not affect the page_build event above
+      - created
 jobs:
   build:
+    name: Flutter Web build and hosting
     runs-on: ubuntu-latest
 
     steps:
