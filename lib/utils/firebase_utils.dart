@@ -1,10 +1,10 @@
 import 'dart:async';
 import 'dart:io';
 
+import 'package:ap_common/config/analytics_constants.dart';
 import 'package:ap_common/utils/analytics_utils.dart';
 import 'package:ap_common/utils/crashlytics_utils.dart';
 import 'package:ap_common/utils/notification_utils.dart';
-import 'package:ap_common_firebase/constants/fiirebase_constants.dart';
 import 'package:ap_common_firebase/utils/firebase_analytics_utils.dart';
 import 'package:ap_common_firebase/utils/firebase_crashlytics_utils.dart';
 import 'package:firebase_analytics/firebase_analytics.dart';
@@ -93,7 +93,7 @@ class FirebaseUtils {
         )
         .then(
           (value) => FirebaseAnalyticsUtils.instance.setUserProperty(
-            FirebaseConstants.HAS_ENABLE_NOTIFICATION,
+            AnalyticsConstants.HAS_ENABLE_NOTIFICATION,
             (value.authorizationStatus == AuthorizationStatus.authorized)
                 .toString(),
           ),
