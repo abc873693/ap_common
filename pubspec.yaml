@@ -4,7 +4,7 @@ version: 0.12.0
 homepage: https://github.com/abc873693/ap_common
 
 environment:
-  sdk: ">=2.6.0 <3.0.0"
+  sdk: ">=2.12.0-0 <3.0.0"
 
 dependencies:
   flutter:
@@ -13,13 +13,13 @@ dependencies:
     sdk: flutter
   flutter_cupertino_localizations: ^1.0.1
 
-  shared_preferences: ^0.5.12+4
-  url_launcher: ^5.7.10
-  share: '>=0.6.5+4 <2.0.0'
-  package_info: ^0.4.3+2
-  sprintf: ^5.0.0
+  shared_preferences: ^2.0.0-nullsafety
+  url_launcher: ^6.0.0-nullsafety.6
+  share: ^2.0.0-nullsafety.2
+  package_info: ^0.5.0-nullsafety
+  sprintf: ^6.0.0-nullsafety
   toast: ">=0.1.4 <1.0.0"
-  intl: ">=0.16.0 <1.0.0"
+  intl: ">=0.17.0 <1.0.0"
   cached_network_image: ^2.5.0
   photo_view: ">=0.10.3 <1.0.0"
   encrypt: ">=4.1.0 <5.0.0"
@@ -27,26 +27,26 @@ dependencies:
   dio_cookie_manager: ">=1.0.0 <2.0.0"
   cookie_jar: ">=1.0.0 <2.0.0"
   flutter_local_notifications: ^3.0.2
-  timezone: ^0.5.9
-  flutter_keyboard_visibility: ^4.0.3
+  timezone: ^0.7.0-nullsafety.0
+  flutter_keyboard_visibility: ^5.0.0-nullsafety.1
   add_2_calendar: ^1.4.0
   material_design_icons_flutter: ^4.0.5755
-  in_app_review: ^1.0.4
+  in_app_review: ^2.0.0-nullsafety
   native_pdf_view: ^3.9.0
-  barcode_widget: ^1.5.0
-  barcode: ^1.17.1
-  auto_size_text: ^2.1.0
+  barcode_widget: ^2.0.0-nullsafety.1
+  barcode: ^2.0.0-nullsafety
+  auto_size_text: ^3.0.0-nullsafety.0
   flutter_linkify: ^4.0.2
   image_gallery_saver: ^1.6.7
   permission_handler: ^5.0.1+1
-  path: ^1.7.0
-  path_provider: ^1.6.27
-  google_sign_in: ^4.5.9
+  path: ^1.8.0-nullsafety.3
+  path_provider: ^2.0.0-nullsafety
+  google_sign_in: ^5.0.0-nullsafety
   google_sign_in_dartio: ^0.0.6
   jwt_decoder: ^1.0.3
   sign_in_with_apple: ^2.5.4
-  image_picker: ^0.6.7+20
-  image_picker_for_web: ^0.1.0+2
+  image_picker: ^0.7.0-nullsafety
+#  image_picker_for_web: ^0.1.0+2
   cupertino_back_gesture: ^0.0.4+1
 
 dev_dependencies:
