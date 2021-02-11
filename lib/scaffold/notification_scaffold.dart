@@ -65,7 +65,7 @@ class NotificationScaffoldState extends State<NotificationScaffold>
   }
 
   Widget _notificationItem(Notifications notification) {
-    return GestureDetector(
+    return InkWell(
       onLongPress: () {
         ApUtils.shareTo("${notification.info.title}\n${notification.link}");
         if (widget.logEvent != null)
@@ -74,53 +74,50 @@ class NotificationScaffoldState extends State<NotificationScaffold>
             'long_click',
           );
       },
-      child: FlatButton(
-        padding: EdgeInsets.all(0.0),
-        onPressed: () {
-          ApUtils.launchUrl(notification.link);
-          if (widget.logEvent != null)
-            widget.logEvent(
-              'notification_link',
-              'click',
-            );
-        },
-        child: Container(
-          width: double.infinity,
-          padding: EdgeInsets.all(16.0),
-          decoration: BoxDecoration(
-            border: Border(
-              top: BorderSide(color: Colors.grey, width: 0.5),
+      onTap: () {
+        ApUtils.launchUrl(notification.link);
+        if (widget.logEvent != null)
+          widget.logEvent(
+            'notification_link',
+            'click',
+          );
+      },
+      child: Container(
+        width: double.infinity,
+        padding: EdgeInsets.all(16.0),
+        decoration: BoxDecoration(
+          border: Border(
+            top: BorderSide(color: Colors.grey, width: 0.5),
+          ),
+        ),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: <Widget>[
+            Text(
+              notification.info.title ?? '',
+              style: _textStyle,
+              textAlign: TextAlign.left,
             ),
-          ),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: <Widget>[
-              Text(
-                notification.info.title ?? '',
-                style: _textStyle,
-                textAlign: TextAlign.left,
-              ),
-              SizedBox(height: 8.0),
-              Row(
-                children: <Widget>[
-                  Expanded(
-                    child: Text(
-                      notification.info.department ?? '',
-                      style: _textGreyStyle,
-                      textAlign: TextAlign.left,
-                    ),
+            SizedBox(height: 8.0),
+            Row(
+              children: <Widget>[
+                Expanded(
+                  child: Text(
+                    notification.info.department ?? '',
+                    style: _textGreyStyle,
+                    textAlign: TextAlign.left,
                   ),
-                  Expanded(
-                    child: Text(
-                      notification.info.date ?? '',
-                      style: _textGreyStyle,
-                      textAlign: TextAlign.right,
-                    ),
+                ),
+                Expanded(
+                  child: Text(
+                    notification.info.date ?? '',
+                    style: _textGreyStyle,
+                    textAlign: TextAlign.right,
                   ),
-                ],
-              )
-            ],
-          ),
+                ),
+              ],
+            )
+          ],
         ),
       ),
     );
@@ -140,8 +137,8 @@ class NotificationScaffoldState extends State<NotificationScaffold>
             child: CircularProgressIndicator(), alignment: Alignment.center);
       case NotificationState.error:
       case NotificationState.empty:
-        return FlatButton(
-          onPressed: () {
+        return InkWell(
+          onTap: () {
             if (widget.onRefresh != null) widget.onRefresh();
             if (widget.logEvent != null)
               widget.logEvent(

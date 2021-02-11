@@ -140,10 +140,12 @@ class AboutUsPageState extends State<AboutUsPage> {
                                           launch(widget.fbFanPageUrl));
                                 else
                                   launch(widget.fbFanPageUrl).catchError(
-                                    (onError) => ApUtils.showToast(
-                                      context,
-                                      app.platformError,
-                                    ),
+                                    (onError) {
+                                      ApUtils.showToast(
+                                        context,
+                                        app.platformError,
+                                      );
+                                    },
                                   );
                                 AnalyticsUtils.instance?.logEvent("fb_click");
                               },
@@ -162,10 +164,12 @@ class AboutUsPageState extends State<AboutUsPage> {
                                   launch(widget.githubUrl);
                                 else
                                   launch(widget.githubUrl).catchError(
-                                    (onError) => ApUtils.showToast(
-                                      context,
-                                      app.platformError,
-                                    ),
+                                    (onError) {
+                                      ApUtils.showToast(
+                                        context,
+                                        app.platformError,
+                                      );
+                                    },
                                   );
                                 AnalyticsUtils.instance
                                     ?.logEvent("github_click");
@@ -176,10 +180,12 @@ class AboutUsPageState extends State<AboutUsPage> {
                               icon: Image.asset(ApImageAssets.email),
                               onPressed: () {
                                 launch('mailto:${widget.email}').catchError(
-                                  (onError) => ApUtils.showToast(
-                                    context,
-                                    app.platformError,
-                                  ),
+                                  (onError) {
+                                    ApUtils.showToast(
+                                      context,
+                                      app.platformError,
+                                    );
+                                  },
                                 );
                                 AnalyticsUtils.instance
                                     ?.logEvent("email_click");

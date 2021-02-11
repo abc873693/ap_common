@@ -20,8 +20,8 @@ class ItemPicker extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return FlatButton(
-      onPressed: () {
+    return InkWell(
+      onTap: () {
         showDialog(
           context: context,
           builder: (_) => SimpleOptionDialog(

@@ -182,17 +182,19 @@ class ApButton extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       width: double.infinity,
-      child: RaisedButton(
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.all(
-            Radius.circular(30.0),
+      child: ElevatedButton(
+        style: ElevatedButton.styleFrom(
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.all(
+              Radius.circular(30.0),
+            ),
           ),
+          padding: EdgeInsets.all(14.0),
+          primary: Colors.white,
         ),
-        padding: EdgeInsets.all(14.0),
         onPressed: () {
           if (onPressed != null) onPressed();
         },
-        color: Colors.white,
         child: Text(
           text,
           style: TextStyle(color: ApTheme.of(context).blue, fontSize: 18.0),
@@ -215,8 +217,7 @@ class ApFlatButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Center(
-      child: FlatButton(
-        padding: EdgeInsets.all(0.0),
+      child: TextButton(
         onPressed: onPressed,
         child: Text(
           text,

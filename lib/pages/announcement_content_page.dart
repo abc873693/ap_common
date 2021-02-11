@@ -152,17 +152,22 @@ class AnnouncementContentPageState extends State<AnnouncementContentPage> {
       if (widget.announcement.url != null &&
           widget.announcement.url.isNotEmpty) ...[
         SizedBox(height: 16.0),
-        RaisedButton(
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.all(
-              Radius.circular(30.0),
+        ElevatedButton(
+          style: ElevatedButton.styleFrom(
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.all(
+                Radius.circular(30.0),
+              ),
             ),
+            padding: EdgeInsets.symmetric(
+              vertical: 16.0,
+              horizontal: 30.0,
+            ),
+            primary: ApTheme.of(context).yellow,
           ),
           onPressed: () {
             launch(widget.announcement.url);
           },
-          padding: EdgeInsets.symmetric(vertical: 12.0, horizontal: 0.0),
-          color: ApTheme.of(context).yellow,
           child: Icon(
             ApIcon.exitToApp,
             color: Colors.white,

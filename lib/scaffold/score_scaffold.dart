@@ -149,8 +149,8 @@ class ScoreScaffoldState extends State<ScoreScaffold> {
       case ScoreState.empty:
       case ScoreState.custom:
       case ScoreState.offlineEmpty:
-        return FlatButton(
-          onPressed: () {
+        return InkWell(
+          onTap: () {
             if (widget.state == ScoreState.empty)
               _pickSemester();
             else if (widget.onRefresh != null) widget.onRefresh();

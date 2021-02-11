@@ -104,8 +104,7 @@ class PhoneScaffoldState extends State<PhoneScaffold>
   }
 
   Widget _phoneItem(PhoneModel phone) {
-    return FlatButton(
-      padding: EdgeInsets.all(0.0),
+    return InkWell(
       child: Container(
         padding: EdgeInsets.all(16.0),
         width: double.infinity,
@@ -131,7 +130,7 @@ class PhoneScaffoldState extends State<PhoneScaffold>
           ],
         ),
       ),
-      onPressed: () {
+      onTap: () {
         if (widget.logEvent != null) widget.logEvent('call_phone', 'click');
         try {
           ApUtils.callPhone(phone.number);

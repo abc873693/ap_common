@@ -233,16 +233,18 @@ class _AnnouncementEditPageState extends State<AnnouncementEditPage> {
               ),
               FractionallySizedBox(
                 widthFactor: 0.3,
-                child: RaisedButton(
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.all(
-                      Radius.circular(30.0),
+                child: ElevatedButton(
+                  style: ElevatedButton.styleFrom(
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.all(
+                        Radius.circular(30.0),
+                      ),
                     ),
+                    padding: EdgeInsets.symmetric(
+                      horizontal: 8.0,
+                    ),
+                    primary: ApTheme.of(context).blueAccent,
                   ),
-                  padding: EdgeInsets.symmetric(
-                    horizontal: 8.0,
-                  ),
-                  color: ApTheme.of(context).blueAccent,
                   onPressed: () async {
                     if (kIsWeb || Platform.isAndroid || Platform.isIOS) {
                       final imagePicker = ImagePicker();
@@ -309,17 +311,19 @@ class _AnnouncementEditPageState extends State<AnnouncementEditPage> {
             SizedBox(height: 8.0),
             FractionallySizedBox(
               widthFactor: 0.3,
-              child: RaisedButton(
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.all(
-                    Radius.circular(30.0),
+              child: ElevatedButton(
+                style: ElevatedButton.styleFrom(
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.all(
+                      Radius.circular(30.0),
+                    ),
                   ),
+                  padding: EdgeInsets.symmetric(
+                    horizontal: 8.0,
+                    vertical: 4.0,
+                  ),
+                  primary: ApTheme.of(context).blueAccent,
                 ),
-                padding: EdgeInsets.symmetric(
-                  horizontal: 8.0,
-                  vertical: 4.0,
-                ),
-                color: ApTheme.of(context).blueAccent,
                 onPressed: () async {
                   setState(() {
                     expireTime = null;
@@ -397,17 +401,22 @@ class _AnnouncementEditPageState extends State<AnnouncementEditPage> {
             SizedBox(height: 36),
             FractionallySizedBox(
               widthFactor: 0.8,
-              child: RaisedButton(
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.all(
-                    Radius.circular(30.0),
+              child: ElevatedButton(
+                style: ElevatedButton.styleFrom(
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.all(
+                      Radius.circular(30.0),
+                    ),
                   ),
+                  padding: EdgeInsets.symmetric(
+                    horizontal: 8.0,
+                    vertical: 4.0,
+                  ),
+                  primary: ApTheme.of(context).blueAccent,
                 ),
-                padding: EdgeInsets.all(14.0),
                 onPressed: () {
                   _announcementSubmit();
                 },
-                color: ApTheme.of(context).blueAccent,
                 child: Text(
                   buttonText,
                   style: TextStyle(
@@ -421,17 +430,22 @@ class _AnnouncementEditPageState extends State<AnnouncementEditPage> {
               SizedBox(height: 18),
               FractionallySizedBox(
                 widthFactor: 0.8,
-                child: RaisedButton(
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.all(
-                      Radius.circular(30.0),
+                child: ElevatedButton(
+                  style: ElevatedButton.styleFrom(
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.all(
+                        Radius.circular(30.0),
+                      ),
                     ),
+                    padding: EdgeInsets.symmetric(
+                      horizontal: 8.0,
+                      vertical: 4.0,
+                    ),
+                    primary: ApTheme.of(context).yellow,
                   ),
-                  padding: EdgeInsets.all(14.0),
                   onPressed: () {
                     _announcementSubmit(isApproval: true);
                   },
-                  color: ApTheme.of(context).yellow,
                   child: Text(
                     app.updateAndApprove,
                     style: TextStyle(
@@ -444,17 +458,22 @@ class _AnnouncementEditPageState extends State<AnnouncementEditPage> {
               SizedBox(height: 18),
               FractionallySizedBox(
                 widthFactor: 0.8,
-                child: RaisedButton(
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.all(
-                      Radius.circular(30.0),
+                child: ElevatedButton(
+                  style: ElevatedButton.styleFrom(
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.all(
+                        Radius.circular(30.0),
+                      ),
                     ),
+                    padding: EdgeInsets.symmetric(
+                      horizontal: 8.0,
+                      vertical: 4.0,
+                    ),
+                    primary: ApTheme.of(context).red,
                   ),
-                  padding: EdgeInsets.all(14.0),
                   onPressed: () {
                     _announcementSubmit(isApproval: false);
                   },
-                  color: ApTheme.of(context).red,
                   child: Text(
                     app.updateAndReject,
                     style: TextStyle(

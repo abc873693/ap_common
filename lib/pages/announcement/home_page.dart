@@ -96,7 +96,7 @@ class _AnnouncementHomePageState extends State<AnnouncementHomePage> {
         backgroundColor: ApTheme.of(context).blue,
         actions: [
           if (state == _State.done)
-            FlatButton(
+            TextButton(
               child: Row(
                 children: [
                   Checkbox(
@@ -178,8 +178,8 @@ class _AnnouncementHomePageState extends State<AnnouncementHomePage> {
           alignment: Alignment.center,
         );
       case _State.error:
-        return FlatButton(
-          onPressed: () {
+        return InkWell(
+          onTap: () {
             _getAnnouncements();
             _getApplications();
           },

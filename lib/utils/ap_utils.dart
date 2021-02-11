@@ -170,7 +170,7 @@ class ApUtils {
           Row(
             mainAxisAlignment: MainAxisAlignment.end,
             children: <Widget>[
-              FlatButton(
+              TextButton(
                 onPressed: () {
                   Navigator.of(context).pop();
                 },
@@ -180,7 +180,7 @@ class ApUtils {
                       color: ApTheme.of(context).blue, fontSize: 16.0),
                 ),
               ),
-              FlatButton(
+              TextButton(
                 onPressed: () => openAppReview(defaultUrl: defaultUrl),
                 child: Text(
                   app.rateNow,
@@ -292,8 +292,10 @@ class InputDoneView extends StatelessWidget {
       color: Colors.white,
       child: Align(
         alignment: Alignment.topRight,
-        child: FlatButton(
-          padding: EdgeInsets.only(right: 12.0, top: 8.0, bottom: 8.0),
+        child: TextButton(
+          style: TextButton.styleFrom(
+            padding: EdgeInsets.only(right: 12.0, top: 8.0, bottom: 8.0),
+          ),
           onPressed: () {
             FocusScope.of(context).requestFocus(FocusNode());
           },

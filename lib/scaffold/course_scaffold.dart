@@ -303,8 +303,8 @@ class CourseScaffoldState extends State<CourseScaffold> {
       case CourseState.error:
       case CourseState.offlineEmpty:
       case CourseState.custom:
-        return FlatButton(
-          onPressed: () {
+        return InkWell(
+          onTap: () {
             if (widget.state == CourseState.empty)
               _pickSemester();
             else if (widget.onRefresh != null) widget.onRefresh();

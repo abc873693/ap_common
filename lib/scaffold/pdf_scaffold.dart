@@ -1,4 +1,3 @@
-
 import 'package:ap_common/resources/ap_icon.dart';
 import 'package:ap_common/utils/ap_localizations.dart';
 import 'package:ap_common/widgets/hint_content.dart';
@@ -54,8 +53,8 @@ class _PdfScaffoldState extends State<PdfScaffold> {
     }
   }
 
-  Widget get errorContent => FlatButton(
-        onPressed: () {
+  Widget get errorContent => InkWell(
+        onTap: () {
           if (widget.onRefresh != null) widget.onRefresh();
         },
         child: HintContent(
