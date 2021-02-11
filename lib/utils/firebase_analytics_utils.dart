@@ -8,6 +8,8 @@ import 'package:firebase_analytics/firebase_analytics.dart';
 import 'package:ap_common/utils/analytics_utils.dart';
 import 'package:flutter/material.dart';
 
+import 'firebase_utils.dart';
+
 export 'package:firebase_analytics/firebase_analytics.dart';
 
 class FirebaseAnalyticsUtils extends AnalyticsUtils {
@@ -17,7 +19,7 @@ class FirebaseAnalyticsUtils extends AnalyticsUtils {
   static FirebaseAnalyticsUtils get instance {
     if (_instance == null) {
       _instance = FirebaseAnalyticsUtils();
-      analytics = FirebaseAnalytics();
+      if (FirebaseUtils.isSupportAnalytics) analytics = FirebaseAnalytics();
     }
     return _instance;
   }
@@ -45,7 +47,7 @@ class FirebaseAnalyticsUtils extends AnalyticsUtils {
       name: name,
       value: value,
     );
-    debugPrint('setUserProperty succeeded');
+    debugPrint('setUserProperty $name succeeded');
   }
 
   Future<void> logEvent(
