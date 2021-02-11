@@ -1,9 +1,12 @@
 import 'dart:async';
 import 'dart:io';
 
+import 'package:ap_common/utils/analytics_utils.dart';
+import 'package:ap_common/utils/crashlytics_utils.dart';
 import 'package:ap_common/utils/notification_utils.dart';
 import 'package:ap_common_firebase/constants/fiirebase_constants.dart';
 import 'package:ap_common_firebase/utils/firebase_analytics_utils.dart';
+import 'package:ap_common_firebase/utils/firebase_crashlytics_utils.dart';
 import 'package:firebase_analytics/firebase_analytics.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/foundation.dart';
@@ -39,8 +42,10 @@ class FirebaseUtils {
     String vapidKey,
   }) {
     if (isSupportCloudMessage) initFcm(vapidKey: vapidKey);
+    if (isSupportCrashlytics)
+      CrashlyticsUtils.instance = FirebaseCrashlyticsUtils.instance;
     if (isSupportAnalytics) {
-      FirebaseAnalyticsUtils.analytics = FirebaseAnalytics();
+      AnalyticsUtils.instance = FirebaseAnalyticsUtils.instance;
       return FirebaseAnalyticsUtils.analytics;
     }
     return null;

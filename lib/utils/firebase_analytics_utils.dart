@@ -17,6 +17,7 @@ class FirebaseAnalyticsUtils extends AnalyticsUtils {
   static FirebaseAnalyticsUtils get instance {
     if (_instance == null) {
       _instance = FirebaseAnalyticsUtils();
+      analytics = FirebaseAnalytics();
     }
     return _instance;
   }
