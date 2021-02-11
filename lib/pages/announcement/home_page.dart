@@ -8,6 +8,7 @@ import 'package:ap_common/resources/ap_theme.dart';
 import 'package:ap_common/scaffold/login_scaffold.dart';
 import 'package:ap_common/utils/ap_localizations.dart';
 import 'package:ap_common/utils/ap_utils.dart';
+import 'package:ap_common/utils/crashlytics_utils.dart';
 import 'package:ap_common/utils/preferences.dart';
 import 'package:ap_common/widgets/hint_content.dart';
 import 'package:ap_common/widgets/progress_dialog.dart';
@@ -28,13 +29,11 @@ class AnnouncementHomePage extends StatefulWidget {
   static const String routerName = "/news/admin";
   final Widget loginDescriptionWidget;
   final Widget reviewDescriptionWidget;
-  final Function(dynamic, StackTrace) catchException;
 
   const AnnouncementHomePage({
     Key key,
     this.loginDescriptionWidget,
     this.reviewDescriptionWidget,
-    this.catchException,
   }) : super(key: key);
 
   @override
@@ -718,7 +717,7 @@ class _AnnouncementHomePageState extends State<AnnouncementHomePage> {
           } catch (e, s) {
             ApUtils.showToast(context, app.thirdPartyLoginFail);
             Navigator.of(context, rootNavigator: true).pop();
-            if (widget.catchException != null) widget.catchException(e, s);
+            CrashlyticsUtils.instance?.recordError(e, s);
           }
           break;
         case AnnouncementLoginType.apple:
@@ -734,7 +733,7 @@ class _AnnouncementHomePageState extends State<AnnouncementHomePage> {
           } catch (e, s) {
             ApUtils.showToast(context, app.thirdPartyLoginFail);
             Navigator.of(context, rootNavigator: true).pop();
-            if (widget.catchException != null) widget.catchException(e, s);
+            CrashlyticsUtils.instance?.recordError(e, s);
           }
           break;
       }
