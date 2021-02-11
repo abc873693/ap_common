@@ -1,7 +1,7 @@
 name: Deploy to Pub Hub
-on:
-  tags:
-    - v*
+
+on: push
+
 jobs:
 
   deploy:
