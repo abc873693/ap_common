@@ -85,17 +85,13 @@ class HomePageState extends State<HomePage> {
       fbFanPageId: '735951703168873',
       fbFanPageUrl: 'https://www.facebook.com/NKUST.ITC/',
       githubUrl: 'https://github.com/NKUST-ITC',
-      logEvent: (name, value) {},
-      setCurrentScreen: () {},
       actions: <Widget>[
         IconButton(
           icon: Icon(ApIcon.codeIcon),
           onPressed: () {
             Navigator.of(context).push(
               MaterialPageRoute(
-                builder: (_) => OpenSourcePage(
-                  setCurrentScreen: () {},
-                ),
+                builder: (_) => OpenSourcePage(),
               ),
             );
           },
