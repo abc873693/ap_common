@@ -1,3 +1,10 @@
+## [0.6.0-dev.2] - 2021/02/11
+
+***[Break Change]***
+* 配合 `ap_common` v0.12.0 API 變動
+* 移除 `FirebaseConstants`
+* 加入 `FirebaseCrashlyticsUtils`
+
 ## [0.6.0-dev.1] - 2021/02/10
 
 * 補齊文件
