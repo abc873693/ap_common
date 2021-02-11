@@ -1,0 +1,23 @@
+name: CI Test
+on: [push, pull_request]
+
+jobs:
+  build:
+    name: Flutter Test
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v2
+      - uses: actions/setup-java@v1
+        with:
+          java-version: '12.x'
+      - uses: subosito/flutter-action@v1
+        with:
+          flutter-version: '1.26.x'
+          channel: 'dev'
+      - name: Upgrades flutter
+        run: flutter upgrade
+      - name: Analyze files
+          run: flutter analyze .
+      - name: Run Flutter Driver tests
+        run: "flutter drive
