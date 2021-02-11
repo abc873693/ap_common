@@ -1,12 +1,12 @@
 import 'package:ap_common/resources/ap_theme.dart';
+import 'package:ap_common/utils/analytics_utils.dart';
 import 'package:ap_common/utils/ap_localizations.dart';
 import 'package:flutter/material.dart';
 
 class OpenSourcePage extends StatefulWidget {
   static const String routerName = "/openSource";
-  final Function() setCurrentScreen;
 
-  const OpenSourcePage({Key key, this.setCurrentScreen}) : super(key: key);
+  const OpenSourcePage({Key key}) : super(key: key);
 
   @override
   OpenSourcePageState createState() => OpenSourcePageState();
@@ -488,7 +488,10 @@ class OpenSourcePageState extends State<OpenSourcePage> {
 
   @override
   void initState() {
-    if (widget.setCurrentScreen != null) widget.setCurrentScreen();
+    AnalyticsUtils.instance?.setCurrentScreen(
+      "OpenSourcePage",
+      "open_source_page.dart",
+    );
     super.initState();
   }
 

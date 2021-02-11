@@ -2,6 +2,7 @@ import 'package:ap_common/config/ap_constants.dart';
 import 'package:ap_common/models/announcement_data.dart';
 import 'package:ap_common/resources/ap_icon.dart';
 import 'package:ap_common/resources/ap_theme.dart';
+import 'package:ap_common/utils/analytics_utils.dart';
 import 'package:ap_common/utils/ap_localizations.dart';
 import 'package:ap_common/utils/ap_utils.dart';
 import 'package:ap_common/widgets/ap_network_image.dart';
@@ -17,11 +18,11 @@ enum _Status { loading, finish, error, empty }
 
 class AnnouncementContentPage extends StatefulWidget {
   final Announcement announcement;
-  final Function() setCurrentScreen;
 
-  const AnnouncementContentPage(
-      {Key key, this.announcement, this.setCurrentScreen})
-      : super(key: key);
+  const AnnouncementContentPage({
+    Key key,
+    this.announcement,
+  }) : super(key: key);
 
   @override
   AnnouncementContentPageState createState() => AnnouncementContentPageState();
@@ -33,7 +34,10 @@ class AnnouncementContentPageState extends State<AnnouncementContentPage> {
 
   @override
   void initState() {
-    if (widget.setCurrentScreen != null) widget.setCurrentScreen();
+    AnalyticsUtils.instance?.setCurrentScreen(
+      "AnnouncementContentPage",
+      "announcement_content_page.dart",
+    );
     super.initState();
   }
 

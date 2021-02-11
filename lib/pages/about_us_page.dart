@@ -2,6 +2,7 @@ import 'dart:io';
 
 import 'package:ap_common/resources/ap_assets.dart';
 import 'package:ap_common/resources/ap_theme.dart';
+import 'package:ap_common/utils/analytics_utils.dart';
 import 'package:ap_common/utils/ap_localizations.dart';
 import 'package:ap_common/utils/ap_utils.dart';
 import 'package:flutter/cupertino.dart';
@@ -20,8 +21,6 @@ class AboutUsPage extends StatefulWidget {
   final String email;
   final String appLicense;
   final List<Widget> actions;
-  final Function(String name, String value) logEvent;
-  final Function() setCurrentScreen;
 
   const AboutUsPage({
     Key key,
@@ -32,8 +31,6 @@ class AboutUsPage extends StatefulWidget {
     @required this.githubName,
     @required this.email,
     @required this.appLicense,
-    this.logEvent,
-    this.setCurrentScreen,
     this.actions,
   }) : super(key: key);
 
@@ -46,7 +43,10 @@ class AboutUsPageState extends State<AboutUsPage> {
 
   @override
   void initState() {
-    if (widget.setCurrentScreen != null) widget.setCurrentScreen();
+    AnalyticsUtils.instance?.setCurrentScreen(
+      "AboutUsPage",
+      "about_us_page.dart",
+    );
     super.initState();
   }
 
@@ -145,8 +145,7 @@ class AboutUsPageState extends State<AboutUsPage> {
                                       app.platformError,
                                     ),
                                   );
-                                if (widget.logEvent != null)
-                                  widget.logEvent('fb', 'click');
+                                AnalyticsUtils.instance?.logEvent("fb_click");
                               },
                               iconSize: 48.0,
                             ),
@@ -168,8 +167,8 @@ class AboutUsPageState extends State<AboutUsPage> {
                                       app.platformError,
                                     ),
                                   );
-                                if (widget.logEvent != null)
-                                  widget.logEvent('github', 'click');
+                                AnalyticsUtils.instance
+                                    ?.logEvent("github_click");
                               },
                               iconSize: 48.0,
                             ),
@@ -182,8 +181,8 @@ class AboutUsPageState extends State<AboutUsPage> {
                                     app.platformError,
                                   ),
                                 );
-                                if (widget.logEvent != null)
-                                  widget.logEvent('email', 'click');
+                                AnalyticsUtils.instance
+                                    ?.logEvent("email_click");
                               },
                               iconSize: 48.0,
                             ),
