@@ -18,6 +18,6 @@ jobs:
       - name: Upgrades flutter
         run: flutter upgrade
       - name: Analyze files
-          run: flutter analyze .
+        run: flutter analyze .
       - name: Run Flutter Driver tests
-        run: "flutter drive
+        run: flutter drive
