@@ -6,7 +6,7 @@ class SimpleOptionDialog extends StatelessWidget {
   final String title;
   final List<String> items;
   final int index;
-  final Function(int index) onSelected;
+  final Function(int index)? onSelected;
 
   const SimpleOptionDialog({
     Key? key,
@@ -42,7 +42,7 @@ class SimpleOptionDialog extends StatelessWidget {
                     check: index == this.index,
                     onPressed: () {
                       Navigator.pop(context, index);
-                      this.onSelected(index);
+                      this.onSelected?.call(index);
                     },
                   );
                 },
@@ -63,7 +63,7 @@ class SimpleOptionDialog extends StatelessWidget {
                   check: i == index,
                   onPressed: () {
                     Navigator.of(context).pop();
-                    this.onSelected(i);
+                    this.onSelected?.call(i);
                   },
                 ),
             ],

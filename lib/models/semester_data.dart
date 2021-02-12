@@ -6,7 +6,7 @@ import 'package:ap_common/utils/preferences.dart';
 class SemesterData {
   List<Semester>? data;
   Semester? defaultSemester;
-  int? currentIndex;
+  int currentIndex;
 
   int get defaultIndex {
     if (defaultSemester == null || data == null) return -1;
@@ -16,8 +16,8 @@ class SemesterData {
   }
 
   Semester? get currentSemester {
-    if (currentIndex == null || data?.length == 0) return null;
-    return data?[currentIndex ?? 0];
+    if (data?.length == 0) return null;
+    return data?[currentIndex];
   }
 
   List<String> get semesters {

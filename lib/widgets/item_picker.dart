@@ -7,7 +7,7 @@ import 'option_dialog.dart';
 class ItemPicker extends StatelessWidget {
   final List<String> items;
   final int currentIndex;
-  final Function(int index) onSelected;
+  final Function(int index)? onSelected;
   final String dialogTitle;
 
   const ItemPicker({
