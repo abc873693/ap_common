@@ -58,7 +58,7 @@ flutter:
     - assets/images/
 
 flutter_intl:
-  enabled: true
+  enabled: false
   class_name: ApLocalizations
   main_locale: 'zh_TW'
   arb_dir: lib/l10n
