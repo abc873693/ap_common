@@ -9,7 +9,7 @@ export 'package:intl/intl.dart';
 
 extension ApExtension on ApLocalizations {
   get dateTimeLocale {
-    if (Intl.defaultLocale.contains('TW'))
+    if (Intl.defaultLocale!.contains('TW'))
       return 'zh-TW';
     else
       return 'en-US';
@@ -54,13 +54,10 @@ extension ApExtension on ApLocalizations {
       case DioErrorType.RECEIVE_TIMEOUT:
       case DioErrorType.SEND_TIMEOUT:
         return timeoutMessage;
-        break;
       case DioErrorType.RESPONSE:
-        return dioError.message;
-        break;
       case DioErrorType.CANCEL:
       default:
-        return null;
+        return dioError.message;
     }
   }
 }
@@ -74,13 +71,10 @@ extension DioErrorI18nExtension on DioError {
       case DioErrorType.RECEIVE_TIMEOUT:
       case DioErrorType.SEND_TIMEOUT:
         return ApLocalizations.current.timeoutMessage;
-        break;
       case DioErrorType.RESPONSE:
-        return message;
-        break;
       case DioErrorType.CANCEL:
       default:
-        return null;
+        return message;
     }
   }
 }
