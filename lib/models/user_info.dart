@@ -6,15 +6,15 @@ import 'package:ap_common/config/ap_constants.dart';
 import 'package:ap_common/utils/preferences.dart';
 
 class UserInfo {
-  String educationSystem;
-  String department;
-  String className;
-  String id;
-  String name;
-  String pictureUrl;
-  String email;
+  String? educationSystem;
+  String? department;
+  String? className;
+  String? id;
+  String? name;
+  String? pictureUrl;
+  String? email;
 
-  Uint8List pictureBytes;
+  Uint8List? pictureBytes;
 
   UserInfo({
     this.educationSystem,
@@ -67,8 +67,10 @@ class UserInfo {
       '',
     );
     if (rawString == '')
-      return null;
+      return UserInfo();
     else
       return UserInfo.fromRawJson(rawString);
   }
+
+  bool get isEmpty => id == null;
 }

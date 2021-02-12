@@ -5,7 +5,7 @@
 import 'dart:convert';
 
 class TimeCodeConfig {
-  List<TimeCode> timeCodes;
+  List<TimeCode>? timeCodes;
 
   TimeCodeConfig({
     this.timeCodes,
@@ -26,12 +26,12 @@ class TimeCodeConfig {
   Map<String, dynamic> toJson() => {
         "timeCodes": timeCodes == null
             ? null
-            : List<dynamic>.from(timeCodes.map((x) => x.toJson())),
+            : List<dynamic>.from(timeCodes?.map((x) => x.toJson()) ?? []),
       };
 
   List<String> get textList {
     List<String> tmp = [];
-    timeCodes?.forEach((timeCode) => tmp.add(timeCode.title));
+    timeCodes?.forEach((timeCode) => tmp.add(timeCode.title ?? ''));
     return tmp;
   }
 
@@ -41,9 +41,9 @@ class TimeCodeConfig {
 }
 
 class TimeCode {
-  String title;
-  String startTime;
-  String endTime;
+  String? title;
+  String? startTime;
+  String? endTime;
 
   TimeCode({
     this.title,

@@ -7,8 +7,8 @@ class GeneralResponse {
   final String message;
 
   GeneralResponse({
-    @required this.statusCode,
-    @required this.message,
+    required this.statusCode,
+    required this.message,
   });
 
   static const SUCCESS = 200;

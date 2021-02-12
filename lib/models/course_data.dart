@@ -12,11 +12,12 @@ class CourseData {
     this.timeCodes,
   });
 
-  List<Course> courses;
-  List<TimeCode> timeCodes;
+  List<Course>? courses;
+  List<TimeCode>? timeCodes;
 
   bool get hasHoliday {
-    for (var course in courses) {
+    if (courses == null) return false;
+    for (var course in courses ?? []) {
       if (course.times == null) continue;
       for (var section in course.times)
         if (section.weekday == DateTime.saturday ||
@@ -27,7 +28,7 @@ class CourseData {
 
   int get maxTimeCodeIndex {
     int index = 10;
-    for (var course in courses) {
+    for (var course in courses ?? []) {
       if (course.times == null) continue;
       for (var time in course.times) {
         if (time.index > index) {
@@ -40,7 +41,7 @@ class CourseData {
 
   int get minTimeCodeIndex {
     int index = 10;
-    for (var course in courses) {
+    for (var course in courses ?? []) {
       if (course.times == null) continue;
       for (var time in course.times) {
         if (time.index < index) {
@@ -52,8 +53,8 @@ class CourseData {
   }
 
   CourseData copyWith({
-    List<Course> courses,
-    List<TimeCode> timeCodes,
+    List<Course>? courses,
+    List<TimeCode>? timeCodes,
   }) =>
       CourseData(
         courses: courses ?? this.courses,
@@ -78,10 +79,10 @@ class CourseData {
   Map<String, dynamic> toJson() => {
         "courses": courses == null
             ? null
-            : List<dynamic>.from(courses.map((x) => x.toJson())),
+            : List<dynamic>.from(courses?.map((x) => x.toJson()) ?? []),
         "timeCodes": timeCodes == null
             ? null
-            : List<dynamic>.from(timeCodes.map((x) => x.toJson())),
+            : List<dynamic>.from(timeCodes?.map((x) => x.toJson()) ?? []),
       };
 
   void save(String tag) {
@@ -99,16 +100,16 @@ class CourseData {
       '',
     );
     if (rawString == '')
-      return null;
+      return CourseData();
     else
       return CourseData.fromRawJson(rawString);
   }
 
   static migrateFrom0_10() async {
-    Preferences.prefs.getKeys()?.forEach((key) {
+    Preferences.prefs?.getKeys()?.forEach((key) {
       if (key.contains('course_data')) {
         debugPrint(key);
-        Preferences.setString(key, null);
+        Preferences.remove(key);
       }
     });
   }
@@ -125,9 +126,9 @@ class CourseData {
         [],
       ]
     ];
-    for (var course in courses) {
+    for (var course in courses ?? []) {
       for (var time in course.times) {
-        for (int i = 0; i < timeCodes.length; i++) {
+        for (int i = 0; i < (timeCodes?.length ?? 0); i++) {
           list[time.weekday - 1].add(course);
         }
       }
@@ -136,9 +137,12 @@ class CourseData {
   }
 
   int getTimeCodeIndex(String section) {
-    for (int i = 0; i < timeCodes.length; i++) {
-      if (timeCodes[i].title == section) return i;
-    }
+    if (timeCodes == null)
+      return -1;
+    else
+      for (int i = 0; i < (timeCodes?.length ?? 0); i++) {
+        if (timeCodes?[i].title == section) return i;
+      }
     return -1;
   }
 }
@@ -158,30 +162,30 @@ class Course {
     this.instructors,
   });
 
-  String code;
-  String title;
-  String className;
-  String group;
-  String units;
-  String hours;
-  String required;
-  String at;
-  List<SectionTime> times;
-  Location location;
-  List<String> instructors;
+  String? code;
+  String? title;
+  String? className;
+  String? group;
+  String? units;
+  String? hours;
+  String? required;
+  String? at;
+  List<SectionTime>? times;
+  Location? location;
+  List<String>? instructors;
 
   Course copyWith({
-    String code,
-    String title,
-    String className,
-    String group,
-    String units,
-    String hours,
-    String required,
-    String at,
-    List<SectionTime> times,
-    Location location,
-    List<String> instructors,
+    String? code,
+    String? title,
+    String? className,
+    String? group,
+    String? units,
+    String? hours,
+    String? required,
+    String? at,
+    List<SectionTime>? times,
+    Location? location,
+    List<String>? instructors,
   }) =>
       Course(
         code: code ?? this.code,
@@ -233,46 +237,50 @@ class Course {
         "at": at == null ? null : at,
         "sectionTimes": times == null
             ? null
-            : List<dynamic>.from(times.map((x) => x.toJson())),
-        "location": location == null ? null : location.toJson(),
+            : List<dynamic>.from(times?.map((x) => x.toJson()) ?? []),
+        "location": location == null ? null : location?.toJson(),
         "instructors": instructors == null
             ? null
-            : List<dynamic>.from(instructors.map((x) => x)),
+            : List<dynamic>.from(instructors?.map((x) => x) ?? []),
       };
 
   String getInstructors() {
     String text = "";
-    if (instructors.length > 0) {
-      text += instructors[0];
-      for (var i = 1; i < instructors.length; i++) text += ",${instructors[i]}";
+    if (instructors == null)
+      return text;
+    else if ((instructors?.length ?? 0) > 0) {
+      text += instructors?[0] ?? '';
+      for (var i = 1; i < (instructors?.length ?? 0); i++)
+        text += ",${instructors?[i]}";
     }
     return text;
   }
 
-  String getTimesShortName(List<TimeCode> timeCode) {
+  String getTimesShortName(List<TimeCode>? timeCode) {
     String text = '';
-    if ((times?.length ?? 0) == 0) return text;
+    if (times == null || (times?.length ?? 0) == 0) return text;
     int startIndex = -1, startTimeCodeIndex = -1, repeat = 0;
     for (var i = 0; i < (times?.length ?? 0); i++) {
-      final time = times[i];
+      final time = times?[i];
+      if (time == null || time.index == null) continue;
       if (startIndex != -1 &&
           startTimeCodeIndex != -1 &&
-          time.index - 1 == startTimeCodeIndex &&
-          times[i - 1].weekday == times[i].weekday) {
+          time.index! - 1 == startTimeCodeIndex &&
+          times?[i - 1].weekday == times?[i].weekday) {
         repeat++;
       } else if (startIndex != -1 && repeat != 0) {
-        final endTime = times[startIndex + repeat];
+        final endTime = times?[startIndex + repeat];
         text += '-'
-            '${timeCode[endTime.index].title}';
+            '${timeCode?[endTime?.index ?? 0].title}';
         repeat = 0;
         startIndex = -1;
         startTimeCodeIndex = -1;
       } else {
         startIndex = i;
-        startTimeCodeIndex = time.index;
+        startTimeCodeIndex = time.index ?? startTimeCodeIndex;
         text +=
-            '${text.isEmpty ? '' : ' '}(${ApLocalizations.current.weekdaysCourse[time.weekDayIndex]}) '
-            '${timeCode[time.index].title}';
+            '${text.isEmpty ? '' : ' '}(${ApLocalizations.current.weekdaysCourse[time?.weekDayIndex ?? 0]}) '
+            '${timeCode?[time.index ?? 0].title}';
       }
     }
     return text;
@@ -285,12 +293,12 @@ class Location {
     this.building,
   });
 
-  String room;
-  String building;
+  String? room;
+  String? building;
 
   Location copyWith({
-    String room,
-    String building,
+    String? room,
+    String? building,
   }) =>
       Location(
         room: room ?? this.room,
@@ -326,16 +334,16 @@ class SectionTime {
 
   ///The day of the week [DateTime.monday]..[DateTime.sunday].
   ///In accordance with ISO 8601 a week starts with Monday, which has the value 1.
-  int weekday;
+  int? weekday;
 
   /// index of [CourseData.timeCodes]
-  int index;
+  int? index;
 
-  int get weekDayIndex => weekday - 1;
+  int? get weekDayIndex => weekday! - 1;
 
   SectionTime copyWith({
-    int weekDay,
-    String index,
+    int? weekDay,
+    int? index,
   }) =>
       SectionTime(
         weekday: weekDay ?? this.weekday,
@@ -365,14 +373,14 @@ class TimeCode {
     this.endTime,
   });
 
-  String title;
-  String startTime;
-  String endTime;
+  String? title;
+  String? startTime;
+  String? endTime;
 
   TimeCode copyWith({
-    String title,
-    String startTime,
-    String endTime,
+    String? title,
+    String? startTime,
+    String? endTime,
   }) =>
       TimeCode(
         title: title ?? this.title,

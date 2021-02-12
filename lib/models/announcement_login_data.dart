@@ -9,10 +9,10 @@ class AnnouncementLoginData {
     this.key,
   });
 
-  String key;
+  String? key;
 
   AnnouncementLoginData copyWith({
-    String key,
+    String? key,
   }) =>
       AnnouncementLoginData(
         key: key ?? this.key,

@@ -11,14 +11,14 @@ class ImgurUploadResponse {
     this.data,
   });
 
-  int status;
-  bool success;
-  ImgurUploadData data;
+  int? status;
+  bool? success;
+  ImgurUploadData? data;
 
   ImgurUploadResponse copyWith({
-    int status,
-    bool success,
-    ImgurUploadData data,
+    int? status,
+    bool? success,
+    ImgurUploadData? data,
   }) =>
       ImgurUploadResponse(
         status: status ?? this.status,
@@ -35,13 +35,15 @@ class ImgurUploadResponse {
       ImgurUploadResponse(
         status: json["status"] == null ? null : json["status"],
         success: json["success"] == null ? null : json["success"],
-        data: json["data"] == null ? null : ImgurUploadData.fromJson(json["data"]),
+        data: json["data"] == null
+            ? null
+            : ImgurUploadData.fromJson(json["data"]),
       );
 
   Map<String, dynamic> toJson() => {
         "status": status == null ? null : status,
         "success": success == null ? null : success,
-        "data": data == null ? null : data.toJson(),
+        "data": data == null ? null : data?.toJson(),
       };
 }
 
@@ -78,66 +80,66 @@ class ImgurUploadData {
     this.hls,
   });
 
-  String id;
-  String deletehash;
-  dynamic accountId;
-  dynamic accountUrl;
-  dynamic adType;
-  dynamic adUrl;
-  dynamic title;
-  dynamic description;
-  String name;
-  String type;
-  int width;
-  int height;
-  int size;
-  int views;
-  dynamic section;
-  dynamic vote;
-  int bandwidth;
-  bool animated;
-  bool favorite;
-  bool inGallery;
-  bool inMostViral;
-  bool hasSound;
-  bool isAd;
+  String? id;
+  String? deletehash;
+  dynamic? accountId;
+  dynamic? accountUrl;
+  dynamic? adType;
+  dynamic? adUrl;
+  dynamic? title;
+  dynamic? description;
+  String? name;
+  String? type;
+  int? width;
+  int? height;
+  int? size;
+  int? views;
+  dynamic? section;
+  dynamic? vote;
+  int? bandwidth;
+  bool? animated;
+  bool? favorite;
+  bool? inGallery;
+  bool? inMostViral;
+  bool? hasSound;
+  bool? isAd;
   dynamic nsfw;
-  String link;
-  List<dynamic> tags;
-  int datetime;
-  String mp4;
-  String hls;
+  String? link;
+  List<dynamic>? tags;
+  int? datetime;
+  String? mp4;
+  String? hls;
 
   ImgurUploadData copyWith({
-    String id,
-    String deletehash,
-    dynamic accountId,
-    dynamic accountUrl,
-    dynamic adType,
-    dynamic adUrl,
-    dynamic title,
-    dynamic description,
-    String name,
-    String type,
-    int width,
-    int height,
-    int size,
-    int views,
-    dynamic section,
-    dynamic vote,
-    int bandwidth,
-    bool animated,
-    bool favorite,
-    bool inGallery,
-    bool inMostViral,
-    bool hasSound,
-    bool isAd,
-    dynamic nsfw,
-    String link,
-    List<dynamic> tags,
-    int datetime,
-    String mp4,
-    String hls,
+    String? id,
+    String? deletehash,
+    dynamic? accountId,
+    dynamic? accountUrl,
+    dynamic? adType,
+    dynamic? adUrl,
+    dynamic? title,
+    dynamic? description,
+    String? name,
+    String? type,
+    int? width,
+    int? height,
+    int? size,
+    int? views,
+    dynamic? section,
+    dynamic? vote,
+    int? bandwidth,
+    bool? animated,
+    bool? favorite,
+    bool? inGallery,
+    bool? inMostViral,
+    bool? hasSound,
+    bool? isAd,
+    dynamic? nsfw,
+    String? link,
+    List<dynamic>? tags,
+    int? datetime,
+    String? mp4,
+    String? hls,
   }) =>
       ImgurUploadData(
         id: id ?? this.id,
@@ -171,11 +173,13 @@ class ImgurUploadData {
         hls: hls ?? this.hls,
       );
 
-  factory ImgurUploadData.fromRawJson(String str) => ImgurUploadData.fromJson(json.decode(str));
+  factory ImgurUploadData.fromRawJson(String str) =>
+      ImgurUploadData.fromJson(json.decode(str));
 
   String toRawJson() => json.encode(toJson());
 
-  factory ImgurUploadData.fromJson(Map<String, dynamic> json) => ImgurUploadData(
+  factory ImgurUploadData.fromJson(Map<String, dynamic> json) =>
+      ImgurUploadData(
         id: json["id"] == null ? null : json["id"],
         deletehash: json["deletehash"] == null ? null : json["deletehash"],
         accountId: json["account_id"],
@@ -236,7 +240,8 @@ class ImgurUploadData {
         "is_ad": isAd == null ? null : isAd,
         "nsfw": nsfw,
         "link": link == null ? null : link,
-        "tags": tags == null ? null : List<dynamic>.from(tags.map((x) => x)),
+        "tags":
+            tags == null ? null : List<dynamic>.from(tags?.map((x) => x) ?? []),
         "datetime": datetime == null ? null : datetime,
         "mp4": mp4 == null ? null : mp4,
         "hls": hls == null ? null : hls,
