@@ -57,11 +57,11 @@ class NotificationUtils {
   }
 
   static Future<void> show({
-    @required int id,
-    @required String androidChannelId,
-    @required String androidChannelDescription,
-    @required String title,
-    @required String content,
+    required int id,
+    required String androidChannelId,
+    required String androidChannelDescription,
+    required String title,
+    required String content,
     bool enableVibration = true,
     String androidResourceIcon = ANDROID_RESOURCE_NAME,
   }) async {
@@ -89,41 +89,37 @@ class NotificationUtils {
   }
 
   static Future<void> scheduleCourseNotify({
-    @required BuildContext context,
-    @required CourseNotify courseNotify,
-    @required Day day,
+    required BuildContext context,
+    required CourseNotify courseNotify,
+    required Day day,
     bool enableVibration = true,
     int beforeMinutes = 10,
     String androidResourceIcon = ANDROID_RESOURCE_NAME,
   }) async {
     final ap = ApLocalizations.of(context);
-    String content = sprintf(ap.courseNotifyContent, [
-      courseNotify.title,
-      courseNotify.location.isEmpty
-          ? ap.courseNotifyUnknown
-          : courseNotify.location
-    ]);
-    final time =
-        parseTime(courseNotify.startTime, beforeMinutes: beforeMinutes);
+    String content = sprintf(ap?.courseNotifyContent,
+        [courseNotify.title, courseNotify.locationText]);
+    final time = parseTime(courseNotify.startTime ?? '00:00',
+        beforeMinutes: beforeMinutes);
     await scheduleWeeklyNotify(
       id: courseNotify.id,
-      title: ap.courseNotify,
+      title: ap?.courseNotify ?? '',
       content: content,
       day: getDay(courseNotify.weekdayIndex),
       time: time,
       androidChannelId: '$COURSE',
-      androidChannelDescription: ap.courseNotify,
+      androidChannelDescription: ap?.courseNotify ?? '',
     );
   }
 
   static Future<void> scheduleWeeklyNotify({
-    @required int id,
-    @required String androidChannelId,
-    @required String androidChannelDescription,
-    @required Day day,
-    @required Time time,
-    @required String title,
-    @required String content,
+    required int id,
+    required String androidChannelId,
+    required String androidChannelDescription,
+    required Day day,
+    required Time time,
+    required String title,
+    required String content,
     String androidResourceIcon = ANDROID_RESOURCE_NAME,
   }) async {
     final flutterLocalNotificationsPlugin = FlutterLocalNotificationsPlugin();
@@ -160,12 +156,12 @@ class NotificationUtils {
   }
 
   static Future<void> schedule({
-    @required int id,
-    @required String androidChannelId,
-    @required String androidChannelDescription,
-    @required DateTime dateTime,
-    @required String title,
-    @required String content,
+    required int id,
+    required String androidChannelId,
+    required String androidChannelDescription,
+    required DateTime dateTime,
+    required String title,
+    required String content,
     String androidResourceIcon = ANDROID_RESOURCE_NAME,
   }) async {
     final flutterLocalNotificationsPlugin = FlutterLocalNotificationsPlugin();
@@ -200,7 +196,7 @@ class NotificationUtils {
     );
   }
 
-  static Future<bool> requestPermissions({
+  static Future<bool?> requestPermissions({
     bool sound = true,
     bool alert = true,
     bool badge = true,
@@ -228,7 +224,7 @@ class NotificationUtils {
   }
 
   static Future<void> cancelCourseNotify({
-    @required int id,
+    required int? id,
   }) async {
     final flutterLocalNotificationsPlugin = FlutterLocalNotificationsPlugin();
     await flutterLocalNotificationsPlugin.cancel(id);
