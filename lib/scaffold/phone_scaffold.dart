@@ -13,12 +13,12 @@ class PhoneScaffold extends StatefulWidget {
   static const String routerName = "/info/phone";
 
   final PhoneState state;
-  final List<PhoneModel> phoneModelList;
+  final List<PhoneModel>? phoneModelList;
 
   const PhoneScaffold({
-    Key key,
-    @required this.state,
-    @required this.phoneModelList,
+    Key? key,
+    required this.state,
+    required this.phoneModelList,
   }) : super(key: key);
 
   @override
@@ -30,7 +30,7 @@ class PhoneScaffoldState extends State<PhoneScaffold>
   @override
   bool get wantKeepAlive => true;
 
-  ApLocalizations ap;
+  late ApLocalizations ap;
 
   TextStyle get _textStyle => TextStyle(
         fontSize: 18.0,
@@ -50,7 +50,7 @@ class PhoneScaffoldState extends State<PhoneScaffold>
 
   @override
   void initState() {
-    AnalyticsUtils.instance?.setCurrentScreen(
+    AnalyticsUtils.instance.setCurrentScreen(
       "PhoneScaffold",
       "phone_scaffold.dart",
     );
@@ -65,7 +65,7 @@ class PhoneScaffoldState extends State<PhoneScaffold>
   @override
   Widget build(BuildContext context) {
     super.build(context);
-    ap = ApLocalizations.of(context);
+    ap = ApLocalizations.of(context)!;
     return _body();
   }
 
@@ -82,28 +82,29 @@ class PhoneScaffoldState extends State<PhoneScaffold>
         );
       default:
         return ListView.builder(
-          itemCount: widget.phoneModelList.length,
+          itemCount: widget.phoneModelList?.length,
           itemBuilder: (context, index) {
-            if (widget.phoneModelList[index].number.isEmpty) {
+            final phone = widget.phoneModelList?[index];
+            if (phone?.number.isEmpty ?? false) {
               return Padding(
                 padding: EdgeInsets.symmetric(
                   vertical: 8.0,
                   horizontal: 16.0,
                 ),
                 child: Text(
-                  widget.phoneModelList[index].name,
+                  phone?.name ?? '',
                   style: _textBlueStyle,
                   textAlign: TextAlign.left,
                 ),
               );
             } else
-              return _phoneItem(widget.phoneModelList[index]);
+              return _phoneItem(phone);
           },
         );
     }
   }
 
-  Widget _phoneItem(PhoneModel phone) {
+  Widget _phoneItem(PhoneModel? phone) {
     return InkWell(
       child: Container(
         padding: EdgeInsets.all(16.0),
@@ -117,13 +118,13 @@ class PhoneScaffoldState extends State<PhoneScaffold>
           crossAxisAlignment: CrossAxisAlignment.start,
           children: <Widget>[
             Text(
-              phone.name ?? '',
+              phone?.name ?? '',
               style: _textStyle,
               textAlign: TextAlign.left,
             ),
             SizedBox(height: 8.0),
             Text(
-              phone.number ?? '',
+              phone?.number ?? '',
               style: _textGreyStyle,
               textAlign: TextAlign.left,
             )
@@ -131,12 +132,12 @@ class PhoneScaffoldState extends State<PhoneScaffold>
         ),
       ),
       onTap: () {
-        AnalyticsUtils.instance?.logEvent('call_phone_click');
+        AnalyticsUtils.instance.logEvent('call_phone_click');
         try {
-          ApUtils.callPhone(phone.number);
-          AnalyticsUtils.instance?.logEvent('call_phone_success');
+          ApUtils.callPhone(phone?.number);
+          AnalyticsUtils.instance.logEvent('call_phone_success');
         } catch (e) {
-          AnalyticsUtils.instance?.logEvent('call_phone_error');
+          AnalyticsUtils.instance.logEvent('call_phone_error');
         }
       },
     );

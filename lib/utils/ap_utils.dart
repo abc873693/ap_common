@@ -78,7 +78,8 @@ class ApUtils {
     await launch(url);
   }
 
-  static callPhone(String url) async {
+  static callPhone(String? url) async {
+    if (url == null) throw 'Could not launch null';
     url = url.replaceAll('#', ',');
     url = url.replaceAll('(', '');
     url = url.replaceAll(')', '');

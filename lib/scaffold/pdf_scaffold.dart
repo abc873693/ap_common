@@ -10,17 +10,15 @@ enum PdfState { loading, finish, error }
 
 class PdfScaffold extends StatefulWidget {
   final PdfState state;
-  final PdfController pdfController;
-  final Function onRefresh;
+  final PdfController? pdfController;
+  final Function()? onRefresh;
 
   PdfScaffold({
-    Key key,
-    @required this.state,
-    @required this.pdfController,
+    Key? key,
+    required this.state,
+    required this.pdfController,
     this.onRefresh,
-  }) : super(key: key) {
-    assert(this.state != null);
-  }
+  }) : super(key: key);
 
   @override
   _PdfScaffoldState createState() => _PdfScaffoldState();
@@ -55,11 +53,11 @@ class _PdfScaffoldState extends State<PdfScaffold> {
 
   Widget get errorContent => InkWell(
         onTap: () {
-          if (widget.onRefresh != null) widget.onRefresh();
+          widget.onRefresh?.call();
         },
         child: HintContent(
           icon: ApIcon.error,
-          content: ApLocalizations.of(context).clickToRetry,
+          content: ApLocalizations.of(context)!.clickToRetry,
         ),
       );
 }
