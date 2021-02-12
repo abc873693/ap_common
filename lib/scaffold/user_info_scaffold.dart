@@ -10,16 +10,15 @@ import 'package:material_design_icons_flutter/material_design_icons_flutter.dart
 enum BarCodeMode { code39, qrCode }
 
 class UserInfoScaffold extends StatefulWidget {
-
   final UserInfo userInfo;
-  final String heroTag;
-  final List<Widget> actions;
-  final Future<UserInfo> Function() onRefresh;
+  final String? heroTag;
+  final List<Widget>? actions;
+  final Future<UserInfo> Function()? onRefresh;
   final bool enableBarCode;
 
   const UserInfoScaffold({
-    Key key,
-    @required this.userInfo,
+    Key? key,
+    required this.userInfo,
     this.heroTag,
     this.actions,
     this.onRefresh,
@@ -31,8 +30,7 @@ class UserInfoScaffold extends StatefulWidget {
 }
 
 class UserInfoScaffoldState extends State<UserInfoScaffold> {
-
-  ApLocalizations app;
+  late ApLocalizations app;
 
   BarCodeMode codeMode = BarCodeMode.qrCode;
 
@@ -59,13 +57,13 @@ class UserInfoScaffoldState extends State<UserInfoScaffold> {
 
   @override
   Widget build(BuildContext context) {
-    app = ApLocalizations.of(context);
+    app = ApLocalizations.of(context)!;
     return Scaffold(
       appBar: AppBar(
         title: Text(app.userInfo),
         backgroundColor: ApTheme.of(context).blue,
         actions: [
-          ...widget.actions,
+          ...widget.actions ?? [],
           if (widget.enableBarCode)
             IconButton(
               icon: Icon(icon),
@@ -78,7 +76,7 @@ class UserInfoScaffoldState extends State<UserInfoScaffold> {
       ),
       body: RefreshIndicator(
         onRefresh: () async {
-          if (widget.onRefresh != null) await widget.onRefresh();
+          await widget.onRefresh?.call();
           return null;
         },
         child: ListView(
@@ -93,7 +91,7 @@ class UserInfoScaffoldState extends State<UserInfoScaffold> {
                       child: Hero(
                         tag: widget.heroTag ?? ApConstants.TAG_STUDENT_PICTURE,
                         child: Image.memory(
-                          widget.userInfo.pictureBytes,
+                          widget.userInfo.pictureBytes!,
                         ),
                       ),
                     ),
@@ -118,9 +116,9 @@ class UserInfoCard extends StatelessWidget {
   final bool enableBarCode;
 
   const UserInfoCard({
-    Key key,
-    this.userInfo,
-    this.codeMode,
+    Key? key,
+    required this.userInfo,
+    required this.codeMode,
     this.enableBarCode = false,
   }) : super(key: key);
 
@@ -148,6 +146,7 @@ class UserInfoCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final ap = ApLocalizations.current;
     return Card(
       elevation: 4.0,
       margin: EdgeInsets.all(16.0),
@@ -172,37 +171,37 @@ class UserInfoCard extends StatelessWidget {
                 ),
               ),
             ListTile(
-              title: Text(ApLocalizations.of(context).studentNameCht),
-              subtitle: Text(userInfo?.name ?? ''),
+              title: Text(ap.studentNameCht),
+              subtitle: Text(userInfo.name ?? ''),
             ),
             Divider(height: 1.0),
-            if (userInfo?.educationSystem != null) ...[
+            if (userInfo.educationSystem != null) ...[
               ListTile(
-                title: Text(ApLocalizations.of(context).educationSystem),
-                subtitle: Text(userInfo?.educationSystem ?? ''),
+                title: Text(ap.educationSystem),
+                subtitle: Text(userInfo.educationSystem ?? ''),
               ),
               Divider(height: 1.0),
             ],
-            if (userInfo?.email != null) ...[
+            if (userInfo.email != null) ...[
               ListTile(
-                title: Text(ApLocalizations.of(context).email),
-                subtitle: Text(userInfo?.email ?? ''),
+                title: Text(ap.email),
+                subtitle: Text(userInfo.email ?? ''),
               ),
               Divider(height: 1.0),
             ],
             ListTile(
-              title: Text(ApLocalizations.of(context).department),
-              subtitle: Text(userInfo?.department ?? ''),
+              title: Text(ap.department),
+              subtitle: Text(userInfo.department ?? ''),
             ),
             Divider(height: 1.0),
             ListTile(
-              title: Text(ApLocalizations.of(context).studentClass),
-              subtitle: Text(userInfo?.className ?? ''),
+              title: Text(ap.studentClass),
+              subtitle: Text(userInfo.className ?? ''),
             ),
             Divider(height: 1.0),
             ListTile(
-              title: Text(ApLocalizations.of(context).studentId),
-              subtitle: Text(userInfo?.id ?? ''),
+              title: Text(ap.studentId),
+              subtitle: Text(userInfo.id ?? ''),
             ),
             Divider(height: 1.0),
           ],
