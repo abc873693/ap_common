@@ -4,16 +4,16 @@ import 'package:flutter/material.dart';
 class YesNoDialog extends StatelessWidget {
   final String title;
   final Widget contentWidget;
-  final EdgeInsetsGeometry contentWidgetPadding;
-  final String leftActionText;
-  final String rightActionText;
-  final Function leftActionFunction;
-  final Function rightActionFunction;
+  final EdgeInsetsGeometry? contentWidgetPadding;
+  final String? leftActionText;
+  final String? rightActionText;
+  final Function()? leftActionFunction;
+  final Function()? rightActionFunction;
 
   const YesNoDialog(
-      {Key key,
-      this.title,
-      this.contentWidget,
+      {Key? key,
+      required this.title,
+      required this.contentWidget,
       this.contentWidgetPadding,
       this.leftActionText,
       this.rightActionText,
@@ -89,7 +89,7 @@ class YesNoDialog extends StatelessWidget {
                     alignment: Alignment.center,
                     padding: EdgeInsets.symmetric(vertical: 16.0),
                     child: Text(
-                      leftActionText,
+                      leftActionText ?? '',
                       style: TextStyle(
                         color: ApTheme.of(context).greyText,
                         fontSize: 16.0,
@@ -98,7 +98,7 @@ class YesNoDialog extends StatelessWidget {
                   ),
                   onTap: () {
                     Navigator.of(context, rootNavigator: true).pop();
-                    if (leftActionFunction != null) leftActionFunction();
+                    leftActionFunction?.call();
                   },
                 ),
               ),
@@ -111,7 +111,7 @@ class YesNoDialog extends StatelessWidget {
                     alignment: Alignment.center,
                     padding: EdgeInsets.symmetric(vertical: 16.0),
                     child: Text(
-                      rightActionText,
+                      rightActionText ?? '',
                       style: TextStyle(
                         color: ApTheme.of(context).greyText,
                         fontSize: 16.0,
@@ -120,7 +120,7 @@ class YesNoDialog extends StatelessWidget {
                   ),
                   onTap: () {
                     Navigator.of(context, rootNavigator: true).pop();
-                    if (rightActionFunction != null) rightActionFunction();
+                    rightActionFunction?.call();
                   },
                 ),
               ),

@@ -10,7 +10,10 @@ import 'option_dialog.dart';
 class SettingTitle extends StatelessWidget {
   final String text;
 
-  const SettingTitle({Key key, this.text}) : super(key: key);
+  const SettingTitle({
+    Key? key,
+    required this.text,
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -29,14 +32,14 @@ class SettingSwitch extends StatelessWidget {
   final String text;
   final String subText;
   final bool value;
-  final Function onChanged;
+  final Function(bool)? onChanged;
 
   const SettingSwitch({
-    Key key,
-    @required this.text,
-    @required this.subText,
-    @required this.value,
-    @required this.onChanged,
+    Key? key,
+    required this.text,
+    required this.subText,
+    required this.value,
+    required this.onChanged,
   }) : super(key: key);
 
   @override
@@ -60,13 +63,13 @@ class SettingSwitch extends StatelessWidget {
 class SettingItem extends StatelessWidget {
   final String text;
   final String subText;
-  final Function onTap;
+  final Function() onTap;
 
   const SettingItem({
-    Key key,
-    @required this.text,
-    @required this.subText,
-    @required this.onTap,
+    Key? key,
+    required this.text,
+    required this.subText,
+    required this.onTap,
   }) : super(key: key);
 
   @override
@@ -86,36 +89,36 @@ class SettingItem extends StatelessWidget {
 }
 
 class CheckCourseNotifyItem extends StatelessWidget {
-  final String tag;
+  final String? tag;
 
-  const CheckCourseNotifyItem({Key key, this.tag}) : super(key: key);
+  const CheckCourseNotifyItem({Key? key, this.tag}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    final ap = ApLocalizations.of(context);
+    final ap = ApLocalizations.of(context)!;
     return SettingItem(
       text: ap.courseNotify,
       subText: ap.courseNotifySubTitle,
       onTap: () {
         CourseNotifyData notifyData = tag == null
             ? CourseNotifyData.loadCurrent()
-            : CourseNotifyData.load(tag);
+            : CourseNotifyData.load(tag!);
         if (NotificationUtils.isSupport) {
-          if (notifyData != null && notifyData.data.length != 0) {
+          if (notifyData.data?.length != 0) {
             showDialog(
               context: context,
               builder: (_) => SimpleOptionDialog(
-                title: ap.courseNotify ?? '',
+                title: ap.courseNotify,
                 items: [
-                  for (var notify in notifyData.data)
+                  for (var notify in notifyData.data ?? [])
                     '${ap.weekdaysCourse[notify.weekdayIndex]} ${notify.startTime} ${notify.title}',
                 ],
                 index: -1,
                 onSelected: (index) {
                   NotificationUtils.cancelCourseNotify(
-                    id: notifyData.data[index].id,
+                    id: notifyData.data?[index].id,
                   );
-                  notifyData.data.removeAt(index);
+                  notifyData.data?.removeAt(index);
                   notifyData.save();
                   ApUtils.showToast(context, ap.cancelNotifySuccess);
                 },
@@ -131,23 +134,23 @@ class CheckCourseNotifyItem extends StatelessWidget {
 }
 
 class ClearAllNotifyItem extends StatelessWidget {
-  final String tag;
+  final String? tag;
 
-  const ClearAllNotifyItem({Key key, this.tag}) : super(key: key);
+  const ClearAllNotifyItem({Key? key, this.tag}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    final ap = ApLocalizations.of(context);
+    final ap = ApLocalizations.of(context)!;
     return SettingItem(
       text: ap.cancelAllNotify,
       subText: ap.cancelAllNotifySubTitle,
       onTap: () {
         if (NotificationUtils.isSupport) {
           NotificationUtils.cancelAll();
-          CourseNotifyData notifyData = tag == null
+          CourseNotifyData notifyData = (tag == null)
               ? CourseNotifyData.loadCurrent()
-              : CourseNotifyData.load(tag);
-          notifyData.data.clear();
+              : CourseNotifyData.load(tag!);
+          notifyData.data?.clear();
           notifyData.save();
           ApUtils.showToast(context, ap.cancelNotifySuccess);
         } else

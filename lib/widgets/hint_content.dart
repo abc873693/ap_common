@@ -6,8 +6,8 @@ class HintContent extends StatelessWidget {
   final String content;
 
   HintContent({
-    @required this.icon,
-    @required this.content,
+    required this.icon,
+    required this.content,
   });
 
   @override

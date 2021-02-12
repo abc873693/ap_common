@@ -11,11 +11,11 @@ class ItemPicker extends StatelessWidget {
   final String dialogTitle;
 
   const ItemPicker({
-    Key key,
-    @required this.onSelected,
-    @required this.items,
-    @required this.dialogTitle,
-    @required this.currentIndex,
+    Key? key,
+    required this.onSelected,
+    required this.items,
+    required this.dialogTitle,
+    required this.currentIndex,
   }) : super(key: key);
 
   @override
@@ -25,9 +25,9 @@ class ItemPicker extends StatelessWidget {
         showDialog(
           context: context,
           builder: (_) => SimpleOptionDialog(
-            title: dialogTitle ?? '',
-            items: items ?? [],
-            index: currentIndex ?? 0,
+            title: dialogTitle,
+            items: items,
+            index: currentIndex,
             onSelected: onSelected,
           ),
         );
@@ -37,7 +37,7 @@ class ItemPicker extends StatelessWidget {
         children: <Widget>[
           Expanded(
             child: Text(
-              items != null ? items[currentIndex] ?? '' : '',
+              items[currentIndex] ?? '',
               style: TextStyle(
                 color: ApTheme.of(context).semesterText,
                 fontSize: 18.0,
