@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
 abstract class CrashlyticsUtils {
-  static CrashlyticsUtils instance;
+  static late CrashlyticsUtils instance;
 
   Future<void> recordError(
     dynamic exception,
