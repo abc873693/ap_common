@@ -12,9 +12,9 @@ import 'package:url_launcher/url_launcher.dart';
 
 class DialogUtils {
   static showDefault({
-    @required BuildContext context,
-    @required String title,
-    @required String content,
+    required BuildContext context,
+    required String title,
+    required String content,
   }) {
     showDialog(
       context: context,
@@ -28,7 +28,7 @@ class DialogUtils {
             fontSize: 16.0,
           ),
         ),
-        actionText: ApLocalizations.of(context).iKnow,
+        actionText: ApLocalizations.current.iKnow,
         actionFunction: () {
           Navigator.of(context, rootNavigator: true).pop();
         },
@@ -37,10 +37,10 @@ class DialogUtils {
   }
 
   static showAnnouncementRule({
-    @required BuildContext context,
-    @required Function onRightButtonClick,
+    required BuildContext context,
+    required Function() onRightButtonClick,
   }) {
-    final ap = ApLocalizations.of(context);
+    final ap = ApLocalizations.current;
     showDialog(
       context: context,
       builder: (BuildContext context) => YesNoDialog(
@@ -72,23 +72,23 @@ class DialogUtils {
   static showUpdateContent(BuildContext context, String content) => showDialog(
         context: context,
         builder: (BuildContext context) => DefaultDialog(
-          title: ApLocalizations.of(context).updateNoteTitle,
+          title: ApLocalizations.current.updateNoteTitle,
           contentWidget: Text(
             content,
             textAlign: TextAlign.center,
             style: TextStyle(color: ApTheme.of(context).grey),
           ),
-          actionText: ApLocalizations.of(context).iKnow,
+          actionText: ApLocalizations.current.iKnow,
           actionFunction: () => Navigator.of(context).pop(),
         ),
       );
 
   static showNewVersionContent({
-    @required BuildContext context,
-    @required VersionInfo versionInfo,
-    @required String appName,
-    @required String iOSAppId,
-    @required String defaultUrl,
+    required BuildContext context,
+    required VersionInfo versionInfo,
+    required String appName,
+    required String iOSAppId,
+    required String defaultUrl,
   }) async {
     PackageInfo packageInfo = await PackageInfo.fromPlatform();
     var app = ApLocalizations.current;
