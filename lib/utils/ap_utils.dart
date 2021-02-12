@@ -18,15 +18,19 @@ import 'package:permission_handler/permission_handler.dart';
 import 'package:share/share.dart';
 import 'package:toast/toast.dart';
 import 'package:url_launcher/url_launcher.dart';
-export 'package:dio/dio.dart';
 
+export 'package:dio/dio.dart';
 export 'package:toast/toast.dart';
 
 class ApUtils {
   static bool get isSupportCacheNetworkImage =>
       (kIsWeb || Platform.isAndroid || Platform.isIOS || Platform.isMacOS);
 
-  static void showToast(BuildContext context, String message, {int gravity}) {
+  static void showToast(
+    BuildContext context,
+    String message, {
+    int? gravity,
+  }) {
     Toast.show(
       message,
       context,
@@ -45,17 +49,21 @@ class ApUtils {
     );
   }
 
-  static void handleDioError(BuildContext context, DioError dioError,
-      {int gravity}) {
+  @deprecated
+  static void handleDioError(
+    BuildContext context,
+    DioError dioError, {
+    int? gravity,
+  }) {
     switch (dioError.type) {
       case DioErrorType.DEFAULT:
-        showToast(context, ApLocalizations.of(context).noInternet,
+        showToast(context, ApLocalizations.current.noInternet,
             gravity: gravity);
         break;
       case DioErrorType.CONNECT_TIMEOUT:
       case DioErrorType.RECEIVE_TIMEOUT:
       case DioErrorType.SEND_TIMEOUT:
-        showToast(context, ApLocalizations.of(context).timeoutMessage,
+        showToast(context, ApLocalizations.current.timeoutMessage,
             gravity: gravity);
         break;
       case DioErrorType.RESPONSE:
@@ -103,7 +111,7 @@ class ApUtils {
           .catchError((onError) => ApUtils.launchUrl(fansPageUrl));
     else {
       ApUtils.launchUrl(fansPageUrl).catchError((onError) => ApUtils.showToast(
-          context, ApLocalizations.of(context).platformError));
+          context, ApLocalizations.of(context)!.platformError));
     }
   }
 
@@ -112,7 +120,7 @@ class ApUtils {
     String defaultUrl,
   ) async {
     await Future.delayed(Duration(seconds: 1));
-    final app = ApLocalizations.of(context);
+    final app = ApLocalizations.of(context)!;
     showDialog(
       context: context,
       builder: (BuildContext context) => YesNoDialog(
@@ -139,7 +147,7 @@ class ApUtils {
     String defaultUrl,
   ) async {
     // await Future.delayed(Duration(seconds: 1));
-    final app = ApLocalizations.of(context);
+    final app = ApLocalizations.of(context)!;
     showModalBottomSheet(
       context: context,
       builder: (BuildContext context) => Column(
@@ -213,7 +221,7 @@ class ApUtils {
     String fileName,
     String successMessage,
   ) async {
-    final ap = ApLocalizations.of(context);
+    final ap = ApLocalizations.of(context)!;
     try {
       bool hasGrantPermission = true;
       if (kIsWeb) {
@@ -257,7 +265,7 @@ class ApUtils {
 
   static showOverlay(BuildContext context, String text) {
     if (overlayEntry != null) return;
-    OverlayState overlayState = Overlay.of(context);
+    final overlayState = Overlay.of(context);
     overlayEntry = OverlayEntry(
       builder: (context) {
         return Positioned(
@@ -269,7 +277,7 @@ class ApUtils {
       },
     );
 
-    overlayState.insert(overlayEntry);
+    overlayState?.insert(overlayEntry);
   }
 
   static removeOverlay() {
@@ -283,7 +291,10 @@ class ApUtils {
 class InputDoneView extends StatelessWidget {
   final String text;
 
-  const InputDoneView({Key key, @required this.text}) : super(key: key);
+  const InputDoneView({
+    Key? key,
+    required this.text,
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
