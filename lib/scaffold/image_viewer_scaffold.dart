@@ -7,20 +7,20 @@ class ImageViewer {
   final String assetName;
 
   ImageViewer({
-    @required this.title,
-    @required this.assetName,
+    required this.title,
+    required this.assetName,
   });
 }
 
 class ImageViewerScaffold extends StatefulWidget {
-  final String title;
+  final String? title;
   final List<ImageViewer> imageViewers;
-  final List<Widget> actions;
+  final List<Widget>? actions;
 
   const ImageViewerScaffold({
-    Key key,
+    Key? key,
     this.title,
-    @required this.imageViewers,
+    required this.imageViewers,
     this.actions,
   }) : super(key: key);
 
@@ -30,7 +30,7 @@ class ImageViewerScaffold extends StatefulWidget {
 
 class _ImageViewerScaffoldState extends State<ImageViewerScaffold>
     with SingleTickerProviderStateMixin {
-  TabController _tabController;
+  late TabController _tabController;
 
   @override
   void initState() {
