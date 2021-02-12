@@ -1,6 +1,7 @@
 import 'package:ap_common/models/phone_model.dart';
 import 'package:ap_common/resources/ap_icon.dart';
 import 'package:ap_common/resources/ap_theme.dart';
+import 'package:ap_common/utils/analytics_utils.dart';
 import 'package:ap_common/utils/ap_localizations.dart';
 import 'package:ap_common/utils/ap_utils.dart';
 import 'package:ap_common/widgets/hint_content.dart';
@@ -13,15 +14,11 @@ class PhoneScaffold extends StatefulWidget {
 
   final PhoneState state;
   final List<PhoneModel> phoneModelList;
-  final Function() setCurrentScreen;
-  final Function(String name, String value) logEvent;
 
   const PhoneScaffold({
     Key key,
     @required this.state,
     @required this.phoneModelList,
-    this.setCurrentScreen,
-    this.logEvent,
   }) : super(key: key);
 
   @override
@@ -53,7 +50,10 @@ class PhoneScaffoldState extends State<PhoneScaffold>
 
   @override
   void initState() {
-    if (widget.setCurrentScreen != null) widget.setCurrentScreen();
+    AnalyticsUtils.instance?.setCurrentScreen(
+      "PhoneScaffold",
+      "phone_scaffold.dart",
+    );
     super.initState();
   }
 
@@ -131,12 +131,12 @@ class PhoneScaffoldState extends State<PhoneScaffold>
         ),
       ),
       onTap: () {
-        if (widget.logEvent != null) widget.logEvent('call_phone', 'click');
+        AnalyticsUtils.instance?.logEvent('call_phone_click');
         try {
           ApUtils.callPhone(phone.number);
-          if (widget.logEvent != null) widget.logEvent('call_phone_success', '');
+          AnalyticsUtils.instance?.logEvent('call_phone_success');
         } catch (e) {
-          if (widget.logEvent != null) widget.logEvent('call_phone_error', '');
+          AnalyticsUtils.instance?.logEvent('call_phone_error');
         }
       },
     );

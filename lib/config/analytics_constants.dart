@@ -14,4 +14,5 @@ class AnalyticsConstants {
   //analytics
   static const String COURSE_HTML_PARSER = 'course_html_parser';
   static const String SCORE_HTML_PARSER = 'score_html_parser';
+  static const String REFRESH = 'refresh';
 }

@@ -1,6 +1,8 @@
+import 'package:ap_common/config/analytics_constants.dart';
 import 'package:ap_common/models/notification_data.dart';
 import 'package:ap_common/resources/ap_icon.dart';
 import 'package:ap_common/resources/ap_theme.dart';
+import 'package:ap_common/utils/analytics_utils.dart';
 import 'package:ap_common/utils/ap_localizations.dart';
 import 'package:ap_common/utils/ap_utils.dart';
 import 'package:ap_common/widgets/hint_content.dart';
@@ -15,8 +17,6 @@ class NotificationScaffold extends StatefulWidget {
   final List<Notifications> notificationList;
   final Function onRefresh;
   final Function onLoadingMore;
-  final Function() setCurrentScreen;
-  final Function(String name, String value) logEvent;
 
   NotificationScaffold({
     Key key,
@@ -24,8 +24,6 @@ class NotificationScaffold extends StatefulWidget {
     @required this.notificationList,
     this.onRefresh,
     this.onLoadingMore,
-    this.setCurrentScreen,
-    this.logEvent,
   }) : super(key: key);
 
   @override
@@ -53,7 +51,10 @@ class NotificationScaffoldState extends State<NotificationScaffold>
 
   @override
   void initState() {
-    if (widget.setCurrentScreen != null) widget.setCurrentScreen();
+    AnalyticsUtils.instance?.setCurrentScreen(
+      "NotificationScaffold",
+      "notification_scaffold.dart",
+    );
     controller = ScrollController()..addListener(_scrollListener);
     super.initState();
   }
@@ -68,19 +69,11 @@ class NotificationScaffoldState extends State<NotificationScaffold>
     return InkWell(
       onLongPress: () {
         ApUtils.shareTo("${notification.info.title}\n${notification.link}");
-        if (widget.logEvent != null)
-          widget.logEvent(
-            'share',
-            'long_click',
-          );
+        AnalyticsUtils.instance?.logEvent('share_long_click');
       },
       onTap: () {
         ApUtils.launchUrl(notification.link);
-        if (widget.logEvent != null)
-          widget.logEvent(
-            'notification_link',
-            'click',
-          );
+        AnalyticsUtils.instance?.logEvent('notification_link_click');
       },
       child: Container(
         width: double.infinity,
@@ -140,11 +133,7 @@ class NotificationScaffoldState extends State<NotificationScaffold>
         return InkWell(
           onTap: () {
             if (widget.onRefresh != null) widget.onRefresh();
-            if (widget.logEvent != null)
-              widget.logEvent(
-                'rerty',
-                'click',
-              );
+            AnalyticsUtils.instance?.logEvent(AnalyticsConstants.REFRESH);
           },
           child: HintContent(
             icon: ApIcon.assignment,
