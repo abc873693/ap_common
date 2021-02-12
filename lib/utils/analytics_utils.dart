@@ -2,7 +2,7 @@ import 'package:ap_common/models/user_info.dart';
 import 'package:flutter/material.dart';
 
 abstract class AnalyticsUtils {
-  static AnalyticsUtils instance;
+  static late AnalyticsUtils instance;
 
   Future<void> setCurrentScreen(String screenName, String screenClassOverride);
 
