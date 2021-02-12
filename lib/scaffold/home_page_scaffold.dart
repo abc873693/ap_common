@@ -20,27 +20,27 @@ enum HomeState { loading, finish, error, empty, offline }
 
 class HomePageScaffold extends StatefulWidget {
   final HomeState state;
-  final String title;
+  final String? title;
   final List<Announcement> announcements;
-  final List<Widget> actions;
-  final List<BottomNavigationBarItem> bottomNavigationBarItems;
+  final List<Widget>? actions;
+  final List<BottomNavigationBarItem>? bottomNavigationBarItems;
 
-  final Function(int index) onTabTapped;
-  final Function(Announcement announcement) onImageTapped;
+  final Function(int index)? onTabTapped;
+  final Function(Announcement announcement)? onImageTapped;
 
-  final Widget drawer;
-  final Widget content;
-  final Widget floatingActionButton;
+  final Widget? drawer;
+  final Widget? content;
+  final Widget? floatingActionButton;
 
   final bool isLogin;
   final bool autoPlay;
   final Duration autoPlayDuration;
 
   const HomePageScaffold({
-    Key key,
-    @required this.state,
-    @required this.announcements,
-    @required this.isLogin,
+    Key? key,
+    required this.state,
+    required this.announcements,
+    required this.isLogin,
     this.actions,
     this.onTabTapped,
     this.bottomNavigationBarItems,
@@ -59,13 +59,13 @@ class HomePageScaffold extends StatefulWidget {
 
 class HomePageScaffoldState extends State<HomePageScaffold> {
   final _scaffoldMessengerKey = GlobalKey<ScaffoldMessengerState>();
-  ApLocalizations app;
+  late ApLocalizations app;
 
-  PageController pageController;
+  late PageController pageController;
 
   int _currentNewsIndex = 0;
 
-  Timer _timer;
+  Timer? _timer;
 
   bool get isTablet => MediaQuery.of(context).size.shortestSide >= 680;
 
@@ -83,14 +83,14 @@ class HomePageScaffoldState extends State<HomePageScaffold> {
 
   @override
   Widget build(BuildContext context) {
-    app = ApLocalizations.of(context);
+    app = ApLocalizations.of(context)!;
     return WillPopScope(
       child: Row(
         children: [
-          if (isTablet) widget.drawer,
+          if (isTablet) widget.drawer!,
           Expanded(
             child: (isTablet && widget.content != null)
-                ? widget.content
+                ? widget.content!
                 : ScaffoldMessenger(
                     key: _scaffoldMessengerKey,
                     child: Scaffold(
@@ -128,7 +128,7 @@ class HomePageScaffoldState extends State<HomePageScaffold> {
                                   unselectedFontSize: 12.0,
                                   selectedIconTheme: IconThemeData(size: 24.0),
                                   onTap: widget.onTabTapped,
-                                  items: widget.bottomNavigationBarItems,
+                                  items: widget.bottomNavigationBarItems!,
                                 ),
                     ),
                   ),
@@ -157,7 +157,7 @@ class HomePageScaffoldState extends State<HomePageScaffold> {
               _currentNewsIndex++;
               if (_currentNewsIndex >= widget.announcements.length)
                 _currentNewsIndex = 0;
-              pageController?.animateToPage(
+              pageController.animateToPage(
                 _currentNewsIndex,
                 duration: Duration(milliseconds: 500),
                 curve: Curves.easeOutQuint,
@@ -174,7 +174,7 @@ class HomePageScaffoldState extends State<HomePageScaffold> {
   ) {
     return GestureDetector(
       onTap: () {
-        if (widget.onImageTapped != null) widget.onImageTapped(announcement);
+        widget.onImageTapped?.call(announcement);
       },
       onTapDown: (detail) {
         _timer?.cancel();
@@ -195,7 +195,7 @@ class HomePageScaffoldState extends State<HomePageScaffold> {
         child: Hero(
           tag: announcement.hashCode,
           child: ApNetworkImage(
-            url: announcement.imgUrl,
+            url: announcement.imgUrl ?? '',
           ),
         ),
       ),
@@ -211,7 +211,7 @@ class HomePageScaffoldState extends State<HomePageScaffold> {
     }
     pageController = PageController(viewportFraction: viewportFraction);
     pageController.addListener(() {
-      int next = pageController.page.round();
+      int next = pageController.page!.round();
       if (_currentNewsIndex != next) {
         setState(() {
           _currentNewsIndex = next;
@@ -233,7 +233,7 @@ class HomePageScaffoldState extends State<HomePageScaffold> {
               child: Material(
                 color: Colors.transparent,
                 child: Text(
-                  widget.announcements[_currentNewsIndex].title,
+                  widget.announcements[_currentNewsIndex].title ?? '',
                   textAlign: TextAlign.center,
                   style: TextStyle(
                       fontSize: 20.0,
@@ -316,24 +316,24 @@ class HomePageScaffoldState extends State<HomePageScaffold> {
     _scaffoldMessengerKey.currentState?.hideCurrentSnackBar();
   }
 
-  void showBasicHint({@required String text}) {
+  void showBasicHint({required String text}) {
     showSnackBar(text: text, duration: Duration(seconds: 2));
   }
 
-  ScaffoldFeatureController<SnackBar, SnackBarClosedReason> showSnackBar({
-    @required String text,
-    String actionText,
-    Function onSnackBarTapped,
-    Duration duration,
+  ScaffoldFeatureController<SnackBar, SnackBarClosedReason>? showSnackBar({
+    required String text,
+    String? actionText,
+    Function()? onSnackBarTapped,
+    Duration? duration,
   }) {
-    return _scaffoldMessengerKey?.currentState?.showSnackBar(
+    return _scaffoldMessengerKey.currentState?.showSnackBar(
       SnackBar(
         content: Text(text),
         duration: duration ?? Duration(days: 1),
         action: actionText == null
             ? null
             : SnackBarAction(
-                onPressed: onSnackBarTapped,
+                onPressed: onSnackBarTapped!,
                 label: actionText,
                 textColor: ApTheme.of(context).snackBarActionTextColor,
               ),
