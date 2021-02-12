@@ -15,7 +15,7 @@ import 'intl/messages_all.dart';
 class ApLocalizations {
   ApLocalizations();
   
-  static ApLocalizations current;
+  static late ApLocalizations current;
   
   static const AppLocalizationDelegate delegate =
     AppLocalizationDelegate();
@@ -31,7 +31,7 @@ class ApLocalizations {
     });
   } 
 
-  static ApLocalizations of(BuildContext context) {
+  static ApLocalizations? of(BuildContext context) {
     return Localizations.of<ApLocalizations>(context, ApLocalizations);
   }
 
