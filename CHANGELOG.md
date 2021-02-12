@@ -1,3 +1,9 @@
+## [0.12.0] - 2021/02/13
+### [Break Change]
+
+* 遷移 Flutter v1.25 按鈕
+* 移除 `PhoneScaffold` 及 `NotificationScaffold` 中 setCurrentScreen & logEvent 參數，改由內部呼叫 `AnalyticsUtils`
+
 ## [0.12.0-dev.2] - 2021/02/11
 ### [Break Change]
 
