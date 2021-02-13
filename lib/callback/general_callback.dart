@@ -17,9 +17,9 @@ class GeneralCallback<T> {
   final Function(T data) onSuccess;
 
   GeneralCallback({
-    @required this.onFailure,
-    @required this.onError,
-    @required this.onSuccess,
+    required this.onFailure,
+    required this.onError,
+    required this.onSuccess,
   });
 
   factory GeneralCallback.simple(

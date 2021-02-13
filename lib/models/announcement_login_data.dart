@@ -9,7 +9,7 @@ class AnnouncementLoginData {
     this.key,
   });
 
-  String? key;
+  String key;
 
   AnnouncementLoginData copyWith({
     String? key,
@@ -29,7 +29,7 @@ class AnnouncementLoginData {
       );
 
   Map<String, dynamic> toJson() => {
-        "key": key == null ? null : key,
+        "key": key,
       };
 
   Map<String, dynamic> get decodedToken => JwtDecoder.decode(key);

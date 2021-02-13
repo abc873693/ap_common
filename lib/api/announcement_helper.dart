@@ -34,20 +34,20 @@ class AnnouncementHelper {
   static String host = 'nkust.taki.dog';
   static String tag = 'ap';
 
-  static String fcmToken;
+  static late String fcmToken;
 
-  static AnnouncementHelper _instance;
-  static BaseOptions options;
-  static Dio dio;
-  static JsonCodec jsonCodec;
-  static CancelToken cancelToken;
+  static AnnouncementHelper? _instance;
+  static late BaseOptions options;
+  static late Dio dio;
+  static late JsonCodec jsonCodec;
+  static late CancelToken cancelToken;
 
   static AnnouncementLoginType loginType = AnnouncementLoginType.normal;
 
-  static String username;
-  static String password;
-  static String code;
-  static DateTime expireTime;
+  static String? username;
+  static String? password;
+  static String? code;
+  static DateTime? expireTime;
 
   static bool isSupportCacheData =
       (!kIsWeb && (Platform.isIOS || Platform.isMacOS || Platform.isAndroid));
@@ -66,16 +66,15 @@ class AnnouncementHelper {
     if (expireTime == null)
       return false;
     else
-      return DateTime.now().isAfter(expireTime.add(Duration(hours: 8)));
+      return DateTime.now().isAfter(expireTime!.add(Duration(hours: 8)));
   }
 
   static AnnouncementHelper get instance {
     if (_instance == null) {
-      _instance = AnnouncementHelper();
       jsonCodec = JsonCodec();
       cancelToken = CancelToken();
     }
-    return _instance;
+    return _instance ??= AnnouncementHelper();
   }
 
   AnnouncementHelper() {
@@ -95,21 +94,21 @@ class AnnouncementHelper {
 
   Future<bool> reLogin(GeneralCallback callback) async {
     var loginData = await login(
-      username: username,
-      password: password,
+      username: username!,
+      password: password!,
       callback: GeneralCallback<AnnouncementLoginData>(
         onSuccess: (loginData) => AnnouncementLoginData,
-        onFailure: callback?.onFailure,
-        onError: callback?.onError,
+        onFailure: callback.onFailure,
+        onError: callback.onError,
       ),
     );
     return loginData != null;
   }
 
-  Future<AnnouncementLoginData> login({
-    @required String username,
-    @required String password,
-    @required GeneralCallback<AnnouncementLoginData> callback,
+  Future<AnnouncementLoginData?> login({
+    required String username,
+    required String password,
+    GeneralCallback<AnnouncementLoginData>? callback,
   }) async {
     try {
       var response = await dio.post(
@@ -143,9 +142,9 @@ class AnnouncementHelper {
     return null;
   }
 
-  Future<AnnouncementLoginData> googleLogin({
-    @required String idToken,
-    @required GeneralCallback<AnnouncementLoginData> callback,
+  Future<AnnouncementLoginData?> googleLogin({
+    required String idToken,
+    GeneralCallback<AnnouncementLoginData>? callback,
   }) async {
     try {
       var response = await dio.post(
@@ -177,9 +176,9 @@ class AnnouncementHelper {
     return null;
   }
 
-  Future<AnnouncementLoginData> appleLogin({
-    @required String idToken,
-    @required GeneralCallback<AnnouncementLoginData> callback,
+  Future<AnnouncementLoginData?> appleLogin({
+    required String idToken,
+    GeneralCallback<AnnouncementLoginData>? callback,
   }) async {
     try {
       var response = await dio.post(
@@ -211,9 +210,9 @@ class AnnouncementHelper {
     return null;
   }
 
-  Future<List<Announcement>> getAllAnnouncements({
-    String locale,
-    @required GeneralCallback<List<Announcement>> callback,
+  Future<List<Announcement?>?> getAllAnnouncements({
+    String? locale,
+    GeneralCallback<List<Announcement>?>? callback,
   }) async {
     try {
       var response = await dio.get(
@@ -225,8 +224,8 @@ class AnnouncementHelper {
       var data = AnnouncementData(data: []);
       if (response.statusCode != 204) {
         data = AnnouncementData.fromJson(response.data);
-        data.data.sort((a, b) {
-          return b.weight.compareTo(a.weight);
+        data.data?.sort((a, b) {
+          return b.weight!.compareTo(a.weight!);
         });
       }
       return (callback == null) ? data.data : callback.onSuccess(data.data);
@@ -239,9 +238,9 @@ class AnnouncementHelper {
     return null;
   }
 
-  Future<Response> addAnnouncement({
-    @required Announcement data,
-    @required GeneralCallback<Response> callback,
+  Future<Response?> addAnnouncement({
+    required Announcement data,
+    GeneralCallback<Response?>? callback,
   }) async {
     try {
       var response = await dio.post(
@@ -258,9 +257,9 @@ class AnnouncementHelper {
     return null;
   }
 
-  Future<Response> updateAnnouncement({
-    @required Announcement data,
-    @required GeneralCallback<Response> callback,
+  Future<Response?> updateAnnouncement({
+    required Announcement data,
+    GeneralCallback<Response>? callback,
   }) async {
     try {
       var response = await dio.put(
@@ -277,9 +276,9 @@ class AnnouncementHelper {
     return null;
   }
 
-  Future<Response> deleteAnnouncement({
-    @required Announcement data,
-    @required GeneralCallback<Response> callback,
+  Future<Response?> deleteAnnouncement({
+    required Announcement data,
+    GeneralCallback<Response>? callback,
   }) async {
     try {
       var response = await dio.delete(
@@ -296,9 +295,9 @@ class AnnouncementHelper {
     return null;
   }
 
-  Future<List<Announcement>> getApplications({
-    String locale,
-    @required GeneralCallback<List<Announcement>> callback,
+  Future<List<Announcement>?> getApplications({
+    String? locale,
+    GeneralCallback<List<Announcement>?>? callback,
   }) async {
     try {
       var response = await dio.get(
@@ -307,8 +306,8 @@ class AnnouncementHelper {
       var data = AnnouncementData(data: []);
       if (response.statusCode != 204) {
         data = AnnouncementData.fromJson(response.data);
-        data.data.sort((a, b) {
-          return b.weight.compareTo(a.weight);
+        data.data?.sort((a, b) {
+          return b.weight!.compareTo(a.weight!);
         });
       }
       return (callback == null) ? data.data : callback.onSuccess(data.data);
@@ -321,9 +320,9 @@ class AnnouncementHelper {
     return null;
   }
 
-  Future<Response> addApplication({
-    @required Announcement data,
-    @required GeneralCallback<Response> callback,
+  Future<Response?> addApplication({
+    required Announcement data,
+    GeneralCallback<Response>? callback,
   }) async {
     try {
       var response = await dio.post(
@@ -340,10 +339,10 @@ class AnnouncementHelper {
     return null;
   }
 
-  Future<Response> approveApplication({
-    @required String applicationId,
-    String reviewDescription,
-    @required GeneralCallback<Response> callback,
+  Future<Response?> approveApplication({
+    required String? applicationId,
+    String? reviewDescription,
+    GeneralCallback<Response>? callback,
   }) async {
     try {
       var response = await dio.put(
@@ -362,10 +361,10 @@ class AnnouncementHelper {
     return null;
   }
 
-  Future<Response> rejectApplication({
-    @required String applicationId,
-    String reviewDescription,
-    @required GeneralCallback<Response> callback,
+  Future<Response?> rejectApplication({
+    required String applicationId,
+    String? reviewDescription,
+    GeneralCallback<Response>? callback,
   }) async {
     try {
       var response = await dio.put(
@@ -384,9 +383,9 @@ class AnnouncementHelper {
     return null;
   }
 
-  Future<Response> removeApplication({
-    @required String applicationId,
-    @required GeneralCallback<Response> callback,
+  Future<Response?> removeApplication({
+    required String applicationId,
+    GeneralCallback<Response>? callback,
   }) async {
     try {
       var response = await dio.delete(
@@ -402,9 +401,9 @@ class AnnouncementHelper {
     return null;
   }
 
-  Future<Response> updateApplication({
-    @required Announcement data,
-    @required GeneralCallback<Response> callback,
+  Future<Response?> updateApplication({
+    required Announcement data,
+    GeneralCallback<Response>? callback,
   }) async {
     try {
       var response = await dio.put(
@@ -434,22 +433,23 @@ class AnnouncementHelper {
     password = null;
   }
 
-  void handleCrudError(DioError dioError, GeneralCallback<Response> callback) {
+  void handleCrudError(
+      DioError dioError, GeneralCallback<Response?>? callback) {
     if (dioError.isNotPermission)
-      callback.onError(
+      callback?.onError(
         GeneralResponse(
           statusCode: NOT_PERMISSION,
           message: ApLocalizations.current.noPermissionHint,
         ),
       );
     else if (dioError.isNotFoundAnnouncement)
-      callback.onError(
+      callback?.onError(
         GeneralResponse(
           statusCode: NOT_PERMISSION,
           message: ApLocalizations.current.notFoundData,
         ),
       );
     else
-      callback.onFailure(dioError);
+      callback?.onFailure(dioError);
   }
 }
