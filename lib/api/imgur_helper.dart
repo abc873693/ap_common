@@ -13,17 +13,14 @@ export 'package:ap_common/callback/general_callback.dart';
 export 'package:ap_common/models/announcement_login_data.dart';
 
 class ImgurHelper {
-  static String clientId;
+  static String? clientId;
 
-  static ImgurHelper _instance;
-  static BaseOptions options;
-  static Dio dio;
+  static ImgurHelper? _instance;
+  static late BaseOptions options;
+  static late Dio dio;
 
   static ImgurHelper get instance {
-    if (_instance == null) {
-      _instance = ImgurHelper();
-    }
-    return _instance;
+    return _instance ??= ImgurHelper();
   }
 
   ImgurHelper() {
@@ -34,8 +31,8 @@ class ImgurHelper {
   }
 
   Future<ImgurUploadData> uploadImageToImgur({
-    @required PickedFile file,
-    @required GeneralCallback<ImgurUploadData> callback,
+    required PickedFile file,
+    GeneralCallback<ImgurUploadData?>? callback,
   }) async {
     try {
       final bytes = await file.readAsBytes();
@@ -76,12 +73,13 @@ class ImgurHelper {
         return callback == null
             ? null
             : callback.onError(
-          GeneralResponse(
-            statusCode: 201,
-            message: ApLocalizations.current.notSupportImageType,
-          ),
-        );
-      else return callback == null ? null : callback.onFailure(dioError);
+                GeneralResponse(
+                  statusCode: 201,
+                  message: ApLocalizations.current.notSupportImageType,
+                ),
+              );
+      else
+        return callback == null ? null : callback.onFailure(dioError);
     }
   }
 }
