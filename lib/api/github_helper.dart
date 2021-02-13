@@ -10,36 +10,35 @@ import 'package:flutter/cupertino.dart';
 class GitHubHelper {
   static const BASE_PATH = 'https://gist.githubusercontent.com/';
 
-  static Dio dio;
-  static CookieJar cookieJar;
+  static late Dio dio;
+  static late CookieJar cookieJar;
 
-  static GitHubHelper _instance;
+  static GitHubHelper? _instance;
 
   static bool isLogin = false;
 
   static GitHubHelper get instance {
     if (_instance == null) {
-      _instance = GitHubHelper();
       cookieJar = CookieJar();
       dio = Dio();
       dio.interceptors.add(CookieManager(cookieJar));
       cookieJar.loadForRequest(Uri.parse(BASE_PATH));
     }
-    return _instance;
+    return _instance ??= GitHubHelper();
   }
 
-  Future<Map<String, List<Announcement>>> getAnnouncement({
-    @required String gitHubUsername,
-    @required String hashCode,
-    @required String tag,
-    @required GeneralCallback<Map<String, List<Announcement>>> callback,
+  Future<Map<String, List<Announcement>>?> getAnnouncement({
+    required String gitHubUsername,
+    required String hashCode,
+    required String tag,
+    GeneralCallback<Map<String, List<Announcement>?>>? callback,
   }) async {
     try {
       var response = await Dio().get(
         '$BASE_PATH/$gitHubUsername/$hashCode/raw/'
         '${tag}_announcement.json',
       );
-      Map<String, List<Announcement>> map = Map();
+      Map<String, List<Announcement>?> map = Map();
       Map<String, dynamic> json = jsonDecode(response.data);
       json.forEach((key, data) {
         if (key != 'data') map[key] = AnnouncementData.fromJson(data).data;
@@ -47,7 +46,7 @@ class GitHubHelper {
       return callback?.onSuccess(map);
     } on DioError catch (e) {
       if (callback != null)
-        callback?.onFailure(e);
+        callback.onFailure(e);
       else
         throw e;
     } on Exception catch (e) {
