@@ -47,6 +47,8 @@ PODS:
     - Flutter
   - "permission_handler (5.1.0+2)":
     - Flutter
+  - printing (0.0.1):
+    - Flutter
   - share (0.0.1):
     - Flutter
   - shared_preferences (0.0.1):
@@ -74,6 +76,7 @@ DEPENDENCIES:
   - package_info (from `.symlinks/plugins/package_info/ios`)
   - path_provider (from `.symlinks/plugins/path_provider/ios`)
   - permission_handler (from `.symlinks/plugins/permission_handler/ios`)
+  - printing (from `.symlinks/plugins/printing/ios`)
   - share (from `.symlinks/plugins/share/ios`)
   - shared_preferences (from `.symlinks/plugins/shared_preferences/ios`)
   - sign_in_with_apple (from `.symlinks/plugins/sign_in_with_apple/ios`)
@@ -117,6 +120,8 @@ EXTERNAL SOURCES:
     :path: ".symlinks/plugins/path_provider/ios"
   permission_handler:
     :path: ".symlinks/plugins/permission_handler/ios"
+  printing:
+    :path: ".symlinks/plugins/printing/ios"
   share:
     :path: ".symlinks/plugins/share/ios"
   shared_preferences:
@@ -148,6 +153,7 @@ SPEC CHECKSUMS:
   package_info: 873975fc26034f0b863a300ad47e7f1ac6c7ec62
   path_provider: abfe2b5c733d04e238b0d8691db0cfd63a27a93c
   permission_handler: ccb20a9fad0ee9b1314a52b70b76b473c5f8dab0
+  printing: 5ec249946ebbd51cead5ed9b0b48113bb5141bcf
   share: 0b2c3e82132f5888bccca3351c504d0003b3b410
   shared_preferences: af6bfa751691cdc24be3045c43ec037377ada40d
   sign_in_with_apple: 34f3f5456a45fd7ac5fb42905e2ad31dae061b4a

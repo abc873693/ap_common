@@ -1,3 +1,4 @@
+import 'dart:typed_data';
 
 import 'package:ap_common/callback/general_callback.dart';
 import 'package:ap_common/models/notification_data.dart';
@@ -64,13 +65,13 @@ class SchoolInfoPageState extends State<SchoolInfoPage>
 
   PdfState pdfState = PdfState.loading;
 
-  PdfController pdfController;
-
   ApLocalizations ap;
 
   TabController controller;
 
   int _currentIndex = 0;
+
+  Uint8List data;
 
   @override
   void initState() {
@@ -117,8 +118,8 @@ class SchoolInfoPageState extends State<SchoolInfoPage>
           ),
           PdfScaffold(
             state: pdfState,
-            pdfController: pdfController,
             onRefresh: () => _getSchedules(),
+            data: data,
           ),
         ],
         controller: controller,
@@ -174,9 +175,7 @@ class SchoolInfoPageState extends State<SchoolInfoPage>
       );
       setState(() {
         pdfState = PdfState.finish;
-        pdfController = PdfController(
-          document: PdfDocument.openData(response.data),
-        );
+        data = response.data as Uint8List;
       });
     } catch (e) {
       setState(() {

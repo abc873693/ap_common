@@ -1,23 +1,24 @@
+import 'dart:typed_data';
+
 import 'package:ap_common/resources/ap_icon.dart';
 import 'package:ap_common/utils/ap_localizations.dart';
 import 'package:ap_common/widgets/hint_content.dart';
 import 'package:flutter/material.dart';
-import 'package:native_pdf_view/native_pdf_view.dart';
-
-export 'package:native_pdf_view/native_pdf_view.dart';
+import 'package:printing/printing.dart';
+import 'package:pdf/pdf.dart';
 
 enum PdfState { loading, finish, error }
 
 class PdfScaffold extends StatefulWidget {
   final PdfState state;
-  final PdfController pdfController;
   final Function onRefresh;
+  final Uint8List data;
 
   PdfScaffold({
     Key key,
     @required this.state,
-    @required this.pdfController,
     this.onRefresh,
+    this.data,
   }) : super(key: key) {
     assert(this.state != null);
   }
@@ -43,13 +44,12 @@ class _PdfScaffoldState extends State<PdfScaffold> {
       case PdfState.error:
         return errorContent;
       default:
-        if (widget.pdfController == null)
-          return errorContent;
-        else {
-          return PdfView(
-            controller: widget.pdfController,
-          );
-        }
+        return PdfPreview(
+          build: (PdfPageFormat format) async {
+            return widget.data;
+          },
+          useActions: false,
+        );
     }
   }
 

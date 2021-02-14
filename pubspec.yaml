@@ -30,9 +30,9 @@ dependencies:
   flutter_keyboard_visibility: ^4.0.3
   add_2_calendar: ^1.4.0
   in_app_review: ^1.0.4
-  native_pdf_view: ^3.9.0
   barcode_widget: ^1.5.0
   barcode: ^1.17.1
+  printing: ^4.1.0
   auto_size_text: ^2.1.0
   flutter_linkify: ^4.0.2
   image_gallery_saver: ^1.6.7

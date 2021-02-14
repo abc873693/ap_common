@@ -143,20 +143,6 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "0.0.4+1"
-  device_info:
-    dependency: transitive
-    description:
-      name: device_info
-      url: "https://pub.dartlang.org"
-    source: hosted
-    version: "1.0.0"
-  device_info_platform_interface:
-    dependency: transitive
-    description:
-      name: device_info_platform_interface
-      url: "https://pub.dartlang.org"
-    source: hosted
-    version: "1.0.1"
   dio:
     dependency: transitive
     description:
@@ -192,13 +178,6 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "0.3.1"
-  extension:
-    dependency: transitive
-    description:
-      name: extension
-      url: "https://pub.dartlang.org"
-    source: hosted
-    version: "0.1.1"
   fake_async:
     dependency: transitive
     description:
@@ -464,20 +443,6 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "0.9.7"
-  native_pdf_renderer:
-    dependency: transitive
-    description:
-      name: native_pdf_renderer
-      url: "https://pub.dartlang.org"
-    source: hosted
-    version: "2.4.0"
-  native_pdf_view:
-    dependency: transitive
-    description:
-      name: native_pdf_view
-      url: "https://pub.dartlang.org"
-    source: hosted
-    version: "3.9.0"
   octo_image:
     dependency: transitive
     description:
@@ -499,6 +464,13 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "1.8.0"
+  path_parsing:
+    dependency: transitive
+    description:
+      name: path_parsing
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "0.1.4"
   path_provider:
     dependency: transitive
     description:
@@ -534,6 +506,13 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "0.0.4+3"
+  pdf:
+    dependency: transitive
+    description:
+      name: pdf
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "2.1.0"
   pedantic:
     dependency: transitive
     description:
@@ -590,6 +569,13 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "2.0.0"
+  printing:
+    dependency: transitive
+    description:
+      name: printing
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "4.1.0"
   process:
     dependency: transitive
     description:
