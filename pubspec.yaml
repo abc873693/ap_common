@@ -29,7 +29,6 @@ dependencies:
   timezone: ^0.6.1
   flutter_keyboard_visibility: ^4.0.3
   add_2_calendar: ^1.4.0
-  material_design_icons_flutter: ^4.0.5755
   in_app_review: ^1.0.4
   native_pdf_view: ^3.9.0
   barcode_widget: ^1.5.0
@@ -55,6 +54,7 @@ dev_dependencies:
 flutter:
   assets:
     - assets/images/
+    - assets/icons/
 
 flutter_intl:
   enabled: true

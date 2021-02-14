@@ -1,16 +1,15 @@
 import 'package:ap_common/config/ap_constants.dart';
 import 'package:ap_common/models/user_info.dart';
+import 'package:ap_common/resources/ap_assets.dart';
 import 'package:ap_common/resources/ap_theme.dart';
 import 'package:ap_common/utils/ap_localizations.dart';
 import 'package:barcode/barcode.dart';
 import 'package:barcode_widget/barcode_widget.dart';
 import 'package:flutter/material.dart';
-import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
 
 enum BarCodeMode { code39, qrCode }
 
 class UserInfoScaffold extends StatefulWidget {
-
   final UserInfo userInfo;
   final String heroTag;
   final List<Widget> actions;
@@ -31,18 +30,17 @@ class UserInfoScaffold extends StatefulWidget {
 }
 
 class UserInfoScaffoldState extends State<UserInfoScaffold> {
-
   ApLocalizations app;
 
   BarCodeMode codeMode = BarCodeMode.qrCode;
 
-  IconData get icon {
+  String get iconName {
     switch (codeMode) {
       case BarCodeMode.code39:
-        return MdiIcons.qrcode;
+        return ApImageIcons.qrcode;
       case BarCodeMode.qrCode:
       default:
-        return MdiIcons.barcode;
+        return ApImageIcons.barcode;
         break;
     }
   }
@@ -68,7 +66,11 @@ class UserInfoScaffoldState extends State<UserInfoScaffold> {
           ...widget.actions,
           if (widget.enableBarCode)
             IconButton(
-              icon: Icon(icon),
+              icon: Image.asset(
+                iconName,
+                height: 24.0,
+                width: 24.0,
+              ),
               onPressed: () {
                 setState(() => codeMode = BarCodeMode
                     .values[(codeMode.index + 1) % BarCodeMode.values.length]);

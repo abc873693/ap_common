@@ -12,3 +12,11 @@ class ApImageAssets {
   static const String dashLineLight = '$basePath/dash_line.webp';
   static const String dashLineDarkTheme = '$basePath/dash_line_dark_theme.webp';
 }
+
+class ApImageIcons {
+  static const String basePath = 'packages/ap_common/assets/icons';
+
+  static const String barcode = '$basePath/barcode.png';
+  static const String qrcode = '$basePath/qrcode.png';
+  static const String calendarImport = '$basePath/calendar-import.png';
+}

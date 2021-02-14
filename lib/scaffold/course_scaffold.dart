@@ -7,6 +7,7 @@ import 'package:ap_common/config/ap_constants.dart';
 import 'package:ap_common/models/course_data.dart';
 import 'package:ap_common/models/course_notify_data.dart';
 import 'package:ap_common/models/semester_data.dart';
+import 'package:ap_common/resources/ap_assets.dart';
 import 'package:ap_common/resources/ap_colors.dart';
 import 'package:ap_common/resources/ap_icon.dart';
 import 'package:ap_common/resources/ap_theme.dart';
@@ -23,7 +24,6 @@ import 'package:flutter/foundation.dart';
 import 'package:intl/intl.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
-import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
 
 export 'package:ap_common/models/course_data.dart';
 
@@ -615,7 +615,12 @@ class _CourseContentState extends State<CourseContent> {
                   widget.enableAddToCalendar)
                 IconButton(
                   tooltip: ApLocalizations.of(context).addToCalendar,
-                  icon: Icon(MdiIcons.calendarImport),
+                  icon: Image.asset(
+                    ApImageIcons.calendarImport,
+                    color: Theme.of(context).iconTheme.color,
+                    height: 24.0,
+                    width: 24.0,
+                  ),
                   onPressed: () async {
                     final format = DateFormat('HH:mm');
                     final startTime = format.parse(widget.timeCode.startTime);
