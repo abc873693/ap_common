@@ -252,24 +252,25 @@ class Course {
   String getTimesShortName(List<TimeCode> timeCode) {
     String text = '';
     if ((times?.length ?? 0) == 0) return text;
-    int startIndex = -1, startTimeCodeIndex = -1, repeat = 0;
-    for (var i = 0; i < (times?.length ?? 0); i++) {
+    int startIndex = -1, repeat = 0;
+    final len = (times?.length ?? 0);
+    for (var i = 0; i < len; i++) {
       final time = times[i];
       if (startIndex != -1 &&
-          startTimeCodeIndex != -1 &&
-          time.index - 1 == startTimeCodeIndex &&
-          times[i - 1].weekday == times[i].weekday) {
+          time.index - 1 == times[i - 1].index &&
+          time.weekday == times[i - 1].weekday) {
         repeat++;
-      } else if (startIndex != -1 && repeat != 0) {
-        final endTime = times[startIndex + repeat];
-        text += '-'
-            '${timeCode[endTime.index].title}';
-        repeat = 0;
-        startIndex = -1;
-        startTimeCodeIndex = -1;
+        if (i == len - 1 ||
+            times[i + 1].weekday != times[i].weekday ||
+            times[i + 1].index != times[i].index + 1) {
+          final endTime = times[startIndex + repeat];
+          text += '-'
+              '${timeCode[endTime.index].title}';
+          repeat = 0;
+          startIndex = -1;
+        }
       } else {
         startIndex = i;
-        startTimeCodeIndex = time.index;
         text +=
             '${text.isEmpty ? '' : ' '}(${ApLocalizations.current.weekdaysCourse[time.weekDayIndex]}) '
             '${timeCode[time.index].title}';
