@@ -64,7 +64,7 @@
     # 官方多國語套件
     flutter_localizations:
         sdk: flutter
-    ap_common: ^0.10.0
+    ap_common: ^0.12.1
 ```
 
 執行加入套件
