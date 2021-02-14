@@ -4,6 +4,7 @@ import 'dart:typed_data';
 import 'package:ap_common/callback/general_callback.dart';
 import 'package:ap_common/resources/ap_theme.dart';
 import 'package:ap_common/utils/ap_localizations.dart';
+import 'package:ap_common/utils/toast.dart';
 import 'package:ap_common/widgets/yes_no_dialog.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
@@ -16,11 +17,10 @@ import 'package:path_provider/path_provider.dart';
 import 'package:path/path.dart' as path;
 import 'package:permission_handler/permission_handler.dart';
 import 'package:share/share.dart';
-import 'package:toast/toast.dart';
 import 'package:url_launcher/url_launcher.dart';
-export 'package:dio/dio.dart';
 
-export 'package:toast/toast.dart';
+export 'package:dio/dio.dart';
+export 'toast.dart';
 
 class ApUtils {
   static bool get isSupportCacheNetworkImage =>
@@ -30,9 +30,11 @@ class ApUtils {
     Toast.show(
       message,
       context,
-      duration: Toast.LENGTH_LONG,
-      gravity: gravity ?? Toast.BOTTOM,
-      textColor: ApTheme.of(context).toastText,
+      duration: Toast.lengthShort,
+      gravity: gravity ?? Toast.bottom,
+      textStyle: TextStyle(
+        color: ApTheme.of(context).toastText,
+      ),
       backgroundColor: ApTheme.of(context).toastBackground,
     );
   }

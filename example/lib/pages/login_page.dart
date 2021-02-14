@@ -32,14 +32,14 @@ class LoginPageState extends State<LoginPage> {
   var isRememberPassword = true;
   var isAutoLogin = false;
 
-  int gravity = Toast.BOTTOM;
+  int gravity = Toast.bottom;
 
   @override
   void initState() {
     _getPreference();
     if ((!kIsWeb && (Platform.isAndroid || Platform.isIOS))) {
       KeyboardVisibilityController().onChange.listen(
-            (bool visible) => gravity = visible ? Toast.TOP : Toast.BOTTOM,
+            (bool visible) => gravity = visible ? Toast.top : Toast.bottom,
           );
     }
     super.initState();
