@@ -1,12 +1,9 @@
-import 'dart:io';
-
 import 'package:ap_common/scaffold/login_scaffold.dart';
 import 'package:ap_common/utils/ap_localizations.dart';
 import 'package:ap_common/utils/ap_utils.dart';
 import 'package:ap_common/utils/preferences.dart';
 import 'package:ap_common/widgets/progress_dialog.dart';
 import 'package:flutter/cupertino.dart';
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
@@ -37,11 +34,6 @@ class LoginPageState extends State<LoginPage> {
   @override
   void initState() {
     _getPreference();
-    if ((!kIsWeb && (Platform.isAndroid || Platform.isIOS))) {
-      KeyboardVisibilityController().onChange.listen(
-            (bool visible) => gravity = visible ? Toast.top : Toast.bottom,
-          );
-    }
     super.initState();
   }
 
