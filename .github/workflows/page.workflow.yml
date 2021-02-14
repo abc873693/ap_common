@@ -1,8 +1,6 @@
 name: Build Web Page
-on:
-  release:
-    types: # This configuration does not affect the page_build event above
-      - created
+on: push
+
 jobs:
   build:
     name: Flutter Web build and hosting
