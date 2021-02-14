@@ -858,58 +858,62 @@ class CourseList extends StatelessWidget {
                       ),
                     ),
                   ),
-                  Expanded(
-                    flex: 1,
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: <Widget>[
-                        if (course.required != null)
-                          Text(
-                            '${course.required}',
-                            style: TextStyle(
-                              color: ApTheme.of(context).blueAccent,
-                              fontSize: 18.0,
-                            ),
-                            textAlign: TextAlign.center,
-                          ),
-                        SizedBox(height: 16.0),
-                        if (course.units != null)
-                          SelectableText.rich(
-                            TextSpan(
+                  if (course.required != null ||
+                      course.units != null ||
+                      course.hours != null)
+                    Expanded(
+                      flex: 1,
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: <Widget>[
+                          if (course.required != null)
+                            Text(
+                              '${course.required}',
                               style: TextStyle(
-                                color: ApTheme.of(context).grey,
-                                fontSize: 16.0,
+                                color: ApTheme.of(context).blueAccent,
+                                fontSize: 18.0,
                               ),
-                              children: [
-                                TextSpan(
-                                    text:
-                                        '${ApLocalizations.of(context).units}：',
-                                    style:
-                                        TextStyle(fontWeight: FontWeight.bold)),
-                                TextSpan(text: '${course.units}'),
-                              ],
+                              textAlign: TextAlign.center,
                             ),
-                          ),
-                        if (course.hours != null)
-                          SelectableText.rich(
-                            TextSpan(
-                              style: TextStyle(
-                                color: ApTheme.of(context).grey,
-                                fontSize: 16.0,
-                              ),
-                              children: [
-                                TextSpan(
-                                  text:
-                                      '${ApLocalizations.of(context).courseHours}：',
-                                  style: TextStyle(fontWeight: FontWeight.bold),
+                          SizedBox(height: 16.0),
+                          if (course.units != null)
+                            SelectableText.rich(
+                              TextSpan(
+                                style: TextStyle(
+                                  color: ApTheme.of(context).grey,
+                                  fontSize: 16.0,
                                 ),
-                                TextSpan(text: '${course.hours}'),
-                              ],
+                                children: [
+                                  TextSpan(
+                                      text:
+                                          '${ApLocalizations.of(context).units}：',
+                                      style: TextStyle(
+                                          fontWeight: FontWeight.bold)),
+                                  TextSpan(text: '${course.units}'),
+                                ],
+                              ),
                             ),
-                          ),
-                      ],
-                    ),
-                  )
+                          if (course.hours != null)
+                            SelectableText.rich(
+                              TextSpan(
+                                style: TextStyle(
+                                  color: ApTheme.of(context).grey,
+                                  fontSize: 16.0,
+                                ),
+                                children: [
+                                  TextSpan(
+                                    text:
+                                        '${ApLocalizations.of(context).courseHours}：',
+                                    style:
+                                        TextStyle(fontWeight: FontWeight.bold),
+                                  ),
+                                  TextSpan(text: '${course.hours}'),
+                                ],
+                              ),
+                            ),
+                        ],
+                      ),
+                    )
                 ],
               ),
               padding: EdgeInsets.symmetric(vertical: 8.0),
