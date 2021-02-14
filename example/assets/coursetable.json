@@ -65,6 +65,14 @@
       "sectionTimes": [
         {
           "weekday": 1,
+          "index": 0
+        },
+        {
+          "weekday": 1,
+          "index": 1
+        },
+        {
+          "weekday": 1,
           "index": 2
         },
         {
@@ -74,6 +82,14 @@
         {
           "weekday": 1,
           "index": 4
+        },
+        {
+          "weekday": 2,
+          "index": 0
+        },
+        {
+          "weekday": 2,
+          "index": 1
         }
       ],
       "location": {
@@ -88,9 +104,6 @@
       "title": "Python程式設計",
       "className": "智慧商務系一乙",
       "group": "01",
-      "units": "3.0",
-      "hours": "3.0",
-      "required": "【選修】",
       "at": "【學期】",
       "sectionTimes": [
         {
