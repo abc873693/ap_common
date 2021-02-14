@@ -33,6 +33,7 @@ dependencies:
   barcode_widget: ^1.5.0
   barcode: ^1.17.1
   printing: ^4.1.0
+  pdf: ^2.1.0
   auto_size_text: ^2.1.0
   flutter_linkify: ^4.0.2
   image_gallery_saver: ^1.6.7
