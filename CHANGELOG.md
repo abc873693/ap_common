@@ -1,3 +1,10 @@
+## [0.13.0-dev.2] - 2021/02/15
+### [Break Change]
+### 基於 Flutter v1.26.0-17.5.pre 開發
+
+* 移除 `material_design_icons_flutter` 套件相依
+* 使用 `printing` 作為 `PdfScaffod` 的套件，移除 `native_pdf_view`
+
 ## [0.13.0-dev.1] - 2021/02/14
 ### [Break Change]
 
