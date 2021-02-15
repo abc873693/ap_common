@@ -1102,6 +1102,7 @@ class _CourseScaffoldSettingDialogState
         children: [
           CheckboxListTile(
             title: Text(ap.showSectionTime),
+            secondary: Icon(ApIcon.accessTime),
             value: showSectionTime,
             onChanged: (value) {
               setState(() => showSectionTime = value);
@@ -1112,6 +1113,7 @@ class _CourseScaffoldSettingDialogState
           ),
           CheckboxListTile(
             title: Text(ap.showInstructors),
+            secondary: Icon(ApIcon.person),
             value: showInstructors,
             onChanged: (value) {
               setState(() => showInstructors = value);
@@ -1122,6 +1124,7 @@ class _CourseScaffoldSettingDialogState
           ),
           CheckboxListTile(
             title: Text(ap.showClassroomLocation),
+            secondary: Icon(ApIcon.locationOn),
             value: showClassroomLocation,
             onChanged: (value) {
               setState(() => showClassroomLocation = value);

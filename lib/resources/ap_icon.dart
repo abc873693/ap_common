@@ -6,6 +6,26 @@ class ApIcon {
 
   static String code = ApIcon.OUTLINED;
 
+  static IconData get search {
+    switch (ApIcon.code) {
+      case ApIcon.FILLED:
+        return Icons.search;
+      case ApIcon.OUTLINED:
+      default:
+        return Icons.search_outlined;
+    }
+  }
+
+  static IconData get locationOn {
+    switch (ApIcon.code) {
+      case ApIcon.FILLED:
+        return Icons.location_on;
+      case ApIcon.OUTLINED:
+      default:
+        return Icons.location_on_outlined;
+    }
+  }
+
   static IconData get download {
     switch (ApIcon.code) {
       case ApIcon.FILLED:
