@@ -68,6 +68,7 @@ class CourseScaffold extends StatefulWidget {
   final Widget itemPicker;
   final SemesterData semesterData;
   final Function(int index) onSelect;
+  @deprecated
   final bool isShowSearchButton;
   final Function onSearchButtonClick;
   final Function() onRefresh;
@@ -84,6 +85,7 @@ class CourseScaffold extends StatefulWidget {
   final bool showSectionTime;
   final bool showInstructors;
   final bool showClassroomLocation;
+  final bool showSearchButton;
 
   const CourseScaffold({
     Key key,
@@ -110,6 +112,7 @@ class CourseScaffold extends StatefulWidget {
     this.showSectionTime,
     this.showInstructors,
     this.showClassroomLocation,
+    this.showSearchButton = true,
   }) : super(key: key);
 
   @override
@@ -126,6 +129,7 @@ class CourseScaffoldState extends State<CourseScaffold> {
   bool showSectionTime;
   bool showInstructors;
   bool showClassroomLocation;
+  bool showSearchButton;
 
   bool get isTablet =>
       MediaQuery.of(context).size.shortestSide >= 680 ||
@@ -139,6 +143,8 @@ class CourseScaffoldState extends State<CourseScaffold> {
         Preferences.getBool(ApConstants.SHOW_INSTRUCTORS, true);
     showClassroomLocation = widget.showClassroomLocation ??
         Preferences.getBool(ApConstants.SHOW_CLASSROOM_LOCATION, true);
+    showSearchButton = widget.showSearchButton ??
+        Preferences.getBool(ApConstants.SHOW_COURSE_SEARCH_BUTTON, true);
     super.initState();
   }
 
@@ -174,6 +180,7 @@ class CourseScaffoldState extends State<CourseScaffold> {
                     showSectionTime: showSectionTime,
                     showInstructors: showInstructors,
                     showClassroomLocation: showClassroomLocation,
+                    showSearchButton: showSearchButton,
                     showSectionTimeOnChanged: (value) {
                       setState(() => showSectionTime = value);
                       Preferences.setBool(
@@ -188,6 +195,11 @@ class CourseScaffoldState extends State<CourseScaffold> {
                       setState(() => showClassroomLocation = value);
                       Preferences.setBool(ApConstants.SHOW_CLASSROOM_LOCATION,
                           showClassroomLocation);
+                    },
+                    showSearchButtonOnChanged: (value) {
+                      setState(() => showSearchButton = value);
+                      Preferences.setBool(ApConstants.SHOW_COURSE_SEARCH_BUTTON,
+                          showSearchButton);
                     },
                   ),
                 );
@@ -268,7 +280,7 @@ class CourseScaffoldState extends State<CourseScaffold> {
           ],
         ),
         floatingActionButtonLocation: FloatingActionButtonLocation.endDocked,
-        floatingActionButton: widget.isShowSearchButton
+        floatingActionButton: showSearchButton
             ? FloatingActionButton(
                 child: Icon(Icons.search),
                 onPressed: () {
@@ -304,7 +316,7 @@ class CourseScaffoldState extends State<CourseScaffold> {
                         setState(() => _contentStyle = _ContentStyle.list);
                       },
                     ),
-                    if (widget.isShowSearchButton) Container(height: 0),
+                    if (showSearchButton) Container(height: 0),
                   ],
                 ),
               ),
@@ -1058,18 +1070,22 @@ class CourseScaffoldSettingDialog extends StatefulWidget {
   final bool showSectionTime;
   final bool showInstructors;
   final bool showClassroomLocation;
+  final bool showSearchButton;
   final Function(bool) showSectionTimeOnChanged;
   final Function(bool) showInstructorsOnChanged;
   final Function(bool) showClassroomLocationOnChanged;
+  final Function(bool) showSearchButtonOnChanged;
 
   const CourseScaffoldSettingDialog({
     Key key,
-    this.showSectionTime,
-    this.showInstructors,
-    this.showClassroomLocation,
+    @required this.showSectionTime,
+    @required this.showInstructors,
+    @required this.showClassroomLocation,
+    @required this.showSearchButton,
     this.showSectionTimeOnChanged,
     this.showInstructorsOnChanged,
     this.showClassroomLocationOnChanged,
+    this.showSearchButtonOnChanged,
   }) : super(key: key);
 
   @override
@@ -1082,12 +1098,14 @@ class _CourseScaffoldSettingDialogState
   bool showSectionTime;
   bool showInstructors;
   bool showClassroomLocation;
+  bool showSearchButton;
 
   @override
   void initState() {
     showSectionTime = widget.showSectionTime;
     showInstructors = widget.showInstructors;
     showClassroomLocation = widget.showClassroomLocation;
+    showSearchButton = widget.showSearchButton;
     super.initState();
   }
 
@@ -1098,6 +1116,7 @@ class _CourseScaffoldSettingDialogState
       title: ap.courseScaffoldSetting,
       actionText: ApLocalizations.current.confirm,
       actionFunction: () => Navigator.of(context, rootNavigator: true).pop(),
+      contentPadding: EdgeInsets.all(0.0),
       contentWidget: Column(
         children: [
           CheckboxListTile(
@@ -1129,6 +1148,17 @@ class _CourseScaffoldSettingDialogState
             onChanged: (value) {
               setState(() => showClassroomLocation = value);
               widget.showClassroomLocationOnChanged(value);
+            },
+            checkColor: ApTheme.of(context).background,
+            activeColor: ApTheme.of(context).yellow,
+          ),
+          CheckboxListTile(
+            title: Text(ap.showSearchButton),
+            secondary: Icon(ApIcon.search),
+            value: showSearchButton,
+            onChanged: (value) {
+              setState(() => showSearchButton = value);
+              widget.showSearchButtonOnChanged(value);
             },
             checkColor: ApTheme.of(context).background,
             activeColor: ApTheme.of(context).yellow,
