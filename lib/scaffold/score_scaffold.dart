@@ -2,6 +2,7 @@ import 'package:ap_common/models/score_data.dart';
 import 'package:ap_common/models/semester_data.dart';
 import 'package:ap_common/resources/ap_icon.dart';
 import 'package:ap_common/resources/ap_theme.dart';
+import 'package:ap_common/utils/analytics_utils.dart';
 import 'package:ap_common/utils/ap_localizations.dart';
 import 'package:ap_common/widgets/hint_content.dart';
 import 'package:ap_common/widgets/item_picker.dart';
@@ -86,7 +87,10 @@ class ScoreScaffoldState extends State<ScoreScaffold> {
       floatingActionButton: widget.isShowSearchButton
           ? FloatingActionButton(
               child: Icon(Icons.search),
-              onPressed: _pickSemester,
+              onPressed: () {
+                _pickSemester();
+                AnalyticsUtils.instance?.logEvent('score_search_button_click');
+              },
             )
           : null,
       body: Container(
@@ -102,6 +106,7 @@ class ScoreScaffoldState extends State<ScoreScaffold> {
                 onSelected: widget.onSelect,
                 items: widget.semesterData.semesters,
                 currentIndex: widget.semesterData.currentIndex,
+                featureTag: 'score',
               ),
             if (widget.itemPicker != null) widget.itemPicker,
             if (widget.customHint != null && widget.customHint.isNotEmpty)
@@ -114,6 +119,7 @@ class ScoreScaffoldState extends State<ScoreScaffold> {
               child: RefreshIndicator(
                 onRefresh: () async {
                   await widget.onRefresh();
+                  AnalyticsUtils.instance?.logEvent('score_refresh');
                   return null;
                 },
                 child: _body(),
@@ -289,7 +295,10 @@ class _ScoreContentState extends State<ScoreContent> {
                             text: widget.scoreData.scores[i].title,
                             style: _textStyle,
                             onTap: (widget.onScoreSelect != null)
-                                ? () => widget.onScoreSelect(i)
+                                ? () {
+                                    widget.onScoreSelect(i);
+                                    AnalyticsUtils.instance?.logEvent('score_title_click');
+                                  }
                                 : null,
                           ),
                           if (widget.middleScoreBuilder == null)
