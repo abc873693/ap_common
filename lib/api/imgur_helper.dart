@@ -50,9 +50,7 @@ class ImgurHelper {
           {
             "image": MultipartFile.fromBytes(
               bytes,
-              filename: p
-                  .split(file.path)
-                  .last,
+              filename: p.split(file.path).last,
             ),
           },
         ),
@@ -66,11 +64,11 @@ class ImgurHelper {
         return callback == null
             ? null
             : callback.onError(
-          GeneralResponse(
-            statusCode: 201,
-            message: response.statusMessage,
-          ),
-        );
+                GeneralResponse(
+                  statusCode: 201,
+                  message: response.statusMessage,
+                ),
+              );
       }
     } on DioError catch (dioError) {
       if (dioError.type == DioErrorType.RESPONSE &&
@@ -78,11 +76,11 @@ class ImgurHelper {
         return callback == null
             ? null
             : callback.onError(
-          GeneralResponse(
-            statusCode: 201,
-            message: ApLocalizations.current.notSupportImageType,
-          ),
-        );
+                GeneralResponse(
+                  statusCode: 201,
+                  message: ApLocalizations.current.notSupportImageType,
+                ),
+              );
       else
         return callback == null ? null : callback.onFailure(dioError);
     }
