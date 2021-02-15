@@ -191,7 +191,7 @@ class CourseScaffoldState extends State<CourseScaffold> {
                   ),
                 );
               },
-              tooltip: ApLocalizations.of(context).exportCourseTable,
+              tooltip: ApLocalizations.of(context).courseScaffoldSetting,
             ),
           ],
         ),
