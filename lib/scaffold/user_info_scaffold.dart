@@ -2,6 +2,7 @@ import 'package:ap_common/config/ap_constants.dart';
 import 'package:ap_common/models/user_info.dart';
 import 'package:ap_common/resources/ap_assets.dart';
 import 'package:ap_common/resources/ap_theme.dart';
+import 'package:ap_common/utils/analytics_utils.dart';
 import 'package:ap_common/utils/ap_localizations.dart';
 import 'package:barcode/barcode.dart';
 import 'package:barcode_widget/barcode_widget.dart';
@@ -74,6 +75,7 @@ class UserInfoScaffoldState extends State<UserInfoScaffold> {
               onPressed: () {
                 setState(() => codeMode = BarCodeMode
                     .values[(codeMode.index + 1) % BarCodeMode.values.length]);
+                AnalyticsUtils.instance?.logEvent('user_info_barcode_switch');
               },
             ),
         ],
@@ -81,6 +83,7 @@ class UserInfoScaffoldState extends State<UserInfoScaffold> {
       body: RefreshIndicator(
         onRefresh: () async {
           if (widget.onRefresh != null) await widget.onRefresh();
+          AnalyticsUtils.instance?.logEvent('user_info_refresh');
           return null;
         },
         child: ListView(
