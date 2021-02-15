@@ -11,6 +11,7 @@ import 'package:ap_common/resources/ap_assets.dart';
 import 'package:ap_common/resources/ap_colors.dart';
 import 'package:ap_common/resources/ap_icon.dart';
 import 'package:ap_common/resources/ap_theme.dart';
+import 'package:ap_common/utils/analytics_utils.dart';
 import 'package:ap_common/utils/ap_localizations.dart';
 import 'package:ap_common/utils/ap_utils.dart';
 import 'package:ap_common/utils/notification_utils.dart';
@@ -190,6 +191,7 @@ class CourseScaffoldState extends State<CourseScaffold> {
                     },
                   ),
                 );
+                AnalyticsUtils.instance?.logEvent('course_setting_click');
               },
               tooltip: ApLocalizations.of(context).courseScaffoldSetting,
             ),
@@ -222,6 +224,7 @@ class CourseScaffoldState extends State<CourseScaffold> {
                               onSelected: widget.onSelect,
                               items: widget.semesterData.semesters,
                               currentIndex: widget.semesterData.currentIndex,
+                              featureTag: 'course',
                             ),
                           ),
                         if (widget.itemPicker != null) widget.itemPicker,
@@ -237,6 +240,7 @@ class CourseScaffoldState extends State<CourseScaffold> {
                     child: RefreshIndicator(
                       onRefresh: () async {
                         await widget.onRefresh();
+                        AnalyticsUtils.instance?.logEvent('course_refresh');
                         return null;
                       },
                       child: _body(),
@@ -267,7 +271,11 @@ class CourseScaffoldState extends State<CourseScaffold> {
         floatingActionButton: widget.isShowSearchButton
             ? FloatingActionButton(
                 child: Icon(Icons.search),
-                onPressed: _pickSemester,
+                onPressed: () {
+                  AnalyticsUtils.instance
+                      ?.logEvent('course_search_button_click');
+                  _pickSemester();
+                },
               )
             : null,
         bottomNavigationBar: isTablet
@@ -381,6 +389,7 @@ class CourseScaffoldState extends State<CourseScaffold> {
       "course_table_$formattedDate",
       ApLocalizations.of(context).exportCourseTableSuccess,
     );
+    AnalyticsUtils.instance?.logEvent('export_course_table_image_success');
   }
 
   BorderSide get _innerBorderSide => BorderSide(
@@ -652,6 +661,8 @@ class _CourseContentState extends State<CourseContent> {
                       timeZone: 'GMT+8',
                     );
                     Add2Calendar.addEvent2Cal(event);
+                    AnalyticsUtils.instance
+                        ?.logEvent('course_export_to_calendar');
                   },
                 ),
               if (widget.enableNotifyControl &&
@@ -684,6 +695,8 @@ class _CourseContentState extends State<CourseContent> {
                         widget.notifyData.data.add(courseNotify);
                         ApUtils.showToast(context,
                             ApLocalizations.of(context).courseNotifyHint);
+                        AnalyticsUtils.instance
+                            ?.logEvent('course_notify_schedule');
                       } else {
                         await NotificationUtils.cancelCourseNotify(
                           id: courseNotify.id,
@@ -696,6 +709,7 @@ class _CourseContentState extends State<CourseContent> {
                       }
                       widget.notifyData.save();
                       setState(() {});
+                      AnalyticsUtils.instance?.logEvent('course_notify_cancel');
                     }
                     if (widget.onNotifyClick != null)
                       widget.onNotifyClick(
@@ -1000,6 +1014,7 @@ class CourseBorder extends StatelessWidget {
             : InkWell(
                 onTap: () {
                   this.onPressed(sectionTime, course);
+                  AnalyticsUtils.instance?.logEvent('course_border_click');
                 },
                 radius: 6.0,
                 child: Padding(
