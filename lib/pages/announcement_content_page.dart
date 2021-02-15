@@ -113,6 +113,7 @@ class AnnouncementContentPageState extends State<AnnouncementContentPage> {
             ),
           ),
         );
+        AnalyticsUtils.instance?.logEvent('announcement_content_image_click');
       },
     );
     final List<Widget> content = <Widget>[
@@ -167,6 +168,7 @@ class AnnouncementContentPageState extends State<AnnouncementContentPage> {
           ),
           onPressed: () {
             launch(widget.announcement.url);
+            AnalyticsUtils.instance?.logEvent('announcement_link_click');
           },
           child: Icon(
             ApIcon.exitToApp,
