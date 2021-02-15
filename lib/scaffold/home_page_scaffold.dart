@@ -5,6 +5,7 @@ import 'package:ap_common/config/ap_constants.dart';
 import 'package:ap_common/models/announcement_data.dart';
 import 'package:ap_common/resources/ap_icon.dart';
 import 'package:ap_common/resources/ap_theme.dart';
+import 'package:ap_common/utils/analytics_utils.dart';
 import 'package:ap_common/utils/ap_localizations.dart';
 import 'package:ap_common/widgets/ap_network_image.dart';
 import 'package:flutter/foundation.dart';
@@ -175,6 +176,7 @@ class HomePageScaffoldState extends State<HomePageScaffold> {
     return GestureDetector(
       onTap: () {
         if (widget.onImageTapped != null) widget.onImageTapped(announcement);
+        AnalyticsUtils.instance?.logEvent('announcement_image_click');
       },
       onTapDown: (detail) {
         _timer?.cancel();
@@ -306,10 +308,12 @@ class HomePageScaffoldState extends State<HomePageScaffold> {
         leftActionText: app.cancel,
         rightActionText: app.confirm,
         rightActionFunction: () {
+          AnalyticsUtils.instance?.logEvent('logout_dialog_confirm');
           SystemNavigator.pop();
         },
       ),
     );
+    AnalyticsUtils.instance?.logEvent('logout_dialog_open');
   }
 
   void hideSnackBar() {
