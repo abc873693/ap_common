@@ -165,6 +165,7 @@ class NotificationScaffoldState extends State<NotificationScaffold>
     if (controller.position.extentAfter < 500) {
       if (widget.state == NotificationState.finish) {
         if (widget.onLoadingMore != null) widget.onLoadingMore();
+        AnalyticsUtils.instance?.logEvent('notification_load_more');
       }
     }
   }
