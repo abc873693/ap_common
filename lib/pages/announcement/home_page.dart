@@ -716,8 +716,8 @@ class _AnnouncementHomePageState extends State<AnnouncementHomePage> {
             }
           } catch (e, s) {
             ApUtils.showToast(context, app.thirdPartyLoginFail);
-            Navigator.of(context, rootNavigator: true).pop();
             CrashlyticsUtils.instance?.recordError(e, s);
+            Navigator.of(context, rootNavigator: true).pop();
           }
           break;
         case AnnouncementLoginType.apple:
