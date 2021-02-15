@@ -6,6 +6,7 @@ class DefaultDialog extends StatelessWidget {
   final Widget contentWidget;
   final String actionText;
   final Function actionFunction;
+  final EdgeInsetsGeometry contentPadding;
 
   const DefaultDialog({
     Key key,
@@ -13,6 +14,7 @@ class DefaultDialog extends StatelessWidget {
     @required this.contentWidget,
     @required this.actionText,
     @required this.actionFunction,
+    this.contentPadding,
   }) : super(key: key);
 
   static showSample(BuildContext context) => showDialog(
@@ -61,7 +63,8 @@ class DefaultDialog extends StatelessWidget {
                 bottom: BorderSide(color: Colors.grey, width: 0.5),
               ),
             ),
-            padding: EdgeInsets.symmetric(horizontal: 30.0, vertical: 24.0),
+            padding: contentPadding ??
+                EdgeInsets.symmetric(horizontal: 30.0, vertical: 24.0),
             child: contentWidget,
           ),
           Container(
