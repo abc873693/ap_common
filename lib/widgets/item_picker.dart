@@ -1,5 +1,6 @@
 import 'package:ap_common/resources/ap_icon.dart';
 import 'package:ap_common/resources/ap_theme.dart';
+import 'package:ap_common/utils/analytics_utils.dart';
 import 'package:flutter/material.dart';
 
 import 'option_dialog.dart';
@@ -9,6 +10,7 @@ class ItemPicker extends StatelessWidget {
   final int currentIndex;
   final Function(int index) onSelected;
   final String dialogTitle;
+  final String featureTag;
 
   const ItemPicker({
     Key key,
@@ -16,6 +18,7 @@ class ItemPicker extends StatelessWidget {
     @required this.items,
     @required this.dialogTitle,
     @required this.currentIndex,
+    this.featureTag,
   }) : super(key: key);
 
   @override
@@ -31,6 +34,8 @@ class ItemPicker extends StatelessWidget {
             onSelected: onSelected,
           ),
         );
+        if (featureTag != null)
+          AnalyticsUtils.instance?.logEvent('${featureTag}_item_picker_click');
       },
       child: Row(
         mainAxisSize: MainAxisSize.min,
