@@ -36,6 +36,28 @@ enum _ContentStyle { list, table }
 
 const _courseHeight = 55.0;
 
+class CourseConfig extends InheritedWidget {
+  final bool showSectionTime;
+  final bool showInstructors;
+  final bool showClassroomLocation;
+
+  CourseConfig({
+    this.showSectionTime,
+    this.showInstructors,
+    this.showClassroomLocation,
+    Widget child,
+  }) : super(child: child);
+
+  static CourseConfig of(BuildContext context) {
+    return context.dependOnInheritedWidgetOfExactType();
+  }
+
+  @override
+  bool updateShouldNotify(CourseConfig oldWidget) {
+    return true;
+  }
+}
+
 class CourseScaffold extends StatefulWidget {
   /// 必要欄位，總共有 `loading` `finish` `error` `empty` `offlineEmpty` `custom` 的狀態，只有`finish`才會顯示課表介面，其餘都是顯示錯誤狀況
   final CourseState state;
@@ -127,153 +149,158 @@ class CourseScaffoldState extends State<CourseScaffold> {
   @override
   Widget build(BuildContext context) {
     app = ApLocalizations.of(context);
-    return Scaffold(
-      appBar: AppBar(
-        title: Text(widget.title ?? app.course),
-        actions: [
-          if (widget.actions != null) ...widget.actions,
-          if (widget.enableCaptureCourseTable)
+    return CourseConfig(
+      showSectionTime: showSectionTime,
+      showInstructors: showInstructors,
+      showClassroomLocation: showClassroomLocation,
+      child: Scaffold(
+        appBar: AppBar(
+          title: Text(widget.title ?? app.course),
+          actions: [
+            if (widget.actions != null) ...widget.actions,
+            if (widget.enableCaptureCourseTable)
+              IconButton(
+                icon: Icon(ApIcon.download),
+                onPressed: _captureCourseTable,
+                tooltip: ApLocalizations.of(context).exportCourseTable,
+              ),
             IconButton(
-              icon: Icon(ApIcon.download),
-              onPressed: _captureCourseTable,
+              icon: Icon(ApIcon.settings),
+              onPressed: () {
+                showDialog(
+                  context: context,
+                  builder: (_) => CourseScaffoldSettingDialog(
+                    showSectionTime: showSectionTime,
+                    showInstructors: showInstructors,
+                    showClassroomLocation: showClassroomLocation,
+                    showSectionTimeOnChanged: (value) {
+                      setState(() => showSectionTime = value);
+                      Preferences.setBool(
+                          ApConstants.SHOW_SECTION_TIME, showSectionTime);
+                    },
+                    showInstructorsOnChanged: (value) {
+                      setState(() => showInstructors = value);
+                      Preferences.setBool(
+                          ApConstants.SHOW_INSTRUCTORS, showInstructors);
+                    },
+                    showClassroomLocationOnChanged: (value) {
+                      setState(() => showClassroomLocation = value);
+                      Preferences.setBool(ApConstants.SHOW_CLASSROOM_LOCATION,
+                          showClassroomLocation);
+                    },
+                  ),
+                );
+              },
               tooltip: ApLocalizations.of(context).exportCourseTable,
             ),
-          IconButton(
-            icon: Icon(ApIcon.settings),
-            onPressed: () {
-              showDialog(
-                context: context,
-                builder: (_) => CourseScaffoldSettingDialog(
-                  showSectionTime: showSectionTime,
-                  showInstructors: showInstructors,
-                  showClassroomLocation: showClassroomLocation,
-                  showSectionTimeOnChanged: (value) {
-                    setState(() => showSectionTime = value);
-                    Preferences.setBool(
-                        ApConstants.SHOW_SECTION_TIME, showSectionTime);
-                  },
-                  showInstructorsOnChanged: (value) {
-                    setState(() => showInstructors = value);
-                    Preferences.setBool(
-                        ApConstants.SHOW_INSTRUCTORS, showInstructors);
-                  },
-                  showClassroomLocationOnChanged: (value) {
-                    setState(() => showClassroomLocation = value);
-                    Preferences.setBool(ApConstants.SHOW_CLASSROOM_LOCATION,
-                        showClassroomLocation);
-                  },
-                ),
-              );
-            },
-            tooltip: ApLocalizations.of(context).exportCourseTable,
-          ),
-        ],
-      ),
-      body: Row(
-        children: <Widget>[
-          Expanded(
-            flex: 3,
-            child: Flex(
-              direction: Axis.vertical,
-              mainAxisSize: MainAxisSize.min,
-              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-              children: <Widget>[
-                if (widget.semesterData != null || widget.itemPicker != null)
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    mainAxisSize: MainAxisSize.max,
-                    children: <Widget>[
+          ],
+        ),
+        body: Row(
+          children: <Widget>[
+            Expanded(
+              flex: 3,
+              child: Flex(
+                direction: Axis.vertical,
+                mainAxisSize: MainAxisSize.min,
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                children: <Widget>[
+                  if (widget.semesterData != null || widget.itemPicker != null)
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      mainAxisSize: MainAxisSize.max,
+                      children: <Widget>[
 //              ItemPicker(
 //                onSelected: (int index) {},
 //                items: widget.years,
 //                currentIndex: widget.yearIndex,
 //              ),
-                      if (widget.semesterData != null &&
-                          widget.itemPicker == null)
-                        Expanded(
-                          child: ItemPicker(
-                            dialogTitle: app.pickSemester,
-                            onSelected: widget.onSelect,
-                            items: widget.semesterData.semesters,
-                            currentIndex: widget.semesterData.currentIndex,
+                        if (widget.semesterData != null &&
+                            widget.itemPicker == null)
+                          Expanded(
+                            child: ItemPicker(
+                              dialogTitle: app.pickSemester,
+                              onSelected: widget.onSelect,
+                              items: widget.semesterData.semesters,
+                              currentIndex: widget.semesterData.currentIndex,
+                            ),
                           ),
-                        ),
-                      if (widget.itemPicker != null) widget.itemPicker,
-                    ],
+                        if (widget.itemPicker != null) widget.itemPicker,
+                      ],
+                    ),
+                  if (widget.customHint != null && widget.customHint.isNotEmpty)
+                    Text(
+                      widget.customHint,
+                      style: TextStyle(color: ApTheme.of(context).grey),
+                      textAlign: TextAlign.center,
+                    ),
+                  Expanded(
+                    child: RefreshIndicator(
+                      onRefresh: () async {
+                        await widget.onRefresh();
+                        return null;
+                      },
+                      child: _body(),
+                    ),
                   ),
-                if (widget.customHint != null && widget.customHint.isNotEmpty)
-                  Text(
-                    widget.customHint,
-                    style: TextStyle(color: ApTheme.of(context).grey),
-                    textAlign: TextAlign.center,
-                  ),
-                Expanded(
-                  child: RefreshIndicator(
-                    onRefresh: () async {
-                      await widget.onRefresh();
-                      return null;
-                    },
-                    child: _body(),
-                  ),
-                ),
-              ],
-            ),
-          ),
-          if (widget.state == CourseState.finish && isTablet) ...[
-            SizedBox(width: 16.0),
-            Expanded(
-              flex: 2,
-              child: Material(
-                elevation: 12.0,
-                child: Container(
-                  color: ApTheme.of(context).courseListTabletBackground,
-                  child: CourseList(
-                    courses: widget.courseData.courses,
-                    timeCodes: widget.courseData.timeCodes,
-                  ),
-                ),
-              ),
-            ),
-          ]
-        ],
-      ),
-      floatingActionButtonLocation: FloatingActionButtonLocation.endDocked,
-      floatingActionButton: widget.isShowSearchButton
-          ? FloatingActionButton(
-              child: Icon(Icons.search),
-              onPressed: _pickSemester,
-            )
-          : null,
-      bottomNavigationBar: isTablet
-          ? null
-          : BottomAppBar(
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                children: <Widget>[
-                  IconButton(
-                    iconSize: _contentStyle == _ContentStyle.table ? 24 : 20,
-                    color: _contentStyle == _ContentStyle.table
-                        ? ApTheme.of(context).yellow
-                        : ApTheme.of(context).grey,
-                    icon: Icon(Icons.grid_on),
-                    onPressed: () {
-                      setState(() => _contentStyle = _ContentStyle.table);
-                    },
-                  ),
-                  IconButton(
-                    iconSize: _contentStyle == _ContentStyle.list ? 24 : 20,
-                    color: _contentStyle == _ContentStyle.list
-                        ? ApTheme.of(context).yellow
-                        : ApTheme.of(context).grey,
-                    icon: Icon(Icons.format_list_bulleted),
-                    onPressed: () {
-                      setState(() => _contentStyle = _ContentStyle.list);
-                    },
-                  ),
-                  if (widget.isShowSearchButton) Container(height: 0),
                 ],
               ),
             ),
+            if (widget.state == CourseState.finish && isTablet) ...[
+              SizedBox(width: 16.0),
+              Expanded(
+                flex: 2,
+                child: Material(
+                  elevation: 12.0,
+                  child: Container(
+                    color: ApTheme.of(context).courseListTabletBackground,
+                    child: CourseList(
+                      courses: widget.courseData.courses,
+                      timeCodes: widget.courseData.timeCodes,
+                    ),
+                  ),
+                ),
+              ),
+            ]
+          ],
+        ),
+        floatingActionButtonLocation: FloatingActionButtonLocation.endDocked,
+        floatingActionButton: widget.isShowSearchButton
+            ? FloatingActionButton(
+                child: Icon(Icons.search),
+                onPressed: _pickSemester,
+              )
+            : null,
+        bottomNavigationBar: isTablet
+            ? null
+            : BottomAppBar(
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  children: <Widget>[
+                    IconButton(
+                      iconSize: _contentStyle == _ContentStyle.table ? 24 : 20,
+                      color: _contentStyle == _ContentStyle.table
+                          ? ApTheme.of(context).yellow
+                          : ApTheme.of(context).grey,
+                      icon: Icon(Icons.grid_on),
+                      onPressed: () {
+                        setState(() => _contentStyle = _ContentStyle.table);
+                      },
+                    ),
+                    IconButton(
+                      iconSize: _contentStyle == _ContentStyle.list ? 24 : 20,
+                      color: _contentStyle == _ContentStyle.list
+                          ? ApTheme.of(context).yellow
+                          : ApTheme.of(context).grey,
+                      icon: Icon(Icons.format_list_bulleted),
+                      onPressed: () {
+                        setState(() => _contentStyle = _ContentStyle.list);
+                      },
+                    ),
+                    if (widget.isShowSearchButton) Container(height: 0),
+                  ],
+                ),
+              ),
+      ),
     );
   }
 
@@ -375,7 +402,6 @@ class CourseScaffoldState extends State<CourseScaffold> {
             TimeCodeBorder(
               timeCode: timeCodes[i],
               hasHoliday: hasHoliday,
-              showSectionTime: showSectionTime,
             ),
           );
     }
@@ -409,8 +435,6 @@ class CourseScaffoldState extends State<CourseScaffold> {
           course: course,
           color: color,
           onPressed: _onPressed,
-          showInstructors: showInstructors,
-          showClassroomLocation: showClassroomLocation,
         );
       }
     }
@@ -436,8 +460,6 @@ class CourseScaffoldState extends State<CourseScaffold> {
             course: courseBorders[j].course,
             height: _courseHeight * (repeat + 1),
             color: courseBorders[j].color,
-            showInstructors: showInstructors,
-            showClassroomLocation: showClassroomLocation,
             border: (j + repeat > courseBorders.length)
                 ? Border(
                     left: _innerBorderSide,
@@ -454,8 +476,6 @@ class CourseScaffoldState extends State<CourseScaffold> {
               course: courseBorders[k].course,
               height: 0.0,
               width: 0.0,
-              showInstructors: showInstructors,
-              showClassroomLocation: showClassroomLocation,
             );
           }
           j += repeat;
@@ -470,8 +490,6 @@ class CourseScaffoldState extends State<CourseScaffold> {
               top: _innerBorderSide,
               bottom: _innerBorderSide,
             ),
-            showInstructors: showInstructors,
-            showClassroomLocation: showClassroomLocation,
             onPressed: _onPressed,
             sectionTime: courseBorders[j].sectionTime,
             timeCode: courseBorders[j].timeCode,
@@ -738,17 +756,16 @@ class _CourseContentState extends State<CourseContent> {
 class TimeCodeBorder extends StatelessWidget {
   final TimeCode timeCode;
   final bool hasHoliday;
-  final bool showSectionTime;
 
   const TimeCodeBorder({
     Key key,
     this.timeCode,
     this.hasHoliday,
-    this.showSectionTime,
   }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
+    final showSectionTime = CourseConfig.of(context).showSectionTime;
     return Container(
       alignment: Alignment.center,
       decoration: BoxDecoration(
@@ -939,8 +956,6 @@ class CourseBorder extends StatelessWidget {
   final double width;
   final Border border;
   final Color color;
-  final bool showInstructors;
-  final bool showClassroomLocation;
   final Function(SectionTime weekIndex, Course course) onPressed;
 
   const CourseBorder({
@@ -953,12 +968,13 @@ class CourseBorder extends StatelessWidget {
     this.width,
     this.border,
     this.color,
-    this.showInstructors,
-    this.showClassroomLocation,
   }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
+    final showInstructors = CourseConfig.of(context).showInstructors;
+    final showClassroomLocation =
+        CourseConfig.of(context).showClassroomLocation;
     return Container(
       padding: EdgeInsets.only(
         bottom: course != null ? 2.0 : 0.0,
