@@ -1,3 +1,8 @@
+## [0.13.1] - 2021/02/16
+
+* 修改 `ApLocalizations` delegate 命名
+* 修復 `PdfScaffod` `AnalyticUtils` 空檢查
+
 ## [0.13.0] - 2021/02/16
 ### 基於 Flutter v1.26.0-17.5.pre 開發
 
