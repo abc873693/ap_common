@@ -60,7 +60,7 @@ class _PdfScaffoldState extends State<PdfScaffold> {
               FloatingActionButton(
                 child: Icon(ApIcon.share),
                 onPressed: () async {
-                  AnalyticsUtils.instance.logEvent('export_by_share');
+                  AnalyticsUtils.instance?.logEvent('export_by_share');
                   await Printing.sharePdf(
                     bytes: widget.data,
                     filename: '${widget.fileName ?? 'export'}.pdf',
@@ -71,7 +71,7 @@ class _PdfScaffoldState extends State<PdfScaffold> {
               FloatingActionButton(
                 child: Icon(ApIcon.print),
                 onPressed: () async {
-                  AnalyticsUtils.instance.logEvent('export_by_printing');
+                  AnalyticsUtils.instance?.logEvent('export_by_printing');
                   await Printing.layoutPdf(
                     onLayout: (format) async => widget.data,
                     name: widget.fileName ?? 'export',
