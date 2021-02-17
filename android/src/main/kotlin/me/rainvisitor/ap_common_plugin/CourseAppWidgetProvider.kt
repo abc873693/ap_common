@@ -105,9 +105,11 @@ class CourseAppWidgetProvider : AppWidgetProvider() {
     }
 
     private fun parseCourseList(today: Calendar, courseData: JSONObject): List<Course> {
+        val todayCourses = mutableListOf<Course>()
+        if (courseData.isNull("courses"))
+            return todayCourses
         val allCourses = courseData.getJSONArray("courses")
         val timeCodes = courseData.getJSONArray("timeCodes")
-        val todayCourses = mutableListOf<Course>()
         val weekday = today.get(Calendar.DAY_OF_WEEK)
 
         for (i in 0 until allCourses.length()) {
