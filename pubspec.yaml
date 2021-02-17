@@ -1,6 +1,6 @@
 name: ap_common_plugin
 description: ap_common Native Plugin
-version: 0.1.4
+version: 0.1.5
 homepage: https://github.com/abc873693/ap_common_plugin
 
 dependencies:
