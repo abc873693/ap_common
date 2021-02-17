@@ -1,3 +1,7 @@
+## [0.13.2] - 2021/02/17
+
+* 修改 `TimeCodeConfig` 使用 `CourseData` 中的 `TimeCode`
+
 ## [0.13.1] - 2021/02/16
 
 * 修改 `ApLocalizations` delegate 命名
