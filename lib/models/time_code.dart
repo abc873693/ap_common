@@ -4,6 +4,8 @@
 
 import 'dart:convert';
 
+import 'course_data.dart' show TimeCode;
+
 class TimeCodeConfig {
   List<TimeCode> timeCodes;
 
@@ -38,33 +40,4 @@ class TimeCodeConfig {
   int indexOf(String section) {
     return textList.indexOf(section);
   }
-}
-
-class TimeCode {
-  String title;
-  String startTime;
-  String endTime;
-
-  TimeCode({
-    this.title,
-    this.startTime,
-    this.endTime,
-  });
-
-  factory TimeCode.fromRawJson(String str) =>
-      TimeCode.fromJson(json.decode(str));
-
-  String toRawJson() => json.encode(toJson());
-
-  factory TimeCode.fromJson(Map<String, dynamic> json) => TimeCode(
-        title: json["title"] == null ? null : json["title"],
-        startTime: json["startTime"] == null ? null : json["startTime"],
-        endTime: json["endTime"] == null ? null : json["endTime"],
-      );
-
-  Map<String, dynamic> toJson() => {
-        "title": title == null ? null : title,
-        "startTime": startTime == null ? null : startTime,
-        "endTime": endTime == null ? null : endTime,
-      };
 }
