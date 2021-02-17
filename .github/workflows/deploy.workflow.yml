@@ -1,6 +1,9 @@
 name: Deploy to Pub Hub
 
-on: push
+on:
+  release:
+    types:
+      - created
 
 jobs:
 
