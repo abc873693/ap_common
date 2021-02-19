@@ -1,10 +1,19 @@
 import 'package:flutter/material.dart';
 
 class ApIcon {
-  static const String FILLED = 'filled';
   static const String OUTLINED = 'outlined';
+  static const String FILLED = 'filled';
+
+  static const values = [
+    OUTLINED,
+    FILLED,
+  ];
 
   static String code = ApIcon.OUTLINED;
+
+  static int get index {
+    return values.indexOf(code);
+  }
 
   static IconData get share {
     switch (ApIcon.code) {

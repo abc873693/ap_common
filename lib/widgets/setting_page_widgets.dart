@@ -1,6 +1,7 @@
 import 'package:ap_common/config/analytics_constants.dart';
 import 'package:ap_common/config/ap_constants.dart';
 import 'package:ap_common/models/course_notify_data.dart';
+import 'package:ap_common/resources/ap_icon.dart';
 import 'package:ap_common/resources/ap_theme.dart';
 import 'package:ap_common/utils/analytics_utils.dart';
 import 'package:ap_common/utils/ap_localizations.dart';
@@ -223,6 +224,7 @@ class ChangeLanguageItem extends StatelessWidget {
             },
           ),
         );
+        AnalyticsUtils.instance?.logEvent('language_setting_click');
       },
     );
   }
@@ -258,15 +260,61 @@ class ChangeThemeModeItem extends StatelessWidget {
             items: themeTextList,
             index: themeModeIndex,
             onSelected: (int index) {
-              onChange?.call(ThemeMode.values[index]);
+              final mode = ThemeMode.values[index];
+              onChange?.call(mode);
               Preferences.setInt(ApConstants.PREF_THEME_MODE_INDEX, index);
               AnalyticsUtils.instance?.logAction(
                 'change_theme',
-                ThemeMode.values[index].toString(),
+                mode.toString(),
+              );
+              AnalyticsUtils.instance?.logThemeEvent(mode);
+            },
+          ),
+        );
+        AnalyticsUtils.instance?.logEvent('theme_mode_setting_click');
+      },
+    );
+  }
+}
+
+class ChangeIconStyleItem extends StatelessWidget {
+  final Function(String code) onChange;
+
+  const ChangeIconStyleItem({
+    Key key,
+    @required this.onChange,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    final iconStyleIndex = ApIcon.index;
+    final ap = ApLocalizations.of(context);
+    return SettingItem(
+      text: ap.iconStyle,
+      subText: ap.iconText,
+      onTap: () {
+        showDialog(
+          context: context,
+          builder: (_) => SimpleOptionDialog(
+            title: ap.theme,
+            items: [
+              ap.outlined,
+              ap.filled,
+            ],
+            index: iconStyleIndex,
+            onSelected: (int index) {
+              final code = ApIcon.values[index];
+              ApIcon.code = code;
+              Preferences.setString(ApConstants.PREF_ICON_STYLE_CODE, code);
+              onChange?.call(code);
+              AnalyticsUtils.instance?.logAction(
+                'change_icon_style',
+                code,
               );
             },
           ),
         );
+        AnalyticsUtils.instance?.logEvent('icon_style_setting_click');
       },
     );
   }
