@@ -107,7 +107,11 @@ class MyAppState extends State<MyApp> with WidgetsBindingObserver {
     );
   }
 
-  void update(ThemeMode mode) {
+  void update() {
+    setState(() {});
+  }
+
+  void loadTheme(ThemeMode mode) {
     setState(() {
       themeMode = mode;
     });
