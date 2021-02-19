@@ -1,9 +1,11 @@
 name: Deploy to Pub Hub
 
 on:
-  release:
-    types: # This configuration does not affect the page_build event above
-      - created
+  push:
+    branches:
+      - master
+    tags:
+      - v*
 jobs:
 
   deploy:
