@@ -1,8 +1,12 @@
+import 'package:ap_common/config/analytics_constants.dart';
+import 'package:ap_common/config/ap_constants.dart';
 import 'package:ap_common/models/course_notify_data.dart';
 import 'package:ap_common/resources/ap_theme.dart';
+import 'package:ap_common/utils/analytics_utils.dart';
 import 'package:ap_common/utils/ap_localizations.dart';
 import 'package:ap_common/utils/ap_utils.dart';
 import 'package:ap_common/utils/notification_utils.dart';
+import 'package:ap_common/utils/preferences.dart';
 import 'package:flutter/material.dart';
 
 import 'option_dialog.dart';
@@ -152,6 +156,117 @@ class ClearAllNotifyItem extends StatelessWidget {
           ApUtils.showToast(context, ap.cancelNotifySuccess);
         } else
           ApUtils.showToast(context, ap.platformError);
+      },
+    );
+  }
+}
+
+class ChangeLanguageItem extends StatelessWidget {
+  final Function(Locale locale) onChange;
+  final List<String> textList;
+
+  const ChangeLanguageItem({
+    Key key,
+    @required this.onChange,
+    this.textList,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    final ap = ApLocalizations.of(context);
+    final languageTextList = this.textList ??
+        [
+          ApLocalizations.of(context).systemLanguage,
+          ApLocalizations.of(context).traditionalChinese,
+          ApLocalizations.of(context).english,
+        ];
+    final code = Preferences.getString(
+        ApConstants.PREF_LANGUAGE_CODE, ApSupportLanguageConstants.SYSTEM);
+    final languageIndex = ApSupportLanguageExtension.fromCode(code);
+    return SettingItem(
+      text: ap.language,
+      subText: languageTextList[languageIndex],
+      onTap: () {
+        showDialog(
+          context: context,
+          builder: (_) => SimpleOptionDialog(
+            title: ap.language,
+            items: languageTextList,
+            index: languageIndex,
+            onSelected: (int index) async {
+              Locale locale;
+              String code = ApSupportLanguage.values[index].code;
+              switch (index) {
+                case 0:
+                  locale = WidgetsBinding.instance.window.locales.first;
+                  locale = ApLocalizations.delegate.isSupported(locale)
+                      ? locale
+                      : Locale('en');
+                  break;
+                default:
+                  locale = Locale(
+                    code,
+                    code == ApSupportLanguageConstants.ZH ? 'TW' : null,
+                  );
+                  break;
+              }
+              onChange?.call(locale);
+              Preferences.setString(ApConstants.PREF_LANGUAGE_CODE, code);
+              AnalyticsUtils.instance?.logAction(
+                'change_language',
+                code,
+              );
+              AnalyticsUtils.instance?.setUserProperty(
+                AnalyticsConstants.LANGUAGE,
+                locale.toLanguageTag(),
+              );
+            },
+          ),
+        );
+      },
+    );
+  }
+}
+
+class ChangeThemeModeItem extends StatelessWidget {
+  final Function(ThemeMode themeMode) onChange;
+  final List<String> textList;
+
+  const ChangeThemeModeItem({
+    Key key,
+    @required this.onChange,
+    this.textList,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    final ap = ApLocalizations.of(context);
+    final themeTextList = [
+      ApLocalizations.of(context).systemTheme,
+      ApLocalizations.of(context).light,
+      ApLocalizations.of(context).dark,
+    ];
+    final themeModeIndex = ApTheme.of(context).themeMode.index;
+    return SettingItem(
+      text: ap.theme,
+      subText: themeTextList[themeModeIndex],
+      onTap: () {
+        showDialog(
+          context: context,
+          builder: (_) => SimpleOptionDialog(
+            title: ap.theme,
+            items: themeTextList,
+            index: themeModeIndex,
+            onSelected: (int index) {
+              onChange?.call(ThemeMode.values[index]);
+              Preferences.setInt(ApConstants.PREF_THEME_MODE_INDEX, index);
+              AnalyticsUtils.instance?.logAction(
+                'change_theme',
+                ThemeMode.values[index].toString(),
+              );
+            },
+          ),
+        );
       },
     );
   }

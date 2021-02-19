@@ -12,6 +12,11 @@ class ApConstants {
   static const NEW_VERSION_CONTENT_ZH = "new_version_content_zh";
   static const NEW_VERSION_CONTENT_EN = "new_version_content_en";
 
+  static const PREF_LANGUAGE_CODE = 'pref_language_code';
+  static const PREF_THEME_CODE = 'pref_theme_code';
+  static const PREF_ICON_STYLE_CODE = 'pref_icon_style_code';
+  static const PREF_THEME_MODE_INDEX = 'pref_theme_mode_index';
+
   static const SEMESTER_LATEST = "latest";
   static const CURRENT_SEMESTER_CODE = "ap_common.current_semester_code";
   static const SHOW_COURSE_SEARCH_BUTTON =
