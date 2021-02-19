@@ -1,3 +1,8 @@
+## [0.13.3] - 2021/02/20
+
+* 加入 `ChageLanguageItem` 作為設定頁使用
+* 加入 `ChangeThemeModeItem` 作為設定頁使用
+
 ## [0.13.2] - 2021/02/17
 
 * 修改 `TimeCodeConfig` 使用 `CourseData` 中的 `TimeCode`
