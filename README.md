@@ -10,6 +10,7 @@
 ## 相關專案
 - [高科校務通](https://github.com/NKUST-ITC/NKUST-AP-Flutter)
 - [中山校務通](https://github.com/abc873693/NSYSU-AP)
+- [文藻校務通](https://github.com/abc873693/WTUC-AP)
 - [台科校務通](https://github.com/abc873693/NTUST-AP)
 
 ## 套件使用要求
@@ -116,15 +117,27 @@
               // 在此設定使用的語言，否則會按照系統提供語言，若為不支援語言 預設為英文
               localeResolutionCallback:
                     (Locale locale, Iterable<Locale> supportedLocales) {
-                  return this.locale = locale;
+                  String languageCode = Preferences.getString(
+                    ApConstants.PREF_LANGUAGE_CODE,
+                    ApSupportLanguageConstants.SYSTEM,
+                  );
+                  if (languageCode == ApSupportLanguageConstants.SYSTEM)
+                    return this.locale = ApLocalizations.delegate.isSupported(locale)
+                        ? locale
+                        : Locale('en');
+                  else
+                    return Locale(
+                      languageCode,
+                      languageCode == ApSupportLanguageConstants.ZH ? 'TW' : null,
+                    );
                 },
-               localizationsDelegates: [
+              localizationsDelegates: [
                   ApLocalizations.delegate,
               ],
               locale: locale,
               supportedLocales: [
                 const Locale('en'), // English
-                const Locale('zh', 'TW'), // Chinese
+                const Locale('zh', 'TW'), // Traditional Chinese
               ],
             );
     }
