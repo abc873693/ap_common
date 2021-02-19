@@ -1,5 +1,7 @@
 import 'dart:io';
 
+import 'package:ap_common/config/ap_constants.dart';
+import 'package:ap_common/resources/ap_icon.dart';
 import 'package:encrypt/encrypt.dart' as encrypt;
 import 'package:flutter/foundation.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -19,9 +21,17 @@ class Preferences {
       Platform.isLinux ||
       Platform.isWindows;
 
-  static init({encrypt.Key key, encrypt.IV iv}) async {
+  static init({
+    @required encrypt.Key key,
+    @required encrypt.IV iv,
+    bool initialApIcon = true,
+  }) async {
     if (isSupport) {
       prefs = await SharedPreferences.getInstance();
+      ApIcon.code = Preferences.getString(
+        ApConstants.PREF_ICON_STYLE_CODE,
+        ApIcon.OUTLINED,
+      );
       if (key != null && iv != null) {
         encrypter = encrypt.Encrypter(
           encrypt.AES(
