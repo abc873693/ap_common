@@ -1,8 +1,8 @@
 name: CI Test
-  on:
-    push:
-      tags-ignore:
-        - v*
+on:
+  push:
+    tags-ignore:
+      - v*
 
 jobs:
   build:
