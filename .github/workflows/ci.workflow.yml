@@ -1,5 +1,8 @@
 name: CI Test
-on: [push, pull_request]
+  on:
+    push:
+      tags-ignore:
+        - v*
 
 jobs:
   build:
