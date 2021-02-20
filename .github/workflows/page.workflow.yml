@@ -1,5 +1,8 @@
-name: Build Web Page
-on: push
+name: Build Demo Web Page
+on:
+  push:
+    tags-ignore:
+      - v*
 
 jobs:
   build:
