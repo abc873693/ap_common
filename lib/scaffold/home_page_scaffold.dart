@@ -286,6 +286,11 @@ class HomePageScaffoldState extends State<HomePageScaffold> {
           icon: ApIcon.offlineBolt,
           content: app.offlineMode,
         );
+      case HomeState.empty:
+        return HintContent(
+          icon: ApIcon.offlineBolt,
+          content: app.announcementEmpty,
+        );
       case HomeState.error:
       default:
         return HintContent(
