@@ -159,6 +159,7 @@
   "openDrawer": "打開功能表",
   "closeDrawer": "關閉功能表",
   "announcements": "最新消息",
+  "announcementEmpty": "Oops！沒有任何最新消息 😋",
   "offlineCourse": "離線課表",
   "courseInfo": "課程學習",
   "course": "學期課表",

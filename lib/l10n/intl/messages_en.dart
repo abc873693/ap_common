@@ -40,6 +40,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "admissionGuide" : MessageLookupByLibrary.simpleMessage("Admission Guide"),
     "allAnnouncements" : MessageLookupByLibrary.simpleMessage("All Announcements"),
     "allApplications" : MessageLookupByLibrary.simpleMessage("All Applications"),
+    "announcementEmpty" : MessageLookupByLibrary.simpleMessage("Oops！No any news 😋"),
     "announcementReviewSystem" : MessageLookupByLibrary.simpleMessage("Announcement Review System"),
     "announcements" : MessageLookupByLibrary.simpleMessage("News"),
     "apiServerError" : MessageLookupByLibrary.simpleMessage("AP Server Error\nPlease report to fans page"),

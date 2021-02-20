@@ -40,6 +40,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "admissionGuide" : MessageLookupByLibrary.simpleMessage("入學指南"),
     "allAnnouncements" : MessageLookupByLibrary.simpleMessage("所有最新消息"),
     "allApplications" : MessageLookupByLibrary.simpleMessage("所有審查"),
+    "announcementEmpty" : MessageLookupByLibrary.simpleMessage("Oops！沒有任何最新消息 😋"),
     "announcementReviewSystem" : MessageLookupByLibrary.simpleMessage("最新消息審查系統"),
     "announcements" : MessageLookupByLibrary.simpleMessage("最新消息"),
     "apiServerError" : MessageLookupByLibrary.simpleMessage("校務通伺服器錯誤\n可向粉絲專頁回報"),

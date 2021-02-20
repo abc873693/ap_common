@@ -1635,6 +1635,16 @@ class ApLocalizations {
     );
   }
 
+  /// `Oops！沒有任何最新消息 😋`
+  String get announcementEmpty {
+    return Intl.message(
+      'Oops！沒有任何最新消息 😋',
+      name: 'announcementEmpty',
+      desc: '',
+      args: [],
+    );
+  }
+
   /// `離線課表`
   String get offlineCourse {
     return Intl.message(

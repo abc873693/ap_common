@@ -165,6 +165,7 @@
   "openDrawer": "Open Menu",
   "closeDrawer": "Close Menu",
   "announcements": "News",
+  "announcementEmpty": "Oops！No any news 😋",
   "offlineCourse": "Offline Class Schedule",
   "courseInfo": "Course info",
   "course": "Class Schedule",
