@@ -212,14 +212,40 @@ class AnnouncementHelper {
   }
 
   Future<List<Announcement>> getAllAnnouncements({
-    String locale,
     @required GeneralCallback<List<Announcement>> callback,
   }) async {
     try {
       var response = await dio.get(
         "/announcements",
-        queryParameters: {
-          'lang': locale ?? '',
+      );
+      var data = AnnouncementData(data: []);
+      if (response.statusCode != 204) {
+        data = AnnouncementData.fromJson(response.data);
+        data.data.sort((a, b) {
+          return b.weight.compareTo(a.weight);
+        });
+      }
+      return (callback == null) ? data.data : callback.onSuccess(data.data);
+    } on DioError catch (dioError) {
+      if (callback == null)
+        throw dioError;
+      else
+        callback.onFailure(dioError);
+    }
+    return null;
+  }
+
+  Future<List<Announcement>> getAnnouncements({
+    @required GeneralCallback<List<Announcement>> callback,
+    String locale,
+    List<String> tags,
+  }) async {
+    try {
+      var response = await dio.post(
+        "/announcements",
+        data: {
+          "tag": tags ?? [],
+          "lang": locale ?? "zh",
         },
       );
       var data = AnnouncementData(data: []);

@@ -317,7 +317,8 @@ class HomePageState extends State<HomePage> {
     //     },
     //   ),
     // );
-    AnnouncementHelper.instance.getAllAnnouncements(
+    AnnouncementHelper.instance.getAnnouncements(
+      tags: [],
       callback: GeneralCallback(
         onFailure: (_) => setState(() => state = HomeState.error),
         onError: (_) => setState(() => state = HomeState.error),
