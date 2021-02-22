@@ -33,6 +33,7 @@ extension DioErrorExtension on DioError {
 class AnnouncementHelper {
   static String host = 'nkust.taki.dog';
   static String tag = 'ap';
+  static String organization;
 
   static String fcmToken;
 
@@ -350,8 +351,14 @@ class AnnouncementHelper {
   Future<Response> addApplication({
     @required Announcement data,
     @required GeneralCallback<Response> callback,
+    String languageCode,
   }) async {
     try {
+      data.tags ??= [];
+      data.tags.addAll([
+        languageCode ?? 'zh',
+        if (organization != null) organization,
+      ]);
       var response = await dio.post(
         "/application",
         data: data.toUpdateJson(),

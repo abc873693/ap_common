@@ -42,6 +42,7 @@ class Announcement {
   String applicationId;
   bool reviewStatus;
   String reviewDescription;
+  List<String> tags;
 
   Announcement({
     this.title,
@@ -58,6 +59,7 @@ class Announcement {
     this.applicationId,
     this.reviewStatus,
     this.reviewDescription,
+    this.tags,
   });
 
   factory Announcement.fromRawJson(String str) =>
@@ -82,6 +84,7 @@ class Announcement {
         applicationId: json["application_id"],
         reviewStatus: json["reviewStatus"],
         reviewDescription: json["reviewDescription"],
+        tags: List<String>.from(json["tag"].map((x) => x)),
       );
 
   Map<String, dynamic> toJson() => {
@@ -99,6 +102,7 @@ class Announcement {
         "application_id": expireTime,
         "reviewStatus": reviewStatus,
         "reviewDescription": reviewDescription,
+        "tag": tags,
       };
 
   Map<String, dynamic> toUpdateJson() => {
@@ -108,6 +112,7 @@ class Announcement {
         "url": url,
         "description": description,
         "expireTime": expireTime,
+        "tag": tags,
       };
 
   Map<String, dynamic> toUpdateApplicationJson() => {
@@ -117,6 +122,7 @@ class Announcement {
         "url": url,
         "description": description,
         "expireTime": expireTime,
+        "tag": tags,
       };
 
   Map<String, dynamic> toAddApplicationJson(String fcmToken) => {
@@ -126,5 +132,6 @@ class Announcement {
         "url": url,
         "description": description,
         "expireTime": expireTime,
+        "tag": tags,
       };
 }
