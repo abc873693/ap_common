@@ -29,11 +29,13 @@ class AnnouncementHomePage extends StatefulWidget {
   static const String routerName = "/news/admin";
   final Widget loginDescriptionWidget;
   final Widget reviewDescriptionWidget;
+  final bool enableNormalLogin;
 
   const AnnouncementHomePage({
     Key key,
     this.loginDescriptionWidget,
     this.reviewDescriptionWidget,
+    this.enableNormalLogin = false,
   }) : super(key: key);
 
   @override
@@ -301,30 +303,27 @@ class _AnnouncementHomePageState extends State<AnnouncementHomePage> {
       ),
       style: _editTextStyle,
     );
-    return SingleChildScrollView(
-      padding: const EdgeInsets.symmetric(
-        vertical: 8.0,
-        horizontal: 32.0,
-      ),
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: <Widget>[
-          widget.loginDescriptionWidget ??
-              SelectableText.rich(
-                TextSpan(
-                  style: TextStyle(
-                      color: ApTheme.of(context).grey, fontSize: 16.0),
-                  children: [
-                    TextSpan(
-                        text: '${app.newsRuleDescription1}',
-                        style: TextStyle(fontWeight: FontWeight.normal)),
-                    TextSpan(
-                        text: '${app.newsRuleDescription3}',
-                        style: TextStyle(fontWeight: FontWeight.normal)),
-                  ],
-                ),
-                textAlign: TextAlign.center,
+    return Column(
+      mainAxisAlignment: MainAxisAlignment.center,
+      mainAxisSize: MainAxisSize.max,
+      children: <Widget>[
+        widget.loginDescriptionWidget ??
+            SelectableText.rich(
+              TextSpan(
+                style:
+                    TextStyle(color: ApTheme.of(context).grey, fontSize: 16.0),
+                children: [
+                  TextSpan(
+                      text: '${app.newsRuleDescription1}',
+                      style: TextStyle(fontWeight: FontWeight.normal)),
+                  TextSpan(
+                      text: '${app.newsRuleDescription3}',
+                      style: TextStyle(fontWeight: FontWeight.normal)),
+                ],
               ),
+              textAlign: TextAlign.center,
+            ),
+        if (widget.enableNormalLogin) ...[
           SizedBox(height: 8.0),
           usernameTextField,
           passwordTextField,
@@ -335,24 +334,24 @@ class _AnnouncementHomePageState extends State<AnnouncementHomePage> {
               _login(AnnouncementLoginType.normal);
             },
           ),
+        ],
+        SizedBox(height: widget.enableNormalLogin ? 16.0 : 24.0),
+        ApButton(
+          text: 'Sign In with Google',
+          onPressed: () async {
+            _login(AnnouncementLoginType.google);
+          },
+        ),
+        if (!kIsWeb && (Platform.isIOS || Platform.isMacOS)) ...[
           SizedBox(height: 16.0),
           ApButton(
-            text: 'Sign In with Google',
+            text: 'Sign In with Apple',
             onPressed: () async {
-              _login(AnnouncementLoginType.google);
+              _login(AnnouncementLoginType.apple);
             },
           ),
-          if (!kIsWeb && (Platform.isIOS || Platform.isMacOS)) ...[
-            SizedBox(height: 16.0),
-            ApButton(
-              text: 'Sign In with Apple',
-              onPressed: () async {
-                _login(AnnouncementLoginType.apple);
-              },
-            ),
-          ],
         ],
-      ),
+      ],
     );
   }
 
