@@ -1,9 +1,9 @@
 name: Deploy to Pub Hub
 
 on:
-  release:
-    types:
-      - created
+  push:
+    tags:
+      - v*
 
 jobs:
 
