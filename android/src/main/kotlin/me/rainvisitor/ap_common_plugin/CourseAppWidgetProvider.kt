@@ -110,8 +110,8 @@ class CourseAppWidgetProvider : AppWidgetProvider() {
             return todayCourses
         val allCourses = courseData.getJSONArray("courses")
         val timeCodes = courseData.getJSONArray("timeCodes")
-        val weekday = today.get(Calendar.DAY_OF_WEEK)
-
+        var weekday = today.get(Calendar.DAY_OF_WEEK)
+        weekday = if (weekday == 1) 7 else weekday - 1
         for (i in 0 until allCourses.length()) {
             val course = allCourses.getJSONObject(i)
             val times = course.getJSONArray("sectionTimes")
