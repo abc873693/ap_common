@@ -67,6 +67,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "busCancelReserveFail" : MessageLookupByLibrary.simpleMessage("Fail Canceled"),
     "busCancelReserveSuccess" : MessageLookupByLibrary.simpleMessage("Successfully Canceled!"),
     "busCount" : MessageLookupByLibrary.simpleMessage("(%s / %s)"),
+    "busEmpty" : MessageLookupByLibrary.simpleMessage("Oops! No bus today~\n Please choose another date 😋"),
     "busFailInfinity" : MessageLookupByLibrary.simpleMessage("Bus system perhaps broken!!!"),
     "busNotPick" : MessageLookupByLibrary.simpleMessage("You have not chosen a date!\n Please choose a date first %s"),
     "busNotPickDate" : MessageLookupByLibrary.simpleMessage("Chosen Date"),
