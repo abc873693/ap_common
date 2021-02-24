@@ -535,8 +535,7 @@ class CourseScaffoldState extends State<CourseScaffold> {
     ];
   }
 
-  void _onPressed(SectionTime sectionTime, Course course) {
-    final timeCodeIndex = sectionTime.index;
+  void _onPressed(int weekday, TimeCode timeCode, Course course) {
     showModalBottomSheet(
       context: context,
       shape: RoundedRectangleBorder(
@@ -547,9 +546,9 @@ class CourseScaffoldState extends State<CourseScaffold> {
           enableNotifyControl: widget.enableNotifyControl,
           course: course,
           notifyData: widget.notifyData,
-          weekday: sectionTime.weekday,
+          weekday: weekday,
           courseNotifySaveKey: widget.courseNotifySaveKey,
-          timeCode: widget.courseData.timeCodes[timeCodeIndex],
+          timeCode: timeCode,
         );
       },
     );
@@ -982,7 +981,7 @@ class CourseBorder extends StatelessWidget {
   final double width;
   final Border border;
   final Color color;
-  final Function(SectionTime weekIndex, Course course) onPressed;
+  final Function(int weekday, TimeCode timeCode, Course course) onPressed;
 
   const CourseBorder({
     Key key,
@@ -1025,7 +1024,7 @@ class CourseBorder extends StatelessWidget {
             ? Container()
             : InkWell(
                 onTap: () {
-                  this.onPressed(sectionTime, course);
+                  this.onPressed(sectionTime.weekday, timeCode, course);
                   AnalyticsUtils.instance?.logEvent('course_border_click');
                 },
                 radius: 6.0,
