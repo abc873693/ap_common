@@ -4,7 +4,7 @@ import 'package:ap_common/utils/ap_localizations.dart';
 import 'package:flutter/material.dart';
 
 class OpenSourcePage extends StatefulWidget {
-  static const String routerName = "/openSource";
+  static const String routerName = "/open_source";
 
   const OpenSourcePage({Key key}) : super(key: key);
 

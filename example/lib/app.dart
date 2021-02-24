@@ -1,6 +1,7 @@
 import 'dart:typed_data';
 
 import 'package:ap_common/pages/about_us_page.dart';
+import 'package:ap_common/pages/announcement/home_page.dart';
 import 'package:ap_common/pages/open_source_page.dart';
 import 'package:ap_common/resources/ap_theme.dart';
 import 'package:ap_common/utils/ap_localizations.dart';
@@ -89,6 +90,8 @@ class MyAppState extends State<MyApp> with WidgetsBindingObserver {
                 HomePageState.aboutPage(context),
             OpenSourcePage.routerName: (BuildContext context) =>
                 OpenSourcePage(),
+            AnnouncementHomePage.routerName: (BuildContext context) =>
+                AnnouncementHomePage(),
           },
           theme: ApTheme.light,
           darkTheme: ApTheme.dark,

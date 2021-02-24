@@ -12,7 +12,8 @@ import 'package:flutter_linkify/flutter_linkify.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class AboutUsPage extends StatefulWidget {
-  static const String routerName = "/aboutus";
+  /// /aboutus
+  static const String routerName = "/about";
   final String assetImage;
   final String fbFanPageUrl;
   final String fbFanPageId;

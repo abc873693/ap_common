@@ -26,7 +26,8 @@ enum _State { notLogin, loading, done, error }
 enum _DataType { announcement, application }
 
 class AnnouncementHomePage extends StatefulWidget {
-  static const String routerName = "/news/admin";
+  static const String routerName = "/announcement";
+
   final Widget loginDescriptionWidget;
   final Widget reviewDescriptionWidget;
   final bool enableNormalLogin;
