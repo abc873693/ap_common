@@ -1170,8 +1170,7 @@ class _CourseScaffoldSettingDialogState
 }
 
 extension DateTimeExtension on DateTime {
-  DateTime weekTime(int weekIndex) {
-    int dayOfWeek = (weekIndex + 1) % 7;
+  DateTime weekTime(int weekday) {
     var now = DateTime.now();
     return DateTime(
       now.year,
@@ -1181,7 +1180,7 @@ extension DateTimeExtension on DateTime {
       minute,
     ).add(
       Duration(
-        days: dayOfWeek - now.weekday,
+        days: weekday - now.weekday,
       ),
     );
   }
