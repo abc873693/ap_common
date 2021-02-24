@@ -14,16 +14,14 @@ packages:
       path: ".."
       relative: true
     source: path
-    version: "0.13.7"
+    version: "0.13.8"
   ap_common_plugin:
     dependency: "direct main"
     description:
-      path: "."
-      ref: "v0.1.2"
-      resolved-ref: "786f2de4eebad25721be2ae0fc13c61f60368e8e"
-      url: "https://github.com/abc873693/ap_common_plugin"
-    source: git
-    version: "0.1.2"
+      name: ap_common_plugin
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "0.2.0"
   archive:
     dependency: transitive
     description:
