@@ -1,6 +1,8 @@
 name: Build Demo Web Page
 on:
   push:
+    branches:
+      - master
     tags-ignore:
       - v*
 
