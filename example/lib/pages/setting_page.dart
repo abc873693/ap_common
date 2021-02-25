@@ -7,7 +7,6 @@ import 'package:ap_common/utils/preferences.dart';
 import 'package:ap_common/widgets/setting_page_widgets.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:package_info/package_info.dart';
 
 import '../config/constants.dart';
 import '../widgets/share_data_widget.dart';

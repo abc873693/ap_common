@@ -12,6 +12,8 @@ import 'package:flutter/material.dart';
 
 import 'option_dialog.dart';
 
+export 'package:package_info_plus/package_info_plus.dart';
+
 class SettingTitle extends StatelessWidget {
   final String text;
 
