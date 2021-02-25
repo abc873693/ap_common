@@ -3,6 +3,10 @@ description: ap_common Native Plugin
 version: 0.2.1
 homepage: https://github.com/abc873693/ap_common_plugin
 
+environment:
+  sdk: ">=2.1.0 <3.0.0"
+  flutter: ">=1.10.0"
+
 dependencies:
   flutter:
     sdk: flutter
@@ -19,7 +23,3 @@ flutter:
         pluginClass: ApCommonPlugin
       ios:
         pluginClass: ApCommonPlugin
-
-environment:
-  sdk: ">=2.1.0 <3.0.0"
-  flutter: ">=1.10.0"
