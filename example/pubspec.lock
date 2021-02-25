@@ -14,14 +14,14 @@ packages:
       path: ".."
       relative: true
     source: path
-    version: "0.14.0"
+    version: "0.14.1"
   ap_common_plugin:
     dependency: "direct main"
     description:
       name: ap_common_plugin
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "0.2.0"
+    version: "0.2.2"
   archive:
     dependency: transitive
     description:
