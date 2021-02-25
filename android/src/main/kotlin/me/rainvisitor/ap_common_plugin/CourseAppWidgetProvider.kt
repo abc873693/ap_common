@@ -120,7 +120,7 @@ class CourseAppWidgetProvider : AppWidgetProvider() {
                     val location = course.getJSONObject("location")
                     val sectionIndex = times.getJSONObject(j).getInt("index")
                     val startTime = timeCodes.getJSONObject(sectionIndex).getString("startTime")
-                    todayCourses.add(Course(location = "${location.get("building")}${location.get("room")}", title = course.getString("title"), startTime = startTime))
+                    todayCourses.add(Course(location = "${location.get("building") ?: ""}${location.get("room") ?: ""}", title = course.getString("title"), startTime = startTime))
                 }
             }
         }
