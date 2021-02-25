@@ -120,7 +120,9 @@ class CourseAppWidgetProvider : AppWidgetProvider() {
                     val location = course.getJSONObject("location")
                     val sectionIndex = times.getJSONObject(j).getInt("index")
                     val startTime = timeCodes.getJSONObject(sectionIndex).getString("startTime")
-                    todayCourses.add(Course(location = "${location.get("building") ?: ""}${location.get("room") ?: ""}", title = course.getString("title"), startTime = startTime))
+                    val building = if (location.getString("building") == "null" || location.getString("building") == null) "" else location.getString("building")
+                    val room = if (location.getString("room") == "null" || location.getString("room") == null) "" else location.getString("room")
+                    todayCourses.add(Course(location = "${building}${room}", title = course.getString("title"), startTime = startTime))
                 }
             }
         }
