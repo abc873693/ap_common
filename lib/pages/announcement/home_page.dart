@@ -195,7 +195,7 @@ class _AnnouncementHomePageState extends State<AnnouncementHomePage> {
           ),
         );
       case _State.done:
-        switch (loginData.level) {
+        switch (loginData?.level ?? PermissionLevel.user) {
           case PermissionLevel.user:
             return SingleChildScrollView(
               child: Column(
@@ -250,7 +250,7 @@ class _AnnouncementHomePageState extends State<AnnouncementHomePage> {
                   SizedBox(height: 16.0),
                   Text(ap.myApplications),
                   SizedBox(height: 8.0),
-                  for (var item in applications)
+                  for (var item in applications ?? [])
                     if ((onlyShowNotReview && item.reviewStatus == null) ||
                         (!onlyShowNotReview))
                       _item(_DataType.application, item)
@@ -648,6 +648,7 @@ class _AnnouncementHomePageState extends State<AnnouncementHomePage> {
         Preferences.getStringSecurity(ApConstants.ANNOUNCEMENT_PASSWORD, '');
     if (isLogin) {
       int index = Preferences.getInt(ApConstants.ANNOUNCEMENT_LOGIN_TYPE, 0);
+      setState(() => state = _State.done);
       _login(AnnouncementLoginType.values[index]);
     } else {
       usernameFocusNode = FocusNode();
@@ -661,15 +662,19 @@ class _AnnouncementHomePageState extends State<AnnouncementHomePage> {
         (_username.text.isEmpty || _password.text.isEmpty)) {
       ApUtils.showToast(context, ap.doNotEmpty);
     } else {
-      showDialog(
-        context: context,
-        builder: (BuildContext context) => WillPopScope(
+      final isNotLogin =
+          !Preferences.getBool(ApConstants.ANNOUNCEMENT_IS_LOGIN, false);
+      if (isNotLogin)
+        showDialog(
+          context: context,
+          builder: (BuildContext context) => WillPopScope(
             child: ProgressDialog(ap.logining),
             onWillPop: () async {
               return false;
-            }),
-        barrierDismissible: false,
-      );
+            },
+          ),
+          barrierDismissible: false,
+        );
       String idToken =
           Preferences.getBool(ApConstants.ANNOUNCEMENT_IS_LOGIN, false)
               ? Preferences.getStringSecurity(
@@ -678,11 +683,11 @@ class _AnnouncementHomePageState extends State<AnnouncementHomePage> {
 
       final callback = GeneralCallback<AnnouncementLoginData>(
         onError: (response) {
-          Navigator.of(context, rootNavigator: true).pop();
+          if (isNotLogin) Navigator.of(context, rootNavigator: true).pop();
           ApUtils.showToast(context, response.message);
         },
         onFailure: (dioError) async {
-          Navigator.of(context, rootNavigator: true).pop();
+          if (isNotLogin) Navigator.of(context, rootNavigator: true).pop();
           ApUtils.showToast(context, dioError.i18nMessage);
           if (dioError.type == DioErrorType.RESPONSE &&
               dioError.response.statusCode == 403) {
@@ -693,7 +698,7 @@ class _AnnouncementHomePageState extends State<AnnouncementHomePage> {
         onSuccess: (loginData) {
           this.loginData = loginData;
           if (kDebugMode) print(loginData.key);
-          Navigator.of(context, rootNavigator: true).pop();
+          if (isNotLogin) Navigator.of(context, rootNavigator: true).pop();
           if (loginType == AnnouncementLoginType.normal)
             Preferences.setStringSecurity(
                 ApConstants.ANNOUNCEMENT_PASSWORD, _password.text);
@@ -705,7 +710,6 @@ class _AnnouncementHomePageState extends State<AnnouncementHomePage> {
           Preferences.setInt(
               ApConstants.ANNOUNCEMENT_LOGIN_TYPE, loginType.index);
           setState(() {
-            state = _State.loading;
             if (loginData.level != PermissionLevel.user) _getAnnouncements();
             _getApplications();
           });
@@ -733,12 +737,12 @@ class _AnnouncementHomePageState extends State<AnnouncementHomePage> {
               idToken = authentication.idToken;
               AnnouncementHelper.instance
                   .googleLogin(idToken: idToken, callback: callback);
-            } else
+            } else if (isNotLogin)
               Navigator.of(context, rootNavigator: true).pop();
           } catch (e, s) {
             ApUtils.showToast(context, ap.thirdPartyLoginFail);
             CrashlyticsUtils.instance?.recordError(e, s);
-            Navigator.of(context, rootNavigator: true).pop();
+            if (isNotLogin) Navigator.of(context, rootNavigator: true).pop();
             if (CrashlyticsUtils.instance != null) throw e;
           }
           break;
@@ -754,7 +758,7 @@ class _AnnouncementHomePageState extends State<AnnouncementHomePage> {
                 .appleLogin(idToken: idToken, callback: callback);
           } catch (e, s) {
             ApUtils.showToast(context, ap.thirdPartyLoginFail);
-            Navigator.of(context, rootNavigator: true).pop();
+            if (isNotLogin) Navigator.of(context, rootNavigator: true).pop();
             CrashlyticsUtils.instance?.recordError(e, s);
           }
           break;
