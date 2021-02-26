@@ -101,7 +101,7 @@ class _AnnouncementHomePageState extends State<AnnouncementHomePage> {
         title: Text(ap.announcementReviewSystem),
         backgroundColor: ApTheme.of(context).blue,
         actions: [
-          if (state == _State.done)
+          if (state == _State.done && loginData?.level != PermissionLevel.user)
             TextButton(
               child: Row(
                 children: [
