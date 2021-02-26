@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'dart:convert';
 import 'dart:io' show Platform;
+import 'dart:ui' show Locale;
 
 import 'package:ap_common/callback/general_callback.dart';
 import 'package:ap_common/l10n/l10n.dart';
@@ -92,6 +93,13 @@ class AnnouncementHelper {
     _instance = AnnouncementHelper();
     jsonCodec = JsonCodec();
     cancelToken = CancelToken();
+  }
+
+  void setLocale(Locale locale) {
+    if (locale.languageCode == 'zh' || locale.languageCode == 'en')
+      dio.options.headers['locale'] = locale.languageCode;
+    else
+      dio.options.headers['locale'] = 'en';
   }
 
   Future<bool> reLogin(GeneralCallback callback) async {
