@@ -668,9 +668,14 @@ class _AnnouncementHomePageState extends State<AnnouncementHomePage> {
           Navigator.of(context, rootNavigator: true).pop();
           ApUtils.showToast(context, response.message);
         },
-        onFailure: (dioError) {
+        onFailure: (dioError) async {
           Navigator.of(context, rootNavigator: true).pop();
           ApUtils.showToast(context, dioError.i18nMessage);
+          if (dioError.type == DioErrorType.RESPONSE &&
+              dioError.response.statusCode == 403) {
+            if (loginType == AnnouncementLoginType.google)
+              await _googleSignIn.signOut();
+          }
         },
         onSuccess: (loginData) {
           this.loginData = loginData;
@@ -693,6 +698,7 @@ class _AnnouncementHomePageState extends State<AnnouncementHomePage> {
           });
         },
       );
+      print(loginType);
       switch (loginType) {
         case AnnouncementLoginType.normal:
           Preferences.setString(
@@ -705,7 +711,8 @@ class _AnnouncementHomePageState extends State<AnnouncementHomePage> {
           break;
         case AnnouncementLoginType.google:
           try {
-            var data = await _googleSignIn.isSignedIn()
+            final isSignIn = await _googleSignIn.isSignedIn();
+            var data = isSignIn
                 ? await _googleSignIn.signInSilently()
                 : await _googleSignIn.signIn();
             if (data != null) {
@@ -713,11 +720,13 @@ class _AnnouncementHomePageState extends State<AnnouncementHomePage> {
               idToken = authentication.idToken;
               AnnouncementHelper.instance
                   .googleLogin(idToken: idToken, callback: callback);
-            }
+            } else
+              Navigator.of(context, rootNavigator: true).pop();
           } catch (e, s) {
             ApUtils.showToast(context, app.thirdPartyLoginFail);
             CrashlyticsUtils.instance?.recordError(e, s);
             Navigator.of(context, rootNavigator: true).pop();
+            if (CrashlyticsUtils.instance != null) throw e;
           }
           break;
         case AnnouncementLoginType.apple:

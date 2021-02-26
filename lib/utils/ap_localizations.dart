@@ -76,7 +76,10 @@ extension DioErrorI18nExtension on DioError {
         return ApLocalizations.current.timeoutMessage;
         break;
       case DioErrorType.RESPONSE:
-        return message;
+        if (response.data is Map<String, dynamic>)
+          return response.data['title'] ?? message;
+        else
+          return message;
         break;
       case DioErrorType.CANCEL:
       default:
