@@ -48,7 +48,7 @@ class _AnnouncementHomePageState extends State<AnnouncementHomePage> {
   final TextEditingController _password = TextEditingController();
   final _reviewDescription = TextEditingController();
 
-  ApLocalizations app;
+  ApLocalizations ap;
 
   _State state = _State.notLogin;
 
@@ -73,9 +73,9 @@ class _AnnouncementHomePageState extends State<AnnouncementHomePage> {
 
   String _reviewStateText(bool reviewStatus) {
     if (reviewStatus == null)
-      return app.waitingForReview;
+      return ap.waitingForReview;
     else
-      return reviewStatus ? app.reviewApproval : app.reviewReject;
+      return reviewStatus ? ap.reviewApproval : ap.reviewReject;
   }
 
   @override
@@ -92,10 +92,10 @@ class _AnnouncementHomePageState extends State<AnnouncementHomePage> {
 
   @override
   Widget build(BuildContext context) {
-    app = ApLocalizations.of(context);
+    ap = ApLocalizations.of(context);
     return Scaffold(
       appBar: AppBar(
-        title: Text(app.announcementReviewSystem),
+        title: Text(ap.announcementReviewSystem),
         backgroundColor: ApTheme.of(context).blue,
         actions: [
           if (state == _State.done)
@@ -115,7 +115,7 @@ class _AnnouncementHomePageState extends State<AnnouncementHomePage> {
                     activeColor: ApTheme.of(context).yellow,
                     checkColor: ApTheme.of(context).blue,
                   ),
-                  Text(app.onlyShowNotReview),
+                  Text(ap.onlyShowNotReview),
                 ],
               ),
               onPressed: () async {
@@ -129,7 +129,7 @@ class _AnnouncementHomePageState extends State<AnnouncementHomePage> {
           if (Preferences.getBool(ApConstants.ANNOUNCEMENT_IS_LOGIN, false))
             IconButton(
               icon: Icon(Icons.exit_to_app),
-              tooltip: app.logout,
+              tooltip: ap.logout,
               onPressed: () async {
                 if (AnnouncementHelper.loginType ==
                     AnnouncementLoginType.google) await _googleSignIn.signOut();
@@ -188,7 +188,7 @@ class _AnnouncementHomePageState extends State<AnnouncementHomePage> {
           },
           child: HintContent(
             icon: ApIcon.classIcon,
-            content: app.clickToRetry,
+            content: ap.clickToRetry,
           ),
         );
       case _State.done:
@@ -206,15 +206,15 @@ class _AnnouncementHomePageState extends State<AnnouncementHomePage> {
                               color: ApTheme.of(context).grey, fontSize: 16.0),
                           children: [
                             TextSpan(
-                              text: '${app.newsRuleDescription1}\n',
+                              text: '${ap.newsRuleDescription1}\n',
                               style: TextStyle(fontWeight: FontWeight.normal),
                             ),
                             TextSpan(
-                              text: '${app.newsRuleDescription2}',
+                              text: '${ap.newsRuleDescription2}',
                               style: TextStyle(fontWeight: FontWeight.bold),
                             ),
                             TextSpan(
-                              text: '${app.newsRuleDescription3}',
+                              text: '${ap.newsRuleDescription3}',
                               style: TextStyle(fontWeight: FontWeight.normal),
                             ),
                           ],
@@ -225,7 +225,7 @@ class _AnnouncementHomePageState extends State<AnnouncementHomePage> {
                   Padding(
                     padding: const EdgeInsets.symmetric(horizontal: 8.0),
                     child: ApButton(
-                      text: app.apply,
+                      text: ap.apply,
                       onPressed: () async {
                         var success = await Navigator.push(
                           context,
@@ -240,7 +240,7 @@ class _AnnouncementHomePageState extends State<AnnouncementHomePage> {
                     ),
                   ),
                   SizedBox(height: 16.0),
-                  Text(app.myApplications),
+                  Text(ap.myApplications),
                   SizedBox(height: 8.0),
                   for (var item in applications)
                     if ((onlyShowNotReview && item.reviewStatus == null) ||
@@ -256,12 +256,12 @@ class _AnnouncementHomePageState extends State<AnnouncementHomePage> {
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
                   SizedBox(height: 8.0),
-                  Text(app.allAnnouncements),
+                  Text(ap.allAnnouncements),
                   SizedBox(height: 8.0),
                   for (var item in announcements ?? [])
                     _item(_DataType.announcement, item),
                   SizedBox(height: 16.0),
-                  Text(app.allApplications),
+                  Text(ap.allApplications),
                   SizedBox(height: 8.0),
                   for (var item in applications ?? [])
                     if ((onlyShowNotReview && item.reviewStatus == null) ||
@@ -285,7 +285,7 @@ class _AnnouncementHomePageState extends State<AnnouncementHomePage> {
         FocusScope.of(context).requestFocus(passwordFocusNode);
       },
       decoration: InputDecoration(
-        labelText: app.account,
+        labelText: ap.account,
       ),
       style: _editTextStyle,
     );
@@ -300,7 +300,7 @@ class _AnnouncementHomePageState extends State<AnnouncementHomePage> {
       },
       obscureText: true,
       decoration: InputDecoration(
-        labelText: app.password,
+        labelText: ap.password,
       ),
       style: _editTextStyle,
     );
@@ -315,10 +315,10 @@ class _AnnouncementHomePageState extends State<AnnouncementHomePage> {
                     TextStyle(color: ApTheme.of(context).grey, fontSize: 16.0),
                 children: [
                   TextSpan(
-                      text: '${app.newsRuleDescription1}',
+                      text: '${ap.newsRuleDescription1}',
                       style: TextStyle(fontWeight: FontWeight.normal)),
                   TextSpan(
-                      text: '${app.newsRuleDescription3}',
+                      text: '${ap.newsRuleDescription3}',
                       style: TextStyle(fontWeight: FontWeight.normal)),
                 ],
               ),
@@ -330,7 +330,7 @@ class _AnnouncementHomePageState extends State<AnnouncementHomePage> {
           passwordTextField,
           SizedBox(height: 24.0),
           ApButton(
-            text: app.login,
+            text: ap.login,
             onPressed: () async {
               _login(AnnouncementLoginType.normal);
             },
@@ -392,13 +392,13 @@ class _AnnouncementHomePageState extends State<AnnouncementHomePage> {
                         builder: (BuildContext context) => dataType ==
                                 _DataType.announcement
                             ? YesNoDialog(
-                                title: app.deleteNewsTitle,
+                                title: ap.deleteNewsTitle,
                                 contentWidget: Text(
-                                  "${app.deleteNewsContent}",
+                                  "${ap.deleteNewsContent}",
                                   textAlign: TextAlign.center,
                                 ),
-                                leftActionText: app.determine,
-                                rightActionText: app.back,
+                                leftActionText: ap.determine,
+                                rightActionText: ap.back,
                                 leftActionFunction: () {
                                   AnnouncementHelper.instance
                                       .deleteAnnouncement(
@@ -407,7 +407,7 @@ class _AnnouncementHomePageState extends State<AnnouncementHomePage> {
                                       context,
                                       (_) {
                                         ApUtils.showToast(
-                                            context, app.updateSuccess);
+                                            context, ap.updateSuccess);
                                         _reviewDescription.text = '';
                                         _getAnnouncements();
                                       },
@@ -416,7 +416,7 @@ class _AnnouncementHomePageState extends State<AnnouncementHomePage> {
                                 },
                               )
                             : YesNoDialog(
-                                title: app.reviewApplication,
+                                title: ap.reviewApplication,
                                 contentWidget: TextField(
                                   controller: _reviewDescription,
                                   maxLines: 3,
@@ -426,11 +426,11 @@ class _AnnouncementHomePageState extends State<AnnouncementHomePage> {
                                     labelStyle: TextStyle(
                                       color: ApTheme.of(context).grey,
                                     ),
-                                    labelText: app.reviewDescription,
+                                    labelText: ap.reviewDescription,
                                   ),
                                 ),
-                                leftActionText: app.approve,
-                                rightActionText: app.reject,
+                                leftActionText: ap.approve,
+                                rightActionText: ap.reject,
                                 leftActionFunction: () {
                                   AnnouncementHelper.instance
                                       .approveApplication(
@@ -440,7 +440,7 @@ class _AnnouncementHomePageState extends State<AnnouncementHomePage> {
                                       context,
                                       (_) {
                                         ApUtils.showToast(
-                                            context, app.updateSuccess);
+                                            context, ap.updateSuccess);
                                         _reviewDescription.text = '';
                                         _getAnnouncements();
                                         _getApplications();
@@ -456,7 +456,7 @@ class _AnnouncementHomePageState extends State<AnnouncementHomePage> {
                                       context,
                                       (_) {
                                         ApUtils.showToast(
-                                            context, app.updateSuccess);
+                                            context, ap.updateSuccess);
                                         _reviewDescription.text = '';
                                         _getAnnouncements();
                                         _getApplications();
@@ -495,20 +495,20 @@ class _AnnouncementHomePageState extends State<AnnouncementHomePage> {
                         if (loginData.level != PermissionLevel.user &&
                             dataType == _DataType.application) ...[
                           TextSpan(
-                            text: '${app.applicant}：',
+                            text: '${ap.applicant}：',
                             style: TextStyle(fontWeight: FontWeight.bold),
                           ),
                           TextSpan(text: '${item.applicant ?? ''}\n'),
                         ],
                         if (loginData.level != PermissionLevel.user) ...[
                           TextSpan(
-                            text: '${app.weight}：',
+                            text: '${ap.weight}：',
                             style: TextStyle(fontWeight: FontWeight.bold),
                           ),
                           TextSpan(text: '${item.weight ?? 1}\n'),
                         ],
                         TextSpan(
-                          text: '${app.imageUrl}：',
+                          text: '${ap.imageUrl}：',
                           style: TextStyle(fontWeight: FontWeight.bold),
                         ),
                         TextSpan(
@@ -523,7 +523,7 @@ class _AnnouncementHomePageState extends State<AnnouncementHomePage> {
                             },
                         ),
                         TextSpan(
-                          text: '\n${app.url}：',
+                          text: '\n${ap.url}：',
                           style: TextStyle(fontWeight: FontWeight.bold),
                         ),
                         TextSpan(
@@ -538,24 +538,24 @@ class _AnnouncementHomePageState extends State<AnnouncementHomePage> {
                             },
                         ),
                         TextSpan(
-                          text: '\n${app.expireTime}：',
+                          text: '\n${ap.expireTime}：',
                           style: TextStyle(fontWeight: FontWeight.bold),
                         ),
                         TextSpan(
-                            text: '${item.expireTime ?? app.noExpiration}\n'),
+                            text: '${item.expireTime ?? ap.noExpiration}\n'),
                         TextSpan(
-                          text: '${app.description}：',
+                          text: '${ap.description}：',
                           style: TextStyle(fontWeight: FontWeight.bold),
                         ),
                         TextSpan(text: '${item.description}'),
                         TextSpan(
-                          text: '\n${app.reviewDescription}：',
+                          text: '\n${ap.reviewDescription}：',
                           style: TextStyle(fontWeight: FontWeight.bold),
                         ),
                         TextSpan(text: '${item.reviewDescription ?? ''}'),
                         if (dataType == _DataType.application &&
                             loginData.level != PermissionLevel.user) ...[
-                          TextSpan(text: '\n${app.reviewState}：'),
+                          TextSpan(text: '\n${ap.reviewState}：'),
                           TextSpan(
                             text: _reviewStateText(item.reviewStatus),
                             style: TextStyle(
@@ -646,12 +646,12 @@ class _AnnouncementHomePageState extends State<AnnouncementHomePage> {
   void _login(AnnouncementLoginType loginType) async {
     if (loginType == AnnouncementLoginType.normal &&
         (_username.text.isEmpty || _password.text.isEmpty)) {
-      ApUtils.showToast(context, app.doNotEmpty);
+      ApUtils.showToast(context, ap.doNotEmpty);
     } else {
       showDialog(
         context: context,
         builder: (BuildContext context) => WillPopScope(
-            child: ProgressDialog(app.logining),
+            child: ProgressDialog(ap.logining),
             onWillPop: () async {
               return false;
             }),
@@ -687,7 +687,7 @@ class _AnnouncementHomePageState extends State<AnnouncementHomePage> {
           else
             Preferences.setStringSecurity(
                 ApConstants.ANNOUNCEMENT_ID_TOKEN, idToken);
-          ApUtils.showToast(context, app.loginSuccess);
+          ApUtils.showToast(context, ap.loginSuccess);
           Preferences.setBool(ApConstants.ANNOUNCEMENT_IS_LOGIN, true);
           Preferences.setInt(
               ApConstants.ANNOUNCEMENT_LOGIN_TYPE, loginType.index);
@@ -723,7 +723,7 @@ class _AnnouncementHomePageState extends State<AnnouncementHomePage> {
             } else
               Navigator.of(context, rootNavigator: true).pop();
           } catch (e, s) {
-            ApUtils.showToast(context, app.thirdPartyLoginFail);
+            ApUtils.showToast(context, ap.thirdPartyLoginFail);
             CrashlyticsUtils.instance?.recordError(e, s);
             Navigator.of(context, rootNavigator: true).pop();
             if (CrashlyticsUtils.instance != null) throw e;
@@ -740,7 +740,7 @@ class _AnnouncementHomePageState extends State<AnnouncementHomePage> {
             AnnouncementHelper.instance
                 .appleLogin(idToken: idToken, callback: callback);
           } catch (e, s) {
-            ApUtils.showToast(context, app.thirdPartyLoginFail);
+            ApUtils.showToast(context, ap.thirdPartyLoginFail);
             Navigator.of(context, rootNavigator: true).pop();
             CrashlyticsUtils.instance?.recordError(e, s);
           }
