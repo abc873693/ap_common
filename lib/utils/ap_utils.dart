@@ -4,6 +4,7 @@ import 'dart:typed_data';
 import 'package:ap_common/callback/general_callback.dart';
 import 'package:ap_common/resources/ap_theme.dart';
 import 'package:ap_common/utils/ap_localizations.dart';
+import 'package:ap_common/utils/crashlytics_utils.dart';
 import 'package:ap_common/utils/toast.dart';
 import 'package:ap_common/widgets/yes_no_dialog.dart';
 import 'package:flutter/cupertino.dart';
@@ -20,6 +21,7 @@ import 'package:share/share.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 export 'package:dio/dio.dart';
+export 'package:path_provider/path_provider.dart';
 export 'toast.dart';
 
 class ApUtils {
@@ -248,10 +250,12 @@ class ApUtils {
         ApUtils.showToast(context, success ? successMessage : ap.unknownError);
       } else
         ApUtils.showToast(context, ap.grandPermissionFail);
-    } catch (e) {
-      //TODO : find collect crashlytics method
+    } catch (e, s) {
       ApUtils.showToast(context, ap.unknownError);
-      throw e;
+      if (CrashlyticsUtils.instance == null)
+        throw e;
+      else
+        CrashlyticsUtils.instance?.recordError(e, s);
     }
   }
 
