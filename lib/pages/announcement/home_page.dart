@@ -19,6 +19,7 @@ import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:sign_in_with_apple/sign_in_with_apple.dart';
+import 'package:sprintf/sprintf.dart';
 
 import 'edit_page.dart';
 
@@ -30,12 +31,14 @@ class AnnouncementHomePage extends StatefulWidget {
 
   final Widget loginDescriptionWidget;
   final Widget reviewDescriptionWidget;
+  final String organizationDomain;
   final bool enableNormalLogin;
 
   const AnnouncementHomePage({
     Key key,
     this.loginDescriptionWidget,
     this.reviewDescriptionWidget,
+    this.organizationDomain,
     this.enableNormalLogin = false,
   }) : super(key: key);
 
@@ -206,7 +209,12 @@ class _AnnouncementHomePageState extends State<AnnouncementHomePage> {
                               color: ApTheme.of(context).grey, fontSize: 16.0),
                           children: [
                             TextSpan(
-                              text: '${ap.newsRuleDescription1}\n',
+                              text: '${sprintf(
+                                ap.newsRuleDescription1,
+                                [
+                                  widget.organizationDomain ?? '',
+                                ],
+                              )}\n',
                               style: TextStyle(fontWeight: FontWeight.normal),
                             ),
                             TextSpan(
@@ -315,7 +323,12 @@ class _AnnouncementHomePageState extends State<AnnouncementHomePage> {
                     TextStyle(color: ApTheme.of(context).grey, fontSize: 16.0),
                 children: [
                   TextSpan(
-                      text: '${ap.newsRuleDescription1}',
+                      text: '${sprintf(
+                        ap.newsRuleDescription1,
+                        [
+                          widget.organizationDomain ?? '',
+                        ],
+                      )}',
                       style: TextStyle(fontWeight: FontWeight.normal)),
                   TextSpan(
                       text: '${ap.newsRuleDescription3}',

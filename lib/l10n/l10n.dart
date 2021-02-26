@@ -2585,30 +2585,30 @@ class ApLocalizations {
     );
   }
 
-  /// `本系統提供社團或學生\n刊登學校相關資訊\n需使用有學校域名(@nkust.edu.tw)的第三方驗證帳號登入\n`
+  /// `本系統提供社團或學生\n刊登學校相關資訊\n需使用有學校域名(%s)的第三方驗證帳號登入\n`
   String get newsRuleDescription1 {
     return Intl.message(
-      '本系統提供社團或學生\n刊登學校相關資訊\n需使用有學校域名(@nkust.edu.tw)的第三方驗證帳號登入\n',
+      '本系統提供社團或學生\n刊登學校相關資訊\n需使用有學校域名(%s)的第三方驗證帳號登入\n',
       name: 'newsRuleDescription1',
       desc: '',
       args: [],
     );
   }
 
-  /// `1. 圖片且上傳至 imgur\n請使用ＪＰＥＧ有壓縮過的檔案\n建議不要超過100KB\n2. 標題建議放活動名稱，不要太長\n3. 活動網址連結\n4. 內容說明\n5.必須為非營利活動\n\n`
+  /// `1. 圖片且上傳至 Imgur\n請使用JPEG有壓縮過的檔案\n建議不要超過100KB\n2. 標題建議放活動名稱，不要太長\n3. 活動網址連結\n4. 內容說明(建議100字內 避免跑版)\n5.必須為非營利活動\n\n`
   String get newsRuleDescription2 {
     return Intl.message(
-      '1. 圖片且上傳至 imgur\n請使用ＪＰＥＧ有壓縮過的檔案\n建議不要超過100KB\n2. 標題建議放活動名稱，不要太長\n3. 活動網址連結\n4. 內容說明\n5.必須為非營利活動\n\n',
+      '1. 圖片且上傳至 Imgur\n請使用JPEG有壓縮過的檔案\n建議不要超過100KB\n2. 標題建議放活動名稱，不要太長\n3. 活動網址連結\n4. 內容說明(建議100字內 避免跑版)\n5.必須為非營利活動\n\n',
       name: 'newsRuleDescription2',
       desc: '',
       args: [],
     );
   }
 
-  /// `高科校務通團隊有最終修改權利`
+  /// `校務通團隊有最終修改權利`
   String get newsRuleDescription3 {
     return Intl.message(
-      '高科校務通團隊有最終修改權利',
+      '校務通團隊有最終修改權利',
       name: 'newsRuleDescription3',
       desc: '',
       args: [],
