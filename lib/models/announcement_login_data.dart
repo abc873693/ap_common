@@ -1,5 +1,7 @@
 import 'dart:convert';
 
+import 'package:ap_common/config/ap_constants.dart';
+import 'package:ap_common/utils/preferences.dart';
 import 'package:jwt_decoder/jwt_decoder.dart';
 
 enum PermissionLevel { user, editor, admin }
@@ -42,4 +44,24 @@ class AnnouncementLoginData {
   String get loginType => decodedToken['user']['login_type'];
 
   String get username => decodedToken['user']['username'];
+
+  void save() {
+    Preferences.setStringSecurity(
+      '${ApConstants.PACKAGE_NAME}'
+      '.announcement_login_data',
+      this.toRawJson(),
+    );
+  }
+
+  factory AnnouncementLoginData.load() {
+    String rawString = Preferences.getStringSecurity(
+      '${ApConstants.PACKAGE_NAME}'
+          '.announcement_login_data',
+      '',
+    );
+    if (rawString == '')
+      return null;
+    else
+      return AnnouncementLoginData.fromRawJson(rawString);
+  }
 }

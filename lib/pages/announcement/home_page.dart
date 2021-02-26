@@ -647,9 +647,21 @@ class _AnnouncementHomePageState extends State<AnnouncementHomePage> {
     _password.text =
         Preferences.getStringSecurity(ApConstants.ANNOUNCEMENT_PASSWORD, '');
     if (isLogin) {
-      int index = Preferences.getInt(ApConstants.ANNOUNCEMENT_LOGIN_TYPE, 0);
       setState(() => state = _State.done);
-      _login(AnnouncementLoginType.values[index]);
+      this.loginData = AnnouncementLoginData.load();
+      if (kDebugMode)
+        print(
+            'token is expire = ${this.loginData?.isExpired} level = ${loginData.level}');
+      if (this.loginData?.isExpired ?? true) {
+        int index = Preferences.getInt(ApConstants.ANNOUNCEMENT_LOGIN_TYPE, 0);
+        _login(AnnouncementLoginType.values[index]);
+      } else {
+        AnnouncementHelper.instance.setAuthorization(loginData.key);
+        setState(() {
+          if (loginData.level != PermissionLevel.user) _getAnnouncements();
+          _getApplications();
+        });
+      }
     } else {
       usernameFocusNode = FocusNode();
       passwordFocusNode = FocusNode();
@@ -697,6 +709,7 @@ class _AnnouncementHomePageState extends State<AnnouncementHomePage> {
         },
         onSuccess: (loginData) {
           this.loginData = loginData;
+          this.loginData.save();
           if (kDebugMode) print(loginData.key);
           if (isNotLogin) Navigator.of(context, rootNavigator: true).pop();
           if (loginType == AnnouncementLoginType.normal)

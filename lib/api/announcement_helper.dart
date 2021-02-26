@@ -130,7 +130,7 @@ class AnnouncementHelper {
         },
       );
       var loginData = AnnouncementLoginData.fromJson(response.data);
-      options.headers = _createBearerTokenAuth(loginData.key);
+      setAuthorization(loginData.key);
       AnnouncementHelper.username = username;
       AnnouncementHelper.password = password;
       AnnouncementHelper.loginType = AnnouncementLoginType.normal;
@@ -165,7 +165,7 @@ class AnnouncementHelper {
         },
       );
       var loginData = AnnouncementLoginData.fromJson(response.data);
-      options.headers = _createBearerTokenAuth(loginData.key);
+      setAuthorization(loginData.key);
       AnnouncementHelper.code = idToken;
       AnnouncementHelper.loginType = AnnouncementLoginType.google;
       return callback == null ? loginData : callback.onSuccess(loginData);
@@ -199,7 +199,7 @@ class AnnouncementHelper {
         },
       );
       var loginData = AnnouncementLoginData.fromJson(response.data);
-      options.headers = _createBearerTokenAuth(loginData.key);
+      setAuthorization(loginData.key);
       AnnouncementHelper.code = idToken;
       AnnouncementHelper.loginType = AnnouncementLoginType.apple;
       return callback == null ? loginData : callback.onSuccess(loginData);
@@ -462,11 +462,8 @@ class AnnouncementHelper {
     return null;
   }
 
-  // v3 api Authorization
-  _createBearerTokenAuth(String token) {
-    return {
-      'Authorization': 'Bearer $token',
-    };
+  void setAuthorization(String key) {
+    dio.options.headers['Authorization'] = 'Bearer $key';
   }
 
   static void clearSetting() {
