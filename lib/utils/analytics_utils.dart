@@ -21,6 +21,7 @@ abstract class AnalyticsUtils {
 
   Future<void> logTimeEvent(String name, double seconds);
 
+  @deprecated
   Future<void> logAction(String name, String action, {String message = ''});
 
   Future<void> logThemeEvent(ThemeMode themeMode);
