@@ -385,5 +385,9 @@
   "pickAndUploadToImgur": "Pick and Upload to Imgur",
   "uploading": "Uploading",
   "imagePreview": "Image Preview",
-  "notSupportImageType": "Not Support Image Type"
+  "notSupportImageType": "Not Support Image Type",
+  "tag": "Tag",
+  "addTag": "Add Tag",
+  "tagRepeatHint": "Tag Repeat",
+  "tagName": "Tag Name"
 }

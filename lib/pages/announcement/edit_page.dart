@@ -8,7 +8,9 @@ import 'package:ap_common/resources/ap_icon.dart';
 import 'package:ap_common/resources/ap_theme.dart';
 import 'package:ap_common/utils/ap_localizations.dart';
 import 'package:ap_common/utils/ap_utils.dart';
+import 'package:ap_common/utils/dialog_utils.dart';
 import 'package:ap_common/widgets/ap_network_image.dart';
+import 'package:ap_common/widgets/default_dialog.dart';
 import 'package:file_selector/file_selector.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
@@ -16,6 +18,8 @@ import 'package:flutter/painting.dart';
 import 'package:flutter/widgets.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:intl/intl.dart' show DateFormat;
+
+import 'home_page.dart' show TagColors;
 
 enum _ImgurUploadState { no_file, uploading, done }
 enum Mode { add, edit, application, editApplication }
@@ -62,6 +66,10 @@ class _AnnouncementEditPageState extends State<AnnouncementEditPage> {
   var dateFormat = DateFormat('yyyy-MM-dd HH:mm:ss');
 
   DateTime expireTime;
+
+  List<String> tags;
+
+  var _newTag = TextEditingController();
 
   final dividerHeight = 16.0;
 
@@ -131,6 +139,7 @@ class _AnnouncementEditPageState extends State<AnnouncementEditPage> {
       if (announcements.expireTime != null)
         expireTime = formatter.parse(announcements.expireTime);
       _description.text = announcements.description;
+      tags = announcements.tags ?? [];
     } else {
       announcements = Announcement();
     }
@@ -175,7 +184,60 @@ class _AnnouncementEditPageState extends State<AnnouncementEditPage> {
               ),
             ),
             SizedBox(height: dividerHeight),
-            if (widget.mode != Mode.application)
+            if (widget.mode != Mode.application) ...[
+              Text(app.tag),
+              Wrap(
+                children: [
+                  for (String tag in tags ?? []) ...[
+                    Chip(
+                      label: Text(tag),
+                      backgroundColor: tag.color,
+                      onDeleted: () {
+                        setState(() => tags.remove(tag));
+                      },
+                    ),
+                    SizedBox(width: 8.0),
+                  ],
+                  GestureDetector(
+                    onTap: () {
+                      _newTag.clear();
+                      showDialog(
+                        context: context,
+                        builder: (BuildContext context) => DefaultDialog(
+                          title: app.addTag,
+                          contentWidget: TextField(
+                            controller: _newTag,
+                            decoration: InputDecoration(
+                              border: InputBorder.none,
+                              hintText: app.tagName,
+                            ),
+                          ),
+                          actionText: ApLocalizations.of(context).confirm,
+                          actionFunction: () {
+                            if (_newTag.text.isEmpty)
+                              ApUtils.showToast(context, app.doNotEmpty);
+                            else {
+                              final newTag = _newTag.text;
+                              final index = tags.indexOf(newTag);
+                              if (index == -1) {
+                                setState(() => tags.add(newTag));
+                                Navigator.of(context, rootNavigator: true)
+                                    .pop();
+                              } else
+                                ApUtils.showToast(context, app.tagRepeatHint);
+                            }
+                          },
+                        ),
+                      );
+                    },
+                    child: Chip(
+                      label: Icon(Icons.add),
+                      backgroundColor: ApTheme.of(context).blueAccent,
+                    ),
+                  ),
+                ],
+              ),
+              SizedBox(height: dividerHeight),
               TextFormField(
                 maxLines: 1,
                 controller: _weight,
@@ -201,6 +263,7 @@ class _AnnouncementEditPageState extends State<AnnouncementEditPage> {
                   labelText: app.weight,
                 ),
               ),
+            ],
             SizedBox(height: dividerHeight),
             TextFormField(
               maxLines: 1,
@@ -532,6 +595,7 @@ class _AnnouncementEditPageState extends State<AnnouncementEditPage> {
       announcements.expireTime =
           (expireTime == null) ? null : expireTime.parseToString();
       announcements.reviewDescription = _reviewDescription.text;
+      announcements.tags = tags;
       final callback = GeneralCallback.simple(
         context,
         (Response _) async {

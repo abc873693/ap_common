@@ -386,5 +386,9 @@
   "pickAndUploadToImgur": "選擇並上傳至Imgur",
   "uploading": "上傳中",
   "imagePreview": "圖片預覽",
-  "notSupportImageType": "不支援圖片格式"
+  "notSupportImageType": "不支援圖片格式",
+  "tag": "標籤",
+  "addTag": "新增標籤",
+  "tagRepeatHint": "標籤已重複",
+  "tagName": "標籤名稱"
 }

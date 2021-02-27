@@ -3914,9 +3914,48 @@ class ApLocalizations {
       args: [],
     );
   }
+
+  /// `標籤`
+  String get tag {
+    return Intl.message(
+      '標籤',
+      name: 'tag',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `新增標籤`
+  String get addTag {
+    return Intl.message(
+      '新增標籤',
+      name: 'addTag',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `標籤已重複`
+  String get tagRepeatHint {
+    return Intl.message(
+      '標籤已重複',
+      name: 'tagRepeatHint',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `標籤名稱`
+  String get tagName {
+    return Intl.message(
+      '標籤名稱',
+      name: 'tagName',
+      desc: '',
+      args: [],
+    );
+  }
 }
 
-class ApLocalizationsDelegate extends LocalizationsDelegate<ApLocalizations> {
   const ApLocalizationsDelegate();
 
   List<Locale> get supportedLocales {
