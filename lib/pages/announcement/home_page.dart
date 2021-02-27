@@ -498,6 +498,18 @@ class _AnnouncementHomePageState extends State<AnnouncementHomePage> {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
+                  if (loginData.level != PermissionLevel.user)
+                    Wrap(
+                      children: [
+                        for (String tag in item.tags ?? []) ...[
+                          Chip(
+                            label: Text(tag),
+                            backgroundColor: tag.color,
+                          ),
+                          SizedBox(width: 8.0),
+                        ]
+                      ],
+                    ),
                   RichText(
                     text: TextSpan(
                       style: TextStyle(
@@ -776,6 +788,27 @@ class _AnnouncementHomePageState extends State<AnnouncementHomePage> {
           }
           break;
       }
+    }
+  }
+}
+
+extension TagColors on String {
+  Color get color {
+    switch (this) {
+      case 'zh':
+        return Colors.deepOrange;
+      case 'en':
+        return Colors.teal;
+      case 'nkust':
+        return Colors.blue;
+      case 'nsysu':
+        return Colors.green;
+      case 'wtuc':
+        return Colors.pink;
+      case 'ntust':
+        return Colors.blueAccent;
+      default:
+        return null;
     }
   }
 }
