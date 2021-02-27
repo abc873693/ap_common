@@ -70,7 +70,7 @@ class ApTheme extends InheritedWidget {
     }
   }
 
-  get blueAccent {
+  Color get blueAccent {
     switch (brightness) {
       case Brightness.dark:
         return ApColors.blue300;
@@ -80,7 +80,7 @@ class ApTheme extends InheritedWidget {
     }
   }
 
-  get semesterText {
+  Color get semesterText {
     switch (brightness) {
       case Brightness.dark:
         return Color(0xffffffff);
