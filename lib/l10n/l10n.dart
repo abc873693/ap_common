@@ -17,8 +17,8 @@ class ApLocalizations {
   
   static ApLocalizations current;
   
-  static const ApLocalizationsDelegate delegate =
-    ApLocalizationsDelegate();
+  static const AppLocalizationDelegate delegate =
+    AppLocalizationDelegate();
 
   static Future<ApLocalizations> load(Locale locale) {
     final name = (locale.countryCode?.isEmpty ?? false) ? locale.languageCode : locale.toString();
@@ -3956,7 +3956,8 @@ class ApLocalizations {
   }
 }
 
-  const ApLocalizationsDelegate();
+class AppLocalizationDelegate extends LocalizationsDelegate<ApLocalizations> {
+  const AppLocalizationDelegate();
 
   List<Locale> get supportedLocales {
     return const <Locale>[
@@ -3970,7 +3971,7 @@ class ApLocalizations {
   @override
   Future<ApLocalizations> load(Locale locale) => ApLocalizations.load(locale);
   @override
-  bool shouldReload(ApLocalizationsDelegate old) => false;
+  bool shouldReload(AppLocalizationDelegate old) => false;
 
   bool _isSupported(Locale locale) {
     if (locale != null) {
