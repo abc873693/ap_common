@@ -9,6 +9,7 @@ import 'package:ap_common/resources/ap_theme.dart';
 import 'package:ap_common/utils/ap_localizations.dart';
 import 'package:ap_common/utils/ap_utils.dart';
 import 'package:ap_common/widgets/ap_network_image.dart';
+import 'package:file_selector/file_selector.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/painting.dart';
@@ -65,9 +66,6 @@ class _AnnouncementEditPageState extends State<AnnouncementEditPage> {
   final dividerHeight = 16.0;
 
   var imgurUploadState = _ImgurUploadState.no_file;
-
-  bool get isSupportImgurUpload =>
-      (kIsWeb || Platform.isAndroid || Platform.isIOS);
 
   String get title {
     switch (widget.mode) {
@@ -207,7 +205,7 @@ class _AnnouncementEditPageState extends State<AnnouncementEditPage> {
             TextFormField(
               maxLines: 1,
               controller: _imgUrl,
-              enabled: !isSupportImgurUpload,
+              enabled: false,
               validator: (value) {
                 if (value.isEmpty) {
                   return app.doNotEmpty;
@@ -224,71 +222,75 @@ class _AnnouncementEditPageState extends State<AnnouncementEditPage> {
                 labelText: app.imageUrl,
               ),
             ),
-            if (isSupportImgurUpload) ...[
-              SizedBox(height: 8.0),
-              Center(
-                child: Column(
-                  children: _imgurUploadWidget,
-                ),
+            SizedBox(height: 8.0),
+            Center(
+              child: Column(
+                children: _imgurUploadWidget,
               ),
-              FractionallySizedBox(
-                widthFactor: 0.3,
-                child: ElevatedButton(
-                  style: ElevatedButton.styleFrom(
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.all(
-                        Radius.circular(30.0),
+            ),
+            FractionallySizedBox(
+              widthFactor: 0.7,
+              child: ElevatedButton(
+                style: ElevatedButton.styleFrom(
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.all(
+                      Radius.circular(30.0),
+                    ),
+                  ),
+                  padding: EdgeInsets.symmetric(
+                    horizontal: 8.0,
+                  ),
+                  primary: ApTheme.of(context).blueAccent,
+                ),
+                onPressed: () async {
+                  PickedFile image;
+                  if (kIsWeb || Platform.isAndroid || Platform.isIOS) {
+                    final imagePicker = ImagePicker();
+                    image = await imagePicker.getImage(
+                      source: ImageSource.gallery,
+                    );
+                  } else {
+                    final typeGroup = XTypeGroup(
+                      label: 'images',
+                      extensions: ['jpg', 'jpeg'],
+                    );
+                    final file =
+                        await openFile(acceptedTypeGroups: [typeGroup]);
+                    if (file != null) image = PickedFile(file.path);
+                  }
+                  if (image != null) {
+                    setState(
+                        () => imgurUploadState = _ImgurUploadState.uploading);
+                    ImgurHelper.instance.uploadImageToImgur(
+                      file: image,
+                      callback: GeneralCallback(
+                        onFailure: (dioError) {
+                          ApUtils.showToast(context, dioError.message);
+                          setState(() => imgurUploadState = _imgUrl.text.isEmpty
+                              ? _ImgurUploadState.no_file
+                              : _ImgurUploadState.done);
+                        },
+                        onError: (generalResponse) {
+                          ApUtils.showToast(context, generalResponse.message);
+                          setState(() => imgurUploadState = _imgUrl.text.isEmpty
+                              ? _ImgurUploadState.no_file
+                              : _ImgurUploadState.done);
+                        },
+                        onSuccess: (data) {
+                          _imgUrl.text = data.link;
+                          setState(
+                              () => imgurUploadState = _ImgurUploadState.done);
+                        },
                       ),
-                    ),
-                    padding: EdgeInsets.symmetric(
-                      horizontal: 8.0,
-                    ),
-                    primary: ApTheme.of(context).blueAccent,
-                  ),
-                  onPressed: () async {
-                    if (kIsWeb || Platform.isAndroid || Platform.isIOS) {
-                      final imagePicker = ImagePicker();
-                      final image = await imagePicker.getImage(
-                        source: ImageSource.gallery,
-                      );
-                      if (image != null) {
-                        setState(() =>
-                            imgurUploadState = _ImgurUploadState.uploading);
-                        ImgurHelper.instance.uploadImageToImgur(
-                          file: image,
-                          callback: GeneralCallback(
-                            onFailure: (dioError) {
-                              ApUtils.showToast(context, dioError.message);
-                              setState(() => imgurUploadState =
-                                  _imgUrl.text.isEmpty
-                                      ? _ImgurUploadState.no_file
-                                      : _ImgurUploadState.done);
-                            },
-                            onError: (generalResponse) {
-                              ApUtils.showToast(
-                                  context, generalResponse.message);
-                              setState(() => imgurUploadState =
-                                  _imgUrl.text.isEmpty
-                                      ? _ImgurUploadState.no_file
-                                      : _ImgurUploadState.done);
-                            },
-                            onSuccess: (data) {
-                              _imgUrl.text = data.link;
-                              setState(() =>
-                                  imgurUploadState = _ImgurUploadState.done);
-                            },
-                          ),
-                        );
-                      }
-                    }
-                  },
-                  child: Text(
-                    app.pickAndUploadToImgur,
-                    style: TextStyle(color: Colors.white),
-                  ),
+                    );
+                  }
+                },
+                child: Text(
+                  app.pickAndUploadToImgur,
+                  style: TextStyle(color: Colors.white),
                 ),
               ),
-            ],
+            ),
             SizedBox(height: dividerHeight),
             TextFormField(
               maxLines: 1,
@@ -310,7 +312,7 @@ class _AnnouncementEditPageState extends State<AnnouncementEditPage> {
             Container(color: ApTheme.of(context).grey, height: 1),
             SizedBox(height: 8.0),
             FractionallySizedBox(
-              widthFactor: 0.3,
+              widthFactor: 0.7,
               child: ElevatedButton(
                 style: ElevatedButton.styleFrom(
                   shape: RoundedRectangleBorder(
