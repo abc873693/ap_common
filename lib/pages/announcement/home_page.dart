@@ -139,6 +139,7 @@ class _AnnouncementHomePageState extends State<AnnouncementHomePage> {
                 setState(() {
                   Preferences.setBool(ApConstants.ANNOUNCEMENT_IS_LOGIN, false);
                   state = _State.notLogin;
+                  loginData = null;
                 });
               },
             ),
