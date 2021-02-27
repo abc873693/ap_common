@@ -22,6 +22,7 @@ import 'package:url_launcher/url_launcher.dart';
 
 export 'package:dio/dio.dart';
 export 'package:path_provider/path_provider.dart';
+export 'package:package_info_plus/package_info_plus.dart';
 export 'toast.dart';
 
 class ApUtils {
