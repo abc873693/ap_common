@@ -35,6 +35,7 @@ class AnnouncementHelper {
   static String host = 'nkust.taki.dog';
   static String tag = 'ap';
   static String organization;
+  static String appleBundleId;
 
   static String fcmToken;
 
@@ -196,6 +197,7 @@ class AnnouncementHelper {
         data: {
           'token': idToken,
           "fcmToken": fcmToken,
+          'bundleId': appleBundleId
         },
       );
       var loginData = AnnouncementLoginData.fromJson(response.data);
