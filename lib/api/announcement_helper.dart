@@ -279,8 +279,14 @@ class AnnouncementHelper {
   Future<Response> addAnnouncement({
     @required Announcement data,
     @required GeneralCallback<Response> callback,
+    String languageCode,
   }) async {
     try {
+      data.tags ??= [];
+      data.tags.addAll([
+        languageCode ?? 'zh',
+        if (organization != null) organization,
+      ]);
       var response = await dio.post(
         "/announcements/add",
         data: data.toUpdateJson(),
