@@ -19,7 +19,7 @@ import Flutter
     if #available(iOS 14.0, *) {
         //Course data export to app group
         let standrtUserDefaults = UserDefaults.standard
-        let groupUserDefaults = UserDefaults(suiteName: "group.me.rainvisitor.apCommonExample")
+        let groupUserDefaults = UserDefaults(suiteName: "group.common.ap.example")
         if let semester = standrtUserDefaults.string(forKey: "flutter.ap_common.current_semester_code"){
             if let text = standrtUserDefaults.string(forKey: "flutter.ap_common.course_data_\(semester)"){
                 groupUserDefaults?.set(text, forKey: "course_notify")
