@@ -67,14 +67,25 @@ class AnnouncementContentPageState extends State<AnnouncementContentPage> {
       case _Status.finish:
         return OrientationBuilder(
           builder: (_, orientation) {
-            return Flex(
-              direction: orientation == Orientation.portrait
-                  ? Axis.vertical
-                  : Axis.horizontal,
-              crossAxisAlignment: CrossAxisAlignment.center,
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: _renderContent(orientation),
-            );
+            return orientation == Orientation.portrait
+                ? SingleChildScrollView(
+                    child: Flex(
+                      direction: orientation == Orientation.portrait
+                          ? Axis.vertical
+                          : Axis.horizontal,
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: _renderContent(orientation),
+                    ),
+                  )
+                : Flex(
+                    direction: orientation == Orientation.portrait
+                        ? Axis.vertical
+                        : Axis.horizontal,
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: _renderContent(orientation),
+                  );
           },
         );
       case _Status.error:
@@ -138,7 +149,8 @@ class AnnouncementContentPageState extends State<AnnouncementContentPage> {
       ),
       Padding(
         padding: EdgeInsets.symmetric(
-            horizontal: orientation == Orientation.portrait ? 16.0 : 0.0),
+          horizontal: orientation == Orientation.portrait ? 16.0 : 0.0,
+        ),
         child: SelectableLinkify(
           text: widget.announcement.description,
           textAlign: TextAlign.center,
@@ -175,24 +187,30 @@ class AnnouncementContentPageState extends State<AnnouncementContentPage> {
             color: Colors.white,
           ),
         ),
+        SizedBox(height: 16.0),
       ],
     ];
     if (orientation == Orientation.portrait) {
       return <Widget>[
+        SizedBox(height: 16.0),
         image,
         SizedBox(height: 16.0),
         ...content,
       ];
     } else {
       return <Widget>[
+        SizedBox(width: 16.0),
         Expanded(child: image),
         SizedBox(width: 32.0),
         Expanded(
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: content,
+          child: SingleChildScrollView(
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: content,
+            ),
           ),
         ),
+        SizedBox(width: 16.0),
       ];
     }
   }
