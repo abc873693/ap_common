@@ -67,6 +67,12 @@ class _AnnouncementHomePageState extends State<AnnouncementHomePage> {
 
   bool onlyShowNotReview = false;
 
+  TextStyle get _defaultStyle => TextStyle(
+        color: ApTheme.of(context).grey,
+        height: 1.3,
+        fontSize: 16.0,
+      );
+
   TextStyle get _editTextStyle => TextStyle(
         fontSize: 18.0,
         decorationColor: ApTheme.of(context).blueAccent,
@@ -118,7 +124,10 @@ class _AnnouncementHomePageState extends State<AnnouncementHomePage> {
                     activeColor: ApTheme.of(context).yellow,
                     checkColor: ApTheme.of(context).blue,
                   ),
-                  Text(ap.onlyShowNotReview),
+                  Text(
+                    ap.onlyShowNotReview,
+                    style: TextStyle(color: Colors.white),
+                  ),
                 ],
               ),
               onPressed: () async {
@@ -513,11 +522,7 @@ class _AnnouncementHomePageState extends State<AnnouncementHomePage> {
           children: [
             RichText(
               text: TextSpan(
-                style: TextStyle(
-                  color: ApTheme.of(context).grey,
-                  height: 1.3,
-                  fontSize: 16.0,
-                ),
+                style: _defaultStyle,
                 children: [
                   if (loginData.level != PermissionLevel.user) ...[
                     TextSpan(
@@ -582,6 +587,7 @@ class _AnnouncementHomePageState extends State<AnnouncementHomePage> {
               if (dataType == _DataType.application)
                 RichText(
                   text: TextSpan(
+                    style: _defaultStyle,
                     children: [
                       TextSpan(text: '${ap.reviewState}：'),
                       TextSpan(
