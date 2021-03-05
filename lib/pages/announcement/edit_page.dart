@@ -8,7 +8,6 @@ import 'package:ap_common/resources/ap_icon.dart';
 import 'package:ap_common/resources/ap_theme.dart';
 import 'package:ap_common/utils/ap_localizations.dart';
 import 'package:ap_common/utils/ap_utils.dart';
-import 'package:ap_common/utils/dialog_utils.dart';
 import 'package:ap_common/widgets/ap_network_image.dart';
 import 'package:ap_common/widgets/default_dialog.dart';
 import 'package:file_selector/file_selector.dart';
@@ -134,6 +133,8 @@ class _AnnouncementEditPageState extends State<AnnouncementEditPage> {
       announcements = widget.announcement;
       _title.text = announcements.title;
       _imgUrl.text = announcements.imgUrl;
+      if (announcements.url.isNotEmpty)
+        imgurUploadState = _ImgurUploadState.done;
       _url.text = announcements.url;
       _weight.text = announcements.weight.toString();
       if (announcements.expireTime != null)
@@ -431,7 +432,7 @@ class _AnnouncementEditPageState extends State<AnnouncementEditPage> {
             Container(color: ApTheme.of(context).grey, height: 1),
             SizedBox(height: dividerHeight),
             TextFormField(
-              maxLines: 2,
+              maxLines: 5,
               controller: _description,
               validator: (value) {
                 return null;
