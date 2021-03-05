@@ -5,25 +5,27 @@ import 'package:ap_common/models/announcement_data.dart';
 import 'package:dio/dio.dart';
 import 'package:dio_cookie_manager/dio_cookie_manager.dart';
 import 'package:cookie_jar/cookie_jar.dart';
-import 'package:flutter/cupertino.dart';
+import 'package:flutter/foundation.dart' show required;
 
 class GitHubHelper {
   static const BASE_PATH = 'https://gist.githubusercontent.com/';
 
-  static Dio dio;
-  static CookieJar cookieJar;
-
   static GitHubHelper _instance;
 
-  static bool isLogin = false;
+  Dio dio;
+
+  CookieJar cookieJar;
+
+  GitHubHelper() {
+    cookieJar = CookieJar();
+    dio = Dio();
+    dio.interceptors.add(CookieManager(cookieJar));
+    cookieJar.loadForRequest(Uri.parse(BASE_PATH));
+  }
 
   static GitHubHelper get instance {
     if (_instance == null) {
       _instance = GitHubHelper();
-      cookieJar = CookieJar();
-      dio = Dio();
-      dio.interceptors.add(CookieManager(cookieJar));
-      cookieJar.loadForRequest(Uri.parse(BASE_PATH));
     }
     return _instance;
   }
