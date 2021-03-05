@@ -1,15 +1,12 @@
 import 'dart:async';
-import 'dart:convert';
-import 'dart:io' show Platform;
 import 'dart:ui' show Locale;
 
 import 'package:ap_common/callback/general_callback.dart';
 import 'package:ap_common/l10n/l10n.dart';
 import 'package:ap_common/models/announcement_data.dart';
 import 'package:ap_common/models/announcement_login_data.dart';
-import 'package:ap_common/utils/ap_utils.dart';
 import 'package:dio/dio.dart';
-import 'package:flutter/foundation.dart';
+import 'package:flutter/foundation.dart' show required;
 
 export 'package:ap_common/callback/general_callback.dart';
 export 'package:ap_common/models/announcement_login_data.dart';
@@ -32,68 +29,58 @@ extension DioErrorExtension on DioError {
 }
 
 class AnnouncementHelper {
-  static String host = 'nkust.taki.dog';
-  static String tag = 'ap';
-  static String organization;
-  static String appleBundleId;
-
-  static String fcmToken;
-
-  static AnnouncementHelper _instance;
-  static BaseOptions options;
-  static Dio dio;
-  static JsonCodec jsonCodec;
-  static CancelToken cancelToken;
-
-  static AnnouncementLoginType loginType = AnnouncementLoginType.normal;
-
-  static String username;
-  static String password;
-  static String code;
-  static DateTime expireTime;
-
-  static bool isSupportCacheData =
-      (!kIsWeb && (Platform.isIOS || Platform.isMacOS || Platform.isAndroid));
-
-  //LOGIN API
   static const USER_DATA_ERROR = 1401;
   static const TOKEN_EXPIRE = 401;
   static const NOT_PERMISSION = 403;
   static const NOT_FOUND_DATA = 404;
 
-  int reLoginCount = 0;
+  static AnnouncementHelper _instance;
 
-  bool get canReLogin => reLoginCount == 0;
+  static String host = 'nkust.taki.dog';
+  static String tag = 'ap';
 
-  bool isExpire() {
-    if (expireTime == null)
-      return false;
-    else
-      return DateTime.now().isAfter(expireTime.add(Duration(hours: 8)));
+  Dio dio;
+
+  AnnouncementLoginType loginType = AnnouncementLoginType.normal;
+
+  String username;
+  String password;
+
+  String code;
+
+  ///organization tag name
+  String organization;
+
+  ///Apple bundle identifier for apple sign in
+  String appleBundleId;
+
+  ///firebase cloud message token
+  String fcmToken;
+
+  AnnouncementHelper() {
+    dio = Dio(
+      BaseOptions(
+        baseUrl: 'https://$host/$tag',
+        connectTimeout: 10000,
+        receiveTimeout: 10000,
+      ),
+    );
   }
 
   static AnnouncementHelper get instance {
     if (_instance == null) {
       _instance = AnnouncementHelper();
-      jsonCodec = JsonCodec();
-      cancelToken = CancelToken();
     }
     return _instance;
   }
 
-  AnnouncementHelper() {
-    options = BaseOptions(
-      baseUrl: 'https://$host/$tag',
-      connectTimeout: 10000,
-      receiveTimeout: 10000,
-    );
-    dio = Dio(options);
-  }
-
-  static resetInstance() {
+  static reInstance({
+    String host,
+    String tag,
+  }) {
+    if (host != null) AnnouncementHelper.host = host;
+    if (tag != null) AnnouncementHelper.tag = tag;
     _instance = AnnouncementHelper();
-    jsonCodec = JsonCodec();
-    cancelToken = CancelToken();
   }
 
   void setLocale(Locale locale) {
@@ -132,9 +119,9 @@ class AnnouncementHelper {
       );
       var loginData = AnnouncementLoginData.fromJson(response.data);
       setAuthorization(loginData.key);
-      AnnouncementHelper.username = username;
-      AnnouncementHelper.password = password;
-      AnnouncementHelper.loginType = AnnouncementLoginType.normal;
+      this.username = username;
+      this.password = password;
+      this.loginType = AnnouncementLoginType.normal;
       return callback == null ? loginData : callback.onSuccess(loginData);
     } on DioError catch (dioError) {
       if (callback == null)
@@ -167,8 +154,8 @@ class AnnouncementHelper {
       );
       var loginData = AnnouncementLoginData.fromJson(response.data);
       setAuthorization(loginData.key);
-      AnnouncementHelper.code = idToken;
-      AnnouncementHelper.loginType = AnnouncementLoginType.google;
+      this.code = idToken;
+      this.loginType = AnnouncementLoginType.google;
       return callback == null ? loginData : callback.onSuccess(loginData);
     } on DioError catch (dioError) {
       if (callback == null)
@@ -202,8 +189,8 @@ class AnnouncementHelper {
       );
       var loginData = AnnouncementLoginData.fromJson(response.data);
       setAuthorization(loginData.key);
-      AnnouncementHelper.code = idToken;
-      AnnouncementHelper.loginType = AnnouncementLoginType.apple;
+      this.code = idToken;
+      this.loginType = AnnouncementLoginType.apple;
       return callback == null ? loginData : callback.onSuccess(loginData);
     } on DioError catch (dioError) {
       if (callback == null)
@@ -474,8 +461,7 @@ class AnnouncementHelper {
     dio.options.headers['Authorization'] = 'Bearer $key';
   }
 
-  static void clearSetting() {
-    expireTime = null;
+  void clearSetting() {
     username = null;
     password = null;
   }
