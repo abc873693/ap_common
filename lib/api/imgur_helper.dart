@@ -13,11 +13,11 @@ export 'package:ap_common/callback/general_callback.dart';
 export 'package:ap_common/models/announcement_login_data.dart';
 
 class ImgurHelper {
-  static String clientId;
+  static const String clientId = 'bf8e32144d00b04';
 
   static ImgurHelper _instance;
-  static BaseOptions options;
-  static Dio dio;
+
+  Dio dio;
 
   static ImgurHelper get instance {
     if (_instance == null) {
@@ -27,10 +27,11 @@ class ImgurHelper {
   }
 
   ImgurHelper() {
-    options = BaseOptions(
-      baseUrl: 'https://api.imgur.com',
+    dio = Dio(
+      BaseOptions(
+        baseUrl: 'https://api.imgur.com',
+      ),
     );
-    dio = Dio(options);
   }
 
   Future<ImgurUploadData> uploadImageToImgur({
