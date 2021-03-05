@@ -261,22 +261,26 @@ class _AnnouncementHomePageState extends State<AnnouncementHomePage> {
           case PermissionLevel.editor:
           case PermissionLevel.admin:
             return SingleChildScrollView(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: [
-                  SizedBox(height: 8.0),
-                  Text(ap.allAnnouncements),
-                  SizedBox(height: 8.0),
-                  for (var item in announcements ?? [])
-                    _item(_DataType.announcement, item),
-                  SizedBox(height: 16.0),
-                  Text(ap.allApplications),
-                  SizedBox(height: 8.0),
-                  for (var item in applications ?? [])
-                    if ((onlyShowNotReview && item.reviewStatus == null) ||
-                        (!onlyShowNotReview))
-                      _item(_DataType.application, item)
-                ],
+              child: Theme(
+                data: Theme.of(context)
+                    .copyWith(dividerColor: Colors.transparent),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    SizedBox(height: 8.0, width: double.infinity),
+                    Text(ap.allApplications),
+                    SizedBox(height: 8.0),
+                    for (var item in applications ?? [])
+                      if ((onlyShowNotReview && item.reviewStatus == null) ||
+                          (!onlyShowNotReview))
+                        _item(_DataType.application, item),
+                    SizedBox(height: 16.0),
+                    Text(ap.allAnnouncements),
+                    SizedBox(height: 8.0),
+                    for (var item in announcements ?? [])
+                      _item(_DataType.announcement, item),
+                  ],
+                ),
               ),
             );
         }
@@ -377,229 +381,8 @@ class _AnnouncementHomePageState extends State<AnnouncementHomePage> {
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(12.0),
       ),
-      child: InkWell(
-        radius: 12.0,
-        child: Padding(
-          padding: const EdgeInsets.all(8.0),
-          child: ListTile(
-            title: Text(
-              item.title,
-              style: TextStyle(fontSize: 18.0),
-            ),
-            trailing: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                if (loginData.level != PermissionLevel.user &&
-                    item.reviewStatus == null)
-                  IconButton(
-                    icon: Icon(
-                      dataType == _DataType.announcement
-                          ? ApIcon.cancel
-                          : Icons.approval,
-                      color: dataType == _DataType.announcement
-                          ? ApTheme.of(context).red
-                          : ApTheme.of(context).yellow,
-                    ),
-                    onPressed: () async {
-                      showDialog(
-                        context: context,
-                        builder: (BuildContext context) => dataType ==
-                                _DataType.announcement
-                            ? YesNoDialog(
-                                title: ap.deleteNewsTitle,
-                                contentWidget: Text(
-                                  "${ap.deleteNewsContent}",
-                                  textAlign: TextAlign.center,
-                                ),
-                                leftActionText: ap.determine,
-                                rightActionText: ap.back,
-                                leftActionFunction: () {
-                                  AnnouncementHelper.instance
-                                      .deleteAnnouncement(
-                                    data: item,
-                                    callback: GeneralCallback.simple(
-                                      context,
-                                      (_) {
-                                        ApUtils.showToast(
-                                            context, ap.updateSuccess);
-                                        _reviewDescription.text = '';
-                                        _getAnnouncements();
-                                      },
-                                    ),
-                                  );
-                                },
-                              )
-                            : YesNoDialog(
-                                title: ap.reviewApplication,
-                                contentWidget: TextField(
-                                  controller: _reviewDescription,
-                                  maxLines: 3,
-                                  decoration: InputDecoration(
-                                    border: OutlineInputBorder(),
-                                    fillColor: ApTheme.of(context).blueAccent,
-                                    labelStyle: TextStyle(
-                                      color: ApTheme.of(context).grey,
-                                    ),
-                                    labelText: ap.reviewDescription,
-                                  ),
-                                ),
-                                leftActionText: ap.approve,
-                                rightActionText: ap.reject,
-                                leftActionFunction: () {
-                                  AnnouncementHelper.instance
-                                      .approveApplication(
-                                    applicationId: item.applicationId,
-                                    reviewDescription: _reviewDescription.text,
-                                    callback: GeneralCallback.simple(
-                                      context,
-                                      (_) {
-                                        ApUtils.showToast(
-                                            context, ap.updateSuccess);
-                                        _reviewDescription.text = '';
-                                        _getAnnouncements();
-                                        _getApplications();
-                                      },
-                                    ),
-                                  );
-                                },
-                                rightActionFunction: () {
-                                  AnnouncementHelper.instance.rejectApplication(
-                                    applicationId: item.applicationId,
-                                    reviewDescription: _reviewDescription.text,
-                                    callback: GeneralCallback.simple(
-                                      context,
-                                      (_) {
-                                        ApUtils.showToast(
-                                            context, ap.updateSuccess);
-                                        _reviewDescription.text = '';
-                                        _getAnnouncements();
-                                        _getApplications();
-                                      },
-                                    ),
-                                  );
-                                },
-                              ),
-                      );
-                    },
-                  ),
-                if (dataType == _DataType.application &&
-                    loginData.level == PermissionLevel.user)
-                  Text(
-                    _reviewStateText(item.reviewStatus),
-                    style: TextStyle(
-                      color: item.reviewStatus ?? false
-                          ? Colors.green
-                          : Colors.red,
-                    ),
-                  ),
-              ],
-            ),
-            subtitle: Padding(
-              padding: const EdgeInsets.symmetric(vertical: 8.0),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  if (loginData.level != PermissionLevel.user)
-                    Wrap(
-                      children: [
-                        for (String tag in item.tags ?? []) ...[
-                          Chip(
-                            label: Text(tag),
-                            backgroundColor: tag.color,
-                          ),
-                          SizedBox(width: 8.0),
-                        ]
-                      ],
-                    ),
-                  RichText(
-                    text: TextSpan(
-                      style: TextStyle(
-                          color: ApTheme.of(context).grey,
-                          height: 1.3,
-                          fontSize: 16.0),
-                      children: [
-                        if (loginData.level != PermissionLevel.user &&
-                            dataType == _DataType.application) ...[
-                          TextSpan(
-                            text: '${ap.applicant}：',
-                            style: TextStyle(fontWeight: FontWeight.bold),
-                          ),
-                          TextSpan(text: '${item.applicant ?? ''}\n'),
-                        ],
-                        if (loginData.level != PermissionLevel.user) ...[
-                          TextSpan(
-                            text: '${ap.weight}：',
-                            style: TextStyle(fontWeight: FontWeight.bold),
-                          ),
-                          TextSpan(text: '${item.weight ?? 1}\n'),
-                        ],
-                        TextSpan(
-                          text: '${ap.imageUrl}：',
-                          style: TextStyle(fontWeight: FontWeight.bold),
-                        ),
-                        TextSpan(
-                          text: '${item.imgUrl}',
-                          style: TextStyle(
-                            color: ApTheme.of(context).blueAccent,
-                            decoration: TextDecoration.underline,
-                          ),
-                          recognizer: TapGestureRecognizer()
-                            ..onTap = () {
-                              ApUtils.launchUrl(item.imgUrl);
-                            },
-                        ),
-                        TextSpan(
-                          text: '\n${ap.url}：',
-                          style: TextStyle(fontWeight: FontWeight.bold),
-                        ),
-                        TextSpan(
-                          text: '${item.url}',
-                          style: TextStyle(
-                            color: ApTheme.of(context).blueAccent,
-                            decoration: TextDecoration.underline,
-                          ),
-                          recognizer: TapGestureRecognizer()
-                            ..onTap = () {
-                              ApUtils.launchUrl(item.url);
-                            },
-                        ),
-                        TextSpan(
-                          text: '\n${ap.expireTime}：',
-                          style: TextStyle(fontWeight: FontWeight.bold),
-                        ),
-                        TextSpan(
-                            text: '${item.expireTime ?? ap.noExpiration}\n'),
-                        TextSpan(
-                          text: '${ap.description}：',
-                          style: TextStyle(fontWeight: FontWeight.bold),
-                        ),
-                        TextSpan(text: '${item.description}'),
-                        TextSpan(
-                          text: '\n${ap.reviewDescription}：',
-                          style: TextStyle(fontWeight: FontWeight.bold),
-                        ),
-                        TextSpan(text: '${item.reviewDescription ?? ''}'),
-                        if (dataType == _DataType.application &&
-                            loginData.level != PermissionLevel.user) ...[
-                          TextSpan(text: '\n${ap.reviewState}：'),
-                          TextSpan(
-                            text: _reviewStateText(item.reviewStatus),
-                            style: TextStyle(
-                              color: item.reviewStatus ?? false
-                                  ? Colors.green
-                                  : Colors.red,
-                            ),
-                          ),
-                        ],
-                      ],
-                    ),
-                  ),
-                ],
-              ),
-            ),
-          ),
-        ),
-        onTap:
+      child: GestureDetector(
+        onLongPress:
             loginData.level == PermissionLevel.user || item.reviewStatus != null
                 ? null
                 : () async {
@@ -621,6 +404,212 @@ class _AnnouncementHomePageState extends State<AnnouncementHomePage> {
                       }
                     }
                   },
+        child: ExpansionTile(
+          childrenPadding: const EdgeInsets.symmetric(horizontal: 24.0),
+          title: Padding(
+            padding: const EdgeInsets.only(top: 8.0),
+            child: Text(
+              item.title,
+              style: TextStyle(fontSize: 18.0),
+            ),
+          ),
+          trailing: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              if (loginData.level != PermissionLevel.user &&
+                  item.reviewStatus == null) ...[
+                IconButton(
+                  icon: Icon(
+                    dataType == _DataType.announcement
+                        ? ApIcon.cancel
+                        : Icons.approval,
+                    color: dataType == _DataType.announcement
+                        ? ApTheme.of(context).red
+                        : ApTheme.of(context).yellow,
+                  ),
+                  onPressed: () async {
+                    showDialog(
+                      context: context,
+                      builder: (BuildContext context) => dataType ==
+                              _DataType.announcement
+                          ? YesNoDialog(
+                              title: ap.deleteNewsTitle,
+                              contentWidget: Text(
+                                "${ap.deleteNewsContent}",
+                                textAlign: TextAlign.center,
+                              ),
+                              leftActionText: ap.determine,
+                              rightActionText: ap.back,
+                              leftActionFunction: () {
+                                AnnouncementHelper.instance.deleteAnnouncement(
+                                  data: item,
+                                  callback: GeneralCallback.simple(
+                                    context,
+                                    (_) {
+                                      ApUtils.showToast(
+                                          context, ap.updateSuccess);
+                                      _reviewDescription.text = '';
+                                      _getAnnouncements();
+                                    },
+                                  ),
+                                );
+                              },
+                            )
+                          : YesNoDialog(
+                              title: ap.reviewApplication,
+                              contentWidget: TextField(
+                                controller: _reviewDescription,
+                                maxLines: 3,
+                                decoration: InputDecoration(
+                                  border: OutlineInputBorder(),
+                                  fillColor: ApTheme.of(context).blueAccent,
+                                  labelStyle: TextStyle(
+                                    color: ApTheme.of(context).grey,
+                                  ),
+                                  labelText: ap.reviewDescription,
+                                ),
+                              ),
+                              leftActionText: ap.approve,
+                              rightActionText: ap.reject,
+                              leftActionFunction: () {
+                                AnnouncementHelper.instance.approveApplication(
+                                  applicationId: item.applicationId,
+                                  reviewDescription: _reviewDescription.text,
+                                  callback: GeneralCallback.simple(
+                                    context,
+                                    (_) {
+                                      ApUtils.showToast(
+                                          context, ap.updateSuccess);
+                                      _reviewDescription.text = '';
+                                      _getAnnouncements();
+                                      _getApplications();
+                                    },
+                                  ),
+                                );
+                              },
+                              rightActionFunction: () {
+                                AnnouncementHelper.instance.rejectApplication(
+                                  applicationId: item.applicationId,
+                                  reviewDescription: _reviewDescription.text,
+                                  callback: GeneralCallback.simple(
+                                    context,
+                                    (_) {
+                                      ApUtils.showToast(
+                                          context, ap.updateSuccess);
+                                      _reviewDescription.text = '';
+                                      _getAnnouncements();
+                                      _getApplications();
+                                    },
+                                  ),
+                                );
+                              },
+                            ),
+                    );
+                  },
+                ),
+              ],
+            ],
+          ),
+          children: [
+            RichText(
+              text: TextSpan(
+                style: TextStyle(
+                  color: ApTheme.of(context).grey,
+                  height: 1.3,
+                  fontSize: 16.0,
+                ),
+                children: [
+                  if (loginData.level != PermissionLevel.user) ...[
+                    TextSpan(
+                      text: '${ap.weight}：',
+                      style: TextStyle(fontWeight: FontWeight.bold),
+                    ),
+                    TextSpan(text: '${item.weight ?? 1}\n'),
+                  ],
+                  TextSpan(
+                    text: '${ap.imageUrl}：',
+                    style: TextStyle(fontWeight: FontWeight.bold),
+                  ),
+                  TextSpan(
+                    text: '${item.imgUrl}',
+                    style: TextStyle(
+                      color: ApTheme.of(context).blueAccent,
+                      decoration: TextDecoration.underline,
+                    ),
+                    recognizer: TapGestureRecognizer()
+                      ..onTap = () {
+                        ApUtils.launchUrl(item.imgUrl);
+                      },
+                  ),
+                  TextSpan(
+                    text: '\n${ap.url}：',
+                    style: TextStyle(fontWeight: FontWeight.bold),
+                  ),
+                  TextSpan(
+                    text: '${item.url}',
+                    style: TextStyle(
+                      color: ApTheme.of(context).blueAccent,
+                      decoration: TextDecoration.underline,
+                    ),
+                    recognizer: TapGestureRecognizer()
+                      ..onTap = () {
+                        ApUtils.launchUrl(item.url);
+                      },
+                  ),
+                  TextSpan(
+                    text: '\n${ap.expireTime}：',
+                    style: TextStyle(fontWeight: FontWeight.bold),
+                  ),
+                  TextSpan(text: '${item.expireTime ?? ap.noExpiration}\n'),
+                  TextSpan(
+                    text: '${ap.description}：',
+                    style: TextStyle(fontWeight: FontWeight.bold),
+                  ),
+                  TextSpan(text: '${item.description}'),
+                  TextSpan(
+                    text: '\n${ap.reviewDescription}：',
+                    style: TextStyle(fontWeight: FontWeight.bold),
+                  ),
+                  TextSpan(text: '${item.reviewDescription ?? ''}'),
+                ],
+              ),
+            ),
+            SizedBox(height: 16.0),
+          ],
+          subtitle: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              if (dataType == _DataType.application)
+                RichText(
+                  text: TextSpan(
+                    children: [
+                      TextSpan(text: '${ap.reviewState}：'),
+                      TextSpan(
+                        text: _reviewStateText(item.reviewStatus),
+                        style: TextStyle(
+                          color: item.reviewStatus ?? false
+                              ? Colors.green
+                              : Colors.red,
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              if (loginData.level != PermissionLevel.user)
+                Wrap(
+                  children: [
+                    for (String tag in item.tags ?? []) ...[
+                      Chip(
+                        label: Text(tag),
+                        backgroundColor: tag.color,
+                      ),
+                      SizedBox(width: 8.0),
+                    ]
+                  ],
+                ),
+            ],
+          ),
+        ),
       ),
     );
   }
