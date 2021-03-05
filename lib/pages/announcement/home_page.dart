@@ -134,7 +134,7 @@ class _AnnouncementHomePageState extends State<AnnouncementHomePage> {
               icon: Icon(Icons.exit_to_app),
               tooltip: ap.logout,
               onPressed: () async {
-                if (AnnouncementHelper.loginType ==
+                if (AnnouncementHelper.instance.loginType ==
                     AnnouncementLoginType.google) await _googleSignIn.signOut();
                 setState(() {
                   Preferences.setBool(ApConstants.ANNOUNCEMENT_IS_LOGIN, false);
