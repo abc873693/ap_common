@@ -7,11 +7,13 @@ import 'package:ap_common/utils/ap_localizations.dart';
 import 'package:ap_common/utils/crashlytics_utils.dart';
 import 'package:ap_common/utils/toast.dart';
 import 'package:ap_common/widgets/yes_no_dialog.dart';
+import 'package:file_selector/file_selector.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:image_gallery_saver/image_gallery_saver.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:in_app_review/in_app_review.dart';
 import 'package:package_info_plus/package_info_plus.dart';
 import 'package:path_provider/path_provider.dart';
@@ -210,6 +212,29 @@ class ApUtils {
       inAppReview.requestReview();
     } else
       launchUrl(defaultUrl);
+  }
+
+  static Future<PickedFile> pickImage({
+    ImageSource imageSource,
+    CameraDevice preferredCameraDevice,
+    List<String> extensions,
+  }) async {
+    PickedFile image;
+    if (kIsWeb || Platform.isAndroid || Platform.isIOS) {
+      final imagePicker = ImagePicker();
+      image = await imagePicker.getImage(
+        source: imageSource ?? ImageSource.gallery,
+        preferredCameraDevice: preferredCameraDevice,
+      );
+    } else {
+      final typeGroup = XTypeGroup(
+        label: 'images',
+        extensions: extensions ?? ['jpg', 'jpeg'],
+      );
+      final file = await openFile(acceptedTypeGroups: [typeGroup]);
+      if (file != null) image = PickedFile(file.path);
+    }
+    return image;
   }
 
   static Future<void> saveImage(

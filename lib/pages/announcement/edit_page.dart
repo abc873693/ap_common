@@ -1,4 +1,3 @@
-import 'dart:io';
 import 'dart:ui';
 
 import 'package:ap_common/api/announcement_helper.dart';
@@ -10,7 +9,6 @@ import 'package:ap_common/utils/ap_localizations.dart';
 import 'package:ap_common/utils/ap_utils.dart';
 import 'package:ap_common/widgets/ap_network_image.dart';
 import 'package:ap_common/widgets/default_dialog.dart';
-import 'package:file_selector/file_selector.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/painting.dart';
@@ -307,21 +305,7 @@ class _AnnouncementEditPageState extends State<AnnouncementEditPage> {
                   primary: ApTheme.of(context).blueAccent,
                 ),
                 onPressed: () async {
-                  PickedFile image;
-                  if (kIsWeb || Platform.isAndroid || Platform.isIOS) {
-                    final imagePicker = ImagePicker();
-                    image = await imagePicker.getImage(
-                      source: ImageSource.gallery,
-                    );
-                  } else {
-                    final typeGroup = XTypeGroup(
-                      label: 'images',
-                      extensions: ['jpg', 'jpeg'],
-                    );
-                    final file =
-                        await openFile(acceptedTypeGroups: [typeGroup]);
-                    if (file != null) image = PickedFile(file.path);
-                  }
+                  PickedFile image = await ApUtils.pickImage();
                   if (image != null) {
                     setState(
                         () => imgurUploadState = _ImgurUploadState.uploading);
