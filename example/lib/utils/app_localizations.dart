@@ -9,6 +9,8 @@ class AppLocalizations {
   String get aboutOpenSourceContent =>
       _vocabularies['about_open_source_content'];
 
+  String get dialogUtilTest => _vocabularies['dialogUtilTest'];
+
   static init(Locale locale) {
     AppLocalizations.locale = locale;
   }
@@ -157,6 +159,7 @@ class AppLocalizations {
       'getPendingNotificationList':
           'Pending Notification List(Click to cancel)',
       'cancelAll': 'Cancel All',
+      'dialogUtilTest': 'Dialog Util Test'
     },
     'zh': {
       'app_name': '高科校務通',
@@ -282,6 +285,7 @@ class AppLocalizations {
       'scheduleWeeklyNotifyContent': '設定在每 %s %s',
       'getPendingNotificationList': '等待通知列表(點擊可取消)',
       'cancelAll': '取消全部',
+      'dialogUtilTest': '對話框測試'
     },
   };
 

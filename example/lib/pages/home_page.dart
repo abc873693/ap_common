@@ -13,6 +13,7 @@ import 'package:ap_common/utils/ap_utils.dart';
 import 'package:ap_common/utils/notification_utils.dart';
 import 'package:ap_common/utils/preferences.dart';
 import 'package:ap_common/widgets/ap_drawer.dart';
+import 'package:ap_common_example/pages/diolog_utils_page.dart';
 import 'package:flutter/services.dart';
 import 'package:http/http.dart' as http;
 import 'package:flutter/cupertino.dart';
@@ -216,6 +217,13 @@ class HomePageState extends State<HomePage> {
                 NotificationUtilsTestPage(),
               ),
             ),
+          DrawerItem(
+            icon: ApIcon.check,
+            title: app.dialogUtilTest,
+            onTap: () => _openPage(
+              DialogUtilsTestPage(),
+            ),
+          ),
           DrawerItem(
             icon: ApIcon.face,
             title: ap.about,
