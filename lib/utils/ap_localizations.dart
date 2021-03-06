@@ -8,7 +8,14 @@ export 'package:ap_common/l10n/l10n.dart';
 export 'package:intl/intl.dart';
 
 extension ApExtension on ApLocalizations {
-  get dateTimeLocale {
+  String get dateTimeLocale {
+    if (Intl.defaultLocale.contains('TW'))
+      return 'zh-TW';
+    else
+      return 'en-US';
+  }
+
+  String get locale {
     if (Intl.defaultLocale.contains('TW'))
       return 'zh-TW';
     else
