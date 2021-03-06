@@ -25,6 +25,7 @@ import 'package:url_launcher/url_launcher.dart';
 export 'package:dio/dio.dart';
 export 'package:path_provider/path_provider.dart';
 export 'package:package_info_plus/package_info_plus.dart';
+export 'package:image_picker/image_picker.dart';
 export 'toast.dart';
 
 class ApUtils {
@@ -224,7 +225,7 @@ class ApUtils {
       final imagePicker = ImagePicker();
       image = await imagePicker.getImage(
         source: imageSource ?? ImageSource.gallery,
-        preferredCameraDevice: preferredCameraDevice,
+        preferredCameraDevice: preferredCameraDevice ?? CameraDevice.rear,
       );
     } else {
       final typeGroup = XTypeGroup(
