@@ -308,7 +308,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "printing" : MessageLookupByLibrary.simpleMessage("印表機"),
     "rank" : MessageLookupByLibrary.simpleMessage("名次"),
     "rateNow" : MessageLookupByLibrary.simpleMessage("現在就去"),
-    "ratingDialogContent" : MessageLookupByLibrary.simpleMessage("喜歡高科校務通嗎？\n前往商店給予我們評論\n是我們最大的動力！"),
+    "ratingDialogContent" : MessageLookupByLibrary.simpleMessage("喜歡校務通嗎？\n前往商店給予我們評論\n是我們最大的動力！"),
     "ratingDialogTitle" : MessageLookupByLibrary.simpleMessage("評分"),
     "reason" : MessageLookupByLibrary.simpleMessage("原因"),
     "reject" : MessageLookupByLibrary.simpleMessage("駁回"),

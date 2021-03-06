@@ -2445,10 +2445,10 @@ class ApLocalizations {
     );
   }
 
-  /// `喜歡高科校務通嗎？\n前往商店給予我們評論\n是我們最大的動力！`
+  /// `喜歡校務通嗎？\n前往商店給予我們評論\n是我們最大的動力！`
   String get ratingDialogContent {
     return Intl.message(
-      '喜歡高科校務通嗎？\n前往商店給予我們評論\n是我們最大的動力！',
+      '喜歡校務通嗎？\n前往商店給予我們評論\n是我們最大的動力！',
       name: 'ratingDialogContent',
       desc: '',
       args: [],

@@ -306,7 +306,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "printing" : MessageLookupByLibrary.simpleMessage("Printing"),
     "rank" : MessageLookupByLibrary.simpleMessage("Rank"),
     "rateNow" : MessageLookupByLibrary.simpleMessage("RATE NOW"),
-    "ratingDialogContent" : MessageLookupByLibrary.simpleMessage("Do you like NKUST APP?\nPlease write a comment and rating on the store\nThis is our motivation!"),
+    "ratingDialogContent" : MessageLookupByLibrary.simpleMessage("Do you like APP?\nPlease write a comment and rating on the store\nThis is our motivation!"),
     "ratingDialogTitle" : MessageLookupByLibrary.simpleMessage("Rate App"),
     "reason" : MessageLookupByLibrary.simpleMessage("Reason"),
     "reject" : MessageLookupByLibrary.simpleMessage("Reject"),
