@@ -230,13 +230,6 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "2.1.0"
-  flutter_cupertino_localizations:
-    dependency: "direct main"
-    description:
-      name: flutter_cupertino_localizations
-      url: "https://pub.dartlang.org"
-    source: hosted
-    version: "1.0.1"
   flutter_keyboard_visibility:
     dependency: "direct main"
     description:
