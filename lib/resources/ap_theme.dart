@@ -1,10 +1,10 @@
 import 'package:ap_common/resources/ap_assets.dart';
-import 'package:cupertino_back_gesture/cupertino_back_gesture.dart';
+import 'package:ap_common/utils/cupertino_back_gesture.dart';
 import 'package:flutter/material.dart';
 
 import 'ap_colors.dart';
 
-export 'package:cupertino_back_gesture/cupertino_back_gesture.dart';
+export 'package:ap_common/utils/cupertino_back_gesture.dart';
 
 class ApTheme extends InheritedWidget {
   final ThemeMode themeMode;

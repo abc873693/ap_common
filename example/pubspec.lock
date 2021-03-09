@@ -141,13 +141,6 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "2.1.5"
-  cupertino_back_gesture:
-    dependency: transitive
-    description:
-      name: cupertino_back_gesture
-      url: "https://pub.dartlang.org"
-    source: hosted
-    version: "0.0.4+1"
   dio:
     dependency: transitive
     description:
