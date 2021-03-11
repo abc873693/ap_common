@@ -330,7 +330,7 @@ packages:
     source: hosted
     version: "4.5.9"
   google_sign_in_dartio:
-    dependency: transitive
+    dependency: "direct main"
     description:
       name: google_sign_in_dartio
       url: "https://pub.dartlang.org"

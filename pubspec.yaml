@@ -44,7 +44,6 @@ dependencies:
   path: ^1.7.0
   path_provider: ^1.6.27
   google_sign_in: ^4.5.9
-  google_sign_in_dartio: ^0.0.6
   jwt_decoder: ^1.0.3
   sign_in_with_apple: ^2.5.4
   image_picker: ^0.6.7+20
