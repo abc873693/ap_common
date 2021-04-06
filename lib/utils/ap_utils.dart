@@ -12,13 +12,12 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
-import 'package:image_gallery_saver/image_gallery_saver.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:in_app_review/in_app_review.dart';
 import 'package:package_info_plus/package_info_plus.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:path/path.dart' as path;
-import 'package:permission_handler/permission_handler.dart';
+import 'package:photo_manager/photo_manager.dart';
 import 'package:share/share.dart';
 import 'package:url_launcher/url_launcher.dart';
 
@@ -248,10 +247,9 @@ class ApUtils {
     try {
       bool hasGrantPermission = true;
       if (kIsWeb) {
-      } else if (Platform.isAndroid)
-        hasGrantPermission = await Permission.storage.request().isGranted;
-      else if (Platform.isIOS)
-        hasGrantPermission = await Permission.photos.request().isGranted;
+      } else if (Platform.isAndroid || Platform.isIOS) {
+        hasGrantPermission = await PhotoManager.requestPermission();
+      }
       if (hasGrantPermission) {
         final pngBytes = byteData.buffer.asUint8List();
         var downloadDir = '';
@@ -265,12 +263,12 @@ class ApUtils {
         final filePath = path.join(downloadDir, '$fileName.png');
         bool success = true;
         if (!kIsWeb && (Platform.isAndroid || Platform.isIOS)) {
-          final result = await ImageGallerySaver.saveImage(
+          final AssetEntity imageEntity = await PhotoManager.editor.saveImage(
             pngBytes,
-            name: fileName,
+            title: fileName,
           );
-          if (kDebugMode) print(result);
-          success = result['isSuccess'];
+          if (kDebugMode) print(imageEntity.title);
+          success = imageEntity != null;
         } else {
           await File(filePath).writeAsBytes(pngBytes);
         }

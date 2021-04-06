@@ -35,12 +35,10 @@ dependencies:
   pdf: ^2.1.0
   auto_size_text: ^2.1.0
   flutter_linkify: ^4.0.2
-  image_gallery_saver: ^1.6.7
   file_selector: ^0.7.0
   file_selector_macos: ^0.0.1
   file_selector_linux: ^0.0.1
   file_selector_windows: ^0.0.1
-  permission_handler: ^5.1.0+2
   path: ^1.7.0
   path_provider: ^1.6.27
   google_sign_in: ^4.5.9
@@ -48,6 +46,7 @@ dependencies:
   sign_in_with_apple: ^2.5.4
   image_picker: ^0.6.7+20
   image_picker_for_web: ^0.1.0+2
+  photo_manager: ^1.0.6
 
 dev_dependencies:
   flutter_test:
