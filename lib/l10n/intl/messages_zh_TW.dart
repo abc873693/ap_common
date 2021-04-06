@@ -179,7 +179,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "events" : MessageLookupByLibrary.simpleMessage("行事曆"),
     "expireTime" : MessageLookupByLibrary.simpleMessage("到期時間"),
     "exportCourseTable" : MessageLookupByLibrary.simpleMessage("匯出課表成圖片"),
-    "exportCourseTableSuccess" : MessageLookupByLibrary.simpleMessage("匯出成功~ 請檢查下載資料夾"),
+    "exportCourseTableSuccess" : MessageLookupByLibrary.simpleMessage("匯出成功~ 請檢查資料夾"),
     "feedback" : MessageLookupByLibrary.simpleMessage("回饋意見"),
     "feedbackViaFacebook" : MessageLookupByLibrary.simpleMessage("私訊給粉絲專頁"),
     "filled" : MessageLookupByLibrary.simpleMessage("填充"),

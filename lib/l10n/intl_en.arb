@@ -349,7 +349,7 @@
   "cancelAllNotifySubTitle": "Clean all notify include unknown notify",
   "exportCourseTable": "Export courseTable to image",
   "grandPermissionFail": "Grand permission fail, please try again.",
-  "exportCourseTableSuccess": "Export Successful~ Please check download directory.",
+  "exportCourseTableSuccess": "Export Successful~ Please check directory.",
   "courseScaffoldSetting": "Course Table Setting",
   "showSectionTime": "Show Section Time",
   "showInstructors": "Show Instructors",

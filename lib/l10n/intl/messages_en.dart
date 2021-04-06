@@ -178,7 +178,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "events" : MessageLookupByLibrary.simpleMessage("Events"),
     "expireTime" : MessageLookupByLibrary.simpleMessage("Expire Time"),
     "exportCourseTable" : MessageLookupByLibrary.simpleMessage("Export courseTable to image"),
-    "exportCourseTableSuccess" : MessageLookupByLibrary.simpleMessage("Export Successful~ Please check download directory."),
+    "exportCourseTableSuccess" : MessageLookupByLibrary.simpleMessage("Export Successful~ Please check directory."),
     "feedback" : MessageLookupByLibrary.simpleMessage("Suggestions"),
     "feedbackViaFacebook" : MessageLookupByLibrary.simpleMessage("Message to Facebook Page"),
     "filled" : MessageLookupByLibrary.simpleMessage("Filled"),

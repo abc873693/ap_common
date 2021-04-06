@@ -3545,10 +3545,10 @@ class ApLocalizations {
     );
   }
 
-  /// `匯出成功~ 請檢查下載資料夾`
+  /// `匯出成功~ 請檢查資料夾`
   String get exportCourseTableSuccess {
     return Intl.message(
-      '匯出成功~ 請檢查下載資料夾',
+      '匯出成功~ 請檢查資料夾',
       name: 'exportCourseTableSuccess',
       desc: '',
       args: [],
