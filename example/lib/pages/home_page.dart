@@ -362,7 +362,7 @@ class HomePageState extends State<HomePage> {
   _getUserPicture() async {
     try {
       if ((userInfo?.pictureUrl) == null) return;
-      var response = await http.get(userInfo.pictureUrl);
+      var response = await http.get(Uri.parse(userInfo.pictureUrl));
       if (!response.body.contains('html')) {
         if (mounted) {
           setState(() {
