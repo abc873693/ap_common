@@ -72,7 +72,7 @@ class ImgurHelper {
               );
       }
     } on DioError catch (dioError) {
-      if (dioError.type == DioErrorType.RESPONSE &&
+      if (dioError.type == DioErrorType.response &&
           dioError.response.statusCode == 400)
         return callback == null
             ? null

@@ -709,7 +709,7 @@ class _AnnouncementHomePageState extends State<AnnouncementHomePage> {
         onFailure: (dioError) async {
           if (isNotLogin) Navigator.of(context, rootNavigator: true).pop();
           ApUtils.showToast(context, dioError.i18nMessage);
-          if (dioError.type == DioErrorType.RESPONSE &&
+          if (dioError.type == DioErrorType.response &&
               dioError.response.statusCode == 403) {
             if (loginType == AnnouncementLoginType.google)
               await _googleSignIn.signOut();
