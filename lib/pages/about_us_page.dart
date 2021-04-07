@@ -222,14 +222,14 @@ class AboutUsPageState extends State<AboutUsPage> {
             mainAxisSize: MainAxisSize.max,
             crossAxisAlignment: CrossAxisAlignment.start,
             children: <Widget>[
-              SelectableLinkify(
+              Linkify(
                 text: text,
                 style: TextStyle(fontSize: 18.0),
               ),
               SizedBox(
                 height: 4.0,
               ),
-              SelectableLinkify(
+              Linkify(
                 text: subText,
                 style: TextStyle(
                   fontSize: 14.0,

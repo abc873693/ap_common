@@ -151,7 +151,7 @@ class AnnouncementContentPageState extends State<AnnouncementContentPage> {
         padding: EdgeInsets.symmetric(
           horizontal: orientation == Orientation.portrait ? 16.0 : 0.0,
         ),
-        child: SelectableLinkify(
+        child: Linkify(
           text: widget.announcement.description ?? '',
           textAlign: TextAlign.center,
           style: TextStyle(
