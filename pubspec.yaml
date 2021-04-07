@@ -33,7 +33,7 @@ dependencies:
   barcode: ^2.1.0
   printing: ^5.0.4
   pdf: ^3.1.0
-  auto_size_text: ^2.1.0
+  auto_size_text_pk: ^3.0.0
   flutter_linkify: ^5.0.0
   file_selector: ^0.8.2
   file_selector_macos: ^0.0.1
