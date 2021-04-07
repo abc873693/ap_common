@@ -14,14 +14,14 @@ class CourseNotifyData {
 
   late int version;
   late int lastId;
-  List<CourseNotify>? data;
+  List<CourseNotify> data;
 
   String? tag;
 
   CourseNotifyData({
     this.version = VERSION,
     this.lastId = INITIAL_ID,
-    this.data,
+    this.data = const [],
   });
 
   factory CourseNotifyData.fromRawJson(String str) =>
@@ -40,15 +40,13 @@ class CourseNotifyData {
       );
 
   Map<String, dynamic> toJson() => {
-        "version": version == null ? null : version,
-        "lastId": lastId == null ? null : lastId,
-        "data": data == null
-            ? null
-            : List<dynamic>.from(data!.map((x) => x.toJson())),
+        "version": version,
+        "lastId": lastId,
+        "data": List<dynamic>.from(data.map((x) => x.toJson())),
       };
 
   CourseNotify? getByCode(String? code, String? startTime, int weekIndex) {
-    for (var value in data!) {
+    for (var value in data) {
       if (value.code == code &&
           value.startTime == startTime &&
           value.weekday == weekIndex) return value;
@@ -68,7 +66,7 @@ class CourseNotifyData {
     final key = '${ApConstants.PACKAGE_NAME}.course_notify_data_$tag';
     final ap = ApLocalizations.of(context);
     var cache = CourseNotifyData.load(key);
-    cache.data!.forEach((courseNotify) {
+    cache.data.forEach((courseNotify) {
       courseData.courses?.forEach((courseDetail) {
         if (courseDetail.code == courseNotify.code) {
           courseNotify.title = sprintf(ap.courseNotifyContent, [
@@ -127,9 +125,9 @@ class CourseNotifyData {
     print(rawString);
     if (rawString.isNotEmpty) {
       var courseNotifyData = CourseNotifyData.fromRawJson(rawString);
-      courseNotifyData.data!.forEach(
+      courseNotifyData.data.forEach(
           (element) => NotificationUtils.cancelCourseNotify(id: element.id!));
-      courseNotifyData.data!.clear();
+      courseNotifyData.data.clear();
       courseNotifyData.tag = newTag;
       courseNotifyData.save();
     }

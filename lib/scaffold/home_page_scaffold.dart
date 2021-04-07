@@ -197,7 +197,7 @@ class HomePageScaffoldState extends State<HomePageScaffold> {
         child: Hero(
           tag: announcement.hashCode,
           child: ApNetworkImage(
-            url: announcement.imgUrl,
+            url: announcement.imgUrl!,
           ),
         ),
       ),

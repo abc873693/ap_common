@@ -4,8 +4,8 @@ import 'dialog_option.dart';
 
 class SimpleOptionDialog extends StatelessWidget {
   final String title;
-  final List<String?> items;
-  final int? index;
+  final List<String> items;
+  final int index;
   final Function(int index)? onSelected;
 
   const SimpleOptionDialog({
@@ -31,7 +31,7 @@ class SimpleOptionDialog extends StatelessWidget {
               width: MediaQuery.of(context).size.width * 0.8,
               height: MediaQuery.of(context).size.height * 0.8,
               child: ListView.separated(
-                controller: ScrollController(initialScrollOffset: index! * 48.0),
+                controller: ScrollController(initialScrollOffset: index * 48.0),
                 itemCount: items.length,
                 separatorBuilder: (BuildContext context, int index) {
                   return Divider(height: 6.0);
@@ -42,7 +42,7 @@ class SimpleOptionDialog extends StatelessWidget {
                     check: index == this.index,
                     onPressed: () {
                       Navigator.pop(context, index);
-                      this.onSelected!(index);
+                      this.onSelected?.call(index);
                     },
                   );
                 },
@@ -63,7 +63,7 @@ class SimpleOptionDialog extends StatelessWidget {
                   check: i == index,
                   onPressed: () {
                     Navigator.of(context).pop();
-                    this.onSelected!(i);
+                    this.onSelected?.call(i);
                   },
                 ),
             ],

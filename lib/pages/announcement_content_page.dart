@@ -104,7 +104,7 @@ class AnnouncementContentPageState extends State<AnnouncementContentPage> {
         child: Hero(
           tag: widget.announcement.hashCode,
           child: ApNetworkImage(
-            url: widget.announcement.imgUrl,
+            url: widget.announcement.imgUrl!,
           ),
         ),
       ),

@@ -704,7 +704,7 @@ class _CourseContentState extends State<CourseContent> {
                             day: NotificationUtils.getDay(widget.weekday),
                             androidResourceIcon: widget.androidResourceIcon);
                         widget.notifyData!.lastId++;
-                        widget.notifyData!.data!.add(courseNotify);
+                        widget.notifyData!.data.add(courseNotify);
                         ApUtils.showToast(context,
                             ApLocalizations.of(context).courseNotifyHint);
                         AnalyticsUtils.instance
@@ -713,7 +713,7 @@ class _CourseContentState extends State<CourseContent> {
                         await NotificationUtils.cancelCourseNotify(
                           id: courseNotify.id!,
                         );
-                        widget.notifyData!.data!.removeWhere((data) {
+                        widget.notifyData!.data.removeWhere((data) {
                           return data.id == courseNotify!.id;
                         });
                         ApUtils.showToast(context,

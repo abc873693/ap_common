@@ -30,8 +30,6 @@ class ApDrawer extends StatefulWidget {
 }
 
 class ApDrawerState extends State<ApDrawer> {
-  ApLocalizations? app;
-
   @override
   void initState() {
     super.initState();
@@ -44,7 +42,6 @@ class ApDrawerState extends State<ApDrawer> {
 
   @override
   Widget build(BuildContext context) {
-    app = ApLocalizations.of(context);
     return Drawer(
       child: SingleChildScrollView(
         child: Column(
@@ -88,8 +85,8 @@ class ApDrawerState extends State<ApDrawer> {
                                 ),
                               ),
                     accountName: Text(
-                      (widget.userInfo == null)
-                          ? app!.notLogin
+                      widget.userInfo == null
+                          ? ApLocalizations.of(context).notLogin
                           : (widget.userInfo?.name ?? ''),
                       style: TextStyle(color: Colors.white),
                     ),

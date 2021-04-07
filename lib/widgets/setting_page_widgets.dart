@@ -108,21 +108,21 @@ class CheckCourseNotifyItem extends StatelessWidget {
             ? CourseNotifyData.loadCurrent()
             : CourseNotifyData.load(tag);
         if (NotificationUtils.isSupport) {
-          if (notifyData != null && notifyData.data!.length != 0) {
+          if (notifyData.data.length != 0) {
             showDialog(
               context: context,
               builder: (_) => SimpleOptionDialog(
                 title: ap.courseNotify,
                 items: [
-                  for (var notify in notifyData.data!)
+                  for (var notify in notifyData.data)
                     '${ap.weekdaysCourse[notify.weekdayIndex]} ${notify.startTime} ${notify.title}',
                 ],
                 index: -1,
                 onSelected: (index) {
                   NotificationUtils.cancelCourseNotify(
-                    id: notifyData.data![index].id!,
+                    id: notifyData.data[index].id!,
                   );
-                  notifyData.data!.removeAt(index);
+                  notifyData.data.removeAt(index);
                   notifyData.save();
                   ApUtils.showToast(context, ap.cancelNotifySuccess);
                 },
@@ -154,7 +154,7 @@ class ClearAllNotifyItem extends StatelessWidget {
           CourseNotifyData notifyData = tag == null
               ? CourseNotifyData.loadCurrent()
               : CourseNotifyData.load(tag);
-          notifyData.data!.clear();
+          notifyData.data.clear();
           notifyData.save();
           ApUtils.showToast(context, ap.cancelNotifySuccess);
         } else
