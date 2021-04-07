@@ -6,7 +6,7 @@ import 'package:flutter/material.dart';
 class OpenSourcePage extends StatefulWidget {
   static const String routerName = "/open_source";
 
-  const OpenSourcePage({Key key}) : super(key: key);
+  const OpenSourcePage({Key? key}) : super(key: key);
 
   @override
   OpenSourcePageState createState() => OpenSourcePageState();
@@ -484,7 +484,7 @@ class OpenSourcePageState extends State<OpenSourcePage> {
     ),
   ];
 
-  ApLocalizations app;
+  ApLocalizations? app;
 
   @override
   void initState() {
@@ -505,7 +505,7 @@ class OpenSourcePageState extends State<OpenSourcePage> {
     app = ApLocalizations.of(context);
     return Scaffold(
       appBar: AppBar(
-        title: Text(app.aboutOpenSourceTitle),
+        title: Text(app!.aboutOpenSourceTitle),
         backgroundColor: ApTheme.of(context).blue,
       ),
       body: ListView.builder(

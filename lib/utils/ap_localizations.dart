@@ -9,14 +9,14 @@ export 'package:intl/intl.dart';
 
 extension ApExtension on ApLocalizations {
   String get dateTimeLocale {
-    if (Intl.defaultLocale.contains('TW'))
+    if (Intl.defaultLocale!.contains('TW'))
       return 'zh-TW';
     else
       return 'en-US';
   }
 
   String get locale {
-    if (Intl.defaultLocale.contains('TW'))
+    if (Intl.defaultLocale!.contains('TW'))
       return 'zh-TW';
     else
       return 'en-US';
@@ -53,7 +53,7 @@ extension ApExtension on ApLocalizations {
       ];
 
   @deprecated
-  String dioError(DioError dioError) {
+  String? dioError(DioError dioError) {
     switch (dioError.type) {
       case DioErrorType.other:
         return noInternet;
@@ -73,7 +73,7 @@ extension ApExtension on ApLocalizations {
 }
 
 extension DioErrorI18nExtension on DioError {
-  String get i18nMessage {
+  String? get i18nMessage {
     switch (type) {
       case DioErrorType.other:
         return ApLocalizations.current.noInternet;
@@ -83,8 +83,8 @@ extension DioErrorI18nExtension on DioError {
         return ApLocalizations.current.timeoutMessage;
         break;
       case DioErrorType.response:
-        if (response.data is Map<String, dynamic>)
-          return response.data['title'] ?? message;
+        if (response!.data is Map<String, dynamic>)
+          return response!.data['title'] ?? message;
         else
           return message;
         break;

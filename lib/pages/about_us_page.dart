@@ -21,17 +21,17 @@ class AboutUsPage extends StatefulWidget {
   final String githubName;
   final String email;
   final String appLicense;
-  final List<Widget> actions;
+  final List<Widget>? actions;
 
   const AboutUsPage({
-    Key key,
-    @required this.assetImage,
-    @required this.fbFanPageUrl,
-    @required this.fbFanPageId,
-    @required this.githubUrl,
-    @required this.githubName,
-    @required this.email,
-    @required this.appLicense,
+    Key? key,
+    required this.assetImage,
+    required this.fbFanPageUrl,
+    required this.fbFanPageId,
+    required this.githubUrl,
+    required this.githubName,
+    required this.email,
+    required this.appLicense,
     this.actions,
   }) : super(key: key);
 
@@ -40,7 +40,7 @@ class AboutUsPage extends StatefulWidget {
 }
 
 class AboutUsPageState extends State<AboutUsPage> {
-  ApLocalizations app;
+  ApLocalizations? app;
 
   @override
   void initState() {
@@ -67,7 +67,7 @@ class AboutUsPageState extends State<AboutUsPage> {
             expandedHeight: expandedHeight,
             floating: false,
             pinned: true,
-            title: Text(app.about),
+            title: Text(app!.about),
             actions: widget.actions,
             backgroundColor: ApTheme.of(context).blue,
             flexibleSpace: FlexibleSpaceBar(
@@ -80,12 +80,12 @@ class AboutUsPageState extends State<AboutUsPage> {
           SliverList(
               delegate: SliverChildListDelegate(
             <Widget>[
-              _item(app.aboutAuthorTitle, app.aboutAuthorContent),
-              _item(app.about, app.aboutUsContent),
-              _item(app.aboutRecruitTitle, app.aboutRecruitContent),
+              _item(app!.aboutAuthorTitle, app!.aboutAuthorContent),
+              _item(app!.about, app!.aboutUsContent),
+              _item(app!.aboutRecruitTitle, app!.aboutRecruitContent),
               Stack(
                 children: <Widget>[
-                  _item(app.aboutItcTitle, app.aboutItcContent),
+                  _item(app!.aboutItcTitle, app!.aboutItcContent),
                   Padding(
                     padding:
                         EdgeInsets.symmetric(vertical: 20.0, horizontal: 26.0),
@@ -115,7 +115,7 @@ class AboutUsPageState extends State<AboutUsPage> {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: <Widget>[
                       SelectableText(
-                        app.aboutContactUsTitle,
+                        app!.aboutContactUsTitle,
                         style: TextStyle(fontSize: 18.0),
                       ),
                       SizedBox(
@@ -144,7 +144,7 @@ class AboutUsPageState extends State<AboutUsPage> {
                                     (onError) {
                                       ApUtils.showToast(
                                         context,
-                                        app.platformError,
+                                        app!.platformError,
                                       );
                                     },
                                   );
@@ -168,7 +168,7 @@ class AboutUsPageState extends State<AboutUsPage> {
                                     (onError) {
                                       ApUtils.showToast(
                                         context,
-                                        app.platformError,
+                                        app!.platformError,
                                       );
                                     },
                                   );
@@ -184,7 +184,7 @@ class AboutUsPageState extends State<AboutUsPage> {
                                   (onError) {
                                     ApUtils.showToast(
                                       context,
-                                      app.platformError,
+                                      app!.platformError,
                                     );
                                   },
                                 );
@@ -200,7 +200,7 @@ class AboutUsPageState extends State<AboutUsPage> {
                   ),
                 ),
               ),
-              _item(app.aboutOpenSourceTitle, widget.appLicense),
+              _item(app!.aboutOpenSourceTitle, widget.appLicense),
             ],
           )),
         ],
@@ -236,7 +236,7 @@ class AboutUsPageState extends State<AboutUsPage> {
                   color: ApTheme.of(context).grey,
                 ),
                 options: LinkifyOptions(humanize: false),
-                onOpen: (link) async => ApUtils.launchUrl(link?.url),
+                onOpen: (link) async => ApUtils.launchUrl(link.url),
               ),
             ],
           ),

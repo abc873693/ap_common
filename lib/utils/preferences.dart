@@ -7,11 +7,11 @@ import 'package:flutter/foundation.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class Preferences {
-  static SharedPreferences prefs;
+  static SharedPreferences? prefs;
 
-  static encrypt.Encrypter encrypter;
+  static late encrypt.Encrypter encrypter;
 
-  static encrypt.IV iv;
+  static encrypt.IV? iv;
 
   static bool get isSupport =>
       kIsWeb ||
@@ -22,8 +22,8 @@ class Preferences {
       Platform.isWindows;
 
   static init({
-    @required encrypt.Key key,
-    @required encrypt.IV iv,
+    required encrypt.Key key,
+    required encrypt.IV iv,
     bool initialApIcon = true,
   }) async {
     if (isSupport) {
@@ -32,15 +32,13 @@ class Preferences {
         ApConstants.PREF_ICON_STYLE_CODE,
         ApIcon.OUTLINED,
       );
-      if (key != null && iv != null) {
-        encrypter = encrypt.Encrypter(
-          encrypt.AES(
-            key,
-            mode: encrypt.AESMode.cbc,
-          ),
-        );
-        Preferences.iv = iv;
-      }
+      encrypter = encrypt.Encrypter(
+        encrypt.AES(
+          key,
+          mode: encrypt.AESMode.cbc,
+        ),
+      );
+      Preferences.iv = iv;
     }
   }
 
@@ -59,7 +57,7 @@ class Preferences {
     );
   }
 
-  static String getStringSecurity(String key, String defaultValue) {
+  static String? getStringSecurity(String key, String? defaultValue) {
     String data = prefs?.getString(key) ?? '';
     if (data == '')
       return defaultValue;
@@ -97,5 +95,9 @@ class Preferences {
 
   static List<String> getStringList(String key, List<String> defaultValue) {
     return prefs?.getStringList(key) ?? defaultValue;
+  }
+
+  static Future<bool>? remove(String key) {
+    return prefs?.remove(key);
   }
 }

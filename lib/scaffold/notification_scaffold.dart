@@ -15,13 +15,13 @@ class NotificationScaffold extends StatefulWidget {
 
   final NotificationState state;
   final List<Notifications> notificationList;
-  final Function onRefresh;
-  final Function onLoadingMore;
+  final Function? onRefresh;
+  final Function? onLoadingMore;
 
   NotificationScaffold({
-    Key key,
-    @required this.state,
-    @required this.notificationList,
+    Key? key,
+    required this.state,
+    required this.notificationList,
     this.onRefresh,
     this.onLoadingMore,
   }) : super(key: key);
@@ -35,9 +35,9 @@ class NotificationScaffoldState extends State<NotificationScaffold>
   @override
   bool get wantKeepAlive => true;
 
-  ApLocalizations ap;
+  ApLocalizations? ap;
 
-  ScrollController controller;
+  ScrollController? controller;
 
   TextStyle get _textStyle => TextStyle(
         fontSize: 18.0,
@@ -62,13 +62,13 @@ class NotificationScaffoldState extends State<NotificationScaffold>
   @override
   void dispose() {
     super.dispose();
-    controller.removeListener(_scrollListener);
+    controller!.removeListener(_scrollListener);
   }
 
   Widget _notificationItem(Notifications notification) {
     return InkWell(
       onLongPress: () {
-        ApUtils.shareTo("${notification.info.title}\n${notification.link}");
+        ApUtils.shareTo("${notification.info!.title}\n${notification.link}");
         AnalyticsUtils.instance?.logEvent('share_long_click');
       },
       onTap: () {
@@ -87,7 +87,7 @@ class NotificationScaffoldState extends State<NotificationScaffold>
           crossAxisAlignment: CrossAxisAlignment.start,
           children: <Widget>[
             Text(
-              notification.info.title ?? '',
+              notification.info!.title ?? '',
               style: _textStyle,
               textAlign: TextAlign.left,
             ),
@@ -96,14 +96,14 @@ class NotificationScaffoldState extends State<NotificationScaffold>
               children: <Widget>[
                 Expanded(
                   child: Text(
-                    notification.info.department ?? '',
+                    notification.info!.department ?? '',
                     style: _textGreyStyle,
                     textAlign: TextAlign.left,
                   ),
                 ),
                 Expanded(
                   child: Text(
-                    notification.info.date ?? '',
+                    notification.info!.date ?? '',
                     style: _textGreyStyle,
                     textAlign: TextAlign.right,
                   ),
@@ -132,24 +132,24 @@ class NotificationScaffoldState extends State<NotificationScaffold>
       case NotificationState.empty:
         return InkWell(
           onTap: () {
-            if (widget.onRefresh != null) widget.onRefresh();
+            if (widget.onRefresh != null) widget.onRefresh!();
             AnalyticsUtils.instance?.logEvent(AnalyticsConstants.REFRESH);
           },
           child: HintContent(
             icon: ApIcon.assignment,
             content: widget.state == NotificationState.error
-                ? ap.clickToRetry
-                : ap.clickToRetry,
+                ? ap!.clickToRetry
+                : ap!.clickToRetry,
           ),
         );
       case NotificationState.offline:
         return HintContent(
           icon: ApIcon.offlineBolt,
-          content: ap.offlineMode,
+          content: ap!.offlineMode,
         );
       default:
         return RefreshIndicator(
-          onRefresh: widget.onRefresh,
+          onRefresh: widget.onRefresh as Future<void> Function(),
           child: ListView.builder(
             controller: controller,
             itemBuilder: (context, index) {
@@ -162,9 +162,9 @@ class NotificationScaffoldState extends State<NotificationScaffold>
   }
 
   void _scrollListener() {
-    if (controller.position.extentAfter < 500) {
+    if (controller!.position.extentAfter < 500) {
       if (widget.state == NotificationState.finish) {
-        if (widget.onLoadingMore != null) widget.onLoadingMore();
+        if (widget.onLoadingMore != null) widget.onLoadingMore!();
         AnalyticsUtils.instance?.logEvent('notification_load_more');
       }
     }

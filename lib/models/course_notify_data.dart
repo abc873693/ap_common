@@ -12,11 +12,11 @@ class CourseNotifyData {
   static const VERSION = 2;
   static const INITIAL_ID = 1;
 
-  int version;
-  int lastId;
-  List<CourseNotify> data;
+  late int version;
+  late int lastId;
+  List<CourseNotify>? data;
 
-  String tag;
+  String? tag;
 
   CourseNotifyData({
     this.version = VERSION,
@@ -44,11 +44,11 @@ class CourseNotifyData {
         "lastId": lastId == null ? null : lastId,
         "data": data == null
             ? null
-            : List<dynamic>.from(data.map((x) => x.toJson())),
+            : List<dynamic>.from(data!.map((x) => x.toJson())),
       };
 
-  CourseNotify getByCode(String code, String startTime, int weekIndex) {
-    for (var value in data) {
+  CourseNotify? getByCode(String? code, String? startTime, int weekIndex) {
+    for (var value in data!) {
       if (value.code == code &&
           value.startTime == startTime &&
           value.weekday == weekIndex) return value;
@@ -68,12 +68,12 @@ class CourseNotifyData {
     final key = '${ApConstants.PACKAGE_NAME}.course_notify_data_$tag';
     final ap = ApLocalizations.of(context);
     var cache = CourseNotifyData.load(key);
-    cache.data.forEach((courseNotify) {
-      courseData?.courses?.forEach((courseDetail) {
+    cache.data!.forEach((courseNotify) {
+      courseData.courses?.forEach((courseDetail) {
         if (courseDetail.code == courseNotify.code) {
           courseNotify.title = sprintf(ap.courseNotifyContent, [
             courseNotify.title,
-            courseNotify.location.isEmpty
+            courseNotify.location!.isEmpty
                 ? ap.courseNotifyUnknown
                 : courseNotify.location
           ]);
@@ -86,7 +86,7 @@ class CourseNotifyData {
     );
   }
 
-  factory CourseNotifyData.load(String tag) {
+  factory CourseNotifyData.load(String? tag) {
     String rawString = Preferences.getString(
       '${ApConstants.PACKAGE_NAME}.'
           'course_notify_data_$tag',
@@ -116,8 +116,8 @@ class CourseNotifyData {
   }
 
   static void clearOldVersionNotification({
-    @required String tag,
-    @required String newTag,
+    required String tag,
+    required String newTag,
   }) {
     String rawString = Preferences.getString(
       '${ApConstants.PACKAGE_NAME}.'
@@ -127,33 +127,29 @@ class CourseNotifyData {
     print(rawString);
     if (rawString.isNotEmpty) {
       var courseNotifyData = CourseNotifyData.fromRawJson(rawString);
-      courseNotifyData.data.forEach(
-          (element) => NotificationUtils.cancelCourseNotify(id: element.id));
-      courseNotifyData.data.clear();
+      courseNotifyData.data!.forEach(
+          (element) => NotificationUtils.cancelCourseNotify(id: element.id!));
+      courseNotifyData.data!.clear();
       courseNotifyData.tag = newTag;
       courseNotifyData.save();
     }
-    Preferences.setString(
-      '${ApConstants.PACKAGE_NAME}.'
-      'course_notify_data_$tag',
-      null,
-    );
+    Preferences.remove('${ApConstants.PACKAGE_NAME}.course_notify_data_$tag');
   }
 }
 
 class CourseNotify {
-  int id;
-  String title;
-  String location;
-  String code;
+  int? id;
+  String? title;
+  String? location;
+  String? code;
 
   ///The day of the week [DateTime.monday]..[DateTime.sunday].
   ///In accordance with ISO 8601 a week starts with Monday, which has the value 1.
-  int weekday;
+  int? weekday;
 
-  String startTime;
+  String? startTime;
 
-  int get weekdayIndex => weekday - 1;
+  int get weekdayIndex => weekday! - 1;
 
   CourseNotify({
     this.id,
@@ -190,10 +186,10 @@ class CourseNotify {
       };
 
   factory CourseNotify.fromCourse({
-    @required int id,
-    @required Course course,
-    @required int weekday,
-    @required TimeCode timeCode,
+    required int id,
+    required Course course,
+    required int weekday,
+    required TimeCode timeCode,
   }) {
     return CourseNotify(
       id: id,

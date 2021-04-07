@@ -4,23 +4,23 @@ import 'package:ap_common/config/ap_constants.dart';
 import 'package:ap_common/utils/preferences.dart';
 
 class SemesterData {
-  List<Semester> data;
-  Semester defaultSemester;
-  int currentIndex;
+  List<Semester>? data;
+  Semester? defaultSemester;
+  int? currentIndex;
 
   int get defaultIndex {
     if (defaultSemester == null) return 0;
-    for (var i = 0; i < data.length; i++)
-      if (defaultSemester.text == data[i].text) return i;
+    for (var i = 0; i < data!.length; i++)
+      if (defaultSemester!.text == data![i].text) return i;
     return 0;
   }
 
   Semester get currentSemester {
-    return data[currentIndex];
+    return data![currentIndex!];
   }
 
-  List<String> get semesters {
-    List<String> texts = [];
+  List<String?> get semesters {
+    List<String?> texts = [];
     data?.forEach((element) => texts.add(element.text));
     return texts;
   }
@@ -44,8 +44,8 @@ class SemesterData {
       );
 
   Map<String, dynamic> toJson() => {
-        "data": new List<dynamic>.from(data.map((x) => x.toJson())),
-        "default": defaultSemester.toJson(),
+        "data": new List<dynamic>.from(data!.map((x) => x.toJson())),
+        "default": defaultSemester!.toJson(),
         "currentIndex": currentIndex,
       };
 
@@ -57,7 +57,7 @@ class SemesterData {
     );
   }
 
-  factory SemesterData.load() {
+  static SemesterData? load() {
     String rawString = Preferences.getString(
       '${ApConstants.PACKAGE_NAME}'
           'semester_data',
@@ -71,9 +71,9 @@ class SemesterData {
 }
 
 class Semester {
-  String year;
-  String value;
-  String text;
+  String? year;
+  String? value;
+  String? text;
 
   String get code => '$year$value';
 

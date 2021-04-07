@@ -6,18 +6,18 @@ import 'package:flutter/material.dart';
 import 'option_dialog.dart';
 
 class ItemPicker extends StatelessWidget {
-  final List<String> items;
-  final int currentIndex;
-  final Function(int index) onSelected;
+  final List<String?> items;
+  final int? currentIndex;
+  final Function(int index)? onSelected;
   final String dialogTitle;
-  final String featureTag;
+  final String? featureTag;
 
   const ItemPicker({
-    Key key,
-    @required this.onSelected,
-    @required this.items,
-    @required this.dialogTitle,
-    @required this.currentIndex,
+    Key? key,
+    required this.onSelected,
+    required this.items,
+    required this.dialogTitle,
+    required this.currentIndex,
     this.featureTag,
   }) : super(key: key);
 
@@ -28,8 +28,8 @@ class ItemPicker extends StatelessWidget {
         showDialog(
           context: context,
           builder: (_) => SimpleOptionDialog(
-            title: dialogTitle ?? '',
-            items: items ?? [],
+            title: dialogTitle,
+            items: items,
             index: currentIndex ?? 0,
             onSelected: onSelected,
           ),
@@ -47,7 +47,7 @@ class ItemPicker extends StatelessWidget {
           children: <Widget>[
             Expanded(
               child: Text(
-                items != null ? items[currentIndex] ?? '' : '',
+                items != null ? items[currentIndex!] ?? '' : '',
                 style: TextStyle(
                   color: ApTheme.of(context).semesterText,
                   fontSize: 18.0,

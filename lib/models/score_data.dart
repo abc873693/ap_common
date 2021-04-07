@@ -4,8 +4,8 @@ import 'package:ap_common/config/ap_constants.dart';
 import 'package:ap_common/utils/preferences.dart';
 
 class ScoreData {
-  List<Score> scores;
-  Detail detail;
+  List<Score>? scores;
+  Detail? detail;
 
   ScoreData({
     this.scores,
@@ -24,8 +24,8 @@ class ScoreData {
       );
 
   Map<String, dynamic> toJson() => {
-        "scores": new List<dynamic>.from(scores.map((x) => x.toJson())),
-        "detail": detail.toJson(),
+        "scores": new List<dynamic>.from(scores!.map((x) => x.toJson())),
+        "detail": detail!.toJson(),
       };
 
   void save(String tag) {
@@ -36,7 +36,7 @@ class ScoreData {
     );
   }
 
-  factory ScoreData.load(String tag) {
+  static ScoreData? load(String tag) {
     String rawString = Preferences.getString(
       '${ApConstants.PACKAGE_NAME}'
           '.score_data_$tag',
@@ -50,13 +50,13 @@ class ScoreData {
 }
 
 class Detail {
-  double creditTaken;
-  double creditEarned;
-  double conduct;
-  double average;
-  String classRank;
-  String departmentRank;
-  double classPercentage;
+  double? creditTaken;
+  double? creditEarned;
+  double? conduct;
+  double? average;
+  String? classRank;
+  String? departmentRank;
+  double? classPercentage;
 
   Detail({
     this.creditTaken,
@@ -96,18 +96,18 @@ class Detail {
 }
 
 class Score {
-  String courseNumber;
+  String? courseNumber;
   bool isPreScore;
-  String title;
-  String units;
-  String hours;
-  String required;
-  String at;
-  String middleScore;
-  String generalScore;
-  String finalScore;
-  String semesterScore;
-  String remark;
+  String? title;
+  String? units;
+  String? hours;
+  String? required;
+  String? at;
+  String? middleScore;
+  String? generalScore;
+  String? finalScore;
+  String? semesterScore;
+  String? remark;
 
   Score({
     this.courseNumber,

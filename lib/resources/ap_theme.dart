@@ -11,18 +11,19 @@ class ApTheme extends InheritedWidget {
 
   ApTheme(
     this.themeMode, {
-    Widget child,
-    BackGestureWidth backGestureWidth,
+    required Widget child,
+    BackGestureWidth? backGestureWidth,
   }) : super(
           child: BackGestureWidthTheme(
             backGestureWidth:
-                backGestureWidth ?? BackGestureWidth.fraction(1 / 2),
+                backGestureWidth as double Function(Size Function())? ??
+                    BackGestureWidth.fraction(1 / 2),
             child: child,
           ),
         );
 
   static ApTheme of(BuildContext context) {
-    return context.dependOnInheritedWidgetOfExactType();
+    return context.dependOnInheritedWidgetOfExactType()!;
   }
 
   @override
@@ -39,7 +40,7 @@ class ApTheme extends InheritedWidget {
   Brightness get brightness {
     switch (themeMode) {
       case ThemeMode.system:
-        return WidgetsBinding.instance.window.platformBrightness;
+        return WidgetsBinding.instance!.window.platformBrightness;
       case ThemeMode.light:
         return Brightness.light;
       case ThemeMode.dark:
@@ -52,11 +53,9 @@ class ApTheme extends InheritedWidget {
     switch (brightness) {
       case Brightness.light:
         return ApColors.blue500;
-        break;
       case Brightness.dark:
       default:
         return ApColors.blueDark;
-        break;
     }
   }
 
@@ -154,11 +153,9 @@ class ApTheme extends InheritedWidget {
     switch (brightness) {
       case Brightness.light:
         return Colors.green;
-        break;
       case Brightness.dark:
       default:
-        return Colors.green[300];
-        break;
+        return Colors.green[300]!;
     }
   }
 

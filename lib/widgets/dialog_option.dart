@@ -3,15 +3,15 @@ import 'package:ap_common/resources/ap_theme.dart';
 import 'package:flutter/material.dart';
 
 class DialogOption extends StatelessWidget {
-  final String text;
+  final String? text;
   final bool check;
   final Function onPressed;
 
   const DialogOption({
-    Key key,
-    @required this.text,
-    @required this.check,
-    @required this.onPressed,
+    Key? key,
+    required this.text,
+    required this.check,
+    required this.onPressed,
   }) : super(key: key);
 
   @override
@@ -24,7 +24,7 @@ class DialogOption extends StatelessWidget {
             child: Padding(
               padding: EdgeInsets.symmetric(vertical: 2.0),
               child: Text(
-                text,
+                text!,
                 style: TextStyle(
                     fontSize: 16.0,
                     color: check ? ApTheme.of(context).blueAccent : null),
@@ -39,7 +39,7 @@ class DialogOption extends StatelessWidget {
             )
         ],
       ),
-      onPressed: onPressed,
+      onPressed: onPressed as void Function()?,
     );
   }
 }

@@ -6,15 +6,15 @@ import 'package:ap_common/config/ap_constants.dart';
 import 'package:ap_common/utils/preferences.dart';
 
 class UserInfo {
-  String educationSystem;
-  String department;
-  String className;
-  String id;
-  String name;
-  String pictureUrl;
-  String email;
+  String? educationSystem;
+  String? department;
+  String? className;
+  String? id;
+  String? name;
+  String? pictureUrl;
+  String? email;
 
-  Uint8List pictureBytes;
+  Uint8List? pictureBytes;
 
   UserInfo({
     this.educationSystem,
@@ -60,7 +60,7 @@ class UserInfo {
     );
   }
 
-  factory UserInfo.load(String tag) {
+  static UserInfo? load(String tag) {
     String rawString = Preferences.getString(
       '${ApConstants.PACKAGE_NAME}'
           '.user_info_$tag',

@@ -29,7 +29,7 @@ import 'package:flutter/rendering.dart';
 export 'package:ap_common/models/course_data.dart';
 
 typedef CourseNotifyCallback(
-    CourseNotify courseNotify, CourseNotifyState state);
+    CourseNotify? courseNotify, CourseNotifyState state);
 
 enum CourseState { loading, finish, error, empty, offlineEmpty, custom }
 enum CourseNotifyState { schedule, cancel }
@@ -38,18 +38,18 @@ enum _ContentStyle { list, table }
 const _courseHeight = 55.0;
 
 class CourseConfig extends InheritedWidget {
-  final bool showSectionTime;
-  final bool showInstructors;
-  final bool showClassroomLocation;
+  final bool? showSectionTime;
+  final bool? showInstructors;
+  final bool? showClassroomLocation;
 
   CourseConfig({
     this.showSectionTime,
     this.showInstructors,
     this.showClassroomLocation,
-    Widget child,
+    required Widget child,
   }) : super(child: child);
 
-  static CourseConfig of(BuildContext context) {
+  static CourseConfig? of(BuildContext context) {
     return context.dependOnInheritedWidgetOfExactType();
   }
 
@@ -62,35 +62,35 @@ class CourseConfig extends InheritedWidget {
 class CourseScaffold extends StatefulWidget {
   /// 必要欄位，總共有 `loading` `finish` `error` `empty` `offlineEmpty` `custom` 的狀態，只有`finish`才會顯示課表介面，其餘都是顯示錯誤狀況
   final CourseState state;
-  final String customStateHint;
+  final String? customStateHint;
   final CourseData courseData;
-  final String title;
-  final Widget itemPicker;
-  final SemesterData semesterData;
-  final Function(int index) onSelect;
+  final String? title;
+  final Widget? itemPicker;
+  final SemesterData? semesterData;
+  final Function(int index)? onSelect;
   @deprecated
   final bool isShowSearchButton;
-  final Function onSearchButtonClick;
-  final Function() onRefresh;
-  final List<Widget> actions;
-  final String customHint;
+  final Function? onSearchButtonClick;
+  final Function()? onRefresh;
+  final List<Widget>? actions;
+  final String? customHint;
   final bool enableNotifyControl;
-  final CourseNotifyData notifyData;
+  final CourseNotifyData? notifyData;
   final bool autoNotifySave;
-  final CourseNotifyCallback onNotifyClick;
+  final CourseNotifyCallback? onNotifyClick;
   final String courseNotifySaveKey;
   final bool enableAddToCalendar;
-  final String androidResourceIcon;
+  final String? androidResourceIcon;
   final bool enableCaptureCourseTable;
-  final bool showSectionTime;
-  final bool showInstructors;
-  final bool showClassroomLocation;
-  final bool showSearchButton;
+  final bool? showSectionTime;
+  final bool? showInstructors;
+  final bool? showClassroomLocation;
+  final bool? showSearchButton;
 
   const CourseScaffold({
-    Key key,
-    @required this.state,
-    @required this.courseData,
+    Key? key,
+    required this.state,
+    required this.courseData,
     this.title,
     this.customHint,
     this.semesterData,
@@ -112,7 +112,7 @@ class CourseScaffold extends StatefulWidget {
     this.showSectionTime,
     this.showInstructors,
     this.showClassroomLocation,
-    this.showSearchButton = true,
+    this.showSearchButton,
   }) : super(key: key);
 
   @override
@@ -122,14 +122,14 @@ class CourseScaffold extends StatefulWidget {
 class CourseScaffoldState extends State<CourseScaffold> {
   final GlobalKey _repaintBoundaryGlobalKey = GlobalKey();
 
-  ApLocalizations app;
+  ApLocalizations? app;
 
   _ContentStyle _contentStyle = _ContentStyle.table;
 
-  bool showSectionTime;
-  bool showInstructors;
-  bool showClassroomLocation;
-  bool showSearchButton;
+  bool? showSectionTime;
+  bool? showInstructors;
+  bool? showClassroomLocation;
+  bool? showSearchButton;
 
   bool get isTablet =>
       MediaQuery.of(context).size.shortestSide >= 680 ||
@@ -162,9 +162,9 @@ class CourseScaffoldState extends State<CourseScaffold> {
       showClassroomLocation: showClassroomLocation,
       child: Scaffold(
         appBar: AppBar(
-          title: Text(widget.title ?? app.course),
+          title: Text(widget.title ?? app!.course),
           actions: [
-            if (widget.actions != null) ...widget.actions,
+            if (widget.actions != null) ...widget.actions!,
             if (widget.enableCaptureCourseTable)
               IconButton(
                 icon: Icon(ApIcon.download),
@@ -184,22 +184,22 @@ class CourseScaffoldState extends State<CourseScaffold> {
                     showSectionTimeOnChanged: (value) {
                       setState(() => showSectionTime = value);
                       Preferences.setBool(
-                          ApConstants.SHOW_SECTION_TIME, showSectionTime);
+                          ApConstants.SHOW_SECTION_TIME, showSectionTime!);
                     },
                     showInstructorsOnChanged: (value) {
                       setState(() => showInstructors = value);
                       Preferences.setBool(
-                          ApConstants.SHOW_INSTRUCTORS, showInstructors);
+                          ApConstants.SHOW_INSTRUCTORS, showInstructors!);
                     },
                     showClassroomLocationOnChanged: (value) {
                       setState(() => showClassroomLocation = value);
                       Preferences.setBool(ApConstants.SHOW_CLASSROOM_LOCATION,
-                          showClassroomLocation);
+                          showClassroomLocation!);
                     },
                     showSearchButtonOnChanged: (value) {
                       setState(() => showSearchButton = value);
                       Preferences.setBool(ApConstants.SHOW_COURSE_SEARCH_BUTTON,
-                          showSearchButton);
+                          showSearchButton!);
                     },
                   ),
                 );
@@ -232,26 +232,27 @@ class CourseScaffoldState extends State<CourseScaffold> {
                             widget.itemPicker == null)
                           Expanded(
                             child: ItemPicker(
-                              dialogTitle: app.pickSemester,
+                              dialogTitle: app!.pickSemester,
                               onSelected: widget.onSelect,
-                              items: widget.semesterData.semesters,
-                              currentIndex: widget.semesterData.currentIndex,
+                              items: widget.semesterData!.semesters,
+                              currentIndex: widget.semesterData!.currentIndex,
                               featureTag: 'course',
                             ),
                           ),
-                        if (widget.itemPicker != null) widget.itemPicker,
+                        if (widget.itemPicker != null) widget.itemPicker!,
                       ],
                     ),
-                  if (widget.customHint != null && widget.customHint.isNotEmpty)
+                  if (widget.customHint != null &&
+                      widget.customHint!.isNotEmpty)
                     Text(
-                      widget.customHint,
+                      widget.customHint!,
                       style: TextStyle(color: ApTheme.of(context).grey),
                       textAlign: TextAlign.center,
                     ),
                   Expanded(
                     child: RefreshIndicator(
                       onRefresh: () async {
-                        await widget.onRefresh();
+                        await widget.onRefresh!();
                         AnalyticsUtils.instance?.logEvent('course_refresh');
                         return null;
                       },
@@ -280,7 +281,7 @@ class CourseScaffoldState extends State<CourseScaffold> {
           ],
         ),
         floatingActionButtonLocation: FloatingActionButtonLocation.endDocked,
-        floatingActionButton: showSearchButton
+        floatingActionButton: showSearchButton!
             ? FloatingActionButton(
                 child: Icon(Icons.search),
                 onPressed: () {
@@ -316,7 +317,7 @@ class CourseScaffoldState extends State<CourseScaffold> {
                         setState(() => _contentStyle = _ContentStyle.list);
                       },
                     ),
-                    if (showSearchButton) Container(height: 0),
+                    if (showSearchButton!) Container(height: 0),
                   ],
                 ),
               ),
@@ -327,13 +328,13 @@ class CourseScaffoldState extends State<CourseScaffold> {
   String get hintContent {
     switch (widget.state) {
       case CourseState.error:
-        return app.clickToRetry;
+        return app!.clickToRetry;
       case CourseState.empty:
-        return app.courseEmpty;
+        return app!.courseEmpty;
       case CourseState.offlineEmpty:
-        return app.noOfflineData;
+        return app!.noOfflineData;
       case CourseState.custom:
-        return widget.customStateHint ?? app.unknownError;
+        return widget.customStateHint ?? app!.unknownError;
       default:
         return '';
     }
@@ -354,7 +355,7 @@ class CourseScaffoldState extends State<CourseScaffold> {
           onTap: () {
             if (widget.state == CourseState.empty)
               _pickSemester();
-            else if (widget.onRefresh != null) widget.onRefresh();
+            else if (widget.onRefresh != null) widget.onRefresh!();
           },
           child: HintContent(
             icon: ApIcon.classIcon,
@@ -389,10 +390,10 @@ class CourseScaffoldState extends State<CourseScaffold> {
   }
 
   Future<void> _captureCourseTable() async {
-    RenderRepaintBoundary boundary =
-        _repaintBoundaryGlobalKey.currentContext.findRenderObject();
+    RenderRepaintBoundary boundary = _repaintBoundaryGlobalKey.currentContext!
+        .findRenderObject() as RenderRepaintBoundary;
     ui.Image image = await boundary.toImage(pixelRatio: 3.0);
-    ByteData byteData = await image.toByteData(format: ui.ImageByteFormat.png);
+    ByteData? byteData = await image.toByteData(format: ui.ImageByteFormat.png);
     DateTime now = DateTime.now();
     String formattedDate = DateFormat('yyyyMMdd_hhmmss').format(now);
     await ApUtils.saveImage(
@@ -411,8 +412,8 @@ class CourseScaffoldState extends State<CourseScaffold> {
 
   List<Widget> renderCourseTable() {
     final timeCodes = widget.courseData.timeCodes;
-    final maxTimeCode = widget.courseData.maxTimeCodeIndex;
-    final minTimeCode = widget.courseData.minTimeCodeIndex;
+    final maxTimeCode = widget.courseData.maxTimeCodeIndex!;
+    final minTimeCode = widget.courseData.minTimeCodeIndex!;
     final hasHoliday = widget.courseData.hasHoliday;
     var columns = <Column>[Column(children: [])];
     columns[0].children.add(
@@ -421,7 +422,7 @@ class CourseScaffoldState extends State<CourseScaffold> {
     for (var i = minTimeCode; i < maxTimeCode + 1; i++) {
       columns[0].children.add(
             TimeCodeBorder(
-              timeCode: timeCodes[i],
+              timeCode: timeCodes![i],
               hasHoliday: hasHoliday,
             ),
           );
@@ -441,18 +442,18 @@ class CourseScaffoldState extends State<CourseScaffold> {
       for (var j = 0; j < maxTimeCode - minTimeCode + 1; j++)
         courseBorderCollection[i].add(CourseBorder());
     }
-    for (var i = 0; i < widget.courseData.courses.length; i++) {
-      final course = widget.courseData.courses[i];
+    for (var i = 0; i < widget.courseData.courses!.length; i++) {
+      final course = widget.courseData.courses![i];
       for (var j = 0; j < (course.times?.length ?? 0); j++) {
-        final time = course.times[j];
-        final timeCodeIndex = time.index;
+        final time = course.times![j];
+        final timeCodeIndex = time.index!;
         final courseBorderIndex = timeCodeIndex - minTimeCode;
         final len = ApColors.colors.length;
         final color = ApColors.colors[i % len][300 + 100 * (i ~/ len)];
         courseBorderCollection[time.weekDayIndex][courseBorderIndex] =
             CourseBorder(
           sectionTime: time,
-          timeCode: widget.courseData.timeCodes[timeCodeIndex],
+          timeCode: widget.courseData.timeCodes![timeCodeIndex],
           course: course,
           color: color,
           onPressed: _onPressed,
@@ -466,15 +467,15 @@ class CourseScaffoldState extends State<CourseScaffold> {
         if (courseBorders[j].course != null)
           for (var k = j + 1; k < courseBorders.length; k++) {
             if (courseBorders[k].course != null &&
-                courseBorders[j].course.title ==
-                    courseBorders[k].course.title) {
+                courseBorders[j].course!.title ==
+                    courseBorders[k].course!.title) {
               repeat++;
             } else
               break;
           }
         if (repeat != 0) {
-          final timeCode = courseBorders[j].timeCode.copyWith();
-          timeCode.endTime = courseBorders[j + repeat].timeCode.endTime;
+          final timeCode = courseBorders[j].timeCode!.copyWith();
+          timeCode.endTime = courseBorders[j + repeat].timeCode!.endTime;
           courseBorders[j] = CourseBorder(
             timeCode: timeCode,
             sectionTime: courseBorders[j].sectionTime,
@@ -520,7 +521,7 @@ class CourseScaffoldState extends State<CourseScaffold> {
       columns.add(
         Column(
           children: [
-            _weekBorder(app.weekdaysCourse[i]),
+            _weekBorder(app!.weekdaysCourse[i]),
             ...(courseBorderCollection[i]),
           ],
         ),
@@ -562,7 +563,7 @@ class CourseScaffoldState extends State<CourseScaffold> {
         ),
         height: 30.0,
         child: Text(
-          text ?? '',
+          text,
           style: TextStyle(
             color: ApTheme.of(context).blueText,
             fontSize: 14.0,
@@ -575,13 +576,13 @@ class CourseScaffoldState extends State<CourseScaffold> {
       showDialog(
         context: context,
         builder: (_) => SimpleOptionDialog(
-          title: app.pickSemester,
-          items: widget.semesterData.semesters,
-          index: widget.semesterData.currentIndex,
+          title: app!.pickSemester,
+          items: widget.semesterData!.semesters,
+          index: widget.semesterData!.currentIndex,
           onSelected: widget.onSelect,
         ),
       );
-    if (widget.onSearchButtonClick != null) widget.onSearchButtonClick();
+    if (widget.onSearchButtonClick != null) widget.onSearchButtonClick!();
   }
 }
 
@@ -590,19 +591,19 @@ class CourseContent extends StatefulWidget {
   final Course course;
   final TimeCode timeCode;
   final int weekday;
-  final CourseNotifyData notifyData;
+  final CourseNotifyData? notifyData;
   final bool autoNotifySave;
-  final CourseNotifyCallback onNotifyClick;
+  final CourseNotifyCallback? onNotifyClick;
   final String courseNotifySaveKey;
   final bool enableAddToCalendar;
-  final String androidResourceIcon;
+  final String? androidResourceIcon;
 
   const CourseContent({
-    Key key,
-    @required this.enableNotifyControl,
-    @required this.course,
-    @required this.timeCode,
-    @required this.weekday,
+    Key? key,
+    required this.enableNotifyControl,
+    required this.course,
+    required this.timeCode,
+    required this.weekday,
     this.notifyData,
     this.autoNotifySave = true,
     this.onNotifyClick,
@@ -618,9 +619,9 @@ class CourseContent extends StatefulWidget {
 class _CourseContentState extends State<CourseContent> {
   @override
   Widget build(BuildContext context) {
-    CourseNotifyState _state;
+    CourseNotifyState? _state;
     if (widget.enableNotifyControl && widget.notifyData != null) {
-      _state = (widget.notifyData.getByCode(
+      _state = (widget.notifyData!.getByCode(
                 widget.course.code,
                 widget.timeCode.startTime,
                 widget.weekday,
@@ -641,7 +642,7 @@ class _CourseContentState extends State<CourseContent> {
             children: <Widget>[
               Expanded(
                 child: Text(
-                  widget.course.title,
+                  widget.course.title!,
                   style: TextStyle(
                     fontWeight: FontWeight.bold,
                     fontSize: 20.0,
@@ -661,10 +662,10 @@ class _CourseContentState extends State<CourseContent> {
                   ),
                   onPressed: () async {
                     final format = DateFormat('HH:mm');
-                    final startTime = format.parse(widget.timeCode.startTime);
-                    final endTime = format.parse(widget.timeCode.endTime);
+                    final startTime = format.parse(widget.timeCode.startTime!);
+                    final endTime = format.parse(widget.timeCode.endTime!);
                     final Event event = Event(
-                      title: widget.course.title,
+                      title: widget.course.title!,
                       description: '',
                       location: widget.course.location?.toString() ?? '',
                       startDate: startTime.weekTime(widget.weekday),
@@ -684,7 +685,7 @@ class _CourseContentState extends State<CourseContent> {
                       ? Icons.alarm_on
                       : Icons.alarm_off),
                   onPressed: () async {
-                    var courseNotify = widget.notifyData.getByCode(
+                    var courseNotify = widget.notifyData!.getByCode(
                       widget.course.code,
                       widget.timeCode.startTime,
                       widget.weekday,
@@ -692,7 +693,7 @@ class _CourseContentState extends State<CourseContent> {
                     if (widget.autoNotifySave) {
                       if (courseNotify == null) {
                         courseNotify = CourseNotify.fromCourse(
-                          id: widget.notifyData.lastId + 1,
+                          id: widget.notifyData!.lastId + 1,
                           course: widget.course,
                           weekday: widget.weekday,
                           timeCode: widget.timeCode,
@@ -702,30 +703,30 @@ class _CourseContentState extends State<CourseContent> {
                             courseNotify: courseNotify,
                             day: NotificationUtils.getDay(widget.weekday),
                             androidResourceIcon: widget.androidResourceIcon);
-                        widget.notifyData.lastId++;
-                        widget.notifyData.data.add(courseNotify);
+                        widget.notifyData!.lastId++;
+                        widget.notifyData!.data!.add(courseNotify);
                         ApUtils.showToast(context,
                             ApLocalizations.of(context).courseNotifyHint);
                         AnalyticsUtils.instance
                             ?.logEvent('course_notify_schedule');
                       } else {
                         await NotificationUtils.cancelCourseNotify(
-                          id: courseNotify.id,
+                          id: courseNotify.id!,
                         );
-                        widget.notifyData.data.removeWhere((data) {
-                          return data.id == courseNotify.id;
+                        widget.notifyData!.data!.removeWhere((data) {
+                          return data.id == courseNotify!.id;
                         });
                         ApUtils.showToast(context,
                             ApLocalizations.of(context).cancelNotifySuccess);
                       }
-                      widget.notifyData.save();
+                      widget.notifyData!.save();
                       setState(() {});
                       AnalyticsUtils.instance?.logEvent('course_notify_cancel');
                     }
                     if (widget.onNotifyClick != null)
-                      widget.onNotifyClick(
+                      widget.onNotifyClick!(
                           courseNotify,
-                          CourseNotifyState.values[(_state.index + 1) %
+                          CourseNotifyState.values[(_state!.index + 1) %
                               (CourseNotifyState.values.length)]);
                   },
                 )
@@ -779,18 +780,18 @@ class _CourseContentState extends State<CourseContent> {
 }
 
 class TimeCodeBorder extends StatelessWidget {
-  final TimeCode timeCode;
-  final bool hasHoliday;
+  final TimeCode? timeCode;
+  final bool? hasHoliday;
 
   const TimeCodeBorder({
-    Key key,
+    Key? key,
     this.timeCode,
     this.hasHoliday,
   }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    final showSectionTime = CourseConfig.of(context).showSectionTime;
+    final showSectionTime = CourseConfig.of(context)!.showSectionTime!;
     return Container(
       alignment: Alignment.center,
       decoration: BoxDecoration(
@@ -802,7 +803,7 @@ class TimeCodeBorder extends StatelessWidget {
         ),
       ),
       height: _courseHeight,
-      width: hasHoliday ? 35.0 : 50.0,
+      width: hasHoliday! ? 35.0 : 50.0,
       child: AutoSizeText.rich(
         TextSpan(
           style: TextStyle(
@@ -810,9 +811,9 @@ class TimeCodeBorder extends StatelessWidget {
             fontSize: 14.0,
           ),
           children: [
-            if (showSectionTime) TextSpan(text: '${timeCode.startTime}\n'),
+            if (showSectionTime) TextSpan(text: '${timeCode!.startTime}\n'),
             TextSpan(
-              text: '${timeCode.title}\n',
+              text: '${timeCode!.title}\n',
               style: TextStyle(
                 fontWeight:
                     showSectionTime ? FontWeight.bold : FontWeight.normal,
@@ -820,7 +821,7 @@ class TimeCodeBorder extends StatelessWidget {
                 fontSize: showSectionTime ? 16.0 : 14.0,
               ),
             ),
-            if (showSectionTime) TextSpan(text: '${timeCode.endTime}'),
+            if (showSectionTime) TextSpan(text: '${timeCode!.endTime}'),
           ],
         ),
         textAlign: TextAlign.center,
@@ -830,12 +831,12 @@ class TimeCodeBorder extends StatelessWidget {
 }
 
 class CourseList extends StatelessWidget {
-  final List<Course> courses;
-  final List<TimeCode> timeCodes;
+  final List<Course>? courses;
+  final List<TimeCode>? timeCodes;
 
   const CourseList({
-    Key key,
-    @required this.courses,
+    Key? key,
+    required this.courses,
     this.timeCodes,
   }) : super(key: key);
 
@@ -843,7 +844,7 @@ class CourseList extends StatelessWidget {
   Widget build(BuildContext context) {
     return ListView.builder(
       itemBuilder: (_, index) {
-        var course = courses[index];
+        var course = courses![index];
         return Card(
           elevation: 4.0,
           margin: EdgeInsets.all(8.0),
@@ -854,7 +855,7 @@ class CourseList extends StatelessWidget {
             contentPadding:
                 EdgeInsets.symmetric(vertical: 8.0, horizontal: 24.0),
             title: Text(
-              courses[index].title,
+              courses![index].title!,
               style: TextStyle(
                 height: 1.3,
                 fontSize: 20.0,
@@ -882,16 +883,16 @@ class CourseList extends StatelessWidget {
                           ],
                           TextSpan(
                               text:
-                                  '${ApLocalizations.of(context).courseDialogProfessor ?? ''}：',
+                                  '${ApLocalizations.of(context).courseDialogProfessor}：',
                               style: TextStyle(fontWeight: FontWeight.bold)),
                           TextSpan(text: '${course.getInstructors()}\n'),
                           if (course.location != null) ...[
                             TextSpan(
                                 text:
-                                    '${ApLocalizations.of(context).courseDialogLocation ?? ''}：',
+                                    '${ApLocalizations.of(context).courseDialogLocation}：',
                                 style: TextStyle(fontWeight: FontWeight.bold)),
                             TextSpan(
-                                text: '${course.location.toString() ?? ''}\n'),
+                                text: '${course.location.toString()}\n'),
                           ],
                           TextSpan(
                             text:
@@ -900,7 +901,7 @@ class CourseList extends StatelessWidget {
                           ),
                           TextSpan(
                               text:
-                                  '${course.getTimesShortName(timeCodes) ?? ''}'),
+                                  '${course.getTimesShortName(timeCodes)}'),
                         ],
                       ),
                     ),
@@ -974,17 +975,17 @@ class CourseList extends StatelessWidget {
 }
 
 class CourseBorder extends StatelessWidget {
-  final Course course;
-  final SectionTime sectionTime;
-  final TimeCode timeCode;
+  final Course? course;
+  final SectionTime? sectionTime;
+  final TimeCode? timeCode;
   final double height;
-  final double width;
-  final Border border;
-  final Color color;
-  final Function(int weekday, TimeCode timeCode, Course course) onPressed;
+  final double? width;
+  final Border? border;
+  final Color? color;
+  final void Function(int weekday, TimeCode timeCode, Course course)? onPressed;
 
   const CourseBorder({
-    Key key,
+    Key? key,
     this.course,
     this.sectionTime,
     this.timeCode,
@@ -997,9 +998,9 @@ class CourseBorder extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final showInstructors = CourseConfig.of(context).showInstructors;
+    final showInstructors = CourseConfig.of(context)!.showInstructors;
     final showClassroomLocation =
-        CourseConfig.of(context).showClassroomLocation;
+        CourseConfig.of(context)!.showClassroomLocation;
     return Container(
       padding: EdgeInsets.only(
         bottom: course != null ? 2.0 : 0.0,
@@ -1024,7 +1025,9 @@ class CourseBorder extends StatelessWidget {
             ? Container()
             : InkWell(
                 onTap: () {
-                  this.onPressed(sectionTime.weekday, timeCode, course);
+                  this
+                      .onPressed
+                      ?.call(sectionTime!.weekday!, timeCode!, course!);
                   AnalyticsUtils.instance?.logEvent('course_border_click');
                 },
                 radius: 6.0,
@@ -1035,20 +1038,20 @@ class CourseBorder extends StatelessWidget {
                       TextSpan(
                         children: [
                           TextSpan(
-                            text: '${course.title ?? ' '}',
+                            text: '${course!.title ?? ' '}',
                             style: TextStyle(
                               fontSize: 16.0,
                               fontWeight:
-                                  (showInstructors || showClassroomLocation)
+                                  (showInstructors! || showClassroomLocation!)
                                       ? FontWeight.bold
                                       : FontWeight.normal,
                             ),
                           ),
                           if (showInstructors)
                             TextSpan(
-                                text: '\n${course.getInstructors() ?? ' '}'),
-                          if (showClassroomLocation)
-                            TextSpan(text: '\n${course.location ?? ' '}'),
+                                text: '\n${course!.getInstructors()}'),
+                          if (showClassroomLocation!)
+                            TextSpan(text: '\n${course!.location ?? ' '}'),
                         ],
                       ),
                       style: TextStyle(
@@ -1066,21 +1069,21 @@ class CourseBorder extends StatelessWidget {
 }
 
 class CourseScaffoldSettingDialog extends StatefulWidget {
-  final bool showSectionTime;
-  final bool showInstructors;
-  final bool showClassroomLocation;
-  final bool showSearchButton;
-  final Function(bool) showSectionTimeOnChanged;
-  final Function(bool) showInstructorsOnChanged;
-  final Function(bool) showClassroomLocationOnChanged;
-  final Function(bool) showSearchButtonOnChanged;
+  final bool? showSectionTime;
+  final bool? showInstructors;
+  final bool? showClassroomLocation;
+  final bool? showSearchButton;
+  final Function(bool?)? showSectionTimeOnChanged;
+  final Function(bool?)? showInstructorsOnChanged;
+  final Function(bool?)? showClassroomLocationOnChanged;
+  final Function(bool?)? showSearchButtonOnChanged;
 
   const CourseScaffoldSettingDialog({
-    Key key,
-    @required this.showSectionTime,
-    @required this.showInstructors,
-    @required this.showClassroomLocation,
-    @required this.showSearchButton,
+    Key? key,
+    required this.showSectionTime,
+    required this.showInstructors,
+    required this.showClassroomLocation,
+    required this.showSearchButton,
     this.showSectionTimeOnChanged,
     this.showInstructorsOnChanged,
     this.showClassroomLocationOnChanged,
@@ -1094,10 +1097,10 @@ class CourseScaffoldSettingDialog extends StatefulWidget {
 
 class _CourseScaffoldSettingDialogState
     extends State<CourseScaffoldSettingDialog> {
-  bool showSectionTime;
-  bool showInstructors;
-  bool showClassroomLocation;
-  bool showSearchButton;
+  bool? showSectionTime;
+  bool? showInstructors;
+  bool? showClassroomLocation;
+  bool? showSearchButton;
 
   @override
   void initState() {
@@ -1124,7 +1127,7 @@ class _CourseScaffoldSettingDialogState
             value: showSectionTime,
             onChanged: (value) {
               setState(() => showSectionTime = value);
-              widget.showSectionTimeOnChanged(value);
+              widget.showSectionTimeOnChanged!(value);
             },
             checkColor: ApTheme.of(context).background,
             activeColor: ApTheme.of(context).yellow,
@@ -1135,7 +1138,7 @@ class _CourseScaffoldSettingDialogState
             value: showInstructors,
             onChanged: (value) {
               setState(() => showInstructors = value);
-              widget.showInstructorsOnChanged(value);
+              widget.showInstructorsOnChanged!(value);
             },
             checkColor: ApTheme.of(context).background,
             activeColor: ApTheme.of(context).yellow,
@@ -1146,7 +1149,7 @@ class _CourseScaffoldSettingDialogState
             value: showClassroomLocation,
             onChanged: (value) {
               setState(() => showClassroomLocation = value);
-              widget.showClassroomLocationOnChanged(value);
+              widget.showClassroomLocationOnChanged!(value);
             },
             checkColor: ApTheme.of(context).background,
             activeColor: ApTheme.of(context).yellow,
@@ -1157,7 +1160,7 @@ class _CourseScaffoldSettingDialogState
             value: showSearchButton,
             onChanged: (value) {
               setState(() => showSearchButton = value);
-              widget.showSearchButtonOnChanged(value);
+              widget.showSearchButtonOnChanged!(value);
             },
             checkColor: ApTheme.of(context).background,
             activeColor: ApTheme.of(context).yellow,

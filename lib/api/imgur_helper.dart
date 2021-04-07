@@ -15,11 +15,11 @@ export 'package:ap_common/models/announcement_login_data.dart';
 class ImgurHelper {
   static const String clientId = 'bf8e32144d00b04';
 
-  static ImgurHelper _instance;
+  static ImgurHelper? _instance;
 
-  Dio dio;
+  late Dio dio;
 
-  static ImgurHelper get instance {
+  static ImgurHelper? get instance {
     if (_instance == null) {
       _instance = ImgurHelper();
     }
@@ -35,8 +35,8 @@ class ImgurHelper {
   }
 
   Future<ImgurUploadData> uploadImageToImgur({
-    @required PickedFile file,
-    @required GeneralCallback<ImgurUploadData> callback,
+    required PickedFile file,
+    required GeneralCallback<ImgurUploadData?> callback,
   }) async {
     try {
       final bytes = await file.readAsBytes();
@@ -59,7 +59,7 @@ class ImgurHelper {
       if (response.statusCode == 200) {
         final imgurUploadResponse = ImgurUploadResponse.fromJson(response.data);
         return callback == null
-            ? imgurUploadResponse
+            ? imgurUploadResponse as FutureOr<ImgurUploadData>
             : callback.onSuccess(imgurUploadResponse.data);
       } else {
         return callback == null
@@ -73,7 +73,7 @@ class ImgurHelper {
       }
     } on DioError catch (dioError) {
       if (dioError.type == DioErrorType.response &&
-          dioError.response.statusCode == 400)
+          dioError.response!.statusCode == 400)
         return callback == null
             ? null
             : callback.onError(

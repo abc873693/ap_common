@@ -7,14 +7,14 @@ class DefaultDialog extends StatelessWidget {
   final Widget contentWidget;
   final String actionText;
   final Function actionFunction;
-  final EdgeInsetsGeometry contentPadding;
+  final EdgeInsetsGeometry? contentPadding;
 
   const DefaultDialog({
-    Key key,
-    @required this.title,
-    @required this.contentWidget,
-    @required this.actionText,
-    @required this.actionFunction,
+    Key? key,
+    required this.title,
+    required this.contentWidget,
+    required this.actionText,
+    required this.actionFunction,
     this.contentPadding,
   }) : super(key: key);
 
@@ -86,7 +86,7 @@ class DefaultDialog extends StatelessWidget {
                   ),
                 ),
               ),
-              onTap: actionFunction,
+              onTap: actionFunction as void Function()?,
             ),
           ),
         ],

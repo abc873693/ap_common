@@ -16,9 +16,9 @@ class PhoneScaffold extends StatefulWidget {
   final List<PhoneModel> phoneModelList;
 
   const PhoneScaffold({
-    Key key,
-    @required this.state,
-    @required this.phoneModelList,
+    Key? key,
+    required this.state,
+    required this.phoneModelList,
   }) : super(key: key);
 
   @override
@@ -30,7 +30,7 @@ class PhoneScaffoldState extends State<PhoneScaffold>
   @override
   bool get wantKeepAlive => true;
 
-  ApLocalizations ap;
+  ApLocalizations? ap;
 
   TextStyle get _textStyle => TextStyle(
         fontSize: 18.0,
@@ -78,7 +78,7 @@ class PhoneScaffoldState extends State<PhoneScaffold>
       case PhoneState.error:
         return HintContent(
           icon: ApIcon.assignment,
-          content: ap.clickToRetry,
+          content: ap!.clickToRetry,
         );
       default:
         return ListView.builder(
@@ -117,13 +117,13 @@ class PhoneScaffoldState extends State<PhoneScaffold>
           crossAxisAlignment: CrossAxisAlignment.start,
           children: <Widget>[
             Text(
-              phone.name ?? '',
+              phone.name,
               style: _textStyle,
               textAlign: TextAlign.left,
             ),
             SizedBox(height: 8.0),
             Text(
-              phone.number ?? '',
+              phone.number,
               style: _textGreyStyle,
               textAlign: TextAlign.left,
             )

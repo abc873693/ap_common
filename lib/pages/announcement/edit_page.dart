@@ -33,11 +33,11 @@ class AnnouncementEditPage extends StatefulWidget {
   static const String routerName = "/news/edit";
 
   final Mode mode;
-  final Announcement announcement;
+  final Announcement? announcement;
 
   const AnnouncementEditPage({
-    Key key,
-    @required this.mode,
+    Key? key,
+    required this.mode,
     this.announcement,
   }) : super(key: key);
 
@@ -48,9 +48,9 @@ class AnnouncementEditPage extends StatefulWidget {
 class _AnnouncementEditPageState extends State<AnnouncementEditPage> {
   final _formKey = GlobalKey<FormState>();
 
-  ApLocalizations app;
+  ApLocalizations? app;
 
-  Announcement announcements;
+  Announcement? announcements;
 
   var _title = TextEditingController();
   var _description = TextEditingController();
@@ -62,9 +62,9 @@ class _AnnouncementEditPageState extends State<AnnouncementEditPage> {
   var formatter = DateFormat('yyyy-MM-ddTHH:mm:ss');
   var dateFormat = DateFormat('yyyy-MM-dd HH:mm:ss');
 
-  DateTime expireTime;
+  DateTime? expireTime;
 
-  List<String> tags;
+  List<String?>? tags;
 
   var _newTag = TextEditingController();
 
@@ -77,24 +77,22 @@ class _AnnouncementEditPageState extends State<AnnouncementEditPage> {
       case Mode.add:
       case Mode.edit:
       case Mode.editApplication:
-        return app.announcements;
+        return app!.announcements;
       case Mode.application:
-        return app.addApplication;
+        return app!.addApplication;
     }
-    return app.submit;
   }
 
   String get buttonText {
     switch (widget.mode) {
       case Mode.add:
-        return app.submit;
+        return app!.submit;
       case Mode.edit:
-        return app.update;
+        return app!.update;
       case Mode.editApplication:
       case Mode.application:
-        return app.submit;
+        return app!.submit;
     }
-    return app.submit;
   }
 
   List<Widget> get _imgurUploadWidget {
@@ -103,12 +101,11 @@ class _AnnouncementEditPageState extends State<AnnouncementEditPage> {
         return [
           CircularProgressIndicator(),
           SizedBox(height: 8.0),
-          Text(app.uploading),
+          Text(app!.uploading),
         ];
-        break;
       case _ImgurUploadState.done:
         return [
-          Text(app.imagePreview),
+          Text(app!.imagePreview),
           SizedBox(height: 8.0),
           SizedBox(
             height: 300,
@@ -119,7 +116,7 @@ class _AnnouncementEditPageState extends State<AnnouncementEditPage> {
       case _ImgurUploadState.no_file:
       default:
         return [
-          Text(app.imgurUploadDescription),
+          Text(app!.imgurUploadDescription),
           SizedBox(height: 8.0),
         ];
     }
@@ -129,16 +126,16 @@ class _AnnouncementEditPageState extends State<AnnouncementEditPage> {
   void initState() {
     if (widget.mode == Mode.edit || widget.mode == Mode.editApplication) {
       announcements = widget.announcement;
-      _title.text = announcements.title;
-      _imgUrl.text = announcements.imgUrl;
-      if (announcements.url.isNotEmpty)
+      _title.text = announcements!.title!;
+      _imgUrl.text = announcements!.imgUrl!;
+      if (announcements!.url!.isNotEmpty)
         imgurUploadState = _ImgurUploadState.done;
-      _url.text = announcements.url;
-      _weight.text = announcements.weight.toString();
-      if (announcements.expireTime != null)
-        expireTime = formatter.parse(announcements.expireTime);
-      _description.text = announcements.description;
-      tags = announcements.tags ?? [];
+      _url.text = announcements!.url!;
+      _weight.text = announcements!.weight.toString();
+      if (announcements!.expireTime != null)
+        expireTime = formatter.parse(announcements!.expireTime!);
+      _description.text = announcements!.description!;
+      tags = announcements!.tags ?? [];
     } else {
       announcements = Announcement();
     }
@@ -168,8 +165,8 @@ class _AnnouncementEditPageState extends State<AnnouncementEditPage> {
               maxLines: 1,
               controller: _title,
               validator: (value) {
-                if (value.isEmpty) {
-                  return app.doNotEmpty;
+                if (value!.isEmpty) {
+                  return app!.doNotEmpty;
                 }
                 return null;
               },
@@ -179,20 +176,20 @@ class _AnnouncementEditPageState extends State<AnnouncementEditPage> {
                 labelStyle: TextStyle(
                   color: ApTheme.of(context).grey,
                 ),
-                labelText: app.title,
+                labelText: app!.title,
               ),
             ),
             SizedBox(height: dividerHeight),
             if (widget.mode != Mode.application) ...[
-              Text(app.tag),
+              Text(app!.tag),
               Wrap(
                 children: [
-                  for (String tag in tags ?? []) ...[
+                  for (String? tag in tags ?? []) ...[
                     Chip(
-                      label: Text(tag),
+                      label: Text(tag!),
                       backgroundColor: tag.color,
                       onDeleted: () {
-                        setState(() => tags.remove(tag));
+                        setState(() => tags!.remove(tag));
                       },
                     ),
                     SizedBox(width: 8.0),
@@ -203,27 +200,27 @@ class _AnnouncementEditPageState extends State<AnnouncementEditPage> {
                       showDialog(
                         context: context,
                         builder: (BuildContext context) => DefaultDialog(
-                          title: app.addTag,
+                          title: app!.addTag,
                           contentWidget: TextField(
                             controller: _newTag,
                             decoration: InputDecoration(
                               border: InputBorder.none,
-                              hintText: app.tagName,
+                              hintText: app!.tagName,
                             ),
                           ),
                           actionText: ApLocalizations.of(context).confirm,
                           actionFunction: () {
                             if (_newTag.text.isEmpty)
-                              ApUtils.showToast(context, app.doNotEmpty);
+                              ApUtils.showToast(context, app!.doNotEmpty);
                             else {
                               final newTag = _newTag.text;
-                              final index = tags.indexOf(newTag);
+                              final index = tags!.indexOf(newTag);
                               if (index == -1) {
-                                setState(() => tags.add(newTag));
+                                setState(() => tags!.add(newTag));
                                 Navigator.of(context, rootNavigator: true)
                                     .pop();
                               } else
-                                ApUtils.showToast(context, app.tagRepeatHint);
+                                ApUtils.showToast(context, app!.tagRepeatHint);
                             }
                           },
                         ),
@@ -241,13 +238,13 @@ class _AnnouncementEditPageState extends State<AnnouncementEditPage> {
                 maxLines: 1,
                 controller: _weight,
                 validator: (value) {
-                  if (value.isEmpty) {
-                    return app.doNotEmpty;
+                  if (value!.isEmpty) {
+                    return app!.doNotEmpty;
                   } else {
                     try {
                       int.parse(value);
                     } catch (e) {
-                      return app.formatError;
+                      return app!.formatError;
                     }
                   }
                   return null;
@@ -259,7 +256,7 @@ class _AnnouncementEditPageState extends State<AnnouncementEditPage> {
                   labelStyle: TextStyle(
                     color: ApTheme.of(context).grey,
                   ),
-                  labelText: app.weight,
+                  labelText: app!.weight,
                 ),
               ),
             ],
@@ -269,8 +266,8 @@ class _AnnouncementEditPageState extends State<AnnouncementEditPage> {
               controller: _imgUrl,
               enabled: false,
               validator: (value) {
-                if (value.isEmpty) {
-                  return app.doNotEmpty;
+                if (value!.isEmpty) {
+                  return app!.doNotEmpty;
                 }
                 return null;
               },
@@ -281,7 +278,7 @@ class _AnnouncementEditPageState extends State<AnnouncementEditPage> {
                 labelStyle: TextStyle(
                   color: ApTheme.of(context).grey,
                 ),
-                labelText: app.imageUrl,
+                labelText: app!.imageUrl,
               ),
             ),
             SizedBox(height: 8.0),
@@ -305,11 +302,11 @@ class _AnnouncementEditPageState extends State<AnnouncementEditPage> {
                   primary: ApTheme.of(context).blueAccent,
                 ),
                 onPressed: () async {
-                  PickedFile image = await ApUtils.pickImage();
+                  PickedFile? image = await ApUtils.pickImage();
                   if (image != null) {
                     setState(
                         () => imgurUploadState = _ImgurUploadState.uploading);
-                    ImgurHelper.instance.uploadImageToImgur(
+                    ImgurHelper.instance!.uploadImageToImgur(
                       file: image,
                       callback: GeneralCallback(
                         onFailure: (dioError) {
@@ -325,7 +322,7 @@ class _AnnouncementEditPageState extends State<AnnouncementEditPage> {
                               : _ImgurUploadState.done);
                         },
                         onSuccess: (data) {
-                          _imgUrl.text = data.link;
+                          _imgUrl.text = data!.link!;
                           setState(
                               () => imgurUploadState = _ImgurUploadState.done);
                         },
@@ -334,7 +331,7 @@ class _AnnouncementEditPageState extends State<AnnouncementEditPage> {
                   }
                 },
                 child: Text(
-                  app.pickAndUploadToImgur,
+                  app!.pickAndUploadToImgur,
                   style: TextStyle(color: Colors.white),
                 ),
               ),
@@ -353,7 +350,7 @@ class _AnnouncementEditPageState extends State<AnnouncementEditPage> {
                 labelStyle: TextStyle(
                   color: ApTheme.of(context).grey,
                 ),
-                labelText: app.url,
+                labelText: app!.url,
               ),
             ),
             SizedBox(height: dividerHeight),
@@ -380,7 +377,7 @@ class _AnnouncementEditPageState extends State<AnnouncementEditPage> {
                   });
                 },
                 child: Text(
-                  app.setNoExpireTime,
+                  app!.setNoExpireTime,
                   style: TextStyle(color: Colors.white),
                 ),
               ),
@@ -403,13 +400,13 @@ class _AnnouncementEditPageState extends State<AnnouncementEditPage> {
                 color: ApTheme.of(context).grey,
               ),
               title: Text(
-                app.expireTime,
+                app!.expireTime,
                 style: TextStyle(fontSize: 20),
               ),
               subtitle: Text(
                 expireTime == null
-                    ? app.newsExpireTimeHint
-                    : dateFormat.format(expireTime),
+                    ? app!.newsExpireTimeHint
+                    : dateFormat.format(expireTime!),
                 style: TextStyle(fontSize: 20),
               ),
             ),
@@ -427,7 +424,7 @@ class _AnnouncementEditPageState extends State<AnnouncementEditPage> {
                 labelStyle: TextStyle(
                   color: ApTheme.of(context).grey,
                 ),
-                labelText: app.description,
+                labelText: app!.description,
               ),
             ),
             if (widget.mode == Mode.editApplication) ...[
@@ -444,7 +441,7 @@ class _AnnouncementEditPageState extends State<AnnouncementEditPage> {
                   labelStyle: TextStyle(
                     color: ApTheme.of(context).grey,
                   ),
-                  labelText: app.reviewDescription,
+                  labelText: app!.reviewDescription,
                 ),
               ),
             ],
@@ -497,7 +494,7 @@ class _AnnouncementEditPageState extends State<AnnouncementEditPage> {
                     _announcementSubmit(isApproval: true);
                   },
                   child: Text(
-                    app.updateAndApprove,
+                    app!.updateAndApprove,
                     style: TextStyle(
                       color: Colors.white,
                       fontSize: 18.0,
@@ -525,7 +522,7 @@ class _AnnouncementEditPageState extends State<AnnouncementEditPage> {
                     _announcementSubmit(isApproval: false);
                   },
                   child: Text(
-                    app.updateAndReject,
+                    app!.updateAndReject,
                     style: TextStyle(
                       color: Colors.white,
                       fontSize: 18.0,
@@ -544,13 +541,13 @@ class _AnnouncementEditPageState extends State<AnnouncementEditPage> {
   Future _pickStartDateTime() async {
     DateTime dateTime =
         this.expireTime ?? DateTime.now().add(Duration(days: 7));
-    DateTime picked = await showDatePicker(
+    DateTime? picked = await showDatePicker(
       context: context,
-      initialDate: dateTime ?? DateTime.now().add(Duration(days: 7)),
+      initialDate: dateTime,
       firstDate: DateTime(1950),
       lastDate: DateTime(2099),
     );
-    TimeOfDay timeOfDay =
+    TimeOfDay? timeOfDay =
         TimeOfDay(hour: dateTime.hour, minute: dateTime.minute);
     timeOfDay = await showTimePicker(
       context: context,
@@ -562,54 +559,54 @@ class _AnnouncementEditPageState extends State<AnnouncementEditPage> {
           picked.year,
           picked.month,
           picked.day,
-          timeOfDay.hour,
+          timeOfDay!.hour,
           timeOfDay.minute,
         ),
       );
     }
   }
 
-  void _announcementSubmit({bool isApproval}) async {
-    if (_formKey.currentState.validate()) {
-      announcements.title = _title.text;
-      announcements.description = _description.text;
-      announcements.imgUrl = _imgUrl.text;
-      announcements.url = _url.text;
-      announcements.weight =
-          _weight.text.isNotEmpty ? int.parse(_weight?.text ?? 0) : 0;
-      announcements.expireTime =
-          (expireTime == null) ? null : expireTime.parseToString();
-      announcements.reviewDescription = _reviewDescription.text;
-      announcements.tags = tags;
+  void _announcementSubmit({bool? isApproval}) async {
+    if (_formKey.currentState!.validate()) {
+      announcements!.title = _title.text;
+      announcements!.description = _description.text;
+      announcements!.imgUrl = _imgUrl.text;
+      announcements!.url = _url.text;
+      announcements!.weight =
+          _weight.text.isNotEmpty ? int.tryParse(_weight.text) : 0;
+      announcements!.expireTime =
+          (expireTime == null) ? null : expireTime!.parseToString();
+      announcements!.reviewDescription = _reviewDescription.text;
+      announcements!.tags = tags;
       final callback = GeneralCallback.simple(
         context,
         (Response _) async {
           switch (widget.mode) {
             case Mode.add:
-              ApUtils.showToast(context, app.addSuccess);
+              ApUtils.showToast(context, app!.addSuccess);
               break;
             case Mode.edit:
-              ApUtils.showToast(context, app.updateSuccess);
+              ApUtils.showToast(context, app!.updateSuccess);
               break;
             case Mode.application:
-              ApUtils.showToast(context, app.applicationSubmitSuccess);
+              ApUtils.showToast(context, app!.applicationSubmitSuccess);
               break;
             case Mode.editApplication:
-              ApUtils.showToast(context, app.updateSuccess);
+              ApUtils.showToast(context, app!.updateSuccess);
               if (isApproval != null) {
                 if (isApproval)
-                  await AnnouncementHelper.instance.approveApplication(
-                    applicationId: announcements.applicationId,
-                    reviewDescription: announcements.reviewDescription,
+                  await AnnouncementHelper.instance!.approveApplication(
+                    applicationId: announcements!.applicationId,
+                    reviewDescription: announcements!.reviewDescription,
                     callback: GeneralCallback.simple(
                       context,
                       (_) => _,
                     ),
                   );
                 else
-                  await AnnouncementHelper.instance.rejectApplication(
-                    applicationId: announcements.applicationId,
-                    reviewDescription: announcements.reviewDescription,
+                  await AnnouncementHelper.instance!.rejectApplication(
+                    applicationId: announcements!.applicationId,
+                    reviewDescription: announcements!.reviewDescription,
                     callback: GeneralCallback.simple(
                       context,
                       (_) => _,
@@ -623,26 +620,26 @@ class _AnnouncementEditPageState extends State<AnnouncementEditPage> {
       );
       switch (widget.mode) {
         case Mode.add:
-          AnnouncementHelper.instance.addAnnouncement(
-            data: announcements,
+          AnnouncementHelper.instance!.addAnnouncement(
+            data: announcements!,
             callback: callback,
           );
           break;
         case Mode.edit:
-          AnnouncementHelper.instance.updateAnnouncement(
-            data: announcements,
+          AnnouncementHelper.instance!.updateAnnouncement(
+            data: announcements!,
             callback: callback,
           );
           break;
         case Mode.application:
-          AnnouncementHelper.instance.addApplication(
-            data: announcements,
+          AnnouncementHelper.instance!.addApplication(
+            data: announcements!,
             callback: callback,
           );
           break;
         case Mode.editApplication:
-          AnnouncementHelper.instance.updateApplication(
-            data: announcements,
+          AnnouncementHelper.instance!.updateApplication(
+            data: announcements!,
             callback: callback,
           );
           break;

@@ -12,14 +12,14 @@ enum BarCodeMode { code39, qrCode }
 
 class UserInfoScaffold extends StatefulWidget {
   final UserInfo userInfo;
-  final String heroTag;
-  final List<Widget> actions;
-  final Future<UserInfo> Function() onRefresh;
+  final String? heroTag;
+  final List<Widget>? actions;
+  final Future<UserInfo> Function()? onRefresh;
   final bool enableBarCode;
 
   const UserInfoScaffold({
-    Key key,
-    @required this.userInfo,
+    Key? key,
+    required this.userInfo,
     this.heroTag,
     this.actions,
     this.onRefresh,
@@ -31,7 +31,7 @@ class UserInfoScaffold extends StatefulWidget {
 }
 
 class UserInfoScaffoldState extends State<UserInfoScaffold> {
-  ApLocalizations app;
+  ApLocalizations? app;
 
   BarCodeMode codeMode = BarCodeMode.qrCode;
 
@@ -61,10 +61,10 @@ class UserInfoScaffoldState extends State<UserInfoScaffold> {
     app = ApLocalizations.of(context);
     return Scaffold(
       appBar: AppBar(
-        title: Text(app.userInfo),
+        title: Text(app!.userInfo),
         backgroundColor: ApTheme.of(context).blue,
         actions: [
-          ...widget.actions,
+          ...widget.actions!,
           if (widget.enableBarCode)
             IconButton(
               icon: Image.asset(
@@ -82,7 +82,7 @@ class UserInfoScaffoldState extends State<UserInfoScaffold> {
       ),
       body: RefreshIndicator(
         onRefresh: () async {
-          if (widget.onRefresh != null) await widget.onRefresh();
+          if (widget.onRefresh != null) await widget.onRefresh!();
           AnalyticsUtils.instance?.logEvent('user_info_refresh');
           return null;
         },
@@ -98,7 +98,7 @@ class UserInfoScaffoldState extends State<UserInfoScaffold> {
                       child: Hero(
                         tag: widget.heroTag ?? ApConstants.TAG_STUDENT_PICTURE,
                         child: Image.memory(
-                          widget.userInfo.pictureBytes,
+                          widget.userInfo.pictureBytes!,
                         ),
                       ),
                     ),
@@ -118,12 +118,12 @@ class UserInfoScaffoldState extends State<UserInfoScaffold> {
 }
 
 class UserInfoCard extends StatelessWidget {
-  final UserInfo userInfo;
-  final BarCodeMode codeMode;
+  final UserInfo? userInfo;
+  final BarCodeMode? codeMode;
   final bool enableBarCode;
 
   const UserInfoCard({
-    Key key,
+    Key? key,
     this.userInfo,
     this.codeMode,
     this.enableBarCode = false,
@@ -171,7 +171,7 @@ class UserInfoCard extends StatelessWidget {
                 ),
                 child: BarcodeWidget(
                   barcode: barcode,
-                  data: userInfo.id,
+                  data: userInfo!.id!,
                   color: ApTheme.of(context).barCode,
                   height: barcodeHeight,
                 ),

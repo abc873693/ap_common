@@ -1,3 +1,5 @@
+import 'dart:typed_data';
+
 import 'package:ap_common/config/ap_constants.dart';
 import 'package:ap_common/models/user_info.dart';
 import 'package:ap_common/resources/ap_icon.dart';
@@ -6,18 +8,18 @@ import 'package:ap_common/utils/ap_localizations.dart';
 import 'package:flutter/material.dart';
 
 class ApDrawer extends StatefulWidget {
-  final UserInfo userInfo;
+  final UserInfo? userInfo;
   final Function onTapHeader;
-  final String imageAsset;
+  final String? imageAsset;
   final List<Widget> widgets;
   final String imageHeroTag;
   final bool displayPicture;
 
   const ApDrawer({
-    Key key,
-    @required this.onTapHeader,
-    @required this.widgets,
-    @required this.userInfo,
+    Key? key,
+    required this.onTapHeader,
+    required this.widgets,
+    this.userInfo,
     this.imageAsset,
     this.imageHeroTag = ApConstants.TAG_STUDENT_PICTURE,
     this.displayPicture = false,
@@ -28,7 +30,7 @@ class ApDrawer extends StatefulWidget {
 }
 
 class ApDrawerState extends State<ApDrawer> {
-  ApLocalizations app;
+  ApLocalizations? app;
 
   @override
   void initState() {
@@ -48,7 +50,7 @@ class ApDrawerState extends State<ApDrawer> {
         child: Column(
           children: <Widget>[
             GestureDetector(
-              onTap: widget.onTapHeader,
+              onTap: widget.onTapHeader as void Function()?,
               child: Stack(
                 children: <Widget>[
                   UserAccountsDrawerHeader(
@@ -66,7 +68,8 @@ class ApDrawerState extends State<ApDrawer> {
                                     image: DecorationImage(
                                       fit: BoxFit.fitWidth,
                                       image: MemoryImage(
-                                        widget.userInfo.pictureBytes,
+                                        widget.userInfo?.pictureBytes ??
+                                            Uint8List(0),
                                       ),
                                     ),
                                   ),
@@ -86,7 +89,7 @@ class ApDrawerState extends State<ApDrawer> {
                               ),
                     accountName: Text(
                       (widget.userInfo == null)
-                          ? app.notLogin
+                          ? app!.notLogin
                           : (widget.userInfo?.name ?? ''),
                       style: TextStyle(color: Colors.white),
                     ),
@@ -110,7 +113,7 @@ class ApDrawerState extends State<ApDrawer> {
                       child: Opacity(
                         opacity: ApTheme.of(context).drawerIconOpacity,
                         child: Image.asset(
-                          widget.imageAsset,
+                          widget.imageAsset!,
                           width: 90.0,
                         ),
                       ),
@@ -132,10 +135,10 @@ class DrawerItem extends StatelessWidget {
   final Function onTap;
 
   const DrawerItem({
-    Key key,
-    @required this.icon,
-    @required this.title,
-    @required this.onTap,
+    Key? key,
+    required this.icon,
+    required this.title,
+    required this.onTap,
   }) : super(key: key);
 
   @override
@@ -149,7 +152,7 @@ class DrawerItem extends StatelessWidget {
           fontSize: 16.0,
         ),
       ),
-      onTap: onTap,
+      onTap: onTap as void Function()?,
     );
   }
 }
@@ -160,10 +163,10 @@ class DrawerSubItem extends StatelessWidget {
   final Function onTap;
 
   const DrawerSubItem({
-    Key key,
-    @required this.icon,
-    @required this.title,
-    @required this.onTap,
+    Key? key,
+    required this.icon,
+    required this.title,
+    required this.onTap,
   }) : super(key: key);
 
   @override
@@ -178,7 +181,7 @@ class DrawerSubItem extends StatelessWidget {
           fontSize: 16.0,
         ),
       ),
-      onTap: onTap,
+      onTap: onTap as void Function()?,
     );
   }
 }

@@ -15,16 +15,16 @@ import 'option_dialog.dart';
 export 'package:package_info_plus/package_info_plus.dart';
 
 class SettingTitle extends StatelessWidget {
-  final String text;
+  final String? text;
 
-  const SettingTitle({Key key, this.text}) : super(key: key);
+  const SettingTitle({Key? key, this.text}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return Padding(
       padding: EdgeInsets.fromLTRB(16.0, 16.0, 16.0, 8.0),
       child: Text(
-        text,
+        text!,
         style: TextStyle(color: ApTheme.of(context).blueText, fontSize: 14.0),
         textAlign: TextAlign.start,
       ),
@@ -39,11 +39,11 @@ class SettingSwitch extends StatelessWidget {
   final Function onChanged;
 
   const SettingSwitch({
-    Key key,
-    @required this.text,
-    @required this.subText,
-    @required this.value,
-    @required this.onChanged,
+    Key? key,
+    required this.text,
+    required this.subText,
+    required this.value,
+    required this.onChanged,
   }) : super(key: key);
 
   @override
@@ -58,7 +58,7 @@ class SettingSwitch extends StatelessWidget {
         style: TextStyle(fontSize: 14.0, color: ApTheme.of(context).greyText),
       ),
       value: value,
-      onChanged: onChanged,
+      onChanged: onChanged as void Function(bool)?,
       activeColor: ApTheme.of(context).blueAccent,
     );
   }
@@ -70,10 +70,10 @@ class SettingItem extends StatelessWidget {
   final Function onTap;
 
   const SettingItem({
-    Key key,
-    @required this.text,
-    @required this.subText,
-    @required this.onTap,
+    Key? key,
+    required this.text,
+    required this.subText,
+    required this.onTap,
   }) : super(key: key);
 
   @override
@@ -87,15 +87,15 @@ class SettingItem extends StatelessWidget {
         subText,
         style: TextStyle(fontSize: 14.0, color: ApTheme.of(context).greyText),
       ),
-      onTap: onTap,
+      onTap: onTap as void Function()?,
     );
   }
 }
 
 class CheckCourseNotifyItem extends StatelessWidget {
-  final String tag;
+  final String? tag;
 
-  const CheckCourseNotifyItem({Key key, this.tag}) : super(key: key);
+  const CheckCourseNotifyItem({Key? key, this.tag}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -108,21 +108,21 @@ class CheckCourseNotifyItem extends StatelessWidget {
             ? CourseNotifyData.loadCurrent()
             : CourseNotifyData.load(tag);
         if (NotificationUtils.isSupport) {
-          if (notifyData != null && notifyData.data.length != 0) {
+          if (notifyData != null && notifyData.data!.length != 0) {
             showDialog(
               context: context,
               builder: (_) => SimpleOptionDialog(
-                title: ap.courseNotify ?? '',
+                title: ap.courseNotify,
                 items: [
-                  for (var notify in notifyData.data)
+                  for (var notify in notifyData.data!)
                     '${ap.weekdaysCourse[notify.weekdayIndex]} ${notify.startTime} ${notify.title}',
                 ],
                 index: -1,
                 onSelected: (index) {
                   NotificationUtils.cancelCourseNotify(
-                    id: notifyData.data[index].id,
+                    id: notifyData.data![index].id!,
                   );
-                  notifyData.data.removeAt(index);
+                  notifyData.data!.removeAt(index);
                   notifyData.save();
                   ApUtils.showToast(context, ap.cancelNotifySuccess);
                 },
@@ -138,9 +138,9 @@ class CheckCourseNotifyItem extends StatelessWidget {
 }
 
 class ClearAllNotifyItem extends StatelessWidget {
-  final String tag;
+  final String? tag;
 
-  const ClearAllNotifyItem({Key key, this.tag}) : super(key: key);
+  const ClearAllNotifyItem({Key? key, this.tag}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -154,7 +154,7 @@ class ClearAllNotifyItem extends StatelessWidget {
           CourseNotifyData notifyData = tag == null
               ? CourseNotifyData.loadCurrent()
               : CourseNotifyData.load(tag);
-          notifyData.data.clear();
+          notifyData.data!.clear();
           notifyData.save();
           ApUtils.showToast(context, ap.cancelNotifySuccess);
         } else
@@ -166,11 +166,11 @@ class ClearAllNotifyItem extends StatelessWidget {
 
 class ChangeLanguageItem extends StatelessWidget {
   final Function(Locale locale) onChange;
-  final List<String> textList;
+  final List<String>? textList;
 
   const ChangeLanguageItem({
-    Key key,
-    @required this.onChange,
+    Key? key,
+    required this.onChange,
     this.textList,
   }) : super(key: key);
 
@@ -201,7 +201,7 @@ class ChangeLanguageItem extends StatelessWidget {
               String code = ApSupportLanguage.values[index].code;
               switch (index) {
                 case 0:
-                  locale = WidgetsBinding.instance.window.locales.first;
+                  locale = WidgetsBinding.instance!.window.locales.first;
                   locale = ApLocalizations.delegate.isSupported(locale)
                       ? locale
                       : Locale('en');
@@ -213,7 +213,7 @@ class ChangeLanguageItem extends StatelessWidget {
                   );
                   break;
               }
-              onChange?.call(locale);
+              onChange.call(locale);
               Preferences.setString(ApConstants.PREF_LANGUAGE_CODE, code);
               AnalyticsUtils.instance?.logAction(
                 'change_language',
@@ -234,11 +234,11 @@ class ChangeLanguageItem extends StatelessWidget {
 
 class ChangeThemeModeItem extends StatelessWidget {
   final Function(ThemeMode themeMode) onChange;
-  final List<String> textList;
+  final List<String>? textList;
 
   const ChangeThemeModeItem({
-    Key key,
-    @required this.onChange,
+    Key? key,
+    required this.onChange,
     this.textList,
   }) : super(key: key);
 
@@ -263,7 +263,7 @@ class ChangeThemeModeItem extends StatelessWidget {
             index: themeModeIndex,
             onSelected: (int index) {
               final mode = ThemeMode.values[index];
-              onChange?.call(mode);
+              onChange.call(mode);
               Preferences.setInt(ApConstants.PREF_THEME_MODE_INDEX, index);
               AnalyticsUtils.instance?.logAction(
                 'change_theme',
@@ -283,8 +283,8 @@ class ChangeIconStyleItem extends StatelessWidget {
   final Function(String code) onChange;
 
   const ChangeIconStyleItem({
-    Key key,
-    @required this.onChange,
+    Key? key,
+    required this.onChange,
   }) : super(key: key);
 
   @override
@@ -308,7 +308,7 @@ class ChangeIconStyleItem extends StatelessWidget {
               final code = ApIcon.values[index];
               ApIcon.code = code;
               Preferences.setString(ApConstants.PREF_ICON_STYLE_CODE, code);
-              onChange?.call(code);
+              onChange.call(code);
               AnalyticsUtils.instance?.logAction(
                 'change_icon_style',
                 code,

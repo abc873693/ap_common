@@ -20,8 +20,8 @@ class AnnouncementContentPage extends StatefulWidget {
   final Announcement announcement;
 
   const AnnouncementContentPage({
-    Key key,
-    this.announcement,
+    Key? key,
+    required this.announcement,
   }) : super(key: key);
 
   @override
@@ -30,7 +30,7 @@ class AnnouncementContentPage extends StatefulWidget {
 
 class AnnouncementContentPageState extends State<AnnouncementContentPage> {
   _Status state = _Status.finish;
-  ApLocalizations app;
+  late ApLocalizations app;
 
   @override
   void initState() {
@@ -58,7 +58,7 @@ class AnnouncementContentPageState extends State<AnnouncementContentPage> {
     );
   }
 
-  Widget _homebody() {
+  Widget? _homebody() {
     switch (state) {
       case _Status.loading:
         return Center(
@@ -95,7 +95,6 @@ class AnnouncementContentPageState extends State<AnnouncementContentPage> {
           content: app.somethingError,
         );
     }
-    return null;
   }
 
   _renderContent(Orientation orientation) {
@@ -114,13 +113,14 @@ class AnnouncementContentPageState extends State<AnnouncementContentPage> {
           context,
           Scaffold(
             appBar: AppBar(
-              title: Text(widget.announcement.title),
+              title: Text(widget.announcement.title!),
               backgroundColor: ApTheme.of(context).blue,
             ),
             body: PhotoView(
-              imageProvider: ApUtils.isSupportCacheNetworkImage
-                  ? CachedNetworkImageProvider(widget.announcement.imgUrl)
-                  : NetworkImage(widget.announcement.imgUrl),
+              imageProvider: (ApUtils.isSupportCacheNetworkImage
+                      ? CachedNetworkImageProvider(widget.announcement.imgUrl!)
+                      : NetworkImage(widget.announcement.imgUrl!))
+                  as ImageProvider<Object>?,
             ),
           ),
         );
@@ -133,7 +133,7 @@ class AnnouncementContentPageState extends State<AnnouncementContentPage> {
         child: Material(
           color: Colors.transparent,
           child: SelectableText(
-            widget.announcement.title,
+            widget.announcement.title!,
             textAlign: TextAlign.center,
             style: TextStyle(
               fontSize: 20.0,
@@ -152,18 +152,18 @@ class AnnouncementContentPageState extends State<AnnouncementContentPage> {
           horizontal: orientation == Orientation.portrait ? 16.0 : 0.0,
         ),
         child: SelectableLinkify(
-          text: widget.announcement.description,
+          text: widget.announcement.description ?? '',
           textAlign: TextAlign.center,
           style: TextStyle(
             fontSize: 16.0,
             color: ApTheme.of(context).greyText,
           ),
           options: LinkifyOptions(humanize: false),
-          onOpen: (link) async => ApUtils.launchUrl(link?.url),
+          onOpen: (link) async => ApUtils.launchUrl(link.url),
         ),
       ),
       if (widget.announcement.url != null &&
-          widget.announcement.url.isNotEmpty) ...[
+          widget.announcement.url!.isNotEmpty) ...[
         SizedBox(height: 16.0),
         ElevatedButton(
           style: ElevatedButton.styleFrom(
@@ -179,7 +179,7 @@ class AnnouncementContentPageState extends State<AnnouncementContentPage> {
             primary: ApTheme.of(context).yellow,
           ),
           onPressed: () {
-            launch(widget.announcement.url);
+            launch(widget.announcement.url!);
             AnalyticsUtils.instance?.logEvent('announcement_link_click');
           },
           child: Icon(

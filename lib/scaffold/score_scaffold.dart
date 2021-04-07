@@ -15,32 +15,32 @@ class ScoreScaffold extends StatefulWidget {
   static const String routerName = '/score';
 
   final ScoreState state;
-  final String customStateHint;
-  final String title;
+  final String? customStateHint;
+  final String? title;
   final ScoreData scoreData;
-  final SemesterData semesterData;
-  final Function(int index) onSelect;
-  final Function onSearchButtonClick;
-  final Function() onRefresh;
-  final Widget itemPicker;
-  final String middleTitle;
-  final String finalTitle;
-  final Function(int index) onScoreSelect;
-  final Widget Function(int index) middleScoreBuilder;
-  final Widget Function(int index) finalScoreBuilder;
-  final List<String> details;
+  final SemesterData? semesterData;
+  final Function(int index)? onSelect;
+  final Function()? onSearchButtonClick;
+  final Function()? onRefresh;
+  final Widget? itemPicker;
+  final String? middleTitle;
+  final String? finalTitle;
+  final Function(int index)? onScoreSelect;
+  final Widget Function(int index)? middleScoreBuilder;
+  final Widget Function(int index)? finalScoreBuilder;
+  final List<String>? details;
 
   final bool isShowSearchButton;
 
-  final String customHint;
+  final String? customHint;
 
-  final Widget bottom;
+  final Widget? bottom;
 
   const ScoreScaffold({
-    Key key,
-    @required this.state,
-    @required this.scoreData,
-    @required this.onRefresh,
+    Key? key,
+    required this.state,
+    required this.scoreData,
+    required this.onRefresh,
     this.title,
     this.itemPicker,
     this.semesterData,
@@ -63,7 +63,7 @@ class ScoreScaffold extends StatefulWidget {
 }
 
 class ScoreScaffoldState extends State<ScoreScaffold> {
-  ApLocalizations app;
+  ApLocalizations? app;
 
   @override
   void initState() {
@@ -80,9 +80,9 @@ class ScoreScaffoldState extends State<ScoreScaffold> {
     app = ApLocalizations.of(context);
     return Scaffold(
       appBar: AppBar(
-        title: Text(widget.title ?? app.score),
+        title: Text(widget.title ?? app!.score),
         backgroundColor: ApTheme.of(context).blue,
-        bottom: widget.bottom,
+        bottom: widget.bottom as PreferredSizeWidget?,
       ),
       floatingActionButton: widget.isShowSearchButton
           ? FloatingActionButton(
@@ -102,23 +102,23 @@ class ScoreScaffoldState extends State<ScoreScaffold> {
             SizedBox(height: 8.0),
             if (widget.semesterData != null && widget.itemPicker == null)
               ItemPicker(
-                dialogTitle: app.pickSemester,
+                dialogTitle: app!.pickSemester,
                 onSelected: widget.onSelect,
-                items: widget.semesterData.semesters,
-                currentIndex: widget.semesterData.currentIndex,
+                items: widget.semesterData!.semesters,
+                currentIndex: widget.semesterData!.currentIndex,
                 featureTag: 'score',
               ),
-            if (widget.itemPicker != null) widget.itemPicker,
-            if (widget.customHint != null && widget.customHint.isNotEmpty)
+            if (widget.itemPicker != null) widget.itemPicker!,
+            if (widget.customHint != null && widget.customHint!.isNotEmpty)
               Text(
-                widget.customHint,
+                widget.customHint!,
                 style: TextStyle(color: ApTheme.of(context).grey),
                 textAlign: TextAlign.center,
               ),
             Expanded(
               child: RefreshIndicator(
                 onRefresh: () async {
-                  await widget.onRefresh();
+                  await widget.onRefresh?.call();
                   AnalyticsUtils.instance?.logEvent('score_refresh');
                   return null;
                 },
@@ -134,13 +134,13 @@ class ScoreScaffoldState extends State<ScoreScaffold> {
   String get hintContent {
     switch (widget.state) {
       case ScoreState.error:
-        return app.clickToRetry;
+        return app!.clickToRetry;
       case ScoreState.empty:
-        return app.scoreEmpty;
+        return app!.scoreEmpty;
       case ScoreState.offlineEmpty:
-        return app.noOfflineData;
+        return app!.noOfflineData;
       case ScoreState.custom:
-        return widget.customStateHint ?? app.unknownError;
+        return widget.customStateHint ?? app!.unknownError;
       default:
         return '';
     }
@@ -159,7 +159,8 @@ class ScoreScaffoldState extends State<ScoreScaffold> {
           onTap: () {
             if (widget.state == ScoreState.empty)
               _pickSemester();
-            else if (widget.onRefresh != null) widget.onRefresh();
+            else
+              widget.onRefresh?.call();
           },
           child: HintContent(
             icon: ApIcon.assignment,
@@ -169,7 +170,7 @@ class ScoreScaffoldState extends State<ScoreScaffold> {
       default:
         return ScoreContent(
           scoreData: widget.scoreData,
-          onRefresh: widget.onRefresh,
+          onRefresh: widget.onRefresh?.call(),
           middleTitle: widget.middleTitle,
           finalTitle: widget.finalTitle,
           onScoreSelect: widget.onScoreSelect,
@@ -185,30 +186,30 @@ class ScoreScaffoldState extends State<ScoreScaffold> {
       showDialog(
         context: context,
         builder: (_) => SimpleOptionDialog(
-          title: app.pickSemester,
-          items: widget.semesterData.semesters,
-          index: widget.semesterData.currentIndex,
+          title: app!.pickSemester,
+          items: widget.semesterData!.semesters,
+          index: widget.semesterData!.currentIndex,
           onSelected: widget.onSelect,
         ),
       );
-    if (widget.onSearchButtonClick != null) widget.onSearchButtonClick();
+    if (widget.onSearchButtonClick != null) widget.onSearchButtonClick!();
   }
 }
 
 class ScoreContent extends StatefulWidget {
   final ScoreData scoreData;
-  final Function() onRefresh;
-  final String middleTitle;
-  final String finalTitle;
-  final Function(int index) onScoreSelect;
-  final Widget Function(int index) middleScoreBuilder;
-  final Widget Function(int index) finalScoreBuilder;
-  final List<String> details;
+  final Function()? onRefresh;
+  final String? middleTitle;
+  final String? finalTitle;
+  final Function(int index)? onScoreSelect;
+  final Widget Function(int index)? middleScoreBuilder;
+  final Widget Function(int index)? finalScoreBuilder;
+  final List<String>? details;
 
   const ScoreContent({
-    Key key,
-    @required this.scoreData,
-    @required this.onRefresh,
+    Key? key,
+    required this.scoreData,
+    this.onRefresh,
     this.middleTitle,
     this.finalTitle,
     this.onScoreSelect,
@@ -288,33 +289,34 @@ class _ScoreContentState extends State<ScoreContent> {
                         ),
                       ],
                     ),
-                    for (var i = 0; i < widget.scoreData.scores.length; i++)
+                    for (var i = 0; i < widget.scoreData.scores!.length; i++)
                       TableRow(
                         children: <Widget>[
                           ScoreTextBorder(
-                            text: widget.scoreData.scores[i].title,
+                            text: widget.scoreData.scores![i].title,
                             style: _textStyle,
                             onTap: (widget.onScoreSelect != null)
                                 ? () {
-                                    widget.onScoreSelect(i);
-                                    AnalyticsUtils.instance?.logEvent('score_title_click');
+                                    widget.onScoreSelect!(i);
+                                    AnalyticsUtils.instance
+                                        ?.logEvent('score_title_click');
                                   }
                                 : null,
                           ),
                           if (widget.middleScoreBuilder == null)
                             ScoreTextBorder(
-                              text: widget.scoreData.scores[i].middleScore,
+                              text: widget.scoreData.scores![i].middleScore,
                               style: _textStyle,
                             ),
                           if (widget.middleScoreBuilder != null)
-                            widget.middleScoreBuilder(i),
+                            widget.middleScoreBuilder!(i),
                           if (widget.finalScoreBuilder == null)
                             ScoreTextBorder(
-                              text: widget.scoreData.scores[i].semesterScore,
+                              text: widget.scoreData.scores![i].semesterScore,
                               style: _textStyle,
                             ),
                           if (widget.finalScoreBuilder != null)
-                            widget.finalScoreBuilder(i)
+                            widget.finalScoreBuilder!(i)
                         ],
                       )
                   ],
@@ -325,7 +327,7 @@ class _ScoreContentState extends State<ScoreContent> {
               height: isTablet ? 0.0 : 20.0,
               width: isTablet ? 20 : 0.0,
             ),
-            if (widget.details != null && widget.details.length != 0)
+            if (widget.details != null && widget.details!.length != 0)
               Flexible(
                 flex: isTablet ? 1 : 0,
                 child: Container(
@@ -337,7 +339,7 @@ class _ScoreContentState extends State<ScoreContent> {
                     defaultVerticalAlignment: TableCellVerticalAlignment.middle,
                     border: _tableBorder,
                     children: [
-                      for (var text in widget.details)
+                      for (var text in widget.details!)
                         TableRow(
                           children: <Widget>[
                             Container(
@@ -345,7 +347,7 @@ class _ScoreContentState extends State<ScoreContent> {
                               padding: EdgeInsets.all(2.0),
                               alignment: Alignment.center,
                               child: SelectableText(
-                                text ?? '',
+                                text,
                                 textAlign: TextAlign.center,
                                 style: _textBlueStyle,
                               ),
@@ -364,22 +366,22 @@ class _ScoreContentState extends State<ScoreContent> {
 }
 
 class ScoreTextBorder extends StatelessWidget {
-  final String text;
+  final String? text;
   final TextStyle style;
 
-  final Function onTap;
+  final Function? onTap;
 
   const ScoreTextBorder({
-    Key key,
-    @required this.text,
-    @required this.style,
+    Key? key,
+    required this.text,
+    required this.style,
     this.onTap,
   }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return InkWell(
-      onTap: onTap,
+      onTap: onTap as void Function()?,
       child: Container(
         width: double.maxFinite,
         padding: EdgeInsets.symmetric(vertical: 2.0, horizontal: 4.0),
