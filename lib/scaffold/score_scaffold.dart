@@ -170,7 +170,7 @@ class ScoreScaffoldState extends State<ScoreScaffold> {
       default:
         return ScoreContent(
           scoreData: widget.scoreData,
-          onRefresh: widget.onRefresh?.call(),
+          onRefresh: widget.onRefresh,
           middleTitle: widget.middleTitle,
           finalTitle: widget.finalTitle,
           onScoreSelect: widget.onScoreSelect,
