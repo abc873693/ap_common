@@ -1,5 +1,6 @@
-import 'package:ap_common/resources/ap_theme.dart';
 import 'package:flutter/material.dart';
+
+import '../resources/ap_theme.dart';
 
 class DefaultDialog extends StatelessWidget {
   final String title;
