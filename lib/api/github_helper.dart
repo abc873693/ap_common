@@ -5,7 +5,6 @@ import 'package:ap_common/models/announcement_data.dart';
 import 'package:dio/dio.dart';
 import 'package:dio_cookie_manager/dio_cookie_manager.dart';
 import 'package:cookie_jar/cookie_jar.dart';
-import 'package:flutter/foundation.dart' show required;
 
 class GitHubHelper {
   static const BASE_PATH = 'https://gist.githubusercontent.com/';
@@ -34,7 +33,7 @@ class GitHubHelper {
     required String gitHubUsername,
     required String hashCode,
     required String tag,
-    required GeneralCallback<Map<String, List<Announcement>?>> callback,
+    GeneralCallback<Map<String, List<Announcement>?>>? callback,
   }) async {
     try {
       var response = await Dio().get(
@@ -49,7 +48,7 @@ class GitHubHelper {
       return callback?.onSuccess(map);
     } on DioError catch (e) {
       if (callback != null)
-        callback?.onFailure(e);
+        callback.onFailure(e);
       else
         throw e;
     } on Exception catch (e) {

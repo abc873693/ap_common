@@ -6,7 +6,6 @@ import 'package:path/path.dart' as p;
 import 'package:ap_common/callback/general_callback.dart';
 import 'package:ap_common/utils/ap_utils.dart';
 import 'package:dio/dio.dart';
-import 'package:flutter/foundation.dart';
 import 'package:image_picker/image_picker.dart';
 
 export 'package:ap_common/callback/general_callback.dart';
@@ -36,7 +35,7 @@ class ImgurHelper {
 
   Future<ImgurUploadData> uploadImageToImgur({
     required PickedFile file,
-    required GeneralCallback<ImgurUploadData?> callback,
+    GeneralCallback<ImgurUploadData?>? callback,
   }) async {
     try {
       final bytes = await file.readAsBytes();
@@ -67,13 +66,14 @@ class ImgurHelper {
             : callback.onError(
                 GeneralResponse(
                   statusCode: 201,
-                  message: response.statusMessage,
+                  message: response.statusMessage ??
+                      ApLocalizations.current.unknownError,
                 ),
               );
       }
     } on DioError catch (dioError) {
       if (dioError.type == DioErrorType.response &&
-          dioError.response!.statusCode == 400)
+          dioError.response?.statusCode == 400)
         return callback == null
             ? null
             : callback.onError(

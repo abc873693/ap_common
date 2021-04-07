@@ -6,7 +6,6 @@ import 'package:ap_common/l10n/l10n.dart';
 import 'package:ap_common/models/announcement_data.dart';
 import 'package:ap_common/models/announcement_login_data.dart';
 import 'package:dio/dio.dart';
-import 'package:flutter/foundation.dart' show required;
 
 export 'package:ap_common/callback/general_callback.dart';
 export 'package:ap_common/models/announcement_login_data.dart';
@@ -106,7 +105,7 @@ class AnnouncementHelper {
   Future<AnnouncementLoginData?> login({
     required String? username,
     required String? password,
-    required GeneralCallback<AnnouncementLoginData> callback,
+    GeneralCallback<AnnouncementLoginData>? callback,
   }) async {
     try {
       var response = await dio.post(
@@ -142,7 +141,7 @@ class AnnouncementHelper {
 
   Future<AnnouncementLoginData?> googleLogin({
     required String? idToken,
-    required GeneralCallback<AnnouncementLoginData> callback,
+    GeneralCallback<AnnouncementLoginData>? callback,
   }) async {
     try {
       var response = await dio.post(
@@ -165,7 +164,8 @@ class AnnouncementHelper {
           callback.onError(
             GeneralResponse(
               statusCode: 401,
-              message: dioError.response!.data,
+              message: dioError.response?.data ??
+                  ApLocalizations.current.unknownError,
             ),
           );
         callback.onFailure(dioError);
@@ -176,7 +176,7 @@ class AnnouncementHelper {
 
   Future<AnnouncementLoginData?> appleLogin({
     required String idToken,
-    required GeneralCallback<AnnouncementLoginData> callback,
+    GeneralCallback<AnnouncementLoginData>? callback,
   }) async {
     try {
       var response = await dio.post(
@@ -200,7 +200,8 @@ class AnnouncementHelper {
           callback.onError(
             GeneralResponse(
               statusCode: 401,
-              message: dioError.response!.data,
+              message: dioError.response?.data ??
+                  ApLocalizations.current.unknownError,
             ),
           );
         callback.onFailure(dioError);
@@ -210,7 +211,7 @@ class AnnouncementHelper {
   }
 
   Future<List<Announcement>?> getAllAnnouncements({
-    required GeneralCallback<List<Announcement>?> callback,
+    GeneralCallback<List<Announcement>?>? callback,
   }) async {
     try {
       var response = await dio.get(
@@ -219,7 +220,7 @@ class AnnouncementHelper {
       var data = AnnouncementData(data: []);
       if (response.statusCode != 204) {
         data = AnnouncementData.fromJson(response.data);
-        data.data!.sort((a, b) {
+        data.data?.sort((a, b) {
           return b.weight!.compareTo(a.weight!);
         });
       }
@@ -234,7 +235,7 @@ class AnnouncementHelper {
   }
 
   Future<List<Announcement>?> getAnnouncements({
-    required GeneralCallback<List<Announcement>?> callback,
+    GeneralCallback<List<Announcement>?>? callback,
     String? locale,
     List<String>? tags,
   }) async {
@@ -249,7 +250,7 @@ class AnnouncementHelper {
       var data = AnnouncementData(data: []);
       if (response.statusCode != 204) {
         data = AnnouncementData.fromJson(response.data);
-        data.data!.sort((a, b) {
+        data.data?.sort((a, b) {
           return b.weight!.compareTo(a.weight!);
         });
       }
@@ -265,7 +266,7 @@ class AnnouncementHelper {
 
   Future<Response?> addAnnouncement({
     required Announcement data,
-    required GeneralCallback<Response> callback,
+    GeneralCallback<Response>? callback,
     String? languageCode,
   }) async {
     try {
@@ -290,7 +291,7 @@ class AnnouncementHelper {
 
   Future<Response?> updateAnnouncement({
     required Announcement data,
-    required GeneralCallback<Response> callback,
+    GeneralCallback<Response>? callback,
   }) async {
     try {
       var response = await dio.put(
@@ -309,7 +310,7 @@ class AnnouncementHelper {
 
   Future<Response?> deleteAnnouncement({
     required Announcement data,
-    required GeneralCallback<Response> callback,
+    GeneralCallback<Response>? callback,
   }) async {
     try {
       var response = await dio.delete(
@@ -328,7 +329,7 @@ class AnnouncementHelper {
 
   Future<List<Announcement>?> getApplications({
     String? locale,
-    required GeneralCallback<List<Announcement>?> callback,
+    GeneralCallback<List<Announcement>?>? callback,
   }) async {
     try {
       var response = await dio.get(
@@ -337,7 +338,7 @@ class AnnouncementHelper {
       var data = AnnouncementData(data: []);
       if (response.statusCode != 204) {
         data = AnnouncementData.fromJson(response.data);
-        data.data!.sort((a, b) {
+        data.data?.sort((a, b) {
           return b.weight!.compareTo(a.weight!);
         });
       }
@@ -353,12 +354,12 @@ class AnnouncementHelper {
 
   Future<Response?> addApplication({
     required Announcement data,
-    required GeneralCallback<Response> callback,
+    GeneralCallback<Response>? callback,
     String? languageCode,
   }) async {
     try {
       data.tags ??= [];
-      data.tags!.addAll([
+      data.tags?.addAll([
         languageCode ?? 'zh',
         if (organization != null) organization,
       ]);
@@ -379,7 +380,7 @@ class AnnouncementHelper {
   Future<Response?> approveApplication({
     required String? applicationId,
     String? reviewDescription,
-    required GeneralCallback<Response> callback,
+    GeneralCallback<Response>? callback,
   }) async {
     try {
       var response = await dio.put(
@@ -401,7 +402,7 @@ class AnnouncementHelper {
   Future<Response?> rejectApplication({
     required String? applicationId,
     String? reviewDescription,
-    required GeneralCallback<Response> callback,
+    GeneralCallback<Response>? callback,
   }) async {
     try {
       var response = await dio.put(
@@ -422,7 +423,7 @@ class AnnouncementHelper {
 
   Future<Response?> removeApplication({
     required String applicationId,
-    required GeneralCallback<Response> callback,
+    GeneralCallback<Response>? callback,
   }) async {
     try {
       var response = await dio.delete(
@@ -440,7 +441,7 @@ class AnnouncementHelper {
 
   Future<Response?> updateApplication({
     required Announcement data,
-    required GeneralCallback<Response> callback,
+    GeneralCallback<Response>? callback,
   }) async {
     try {
       var response = await dio.put(
