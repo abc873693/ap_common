@@ -71,7 +71,7 @@ class CourseNotifyData {
         if (courseDetail.code == courseNotify.code) {
           courseNotify.title = sprintf(ap.courseNotifyContent, [
             courseNotify.title,
-            courseNotify.location!.isEmpty
+            courseNotify.location == null || courseNotify.location!.isEmpty
                 ? ap.courseNotifyUnknown
                 : courseNotify.location
           ]);
@@ -126,7 +126,7 @@ class CourseNotifyData {
     if (rawString.isNotEmpty) {
       var courseNotifyData = CourseNotifyData.fromRawJson(rawString);
       courseNotifyData.data.forEach(
-          (element) => NotificationUtils.cancelCourseNotify(id: element.id!));
+          (element) => NotificationUtils.cancelCourseNotify(id: element.id));
       courseNotifyData.data.clear();
       courseNotifyData.tag = newTag;
       courseNotifyData.save();
@@ -136,26 +136,26 @@ class CourseNotifyData {
 }
 
 class CourseNotify {
-  int? id;
+  int id;
   String? title;
   String? location;
   String? code;
 
   ///The day of the week [DateTime.monday]..[DateTime.sunday].
   ///In accordance with ISO 8601 a week starts with Monday, which has the value 1.
-  int? weekday;
+  int weekday;
 
-  String? startTime;
+  String startTime;
 
-  int get weekdayIndex => weekday! - 1;
+  int get weekdayIndex => weekday - 1;
 
   CourseNotify({
-    this.id,
+    required this.id,
+    required this.weekday,
+    required this.startTime,
     this.title,
     this.location,
     this.code,
-    this.weekday,
-    this.startTime,
   });
 
   factory CourseNotify.fromRawJson(String str) =>
@@ -175,11 +175,11 @@ class CourseNotify {
       );
 
   Map<String, dynamic> toJson() => {
-        "id": id == null ? null : id,
+        "id": id,
         "title": title == null ? null : title,
         "location": location == null ? null : location,
         "code": code == null ? null : code,
-        "weekday": weekday == null ? null : weekday,
+        "weekday": weekday,
         "startTime": startTime == null ? null : startTime,
       };
 

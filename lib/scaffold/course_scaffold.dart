@@ -396,13 +396,16 @@ class CourseScaffoldState extends State<CourseScaffold> {
     ByteData? byteData = await image.toByteData(format: ui.ImageByteFormat.png);
     DateTime now = DateTime.now();
     String formattedDate = DateFormat('yyyyMMdd_hhmmss').format(now);
-    await ApUtils.saveImage(
-      context,
-      byteData,
-      "course_table_$formattedDate",
-      ApLocalizations.of(context).exportCourseTableSuccess,
-    );
-    AnalyticsUtils.instance?.logEvent('export_course_table_image_success');
+    if (byteData != null) {
+      await ApUtils.saveImage(
+        context,
+        byteData,
+        "course_table_$formattedDate",
+        ApLocalizations.of(context).exportCourseTableSuccess,
+      );
+      AnalyticsUtils.instance?.logEvent('export_course_table_image_success');
+    } else
+      ApUtils.showToast(context, app!.unknownError);
   }
 
   BorderSide get _innerBorderSide => BorderSide(
@@ -891,8 +894,7 @@ class CourseList extends StatelessWidget {
                                 text:
                                     '${ApLocalizations.of(context).courseDialogLocation}：',
                                 style: TextStyle(fontWeight: FontWeight.bold)),
-                            TextSpan(
-                                text: '${course.location.toString()}\n'),
+                            TextSpan(text: '${course.location.toString()}\n'),
                           ],
                           TextSpan(
                             text:
@@ -900,8 +902,7 @@ class CourseList extends StatelessWidget {
                             style: TextStyle(fontWeight: FontWeight.bold),
                           ),
                           TextSpan(
-                              text:
-                                  '${course.getTimesShortName(timeCodes)}'),
+                              text: '${course.getTimesShortName(timeCodes)}'),
                         ],
                       ),
                     ),
@@ -1048,8 +1049,7 @@ class CourseBorder extends StatelessWidget {
                             ),
                           ),
                           if (showInstructors)
-                            TextSpan(
-                                text: '\n${course!.getInstructors()}'),
+                            TextSpan(text: '\n${course!.getInstructors()}'),
                           if (showClassroomLocation!)
                             TextSpan(text: '\n${course!.location ?? ' '}'),
                         ],

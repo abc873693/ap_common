@@ -99,14 +99,14 @@ class NotificationUtils {
     final ap = ApLocalizations.of(context);
     String content = sprintf(ap.courseNotifyContent, [
       courseNotify.title,
-      courseNotify.location!.isEmpty
+      courseNotify.location == null || courseNotify.location!.isEmpty
           ? ap.courseNotifyUnknown
           : courseNotify.location
     ]);
     final time =
-        parseTime(courseNotify.startTime!, beforeMinutes: beforeMinutes);
+        parseTime(courseNotify.startTime, beforeMinutes: beforeMinutes);
     await scheduleWeeklyNotify(
-      id: courseNotify.id!,
+      id: courseNotify.id,
       title: ap.courseNotify,
       content: content,
       day: getDay(courseNotify.weekdayIndex),

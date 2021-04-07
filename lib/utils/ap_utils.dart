@@ -239,7 +239,7 @@ class ApUtils {
 
   static Future<void> saveImage(
     BuildContext context,
-    ByteData? byteData,
+    ByteData byteData,
     String fileName,
     String successMessage,
   ) async {
@@ -251,7 +251,7 @@ class ApUtils {
         hasGrantPermission = await PhotoManager.requestPermission();
       }
       if (hasGrantPermission) {
-        final pngBytes = byteData!.buffer.asUint8List();
+        final pngBytes = byteData.buffer.asUint8List();
         var downloadDir = '';
         if (kIsWeb)
           downloadDir = '';
@@ -267,7 +267,7 @@ class ApUtils {
             pngBytes,
             title: fileName,
           );
-          if (kDebugMode) print(imageEntity!.title);
+          if (kDebugMode) print(imageEntity?.title);
           success = imageEntity != null;
         } else {
           await File(filePath).writeAsBytes(pngBytes);
@@ -288,7 +288,7 @@ class ApUtils {
 
   static showOverlay(BuildContext context, String text) {
     if (overlayEntry != null) return;
-    OverlayState overlayState = Overlay.of(context)!;
+    OverlayState? overlayState = Overlay.of(context);
     overlayEntry = OverlayEntry(
       builder: (context) {
         return Positioned(
@@ -300,7 +300,7 @@ class ApUtils {
       },
     );
 
-    overlayState.insert(overlayEntry);
+    overlayState?.insert(overlayEntry);
   }
 
   static removeOverlay() {

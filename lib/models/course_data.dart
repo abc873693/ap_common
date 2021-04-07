@@ -362,14 +362,14 @@ class SectionTime {
 
 class TimeCode {
   TimeCode({
-    this.title,
-    this.startTime,
-    this.endTime,
+    required this.title,
+    required this.startTime,
+    required this.endTime,
   });
 
-  String? title;
-  String? startTime;
-  String? endTime;
+  String title;
+  String startTime;
+  String endTime;
 
   TimeCode copyWith({
     String? title,

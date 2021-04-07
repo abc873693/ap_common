@@ -61,10 +61,8 @@ extension ApExtension on ApLocalizations {
       case DioErrorType.receiveTimeout:
       case DioErrorType.sendTimeout:
         return timeoutMessage;
-        break;
       case DioErrorType.response:
         return dioError.message;
-        break;
       case DioErrorType.cancel:
       default:
         return null;
@@ -81,13 +79,11 @@ extension DioErrorI18nExtension on DioError {
       case DioErrorType.receiveTimeout:
       case DioErrorType.sendTimeout:
         return ApLocalizations.current.timeoutMessage;
-        break;
       case DioErrorType.response:
         if (response!.data is Map<String, dynamic>)
           return response!.data['title'] ?? message;
         else
           return message;
-        break;
       case DioErrorType.cancel:
       default:
         return null;
