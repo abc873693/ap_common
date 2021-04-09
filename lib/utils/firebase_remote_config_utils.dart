@@ -9,15 +9,15 @@ class FirebaseRemoteConfigUtils {
   static Future<VersionInfo> getVersionInfo() async {
     RemoteConfig remoteConfig;
     try {
-      remoteConfig = await RemoteConfig.instance;
-      await remoteConfig.fetch(expiration: const Duration(seconds: 10));
-      await remoteConfig.activateFetched();
+      remoteConfig = RemoteConfig.instance;
+      await remoteConfig.fetch();
+      await remoteConfig.activate();
       return VersionInfo(
         code: remoteConfig.getInt(ApConstants.APP_VERSION),
         isForceUpdate: remoteConfig.getBool(ApConstants.IS_FORCE_UPDATE),
-        content:  remoteConfig.getString(ApConstants.NEW_VERSION_CONTENT),
+        content: remoteConfig.getString(ApConstants.NEW_VERSION_CONTENT),
       );
-    } on FetchThrottledException catch (exception) {} catch (exception) {} finally {}
+    } catch (exception) {} finally {}
     return null;
   }
 }
