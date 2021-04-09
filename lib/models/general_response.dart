@@ -1,14 +1,12 @@
 import 'dart:convert';
 
-import 'package:flutter/cupertino.dart';
-
 class GeneralResponse {
   final int statusCode;
   final String message;
 
   GeneralResponse({
-    @required this.statusCode,
-    @required this.message,
+    required this.statusCode,
+    required this.message,
   });
 
   static const SUCCESS = 200;
@@ -36,7 +34,7 @@ class GeneralResponse {
       );
 
   Map<String, dynamic> toJson() => {
-        "code": statusCode == null ? null : statusCode,
-        "description": message == null ? null : message,
+        "code": statusCode,
+        "description": message,
       };
 }

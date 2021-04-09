@@ -33,11 +33,11 @@ class AnnouncementEditPage extends StatefulWidget {
   static const String routerName = "/news/edit";
 
   final Mode mode;
-  final Announcement announcement;
+  final Announcement? announcement;
 
   const AnnouncementEditPage({
-    Key key,
-    @required this.mode,
+    Key? key,
+    required this.mode,
     this.announcement,
   }) : super(key: key);
 
@@ -48,9 +48,9 @@ class AnnouncementEditPage extends StatefulWidget {
 class _AnnouncementEditPageState extends State<AnnouncementEditPage> {
   final _formKey = GlobalKey<FormState>();
 
-  ApLocalizations app;
+  ApLocalizations get app => ApLocalizations.of(context);
 
-  Announcement announcements;
+  Announcement? announcements;
 
   var _title = TextEditingController();
   var _description = TextEditingController();
@@ -62,9 +62,9 @@ class _AnnouncementEditPageState extends State<AnnouncementEditPage> {
   var formatter = DateFormat('yyyy-MM-ddTHH:mm:ss');
   var dateFormat = DateFormat('yyyy-MM-dd HH:mm:ss');
 
-  DateTime expireTime;
+  DateTime? expireTime;
 
-  List<String> tags;
+  List<String?>? tags;
 
   var _newTag = TextEditingController();
 
@@ -81,7 +81,6 @@ class _AnnouncementEditPageState extends State<AnnouncementEditPage> {
       case Mode.application:
         return app.addApplication;
     }
-    return app.submit;
   }
 
   String get buttonText {
@@ -94,7 +93,6 @@ class _AnnouncementEditPageState extends State<AnnouncementEditPage> {
       case Mode.application:
         return app.submit;
     }
-    return app.submit;
   }
 
   List<Widget> get _imgurUploadWidget {
@@ -105,7 +103,6 @@ class _AnnouncementEditPageState extends State<AnnouncementEditPage> {
           SizedBox(height: 8.0),
           Text(app.uploading),
         ];
-        break;
       case _ImgurUploadState.done:
         return [
           Text(app.imagePreview),
@@ -129,16 +126,16 @@ class _AnnouncementEditPageState extends State<AnnouncementEditPage> {
   void initState() {
     if (widget.mode == Mode.edit || widget.mode == Mode.editApplication) {
       announcements = widget.announcement;
-      _title.text = announcements.title;
-      _imgUrl.text = announcements.imgUrl;
-      if (announcements.url.isNotEmpty)
+      _title.text = announcements!.title!;
+      _imgUrl.text = announcements!.imgUrl!;
+      if (announcements!.url!.isNotEmpty)
         imgurUploadState = _ImgurUploadState.done;
-      _url.text = announcements.url;
-      _weight.text = announcements.weight.toString();
-      if (announcements.expireTime != null)
-        expireTime = formatter.parse(announcements.expireTime);
-      _description.text = announcements.description;
-      tags = announcements.tags ?? [];
+      _url.text = announcements!.url!;
+      _weight.text = announcements!.weight.toString();
+      if (announcements!.expireTime != null)
+        expireTime = formatter.parse(announcements!.expireTime!);
+      _description.text = announcements!.description!;
+      tags = announcements!.tags ?? [];
     } else {
       announcements = Announcement();
     }
@@ -152,7 +149,6 @@ class _AnnouncementEditPageState extends State<AnnouncementEditPage> {
 
   @override
   Widget build(BuildContext context) {
-    app = ApLocalizations.of(context);
     return Scaffold(
       appBar: AppBar(
         title: Text(title),
@@ -168,7 +164,7 @@ class _AnnouncementEditPageState extends State<AnnouncementEditPage> {
               maxLines: 1,
               controller: _title,
               validator: (value) {
-                if (value.isEmpty) {
+                if (value!.isEmpty) {
                   return app.doNotEmpty;
                 }
                 return null;
@@ -187,12 +183,12 @@ class _AnnouncementEditPageState extends State<AnnouncementEditPage> {
               Text(app.tag),
               Wrap(
                 children: [
-                  for (String tag in tags ?? []) ...[
+                  for (String? tag in tags ?? []) ...[
                     Chip(
-                      label: Text(tag),
+                      label: Text(tag!),
                       backgroundColor: tag.color,
                       onDeleted: () {
-                        setState(() => tags.remove(tag));
+                        setState(() => tags!.remove(tag));
                       },
                     ),
                     SizedBox(width: 8.0),
@@ -217,9 +213,9 @@ class _AnnouncementEditPageState extends State<AnnouncementEditPage> {
                               ApUtils.showToast(context, app.doNotEmpty);
                             else {
                               final newTag = _newTag.text;
-                              final index = tags.indexOf(newTag);
+                              final index = tags!.indexOf(newTag);
                               if (index == -1) {
-                                setState(() => tags.add(newTag));
+                                setState(() => tags!.add(newTag));
                                 Navigator.of(context, rootNavigator: true)
                                     .pop();
                               } else
@@ -241,7 +237,7 @@ class _AnnouncementEditPageState extends State<AnnouncementEditPage> {
                 maxLines: 1,
                 controller: _weight,
                 validator: (value) {
-                  if (value.isEmpty) {
+                  if (value!.isEmpty) {
                     return app.doNotEmpty;
                   } else {
                     try {
@@ -269,7 +265,7 @@ class _AnnouncementEditPageState extends State<AnnouncementEditPage> {
               controller: _imgUrl,
               enabled: false,
               validator: (value) {
-                if (value.isEmpty) {
+                if (value!.isEmpty) {
                   return app.doNotEmpty;
                 }
                 return null;
@@ -305,11 +301,11 @@ class _AnnouncementEditPageState extends State<AnnouncementEditPage> {
                   primary: ApTheme.of(context).blueAccent,
                 ),
                 onPressed: () async {
-                  PickedFile image = await ApUtils.pickImage();
+                  PickedFile? image = await ApUtils.pickImage();
                   if (image != null) {
                     setState(
                         () => imgurUploadState = _ImgurUploadState.uploading);
-                    ImgurHelper.instance.uploadImageToImgur(
+                    ImgurHelper.instance!.uploadImageToImgur(
                       file: image,
                       callback: GeneralCallback(
                         onFailure: (dioError) {
@@ -325,7 +321,7 @@ class _AnnouncementEditPageState extends State<AnnouncementEditPage> {
                               : _ImgurUploadState.done);
                         },
                         onSuccess: (data) {
-                          _imgUrl.text = data.link;
+                          _imgUrl.text = data!.link!;
                           setState(
                               () => imgurUploadState = _ImgurUploadState.done);
                         },
@@ -409,7 +405,7 @@ class _AnnouncementEditPageState extends State<AnnouncementEditPage> {
               subtitle: Text(
                 expireTime == null
                     ? app.newsExpireTimeHint
-                    : dateFormat.format(expireTime),
+                    : dateFormat.format(expireTime!),
                 style: TextStyle(fontSize: 20),
               ),
             ),
@@ -544,13 +540,13 @@ class _AnnouncementEditPageState extends State<AnnouncementEditPage> {
   Future _pickStartDateTime() async {
     DateTime dateTime =
         this.expireTime ?? DateTime.now().add(Duration(days: 7));
-    DateTime picked = await showDatePicker(
+    DateTime? picked = await showDatePicker(
       context: context,
-      initialDate: dateTime ?? DateTime.now().add(Duration(days: 7)),
+      initialDate: dateTime,
       firstDate: DateTime(1950),
       lastDate: DateTime(2099),
     );
-    TimeOfDay timeOfDay =
+    TimeOfDay? timeOfDay =
         TimeOfDay(hour: dateTime.hour, minute: dateTime.minute);
     timeOfDay = await showTimePicker(
       context: context,
@@ -562,25 +558,25 @@ class _AnnouncementEditPageState extends State<AnnouncementEditPage> {
           picked.year,
           picked.month,
           picked.day,
-          timeOfDay.hour,
+          timeOfDay!.hour,
           timeOfDay.minute,
         ),
       );
     }
   }
 
-  void _announcementSubmit({bool isApproval}) async {
-    if (_formKey.currentState.validate()) {
-      announcements.title = _title.text;
-      announcements.description = _description.text;
-      announcements.imgUrl = _imgUrl.text;
-      announcements.url = _url.text;
-      announcements.weight =
-          _weight.text.isNotEmpty ? int.parse(_weight?.text ?? 0) : 0;
-      announcements.expireTime =
-          (expireTime == null) ? null : expireTime.parseToString();
-      announcements.reviewDescription = _reviewDescription.text;
-      announcements.tags = tags;
+  void _announcementSubmit({bool? isApproval}) async {
+    if (_formKey.currentState!.validate()) {
+      announcements!.title = _title.text;
+      announcements!.description = _description.text;
+      announcements!.imgUrl = _imgUrl.text;
+      announcements!.url = _url.text;
+      announcements!.weight =
+          _weight.text.isNotEmpty ? int.tryParse(_weight.text) : 0;
+      announcements!.expireTime =
+          (expireTime == null) ? null : expireTime!.parseToString();
+      announcements!.reviewDescription = _reviewDescription.text;
+      announcements!.tags = tags;
       final callback = GeneralCallback.simple(
         context,
         (Response _) async {
@@ -599,8 +595,8 @@ class _AnnouncementEditPageState extends State<AnnouncementEditPage> {
               if (isApproval != null) {
                 if (isApproval)
                   await AnnouncementHelper.instance.approveApplication(
-                    applicationId: announcements.applicationId,
-                    reviewDescription: announcements.reviewDescription,
+                    applicationId: announcements!.applicationId,
+                    reviewDescription: announcements!.reviewDescription,
                     callback: GeneralCallback.simple(
                       context,
                       (_) => _,
@@ -608,8 +604,8 @@ class _AnnouncementEditPageState extends State<AnnouncementEditPage> {
                   );
                 else
                   await AnnouncementHelper.instance.rejectApplication(
-                    applicationId: announcements.applicationId,
-                    reviewDescription: announcements.reviewDescription,
+                    applicationId: announcements!.applicationId,
+                    reviewDescription: announcements!.reviewDescription,
                     callback: GeneralCallback.simple(
                       context,
                       (_) => _,
@@ -624,25 +620,25 @@ class _AnnouncementEditPageState extends State<AnnouncementEditPage> {
       switch (widget.mode) {
         case Mode.add:
           AnnouncementHelper.instance.addAnnouncement(
-            data: announcements,
+            data: announcements!,
             callback: callback,
           );
           break;
         case Mode.edit:
           AnnouncementHelper.instance.updateAnnouncement(
-            data: announcements,
+            data: announcements!,
             callback: callback,
           );
           break;
         case Mode.application:
           AnnouncementHelper.instance.addApplication(
-            data: announcements,
+            data: announcements!,
             callback: callback,
           );
           break;
         case Mode.editApplication:
           AnnouncementHelper.instance.updateApplication(
-            data: announcements,
+            data: announcements!,
             callback: callback,
           );
           break;

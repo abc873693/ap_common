@@ -21,17 +21,17 @@ class AboutUsPage extends StatefulWidget {
   final String githubName;
   final String email;
   final String appLicense;
-  final List<Widget> actions;
+  final List<Widget>? actions;
 
   const AboutUsPage({
-    Key key,
-    @required this.assetImage,
-    @required this.fbFanPageUrl,
-    @required this.fbFanPageId,
-    @required this.githubUrl,
-    @required this.githubName,
-    @required this.email,
-    @required this.appLicense,
+    Key? key,
+    required this.assetImage,
+    required this.fbFanPageUrl,
+    required this.fbFanPageId,
+    required this.githubUrl,
+    required this.githubName,
+    required this.email,
+    required this.appLicense,
     this.actions,
   }) : super(key: key);
 
@@ -40,7 +40,7 @@ class AboutUsPage extends StatefulWidget {
 }
 
 class AboutUsPageState extends State<AboutUsPage> {
-  ApLocalizations app;
+  ApLocalizations get app => ApLocalizations.of(context);
 
   @override
   void initState() {
@@ -58,7 +58,6 @@ class AboutUsPageState extends State<AboutUsPage> {
 
   @override
   Widget build(BuildContext context) {
-    app = ApLocalizations.of(context);
     var expandedHeight = MediaQuery.of(context).size.height * 0.25;
     return Scaffold(
       body: CustomScrollView(
@@ -222,21 +221,21 @@ class AboutUsPageState extends State<AboutUsPage> {
             mainAxisSize: MainAxisSize.max,
             crossAxisAlignment: CrossAxisAlignment.start,
             children: <Widget>[
-              SelectableLinkify(
+              Linkify(
                 text: text,
                 style: TextStyle(fontSize: 18.0),
               ),
               SizedBox(
                 height: 4.0,
               ),
-              SelectableLinkify(
+              Linkify(
                 text: subText,
                 style: TextStyle(
                   fontSize: 14.0,
                   color: ApTheme.of(context).grey,
                 ),
                 options: LinkifyOptions(humanize: false),
-                onOpen: (link) async => ApUtils.launchUrl(link?.url),
+                onOpen: (link) async => ApUtils.launchUrl(link.url),
               ),
             ],
           ),

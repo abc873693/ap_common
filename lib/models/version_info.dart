@@ -3,5 +3,9 @@ class VersionInfo {
   bool isForceUpdate;
   String content;
 
-  VersionInfo({this.code, this.isForceUpdate, this.content});
+  VersionInfo({
+    required this.code,
+    required this.isForceUpdate,
+    required this.content,
+  });
 }

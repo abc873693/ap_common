@@ -1,17 +1,19 @@
-import 'package:ap_common/resources/ap_theme.dart';
+import 'package:ap_common/l10n/l10n.dart';
 import 'package:flutter/material.dart';
 
+import '../resources/ap_theme.dart';
+
 class YesNoDialog extends StatelessWidget {
-  final String title;
-  final Widget contentWidget;
-  final EdgeInsetsGeometry contentWidgetPadding;
-  final String leftActionText;
-  final String rightActionText;
-  final Function leftActionFunction;
-  final Function rightActionFunction;
+  final String? title;
+  final Widget? contentWidget;
+  final EdgeInsetsGeometry? contentWidgetPadding;
+  final String? leftActionText;
+  final String? rightActionText;
+  final Function? leftActionFunction;
+  final Function? rightActionFunction;
 
   const YesNoDialog(
-      {Key key,
+      {Key? key,
       this.title,
       this.contentWidget,
       this.contentWidgetPadding,
@@ -45,7 +47,7 @@ class YesNoDialog extends StatelessWidget {
         ),
       ),
       title: Text(
-        title,
+        title ?? '',
         textAlign: TextAlign.center,
         style: TextStyle(
           color: ApTheme.of(context).blueText,
@@ -89,7 +91,7 @@ class YesNoDialog extends StatelessWidget {
                     alignment: Alignment.center,
                     padding: EdgeInsets.symmetric(vertical: 16.0),
                     child: Text(
-                      leftActionText,
+                      leftActionText ?? ApLocalizations.current.confirm,
                       style: TextStyle(
                         color: ApTheme.of(context).greyText,
                         fontSize: 16.0,
@@ -98,7 +100,7 @@ class YesNoDialog extends StatelessWidget {
                   ),
                   onTap: () {
                     Navigator.of(context, rootNavigator: true).pop();
-                    if (leftActionFunction != null) leftActionFunction();
+                    leftActionFunction?.call();
                   },
                 ),
               ),
@@ -111,7 +113,7 @@ class YesNoDialog extends StatelessWidget {
                     alignment: Alignment.center,
                     padding: EdgeInsets.symmetric(vertical: 16.0),
                     child: Text(
-                      rightActionText,
+                      rightActionText ?? ApLocalizations.current.cancel,
                       style: TextStyle(
                         color: ApTheme.of(context).greyText,
                         fontSize: 16.0,
@@ -120,7 +122,7 @@ class YesNoDialog extends StatelessWidget {
                   ),
                   onTap: () {
                     Navigator.of(context, rootNavigator: true).pop();
-                    if (rightActionFunction != null) rightActionFunction();
+                    rightActionFunction?.call();
                   },
                 ),
               ),

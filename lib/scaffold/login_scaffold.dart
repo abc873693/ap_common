@@ -20,9 +20,9 @@ class LoginScaffold extends StatefulWidget {
   final bool enableKeyboardDoneButton;
 
   const LoginScaffold({
-    Key key,
-    @required this.logoSource,
-    @required this.forms,
+    Key? key,
+    required this.logoSource,
+    required this.forms,
     this.logoMode = LogoMode.text,
     this.enableKeyboardDoneButton = false,
   }) : super(key: key);
@@ -131,13 +131,13 @@ class LoginScaffoldState extends State<LoginScaffold> {
 class TextCheckBox extends StatelessWidget {
   final bool value;
   final String text;
-  final ValueChanged<bool> onChanged;
+  final ValueChanged<bool?>? onChanged;
 
   const TextCheckBox({
-    Key key,
-    @required this.value,
-    @required this.text,
-    @required this.onChanged,
+    Key? key,
+    required this.value,
+    required this.text,
+    required this.onChanged,
   }) : super(key: key);
 
   @override
@@ -163,19 +163,19 @@ class TextCheckBox extends StatelessWidget {
           )
         ],
       ),
-      onTap: (onChanged == null) ? null : () => onChanged(!value),
+      onTap: (onChanged == null) ? null : () => onChanged?.call(value),
     );
   }
 }
 
 class ApButton extends StatelessWidget {
-  final Function onPressed;
   final String text;
+  final Function()? onPressed;
 
   const ApButton({
-    Key key,
-    @required this.onPressed,
-    @required this.text,
+    Key? key,
+    required this.text,
+    this.onPressed,
   }) : super(key: key);
 
   @override
@@ -192,9 +192,7 @@ class ApButton extends StatelessWidget {
           padding: EdgeInsets.all(14.0),
           primary: Colors.white,
         ),
-        onPressed: () {
-          if (onPressed != null) onPressed();
-        },
+        onPressed: onPressed,
         child: Text(
           text,
           style: TextStyle(color: ApTheme.of(context).blue, fontSize: 18.0),
@@ -205,11 +203,11 @@ class ApButton extends StatelessWidget {
 }
 
 class ApFlatButton extends StatelessWidget {
-  final Function onPressed;
-  final String text;
+  final Function()? onPressed;
+  final String? text;
 
   const ApFlatButton({
-    Key key,
+    Key? key,
     this.onPressed,
     this.text,
   }) : super(key: key);
@@ -220,7 +218,7 @@ class ApFlatButton extends StatelessWidget {
       child: TextButton(
         onPressed: onPressed,
         child: Text(
-          text,
+          text!,
           style: TextStyle(color: Colors.white, fontSize: 16.0),
         ),
       ),
@@ -232,8 +230,8 @@ class TextLogo extends StatelessWidget {
   final String text;
 
   const TextLogo({
-    Key key,
-    @required this.text,
+    Key? key,
+    required this.text,
   }) : super(key: key);
 
   @override
@@ -251,21 +249,21 @@ class TextLogo extends StatelessWidget {
 
 class ApTextField extends StatelessWidget {
   final TextEditingController controller;
-  final FocusNode focusNode;
-  final FocusNode nextFocusNode;
+  final FocusNode? focusNode;
+  final FocusNode? nextFocusNode;
   final TextInputAction textInputAction;
   final String labelText;
-  final Function(String text) onSubmitted;
-  final Function(String text) onChanged;
+  final Function(String text)? onSubmitted;
+  final Function(String text)? onChanged;
   final bool obscureText;
-  final int maxLength;
+  final int? maxLength;
   final TextInputType keyboardType;
-  final Iterable<String> autofillHints;
+  final Iterable<String>? autofillHints;
 
   const ApTextField({
-    Key key,
-    @required this.controller,
-    @required this.focusNode,
+    Key? key,
+    required this.controller,
+    required this.focusNode,
     this.nextFocusNode,
     this.onSubmitted,
     this.labelText = '',
@@ -289,10 +287,10 @@ class ApTextField extends StatelessWidget {
       maxLength: maxLength,
       onChanged: onChanged,
       onSubmitted: (text) {
-        if (focusNode != null) focusNode.unfocus();
+        focusNode?.unfocus();
         if (nextFocusNode != null)
           FocusScope.of(context).requestFocus(nextFocusNode);
-        if (onSubmitted != null) onSubmitted(text);
+        onSubmitted?.call(text);
       },
       decoration: InputDecoration(
         labelText: labelText,

@@ -1,19 +1,20 @@
-import 'package:ap_common/resources/ap_theme.dart';
 import 'package:flutter/material.dart';
+
+import '../resources/ap_theme.dart';
 
 class DefaultDialog extends StatelessWidget {
   final String title;
   final Widget contentWidget;
   final String actionText;
-  final Function actionFunction;
-  final EdgeInsetsGeometry contentPadding;
+  final Function() actionFunction;
+  final EdgeInsetsGeometry? contentPadding;
 
   const DefaultDialog({
-    Key key,
-    @required this.title,
-    @required this.contentWidget,
-    @required this.actionText,
-    @required this.actionFunction,
+    Key? key,
+    required this.title,
+    required this.contentWidget,
+    required this.actionText,
+    required this.actionFunction,
     this.contentPadding,
   }) : super(key: key);
 

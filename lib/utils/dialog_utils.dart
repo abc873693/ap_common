@@ -14,9 +14,9 @@ import 'package:dio/dio.dart';
 
 class DialogUtils {
   static showDefault({
-    @required BuildContext context,
-    @required String title,
-    @required String content,
+    required BuildContext context,
+    required String title,
+    required String content,
   }) {
     showDialog(
       context: context,
@@ -39,8 +39,8 @@ class DialogUtils {
   }
 
   static showAnnouncementRule({
-    @required BuildContext context,
-    @required Function onRightButtonClick,
+    required BuildContext context,
+    required Function() onRightButtonClick,
   }) {
     final ap = ApLocalizations.of(context);
     showDialog(
@@ -86,22 +86,22 @@ class DialogUtils {
       );
 
   static void showNewVersionContent({
-    @required BuildContext context,
-    @required VersionInfo versionInfo,
-    @required String appName,
-    @required String iOSAppId,
-    @required String defaultUrl,
-    String snapStoreId,
-    String windowsPath,
-    String githubRepositoryName,
-    String githubBranchName,
+    required BuildContext context,
+    required VersionInfo versionInfo,
+    required String appName,
+    required String iOSAppId,
+    required String defaultUrl,
+    String? snapStoreId,
+    String? windowsPath,
+    String? githubRepositoryName,
+    String? githubBranchName,
   }) async {
     final packageInfo = await PackageInfo.fromPlatform();
     final app = ApLocalizations.current;
     final versionDiff = versionInfo.code - int.parse(packageInfo.buildNumber);
     final versionName =
         'v${versionInfo.code ~/ 10000}.${versionInfo.code % 1000 ~/ 100}.${versionInfo.code % 100}';
-    String url = "";
+    String url = '';
     if (Platform.isAndroid) {
       url = "market://details?id=${packageInfo.packageName}";
     } else if (Platform.isIOS || Platform.isMacOS) {

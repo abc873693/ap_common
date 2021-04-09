@@ -1,7 +1,7 @@
 import 'dart:convert';
 
 class AnnouncementData {
-  List<Announcement> data;
+  List<Announcement>? data;
 
   AnnouncementData({
     this.data,
@@ -23,26 +23,26 @@ class AnnouncementData {
   Map<String, dynamic> toJson() => {
         "data": data == null
             ? null
-            : List<dynamic>.from(data.map((x) => x.toJson())),
+            : List<dynamic>.from(data!.map((x) => x.toJson())),
       };
 }
 
 class Announcement {
-  String title;
-  int id;
-  int nextId;
-  int lastId;
-  int weight;
-  String imgUrl;
-  String url;
-  String description;
-  String publishedTime;
-  String expireTime;
-  String applicant;
-  String applicationId;
-  bool reviewStatus;
-  String reviewDescription;
-  List<String> tags;
+  String? title;
+  int? id;
+  int? nextId;
+  int? lastId;
+  int? weight;
+  String? imgUrl;
+  String? url;
+  String? description;
+  String? publishedTime;
+  String? expireTime;
+  String? applicant;
+  String? applicationId;
+  bool? reviewStatus;
+  String? reviewDescription;
+  List<String?>? tags;
 
   Announcement({
     this.title,

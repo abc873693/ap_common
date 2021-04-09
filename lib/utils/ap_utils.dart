@@ -31,7 +31,7 @@ class ApUtils {
   static bool get isSupportCacheNetworkImage =>
       (kIsWeb || Platform.isAndroid || Platform.isIOS || Platform.isMacOS);
 
-  static void showToast(BuildContext context, String message, {int gravity}) {
+  static void showToast(BuildContext context, String? message, {int? gravity}) {
     Toast.show(
       message,
       context,
@@ -53,22 +53,22 @@ class ApUtils {
   }
 
   static void handleDioError(BuildContext context, DioError dioError,
-      {int gravity}) {
+      {int? gravity}) {
     switch (dioError.type) {
-      case DioErrorType.DEFAULT:
+      case DioErrorType.other:
         showToast(context, ApLocalizations.of(context).noInternet,
             gravity: gravity);
         break;
-      case DioErrorType.CONNECT_TIMEOUT:
-      case DioErrorType.RECEIVE_TIMEOUT:
-      case DioErrorType.SEND_TIMEOUT:
+      case DioErrorType.connectTimeout:
+      case DioErrorType.receiveTimeout:
+      case DioErrorType.sendTimeout:
         showToast(context, ApLocalizations.of(context).timeoutMessage,
             gravity: gravity);
         break;
-      case DioErrorType.RESPONSE:
+      case DioErrorType.response:
         showToast(context, dioError.message, gravity: gravity);
         break;
-      case DioErrorType.CANCEL:
+      case DioErrorType.cancel:
         break;
     }
   }
@@ -214,12 +214,12 @@ class ApUtils {
       launchUrl(defaultUrl);
   }
 
-  static Future<PickedFile> pickImage({
-    ImageSource imageSource,
-    CameraDevice preferredCameraDevice,
-    List<String> extensions,
+  static Future<PickedFile?> pickImage({
+    ImageSource? imageSource,
+    CameraDevice? preferredCameraDevice,
+    List<String>? extensions,
   }) async {
-    PickedFile image;
+    PickedFile? image;
     if (kIsWeb || Platform.isAndroid || Platform.isIOS) {
       final imagePicker = ImagePicker();
       image = await imagePicker.getImage(
@@ -256,18 +256,18 @@ class ApUtils {
         if (kIsWeb)
           downloadDir = '';
         else if (Platform.isMacOS)
-          downloadDir = (await getDownloadsDirectory()).path;
+          downloadDir = (await getDownloadsDirectory())!.path;
         else
           downloadDir = '';
         print(downloadDir);
         final filePath = path.join(downloadDir, '$fileName.png');
         bool success = true;
         if (!kIsWeb && (Platform.isAndroid || Platform.isIOS)) {
-          final AssetEntity imageEntity = await PhotoManager.editor.saveImage(
+          final AssetEntity? imageEntity = await PhotoManager.editor.saveImage(
             pngBytes,
             title: fileName,
           );
-          if (kDebugMode) print(imageEntity.title);
+          if (kDebugMode) print(imageEntity?.title);
           success = imageEntity != null;
         } else {
           await File(filePath).writeAsBytes(pngBytes);
@@ -288,7 +288,7 @@ class ApUtils {
 
   static showOverlay(BuildContext context, String text) {
     if (overlayEntry != null) return;
-    OverlayState overlayState = Overlay.of(context);
+    OverlayState? overlayState = Overlay.of(context);
     overlayEntry = OverlayEntry(
       builder: (context) {
         return Positioned(
@@ -300,7 +300,7 @@ class ApUtils {
       },
     );
 
-    overlayState.insert(overlayEntry);
+    overlayState?.insert(overlayEntry);
   }
 
   static removeOverlay() {
@@ -314,7 +314,7 @@ class ApUtils {
 class InputDoneView extends StatelessWidget {
   final String text;
 
-  const InputDoneView({Key key, @required this.text}) : super(key: key);
+  const InputDoneView({Key? key, required this.text}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {

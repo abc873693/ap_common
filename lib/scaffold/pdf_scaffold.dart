@@ -12,19 +12,17 @@ enum PdfState { loading, finish, error }
 
 class PdfScaffold extends StatefulWidget {
   final PdfState state;
-  final Function onRefresh;
-  final Uint8List data;
-  final String fileName;
+  final Function()? onRefresh;
+  final Uint8List? data;
+  final String? fileName;
 
   PdfScaffold({
-    Key key,
-    @required this.state,
+    Key? key,
+    required this.state,
     this.onRefresh,
     this.data,
     this.fileName,
-  }) : super(key: key) {
-    assert(this.state != null);
-  }
+  }) : super(key: key);
 
   @override
   _PdfScaffoldState createState() => _PdfScaffoldState();
@@ -49,8 +47,8 @@ class _PdfScaffoldState extends State<PdfScaffold> {
       default:
         return Scaffold(
           body: PdfPreview(
-            build: (PdfPageFormat format) async {
-              return widget.data;
+            build: (PdfPageFormat format) {
+              return widget.data!;
             },
             useActions: false,
           ),
@@ -62,7 +60,7 @@ class _PdfScaffoldState extends State<PdfScaffold> {
                 onPressed: () async {
                   AnalyticsUtils.instance?.logEvent('export_by_share');
                   await Printing.sharePdf(
-                    bytes: widget.data,
+                    bytes: widget.data!,
                     filename: '${widget.fileName ?? 'export'}.pdf',
                   );
                 },
@@ -73,8 +71,8 @@ class _PdfScaffoldState extends State<PdfScaffold> {
                 onPressed: () async {
                   AnalyticsUtils.instance?.logEvent('export_by_printing');
                   await Printing.layoutPdf(
-                    onLayout: (format) async => widget.data,
                     name: widget.fileName ?? 'export',
+                    onLayout: (PdfPageFormat format) => widget.data!,
                   );
                 },
               ),
@@ -86,7 +84,7 @@ class _PdfScaffoldState extends State<PdfScaffold> {
 
   Widget get errorContent => InkWell(
         onTap: () {
-          if (widget.onRefresh != null) widget.onRefresh();
+          if (widget.onRefresh != null) widget.onRefresh!();
         },
         child: HintContent(
           icon: ApIcon.error,

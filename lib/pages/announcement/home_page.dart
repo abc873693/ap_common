@@ -29,13 +29,13 @@ enum _DataType { announcement, application }
 class AnnouncementHomePage extends StatefulWidget {
   static const String routerName = "/announcement";
 
-  final Widget loginDescriptionWidget;
-  final Widget reviewDescriptionWidget;
-  final String organizationDomain;
+  final Widget? loginDescriptionWidget;
+  final Widget? reviewDescriptionWidget;
+  final String? organizationDomain;
   final bool enableNormalLogin;
 
   const AnnouncementHomePage({
-    Key key,
+    Key? key,
     this.loginDescriptionWidget,
     this.reviewDescriptionWidget,
     this.organizationDomain,
@@ -51,21 +51,21 @@ class _AnnouncementHomePageState extends State<AnnouncementHomePage> {
   final TextEditingController _password = TextEditingController();
   final _reviewDescription = TextEditingController();
 
-  ApLocalizations ap;
+  ApLocalizations get ap => ApLocalizations.of(context);
 
   _State state = _State.notLogin;
 
-  List<Announcement> announcements;
-  List<Announcement> applications;
+  List<Announcement>? announcements;
+  List<Announcement>? applications;
 
   bool isOffline = false;
 
-  AnnouncementLoginData loginData;
+  AnnouncementLoginData? loginData;
 
-  FocusNode usernameFocusNode;
-  FocusNode passwordFocusNode;
+  FocusNode? usernameFocusNode;
+  FocusNode? passwordFocusNode;
 
-  bool onlyShowNotReview = false;
+  bool? onlyShowNotReview = false;
 
   TextStyle get _defaultStyle => TextStyle(
         color: ApTheme.of(context).grey,
@@ -80,7 +80,7 @@ class _AnnouncementHomePageState extends State<AnnouncementHomePage> {
 
   GoogleSignIn _googleSignIn = GoogleSignIn(scopes: ['email']);
 
-  String _reviewStateText(bool reviewStatus) {
+  String _reviewStateText(bool? reviewStatus) {
     if (reviewStatus == null)
       return ap.waitingForReview;
     else
@@ -101,7 +101,6 @@ class _AnnouncementHomePageState extends State<AnnouncementHomePage> {
 
   @override
   Widget build(BuildContext context) {
-    ap = ApLocalizations.of(context);
     return Scaffold(
       appBar: AppBar(
         title: Text(ap.announcementReviewSystem),
@@ -113,13 +112,13 @@ class _AnnouncementHomePageState extends State<AnnouncementHomePage> {
                 children: [
                   Checkbox(
                     value: onlyShowNotReview,
-                    onChanged: (bool value) {
+                    onChanged: (bool? value) {
                       setState(() {
                         onlyShowNotReview = value;
                       });
                       Preferences.setBool(
                           ApConstants.ANNOUNCEMENT_ONLY_NOT_REVIEW,
-                          onlyShowNotReview);
+                          onlyShowNotReview!);
                     },
                     activeColor: ApTheme.of(context).yellow,
                     checkColor: ApTheme.of(context).blue,
@@ -132,10 +131,10 @@ class _AnnouncementHomePageState extends State<AnnouncementHomePage> {
               ),
               onPressed: () async {
                 setState(() {
-                  onlyShowNotReview = !onlyShowNotReview;
+                  onlyShowNotReview = !onlyShowNotReview!;
                 });
                 Preferences.setBool(ApConstants.ANNOUNCEMENT_ONLY_NOT_REVIEW,
-                    onlyShowNotReview);
+                    onlyShowNotReview!);
               },
             ),
           if (Preferences.getBool(ApConstants.ANNOUNCEMENT_IS_LOGIN, false))
@@ -168,7 +167,7 @@ class _AnnouncementHomePageState extends State<AnnouncementHomePage> {
                         ),
                       ),
                     );
-                    if (success is bool && success != null && success) {
+                    if (success is bool && success) {
                       _getAnnouncements();
                     }
                   },
@@ -261,8 +260,8 @@ class _AnnouncementHomePageState extends State<AnnouncementHomePage> {
                   Text(ap.myApplications),
                   SizedBox(height: 8.0),
                   for (var item in applications ?? [])
-                    if ((onlyShowNotReview && item.reviewStatus == null) ||
-                        (!onlyShowNotReview))
+                    if ((onlyShowNotReview! && item.reviewStatus == null) ||
+                        (!onlyShowNotReview!))
                       _item(_DataType.application, item)
                 ],
               ),
@@ -280,8 +279,8 @@ class _AnnouncementHomePageState extends State<AnnouncementHomePage> {
                     Text(ap.allApplications),
                     SizedBox(height: 8.0),
                     for (var item in applications ?? [])
-                      if ((onlyShowNotReview && item.reviewStatus == null) ||
-                          (!onlyShowNotReview))
+                      if ((onlyShowNotReview! && item.reviewStatus == null) ||
+                          (!onlyShowNotReview!))
                         _item(_DataType.application, item),
                     SizedBox(height: 16.0),
                     Text(ap.allAnnouncements),
@@ -303,7 +302,7 @@ class _AnnouncementHomePageState extends State<AnnouncementHomePage> {
       textInputAction: TextInputAction.next,
       focusNode: usernameFocusNode,
       onSubmitted: (text) {
-        usernameFocusNode.unfocus();
+        usernameFocusNode?.unfocus();
         FocusScope.of(context).requestFocus(passwordFocusNode);
       },
       decoration: InputDecoration(
@@ -317,7 +316,7 @@ class _AnnouncementHomePageState extends State<AnnouncementHomePage> {
       controller: _password,
       focusNode: passwordFocusNode,
       onSubmitted: (text) {
-        passwordFocusNode.unfocus();
+        passwordFocusNode?.unfocus();
         _login(AnnouncementLoginType.normal);
       },
       obscureText: true,
@@ -391,41 +390,41 @@ class _AnnouncementHomePageState extends State<AnnouncementHomePage> {
         borderRadius: BorderRadius.circular(12.0),
       ),
       child: GestureDetector(
-        onLongPress:
-            loginData.level == PermissionLevel.user || item.reviewStatus != null
-                ? null
-                : () async {
-                    var success = await Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (_) => AnnouncementEditPage(
-                          mode: dataType == _DataType.announcement
-                              ? Mode.edit
-                              : Mode.editApplication,
-                          announcement: item,
-                        ),
-                      ),
-                    );
-                    if (success ?? false) {
-                      if (success) {
-                        _getAnnouncements();
-                        _getApplications();
-                      }
-                    }
-                  },
+        onLongPress: loginData?.level == PermissionLevel.user ||
+                item.reviewStatus != null
+            ? null
+            : () async {
+                var success = await Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (_) => AnnouncementEditPage(
+                      mode: dataType == _DataType.announcement
+                          ? Mode.edit
+                          : Mode.editApplication,
+                      announcement: item,
+                    ),
+                  ),
+                );
+                if (success ?? false) {
+                  if (success) {
+                    _getAnnouncements();
+                    _getApplications();
+                  }
+                }
+              },
         child: ExpansionTile(
           childrenPadding: const EdgeInsets.symmetric(horizontal: 24.0),
           title: Padding(
             padding: const EdgeInsets.only(top: 8.0),
             child: Text(
-              item.title,
+              item.title!,
               style: TextStyle(fontSize: 18.0),
             ),
           ),
           trailing: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              if (loginData.level != PermissionLevel.user &&
+              if (loginData?.level != PermissionLevel.user &&
                   item.reviewStatus == null) ...[
                 IconButton(
                   icon: Icon(
@@ -524,7 +523,7 @@ class _AnnouncementHomePageState extends State<AnnouncementHomePage> {
               text: TextSpan(
                 style: _defaultStyle,
                 children: [
-                  if (loginData.level != PermissionLevel.user) ...[
+                  if (loginData!.level != PermissionLevel.user) ...[
                     TextSpan(
                       text: '${ap.weight}：',
                       style: TextStyle(fontWeight: FontWeight.bold),
@@ -601,12 +600,12 @@ class _AnnouncementHomePageState extends State<AnnouncementHomePage> {
                     ],
                   ),
                 ),
-              if (loginData.level != PermissionLevel.user)
+              if (loginData!.level != PermissionLevel.user)
                 Wrap(
                   children: [
-                    for (String tag in item.tags ?? []) ...[
+                    for (String? tag in item.tags ?? []) ...[
                       Chip(
-                        label: Text(tag),
+                        label: Text(tag!),
                         backgroundColor: tag.color,
                       ),
                       SizedBox(width: 8.0),
@@ -624,7 +623,7 @@ class _AnnouncementHomePageState extends State<AnnouncementHomePage> {
     AnnouncementHelper.instance.getAllAnnouncements(
       callback: GeneralCallback.simple(
         context,
-        (List<Announcement> data) {
+        (List<Announcement>? data) {
           this.announcements = data;
           setState(() => state = _State.done);
         },
@@ -636,7 +635,7 @@ class _AnnouncementHomePageState extends State<AnnouncementHomePage> {
     AnnouncementHelper.instance.getApplications(
       callback: GeneralCallback.simple(
         context,
-        (List<Announcement> data) {
+        (List<Announcement>? data) {
           this.applications = data;
           setState(() => state = _State.done);
         },
@@ -653,20 +652,20 @@ class _AnnouncementHomePageState extends State<AnnouncementHomePage> {
     _username.text =
         Preferences.getString(ApConstants.ANNOUNCEMENT_USERNAME, '');
     _password.text =
-        Preferences.getStringSecurity(ApConstants.ANNOUNCEMENT_PASSWORD, '');
+        Preferences.getStringSecurity(ApConstants.ANNOUNCEMENT_PASSWORD, '')!;
     if (isLogin) {
       setState(() => state = _State.done);
       this.loginData = AnnouncementLoginData.load();
       if (kDebugMode)
         print(
-            'token is expire = ${this.loginData?.isExpired} level = ${loginData.level}');
+            'token is expire = ${this.loginData?.isExpired} level = ${loginData!.level}');
       if (this.loginData?.isExpired ?? true) {
         int index = Preferences.getInt(ApConstants.ANNOUNCEMENT_LOGIN_TYPE, 0);
         _login(AnnouncementLoginType.values[index]);
       } else {
-        AnnouncementHelper.instance.setAuthorization(loginData.key);
+        AnnouncementHelper.instance.setAuthorization(loginData!.key);
         setState(() {
-          if (loginData.level != PermissionLevel.user) _getAnnouncements();
+          if (loginData!.level != PermissionLevel.user) _getAnnouncements();
           _getApplications();
         });
       }
@@ -695,7 +694,7 @@ class _AnnouncementHomePageState extends State<AnnouncementHomePage> {
           ),
           barrierDismissible: false,
         );
-      String idToken =
+      String? idToken =
           Preferences.getBool(ApConstants.ANNOUNCEMENT_IS_LOGIN, false)
               ? Preferences.getStringSecurity(
                   ApConstants.ANNOUNCEMENT_ID_TOKEN, null)
@@ -709,15 +708,15 @@ class _AnnouncementHomePageState extends State<AnnouncementHomePage> {
         onFailure: (dioError) async {
           if (isNotLogin) Navigator.of(context, rootNavigator: true).pop();
           ApUtils.showToast(context, dioError.i18nMessage);
-          if (dioError.type == DioErrorType.RESPONSE &&
-              dioError.response.statusCode == 403) {
+          if (dioError.type == DioErrorType.response &&
+              dioError.response!.statusCode == 403) {
             if (loginType == AnnouncementLoginType.google)
               await _googleSignIn.signOut();
           }
         },
         onSuccess: (loginData) {
           this.loginData = loginData;
-          this.loginData.save();
+          this.loginData!.save();
           if (kDebugMode) print(loginData.key);
           if (isNotLogin) Navigator.of(context, rootNavigator: true).pop();
           if (loginType == AnnouncementLoginType.normal)
@@ -725,7 +724,7 @@ class _AnnouncementHomePageState extends State<AnnouncementHomePage> {
                 ApConstants.ANNOUNCEMENT_PASSWORD, _password.text);
           else
             Preferences.setStringSecurity(
-                ApConstants.ANNOUNCEMENT_ID_TOKEN, idToken);
+                ApConstants.ANNOUNCEMENT_ID_TOKEN, idToken!);
           ApUtils.showToast(context, ap.loginSuccess);
           Preferences.setBool(ApConstants.ANNOUNCEMENT_IS_LOGIN, true);
           Preferences.setInt(
@@ -776,7 +775,7 @@ class _AnnouncementHomePageState extends State<AnnouncementHomePage> {
               idToken = credential.identityToken;
             }
             AnnouncementHelper.instance
-                .appleLogin(idToken: idToken, callback: callback);
+                .appleLogin(idToken: idToken!, callback: callback);
           } catch (e, s) {
             ApUtils.showToast(context, ap.thirdPartyLoginFail);
             if (isNotLogin) Navigator.of(context, rootNavigator: true).pop();
@@ -788,8 +787,8 @@ class _AnnouncementHomePageState extends State<AnnouncementHomePage> {
   }
 }
 
-extension TagColors on String {
-  Color get color {
+extension TagColors on String? {
+  Color? get color {
     switch (this) {
       case 'zh':
         return Colors.deepOrange;

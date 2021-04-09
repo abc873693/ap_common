@@ -5,7 +5,7 @@
 import 'dart:convert';
 
 class NotificationsData {
-  Data data;
+  Data? data;
 
   NotificationsData({
     this.data,
@@ -22,7 +22,7 @@ class NotificationsData {
       );
 
   Map<String, dynamic> toJson() => {
-        "data": data.toJson(),
+        "data": data!.toJson(),
       };
 
   static NotificationsData sample() {
@@ -32,8 +32,8 @@ class NotificationsData {
 }
 
 class Data {
-  int page;
-  List<Notifications> notifications;
+  int? page;
+  List<Notifications>? notifications;
 
   Data({
     this.page,
@@ -53,13 +53,13 @@ class Data {
   Map<String, dynamic> toJson() => {
         "page": page,
         "notification":
-            new List<dynamic>.from(notifications.map((x) => x.toJson())),
+            new List<dynamic>.from(notifications!.map((x) => x.toJson())),
       };
 }
 
 class Notifications {
-  String link;
-  Info info;
+  String? link;
+  Info? info;
 
   Notifications({
     this.link,
@@ -79,15 +79,15 @@ class Notifications {
 
   Map<String, dynamic> toJson() => {
         "link": link,
-        "info": info.toJson(),
+        "info": info!.toJson(),
       };
 }
 
 class Info {
-  int id;
-  String title;
-  String department;
-  String date;
+  int? id;
+  String? title;
+  String? department;
+  String? date;
 
   Info({
     this.id,

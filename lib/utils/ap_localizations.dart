@@ -9,14 +9,14 @@ export 'package:intl/intl.dart';
 
 extension ApExtension on ApLocalizations {
   String get dateTimeLocale {
-    if (Intl.defaultLocale.contains('TW'))
+    if (Intl.defaultLocale!.contains('TW'))
       return 'zh-TW';
     else
       return 'en-US';
   }
 
   String get locale {
-    if (Intl.defaultLocale.contains('TW'))
+    if (Intl.defaultLocale!.contains('TW'))
       return 'zh-TW';
     else
       return 'en-US';
@@ -53,19 +53,17 @@ extension ApExtension on ApLocalizations {
       ];
 
   @deprecated
-  String dioError(DioError dioError) {
+  String? dioError(DioError dioError) {
     switch (dioError.type) {
-      case DioErrorType.DEFAULT:
+      case DioErrorType.other:
         return noInternet;
-      case DioErrorType.CONNECT_TIMEOUT:
-      case DioErrorType.RECEIVE_TIMEOUT:
-      case DioErrorType.SEND_TIMEOUT:
+      case DioErrorType.connectTimeout:
+      case DioErrorType.receiveTimeout:
+      case DioErrorType.sendTimeout:
         return timeoutMessage;
-        break;
-      case DioErrorType.RESPONSE:
+      case DioErrorType.response:
         return dioError.message;
-        break;
-      case DioErrorType.CANCEL:
+      case DioErrorType.cancel:
       default:
         return null;
     }
@@ -73,22 +71,20 @@ extension ApExtension on ApLocalizations {
 }
 
 extension DioErrorI18nExtension on DioError {
-  String get i18nMessage {
+  String? get i18nMessage {
     switch (type) {
-      case DioErrorType.DEFAULT:
+      case DioErrorType.other:
         return ApLocalizations.current.noInternet;
-      case DioErrorType.CONNECT_TIMEOUT:
-      case DioErrorType.RECEIVE_TIMEOUT:
-      case DioErrorType.SEND_TIMEOUT:
+      case DioErrorType.connectTimeout:
+      case DioErrorType.receiveTimeout:
+      case DioErrorType.sendTimeout:
         return ApLocalizations.current.timeoutMessage;
-        break;
-      case DioErrorType.RESPONSE:
-        if (response.data is Map<String, dynamic>)
-          return response.data['title'] ?? message;
+      case DioErrorType.response:
+        if (response!.data is Map<String, dynamic>)
+          return response!.data['title'] ?? message;
         else
           return message;
-        break;
-      case DioErrorType.CANCEL:
+      case DioErrorType.cancel:
       default:
         return null;
     }
