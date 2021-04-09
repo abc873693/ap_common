@@ -49,8 +49,8 @@ class CourseConfig extends InheritedWidget {
     required Widget child,
   }) : super(child: child);
 
-  static CourseConfig? of(BuildContext context) {
-    return context.dependOnInheritedWidgetOfExactType();
+  static CourseConfig of(BuildContext context) {
+    return context.dependOnInheritedWidgetOfExactType()!;
   }
 
   @override
@@ -70,7 +70,7 @@ class CourseScaffold extends StatefulWidget {
   final Function(int index)? onSelect;
   @deprecated
   final bool isShowSearchButton;
-  final Function? onSearchButtonClick;
+  final Function()? onSearchButtonClick;
   final Function()? onRefresh;
   final List<Widget>? actions;
   final String? customHint;
@@ -270,7 +270,7 @@ class CourseScaffoldState extends State<CourseScaffold> {
                   child: Container(
                     color: ApTheme.of(context).courseListTabletBackground,
                     child: CourseList(
-                      courses: widget.courseData.courses,
+                      courses: widget.courseData.courses ?? [],
                       timeCodes: widget.courseData.timeCodes,
                     ),
                   ),
@@ -354,7 +354,8 @@ class CourseScaffoldState extends State<CourseScaffold> {
           onTap: () {
             if (widget.state == CourseState.empty)
               _pickSemester();
-            else if (widget.onRefresh != null) widget.onRefresh!();
+            else
+              widget.onRefresh?.call();
           },
           child: HintContent(
             icon: ApIcon.classIcon,
@@ -381,7 +382,7 @@ class CourseScaffoldState extends State<CourseScaffold> {
           );
         } else {
           return CourseList(
-            courses: widget.courseData.courses,
+            courses: widget.courseData.courses ?? [],
             timeCodes: widget.courseData.timeCodes,
           );
         }
@@ -782,18 +783,18 @@ class _CourseContentState extends State<CourseContent> {
 }
 
 class TimeCodeBorder extends StatelessWidget {
-  final TimeCode? timeCode;
-  final bool? hasHoliday;
+  final TimeCode timeCode;
+  final bool hasHoliday;
 
   const TimeCodeBorder({
     Key? key,
-    this.timeCode,
-    this.hasHoliday,
+    required this.timeCode,
+    required this.hasHoliday,
   }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    final showSectionTime = CourseConfig.of(context)!.showSectionTime!;
+    final showSectionTime = CourseConfig.of(context).showSectionTime!;
     return Container(
       alignment: Alignment.center,
       decoration: BoxDecoration(
@@ -805,7 +806,7 @@ class TimeCodeBorder extends StatelessWidget {
         ),
       ),
       height: _courseHeight,
-      width: hasHoliday! ? 35.0 : 50.0,
+      width: hasHoliday ? 35.0 : 50.0,
       child: AutoSizeText.rich(
         TextSpan(
           style: TextStyle(
@@ -813,9 +814,9 @@ class TimeCodeBorder extends StatelessWidget {
             fontSize: 14.0,
           ),
           children: [
-            if (showSectionTime) TextSpan(text: '${timeCode!.startTime}\n'),
+            if (showSectionTime) TextSpan(text: '${timeCode.startTime}\n'),
             TextSpan(
-              text: '${timeCode!.title}\n',
+              text: '${timeCode.title}\n',
               style: TextStyle(
                 fontWeight:
                     showSectionTime ? FontWeight.bold : FontWeight.normal,
@@ -823,7 +824,7 @@ class TimeCodeBorder extends StatelessWidget {
                 fontSize: showSectionTime ? 16.0 : 14.0,
               ),
             ),
-            if (showSectionTime) TextSpan(text: '${timeCode!.endTime}'),
+            if (showSectionTime) TextSpan(text: '${timeCode.endTime}'),
           ],
         ),
         textAlign: TextAlign.center,
@@ -833,7 +834,7 @@ class TimeCodeBorder extends StatelessWidget {
 }
 
 class CourseList extends StatelessWidget {
-  final List<Course>? courses;
+  final List<Course> courses;
   final List<TimeCode>? timeCodes;
 
   const CourseList({
@@ -846,7 +847,7 @@ class CourseList extends StatelessWidget {
   Widget build(BuildContext context) {
     return ListView.builder(
       itemBuilder: (_, index) {
-        var course = courses![index];
+        var course = courses[index];
         return Card(
           elevation: 4.0,
           margin: EdgeInsets.all(8.0),
@@ -857,7 +858,7 @@ class CourseList extends StatelessWidget {
             contentPadding:
                 EdgeInsets.symmetric(vertical: 8.0, horizontal: 24.0),
             title: Text(
-              courses![index].title!,
+              courses[index].title!,
               style: TextStyle(
                 height: 1.3,
                 fontSize: 20.0,
@@ -969,7 +970,7 @@ class CourseList extends StatelessWidget {
           ),
         );
       },
-      itemCount: courses?.length ?? 0,
+      itemCount: courses.length,
     );
   }
 }
@@ -979,7 +980,7 @@ class CourseBorder extends StatelessWidget {
   final SectionTime? sectionTime;
   final TimeCode? timeCode;
   final double height;
-  final double? width;
+  final double width;
   final Border? border;
   final Color? color;
   final void Function(int weekday, TimeCode timeCode, Course course)? onPressed;
@@ -991,23 +992,23 @@ class CourseBorder extends StatelessWidget {
     this.timeCode,
     this.onPressed,
     this.height = _courseHeight,
-    this.width,
+    this.width = double.maxFinite,
     this.border,
     this.color,
   }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    final showInstructors = CourseConfig.of(context)!.showInstructors;
+    final showInstructors = CourseConfig.of(context).showInstructors;
     final showClassroomLocation =
-        CourseConfig.of(context)!.showClassroomLocation;
+        CourseConfig.of(context).showClassroomLocation;
     return Container(
       padding: EdgeInsets.only(
         bottom: course != null ? 2.0 : 0.0,
         right: course != null ? 2.0 : 0.0,
       ),
       height: height,
-      width: width ?? double.maxFinite,
+      width: width,
       decoration: BoxDecoration(
         border: border ??
             Border.all(
@@ -1126,7 +1127,7 @@ class _CourseScaffoldSettingDialogState
             value: showSectionTime,
             onChanged: (value) {
               setState(() => showSectionTime = value);
-              widget.showSectionTimeOnChanged!(value);
+              widget.showSectionTimeOnChanged?.call(value);
             },
             checkColor: ApTheme.of(context).background,
             activeColor: ApTheme.of(context).yellow,
@@ -1137,7 +1138,7 @@ class _CourseScaffoldSettingDialogState
             value: showInstructors,
             onChanged: (value) {
               setState(() => showInstructors = value);
-              widget.showInstructorsOnChanged!(value);
+              widget.showInstructorsOnChanged?.call(value);
             },
             checkColor: ApTheme.of(context).background,
             activeColor: ApTheme.of(context).yellow,
@@ -1148,7 +1149,7 @@ class _CourseScaffoldSettingDialogState
             value: showClassroomLocation,
             onChanged: (value) {
               setState(() => showClassroomLocation = value);
-              widget.showClassroomLocationOnChanged!(value);
+              widget.showClassroomLocationOnChanged?.call(value);
             },
             checkColor: ApTheme.of(context).background,
             activeColor: ApTheme.of(context).yellow,
@@ -1159,7 +1160,7 @@ class _CourseScaffoldSettingDialogState
             value: showSearchButton,
             onChanged: (value) {
               setState(() => showSearchButton = value);
-              widget.showSearchButtonOnChanged!(value);
+              widget.showSearchButtonOnChanged?.call(value);
             },
             checkColor: ApTheme.of(context).background,
             activeColor: ApTheme.of(context).yellow,
