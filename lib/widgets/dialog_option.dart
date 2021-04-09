@@ -5,7 +5,7 @@ import 'package:flutter/material.dart';
 class DialogOption extends StatelessWidget {
   final String text;
   final bool check;
-  final Function onPressed;
+  final Function() onPressed;
 
   const DialogOption({
     Key? key,
@@ -39,7 +39,7 @@ class DialogOption extends StatelessWidget {
             )
         ],
       ),
-      onPressed: onPressed as void Function()?,
+      onPressed: onPressed,
     );
   }
 }

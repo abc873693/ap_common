@@ -131,7 +131,7 @@ class LoginScaffoldState extends State<LoginScaffold> {
 class TextCheckBox extends StatelessWidget {
   final bool value;
   final String text;
-  final ValueChanged<bool?> onChanged;
+  final ValueChanged<bool?>? onChanged;
 
   const TextCheckBox({
     Key? key,
@@ -163,19 +163,19 @@ class TextCheckBox extends StatelessWidget {
           )
         ],
       ),
-      onTap: (onChanged == null) ? null : () => onChanged(!value),
+      onTap: (onChanged == null) ? null : () => onChanged?.call(value),
     );
   }
 }
 
 class ApButton extends StatelessWidget {
-  final Function onPressed;
   final String text;
+  final Function()? onPressed;
 
   const ApButton({
     Key? key,
-    required this.onPressed,
     required this.text,
+    this.onPressed,
   }) : super(key: key);
 
   @override
@@ -192,9 +192,7 @@ class ApButton extends StatelessWidget {
           padding: EdgeInsets.all(14.0),
           primary: Colors.white,
         ),
-        onPressed: () {
-          if (onPressed != null) onPressed();
-        },
+        onPressed: onPressed,
         child: Text(
           text,
           style: TextStyle(color: ApTheme.of(context).blue, fontSize: 18.0),
@@ -205,7 +203,7 @@ class ApButton extends StatelessWidget {
 }
 
 class ApFlatButton extends StatelessWidget {
-  final Function? onPressed;
+  final Function()? onPressed;
   final String? text;
 
   const ApFlatButton({
@@ -218,7 +216,7 @@ class ApFlatButton extends StatelessWidget {
   Widget build(BuildContext context) {
     return Center(
       child: TextButton(
-        onPressed: onPressed as void Function()?,
+        onPressed: onPressed,
         child: Text(
           text!,
           style: TextStyle(color: Colors.white, fontSize: 16.0),
@@ -251,7 +249,7 @@ class TextLogo extends StatelessWidget {
 
 class ApTextField extends StatelessWidget {
   final TextEditingController controller;
-  final FocusNode focusNode;
+  final FocusNode? focusNode;
   final FocusNode? nextFocusNode;
   final TextInputAction textInputAction;
   final String labelText;
@@ -289,10 +287,10 @@ class ApTextField extends StatelessWidget {
       maxLength: maxLength,
       onChanged: onChanged,
       onSubmitted: (text) {
-        if (focusNode != null) focusNode.unfocus();
+        focusNode?.unfocus();
         if (nextFocusNode != null)
           FocusScope.of(context).requestFocus(nextFocusNode);
-        if (onSubmitted != null) onSubmitted!(text);
+        onSubmitted?.call(text);
       },
       decoration: InputDecoration(
         labelText: labelText,

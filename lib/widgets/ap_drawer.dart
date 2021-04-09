@@ -9,7 +9,7 @@ import 'package:flutter/material.dart';
 
 class ApDrawer extends StatefulWidget {
   final UserInfo? userInfo;
-  final Function onTapHeader;
+  final Function() onTapHeader;
   final String? imageAsset;
   final List<Widget> widgets;
   final String imageHeroTag;
@@ -47,7 +47,7 @@ class ApDrawerState extends State<ApDrawer> {
         child: Column(
           children: <Widget>[
             GestureDetector(
-              onTap: widget.onTapHeader as void Function()?,
+              onTap: widget.onTapHeader,
               child: Stack(
                 children: <Widget>[
                   UserAccountsDrawerHeader(
@@ -129,7 +129,7 @@ class ApDrawerState extends State<ApDrawer> {
 class DrawerItem extends StatelessWidget {
   final IconData icon;
   final String title;
-  final Function onTap;
+  final Function() onTap;
 
   const DrawerItem({
     Key? key,
@@ -149,7 +149,7 @@ class DrawerItem extends StatelessWidget {
           fontSize: 16.0,
         ),
       ),
-      onTap: onTap as void Function()?,
+      onTap: onTap,
     );
   }
 }
@@ -157,7 +157,7 @@ class DrawerItem extends StatelessWidget {
 class DrawerSubItem extends StatelessWidget {
   final IconData icon;
   final String title;
-  final Function onTap;
+  final Function() onTap;
 
   const DrawerSubItem({
     Key? key,
@@ -178,7 +178,7 @@ class DrawerSubItem extends StatelessWidget {
           fontSize: 16.0,
         ),
       ),
-      onTap: onTap as void Function()?,
+      onTap: onTap,
     );
   }
 }

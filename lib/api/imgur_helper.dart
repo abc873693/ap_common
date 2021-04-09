@@ -55,7 +55,7 @@ class ImgurHelper {
       if (response.statusCode == 200) {
         final imgurUploadResponse = ImgurUploadResponse.fromJson(response.data);
         return callback == null
-            ? imgurUploadResponse as FutureOr<ImgurUploadData>
+            ? imgurUploadResponse.data
             : callback.onSuccess(imgurUploadResponse.data);
       } else {
         return callback == null

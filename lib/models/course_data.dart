@@ -337,11 +337,11 @@ class SectionTime {
 
   SectionTime copyWith({
     int? weekDay,
-    String? index,
+    int? index,
   }) =>
       SectionTime(
         weekday: weekDay ?? this.weekday,
-        index: index as int? ?? this.index,
+        index: index ?? this.index,
       );
 
   factory SectionTime.fromRawJson(String str) =>
@@ -394,9 +394,9 @@ class TimeCode {
       );
 
   Map<String, dynamic> toJson() => {
-        "title": title == null ? null : title,
-        "startTime": startTime == null ? null : startTime,
-        "endTime": endTime == null ? null : endTime,
+        "title": title,
+        "startTime": startTime,
+        "endTime": endTime,
       };
 }
 

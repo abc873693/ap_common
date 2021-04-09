@@ -42,7 +42,6 @@ class UserInfoScaffoldState extends State<UserInfoScaffold> {
       case BarCodeMode.qrCode:
       default:
         return ApImageIcons.barcode;
-        break;
     }
   }
 
@@ -135,7 +134,6 @@ class UserInfoCard extends StatelessWidget {
       case BarCodeMode.qrCode:
       default:
         return Barcode.qrCode();
-        break;
     }
   }
 
@@ -146,7 +144,6 @@ class UserInfoCard extends StatelessWidget {
       case BarCodeMode.qrCode:
       default:
         return 180.0;
-        break;
     }
   }
 

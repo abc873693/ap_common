@@ -15,14 +15,14 @@ class NotificationScaffold extends StatefulWidget {
 
   final NotificationState state;
   final List<Notifications> notificationList;
-  final Function? onRefresh;
-  final Function? onLoadingMore;
+  final Future<void> Function() onRefresh;
+  final Future<void> Function()? onLoadingMore;
 
   NotificationScaffold({
     Key? key,
     required this.state,
     required this.notificationList,
-    this.onRefresh,
+    required this.onRefresh,
     this.onLoadingMore,
   }) : super(key: key);
 
@@ -131,7 +131,7 @@ class NotificationScaffoldState extends State<NotificationScaffold>
       case NotificationState.empty:
         return InkWell(
           onTap: () {
-            if (widget.onRefresh != null) widget.onRefresh!();
+            widget.onRefresh.call();
             AnalyticsUtils.instance?.logEvent(AnalyticsConstants.REFRESH);
           },
           child: HintContent(
@@ -148,7 +148,7 @@ class NotificationScaffoldState extends State<NotificationScaffold>
         );
       default:
         return RefreshIndicator(
-          onRefresh: widget.onRefresh as Future<void> Function(),
+          onRefresh: widget.onRefresh,
           child: ListView.builder(
             controller: controller,
             itemBuilder: (context, index) {

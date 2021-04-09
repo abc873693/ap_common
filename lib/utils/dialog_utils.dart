@@ -40,7 +40,7 @@ class DialogUtils {
 
   static showAnnouncementRule({
     required BuildContext context,
-    required Function onRightButtonClick,
+    required Function() onRightButtonClick,
   }) {
     final ap = ApLocalizations.of(context);
     showDialog(

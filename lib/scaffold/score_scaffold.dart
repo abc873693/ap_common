@@ -368,7 +368,7 @@ class ScoreTextBorder extends StatelessWidget {
   final String? text;
   final TextStyle style;
 
-  final Function? onTap;
+  final Function()? onTap;
 
   const ScoreTextBorder({
     Key? key,
@@ -380,7 +380,7 @@ class ScoreTextBorder extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return InkWell(
-      onTap: onTap as void Function()?,
+      onTap: onTap,
       child: Container(
         width: double.maxFinite,
         padding: EdgeInsets.symmetric(vertical: 2.0, horizontal: 4.0),

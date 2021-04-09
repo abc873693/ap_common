@@ -180,7 +180,7 @@ class CourseNotify {
         "location": location == null ? null : location,
         "code": code == null ? null : code,
         "weekday": weekday,
-        "startTime": startTime == null ? null : startTime,
+        "startTime": startTime,
       };
 
   factory CourseNotify.fromCourse({

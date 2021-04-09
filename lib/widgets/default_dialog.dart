@@ -6,7 +6,7 @@ class DefaultDialog extends StatelessWidget {
   final String title;
   final Widget contentWidget;
   final String actionText;
-  final Function actionFunction;
+  final Function() actionFunction;
   final EdgeInsetsGeometry? contentPadding;
 
   const DefaultDialog({
@@ -86,7 +86,7 @@ class DefaultDialog extends StatelessWidget {
                   ),
                 ),
               ),
-              onTap: actionFunction as void Function()?,
+              onTap: actionFunction,
             ),
           ),
         ],

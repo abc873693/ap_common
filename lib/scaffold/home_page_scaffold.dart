@@ -60,6 +60,7 @@ class HomePageScaffold extends StatefulWidget {
 
 class HomePageScaffoldState extends State<HomePageScaffold> {
   final _scaffoldMessengerKey = GlobalKey<ScaffoldMessengerState>();
+
   ApLocalizations get app => ApLocalizations.of(context);
 
   PageController? pageController;
@@ -331,7 +332,7 @@ class HomePageScaffoldState extends State<HomePageScaffold> {
   ScaffoldFeatureController<SnackBar, SnackBarClosedReason>? showSnackBar({
     required String text,
     String? actionText,
-    Function? onSnackBarTapped,
+    Function()? onSnackBarTapped,
     Duration? duration,
   }) {
     return _scaffoldMessengerKey.currentState?.showSnackBar(
@@ -341,7 +342,7 @@ class HomePageScaffoldState extends State<HomePageScaffold> {
         action: actionText == null
             ? null
             : SnackBarAction(
-                onPressed: onSnackBarTapped as void Function(),
+                onPressed: onSnackBarTapped!,
                 label: actionText,
                 textColor: ApTheme.of(context).snackBarActionTextColor,
               ),

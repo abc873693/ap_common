@@ -36,7 +36,7 @@ class SettingSwitch extends StatelessWidget {
   final String text;
   final String subText;
   final bool value;
-  final Function onChanged;
+  final void Function(bool) onChanged;
 
   const SettingSwitch({
     Key? key,
@@ -58,7 +58,7 @@ class SettingSwitch extends StatelessWidget {
         style: TextStyle(fontSize: 14.0, color: ApTheme.of(context).greyText),
       ),
       value: value,
-      onChanged: onChanged as void Function(bool)?,
+      onChanged: onChanged,
       activeColor: ApTheme.of(context).blueAccent,
     );
   }
@@ -67,13 +67,13 @@ class SettingSwitch extends StatelessWidget {
 class SettingItem extends StatelessWidget {
   final String text;
   final String subText;
-  final Function onTap;
+  final Function()? onTap;
 
   const SettingItem({
     Key? key,
     required this.text,
     required this.subText,
-    required this.onTap,
+    this.onTap,
   }) : super(key: key);
 
   @override
@@ -87,7 +87,7 @@ class SettingItem extends StatelessWidget {
         subText,
         style: TextStyle(fontSize: 14.0, color: ApTheme.of(context).greyText),
       ),
-      onTap: onTap as void Function()?,
+      onTap: onTap,
     );
   }
 }
@@ -120,7 +120,7 @@ class CheckCourseNotifyItem extends StatelessWidget {
                 index: -1,
                 onSelected: (index) {
                   NotificationUtils.cancelCourseNotify(
-                    id: notifyData.data[index].id!,
+                    id: notifyData.data[index].id,
                   );
                   notifyData.data.removeAt(index);
                   notifyData.save();
