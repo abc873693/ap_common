@@ -201,7 +201,11 @@ class ChangeLanguageItem extends StatelessWidget {
               String code = ApSupportLanguage.values[index].code;
               switch (index) {
                 case 0:
-                  locale = WidgetsBinding.instance!.window.locales.first;
+                  List<Locale>? locales =
+                      WidgetsBinding.instance?.window.locales;
+                  locale =
+                      (locales?.length == 0 ? Locale('en') : locales?.first) ??
+                          Locale('en');
                   locale = ApLocalizations.delegate.isSupported(locale)
                       ? locale
                       : Locale('en');
@@ -215,9 +219,9 @@ class ChangeLanguageItem extends StatelessWidget {
               }
               onChange.call(locale);
               Preferences.setString(ApConstants.PREF_LANGUAGE_CODE, code);
-              AnalyticsUtils.instance?.logAction(
+              AnalyticsUtils.instance?.logEvent(
                 'change_language',
-                code,
+                parameters: {'action': code},
               );
               AnalyticsUtils.instance?.setUserProperty(
                 AnalyticsConstants.LANGUAGE,
