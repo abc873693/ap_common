@@ -63,7 +63,7 @@ class ScoreScaffold extends StatefulWidget {
 }
 
 class ScoreScaffoldState extends State<ScoreScaffold> {
-  ApLocalizations? app;
+  ApLocalizations get app => ApLocalizations.of(context);
 
   @override
   void initState() {
@@ -77,10 +77,9 @@ class ScoreScaffoldState extends State<ScoreScaffold> {
 
   @override
   Widget build(BuildContext context) {
-    app = ApLocalizations.of(context);
     return Scaffold(
       appBar: AppBar(
-        title: Text(widget.title ?? app!.score),
+        title: Text(widget.title ?? app.score),
         backgroundColor: ApTheme.of(context).blue,
         bottom: widget.bottom as PreferredSizeWidget?,
       ),
@@ -102,7 +101,7 @@ class ScoreScaffoldState extends State<ScoreScaffold> {
             SizedBox(height: 8.0),
             if (widget.semesterData != null && widget.itemPicker == null)
               ItemPicker(
-                dialogTitle: app!.pickSemester,
+                dialogTitle: app.pickSemester,
                 onSelected: widget.onSelect,
                 items: widget.semesterData!.semesters,
                 currentIndex: widget.semesterData!.currentIndex,
@@ -134,13 +133,13 @@ class ScoreScaffoldState extends State<ScoreScaffold> {
   String get hintContent {
     switch (widget.state) {
       case ScoreState.error:
-        return app!.clickToRetry;
+        return app.clickToRetry;
       case ScoreState.empty:
-        return app!.scoreEmpty;
+        return app.scoreEmpty;
       case ScoreState.offlineEmpty:
-        return app!.noOfflineData;
+        return app.noOfflineData;
       case ScoreState.custom:
-        return widget.customStateHint ?? app!.unknownError;
+        return widget.customStateHint ?? app.unknownError;
       default:
         return '';
     }
@@ -186,7 +185,7 @@ class ScoreScaffoldState extends State<ScoreScaffold> {
       showDialog(
         context: context,
         builder: (_) => SimpleOptionDialog(
-          title: app!.pickSemester,
+          title: app.pickSemester,
           items: widget.semesterData!.semesters,
           index: widget.semesterData!.currentIndex,
           onSelected: widget.onSelect,

@@ -48,7 +48,7 @@ class AnnouncementEditPage extends StatefulWidget {
 class _AnnouncementEditPageState extends State<AnnouncementEditPage> {
   final _formKey = GlobalKey<FormState>();
 
-  ApLocalizations? app;
+  ApLocalizations get app => ApLocalizations.of(context);
 
   Announcement? announcements;
 
@@ -77,21 +77,21 @@ class _AnnouncementEditPageState extends State<AnnouncementEditPage> {
       case Mode.add:
       case Mode.edit:
       case Mode.editApplication:
-        return app!.announcements;
+        return app.announcements;
       case Mode.application:
-        return app!.addApplication;
+        return app.addApplication;
     }
   }
 
   String get buttonText {
     switch (widget.mode) {
       case Mode.add:
-        return app!.submit;
+        return app.submit;
       case Mode.edit:
-        return app!.update;
+        return app.update;
       case Mode.editApplication:
       case Mode.application:
-        return app!.submit;
+        return app.submit;
     }
   }
 
@@ -101,11 +101,11 @@ class _AnnouncementEditPageState extends State<AnnouncementEditPage> {
         return [
           CircularProgressIndicator(),
           SizedBox(height: 8.0),
-          Text(app!.uploading),
+          Text(app.uploading),
         ];
       case _ImgurUploadState.done:
         return [
-          Text(app!.imagePreview),
+          Text(app.imagePreview),
           SizedBox(height: 8.0),
           SizedBox(
             height: 300,
@@ -116,7 +116,7 @@ class _AnnouncementEditPageState extends State<AnnouncementEditPage> {
       case _ImgurUploadState.no_file:
       default:
         return [
-          Text(app!.imgurUploadDescription),
+          Text(app.imgurUploadDescription),
           SizedBox(height: 8.0),
         ];
     }
@@ -149,7 +149,6 @@ class _AnnouncementEditPageState extends State<AnnouncementEditPage> {
 
   @override
   Widget build(BuildContext context) {
-    app = ApLocalizations.of(context);
     return Scaffold(
       appBar: AppBar(
         title: Text(title),
@@ -166,7 +165,7 @@ class _AnnouncementEditPageState extends State<AnnouncementEditPage> {
               controller: _title,
               validator: (value) {
                 if (value!.isEmpty) {
-                  return app!.doNotEmpty;
+                  return app.doNotEmpty;
                 }
                 return null;
               },
@@ -176,12 +175,12 @@ class _AnnouncementEditPageState extends State<AnnouncementEditPage> {
                 labelStyle: TextStyle(
                   color: ApTheme.of(context).grey,
                 ),
-                labelText: app!.title,
+                labelText: app.title,
               ),
             ),
             SizedBox(height: dividerHeight),
             if (widget.mode != Mode.application) ...[
-              Text(app!.tag),
+              Text(app.tag),
               Wrap(
                 children: [
                   for (String? tag in tags ?? []) ...[
@@ -200,18 +199,18 @@ class _AnnouncementEditPageState extends State<AnnouncementEditPage> {
                       showDialog(
                         context: context,
                         builder: (BuildContext context) => DefaultDialog(
-                          title: app!.addTag,
+                          title: app.addTag,
                           contentWidget: TextField(
                             controller: _newTag,
                             decoration: InputDecoration(
                               border: InputBorder.none,
-                              hintText: app!.tagName,
+                              hintText: app.tagName,
                             ),
                           ),
                           actionText: ApLocalizations.of(context).confirm,
                           actionFunction: () {
                             if (_newTag.text.isEmpty)
-                              ApUtils.showToast(context, app!.doNotEmpty);
+                              ApUtils.showToast(context, app.doNotEmpty);
                             else {
                               final newTag = _newTag.text;
                               final index = tags!.indexOf(newTag);
@@ -220,7 +219,7 @@ class _AnnouncementEditPageState extends State<AnnouncementEditPage> {
                                 Navigator.of(context, rootNavigator: true)
                                     .pop();
                               } else
-                                ApUtils.showToast(context, app!.tagRepeatHint);
+                                ApUtils.showToast(context, app.tagRepeatHint);
                             }
                           },
                         ),
@@ -239,12 +238,12 @@ class _AnnouncementEditPageState extends State<AnnouncementEditPage> {
                 controller: _weight,
                 validator: (value) {
                   if (value!.isEmpty) {
-                    return app!.doNotEmpty;
+                    return app.doNotEmpty;
                   } else {
                     try {
                       int.parse(value);
                     } catch (e) {
-                      return app!.formatError;
+                      return app.formatError;
                     }
                   }
                   return null;
@@ -256,7 +255,7 @@ class _AnnouncementEditPageState extends State<AnnouncementEditPage> {
                   labelStyle: TextStyle(
                     color: ApTheme.of(context).grey,
                   ),
-                  labelText: app!.weight,
+                  labelText: app.weight,
                 ),
               ),
             ],
@@ -267,7 +266,7 @@ class _AnnouncementEditPageState extends State<AnnouncementEditPage> {
               enabled: false,
               validator: (value) {
                 if (value!.isEmpty) {
-                  return app!.doNotEmpty;
+                  return app.doNotEmpty;
                 }
                 return null;
               },
@@ -278,7 +277,7 @@ class _AnnouncementEditPageState extends State<AnnouncementEditPage> {
                 labelStyle: TextStyle(
                   color: ApTheme.of(context).grey,
                 ),
-                labelText: app!.imageUrl,
+                labelText: app.imageUrl,
               ),
             ),
             SizedBox(height: 8.0),
@@ -331,7 +330,7 @@ class _AnnouncementEditPageState extends State<AnnouncementEditPage> {
                   }
                 },
                 child: Text(
-                  app!.pickAndUploadToImgur,
+                  app.pickAndUploadToImgur,
                   style: TextStyle(color: Colors.white),
                 ),
               ),
@@ -350,7 +349,7 @@ class _AnnouncementEditPageState extends State<AnnouncementEditPage> {
                 labelStyle: TextStyle(
                   color: ApTheme.of(context).grey,
                 ),
-                labelText: app!.url,
+                labelText: app.url,
               ),
             ),
             SizedBox(height: dividerHeight),
@@ -377,7 +376,7 @@ class _AnnouncementEditPageState extends State<AnnouncementEditPage> {
                   });
                 },
                 child: Text(
-                  app!.setNoExpireTime,
+                  app.setNoExpireTime,
                   style: TextStyle(color: Colors.white),
                 ),
               ),
@@ -400,12 +399,12 @@ class _AnnouncementEditPageState extends State<AnnouncementEditPage> {
                 color: ApTheme.of(context).grey,
               ),
               title: Text(
-                app!.expireTime,
+                app.expireTime,
                 style: TextStyle(fontSize: 20),
               ),
               subtitle: Text(
                 expireTime == null
-                    ? app!.newsExpireTimeHint
+                    ? app.newsExpireTimeHint
                     : dateFormat.format(expireTime!),
                 style: TextStyle(fontSize: 20),
               ),
@@ -424,7 +423,7 @@ class _AnnouncementEditPageState extends State<AnnouncementEditPage> {
                 labelStyle: TextStyle(
                   color: ApTheme.of(context).grey,
                 ),
-                labelText: app!.description,
+                labelText: app.description,
               ),
             ),
             if (widget.mode == Mode.editApplication) ...[
@@ -441,7 +440,7 @@ class _AnnouncementEditPageState extends State<AnnouncementEditPage> {
                   labelStyle: TextStyle(
                     color: ApTheme.of(context).grey,
                   ),
-                  labelText: app!.reviewDescription,
+                  labelText: app.reviewDescription,
                 ),
               ),
             ],
@@ -494,7 +493,7 @@ class _AnnouncementEditPageState extends State<AnnouncementEditPage> {
                     _announcementSubmit(isApproval: true);
                   },
                   child: Text(
-                    app!.updateAndApprove,
+                    app.updateAndApprove,
                     style: TextStyle(
                       color: Colors.white,
                       fontSize: 18.0,
@@ -522,7 +521,7 @@ class _AnnouncementEditPageState extends State<AnnouncementEditPage> {
                     _announcementSubmit(isApproval: false);
                   },
                   child: Text(
-                    app!.updateAndReject,
+                    app.updateAndReject,
                     style: TextStyle(
                       color: Colors.white,
                       fontSize: 18.0,
@@ -583,19 +582,19 @@ class _AnnouncementEditPageState extends State<AnnouncementEditPage> {
         (Response _) async {
           switch (widget.mode) {
             case Mode.add:
-              ApUtils.showToast(context, app!.addSuccess);
+              ApUtils.showToast(context, app.addSuccess);
               break;
             case Mode.edit:
-              ApUtils.showToast(context, app!.updateSuccess);
+              ApUtils.showToast(context, app.updateSuccess);
               break;
             case Mode.application:
-              ApUtils.showToast(context, app!.applicationSubmitSuccess);
+              ApUtils.showToast(context, app.applicationSubmitSuccess);
               break;
             case Mode.editApplication:
-              ApUtils.showToast(context, app!.updateSuccess);
+              ApUtils.showToast(context, app.updateSuccess);
               if (isApproval != null) {
                 if (isApproval)
-                  await AnnouncementHelper.instance!.approveApplication(
+                  await AnnouncementHelper.instance.approveApplication(
                     applicationId: announcements!.applicationId,
                     reviewDescription: announcements!.reviewDescription,
                     callback: GeneralCallback.simple(
@@ -604,7 +603,7 @@ class _AnnouncementEditPageState extends State<AnnouncementEditPage> {
                     ),
                   );
                 else
-                  await AnnouncementHelper.instance!.rejectApplication(
+                  await AnnouncementHelper.instance.rejectApplication(
                     applicationId: announcements!.applicationId,
                     reviewDescription: announcements!.reviewDescription,
                     callback: GeneralCallback.simple(
@@ -620,25 +619,25 @@ class _AnnouncementEditPageState extends State<AnnouncementEditPage> {
       );
       switch (widget.mode) {
         case Mode.add:
-          AnnouncementHelper.instance!.addAnnouncement(
+          AnnouncementHelper.instance.addAnnouncement(
             data: announcements!,
             callback: callback,
           );
           break;
         case Mode.edit:
-          AnnouncementHelper.instance!.updateAnnouncement(
+          AnnouncementHelper.instance.updateAnnouncement(
             data: announcements!,
             callback: callback,
           );
           break;
         case Mode.application:
-          AnnouncementHelper.instance!.addApplication(
+          AnnouncementHelper.instance.addApplication(
             data: announcements!,
             callback: callback,
           );
           break;
         case Mode.editApplication:
-          AnnouncementHelper.instance!.updateApplication(
+          AnnouncementHelper.instance.updateApplication(
             data: announcements!,
             callback: callback,
           );

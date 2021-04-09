@@ -40,7 +40,7 @@ class AboutUsPage extends StatefulWidget {
 }
 
 class AboutUsPageState extends State<AboutUsPage> {
-  ApLocalizations? app;
+  ApLocalizations get app => ApLocalizations.of(context);
 
   @override
   void initState() {
@@ -58,7 +58,6 @@ class AboutUsPageState extends State<AboutUsPage> {
 
   @override
   Widget build(BuildContext context) {
-    app = ApLocalizations.of(context);
     var expandedHeight = MediaQuery.of(context).size.height * 0.25;
     return Scaffold(
       body: CustomScrollView(
@@ -67,7 +66,7 @@ class AboutUsPageState extends State<AboutUsPage> {
             expandedHeight: expandedHeight,
             floating: false,
             pinned: true,
-            title: Text(app!.about),
+            title: Text(app.about),
             actions: widget.actions,
             backgroundColor: ApTheme.of(context).blue,
             flexibleSpace: FlexibleSpaceBar(
@@ -80,12 +79,12 @@ class AboutUsPageState extends State<AboutUsPage> {
           SliverList(
               delegate: SliverChildListDelegate(
             <Widget>[
-              _item(app!.aboutAuthorTitle, app!.aboutAuthorContent),
-              _item(app!.about, app!.aboutUsContent),
-              _item(app!.aboutRecruitTitle, app!.aboutRecruitContent),
+              _item(app.aboutAuthorTitle, app.aboutAuthorContent),
+              _item(app.about, app.aboutUsContent),
+              _item(app.aboutRecruitTitle, app.aboutRecruitContent),
               Stack(
                 children: <Widget>[
-                  _item(app!.aboutItcTitle, app!.aboutItcContent),
+                  _item(app.aboutItcTitle, app.aboutItcContent),
                   Padding(
                     padding:
                         EdgeInsets.symmetric(vertical: 20.0, horizontal: 26.0),
@@ -115,7 +114,7 @@ class AboutUsPageState extends State<AboutUsPage> {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: <Widget>[
                       SelectableText(
-                        app!.aboutContactUsTitle,
+                        app.aboutContactUsTitle,
                         style: TextStyle(fontSize: 18.0),
                       ),
                       SizedBox(
@@ -144,7 +143,7 @@ class AboutUsPageState extends State<AboutUsPage> {
                                     (onError) {
                                       ApUtils.showToast(
                                         context,
-                                        app!.platformError,
+                                        app.platformError,
                                       );
                                     },
                                   );
@@ -168,7 +167,7 @@ class AboutUsPageState extends State<AboutUsPage> {
                                     (onError) {
                                       ApUtils.showToast(
                                         context,
-                                        app!.platformError,
+                                        app.platformError,
                                       );
                                     },
                                   );
@@ -184,7 +183,7 @@ class AboutUsPageState extends State<AboutUsPage> {
                                   (onError) {
                                     ApUtils.showToast(
                                       context,
-                                      app!.platformError,
+                                      app.platformError,
                                     );
                                   },
                                 );
@@ -200,7 +199,7 @@ class AboutUsPageState extends State<AboutUsPage> {
                   ),
                 ),
               ),
-              _item(app!.aboutOpenSourceTitle, widget.appLicense),
+              _item(app.aboutOpenSourceTitle, widget.appLicense),
             ],
           )),
         ],

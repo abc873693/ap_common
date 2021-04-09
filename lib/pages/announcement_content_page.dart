@@ -30,7 +30,8 @@ class AnnouncementContentPage extends StatefulWidget {
 
 class AnnouncementContentPageState extends State<AnnouncementContentPage> {
   _Status state = _Status.finish;
-  late ApLocalizations app;
+
+  ApLocalizations get app => ApLocalizations.of(context);
 
   @override
   void initState() {
@@ -48,7 +49,6 @@ class AnnouncementContentPageState extends State<AnnouncementContentPage> {
 
   @override
   Widget build(BuildContext context) {
-    app = ApLocalizations.of(context);
     return Scaffold(
       appBar: AppBar(
         title: Text(app.announcements),

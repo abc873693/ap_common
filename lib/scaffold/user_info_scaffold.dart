@@ -31,7 +31,7 @@ class UserInfoScaffold extends StatefulWidget {
 }
 
 class UserInfoScaffoldState extends State<UserInfoScaffold> {
-  ApLocalizations? app;
+  ApLocalizations get app => ApLocalizations.of(context);
 
   BarCodeMode codeMode = BarCodeMode.qrCode;
 
@@ -58,10 +58,9 @@ class UserInfoScaffoldState extends State<UserInfoScaffold> {
 
   @override
   Widget build(BuildContext context) {
-    app = ApLocalizations.of(context);
     return Scaffold(
       appBar: AppBar(
-        title: Text(app!.userInfo),
+        title: Text(app.userInfo),
         backgroundColor: ApTheme.of(context).blue,
         actions: [
           ...widget.actions!,

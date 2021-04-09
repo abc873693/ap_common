@@ -122,7 +122,7 @@ class CourseScaffold extends StatefulWidget {
 class CourseScaffoldState extends State<CourseScaffold> {
   final GlobalKey _repaintBoundaryGlobalKey = GlobalKey();
 
-  ApLocalizations? app;
+  ApLocalizations get app => ApLocalizations.of(context);
 
   _ContentStyle _contentStyle = _ContentStyle.table;
 
@@ -155,14 +155,13 @@ class CourseScaffoldState extends State<CourseScaffold> {
 
   @override
   Widget build(BuildContext context) {
-    app = ApLocalizations.of(context);
     return CourseConfig(
       showSectionTime: showSectionTime,
       showInstructors: showInstructors,
       showClassroomLocation: showClassroomLocation,
       child: Scaffold(
         appBar: AppBar(
-          title: Text(widget.title ?? app!.course),
+          title: Text(widget.title ?? app.course),
           actions: [
             if (widget.actions != null) ...widget.actions!,
             if (widget.enableCaptureCourseTable)
@@ -232,7 +231,7 @@ class CourseScaffoldState extends State<CourseScaffold> {
                             widget.itemPicker == null)
                           Expanded(
                             child: ItemPicker(
-                              dialogTitle: app!.pickSemester,
+                              dialogTitle: app.pickSemester,
                               onSelected: widget.onSelect,
                               items: widget.semesterData!.semesters,
                               currentIndex: widget.semesterData!.currentIndex,
@@ -328,13 +327,13 @@ class CourseScaffoldState extends State<CourseScaffold> {
   String get hintContent {
     switch (widget.state) {
       case CourseState.error:
-        return app!.clickToRetry;
+        return app.clickToRetry;
       case CourseState.empty:
-        return app!.courseEmpty;
+        return app.courseEmpty;
       case CourseState.offlineEmpty:
-        return app!.noOfflineData;
+        return app.noOfflineData;
       case CourseState.custom:
-        return widget.customStateHint ?? app!.unknownError;
+        return widget.customStateHint ?? app.unknownError;
       default:
         return '';
     }
@@ -405,7 +404,7 @@ class CourseScaffoldState extends State<CourseScaffold> {
       );
       AnalyticsUtils.instance?.logEvent('export_course_table_image_success');
     } else
-      ApUtils.showToast(context, app!.unknownError);
+      ApUtils.showToast(context, app.unknownError);
   }
 
   BorderSide get _innerBorderSide => BorderSide(
@@ -524,7 +523,7 @@ class CourseScaffoldState extends State<CourseScaffold> {
       columns.add(
         Column(
           children: [
-            _weekBorder(app!.weekdaysCourse[i]),
+            _weekBorder(app.weekdaysCourse[i]),
             ...(courseBorderCollection[i]),
           ],
         ),
@@ -579,7 +578,7 @@ class CourseScaffoldState extends State<CourseScaffold> {
       showDialog(
         context: context,
         builder: (_) => SimpleOptionDialog(
-          title: app!.pickSemester,
+          title: app.pickSemester,
           items: widget.semesterData!.semesters,
           index: widget.semesterData!.currentIndex,
           onSelected: widget.onSelect,
@@ -665,8 +664,8 @@ class _CourseContentState extends State<CourseContent> {
                   ),
                   onPressed: () async {
                     final format = DateFormat('HH:mm');
-                    final startTime = format.parse(widget.timeCode.startTime!);
-                    final endTime = format.parse(widget.timeCode.endTime!);
+                    final startTime = format.parse(widget.timeCode.startTime);
+                    final endTime = format.parse(widget.timeCode.endTime);
                     final Event event = Event(
                       title: widget.course.title!,
                       description: '',
@@ -714,7 +713,7 @@ class _CourseContentState extends State<CourseContent> {
                             ?.logEvent('course_notify_schedule');
                       } else {
                         await NotificationUtils.cancelCourseNotify(
-                          id: courseNotify.id!,
+                          id: courseNotify.id,
                         );
                         widget.notifyData!.data.removeWhere((data) {
                           return data.id == courseNotify!.id;

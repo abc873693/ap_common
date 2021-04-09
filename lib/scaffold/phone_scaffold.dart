@@ -30,7 +30,7 @@ class PhoneScaffoldState extends State<PhoneScaffold>
   @override
   bool get wantKeepAlive => true;
 
-  ApLocalizations? ap;
+  ApLocalizations get ap => ApLocalizations.of(context);
 
   TextStyle get _textStyle => TextStyle(
         fontSize: 18.0,
@@ -65,7 +65,6 @@ class PhoneScaffoldState extends State<PhoneScaffold>
   @override
   Widget build(BuildContext context) {
     super.build(context);
-    ap = ApLocalizations.of(context);
     return _body();
   }
 
@@ -78,7 +77,7 @@ class PhoneScaffoldState extends State<PhoneScaffold>
       case PhoneState.error:
         return HintContent(
           icon: ApIcon.assignment,
-          content: ap!.clickToRetry,
+          content: ap.clickToRetry,
         );
       default:
         return ListView.builder(

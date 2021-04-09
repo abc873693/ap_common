@@ -60,7 +60,7 @@ class HomePageScaffold extends StatefulWidget {
 
 class HomePageScaffoldState extends State<HomePageScaffold> {
   final _scaffoldMessengerKey = GlobalKey<ScaffoldMessengerState>();
-  ApLocalizations? app;
+  ApLocalizations get app => ApLocalizations.of(context);
 
   PageController? pageController;
 
@@ -84,7 +84,6 @@ class HomePageScaffoldState extends State<HomePageScaffold> {
 
   @override
   Widget build(BuildContext context) {
-    app = ApLocalizations.of(context);
     return WillPopScope(
       child: Row(
         children: [
@@ -284,18 +283,18 @@ class HomePageScaffoldState extends State<HomePageScaffold> {
       case HomeState.offline:
         return HintContent(
           icon: ApIcon.offlineBolt,
-          content: app!.offlineMode,
+          content: app.offlineMode,
         );
       case HomeState.empty:
         return HintContent(
           icon: ApIcon.offlineBolt,
-          content: app!.announcementEmpty,
+          content: app.announcementEmpty,
         );
       case HomeState.error:
       default:
         return HintContent(
           icon: ApIcon.offlineBolt,
-          content: app!.somethingError,
+          content: app.somethingError,
         );
     }
   }
@@ -304,14 +303,14 @@ class HomePageScaffoldState extends State<HomePageScaffold> {
     showDialog(
       context: context,
       builder: (BuildContext context) => YesNoDialog(
-        title: app!.closeAppTitle,
+        title: app.closeAppTitle,
         contentWidget: Text(
-          app!.closeAppHint,
+          app.closeAppHint,
           textAlign: TextAlign.center,
           style: TextStyle(color: ApTheme.of(context).greyText),
         ),
-        leftActionText: app!.cancel,
-        rightActionText: app!.confirm,
+        leftActionText: app.cancel,
+        rightActionText: app.confirm,
         rightActionFunction: () {
           AnalyticsUtils.instance?.logEvent('logout_dialog_confirm');
           SystemNavigator.pop();

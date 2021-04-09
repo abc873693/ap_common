@@ -35,7 +35,7 @@ class NotificationScaffoldState extends State<NotificationScaffold>
   @override
   bool get wantKeepAlive => true;
 
-  ApLocalizations? ap;
+  ApLocalizations get ap => ApLocalizations.of(context);
 
   ScrollController? controller;
 
@@ -119,7 +119,6 @@ class NotificationScaffoldState extends State<NotificationScaffold>
   @override
   Widget build(BuildContext context) {
     super.build(context);
-    ap = ApLocalizations.of(context);
     return _body();
   }
 
@@ -138,14 +137,14 @@ class NotificationScaffoldState extends State<NotificationScaffold>
           child: HintContent(
             icon: ApIcon.assignment,
             content: widget.state == NotificationState.error
-                ? ap!.clickToRetry
-                : ap!.clickToRetry,
+                ? ap.clickToRetry
+                : ap.clickToRetry,
           ),
         );
       case NotificationState.offline:
         return HintContent(
           icon: ApIcon.offlineBolt,
-          content: ap!.offlineMode,
+          content: ap.offlineMode,
         );
       default:
         return RefreshIndicator(
