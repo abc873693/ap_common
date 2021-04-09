@@ -66,11 +66,8 @@ class AnnouncementHelper {
     );
   }
 
-  static AnnouncementHelper? get instance {
-    if (_instance == null) {
-      _instance = AnnouncementHelper();
-    }
-    return _instance;
+  static AnnouncementHelper get instance {
+    return _instance ??= AnnouncementHelper();
   }
 
   static reInstance({

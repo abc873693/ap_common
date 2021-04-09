@@ -23,10 +23,7 @@ class GitHubHelper {
   }
 
   static GitHubHelper? get instance {
-    if (_instance == null) {
-      _instance = GitHubHelper();
-    }
-    return _instance;
+    return _instance ??= GitHubHelper();
   }
 
   Future<Map<String, List<Announcement>>?> getAnnouncement({

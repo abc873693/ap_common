@@ -19,10 +19,7 @@ class ImgurHelper {
   late Dio dio;
 
   static ImgurHelper? get instance {
-    if (_instance == null) {
-      _instance = ImgurHelper();
-    }
-    return _instance;
+    return _instance ??= ImgurHelper();
   }
 
   ImgurHelper() {
