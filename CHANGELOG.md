@@ -1,3 +1,10 @@
+## [0.7.0-dev.1] - 2021/04/09
+
+### [Break Change]
+### 基於 Flutter v2.0.3 開發
+
+* Null-Safety 相容升級
+
 ## [0.6.0-dev.2] - 2021/02/11
 
 ***[Break Change]***
