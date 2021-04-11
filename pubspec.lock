@@ -14,7 +14,7 @@ packages:
       name: ap_common
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "0.16.0-nullsafety.0"
+    version: "0.16.0-nullsafety.1"
   archive:
     dependency: transitive
     description:
