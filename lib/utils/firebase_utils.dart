@@ -39,9 +39,14 @@ class FirebaseUtils {
       (!kIsWeb && (Platform.isAndroid || Platform.isIOS || Platform.isMacOS));
 
   static FirebaseAnalytics init({
+    Function(RemoteMessage) onClick,
     String vapidKey,
   }) {
-    if (isSupportCloudMessage) initFcm(vapidKey: vapidKey);
+    if (isSupportCloudMessage)
+      initFcm(
+        onClick: onClick,
+        vapidKey: vapidKey,
+      );
     if (isSupportCrashlytics)
       CrashlyticsUtils.instance = FirebaseCrashlyticsUtils.instance;
     if (isSupportAnalytics) {
