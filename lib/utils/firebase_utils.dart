@@ -38,15 +38,7 @@ class FirebaseUtils {
   static bool get isSupportRemoteConfig =>
       (!kIsWeb && (Platform.isAndroid || Platform.isIOS || Platform.isMacOS));
 
-  static FirebaseAnalytics init({
-    Function(RemoteMessage) onClick,
-    String vapidKey,
-  }) {
-    if (isSupportCloudMessage)
-      initFcm(
-        onClick: onClick,
-        vapidKey: vapidKey,
-      );
+  static FirebaseAnalytics init() {
     if (isSupportCrashlytics)
       CrashlyticsUtils.instance = FirebaseCrashlyticsUtils.instance;
     if (isSupportAnalytics) {
@@ -60,6 +52,7 @@ class FirebaseUtils {
     Function(RemoteMessage) onClick,
     String vapidKey,
   }) async {
+    if (!isSupportCloudMessage) return;
     FirebaseMessaging firebaseMessaging = FirebaseMessaging.instance;
     await Future.delayed(Duration(seconds: 2));
     FirebaseMessaging.onMessage.listen((RemoteMessage message) async {
