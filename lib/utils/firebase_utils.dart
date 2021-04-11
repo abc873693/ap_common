@@ -52,12 +52,12 @@ class FirebaseUtils {
   }
 
   static initFcm({
-    Function(dynamic) onClick,
+    Function(RemoteMessage) onClick,
     String vapidKey,
   }) async {
     FirebaseMessaging firebaseMessaging = FirebaseMessaging.instance;
     await Future.delayed(Duration(seconds: 2));
-    FirebaseMessaging.onMessage.listen((RemoteMessage message) {
+    FirebaseMessaging.onMessage.listen((RemoteMessage message) async {
       if (message.notification != null) {
         debugPrint("onMessage: $message");
         NotificationUtils.show(
@@ -66,20 +66,19 @@ class FirebaseUtils {
           androidChannelDescription: androidChannelDescription,
           title: message.notification.title ?? '',
           content: message.notification.body ?? '',
+          onSelectNotification: () async {
+            await navigateToItemDetail(message, onClick);
+          },
         );
       }
     });
-    FirebaseMessaging.onMessageOpenedApp.listen((RemoteMessage message) {
+    FirebaseMessaging.onMessageOpenedApp.listen((RemoteMessage message) async {
       debugPrint("onMessageOpenedApp: $message");
-      if (Platform.isAndroid)
-        navigateToItemDetail(message.data, onClick);
-      else if (Platform.isIOS) navigateToItemDetail(message, onClick);
+      await navigateToItemDetail(message, onClick);
     });
-    FirebaseMessaging.onBackgroundMessage((message) async {
+    FirebaseMessaging.onBackgroundMessage((RemoteMessage message) async {
       debugPrint("onBackgroundMessage: $message");
-      if (Platform.isAndroid) {
-        await navigateToItemDetail(message.data, onClick);
-      } else if (Platform.isIOS) await navigateToItemDetail(message, onClick);
+      await navigateToItemDetail(message, onClick);
     });
     firebaseMessaging
         .requestPermission(
@@ -106,13 +105,14 @@ class FirebaseUtils {
   }
 
   static Future<void> navigateToItemDetail(
-    message,
-    Function(dynamic) onClick,
+    RemoteMessage message,
+    Function(RemoteMessage) onClick,
   ) async {
-    if (message['type'] == "1") {
-      launch(message['url']);
+    final data = message.data;
+    if (data['type'] == "1") {
+      launch(data['url']);
     } else {
-      if (onClick != null) onClick(message);
+      onClick?.call(message);
     }
   }
 }
