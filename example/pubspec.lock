@@ -14,7 +14,7 @@ packages:
       path: ".."
       relative: true
     source: path
-    version: "0.16.0-nullsafety.0"
+    version: "0.16.0-nullsafety.1"
   ap_common_plugin:
     dependency: "direct main"
     description:
@@ -278,7 +278,7 @@ packages:
       name: flutter_linkify
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "5.0.0"
+    version: "5.0.2"
   flutter_local_notifications:
     dependency: transitive
     description:
