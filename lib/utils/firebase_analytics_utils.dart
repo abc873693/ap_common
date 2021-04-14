@@ -13,10 +13,10 @@ import 'firebase_utils.dart';
 export 'package:firebase_analytics/firebase_analytics.dart';
 
 class FirebaseAnalyticsUtils extends AnalyticsUtils {
-  static FirebaseAnalyticsUtils _instance;
-  static FirebaseAnalytics analytics;
+  static FirebaseAnalyticsUtils? _instance;
+  static FirebaseAnalytics? analytics;
 
-  static FirebaseAnalyticsUtils get instance {
+  static FirebaseAnalyticsUtils? get instance {
     if (_instance == null) {
       _instance = FirebaseAnalyticsUtils();
       if (FirebaseUtils.isSupportAnalytics) analytics = FirebaseAnalytics();
@@ -41,7 +41,7 @@ class FirebaseAnalyticsUtils extends AnalyticsUtils {
 
   Future<void> setUserProperty(
     String name,
-    String value,
+    String? value,
   ) async {
     await analytics?.setUserProperty(
       name: name,
@@ -52,7 +52,7 @@ class FirebaseAnalyticsUtils extends AnalyticsUtils {
 
   Future<void> logEvent(
     String name, {
-    Map<String, dynamic> parameters,
+    Map<String, dynamic>? parameters,
   }) async {
     await analytics?.logEvent(
       name: name ?? '',
@@ -62,27 +62,27 @@ class FirebaseAnalyticsUtils extends AnalyticsUtils {
 
   Future<void> logUserInfo(UserInfo userInfo) async {
     if (userInfo == null) return;
-    if (userInfo.department != null && userInfo.department.isNotEmpty) {
+    if (userInfo.department != null && userInfo.department!.isNotEmpty) {
       await analytics?.logEvent(
         name: 'user_info',
         parameters: <String, dynamic>{
           AnalyticsConstants.DEPARTMENT: userInfo.department,
         },
       );
-      FirebaseAnalyticsUtils.instance.setUserProperty(
+      FirebaseAnalyticsUtils.instance!.setUserProperty(
         AnalyticsConstants.DEPARTMENT,
         userInfo.department,
       );
     }
-    if (userInfo.className != null && userInfo.className.isNotEmpty) {
-      FirebaseAnalyticsUtils.instance.setUserProperty(
+    if (userInfo.className != null && userInfo.className!.isNotEmpty) {
+      FirebaseAnalyticsUtils.instance!.setUserProperty(
         AnalyticsConstants.CLASS_NAME,
         userInfo.className,
       );
     }
-    if (userInfo.id != null && userInfo.id.isNotEmpty) {
+    if (userInfo.id != null && userInfo.id!.isNotEmpty) {
       await analytics?.setUserId(userInfo.id);
-      FirebaseAnalyticsUtils.instance.setUserProperty(
+      FirebaseAnalyticsUtils.instance!.setUserProperty(
         AnalyticsConstants.STUDENT_ID,
         userInfo.id,
       );
@@ -167,7 +167,7 @@ class FirebaseAnalyticsUtils extends AnalyticsUtils {
     Brightness brightness;
     switch (themeMode) {
       case ThemeMode.system:
-        brightness = WidgetsBinding.instance.window.platformBrightness;
+        brightness = WidgetsBinding.instance!.window.platformBrightness;
         break;
       case ThemeMode.light:
         brightness = Brightness.light;

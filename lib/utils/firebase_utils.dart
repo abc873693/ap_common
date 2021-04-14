@@ -38,7 +38,7 @@ class FirebaseUtils {
   static bool get isSupportRemoteConfig =>
       (!kIsWeb && (Platform.isAndroid || Platform.isIOS || Platform.isMacOS));
 
-  static FirebaseAnalytics init() {
+  static FirebaseAnalytics? init() {
     if (isSupportCrashlytics)
       CrashlyticsUtils.instance = FirebaseCrashlyticsUtils.instance;
     if (isSupportAnalytics) {
@@ -49,8 +49,8 @@ class FirebaseUtils {
   }
 
   static initFcm({
-    Function(RemoteMessage) onClick,
-    String vapidKey,
+    Function(RemoteMessage)? onClick,
+    String? vapidKey,
   }) async {
     if (!isSupportCloudMessage) return;
     FirebaseMessaging firebaseMessaging = FirebaseMessaging.instance;
@@ -62,8 +62,8 @@ class FirebaseUtils {
           id: NOTIFY_ID,
           androidChannelId: NOTIFY_ANDROID_CHANNEL_ID,
           androidChannelDescription: androidChannelDescription,
-          title: message.notification.title ?? '',
-          content: message.notification.body ?? '',
+          title: message.notification!.title ?? '',
+          content: message.notification!.body ?? '',
           onSelectNotification: () async {
             await navigateToItemDetail(message, onClick);
           },
@@ -89,13 +89,13 @@ class FirebaseUtils {
           sound: true,
         )
         .then(
-          (value) => FirebaseAnalyticsUtils.instance.setUserProperty(
+          (value) => FirebaseAnalyticsUtils.instance!.setUserProperty(
             AnalyticsConstants.HAS_ENABLE_NOTIFICATION,
             (value.authorizationStatus == AuthorizationStatus.authorized)
                 .toString(),
           ),
         );
-    firebaseMessaging.getToken(vapidKey: vapidKey).then((String token) {
+    firebaseMessaging.getToken(vapidKey: vapidKey).then((String? token) {
       if (token != null && kDebugMode) {
         print("Push Messaging token: $token");
       }
@@ -104,7 +104,7 @@ class FirebaseUtils {
 
   static Future<void> navigateToItemDetail(
     RemoteMessage message,
-    Function(RemoteMessage) onClick,
+    Function(RemoteMessage)? onClick,
   ) async {
     final data = message.data;
     if (data['type'] == "1") {

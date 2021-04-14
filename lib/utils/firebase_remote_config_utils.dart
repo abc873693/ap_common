@@ -6,7 +6,7 @@ export 'package:ap_common/models/version_info.dart';
 export 'package:firebase_remote_config/firebase_remote_config.dart';
 
 class FirebaseRemoteConfigUtils {
-  static Future<VersionInfo> getVersionInfo() async {
+  static Future<VersionInfo?> getVersionInfo() async {
     RemoteConfig remoteConfig;
     try {
       remoteConfig = RemoteConfig.instance;

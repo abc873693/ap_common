@@ -8,10 +8,10 @@ import 'package:flutter/material.dart';
 export 'package:firebase_crashlytics/firebase_crashlytics.dart';
 
 class FirebaseCrashlyticsUtils extends CrashlyticsUtils {
-  static FirebaseCrashlyticsUtils _instance;
-  static FirebaseCrashlytics crashlytics;
+  static FirebaseCrashlyticsUtils? _instance;
+  static FirebaseCrashlytics? crashlytics;
 
-  static FirebaseCrashlyticsUtils get instance {
+  static FirebaseCrashlyticsUtils? get instance {
     if (_instance == null) {
       _instance = FirebaseCrashlyticsUtils();
       if (FirebaseUtils.isSupportCrashlytics)
@@ -30,14 +30,14 @@ class FirebaseCrashlyticsUtils extends CrashlyticsUtils {
     exception,
     StackTrace stack, {
     reason,
-    Iterable<DiagnosticsNode> information,
-    bool printDetails,
+    Iterable<DiagnosticsNode>? information,
+    bool? printDetails,
   }) async {
     await crashlytics?.recordError(
       exception,
       stack,
       reason: reason,
-      information: information,
+      information: information!,
       printDetails: printDetails,
     );
   }
