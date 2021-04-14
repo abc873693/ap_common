@@ -17,7 +17,7 @@ class ScoreScaffold extends StatefulWidget {
   final ScoreState state;
   final String? customStateHint;
   final String? title;
-  final ScoreData scoreData;
+  final ScoreData? scoreData;
   final SemesterData? semesterData;
   final Function(int index)? onSelect;
   final Function()? onSearchButtonClick;
@@ -196,7 +196,7 @@ class ScoreScaffoldState extends State<ScoreScaffold> {
 }
 
 class ScoreContent extends StatefulWidget {
-  final ScoreData scoreData;
+  final ScoreData? scoreData;
   final Function()? onRefresh;
   final String? middleTitle;
   final String? finalTitle;
@@ -288,11 +288,11 @@ class _ScoreContentState extends State<ScoreContent> {
                         ),
                       ],
                     ),
-                    for (var i = 0; i < widget.scoreData.scores!.length; i++)
+                    for (var i = 0; i < widget.scoreData!.scores!.length; i++)
                       TableRow(
                         children: <Widget>[
                           ScoreTextBorder(
-                            text: widget.scoreData.scores![i].title,
+                            text: widget.scoreData!.scores![i].title,
                             style: _textStyle,
                             onTap: (widget.onScoreSelect != null)
                                 ? () {
@@ -304,14 +304,14 @@ class _ScoreContentState extends State<ScoreContent> {
                           ),
                           if (widget.middleScoreBuilder == null)
                             ScoreTextBorder(
-                              text: widget.scoreData.scores![i].middleScore,
+                              text: widget.scoreData!.scores![i].middleScore,
                               style: _textStyle,
                             ),
                           if (widget.middleScoreBuilder != null)
                             widget.middleScoreBuilder!(i),
                           if (widget.finalScoreBuilder == null)
                             ScoreTextBorder(
-                              text: widget.scoreData.scores![i].semesterScore,
+                              text: widget.scoreData!.scores![i].semesterScore,
                               style: _textStyle,
                             ),
                           if (widget.finalScoreBuilder != null)
