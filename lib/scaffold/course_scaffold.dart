@@ -163,7 +163,7 @@ class CourseScaffoldState extends State<CourseScaffold> {
         appBar: AppBar(
           title: Text(widget.title ?? app.course),
           actions: [
-            if (widget.actions != null) ...widget.actions!,
+            ...widget.actions ?? [],
             if (widget.enableCaptureCourseTable)
               IconButton(
                 icon: Icon(ApIcon.download),

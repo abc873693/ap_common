@@ -81,12 +81,22 @@ extension DioErrorI18nExtension on DioError {
         return ApLocalizations.current.timeoutMessage;
       case DioErrorType.response:
         if (response!.data is Map<String, dynamic>)
-          return response!.data['title'] ?? message;
+          return response!.data['description'] ?? message;
         else
           return message;
       case DioErrorType.cancel:
       default:
         return null;
     }
+  }
+
+  bool get isJsonResponse {
+    return (type == DioErrorType.response &&
+        response!.data is Map<String, dynamic>);
+  }
+
+  String? get falconMessage {
+    // Define in falcon description
+    return isJsonResponse ? response!.data['description'] ?? message : null;
   }
 }
