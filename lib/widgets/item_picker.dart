@@ -47,7 +47,7 @@ class ItemPicker extends StatelessWidget {
           children: <Widget>[
             Expanded(
               child: Text(
-                items[currentIndex],
+                items.length == 0 ? '' : items[currentIndex],
                 style: TextStyle(
                   color: ApTheme.of(context).semesterText,
                   fontSize: 18.0,
