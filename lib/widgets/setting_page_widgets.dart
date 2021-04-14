@@ -221,7 +221,7 @@ class ChangeLanguageItem extends StatelessWidget {
               Preferences.setString(ApConstants.PREF_LANGUAGE_CODE, code);
               AnalyticsUtils.instance?.logEvent(
                 'change_language',
-                parameters: {'action': code},
+                parameters: {'code': code},
               );
               AnalyticsUtils.instance?.setUserProperty(
                 AnalyticsConstants.LANGUAGE,
@@ -269,9 +269,11 @@ class ChangeThemeModeItem extends StatelessWidget {
               final mode = ThemeMode.values[index];
               onChange.call(mode);
               Preferences.setInt(ApConstants.PREF_THEME_MODE_INDEX, index);
-              AnalyticsUtils.instance?.logAction(
+              AnalyticsUtils.instance?.logEvent(
                 'change_theme',
-                mode.toString(),
+                parameters: {
+                  'code': mode.toString(),
+                },
               );
               AnalyticsUtils.instance?.logThemeEvent(mode);
             },
@@ -313,9 +315,9 @@ class ChangeIconStyleItem extends StatelessWidget {
               ApIcon.code = code;
               Preferences.setString(ApConstants.PREF_ICON_STYLE_CODE, code);
               onChange.call(code);
-              AnalyticsUtils.instance?.logAction(
+              AnalyticsUtils.instance?.logEvent(
                 'change_icon_style',
-                code,
+                parameters: {'code': code},
               );
             },
           ),
