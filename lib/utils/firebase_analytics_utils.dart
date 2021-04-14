@@ -14,14 +14,14 @@ export 'package:firebase_analytics/firebase_analytics.dart';
 
 class FirebaseAnalyticsUtils extends AnalyticsUtils {
   static FirebaseAnalyticsUtils? _instance;
-  static FirebaseAnalytics? analytics;
+  FirebaseAnalytics? analytics;
 
-  static FirebaseAnalyticsUtils? get instance {
-    if (_instance == null) {
-      _instance = FirebaseAnalyticsUtils();
-      if (FirebaseUtils.isSupportAnalytics) analytics = FirebaseAnalytics();
-    }
-    return _instance;
+  static FirebaseAnalyticsUtils get instance {
+    return _instance ??= FirebaseAnalyticsUtils();
+  }
+
+  FirebaseAnalyticsUtils() {
+    if (FirebaseUtils.isSupportAnalytics) analytics = FirebaseAnalytics();
   }
 
   Future<void> setCurrentScreen(

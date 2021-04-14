@@ -9,15 +9,15 @@ export 'package:firebase_crashlytics/firebase_crashlytics.dart';
 
 class FirebaseCrashlyticsUtils extends CrashlyticsUtils {
   static FirebaseCrashlyticsUtils? _instance;
-  static FirebaseCrashlytics? crashlytics;
+  FirebaseCrashlytics? crashlytics;
 
-  static FirebaseCrashlyticsUtils? get instance {
-    if (_instance == null) {
-      _instance = FirebaseCrashlyticsUtils();
-      if (FirebaseUtils.isSupportCrashlytics)
-        crashlytics = FirebaseCrashlytics.instance;
-    }
-    return _instance;
+  static FirebaseCrashlyticsUtils get instance {
+    return _instance ??= FirebaseCrashlyticsUtils();
+  }
+
+  FirebaseCrashlyticsUtils() {
+    if (FirebaseUtils.isSupportCrashlytics)
+      crashlytics = FirebaseCrashlytics.instance;
   }
 
   @override

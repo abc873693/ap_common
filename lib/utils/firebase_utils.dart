@@ -43,7 +43,7 @@ class FirebaseUtils {
       CrashlyticsUtils.instance = FirebaseCrashlyticsUtils.instance;
     if (isSupportAnalytics) {
       AnalyticsUtils.instance = FirebaseAnalyticsUtils.instance;
-      return FirebaseAnalyticsUtils.analytics;
+      return FirebaseAnalyticsUtils.instance.analytics;
     }
     return null;
   }
