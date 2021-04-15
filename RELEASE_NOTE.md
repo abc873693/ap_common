@@ -1,2 +1,2 @@
 
-* 從 `init()` 移除 `initFCM()`
+* 支援 Null-Safety

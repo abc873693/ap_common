@@ -1,3 +1,7 @@
+## [0.8.0-nullsafety.0] - 2021/04/15
+
+* 支援 Null-Safety
+
 ## [0.7.0-dev.4] - 2021/04/11
 
 * 從 `init()` 移除 `initFCM()`
