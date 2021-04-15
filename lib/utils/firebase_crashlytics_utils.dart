@@ -9,7 +9,6 @@ export 'package:firebase_crashlytics/firebase_crashlytics.dart';
 
 class FirebaseCrashlyticsUtils extends CrashlyticsUtils {
   static FirebaseCrashlyticsUtils? _instance;
-  FirebaseCrashlytics? crashlytics;
 
   static FirebaseCrashlyticsUtils get instance {
     return _instance ??= FirebaseCrashlyticsUtils();
@@ -19,6 +18,8 @@ class FirebaseCrashlyticsUtils extends CrashlyticsUtils {
     if (FirebaseUtils.isSupportCrashlytics)
       crashlytics = FirebaseCrashlytics.instance;
   }
+
+  FirebaseCrashlytics? crashlytics;
 
   @override
   Future<void> log(String message) async {

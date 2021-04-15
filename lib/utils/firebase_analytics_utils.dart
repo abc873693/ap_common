@@ -14,7 +14,6 @@ export 'package:firebase_analytics/firebase_analytics.dart';
 
 class FirebaseAnalyticsUtils extends AnalyticsUtils {
   static FirebaseAnalyticsUtils? _instance;
-  FirebaseAnalytics? analytics;
 
   static FirebaseAnalyticsUtils get instance {
     return _instance ??= FirebaseAnalyticsUtils();
@@ -23,6 +22,8 @@ class FirebaseAnalyticsUtils extends AnalyticsUtils {
   FirebaseAnalyticsUtils() {
     if (FirebaseUtils.isSupportAnalytics) analytics = FirebaseAnalytics();
   }
+
+  FirebaseAnalytics? analytics;
 
   Future<void> setCurrentScreen(
     String screenName,
@@ -55,12 +56,12 @@ class FirebaseAnalyticsUtils extends AnalyticsUtils {
     Map<String, dynamic>? parameters,
   }) async {
     await analytics?.logEvent(
-      name: name ?? '',
+      name: name,
       parameters: parameters,
     );
   }
 
-  Future<void> logUserInfo(UserInfo userInfo) async {
+  Future<void> logUserInfo(UserInfo? userInfo) async {
     if (userInfo == null) return;
     if (userInfo.department != null && userInfo.department!.isNotEmpty) {
       await analytics?.logEvent(
@@ -69,20 +70,20 @@ class FirebaseAnalyticsUtils extends AnalyticsUtils {
           AnalyticsConstants.DEPARTMENT: userInfo.department,
         },
       );
-      FirebaseAnalyticsUtils.instance!.setUserProperty(
+      FirebaseAnalyticsUtils.instance.setUserProperty(
         AnalyticsConstants.DEPARTMENT,
         userInfo.department,
       );
     }
     if (userInfo.className != null && userInfo.className!.isNotEmpty) {
-      FirebaseAnalyticsUtils.instance!.setUserProperty(
+      FirebaseAnalyticsUtils.instance.setUserProperty(
         AnalyticsConstants.CLASS_NAME,
         userInfo.className,
       );
     }
     if (userInfo.id != null && userInfo.id!.isNotEmpty) {
       await analytics?.setUserId(userInfo.id);
-      FirebaseAnalyticsUtils.instance!.setUserProperty(
+      FirebaseAnalyticsUtils.instance.setUserProperty(
         AnalyticsConstants.STUDENT_ID,
         userInfo.id,
       );

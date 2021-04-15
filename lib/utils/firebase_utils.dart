@@ -102,7 +102,7 @@ class FirebaseUtils {
           sound: true,
         )
         .then(
-          (value) => FirebaseAnalyticsUtils.instance!.setUserProperty(
+          (value) => FirebaseAnalyticsUtils.instance.setUserProperty(
             AnalyticsConstants.HAS_ENABLE_NOTIFICATION,
             (value.authorizationStatus == AuthorizationStatus.authorized)
                 .toString(),
