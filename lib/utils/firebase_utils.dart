@@ -51,6 +51,7 @@ class FirebaseUtils {
   static initFcm({
     Function(RemoteMessage)? onClick,
     String? vapidKey,
+    bool customOnClickAction = false,
   }) async {
     if (!isSupportCloudMessage) return;
     FirebaseMessaging firebaseMessaging = FirebaseMessaging.instance;
@@ -65,18 +66,30 @@ class FirebaseUtils {
           title: message.notification!.title ?? '',
           content: message.notification!.body ?? '',
           onSelectNotification: () async {
-            await navigateToItemDetail(message, onClick);
+            await navigateToItemDetail(
+              message,
+              onClick,
+              customOnClickAction,
+            );
           },
         );
       }
     });
     FirebaseMessaging.onMessageOpenedApp.listen((RemoteMessage message) async {
       debugPrint("onMessageOpenedApp: $message");
-      await navigateToItemDetail(message, onClick);
+      await navigateToItemDetail(
+        message,
+        onClick,
+        customOnClickAction,
+      );
     });
     FirebaseMessaging.onBackgroundMessage((RemoteMessage message) async {
       debugPrint("onBackgroundMessage: $message");
-      await navigateToItemDetail(message, onClick);
+      await navigateToItemDetail(
+        message,
+        onClick,
+        customOnClickAction,
+      );
     });
     firebaseMessaging
         .requestPermission(
@@ -105,9 +118,12 @@ class FirebaseUtils {
   static Future<void> navigateToItemDetail(
     RemoteMessage message,
     Function(RemoteMessage)? onClick,
+    bool customOnClickAction,
   ) async {
     final data = message.data;
-    if (data['type'] == "1") {
+    if (customOnClickAction) {
+      onClick?.call(message);
+    } else if (data['type'] == "1") {
       launch(data['url']);
     } else {
       onClick?.call(message);
