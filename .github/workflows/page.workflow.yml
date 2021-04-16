@@ -32,6 +32,8 @@ jobs:
       - name: Build Web
         run: flutter build web
         working-directory: ./example
+      - name: Fix service worker for GitHub Pages
+          run: sed -i '/ \"\/\",$/d' example/build/web/flutter_service_worker.js
       - name: Deploy
         run: |
           cd example/build/web
