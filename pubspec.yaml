@@ -26,9 +26,9 @@ dependencies:
   cookie_jar: ^3.0.1
   flutter_local_notifications: ^5.0.0+1
   timezone: ^0.7.0
-  flutter_keyboard_visibility: ^5.0.0
+  flutter_keyboard_visibility: ^5.0.1
   add_2_calendar: ^2.0.1
-  in_app_review: ^2.0.1
+  in_app_review: ^2.0.2
   barcode_widget: ^2.0.1
   barcode: ^2.1.0
   printing: ^5.0.4
@@ -41,7 +41,7 @@ dependencies:
   file_selector_windows: ^0.0.1
   path: ^1.7.0
   path_provider: ^2.0.1
-  google_sign_in: ^5.0.1
+  google_sign_in: ^5.0.2
   jwt_decoder: ^2.0.1
   sign_in_with_apple: ^3.0.0
   image_picker: ^0.7.4
