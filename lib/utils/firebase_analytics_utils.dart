@@ -137,10 +137,10 @@ class FirebaseAnalyticsUtils extends AnalyticsUtils {
   Future<void> logAction(String name, String action,
       {String message = ''}) async {
     await analytics?.logEvent(
-      name: name ?? '',
+      name: name,
       parameters: <String, dynamic>{
-        'action': action ?? '',
-        'message': message ?? '',
+        'action': action,
+        'message': message,
       },
     );
   }
