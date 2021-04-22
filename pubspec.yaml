@@ -1,6 +1,6 @@
 name: ap_common_firebase
 description: A new Flutter package.
-version: 0.8.0-nullsafety.1
+version: 0.8.0-nullsafety.2
 homepage: https://github.com/abc873693/ap_common_firebase
 
 environment:
