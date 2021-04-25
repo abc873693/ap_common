@@ -16,13 +16,7 @@ abstract class AnalyticsUtils {
 
   Future<void> logApiEvent(String type, int status, {String message = ''});
 
-  @deprecated
-  Future<void> logCalculateUnits(double seconds);
-
   Future<void> logTimeEvent(String name, double seconds);
-
-  @deprecated
-  Future<void> logAction(String name, String action, {String message = ''});
 
   Future<void> logThemeEvent(ThemeMode themeMode);
 }

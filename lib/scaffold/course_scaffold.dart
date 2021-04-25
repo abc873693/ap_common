@@ -68,8 +68,6 @@ class CourseScaffold extends StatefulWidget {
   final Widget? itemPicker;
   final SemesterData? semesterData;
   final Function(int index)? onSelect;
-  @deprecated
-  final bool isShowSearchButton;
   final Function()? onSearchButtonClick;
   final Function()? onRefresh;
   final List<Widget>? actions;

@@ -51,23 +51,6 @@ extension ApExtension on ApLocalizations {
         friday,
         saturday,
       ];
-
-  @deprecated
-  String? dioError(DioError dioError) {
-    switch (dioError.type) {
-      case DioErrorType.other:
-        return noInternet;
-      case DioErrorType.connectTimeout:
-      case DioErrorType.receiveTimeout:
-      case DioErrorType.sendTimeout:
-        return timeoutMessage;
-      case DioErrorType.response:
-        return dioError.message;
-      case DioErrorType.cancel:
-      default:
-        return null;
-    }
-  }
 }
 
 extension DioErrorI18nExtension on DioError {
