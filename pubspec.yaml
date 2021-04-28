@@ -24,15 +24,15 @@ dependencies:
   dio: ^4.0.0
   dio_cookie_manager: ^2.0.0
   cookie_jar: ^3.0.1
-  flutter_local_notifications: ^5.0.0+1
+  flutter_local_notifications: ^5.0.0+3
   timezone: ^0.7.0
   flutter_keyboard_visibility: ^5.0.1
-  add_2_calendar: ^2.0.1
+  add_2_calendar: ^2.1.0
   in_app_review: ^2.0.2
   barcode_widget: ^2.0.1
   barcode: ^2.1.0
-  printing: ^5.0.4
-  pdf: ^3.1.0
+  printing: ^5.2.1
+  pdf: ^3.3.0
   auto_size_text_pk: ^3.0.0
   flutter_linkify: ^5.0.2
   file_selector: ^0.8.2
