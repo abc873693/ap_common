@@ -94,7 +94,6 @@ class CourseScaffold extends StatefulWidget {
     this.semesterData,
     this.onSelect,
     this.onRefresh,
-    this.isShowSearchButton = true,
     this.actions,
     this.enableNotifyControl = true,
     this.notifyData,

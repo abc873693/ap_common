@@ -1,7 +1,6 @@
 import 'dart:io';
 import 'dart:typed_data';
 
-import 'package:ap_common/callback/general_callback.dart';
 import 'package:ap_common/resources/ap_theme.dart';
 import 'package:ap_common/utils/ap_localizations.dart';
 import 'package:ap_common/utils/crashlytics_utils.dart';
@@ -50,27 +49,6 @@ class ApUtils {
         return page;
       }),
     );
-  }
-
-  static void handleDioError(BuildContext context, DioError dioError,
-      {int? gravity}) {
-    switch (dioError.type) {
-      case DioErrorType.other:
-        showToast(context, ApLocalizations.of(context).noInternet,
-            gravity: gravity);
-        break;
-      case DioErrorType.connectTimeout:
-      case DioErrorType.receiveTimeout:
-      case DioErrorType.sendTimeout:
-        showToast(context, ApLocalizations.of(context).timeoutMessage,
-            gravity: gravity);
-        break;
-      case DioErrorType.response:
-        showToast(context, dioError.message, gravity: gravity);
-        break;
-      case DioErrorType.cancel:
-        break;
-    }
   }
 
   static Future<void> launchUrl(var url) async {
