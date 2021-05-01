@@ -1,3 +1,8 @@
+## [0.16.0-nullsafety.5] - 2021/05/01
+### [Break Change]
+
+* 更改讀取更新紀錄路徑
+
 ## [0.16.0-nullsafety.4] - 2021/04/29
 ### [Break Change]
 
