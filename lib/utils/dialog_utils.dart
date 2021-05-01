@@ -116,7 +116,7 @@ class DialogUtils {
     if (githubRepositoryName != null) {
       final response = await Dio().get(
         sprintf(
-          "https://raw.githubusercontent.com/%s/%s/assets/changelog.json",
+          "https://raw.githubusercontent.com/%s/%s/changelog.json",
           [
             githubRepositoryName,
             githubBranchName ?? 'master',
