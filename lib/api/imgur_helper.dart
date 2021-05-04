@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:typed_data';
 import 'package:ap_common/models/imgur_upload_response.dart';
 import 'package:ap_common/utils/ap_localizations.dart';
 import 'package:path/path.dart' as p;
@@ -30,22 +31,22 @@ class ImgurHelper {
     );
   }
 
-  Future<ImgurUploadData> uploadImageToImgur({
+  Future<ImgurUploadData?> uploadImageToImgur({
     required PickedFile file,
     GeneralCallback<ImgurUploadData?>? callback,
   }) async {
     try {
-      final bytes = await file.readAsBytes();
-      var response = await dio.post(
-        "/3/image",
+      final Uint8List bytes = await file.readAsBytes();
+      final Response<Map<String, dynamic>> response = await dio.post(
+        '/3/image',
         options: Options(
-          headers: {
+          headers: <String, String>{
             'Authorization': 'Client-ID $clientId',
           },
         ),
         data: FormData.fromMap(
-          {
-            "image": MultipartFile.fromBytes(
+          <String, dynamic>{
+            'image': MultipartFile.fromBytes(
               bytes,
               filename: p.split(file.path).last,
             ),
@@ -53,34 +54,35 @@ class ImgurHelper {
         ),
       );
       if (response.statusCode == 200) {
-        final imgurUploadResponse = ImgurUploadResponse.fromJson(response.data);
+        final ImgurUploadResponse imgurUploadResponse =
+            ImgurUploadResponse.fromJson(response.data!);
         return callback == null
             ? imgurUploadResponse.data
-            : callback.onSuccess(imgurUploadResponse.data);
+            : callback.onSuccess(imgurUploadResponse.data) as ImgurUploadData;
       } else {
-        return callback == null
-            ? null
-            : callback.onError(
-                GeneralResponse(
-                  statusCode: 201,
-                  message: response.statusMessage ??
-                      ApLocalizations.current.unknownError,
-                ),
-              );
+        callback?.onError(
+          GeneralResponse(
+            statusCode: 201,
+            message:
+                response.statusMessage ?? ApLocalizations.current.unknownError,
+          ),
+        );
+
+        return null;
       }
     } on DioError catch (dioError) {
       if (dioError.type == DioErrorType.response &&
-          dioError.response?.statusCode == 400)
-        return callback == null
-            ? null
-            : callback.onError(
-                GeneralResponse(
-                  statusCode: 201,
-                  message: ApLocalizations.current.notSupportImageType,
-                ),
-              );
-      else
-        return callback == null ? null : callback.onFailure(dioError);
+          dioError.response?.statusCode == 400) {
+        callback?.onError(
+          GeneralResponse(
+            statusCode: 201,
+            message: ApLocalizations.current.notSupportImageType,
+          ),
+        );
+      } else {
+        callback?.onFailure(dioError);
+      }
+      return null;
     }
   }
 }
