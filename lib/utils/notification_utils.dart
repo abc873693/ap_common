@@ -13,32 +13,24 @@ import 'package:timezone/timezone.dart' as tz;
 export 'package:flutter_local_notifications/flutter_local_notifications.dart';
 
 class NotificationUtils {
-  static const ANDROID_RESOURCE_NAME = '@drawable/ic_stat_name';
+  static const String androidResourceName = '@drawable/ic_stat_name';
 
   // Notification ID
-  static const int BUS = 100;
-  static const int COURSE = 101;
-  static const int FCM = 200;
+  static const int bus = 100;
+  static const int course = 101;
+  static const int fcm = 200;
 
-  static get isSupport =>
+  static bool get isSupport =>
       !kIsWeb && (Platform.isAndroid || Platform.isIOS || Platform.isMacOS);
 
   static InitializationSettings get settings {
     const AndroidInitializationSettings initializationSettingsAndroid =
-        AndroidInitializationSettings(ANDROID_RESOURCE_NAME);
-    final IOSInitializationSettings initializationSettingsIOS =
-        IOSInitializationSettings(
-      requestSoundPermission: true,
-      requestBadgePermission: true,
-      requestAlertPermission: true,
-    );
-    final MacOSInitializationSettings initializationSettingsMacOS =
-        MacOSInitializationSettings(
-      requestAlertPermission: true,
-      requestBadgePermission: true,
-      requestSoundPermission: true,
-    );
-    return InitializationSettings(
+        AndroidInitializationSettings(androidResourceName);
+    const IOSInitializationSettings initializationSettingsIOS =
+        IOSInitializationSettings();
+    const MacOSInitializationSettings initializationSettingsMacOS =
+        MacOSInitializationSettings();
+    return const InitializationSettings(
       android: initializationSettingsAndroid,
       iOS: initializationSettingsIOS,
       macOS: initializationSettingsMacOS,
@@ -47,23 +39,24 @@ class NotificationUtils {
 
   //For taiwan week order
   static Day getDay(int weekIndex) {
-    if (weekIndex == 6)
+    if (weekIndex == 6) {
       return Day.sunday;
-    else
+    } else {
       return Day(weekIndex + 2);
+    }
   }
 
-  static Time parseTime(String text, {beforeMinutes = 0}) {
-    var formatter = DateFormat('HH:mm', 'zh');
-    DateTime dateTime = formatter.parse(text).add(
+  static Time parseTime(String text, {int beforeMinutes = 0}) {
+    final DateFormat formatter = DateFormat('HH:mm', 'zh');
+    final DateTime dateTime = formatter.parse(text).add(
           Duration(minutes: -beforeMinutes),
         );
     return Time(dateTime.hour, dateTime.minute);
   }
 
   static DateTime getNextWeekdayDateTime(Day day, Time time) {
-    var now = DateTime.now();
-    var dateTime = DateTime(
+    final DateTime now = DateTime.now();
+    final DateTime dateTime = DateTime(
       now.year,
       now.month,
       now.day,
@@ -85,12 +78,13 @@ class NotificationUtils {
     required String title,
     required String content,
     bool enableVibration = true,
-    String androidResourceIcon = ANDROID_RESOURCE_NAME,
+    String androidResourceIcon = androidResourceName,
     InitializationSettings? settings,
     VoidCallback? onSelectNotification,
   }) async {
-    final flutterLocalNotificationsPlugin = FlutterLocalNotificationsPlugin();
-    var platformChannelSpecifics = NotificationDetails(
+    final FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
+        FlutterLocalNotificationsPlugin();
+    final NotificationDetails platformChannelSpecifics = NotificationDetails(
       android: AndroidNotificationDetails(
         androidChannelId,
         androidChannelDescription,
@@ -100,12 +94,13 @@ class NotificationUtils {
         enableVibration: enableVibration,
         styleInformation: BigTextStyleInformation(content),
       ),
-      iOS: IOSNotificationDetails(presentAlert: true),
-      macOS: MacOSNotificationDetails(presentAlert: true),
+      iOS: const IOSNotificationDetails(presentAlert: true),
+      macOS: const MacOSNotificationDetails(presentAlert: true),
     );
     flutterLocalNotificationsPlugin.initialize(
       settings ?? NotificationUtils.settings,
-      onSelectNotification: (text) async => onSelectNotification?.call(),
+      onSelectNotification: (String? text) async =>
+          onSelectNotification?.call(),
     );
     await flutterLocalNotificationsPlugin.show(
       id,
@@ -122,18 +117,22 @@ class NotificationUtils {
     required Day day,
     bool enableVibration = true,
     int beforeMinutes = 10,
-    String? androidResourceIcon = ANDROID_RESOURCE_NAME,
+    String? androidResourceIcon = androidResourceName,
     InitializationSettings? settings,
     VoidCallback? onSelectNotification,
   }) async {
-    final ap = ApLocalizations.of(context);
-    String content = sprintf(ap.courseNotifyContent, [
-      courseNotify.title,
-      courseNotify.location == null || courseNotify.location!.isEmpty
-          ? ap.courseNotifyUnknown
-          : courseNotify.location
-    ]);
-    final time =
+    final ApLocalizations ap = ApLocalizations.of(context);
+    final String content = sprintf(
+      ap.courseNotifyContent,
+      <String?>[
+        courseNotify.title,
+        if (courseNotify.location == null || courseNotify.location!.isEmpty)
+          ap.courseNotifyUnknown
+        else
+          courseNotify.location
+      ],
+    );
+    final Time time =
         parseTime(courseNotify.startTime, beforeMinutes: beforeMinutes);
     await scheduleWeeklyNotify(
       id: courseNotify.id,
@@ -141,7 +140,7 @@ class NotificationUtils {
       content: content,
       day: getDay(courseNotify.weekdayIndex),
       time: time,
-      androidChannelId: '$COURSE',
+      androidChannelId: '$course',
       androidChannelDescription: ap.courseNotify,
       settings: settings,
       onSelectNotification: onSelectNotification,
@@ -156,12 +155,13 @@ class NotificationUtils {
     required Time time,
     required String title,
     required String content,
-    String androidResourceIcon = ANDROID_RESOURCE_NAME,
+    String androidResourceIcon = androidResourceName,
     InitializationSettings? settings,
     VoidCallback? onSelectNotification,
   }) async {
-    final flutterLocalNotificationsPlugin = FlutterLocalNotificationsPlugin();
-    var platformChannelSpecifics = NotificationDetails(
+    final FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
+        FlutterLocalNotificationsPlugin();
+    final NotificationDetails platformChannelSpecifics = NotificationDetails(
       android: AndroidNotificationDetails(
         androidChannelId,
         androidChannelDescription,
@@ -171,17 +171,18 @@ class NotificationUtils {
         enableVibration: false,
         styleInformation: BigTextStyleInformation(content),
       ),
-      iOS: IOSNotificationDetails(presentAlert: true),
-      macOS: MacOSNotificationDetails(presentAlert: true),
+      iOS: const IOSNotificationDetails(presentAlert: true),
+      macOS: const MacOSNotificationDetails(presentAlert: true),
     );
     tz.initializeTimeZones();
-    var scheduleDateTime = tz.TZDateTime.from(
+    final tz.TZDateTime scheduleDateTime = tz.TZDateTime.from(
       getNextWeekdayDateTime(day, time),
       tz.local,
     );
     flutterLocalNotificationsPlugin.initialize(
       settings ?? NotificationUtils.settings,
-      onSelectNotification: (text) async => onSelectNotification?.call(),
+      onSelectNotification: (String? text) async =>
+          onSelectNotification?.call(),
     );
     await flutterLocalNotificationsPlugin.zonedSchedule(
       id,
@@ -204,12 +205,13 @@ class NotificationUtils {
     required DateTime dateTime,
     required String title,
     required String content,
-    String androidResourceIcon = ANDROID_RESOURCE_NAME,
+    String androidResourceIcon = androidResourceName,
     InitializationSettings? settings,
     VoidCallback? onSelectNotification,
   }) async {
-    final flutterLocalNotificationsPlugin = FlutterLocalNotificationsPlugin();
-    var platformChannelSpecifics = NotificationDetails(
+    final FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
+        FlutterLocalNotificationsPlugin();
+    final NotificationDetails platformChannelSpecifics = NotificationDetails(
       android: AndroidNotificationDetails(
         androidChannelId,
         androidChannelDescription,
@@ -219,17 +221,18 @@ class NotificationUtils {
         enableVibration: false,
         styleInformation: BigTextStyleInformation(content),
       ),
-      iOS: IOSNotificationDetails(presentAlert: true),
-      macOS: MacOSNotificationDetails(presentAlert: true),
+      iOS: const IOSNotificationDetails(presentAlert: true),
+      macOS: const MacOSNotificationDetails(presentAlert: true),
     );
     tz.initializeTimeZones();
-    var scheduleDateTime = tz.TZDateTime.from(
+    final tz.TZDateTime scheduleDateTime = tz.TZDateTime.from(
       dateTime,
       tz.local,
     );
     flutterLocalNotificationsPlugin.initialize(
       settings ?? NotificationUtils.settings,
-      onSelectNotification: (text) async => onSelectNotification?.call(),
+      onSelectNotification: (String? text) async =>
+          onSelectNotification?.call(),
     );
     await flutterLocalNotificationsPlugin.zonedSchedule(
       id,
@@ -249,7 +252,7 @@ class NotificationUtils {
     bool alert = true,
     bool badge = true,
   }) async {
-    if (!kIsWeb && Platform.isIOS)
+    if (!kIsWeb && Platform.isIOS) {
       return await FlutterLocalNotificationsPlugin()
           .resolvePlatformSpecificImplementation<
               IOSFlutterLocalNotificationsPlugin>()
@@ -258,7 +261,7 @@ class NotificationUtils {
             badge: badge,
             sound: sound,
           );
-    else if (!kIsWeb && Platform.isMacOS)
+    } else if (!kIsWeb && Platform.isMacOS) {
       return await FlutterLocalNotificationsPlugin()
           .resolvePlatformSpecificImplementation<
               MacOSFlutterLocalNotificationsPlugin>()
@@ -267,21 +270,22 @@ class NotificationUtils {
             badge: badge,
             sound: sound,
           );
-    else
+    } else {
       return null;
+    }
   }
 
   static Future<void> cancelCourseNotify({
     required int id,
   }) async {
-    final flutterLocalNotificationsPlugin = FlutterLocalNotificationsPlugin();
+    final FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
+        FlutterLocalNotificationsPlugin();
     await flutterLocalNotificationsPlugin.cancel(id);
   }
 
   static Future<List<PendingNotificationRequest>>
       getPendingNotificationList() async {
-    return await FlutterLocalNotificationsPlugin()
-        .pendingNotificationRequests();
+    return FlutterLocalNotificationsPlugin().pendingNotificationRequests();
   }
 
   static Future<void> cancelAll() async {

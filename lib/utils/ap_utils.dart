@@ -28,9 +28,13 @@ export 'toast.dart';
 
 class ApUtils {
   static bool get isSupportCacheNetworkImage =>
-      (kIsWeb || Platform.isAndroid || Platform.isIOS || Platform.isMacOS);
+      kIsWeb || Platform.isAndroid || Platform.isIOS || Platform.isMacOS;
 
-  static void showToast(BuildContext context, String? message, {int? gravity}) {
+  static void showToast(
+    BuildContext context,
+    String? message, {
+    int? gravity,
+  }) {
     Toast.show(
       message,
       context,
@@ -43,25 +47,30 @@ class ApUtils {
     );
   }
 
-  static pushCupertinoStyle(BuildContext context, Widget page) {
+  static void pushCupertinoStyle(
+    BuildContext context,
+    Widget page,
+  ) {
     Navigator.of(context).push(
-      MaterialPageRoute(builder: (BuildContext context) {
-        return page;
-      }),
+      MaterialPageRoute<Widget>(
+        builder: (BuildContext context) {
+          return page;
+        },
+      ),
     );
   }
 
-  static Future<void> launchUrl(var url) async {
+  static Future<void> launchUrl(String url) async {
     await launch(url);
   }
 
-  static callPhone(String url) async {
+  static Future<void> callPhone(String url) async {
     url = url.replaceAll('#', ',');
     url = url.replaceAll('(', '');
     url = url.replaceAll(')', '');
     url = url.replaceAll('-', '');
     url = url.replaceAll(' ', '');
-    url = "tel:$url";
+    url = 'tel:$url';
     if (await canLaunch(url)) {
       await launch(url);
     } else {
@@ -69,35 +78,41 @@ class ApUtils {
     }
   }
 
-  static void shareTo(String content) async {
-    PackageInfo packageInfo = await PackageInfo.fromPlatform();
-    Share.share("$content\n\n"
-        "Send from ${packageInfo.appName} ${Platform.operatingSystem}");
+  static Future<void> shareTo(String content) async {
+    final PackageInfo packageInfo = await PackageInfo.fromPlatform();
+    Share.share(
+      '$content\n\n'
+      'Send from ${packageInfo.appName} ${Platform.operatingSystem}',
+    );
   }
 
   static Future<void> launchFbFansPage(
     BuildContext context,
     String fansPageId,
   ) async {
-    final fansPageUrl = 'https://www.facebook.com/$fansPageId/';
-    if (Platform.isAndroid)
-      ApUtils.launchUrl('fb://messaging/$fansPageId')
-          .catchError((onError) => ApUtils.launchUrl(fansPageUrl));
-    else if (Platform.isIOS)
-      ApUtils.launchUrl('fb-messenger://user-thread/$fansPageId')
-          .catchError((onError) => ApUtils.launchUrl(fansPageUrl));
-    else {
-      ApUtils.launchUrl(fansPageUrl).catchError((onError) => ApUtils.showToast(
-          context, ApLocalizations.of(context).platformError));
+    final String fansPageUrl = 'https://www.facebook.com/$fansPageId/';
+    if (Platform.isAndroid) {
+      ApUtils.launchUrl('fb://messaging/$fansPageId').catchError(
+        (dynamic onError) => ApUtils.launchUrl(fansPageUrl),
+      );
+    } else if (Platform.isIOS) {
+      ApUtils.launchUrl('fb-messenger://user-thread/$fansPageId').catchError(
+        (dynamic onError) => ApUtils.launchUrl(fansPageUrl),
+      );
+    } else {
+      ApUtils.launchUrl(fansPageUrl).catchError(
+        (dynamic onError) => ApUtils.showToast(
+            context, ApLocalizations.of(context).platformError),
+      );
     }
   }
 
-  static void showAppReviewDialog(
+  static Future<void> showAppReviewDialog(
     BuildContext context,
     String defaultUrl,
   ) async {
-    await Future.delayed(Duration(seconds: 1));
-    final app = ApLocalizations.of(context);
+    await Future<void>.delayed(const Duration(seconds: 1));
+    final ApLocalizations app = ApLocalizations.of(context);
     showDialog(
       context: context,
       builder: (BuildContext context) => YesNoDialog(
@@ -105,35 +120,34 @@ class ApUtils {
         contentWidget: RichText(
           textAlign: TextAlign.center,
           text: TextSpan(
-              style: TextStyle(
-                  color: ApTheme.of(context).grey, height: 1.3, fontSize: 16.0),
-              children: [
-                TextSpan(text: app.ratingDialogContent),
-              ]),
+            style: TextStyle(
+                color: ApTheme.of(context).grey, height: 1.3, fontSize: 16.0),
+            children: <TextSpan>[
+              TextSpan(text: app.ratingDialogContent),
+            ],
+          ),
         ),
         leftActionText: app.later,
         rightActionText: app.rateNow,
-        leftActionFunction: null,
         rightActionFunction: () => openAppReview(defaultUrl: defaultUrl),
       ),
     );
   }
 
-  static void showAppReviewSheet(
+  static Future<void> showAppReviewSheet(
     BuildContext context,
     String defaultUrl,
   ) async {
     // await Future.delayed(Duration(seconds: 1));
-    final app = ApLocalizations.of(context);
+    final ApLocalizations app = ApLocalizations.of(context);
     showModalBottomSheet(
       context: context,
       builder: (BuildContext context) => Column(
         mainAxisSize: MainAxisSize.min,
         children: <Widget>[
           Padding(
-            padding: EdgeInsets.symmetric(vertical: 8, horizontal: 16),
+            padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 16),
             child: Align(
-              alignment: Alignment.center,
               child: Text(
                 app.ratingDialogTitle,
                 style:
@@ -144,13 +158,12 @@ class ApUtils {
           RichText(
             textAlign: TextAlign.center,
             text: TextSpan(
-                style: TextStyle(
-                    color: ApTheme.of(context).grey,
-                    height: 1.3,
-                    fontSize: 18.0),
-                children: [
-                  TextSpan(text: app.ratingDialogContent),
-                ]),
+              style: TextStyle(
+                  color: ApTheme.of(context).grey, height: 1.3, fontSize: 18.0),
+              children: <TextSpan>[
+                TextSpan(text: app.ratingDialogContent),
+              ],
+            ),
           ),
           Row(
             mainAxisAlignment: MainAxisAlignment.end,
@@ -188,8 +201,9 @@ class ApUtils {
         (Platform.isAndroid || Platform.isIOS || Platform.isMacOS) &&
         (await inAppReview.isAvailable())) {
       inAppReview.requestReview();
-    } else
+    } else {
       launchUrl(defaultUrl);
+    }
   }
 
   static Future<PickedFile?> pickImage({
@@ -199,17 +213,19 @@ class ApUtils {
   }) async {
     PickedFile? image;
     if (kIsWeb || Platform.isAndroid || Platform.isIOS) {
-      final imagePicker = ImagePicker();
+      final ImagePicker imagePicker = ImagePicker();
       image = await imagePicker.getImage(
         source: imageSource ?? ImageSource.gallery,
         preferredCameraDevice: preferredCameraDevice ?? CameraDevice.rear,
       );
     } else {
-      final typeGroup = XTypeGroup(
+      final XTypeGroup typeGroup = XTypeGroup(
         label: 'images',
-        extensions: extensions ?? ['jpg', 'jpeg'],
+        extensions: extensions ?? <String>['jpg', 'jpeg'],
       );
-      final file = await openFile(acceptedTypeGroups: [typeGroup]);
+      final XFile? file = await openFile(
+        acceptedTypeGroups: <XTypeGroup>[typeGroup],
+      );
       if (file != null) image = PickedFile(file.path);
     }
     return image;
@@ -221,7 +237,7 @@ class ApUtils {
     String fileName,
     String successMessage,
   ) async {
-    final ap = ApLocalizations.of(context);
+    final ApLocalizations ap = ApLocalizations.of(context);
     try {
       bool hasGrantPermission = true;
       if (kIsWeb) {
@@ -229,61 +245,63 @@ class ApUtils {
         hasGrantPermission = await PhotoManager.requestPermission();
       }
       if (hasGrantPermission) {
-        final pngBytes = byteData.buffer.asUint8List();
-        var downloadDir = '';
-        if (kIsWeb)
+        final Uint8List pngBytes = byteData.buffer.asUint8List();
+        String downloadDir = '';
+        if (kIsWeb) {
           downloadDir = '';
-        else if (Platform.isMacOS)
+        } else if (Platform.isMacOS) {
           downloadDir = (await getDownloadsDirectory())!.path;
-        else
+        } else {
           downloadDir = '';
-        print(downloadDir);
-        final filePath = path.join(downloadDir, '$fileName.png');
+        }
+        final String filePath = path.join(downloadDir, '$fileName.png');
         bool success = true;
         if (!kIsWeb && (Platform.isAndroid || Platform.isIOS)) {
           final AssetEntity? imageEntity = await PhotoManager.editor.saveImage(
             pngBytes,
             title: fileName,
           );
-          if (kDebugMode) print(imageEntity?.title);
+          if (kDebugMode) debugPrint(imageEntity?.title);
           success = imageEntity != null;
         } else {
           await File(filePath).writeAsBytes(pngBytes);
         }
         ApUtils.showToast(context, success ? successMessage : ap.unknownError);
-      } else
+      } else {
         ApUtils.showToast(context, ap.grandPermissionFail);
+      }
     } catch (e, s) {
       ApUtils.showToast(context, ap.unknownError);
-      if (CrashlyticsUtils.instance == null)
-        throw e;
-      else
+      if (CrashlyticsUtils.instance == null) {
+        rethrow;
+      } else {
         CrashlyticsUtils.instance?.recordError(e, s);
+      }
     }
   }
 
-  static var overlayEntry;
+  static OverlayEntry? overlayEntry;
 
-  static showOverlay(BuildContext context, String text) {
-    if (overlayEntry != null) return;
-    OverlayState? overlayState = Overlay.of(context);
-    overlayEntry = OverlayEntry(
-      builder: (context) {
-        return Positioned(
-          bottom: MediaQuery.of(context).viewInsets.bottom,
-          right: 0.0,
-          left: 0.0,
-          child: InputDoneView(text: text),
-        );
-      },
-    );
-
-    overlayState?.insert(overlayEntry);
+  static void showOverlay(BuildContext context, String text) {
+    if (overlayEntry != null) {
+      final OverlayState? overlayState = Overlay.of(context);
+      overlayEntry = OverlayEntry(
+        builder: (BuildContext context) {
+          return Positioned(
+            bottom: MediaQuery.of(context).viewInsets.bottom,
+            right: 0.0,
+            left: 0.0,
+            child: InputDoneView(text: text),
+          );
+        },
+      );
+      overlayState?.insert(overlayEntry!);
+    }
   }
 
-  static removeOverlay() {
+  static void removeOverlay() {
     if (overlayEntry != null) {
-      overlayEntry.remove();
+      overlayEntry?.remove();
       overlayEntry = null;
     }
   }
@@ -303,7 +321,7 @@ class InputDoneView extends StatelessWidget {
         alignment: Alignment.topRight,
         child: TextButton(
           style: TextButton.styleFrom(
-            padding: EdgeInsets.only(right: 12.0, top: 8.0, bottom: 8.0),
+            padding: const EdgeInsets.only(right: 12.0, top: 8.0, bottom: 8.0),
           ),
           onPressed: () {
             FocusScope.of(context).requestFocus(FocusNode());

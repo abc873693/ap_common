@@ -9,17 +9,19 @@ export 'package:intl/intl.dart';
 
 extension ApExtension on ApLocalizations {
   String get dateTimeLocale {
-    if (Intl.defaultLocale!.contains('TW'))
+    if (Intl.defaultLocale!.contains('TW')) {
       return 'zh-TW';
-    else
+    } else {
       return 'en-US';
+    }
   }
 
   String get locale {
-    if (Intl.defaultLocale!.contains('TW'))
+    if (Intl.defaultLocale!.contains('TW')) {
       return 'zh-TW';
-    else
+    } else {
       return 'en-US';
+    }
   }
 
   String get iconText {
@@ -32,7 +34,7 @@ extension ApExtension on ApLocalizations {
     }
   }
 
-  List<String> get weekdaysCourse => [
+  List<String> get weekdaysCourse => <String>[
         mon,
         tue,
         wed,
@@ -42,7 +44,7 @@ extension ApExtension on ApLocalizations {
         sun,
       ];
 
-  List<String> get weekdays => [
+  List<String> get weekdays => <String>[
         sunday,
         monday,
         tuesday,
@@ -63,10 +65,11 @@ extension DioErrorI18nExtension on DioError {
       case DioErrorType.sendTimeout:
         return ApLocalizations.current.timeoutMessage;
       case DioErrorType.response:
-        if (response!.data is Map<String, dynamic>)
-          return response!.data['description'] ?? message;
-        else
+        if (response!.data is Map<String, dynamic>) {
+          return (response!.data['description'] ?? message) as String;
+        } else {
           return message;
+        }
       case DioErrorType.cancel:
       default:
         return null;
@@ -74,12 +77,16 @@ extension DioErrorI18nExtension on DioError {
   }
 
   bool get isJsonResponse {
-    return (type == DioErrorType.response &&
-        response!.data is Map<String, dynamic>);
+    return type == DioErrorType.response &&
+        response!.data is Map<String, dynamic>;
   }
 
   String? get falconMessage {
     // Define in falcon description
-    return isJsonResponse ? response!.data['description'] ?? message : null;
+    if (isJsonResponse) {
+      return (response!.data['description'] ?? message) as String;
+    } else {
+      return null;
+    }
   }
 }

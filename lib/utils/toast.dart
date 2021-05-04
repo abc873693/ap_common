@@ -4,28 +4,40 @@ import 'package:flutter/widgets.dart';
 /// Copy from https://github.com/appdev/FlutterToast
 /// Source Code https://github.com/appdev/FlutterToast/blob/4d446c80a1807094a3e10c8293e4b7f3c6429f9d/lib/toast.dart
 class Toast {
-  static final int lengthShort = 1;
-  static final int lengthLong = 2;
-  static final int bottom = 0;
-  static final int center = 1;
-  static final int top = 2;
+  static const int lengthShort = 1;
+  static const int lengthLong = 2;
+  static const int bottom = 0;
+  static const int center = 1;
+  static const int top = 2;
 
-  static void show(String? msg, BuildContext context,
-      {int duration = 1,
-      int gravity = 0,
-      Color backgroundColor = const Color(0xAA000000),
-      textStyle = const TextStyle(fontSize: 15, color: Colors.white),
-      double backgroundRadius = 20,
-      bool? rootNavigator,
-      Border? border}) {
+  static void show(
+    String? msg,
+    BuildContext context, {
+    int duration = 1,
+    int gravity = 0,
+    Color backgroundColor = const Color(0xAA000000),
+    TextStyle textStyle = const TextStyle(fontSize: 15, color: Colors.white),
+    double backgroundRadius = 20,
+    bool rootNavigator = false,
+    Border? border,
+  }) {
     ToastView.dismiss();
-    ToastView.createView(msg, context, duration, gravity, backgroundColor,
-        textStyle, backgroundRadius, border, rootNavigator);
+    ToastView.createView(
+      msg,
+      context,
+      duration,
+      gravity,
+      backgroundColor,
+      textStyle,
+      backgroundRadius,
+      border,
+      rootNavigator: rootNavigator,
+    );
   }
 }
 
 class ToastView {
-  static final ToastView _singleton = new ToastView._internal();
+  static final ToastView _singleton = ToastView._internal();
 
   factory ToastView() {
     return _singleton;
@@ -37,21 +49,22 @@ class ToastView {
   static OverlayEntry? _overlayEntry;
   static bool _isVisible = false;
 
-  static void createView(
-      String? msg,
-      BuildContext context,
-      int duration,
-      int gravity,
-      Color background,
-      TextStyle textStyle,
-      double backgroundRadius,
-      Border? border,
-      bool? rootNavigator) async {
-    overlayState = Overlay.of(context, rootOverlay: rootNavigator ?? false);
+  static Future<void> createView(
+    String? msg,
+    BuildContext context,
+    int duration,
+    int gravity,
+    Color background,
+    TextStyle textStyle,
+    double backgroundRadius,
+    Border? border, {
+    bool rootNavigator = false,
+  }) async {
+    overlayState = Overlay.of(context, rootOverlay: rootNavigator);
 
-    _overlayEntry = new OverlayEntry(
+    _overlayEntry = OverlayEntry(
       builder: (BuildContext context) => ToastWidget(
-          widget: Container(
+          widget: SizedBox(
             width: MediaQuery.of(context).size.width,
             child: Container(
                 alignment: Alignment.center,
@@ -62,8 +75,8 @@ class ToastView {
                     borderRadius: BorderRadius.circular(backgroundRadius),
                     border: border,
                   ),
-                  margin: EdgeInsets.symmetric(horizontal: 20),
-                  padding: EdgeInsets.fromLTRB(16, 10, 16, 10),
+                  margin: const EdgeInsets.symmetric(horizontal: 20),
+                  padding: const EdgeInsets.fromLTRB(16, 10, 16, 10),
                   child: Text(msg ?? '', softWrap: true, style: textStyle),
                 )),
           ),
@@ -71,11 +84,12 @@ class ToastView {
     );
     _isVisible = true;
     overlayState?.insert(_overlayEntry!);
-    await new Future.delayed(Duration(seconds: duration));
+    // ignore: always_specify_types
+    await Future.delayed(Duration(seconds: duration));
     dismiss();
   }
 
-  static dismiss() async {
+  static Future<void> dismiss() async {
     if (!_isVisible) {
       return;
     }
@@ -85,7 +99,7 @@ class ToastView {
 }
 
 class ToastWidget extends StatelessWidget {
-  ToastWidget({
+  const ToastWidget({
     Key? key,
     required this.widget,
     required this.gravity,
@@ -96,13 +110,14 @@ class ToastWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return new Positioned(
-        top: gravity == 2 ? MediaQuery.of(context).viewInsets.top + 50 : null,
-        bottom:
-            gravity == 0 ? MediaQuery.of(context).viewInsets.bottom + 50 : null,
-        child: Material(
-          color: Colors.transparent,
-          child: widget,
-        ));
+    return Positioned(
+      top: gravity == 2 ? MediaQuery.of(context).viewInsets.top + 50 : null,
+      bottom:
+          gravity == 0 ? MediaQuery.of(context).viewInsets.bottom + 50 : null,
+      child: Material(
+        color: Colors.transparent,
+        child: widget,
+      ),
+    );
   }
 }
