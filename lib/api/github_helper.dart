@@ -7,7 +7,7 @@ import 'package:dio_cookie_manager/dio_cookie_manager.dart';
 import 'package:cookie_jar/cookie_jar.dart';
 
 class GitHubHelper {
-  static const BASE_PATH = 'https://gist.githubusercontent.com/';
+  static const String basePath = 'https://gist.githubusercontent.com/';
 
   static GitHubHelper? _instance;
 
@@ -19,7 +19,7 @@ class GitHubHelper {
     cookieJar = CookieJar();
     dio = Dio();
     dio.interceptors.add(CookieManager(cookieJar));
-    cookieJar.loadForRequest(Uri.parse(BASE_PATH));
+    cookieJar.loadForRequest(Uri.parse(basePath));
   }
 
   static GitHubHelper? get instance {
@@ -33,24 +33,28 @@ class GitHubHelper {
     GeneralCallback<Map<String, List<Announcement>?>>? callback,
   }) async {
     try {
-      var response = await Dio().get(
-        '$BASE_PATH/$gitHubUsername/$hashCode/raw/'
+      final Response<String> response = await dio.get(
+        '$basePath/$gitHubUsername/$hashCode/raw/'
         '${tag}_announcement.json',
       );
-      Map<String, List<Announcement>?> map = Map();
-      Map<String, dynamic> json = jsonDecode(response.data);
-      json.forEach((key, data) {
-        if (key != 'data') map[key] = AnnouncementData.fromJson(data).data;
+      final Map<String, List<Announcement>?> map =
+          <String, List<Announcement>>{};
+      final dynamic json = jsonDecode(response.data!);
+      json.forEach((String key, Map<String, dynamic> data) {
+        if (key != 'data') {
+          map[key] = AnnouncementData.fromJson(data).data;
+        }
       });
-      return callback?.onSuccess(map);
+      return callback?.onSuccess(map) as Map<String, List<Announcement>>;
     } on DioError catch (e) {
-      if (callback != null)
+      if (callback != null) {
         callback.onFailure(e);
-      else
-        throw e;
-    } on Exception catch (e) {
+      } else {
+        rethrow;
+      }
+    } on Exception catch (_) {
       callback?.onError(GeneralResponse.unknownError());
-      throw e;
+      rethrow;
     }
     return null;
   }
