@@ -1,7 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
-// ignore_for_file: lines_longer_than_80_chars
+// ignore_for_file: lines_longer_than_80_chars, avoid_escaping_inner_quotes
 class AppLocalizations {
   AppLocalizations(Locale locale) {
     init(locale);
@@ -12,7 +12,8 @@ class AppLocalizations {
 
   String get dialogUtilTest => _vocabularies['dialogUtilTest'];
 
-  static init(Locale locale) {
+  // ignore: use_setters_to_change_properties
+  static void init(Locale locale) {
     AppLocalizations.locale = locale;
   }
 
@@ -22,7 +23,8 @@ class AppLocalizations {
     return Localizations.of<AppLocalizations>(context, AppLocalizations);
   }
 
-  static Map<String, Map<String, String>> _localizedValues = {
+  static final Map<String, Map<String, String>> _localizedValues =
+      <String, Map<String, String>>{
     'en': {
       'app_name': 'NKUST AP',
       'update_note_content': '* Fix a part of school affairs system feature.',
@@ -133,6 +135,7 @@ class AppLocalizations {
       'bus_rule_following_time':
           'Please follow the bus schedule (ex. 8:20 and 9:30 is different class), People can\'t take bus and get violation point who don\t follow rule.\n',
       'bus_rule_late_and_no_reservation':
+          // ignore: prefer_interpolation_to_compose_strings
           "• Late or don't reserved passenger, please line up standby zone waiting.\n" +
               'Standby\n' +
               "• If you can't pass verification(ex. Don't reserved)，Please change to standby zone waiting.\n" +
@@ -143,6 +146,7 @@ class AppLocalizations {
               '• If your class teacher take temporary leave、transfer cause you need take the bus early or lately，you need apply to class department then，deparment bus system administator will logout violation.\n',
       'bus_rule_fine_title': 'Fine\n',
       'bus_rule_fine_rule':
+          // ignore: prefer_interpolation_to_compose_strings
           "• Fine Calculation，violation times below 3 times don't get point, From 4th violation begin recording point，every point should be pay off fine equal to bus fare.\n" +
               '• Violation point recording until the end of the semester(1st Semester ended at 1/31，2nd Semester ended at 8/31)，violation point will restart recording. When you not paid off fine，next semester will stop your reservation right until you pay off fine.\n' +
               '• Go to the auto payment machine or Office of General Affairs cashier pay off fine after you print violation statement by yourself, After paid off, go to Office of General Affairs General Affairs Division write off payment by receipt(Write off payment need receipt on the day.)，After write off and the next day 4A.M. will be reserve class after 9.A.M..\n' +
@@ -244,7 +248,7 @@ class AppLocalizations {
       'bus_rule_resevation_rule_title': '預約校車\n',
       'bus_rule_travel_by': '• 請上 ',
       'bus_rule_fourteen_day':
-          ' 校車預約系統預約校車\n' + '• 可預約14天以內的校車班次\n' + '• 為配合總務處派車需求預約時間\n',
+          ' 校車預約系統預約校車\n• 可預約14天以內的校車班次\n• 為配合總務處派車需求預約時間\n',
       'bus_rule_reservation_time':
           '■ 9點以前的班次：請於發車前15個小時預約\n' '■ 9點以後的班次：請於發車前5個小時預約\n',
       'bus_rule_cancelling_title': '• 取消預約時間\n',
@@ -258,22 +262,14 @@ class AppLocalizations {
       'bus_rule_no_id_card': '• 未攜帶證件者請排後補區\n',
       'bus_rule_following_time':
           '• 請依預約的班次時間搭乘(例如：8:20與9:30視為不同班次），未依規定者不得上車，並計違規點數一點\n',
-      'bus_rule_late_and_no_reservation': '• 逾時或未預約搭乘者請至候補車道排隊候補上車。\n' +
-          '候補上車\n' +
-          '• 在正常車道上車時未通過驗證者(ex.未預約該班次)，請改至候補車道排隊候補上車。\n' +
-          '• 候補者需等待預約該班次的人全部上車之後才依序遞補上車\n',
+      'bus_rule_late_and_no_reservation':
+          '• 逾時或未預約搭乘者請至候補車道排隊候補上車。\n候補上車\n• 在正常車道上車時未通過驗證者(ex.未預約該班次)，請改至候補車道排隊候補上車。\n• 候補者需等待預約該班次的人全部上車之後才依序遞補上車\n',
       'bus_rule_standby_title': '候補上車\n',
       'bus_rule_standby_rule':
-          '• 未依預約的班次搭乘者，視為違規，計違規點數一次(例如：8:20與9:30視為不同班次）\n' +
-              '• 因教師臨時請假、臨時調課致使需提前或延後搭車，得向開課系所提出申請，並由系所之交通車系統管理者註銷違規紀錄。\n' +
-              '候補上車\n' +
-              '• 在正常車道上車時未通過驗證者(ex.未預約該班次)，請改至候補車道排隊候補上車。\n' +
-              '• 候補者需等待預約該班次的人全部上車之後才依序遞補上車\n',
+          '• 未依預約的班次搭乘者，視為違規，計違規點數一次(例如：8:20與9:30視為不同班次）\n• 因教師臨時請假、臨時調課致使需提前或延後搭車，得向開課系所提出申請，並由系所之交通車系統管理者註銷違規紀錄。\n候補上車\n• 在正常車道上車時未通過驗證者(ex.未預約該班次)，請改至候補車道排隊候補上車。\n• 候補者需等待預約該班次的人全部上車之後才依序遞補上車\n',
       'bus_rule_fine_title': '罰款\n',
-      'bus_rule_fine_rule': '• 違規罰款金額計算，違規前三次不計點，從第四次開始違規記點，每點應繳納等同車資之罰款\n' +
-          '• 違規點數統計至學期末為止(上學期學期末1/31，下學期8/31)，新學期違規點數重新計算。當學期罰款未繳清者，次學期停止預約權限至罰款繳清為止\n' +
-          '• 罰款請自行列印違規明細後至自動繳費機或總務處出納組繳費，繳費後憑收據至總務處事務組銷帳(當天開列之收據須於當天銷帳)，銷帳完後隔天凌晨4點後才可預約當天9點後的校車。\n' +
-          '• 罰款點數如有疑義，請於違規發生日起10日內(含星期例假日)逕向總務處事務組確認。\n',
+      'bus_rule_fine_rule':
+          '• 違規罰款金額計算，違規前三次不計點，從第四次開始違規記點，每點應繳納等同車資之罰款\n• 違規點數統計至學期末為止(上學期學期末1/31，下學期8/31)，新學期違規點數重新計算。當學期罰款未繳清者，次學期停止預約權限至罰款繳清為止\n• 罰款請自行列印違規明細後至自動繳費機或總務處出納組繳費，繳費後憑收據至總務處事務組銷帳(當天開列之收據須於當天銷帳)，銷帳完後隔天凌晨4點後才可預約當天9點後的校車。\n• 罰款點數如有疑義，請於違規發生日起10日內(含星期例假日)逕向總務處事務組確認。\n',
       'localNotificationTest': '本地通知測試',
       'testTitle': '測試標題',
       'testContent': '內容\n第二行',
@@ -290,7 +286,7 @@ class AppLocalizations {
     },
   };
 
-  Map get _vocabularies {
+  Map<String, String> get _vocabularies {
     return _localizedValues[locale.languageCode] ?? _localizedValues['en'];
   }
 

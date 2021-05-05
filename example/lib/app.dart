@@ -32,10 +32,10 @@ class MyAppState extends State<MyApp> with WidgetsBindingObserver {
   ThemeMode themeMode = ThemeMode.system;
   Locale locale;
 
-  logout() {
+  void logout() {
     setState(() {
-      this.offlineLogin = false;
-      this.pictureBytes = null;
+      offlineLogin = false;
+      pictureBytes = null;
     });
   }
 
@@ -68,19 +68,20 @@ class MyAppState extends State<MyApp> with WidgetsBindingObserver {
         child: MaterialApp(
           localeResolutionCallback:
               (Locale locale, Iterable<Locale> supportedLocales) {
-            String languageCode = Preferences.getString(
+            final String languageCode = Preferences.getString(
               Constants.PREF_LANGUAGE_CODE,
               ApSupportLanguageConstants.system,
             );
-            if (languageCode == ApSupportLanguageConstants.system)
+            if (languageCode == ApSupportLanguageConstants.system) {
               return this.locale = ApLocalizations.delegate.isSupported(locale)
                   ? locale
-                  : Locale('en');
-            else
+                  : const Locale('en');
+            } else {
               return this.locale = Locale(
                 languageCode,
                 languageCode == ApSupportLanguageConstants.zh ? 'TW' : null,
               );
+            }
           },
           onGenerateTitle: (context) => AppLocalizations.of(context).appName,
           debugShowCheckedModeBanner: false,
@@ -89,17 +90,17 @@ class MyAppState extends State<MyApp> with WidgetsBindingObserver {
             AboutUsPage.routerName: (BuildContext context) =>
                 HomePageState.aboutPage(context),
             OpenSourcePage.routerName: (BuildContext context) =>
-                OpenSourcePage(),
+                const OpenSourcePage(),
             AnnouncementHomePage.routerName: (BuildContext context) =>
-                AnnouncementHomePage(),
+                const AnnouncementHomePage(),
           },
           theme: ApTheme.light,
           darkTheme: ApTheme.dark,
           themeMode: themeMode,
           locale: locale,
-          localizationsDelegates: [
+          localizationsDelegates: const <LocalizationsDelegate>[
             ApLocalizations.delegate,
-            const AppLocalizationsDelegate(),
+            AppLocalizationsDelegate(),
             GlobalMaterialLocalizations.delegate,
             GlobalWidgetsLocalizations.delegate,
             GlobalCupertinoLocalizations.delegate,
@@ -124,7 +125,7 @@ class MyAppState extends State<MyApp> with WidgetsBindingObserver {
     debugPrint('loadLocale $locale');
     setState(() {
       this.locale = locale;
-      AppLocalizationsDelegate().load(locale);
+      const AppLocalizationsDelegate().load(locale);
       ApLocalizations.delegate.load(locale);
     });
   }

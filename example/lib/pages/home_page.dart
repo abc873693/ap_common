@@ -1,9 +1,9 @@
 import 'package:ap_common/api/announcement_helper.dart';
 import 'package:ap_common/callback/general_callback.dart';
 import 'package:ap_common/models/user_info.dart';
+import 'package:ap_common/pages/about_us_page.dart';
 import 'package:ap_common/pages/announcement/home_page.dart';
 import 'package:ap_common/pages/announcement_content_page.dart';
-import 'package:ap_common/pages/about_us_page.dart';
 import 'package:ap_common/pages/open_source_page.dart';
 import 'package:ap_common/resources/ap_icon.dart';
 import 'package:ap_common/resources/ap_theme.dart';
@@ -14,21 +14,21 @@ import 'package:ap_common/utils/notification_utils.dart';
 import 'package:ap_common/utils/preferences.dart';
 import 'package:ap_common/widgets/ap_drawer.dart';
 import 'package:ap_common_example/pages/diolog_utils_page.dart';
-import 'package:flutter/services.dart';
-import 'package:http/http.dart' as http;
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
+import 'package:http/http.dart' as http;
 
 import '../config/constants.dart';
 import '../res/assets.dart';
 import '../utils/app_localizations.dart';
+import 'login_page.dart';
 import 'notification_utils_page.dart';
 import 'setting_page.dart';
 import 'shcool_info_page.dart';
-import 'user_info_page.dart';
-import 'login_page.dart';
 import 'study/course_page.dart';
 import 'study/score_page.dart';
+import 'user_info_page.dart';
 
 class HomePage extends StatefulWidget {
   static const String routerName = '/home';
@@ -43,7 +43,7 @@ class HomePageState extends State<HomePage> {
 
   bool get isTablet => MediaQuery.of(context).size.shortestSide > 680;
 
-  var state = HomeState.loading;
+  HomeState state = HomeState.loading;
 
   AppLocalizations app;
   ApLocalizations ap;
@@ -54,7 +54,7 @@ class HomePageState extends State<HomePage> {
 
   List<Announcement> announcements;
 
-  var isLogin = false;
+  bool isLogin = false;
   bool displayPicture = true;
   bool isStudyExpanded = false;
   bool isBusExpanded = false;
@@ -77,7 +77,7 @@ class HomePageState extends State<HomePage> {
     }
   }
 
-  static aboutPage(BuildContext context, {String assetImage}) {
+  static Widget aboutPage(BuildContext context, {String assetImage}) {
     return AboutUsPage(
       assetImage: assetImage ?? ImageAssets.kuasap2,
       githubName: 'NKUST-ITC',
@@ -92,7 +92,7 @@ class HomePageState extends State<HomePage> {
           onPressed: () {
             Navigator.of(context).push(
               MaterialPageRoute(
-                builder: (_) => OpenSourcePage(),
+                builder: (_) => const OpenSourcePage(),
               ),
             );
           },
@@ -129,12 +129,12 @@ class HomePageState extends State<HomePage> {
       isLogin: isLogin,
       actions: <Widget>[
         IconButton(
-          icon: Icon(Icons.fiber_new_rounded),
+          icon: const Icon(Icons.fiber_new_rounded),
           tooltip: ap.announcementReviewSystem,
           onPressed: () {
             ApUtils.pushCupertinoStyle(
               context,
-              AnnouncementHomePage(),
+              const AnnouncementHomePage(),
             );
           },
         ),
@@ -147,11 +147,12 @@ class HomePageState extends State<HomePage> {
         imageAsset: drawerIcon,
         onTapHeader: () {
           if (isLogin) {
-            if (userInfo != null)
+            if (userInfo != null) {
               ApUtils.pushCupertinoStyle(
                 context,
                 UserInfoPage(userInfo: userInfo),
               );
+            }
           } else {
             if (!isTablet) Navigator.of(context).pop();
             openLoginPage();
@@ -166,7 +167,7 @@ class HomePageState extends State<HomePage> {
             ),
           ExpansionTile(
             initiallyExpanded: isStudyExpanded,
-            onExpansionChanged: (bool) {
+            onExpansionChanged: (bool bool) {
               setState(() {
                 isStudyExpanded = bool;
               });
@@ -277,7 +278,7 @@ class HomePageState extends State<HomePage> {
     );
   }
 
-  void onTabTapped(int index) async {
+  Future<void> onTabTapped(int index) async {
     if (isLogin) {
       switch (index) {
         case 0:
@@ -296,11 +297,12 @@ class HomePageState extends State<HomePage> {
           ApUtils.pushCupertinoStyle(context, ScorePage());
           break;
       }
-    } else
+    } else {
       ApUtils.showToast(context, ap.notLogin);
+    }
   }
 
-  _getAnnouncements() async {
+  Future<void> _getAnnouncements() async {
     // GitHubHelper.instance.getAnnouncement(
     //   gitHubUsername: 'abc873693',
     //   hashCode: 'a8e048d24f892ce95a633aa5966c030a',
@@ -333,9 +335,9 @@ class HomePageState extends State<HomePage> {
         onSuccess: (List<Announcement> data) {
           announcements = data;
           setState(() {
-            if (announcements == null || announcements.length == 0)
+            if (announcements == null || announcements.isEmpty) {
               state = HomeState.empty;
-            else {
+            } else {
               newsMap?.forEach((_, data) {
                 data.sort((a, b) {
                   return b.weight.compareTo(a.weight);
@@ -349,20 +351,21 @@ class HomePageState extends State<HomePage> {
     );
   }
 
-  _getUserInfo() async {
-    String rawString = await rootBundle.loadString(FileAssets.userInfo);
-    var userInfo = UserInfo.fromRawJson(rawString);
+  Future<void> _getUserInfo() async {
+    final String rawString = await rootBundle.loadString(FileAssets.userInfo);
+    final userInfo = UserInfo.fromRawJson(rawString);
     setState(() {
       this.userInfo = userInfo;
     });
-    if (Preferences.getBool(Constants.PREF_DISPLAY_PICTURE, true))
+    if (Preferences.getBool(Constants.PREF_DISPLAY_PICTURE, true)) {
       _getUserPicture();
+    }
   }
 
-  _getUserPicture() async {
+  Future<void> _getUserPicture() async {
     try {
       if ((userInfo?.pictureUrl) == null) return;
-      var response = await http.get(Uri.parse(userInfo.pictureUrl));
+      final response = await http.get(Uri.parse(userInfo.pictureUrl));
       if (!response.body.contains('html')) {
         if (mounted) {
           setState(() {
@@ -372,12 +375,12 @@ class HomePageState extends State<HomePage> {
 //        CacheUtils.savePictureData(response.bodyBytes);
       }
     } catch (e) {
-      throw e;
+      rethrow;
     }
   }
 
   Future _login() async {
-    await Future.delayed(Duration(microseconds: 30));
+    await Future.delayed(const Duration(microseconds: 30));
     // var username = Preferences.getString(Constants.PREF_USERNAME, '');
     // ignore: lines_longer_than_80_chars
     // var password = Preferences.getStringSecurity(Constants.PREF_PASSWORD, '');
@@ -392,13 +395,13 @@ class HomePageState extends State<HomePage> {
   }
 
   Future openLoginPage() async {
-    var result = await Navigator.of(context).push(
+    final dynamic result = await Navigator.of(context).push(
       MaterialPageRoute(
         builder: (_) => LoginPage(),
       ),
     );
     checkLogin();
-    if (result ?? false) {
+    if (result is bool ?? false) {
       _getUserInfo();
       if (state != HomeState.finish) {
         _getAnnouncements();
@@ -409,8 +412,8 @@ class HomePageState extends State<HomePage> {
     }
   }
 
-  void checkLogin() async {
-    await Future.delayed(Duration(microseconds: 30));
+  Future<void> checkLogin() async {
+    await Future.delayed(const Duration(microseconds: 30));
     if (isLogin) {
       _homeKey.currentState.hideSnackBar();
     } else {
@@ -429,18 +432,19 @@ class HomePageState extends State<HomePage> {
     }
   }
 
-  _openPage(Widget page, {needLogin = false}) {
+  void _openPage(Widget page, {bool needLogin = false}) {
     if (!isTablet) Navigator.of(context).pop();
-    if (needLogin && !isLogin)
+    if (needLogin && !isLogin) {
       ApUtils.showToast(
         context,
         ApLocalizations.of(context).notLoginHint,
       );
-    else {
+    } else {
       if (isTablet) {
         setState(() => content = page);
-      } else
+      } else {
         ApUtils.pushCupertinoStyle(context, page);
+      }
     }
   }
 }

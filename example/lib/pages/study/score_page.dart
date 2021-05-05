@@ -48,7 +48,7 @@ class ScorePageState extends State<ScorePage> {
       customStateHint: customStateHint,
       semesterData: semesterData,
       onSelect: (index) {
-        this.semesterData.currentIndex = index;
+        semesterData.currentIndex = index;
         _getSemesterScore();
       },
       onRefresh: () async {
@@ -67,22 +67,23 @@ class ScorePageState extends State<ScorePage> {
     );
   }
 
-  void _getSemester() async {
-    String rawString = await rootBundle.loadString(FileAssets.semesters);
+  Future<void> _getSemester() async {
+    final String rawString = await rootBundle.loadString(FileAssets.semesters);
     semesterData = SemesterData.fromRawJson(rawString);
-    var i = 0;
-    semesterData.data.forEach((option) {
-      if (option.text == semesterData.defaultSemester.text)
+    for (int i = 0; i < semesterData.data.length; i++) {
+      final option = semesterData.data[i];
+      if (option.text == semesterData.defaultSemester.text) {
         semesterData.currentIndex = i;
+      }
       i++;
-    });
+    }
     _getSemesterScore();
   }
 
-  _getSemesterScore() async {
-    String rawString = await rootBundle.loadString(FileAssets.scores);
+  Future<void> _getSemesterScore() async {
+    final String rawString = await rootBundle.loadString(FileAssets.scores);
     scoreData = ScoreData.fromRawJson(rawString);
-    if (mounted)
+    if (mounted) {
       setState(() {
         if (scoreData == null) {
           state = ScoreState.empty;
@@ -90,6 +91,7 @@ class ScorePageState extends State<ScorePage> {
           state = ScoreState.finish;
         }
       });
+    }
   }
 
 //  Future<bool> _loadOfflineScoreData() async {

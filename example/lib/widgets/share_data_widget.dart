@@ -6,7 +6,7 @@ import '../app.dart';
 class ShareDataWidget extends InheritedWidget {
   final MyAppState data;
 
-  ShareDataWidget({this.data, Widget child}) : super(child: child);
+  const ShareDataWidget({this.data, Widget child}) : super(child: child);
 
   static ShareDataWidget of(BuildContext context) {
     return context.dependOnInheritedWidgetOfExactType();

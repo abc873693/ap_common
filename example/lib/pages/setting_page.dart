@@ -27,13 +27,14 @@ class SettingPageState extends State<SettingPage> {
   bool busNotify = false, courseNotify = false, displayPicture = true;
   bool isOffline = false;
 
-  var autoSendEvent = false;
+  bool autoSendEvent = false;
 
   @override
   void initState() {
     _getPreference();
-    if (DateTime.now().millisecondsSinceEpoch % 5 == 0)
+    if (DateTime.now().millisecondsSinceEpoch % 5 == 0) {
       ApUtils.showAppReviewDialog(context, Constants.PLAY_STORE_URL);
+    }
     super.initState();
   }
 
@@ -56,9 +57,9 @@ class SettingPageState extends State<SettingPage> {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: <Widget>[
             SettingTitle(text: ap.notificationItem),
-            CheckCourseNotifyItem(),
-            ClearAllNotifyItem(),
-            Divider(
+            const CheckCourseNotifyItem(),
+            const ClearAllNotifyItem(),
+            const Divider(
               color: Colors.grey,
               height: 0.5,
             ),
@@ -90,7 +91,7 @@ class SettingPageState extends State<SettingPage> {
                 ShareDataWidget.of(context).data.update();
               },
             ),
-            Divider(
+            const Divider(
               color: Colors.grey,
               height: 0.5,
             ),
@@ -109,10 +110,11 @@ class SettingPageState extends State<SettingPage> {
     );
   }
 
-  _getPreference() async {
+  Future<void> _getPreference() async {
     PackageInfo packageInfo;
-    if (!kIsWeb && (Platform.isAndroid || Platform.isIOS || Platform.isMacOS))
+    if (!kIsWeb && (Platform.isAndroid || Platform.isIOS || Platform.isMacOS)) {
       packageInfo = await PackageInfo.fromPlatform();
+    }
     setState(() {
       isOffline = Preferences.getBool(Constants.PREF_IS_OFFLINE_LOGIN, false);
       appVersion = packageInfo?.version ?? '3.4.2';

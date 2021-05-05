@@ -1,7 +1,7 @@
 import 'package:encrypt/encrypt.dart';
 
+// ignore_for_file: constant_identifier_names
 class Constants {
-
   static final key = Key.fromUtf8('l9r1W3wcsnJTayxCXwoFt62w1i4sQ5J9');
   static final iv = IV.fromUtf8('auc9OV5r0nLwjCAH');
 
@@ -66,5 +66,4 @@ class Constants {
   static const FANS_PAGE_ID = '954175941266264';
   static const PLAY_STORE_URL =
       'https://play.google.com/store/apps/details?id=com.kuas.ap&hl=zh_TW';
-
 }

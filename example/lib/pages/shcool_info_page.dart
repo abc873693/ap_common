@@ -101,6 +101,8 @@ class SchoolInfoPageState extends State<SchoolInfoPage>
         backgroundColor: ApTheme.of(context).blue,
       ),
       body: TabBarView(
+        controller: controller,
+        physics: const NeverScrollableScrollPhysics(),
         children: [
           NotificationScaffold(
             state: notificationState,
@@ -126,8 +128,6 @@ class SchoolInfoPageState extends State<SchoolInfoPage>
             data: data,
           ),
         ],
-        controller: controller,
-        physics: NeverScrollableScrollPhysics(),
       ),
       bottomNavigationBar: BottomNavigationBar(
         currentIndex: _currentIndex,
@@ -156,24 +156,26 @@ class SchoolInfoPageState extends State<SchoolInfoPage>
     );
   }
 
-  _getNotifications() async {
-    String rawString = await rootBundle.loadString(FileAssets.notifications);
-    var data = NotificationsData.fromRawJson(rawString);
-    if (mounted && data != null)
+  Future<void> _getNotifications() async {
+    final String rawString =
+        await rootBundle.loadString(FileAssets.notifications);
+    final data = NotificationsData.fromRawJson(rawString);
+    if (mounted && data != null) {
       setState(() {
         notificationList.addAll(data.data.notifications);
         notificationState = NotificationState.finish;
       });
+    }
   }
 
-  _getSchedules() async {
+  Future<void> _getSchedules() async {
     downloadFdf(
         'https://raw.githubusercontent.com/NKUST-ITC/NKUST-AP-Flutter/master/school_schedule.pdf');
   }
 
-  void downloadFdf(String url) async {
+  Future<void>  downloadFdf(String url) async {
     try {
-      var response = await Dio().get(
+      final response = await Dio().get(
         url,
         options: Options(responseType: ResponseType.bytes),
       );
@@ -185,7 +187,7 @@ class SchoolInfoPageState extends State<SchoolInfoPage>
       setState(() {
         pdfState = PdfState.error;
       });
-      throw e;
+      rethrow;
     }
   }
 }

@@ -12,7 +12,7 @@ import 'app.dart';
 import 'config/constants.dart';
 
 // ignore_for_file: lines_longer_than_80_chars
-void main() async {
+Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
   HttpClient.enableTimelineLogging = !kIsWeb && kDebugMode;
   await Preferences.init(key: Constants.key, iv: Constants.iv);
@@ -23,5 +23,5 @@ void main() async {
   // }
   ApIcon.code =
       Preferences.getString(Constants.PREF_ICON_STYLE_CODE, ApIcon.outlined);
-  runApp(MyApp());
+  runApp(const MyApp());
 }

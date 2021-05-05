@@ -27,14 +27,14 @@ class _DialogUtilsTestPageState extends State<DialogUtilsTestPage> {
       ),
       body: ListView(
         children: [
-          Padding(
-            padding: const EdgeInsets.all(8.0),
+          const Padding(
+            padding: EdgeInsets.all(8.0),
             child: Text(
               '基本顯示',
               style: TextStyle(color: Colors.grey),
             ),
           ),
-          Divider(height: 0.0),
+          const Divider(height: 0.0),
           ListTile(
             onTap: () {
               DialogUtils.showNewVersionContent(
@@ -51,8 +51,8 @@ class _DialogUtilsTestPageState extends State<DialogUtilsTestPage> {
                 ),
               );
             },
-            title: Text('新版本對話框'),
-            subtitle: Text('DialogUtils.showNewVersionContent'),
+            title: const Text('新版本對話框'),
+            subtitle: const Text('DialogUtils.showNewVersionContent'),
           ),
           ListTile(
             onTap: () {
@@ -61,8 +61,8 @@ class _DialogUtilsTestPageState extends State<DialogUtilsTestPage> {
                 app.updateNoteContent,
               );
             },
-            title: Text('版本內容對話框'),
-            subtitle: Text('DialogUtils.showNewVersionContent'),
+            title: const Text('版本內容對話框'),
+            subtitle: const Text('DialogUtils.showNewVersionContent'),
           ),
           ListTile(
             onTap: () {
@@ -71,8 +71,8 @@ class _DialogUtilsTestPageState extends State<DialogUtilsTestPage> {
                 Constants.PLAY_STORE_URL,
               );
             },
-            title: Text('App內評分'),
-            subtitle: Text('ApUtils.showAppReviewDialog'),
+            title: const Text('App內評分'),
+            subtitle: const Text('ApUtils.showAppReviewDialog'),
           ),
         ],
       ),
