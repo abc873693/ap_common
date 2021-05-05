@@ -26,9 +26,9 @@ extension ApExtension on ApLocalizations {
 
   String get iconText {
     switch (ApIcon.code) {
-      case ApIcon.FILLED:
+      case ApIcon.filled:
         return filled;
-      case ApIcon.OUTLINED:
+      case ApIcon.outlined:
       default:
         return outlined;
     }

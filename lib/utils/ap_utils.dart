@@ -65,16 +65,16 @@ class ApUtils {
   }
 
   static Future<void> callPhone(String url) async {
-    url = url.replaceAll('#', ',');
-    url = url.replaceAll('(', '');
-    url = url.replaceAll(')', '');
-    url = url.replaceAll('-', '');
-    url = url.replaceAll(' ', '');
-    url = 'tel:$url';
-    if (await canLaunch(url)) {
-      await launch(url);
+    String newUrl = url.replaceAll('#', ',');
+    newUrl = newUrl.replaceAll('(', '');
+    newUrl = newUrl.replaceAll(')', '');
+    newUrl = newUrl.replaceAll('-', '');
+    newUrl = newUrl.replaceAll(' ', '');
+    newUrl = 'tel:$newUrl';
+    if (await canLaunch(newUrl)) {
+      await launch(newUrl);
     } else {
-      throw 'Could not launch $url';
+      throw 'Could not launch $newUrl';
     }
   }
 

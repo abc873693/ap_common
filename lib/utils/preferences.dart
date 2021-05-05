@@ -29,8 +29,8 @@ class Preferences {
     if (isSupport) {
       prefs = await SharedPreferences.getInstance();
       ApIcon.code = Preferences.getString(
-        ApConstants.PREF_ICON_STYLE_CODE,
-        ApIcon.OUTLINED,
+        ApConstants.prefIconStyleCode,
+        ApIcon.outlined,
       );
       encrypter = encrypt.Encrypter(
         encrypt.AES(
