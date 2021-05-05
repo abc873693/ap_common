@@ -10,8 +10,9 @@ class SemesterData {
 
   int get defaultIndex {
     if (defaultSemester == null) return 0;
-    for (var i = 0; i < data!.length; i++)
+    for (int i = 0; i < data!.length; i++) {
       if (defaultSemester!.text == data![i].text) return i;
+    }
     return 0;
   }
 
@@ -20,8 +21,10 @@ class SemesterData {
   }
 
   List<String> get semesters {
-    List<String> texts = [];
-    data?.forEach((element) => texts.add(element.text ?? ''));
+    final List<String> texts = <String>[];
+    for (final Semester semester in data!) {
+      texts.add(semester.text ?? '');
+    }
     return texts;
   }
 
@@ -32,41 +35,47 @@ class SemesterData {
   });
 
   factory SemesterData.fromRawJson(String str) =>
-      SemesterData.fromJson(json.decode(str));
+      SemesterData.fromJson(json.decode(str) as Map<String, dynamic>);
 
   String toRawJson() => json.encode(toJson());
 
-  factory SemesterData.fromJson(Map<String, dynamic> json) => new SemesterData(
-        data: new List<Semester>.from(
-            json["data"].map((x) => Semester.fromJson(x))),
-        defaultSemester: Semester.fromJson(json["default"]),
-        currentIndex: json['currentIndex'],
+  factory SemesterData.fromJson(Map<String, dynamic> json) => SemesterData(
+        data: List<Semester>.from(
+          (json['data'] as List<dynamic>).map(
+            (x) => Semester.fromJson(x as Map<String, dynamic>),
+          ),
+        ),
+        defaultSemester: Semester.fromJson(
+          json['default'] as Map<String, dynamic>,
+        ),
+        currentIndex: json['currentIndex'] as int,
       );
 
   Map<String, dynamic> toJson() => {
-        "data": new List<dynamic>.from(data!.map((x) => x.toJson())),
-        "default": defaultSemester!.toJson(),
-        "currentIndex": currentIndex,
+        'data': List<dynamic>.from(data!.map((x) => x.toJson())),
+        'default': defaultSemester!.toJson(),
+        'currentIndex': currentIndex,
       };
 
   void save() {
     Preferences.setString(
-      '${ApConstants.PACKAGE_NAME}'
+      '${ApConstants.packageName}'
       'semester_data',
-      this.toRawJson(),
+      toRawJson(),
     );
   }
 
   static SemesterData? load() {
-    String rawString = Preferences.getString(
-      '${ApConstants.PACKAGE_NAME}'
+    final String rawString = Preferences.getString(
+      '${ApConstants.packageName}'
           'semester_data',
       '',
     );
-    if (rawString == '')
+    if (rawString == '') {
       return null;
-    else
+    } else {
       return SemesterData.fromRawJson(rawString);
+    }
   }
 }
 
@@ -85,20 +94,21 @@ class Semester {
     this.text,
   });
 
-  factory Semester.fromRawJson(String str) =>
-      Semester.fromJson(json.decode(str));
+  factory Semester.fromRawJson(String str) => Semester.fromJson(
+        json.decode(str) as Map<String, dynamic>,
+      );
 
   String toRawJson() => json.encode(toJson());
 
-  factory Semester.fromJson(Map<String, dynamic> json) => new Semester(
-        year: json["year"],
-        value: json["value"],
-        text: json["text"],
+  factory Semester.fromJson(Map<String, dynamic> json) => Semester(
+        year: json['year'] as String,
+        value: json['value'] as String,
+        text: json['text'] as String,
       );
 
   Map<String, dynamic> toJson() => {
-        "year": year,
-        "value": value,
-        "text": text,
+        'year': year,
+        'value': value,
+        'text': text,
       };
 }

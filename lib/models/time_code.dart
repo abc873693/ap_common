@@ -13,27 +13,33 @@ class TimeCodeConfig {
     this.timeCodes,
   });
 
-  factory TimeCodeConfig.fromRawJson(String str) =>
-      TimeCodeConfig.fromJson(json.decode(str));
+  factory TimeCodeConfig.fromRawJson(String str) => TimeCodeConfig.fromJson(
+        json.decode(str) as Map<String, dynamic>,
+      );
 
   String toRawJson() => json.encode(toJson());
 
   factory TimeCodeConfig.fromJson(Map<String, dynamic> json) => TimeCodeConfig(
-        timeCodes: json["timeCodes"] == null
+        timeCodes: json['timeCodes'] == null
             ? null
             : List<TimeCode>.from(
-                json["timeCodes"].map((x) => TimeCode.fromJson(x))),
+                (json['timeCodes'] as List<dynamic>).map(
+                  (dynamic x) => TimeCode.fromJson(x as Map<String, dynamic>),
+                ),
+              ),
       );
 
   Map<String, dynamic> toJson() => {
-        "timeCodes": timeCodes == null
+        'timeCodes': timeCodes == null
             ? null
             : List<dynamic>.from(timeCodes!.map((x) => x.toJson())),
       };
 
   List<String?> get textList {
-    List<String?> tmp = [];
-    timeCodes?.forEach((timeCode) => tmp.add(timeCode.title));
+    final List<String?> tmp = [];
+    for (final timeCode in timeCodes ?? <TimeCode>[]) {
+      tmp.add(timeCode.title);
+    }
     return tmp;
   }
 

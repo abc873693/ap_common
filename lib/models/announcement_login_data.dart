@@ -21,17 +21,17 @@ class AnnouncementLoginData {
       );
 
   factory AnnouncementLoginData.fromRawJson(String str) =>
-      AnnouncementLoginData.fromJson(json.decode(str));
+      AnnouncementLoginData.fromJson(json.decode(str) as Map<String, dynamic>);
 
   String toRawJson() => json.encode(toJson());
 
   factory AnnouncementLoginData.fromJson(Map<String, dynamic> json) =>
       AnnouncementLoginData(
-        key: json["key"] == null ? null : json["key"],
+        key: json['key'] as String,
       );
 
   Map<String, dynamic> toJson() => {
-        "key": key == null ? null : key,
+        'key': key,
       };
 
   Map<String, dynamic> get decodedToken => JwtDecoder.decode(key!);
@@ -39,29 +39,30 @@ class AnnouncementLoginData {
   bool get isExpired => JwtDecoder.isExpired(key!);
 
   PermissionLevel get level =>
-      PermissionLevel.values[decodedToken['user']['permission_level']];
+      PermissionLevel.values[decodedToken['user']['permission_level'] as int];
 
-  String? get loginType => decodedToken['user']['login_type'];
+  String? get loginType => decodedToken['user']['login_type'] as String;
 
-  String? get username => decodedToken['user']['username'];
+  String? get username => decodedToken['user']['username'] as String;
 
   void save() {
     Preferences.setStringSecurity(
-      '${ApConstants.PACKAGE_NAME}'
+      '${ApConstants.packageName}'
       '.announcement_login_data',
-      this.toRawJson(),
+      toRawJson(),
     );
   }
 
   static AnnouncementLoginData? load() {
-    String? rawString = Preferences.getStringSecurity(
-      '${ApConstants.PACKAGE_NAME}'
+    final String? rawString = Preferences.getStringSecurity(
+      '${ApConstants.packageName}'
           '.announcement_login_data',
       '',
     );
-    if (rawString == '')
+    if (rawString == '') {
       return null;
-    else
+    } else {
       return AnnouncementLoginData.fromRawJson(rawString!);
+    }
   }
 }

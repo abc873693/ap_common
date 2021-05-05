@@ -27,21 +27,25 @@ class ImgurUploadResponse {
       );
 
   factory ImgurUploadResponse.fromRawJson(String str) =>
-      ImgurUploadResponse.fromJson(json.decode(str));
+      ImgurUploadResponse.fromJson(
+        json.decode(str) as Map<String, dynamic>,
+      );
 
   String toRawJson() => json.encode(toJson());
 
   factory ImgurUploadResponse.fromJson(Map<String, dynamic> json) =>
       ImgurUploadResponse(
-        status: json["status"] == null ? null : json["status"],
-        success: json["success"] == null ? null : json["success"],
-        data: json["data"] == null ? null : ImgurUploadData.fromJson(json["data"]),
+        status: json['status'] as int,
+        success: json['success'] as bool?,
+        data: json['data'] == null
+            ? null
+            : ImgurUploadData.fromJson(json['data'] as Map<String, dynamic>),
       );
 
   Map<String, dynamic> toJson() => {
-        "status": status == null ? null : status,
-        "success": success == null ? null : success,
-        "data": data == null ? null : data!.toJson(),
+        'status': status,
+        'success': success,
+        'data': data == null ? null : data!.toJson(),
       };
 }
 
@@ -171,82 +175,86 @@ class ImgurUploadData {
         hls: hls ?? this.hls,
       );
 
-  factory ImgurUploadData.fromRawJson(String str) => ImgurUploadData.fromJson(json.decode(str));
+  factory ImgurUploadData.fromRawJson(String str) => ImgurUploadData.fromJson(
+        json.decode(str) as Map<String, dynamic>,
+      );
 
   String toRawJson() => json.encode(toJson());
 
-  factory ImgurUploadData.fromJson(Map<String, dynamic> json) => ImgurUploadData(
-        id: json["id"] == null ? null : json["id"],
-        deletehash: json["deletehash"] == null ? null : json["deletehash"],
-        accountId: json["account_id"],
-        accountUrl: json["account_url"],
-        adType: json["ad_type"],
-        adUrl: json["ad_url"],
-        title: json["title"],
-        description: json["description"],
-        name: json["name"] == null ? null : json["name"],
-        type: json["type"] == null ? null : json["type"],
-        width: json["width"] == null ? null : json["width"],
-        height: json["height"] == null ? null : json["height"],
-        size: json["size"] == null ? null : json["size"],
-        views: json["views"] == null ? null : json["views"],
-        section: json["section"],
-        vote: json["vote"],
-        bandwidth: json["bandwidth"] == null ? null : json["bandwidth"],
-        animated: json["animated"] == null ? null : json["animated"],
-        favorite: json["favorite"] == null ? null : json["favorite"],
-        inGallery: json["in_gallery"] == null ? null : json["in_gallery"],
-        inMostViral:
-            json["in_most_viral"] == null ? null : json["in_most_viral"],
-        hasSound: json["has_sound"] == null ? null : json["has_sound"],
-        isAd: json["is_ad"] == null ? null : json["is_ad"],
-        nsfw: json["nsfw"],
-        link: json["link"] == null ? null : json["link"],
-        tags: json["tags"] == null
+  factory ImgurUploadData.fromJson(Map<String, dynamic> json) =>
+      ImgurUploadData(
+        id: json['id'] as String?,
+        deletehash: json['deletehash'] as String?,
+        accountId: json['account_id'],
+        accountUrl: json['account_url'],
+        adType: json['ad_type'],
+        adUrl: json['ad_url'],
+        title: json['title'],
+        description: json['description'],
+        name: json['name'] as String?,
+        type: json['type'] as String?,
+        width: json['width'] as int?,
+        height: json['height'] as int?,
+        size: json['size'] as int?,
+        views: json['views'] as int?,
+        section: json['section'],
+        vote: json['vote'],
+        bandwidth: json['bandwidth'] as int?,
+        animated: json['animated'] as bool?,
+        favorite: json['favorite'] as bool?,
+        inGallery: json['in_gallery'] as bool?,
+        inMostViral: json['in_most_viral'] as bool?,
+        hasSound: json['has_sound'] as bool?,
+        isAd: json['is_ad'] as bool?,
+        nsfw: json['nsfw'],
+        link: json['link'] as String?,
+        tags: json['tags'] == null
             ? null
-            : List<dynamic>.from(json["tags"].map((x) => x)),
-        datetime: json["datetime"] == null ? null : json["datetime"],
-        mp4: json["mp4"] == null ? null : json["mp4"],
-        hls: json["hls"] == null ? null : json["hls"],
+            : List<dynamic>.from(
+                json['tags'] as List<dynamic>,
+              ),
+        datetime: json['datetime'] as int?,
+        mp4: json['mp4'] as String?,
+        hls: json['hls'] as String?,
       );
 
   Map<String, dynamic> toJson() => {
-        "id": id == null ? null : id,
-        "deletehash": deletehash == null ? null : deletehash,
-        "account_id": accountId,
-        "account_url": accountUrl,
-        "ad_type": adType,
-        "ad_url": adUrl,
-        "title": title,
-        "description": description,
-        "name": name == null ? null : name,
-        "type": type == null ? null : type,
-        "width": width == null ? null : width,
-        "height": height == null ? null : height,
-        "size": size == null ? null : size,
-        "views": views == null ? null : views,
-        "section": section,
-        "vote": vote,
-        "bandwidth": bandwidth == null ? null : bandwidth,
-        "animated": animated == null ? null : animated,
-        "favorite": favorite == null ? null : favorite,
-        "in_gallery": inGallery == null ? null : inGallery,
-        "in_most_viral": inMostViral == null ? null : inMostViral,
-        "has_sound": hasSound == null ? null : hasSound,
-        "is_ad": isAd == null ? null : isAd,
-        "nsfw": nsfw,
-        "link": link == null ? null : link,
-        "tags": tags == null ? null : List<dynamic>.from(tags!.map((x) => x)),
-        "datetime": datetime == null ? null : datetime,
-        "mp4": mp4 == null ? null : mp4,
-        "hls": hls == null ? null : hls,
+        'id': id,
+        'deletehash': deletehash,
+        'account_id': accountId,
+        'account_url': accountUrl,
+        'ad_type': adType,
+        'ad_url': adUrl,
+        'title': title,
+        'description': description,
+        'name': name,
+        'type': type,
+        'width': width,
+        'height': height,
+        'size': size,
+        'views': views,
+        'section': section,
+        'vote': vote,
+        'bandwidth': bandwidth,
+        'animated': animated,
+        'favorite': favorite,
+        'in_gallery': inGallery,
+        'in_most_viral': inMostViral,
+        'has_sound': hasSound,
+        'is_ad': isAd,
+        'nsfw': nsfw,
+        'link': link,
+        'tags': tags == null ? null : List<dynamic>.from(tags!.map((x) => x)),
+        'datetime': datetime,
+        'mp4': mp4,
+        'hls': hls,
       };
 
   Map<String, dynamic> toSaveJson() => {
-        "id": id == null ? null : id,
-        "deletehash": deletehash == null ? null : deletehash,
-        "link": link == null ? null : link,
-        "datetime": datetime == null ? null : datetime,
+        'id': id,
+        'deletehash': deletehash,
+        'link': link,
+        'datetime': datetime,
       };
 
   String toSaveRawJson() => json.encode(toJson());

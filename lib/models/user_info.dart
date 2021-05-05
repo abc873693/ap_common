@@ -28,47 +28,48 @@ class UserInfo {
   });
 
   factory UserInfo.fromRawJson(String str) =>
-      UserInfo.fromJson(json.decode(str));
+      UserInfo.fromJson(json.decode(str) as Map<String, dynamic>);
 
   String toRawJson() => json.encode(toJson());
 
-  factory UserInfo.fromJson(Map<String, dynamic> json) => new UserInfo(
-        educationSystem: json["educationSystem"],
-        department: json["department"],
-        className: json["className"],
-        id: json["id"],
-        name: json["name"],
-        pictureUrl: json["pictureUrl"],
-        email: json["email"],
+  factory UserInfo.fromJson(Map<String, dynamic> json) => UserInfo(
+        educationSystem: json['educationSystem'] as String,
+        department: json['department'] as String,
+        className: json['className'] as String,
+        id: json['id'] as String,
+        name: json['name'] as String,
+        pictureUrl: json['pictureUrl'] as String,
+        email: json['email'] as String,
       );
 
   Map<String, dynamic> toJson() => {
-        "educationSystem": educationSystem,
-        "department": department,
-        "className": className,
-        "id": id,
-        "name": name,
-        "pictureUrl": pictureUrl,
-        "email": email
+        'educationSystem': educationSystem,
+        'department': department,
+        'className': className,
+        'id': id,
+        'name': name,
+        'pictureUrl': pictureUrl,
+        'email': email
       };
 
   void save(String tag) {
     Preferences.setString(
-      '${ApConstants.PACKAGE_NAME}'
+      '${ApConstants.packageName}'
       '.user_info_$tag',
-      this.toRawJson(),
+      toRawJson(),
     );
   }
 
   static UserInfo? load(String tag) {
-    String rawString = Preferences.getString(
-      '${ApConstants.PACKAGE_NAME}'
+    final String rawString = Preferences.getString(
+      '${ApConstants.packageName}'
           '.user_info_$tag',
       '',
     );
-    if (rawString == '')
+    if (rawString == '') {
       return null;
-    else
+    } else {
       return UserInfo.fromRawJson(rawString);
+    }
   }
 }
