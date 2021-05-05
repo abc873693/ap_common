@@ -72,7 +72,8 @@ class ScorePageState extends State<ScorePage> {
     semesterData = SemesterData.fromRawJson(rawString);
     var i = 0;
     semesterData.data.forEach((option) {
-      if (option.text == semesterData.defaultSemester.text) semesterData.currentIndex = i;
+      if (option.text == semesterData.defaultSemester.text)
+        semesterData.currentIndex = i;
       i++;
     });
     _getSemesterScore();

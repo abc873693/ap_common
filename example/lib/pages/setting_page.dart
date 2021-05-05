@@ -12,7 +12,7 @@ import '../config/constants.dart';
 import '../widgets/share_data_widget.dart';
 
 class SettingPage extends StatefulWidget {
-  static const String routerName = "/setting";
+  static const String routerName = '/setting';
 
   @override
   SettingPageState createState() => SettingPageState();
@@ -102,7 +102,7 @@ class SettingPageState extends State<SettingPage> {
                   ApUtils.launchFbFansPage(context, Constants.FANS_PAGE_ID);
                 }),
             SettingItem(
-                text: ap.appVersion, subText: "v$appVersion", onTap: () {}),
+                text: ap.appVersion, subText: 'v$appVersion', onTap: () {}),
           ],
         ),
       ),

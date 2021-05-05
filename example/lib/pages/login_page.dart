@@ -11,7 +11,7 @@ import '../config/constants.dart';
 import '../res/assets.dart';
 
 class LoginPage extends StatefulWidget {
-  static const String routerName = "/login";
+  static const String routerName = '/login';
 
   @override
   LoginPageState createState() => LoginPageState();

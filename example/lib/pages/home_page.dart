@@ -31,7 +31,7 @@ import 'study/course_page.dart';
 import 'study/score_page.dart';
 
 class HomePage extends StatefulWidget {
-  static const String routerName = "/home";
+  static const String routerName = '/home';
 
   @override
   HomePageState createState() => HomePageState();
@@ -379,6 +379,7 @@ class HomePageState extends State<HomePage> {
   Future _login() async {
     await Future.delayed(Duration(microseconds: 30));
     // var username = Preferences.getString(Constants.PREF_USERNAME, '');
+    // ignore: lines_longer_than_80_chars
     // var password = Preferences.getStringSecurity(Constants.PREF_PASSWORD, '');
     //to login
     isLogin = true;

@@ -6,7 +6,7 @@ import 'package:flutter/services.dart';
 import '../res/assets.dart';
 
 class UserInfoPage extends StatefulWidget {
-  static const String routerName = "/userInfo";
+  static const String routerName = '/userInfo';
   final UserInfo userInfo;
 
   const UserInfoPage({Key key, this.userInfo}) : super(key: key);

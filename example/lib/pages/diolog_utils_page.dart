@@ -47,7 +47,7 @@ class _DialogUtilsTestPageState extends State<DialogUtilsTestPage> {
                   code: 30713,
                   isForceUpdate: false,
                   content:
-                      "remoteConfig.getString(ApConstants.NEW_VERSION_CONTENT)",
+                      'remoteConfig.getString(ApConstants.NEW_VERSION_CONTENT)',
                 ),
               );
             },
