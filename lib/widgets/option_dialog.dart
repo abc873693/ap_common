@@ -21,12 +21,12 @@ class SimpleOptionDialog extends StatelessWidget {
     return items.length > 5
         ? AlertDialog(
             title: Text(title),
-            shape: RoundedRectangleBorder(
+            shape: const RoundedRectangleBorder(
               borderRadius: BorderRadius.all(
                 Radius.circular(8),
               ),
             ),
-            contentPadding: EdgeInsets.all(0.0),
+            contentPadding: const EdgeInsets.all(0.0),
             content: SizedBox(
               width: MediaQuery.of(context).size.width * 0.8,
               height: MediaQuery.of(context).size.height * 0.8,
@@ -34,7 +34,7 @@ class SimpleOptionDialog extends StatelessWidget {
                 controller: ScrollController(initialScrollOffset: index * 48.0),
                 itemCount: items.length,
                 separatorBuilder: (BuildContext context, int index) {
-                  return Divider(height: 6.0);
+                  return const Divider(height: 6.0);
                 },
                 itemBuilder: (BuildContext context, int index) {
                   return DialogOption(
@@ -42,7 +42,7 @@ class SimpleOptionDialog extends StatelessWidget {
                     check: index == this.index,
                     onPressed: () {
                       Navigator.pop(context, index);
-                      this.onSelected?.call(index);
+                      onSelected?.call(index);
                     },
                   );
                 },
@@ -50,7 +50,7 @@ class SimpleOptionDialog extends StatelessWidget {
             ),
           )
         : SimpleDialog(
-            shape: RoundedRectangleBorder(
+            shape: const RoundedRectangleBorder(
               borderRadius: BorderRadius.all(
                 Radius.circular(16),
               ),
@@ -63,7 +63,7 @@ class SimpleOptionDialog extends StatelessWidget {
                   check: i == index,
                   onPressed: () {
                     Navigator.of(context).pop();
-                    this.onSelected?.call(i);
+                    onSelected?.call(i);
                   },
                 ),
             ],

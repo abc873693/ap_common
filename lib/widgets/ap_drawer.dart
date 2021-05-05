@@ -21,7 +21,7 @@ class ApDrawer extends StatefulWidget {
     required this.widgets,
     this.userInfo,
     this.imageAsset,
-    this.imageHeroTag = ApConstants.TAG_STUDENT_PICTURE,
+    this.imageHeroTag = ApConstants.tagStudentPicture,
     this.displayPicture = false,
   }) : super(key: key);
 
@@ -75,7 +75,7 @@ class ApDrawerState extends State<ApDrawer> {
                             : Container(
                                 width: 72.0,
                                 height: 72.0,
-                                decoration: BoxDecoration(
+                                decoration: const BoxDecoration(
                                   shape: BoxShape.circle,
                                 ),
                                 child: Icon(
@@ -88,11 +88,11 @@ class ApDrawerState extends State<ApDrawer> {
                       widget.userInfo == null
                           ? ApLocalizations.of(context).notLogin
                           : (widget.userInfo?.name ?? ''),
-                      style: TextStyle(color: Colors.white),
+                      style: const TextStyle(color: Colors.white),
                     ),
                     accountEmail: Text(
                       widget.userInfo?.id ?? '',
-                      style: TextStyle(color: Colors.white),
+                      style: const TextStyle(color: Colors.white),
                     ),
                     decoration: BoxDecoration(
                       color: ApTheme.of(context).blue,
@@ -169,7 +169,7 @@ class DrawerSubItem extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ListTile(
-      contentPadding: EdgeInsets.symmetric(horizontal: 72.0),
+      contentPadding: const EdgeInsets.symmetric(horizontal: 72.0),
       leading: Icon(icon, color: ApTheme.of(context).grey),
       title: Text(
         title,

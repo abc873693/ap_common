@@ -18,7 +18,7 @@ class DefaultDialog extends StatelessWidget {
     this.contentPadding,
   }) : super(key: key);
 
-  static showSample(BuildContext context) => showDialog(
+  static void showSample(BuildContext context) => showDialog(
         context: context,
         builder: (BuildContext context) => DefaultDialog(
           title: '預約成功',
@@ -35,7 +35,7 @@ class DefaultDialog extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return AlertDialog(
-      shape: RoundedRectangleBorder(
+      shape: const RoundedRectangleBorder(
         borderRadius: BorderRadius.all(
           Radius.circular(16),
         ),
@@ -49,8 +49,8 @@ class DefaultDialog extends StatelessWidget {
           fontSize: 18.0,
         ),
       ),
-      titlePadding: EdgeInsets.symmetric(vertical: 16.0),
-      contentPadding: EdgeInsets.all(0.0),
+      titlePadding: const EdgeInsets.symmetric(vertical: 16.0),
+      contentPadding: const EdgeInsets.all(0.0),
       content: Column(
         mainAxisSize: MainAxisSize.min,
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -58,26 +58,30 @@ class DefaultDialog extends StatelessWidget {
         children: <Widget>[
           Container(
             width: double.infinity,
-            decoration: BoxDecoration(
+            decoration: const BoxDecoration(
               border: Border(
                 top: BorderSide(color: Colors.grey, width: 0.5),
                 bottom: BorderSide(color: Colors.grey, width: 0.5),
               ),
             ),
             padding: contentPadding ??
-                EdgeInsets.symmetric(horizontal: 30.0, vertical: 24.0),
+                const EdgeInsets.symmetric(
+                  horizontal: 30.0,
+                  vertical: 24.0,
+                ),
             child: contentWidget,
           ),
-          Container(
+          SizedBox(
             width: double.infinity,
             child: InkWell(
-              borderRadius: BorderRadius.only(
+              borderRadius: const BorderRadius.only(
                 bottomLeft: Radius.circular(16.0),
                 bottomRight: Radius.circular(16.0),
               ),
+              onTap: actionFunction,
               child: Container(
                 alignment: Alignment.center,
-                padding: EdgeInsets.symmetric(vertical: 16.0),
+                padding: const EdgeInsets.symmetric(vertical: 16.0),
                 child: Text(
                   actionText,
                   style: TextStyle(
@@ -86,7 +90,6 @@ class DefaultDialog extends StatelessWidget {
                   ),
                 ),
               ),
-              onTap: actionFunction,
             ),
           ),
         ],

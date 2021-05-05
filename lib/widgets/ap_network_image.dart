@@ -14,7 +14,7 @@ class ApNetworkImage extends StatelessWidget {
     return ApUtils.isSupportCacheNetworkImage
         ? CachedNetworkImage(
             imageUrl: url,
-            placeholder: (context, url) => Center(
+            placeholder: (context, url) => const Center(
               child: CircularProgressIndicator(),
             ),
             errorWidget: (context, url, error) => Icon(ApIcon.error),

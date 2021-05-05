@@ -17,12 +17,13 @@ class DialogOption extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return SimpleDialogOption(
+      onPressed: onPressed,
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: <Widget>[
           Expanded(
             child: Padding(
-              padding: EdgeInsets.symmetric(vertical: 2.0),
+              padding: const EdgeInsets.symmetric(vertical: 2.0),
               child: Text(
                 text,
                 style: TextStyle(
@@ -39,7 +40,6 @@ class DialogOption extends StatelessWidget {
             )
         ],
       ),
-      onPressed: onPressed,
     );
   }
 }

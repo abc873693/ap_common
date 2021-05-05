@@ -22,7 +22,7 @@ class SettingTitle extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: EdgeInsets.fromLTRB(16.0, 16.0, 16.0, 8.0),
+      padding: const EdgeInsets.fromLTRB(16.0, 16.0, 16.0, 8.0),
       child: Text(
         text!,
         style: TextStyle(color: ApTheme.of(context).blueText, fontSize: 14.0),
@@ -51,11 +51,14 @@ class SettingSwitch extends StatelessWidget {
     return SwitchListTile(
       title: Text(
         text,
-        style: TextStyle(fontSize: 16.0),
+        style: const TextStyle(fontSize: 16.0),
       ),
       subtitle: Text(
         subText,
-        style: TextStyle(fontSize: 14.0, color: ApTheme.of(context).greyText),
+        style: TextStyle(
+          fontSize: 14.0,
+          color: ApTheme.of(context).greyText,
+        ),
       ),
       value: value,
       onChanged: onChanged,
@@ -81,7 +84,7 @@ class SettingItem extends StatelessWidget {
     return ListTile(
       title: Text(
         text,
-        style: TextStyle(fontSize: 16.0),
+        style: const TextStyle(fontSize: 16.0),
       ),
       subtitle: Text(
         subText,
@@ -104,18 +107,19 @@ class CheckCourseNotifyItem extends StatelessWidget {
       text: ap.courseNotify,
       subText: ap.courseNotifySubTitle,
       onTap: () {
-        CourseNotifyData notifyData = tag == null
+        final CourseNotifyData notifyData = tag == null
             ? CourseNotifyData.loadCurrent()
             : CourseNotifyData.load(tag);
         if (NotificationUtils.isSupport) {
-          if (notifyData.data.length != 0) {
+          if (notifyData.data.isNotEmpty) {
             showDialog(
               context: context,
               builder: (_) => SimpleOptionDialog(
                 title: ap.courseNotify,
                 items: [
                   for (var notify in notifyData.data)
-                    '${ap.weekdaysCourse[notify.weekdayIndex]} ${notify.startTime} ${notify.title}',
+                    '${ap.weekdaysCourse[notify.weekdayIndex]} '
+                        '${notify.startTime} ${notify.title}',
                 ],
                 index: -1,
                 onSelected: (index) {
@@ -128,10 +132,12 @@ class CheckCourseNotifyItem extends StatelessWidget {
                 },
               ),
             );
-          } else
+          } else {
             ApUtils.showToast(context, ap.courseNotifyEmpty);
-        } else
+          }
+        } else {
           ApUtils.showToast(context, ap.platformError);
+        }
       },
     );
   }
@@ -151,14 +157,15 @@ class ClearAllNotifyItem extends StatelessWidget {
       onTap: () {
         if (NotificationUtils.isSupport) {
           NotificationUtils.cancelAll();
-          CourseNotifyData notifyData = tag == null
+          final CourseNotifyData notifyData = tag == null
               ? CourseNotifyData.loadCurrent()
               : CourseNotifyData.load(tag);
           notifyData.data.clear();
           notifyData.save();
           ApUtils.showToast(context, ap.cancelNotifySuccess);
-        } else
+        } else {
           ApUtils.showToast(context, ap.platformError);
+        }
       },
     );
   }
@@ -177,14 +184,14 @@ class ChangeLanguageItem extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final ap = ApLocalizations.of(context);
-    final languageTextList = this.textList ??
+    final languageTextList = textList ??
         [
           ApLocalizations.of(context).systemLanguage,
           ApLocalizations.of(context).traditionalChinese,
           ApLocalizations.of(context).english,
         ];
     final code = Preferences.getString(
-        ApConstants.PREF_LANGUAGE_CODE, ApSupportLanguageConstants.SYSTEM);
+        ApConstants.prefLanguageCode, ApSupportLanguageConstants.system);
     final languageIndex = ApSupportLanguageExtension.fromCode(code);
     return SettingItem(
       text: ap.language,
@@ -198,33 +205,35 @@ class ChangeLanguageItem extends StatelessWidget {
             index: languageIndex,
             onSelected: (int index) async {
               Locale locale;
-              String code = ApSupportLanguage.values[index].code;
+              final String code = ApSupportLanguage.values[index].code;
               switch (index) {
                 case 0:
-                  List<Locale>? locales =
+                  final List<Locale>? locales =
                       WidgetsBinding.instance?.window.locales;
-                  locale =
-                      (locales?.length == 0 ? Locale('en') : locales?.first) ??
-                          Locale('en');
+                  if (locales == null || locales.isEmpty) {
+                    locale = const Locale('en');
+                  } else {
+                    locale = locales.first;
+                  }
                   locale = ApLocalizations.delegate.isSupported(locale)
                       ? locale
-                      : Locale('en');
+                      : const Locale('en');
                   break;
                 default:
                   locale = Locale(
                     code,
-                    code == ApSupportLanguageConstants.ZH ? 'TW' : null,
+                    code == ApSupportLanguageConstants.zh ? 'TW' : null,
                   );
                   break;
               }
               onChange.call(locale);
-              Preferences.setString(ApConstants.PREF_LANGUAGE_CODE, code);
+              Preferences.setString(ApConstants.prefLanguageCode, code);
               AnalyticsUtils.instance?.logEvent(
                 'change_language',
                 parameters: {'code': code},
               );
               AnalyticsUtils.instance?.setUserProperty(
-                AnalyticsConstants.LANGUAGE,
+                AnalyticsConstants.language,
                 locale.toLanguageTag(),
               );
             },
@@ -268,7 +277,7 @@ class ChangeThemeModeItem extends StatelessWidget {
             onSelected: (int index) {
               final mode = ThemeMode.values[index];
               onChange.call(mode);
-              Preferences.setInt(ApConstants.PREF_THEME_MODE_INDEX, index);
+              Preferences.setInt(ApConstants.prefThemeModeIndex, index);
               AnalyticsUtils.instance?.logEvent(
                 'change_theme',
                 parameters: {
@@ -313,7 +322,7 @@ class ChangeIconStyleItem extends StatelessWidget {
             onSelected: (int index) {
               final code = ApIcon.values[index];
               ApIcon.code = code;
-              Preferences.setString(ApConstants.PREF_ICON_STYLE_CODE, code);
+              Preferences.setString(ApConstants.prefIconStyleCode, code);
               onChange.call(code);
               AnalyticsUtils.instance?.logEvent(
                 'change_icon_style',
