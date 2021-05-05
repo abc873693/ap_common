@@ -36,8 +36,8 @@ class AnnouncementContentPageState extends State<AnnouncementContentPage> {
   @override
   void initState() {
     AnalyticsUtils.instance?.setCurrentScreen(
-      "AnnouncementContentPage",
-      "announcement_content_page.dart",
+      'AnnouncementContentPage',
+      'announcement_content_page.dart',
     );
     super.initState();
   }
@@ -61,19 +61,18 @@ class AnnouncementContentPageState extends State<AnnouncementContentPage> {
   Widget? _homebody() {
     switch (state) {
       case _Status.loading:
-        return Center(
+        return const Center(
           child: CircularProgressIndicator(),
         );
       case _Status.finish:
         return OrientationBuilder(
-          builder: (_, orientation) {
+          builder: (_, Orientation orientation) {
             return orientation == Orientation.portrait
                 ? SingleChildScrollView(
                     child: Flex(
                       direction: orientation == Orientation.portrait
                           ? Axis.vertical
                           : Axis.horizontal,
-                      crossAxisAlignment: CrossAxisAlignment.center,
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: _renderContent(orientation),
                     ),
@@ -82,7 +81,6 @@ class AnnouncementContentPageState extends State<AnnouncementContentPage> {
                     direction: orientation == Orientation.portrait
                         ? Axis.vertical
                         : Axis.horizontal,
-                    crossAxisAlignment: CrossAxisAlignment.center,
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: _renderContent(orientation),
                   );
@@ -97,17 +95,8 @@ class AnnouncementContentPageState extends State<AnnouncementContentPage> {
     }
   }
 
-  _renderContent(Orientation orientation) {
+  List<Widget> _renderContent(Orientation orientation) {
     final Widget image = GestureDetector(
-      child: AspectRatio(
-        aspectRatio: orientation == Orientation.portrait ? 4 / 3 : 9 / 16,
-        child: Hero(
-          tag: widget.announcement.hashCode,
-          child: ApNetworkImage(
-            url: widget.announcement.imgUrl!,
-          ),
-        ),
-      ),
       onTap: () {
         ApUtils.pushCupertinoStyle(
           context,
@@ -126,10 +115,19 @@ class AnnouncementContentPageState extends State<AnnouncementContentPage> {
         );
         AnalyticsUtils.instance?.logEvent('announcement_content_image_click');
       },
+      child: AspectRatio(
+        aspectRatio: orientation == Orientation.portrait ? 4 / 3 : 9 / 16,
+        child: Hero(
+          tag: widget.announcement.hashCode,
+          child: ApNetworkImage(
+            url: widget.announcement.imgUrl!,
+          ),
+        ),
+      ),
     );
     final List<Widget> content = <Widget>[
       Hero(
-        tag: ApConstants.TAG_ANNOUNCEMENT_TITLE,
+        tag: ApConstants.tagAnnouncementTitle,
         child: Material(
           color: Colors.transparent,
           child: SelectableText(
@@ -144,7 +142,7 @@ class AnnouncementContentPageState extends State<AnnouncementContentPage> {
         ),
       ),
       Hero(
-        tag: ApConstants.TAG_ANNOUNCEMENT_ICON,
+        tag: ApConstants.tagAnnouncementIcon,
         child: Icon(ApIcon.arrowDropDown),
       ),
       Padding(
@@ -158,21 +156,21 @@ class AnnouncementContentPageState extends State<AnnouncementContentPage> {
             fontSize: 16.0,
             color: ApTheme.of(context).greyText,
           ),
-          options: LinkifyOptions(humanize: false),
-          onOpen: (link) async => ApUtils.launchUrl(link.url),
+          options: const LinkifyOptions(humanize: false),
+          onOpen: (LinkableElement link) async => ApUtils.launchUrl(link.url),
         ),
       ),
       if (widget.announcement.url != null &&
-          widget.announcement.url!.isNotEmpty) ...[
-        SizedBox(height: 16.0),
+          widget.announcement.url!.isNotEmpty) ...<Widget>[
+        const SizedBox(height: 16.0),
         ElevatedButton(
           style: ElevatedButton.styleFrom(
-            shape: RoundedRectangleBorder(
+            shape: const RoundedRectangleBorder(
               borderRadius: BorderRadius.all(
                 Radius.circular(30.0),
               ),
             ),
-            padding: EdgeInsets.symmetric(
+            padding: const EdgeInsets.symmetric(
               vertical: 16.0,
               horizontal: 30.0,
             ),
@@ -187,21 +185,21 @@ class AnnouncementContentPageState extends State<AnnouncementContentPage> {
             color: Colors.white,
           ),
         ),
-        SizedBox(height: 16.0),
+        const SizedBox(height: 16.0),
       ],
     ];
     if (orientation == Orientation.portrait) {
       return <Widget>[
-        SizedBox(height: 16.0),
+        const SizedBox(height: 16.0),
         image,
-        SizedBox(height: 16.0),
+        const SizedBox(height: 16.0),
         ...content,
       ];
     } else {
       return <Widget>[
-        SizedBox(width: 16.0),
+        const SizedBox(width: 16.0),
         Expanded(child: image),
-        SizedBox(width: 32.0),
+        const SizedBox(width: 32.0),
         Expanded(
           child: SingleChildScrollView(
             child: Column(
@@ -210,7 +208,7 @@ class AnnouncementContentPageState extends State<AnnouncementContentPage> {
             ),
           ),
         ),
-        SizedBox(width: 16.0),
+        const SizedBox(width: 16.0),
       ];
     }
   }
