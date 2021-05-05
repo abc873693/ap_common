@@ -85,47 +85,45 @@ class ScoreScaffoldState extends State<ScoreScaffold> {
       ),
       floatingActionButton: widget.isShowSearchButton
           ? FloatingActionButton(
-              child: Icon(Icons.search),
               onPressed: () {
                 _pickSemester();
                 AnalyticsUtils.instance?.logEvent('score_search_button_click');
               },
+              child: const Icon(Icons.search),
             )
           : null,
-      body: Container(
-        child: Flex(
-          direction: Axis.vertical,
-          mainAxisSize: MainAxisSize.min,
-          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-          children: <Widget>[
-            SizedBox(height: 8.0),
-            if (widget.semesterData != null && widget.itemPicker == null)
-              ItemPicker(
-                dialogTitle: app.pickSemester,
-                onSelected: widget.onSelect,
-                items: widget.semesterData!.semesters,
-                currentIndex: widget.semesterData!.currentIndex,
-                featureTag: 'score',
-              ),
-            if (widget.itemPicker != null) widget.itemPicker!,
-            if (widget.customHint != null && widget.customHint!.isNotEmpty)
-              Text(
-                widget.customHint!,
-                style: TextStyle(color: ApTheme.of(context).grey),
-                textAlign: TextAlign.center,
-              ),
-            Expanded(
-              child: RefreshIndicator(
-                onRefresh: () async {
-                  await widget.onRefresh?.call();
-                  AnalyticsUtils.instance?.logEvent('score_refresh');
-                  return null;
-                },
-                child: _body(),
-              ),
+      body: Flex(
+        direction: Axis.vertical,
+        mainAxisSize: MainAxisSize.min,
+        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+        children: <Widget>[
+          const SizedBox(height: 8.0),
+          if (widget.semesterData != null && widget.itemPicker == null)
+            ItemPicker(
+              dialogTitle: app.pickSemester,
+              onSelected: widget.onSelect,
+              items: widget.semesterData!.semesters,
+              currentIndex: widget.semesterData!.currentIndex,
+              featureTag: 'score',
             ),
-          ],
-        ),
+          if (widget.itemPicker != null) widget.itemPicker!,
+          if (widget.customHint != null && widget.customHint!.isNotEmpty)
+            Text(
+              widget.customHint!,
+              style: TextStyle(color: ApTheme.of(context).grey),
+              textAlign: TextAlign.center,
+            ),
+          Expanded(
+            child: RefreshIndicator(
+              onRefresh: () async {
+                await widget.onRefresh?.call();
+                AnalyticsUtils.instance?.logEvent('score_refresh');
+                return;
+              },
+              child: _body(),
+            ),
+          ),
+        ],
       ),
     );
   }
@@ -149,17 +147,20 @@ class ScoreScaffoldState extends State<ScoreScaffold> {
     switch (widget.state) {
       case ScoreState.loading:
         return Container(
-            child: CircularProgressIndicator(), alignment: Alignment.center);
+          alignment: Alignment.center,
+          child: const CircularProgressIndicator(),
+        );
       case ScoreState.error:
       case ScoreState.empty:
       case ScoreState.custom:
       case ScoreState.offlineEmpty:
         return InkWell(
           onTap: () {
-            if (widget.state == ScoreState.empty)
+            if (widget.state == ScoreState.empty) {
               _pickSemester();
-            else
+            } else {
               widget.onRefresh?.call();
+            }
           },
           child: HintContent(
             icon: ApIcon.assignment,
@@ -181,7 +182,7 @@ class ScoreScaffoldState extends State<ScoreScaffold> {
   }
 
   void _pickSemester() {
-    if (widget.semesterData != null)
+    if (widget.semesterData != null) {
       showDialog(
         context: context,
         builder: (_) => SimpleOptionDialog(
@@ -191,6 +192,7 @@ class ScoreScaffoldState extends State<ScoreScaffold> {
           onSelected: widget.onSelect,
         ),
       );
+    }
     if (widget.onSearchButtonClick != null) widget.onSearchButtonClick!();
   }
 }
@@ -225,10 +227,10 @@ class _ScoreContentState extends State<ScoreContent> {
   TextStyle get _textBlueStyle =>
       TextStyle(color: ApTheme.of(context).blueText, fontSize: 16.0);
 
-  TextStyle get _textStyle => TextStyle(fontSize: 15.0);
+  TextStyle get _textStyle => const TextStyle(fontSize: 15.0);
 
   BoxDecoration get _boxDecoration => BoxDecoration(
-        borderRadius: BorderRadius.all(
+        borderRadius: const BorderRadius.all(
           Radius.circular(
             10.0,
           ),
@@ -237,7 +239,7 @@ class _ScoreContentState extends State<ScoreContent> {
       );
 
   TableBorder get _tableBorder => TableBorder.symmetric(
-        inside: BorderSide(
+        inside: const BorderSide(
           color: Colors.grey,
           width: 0.5,
         ),
@@ -252,10 +254,9 @@ class _ScoreContentState extends State<ScoreContent> {
     return SingleChildScrollView(
       physics: const AlwaysScrollableScrollPhysics(),
       child: Container(
-        padding: EdgeInsets.symmetric(horizontal: 16.0, vertical: 8),
+        padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8),
         child: Flex(
           direction: isTablet ? Axis.horizontal : Axis.vertical,
-          mainAxisSize: MainAxisSize.max,
           children: <Widget>[
             Flexible(
               flex: isTablet ? 2 : 0,
@@ -264,8 +265,8 @@ class _ScoreContentState extends State<ScoreContent> {
                 child: Table(
                   columnWidths: const <int, TableColumnWidth>{
                     0: FlexColumnWidth(2.5),
-                    1: FlexColumnWidth(1.0),
-                    2: FlexColumnWidth(1.0),
+                    1: FlexColumnWidth(),
+                    2: FlexColumnWidth(),
                   },
                   defaultVerticalAlignment: TableCellVerticalAlignment.middle,
                   border: _tableBorder,
@@ -326,14 +327,14 @@ class _ScoreContentState extends State<ScoreContent> {
               height: isTablet ? 0.0 : 20.0,
               width: isTablet ? 20 : 0.0,
             ),
-            if (widget.details != null && widget.details!.length != 0)
+            if (widget.details != null && widget.details!.isNotEmpty)
               Flexible(
                 flex: isTablet ? 1 : 0,
                 child: Container(
                   decoration: _boxDecoration,
                   child: Table(
                     columnWidths: const <int, TableColumnWidth>{
-                      0: FlexColumnWidth(1.0),
+                      0: FlexColumnWidth(),
                     },
                     defaultVerticalAlignment: TableCellVerticalAlignment.middle,
                     border: _tableBorder,
@@ -343,7 +344,7 @@ class _ScoreContentState extends State<ScoreContent> {
                           children: <Widget>[
                             Container(
                               width: double.infinity,
-                              padding: EdgeInsets.all(2.0),
+                              padding: const EdgeInsets.all(2.0),
                               alignment: Alignment.center,
                               child: SelectableText(
                                 text,
@@ -383,7 +384,7 @@ class ScoreTextBorder extends StatelessWidget {
       onTap: onTap,
       child: Container(
         width: double.maxFinite,
-        padding: EdgeInsets.symmetric(vertical: 2.0, horizontal: 4.0),
+        padding: const EdgeInsets.symmetric(vertical: 2.0, horizontal: 4.0),
         alignment: Alignment.center,
         child: SelectableText(
           text ?? '',

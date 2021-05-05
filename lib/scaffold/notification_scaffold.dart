@@ -11,14 +11,14 @@ import 'package:flutter/material.dart';
 enum NotificationState { loading, finish, loadingMore, error, empty, offline }
 
 class NotificationScaffold extends StatefulWidget {
-  static const String routerName = "/info/notification";
+  static const String routerName = '/info/notification';
 
   final NotificationState state;
   final List<Notifications> notificationList;
   final Future<void> Function() onRefresh;
   final Future<void> Function()? onLoadingMore;
 
-  NotificationScaffold({
+  const NotificationScaffold({
     Key? key,
     required this.state,
     required this.notificationList,
@@ -39,7 +39,7 @@ class NotificationScaffoldState extends State<NotificationScaffold>
 
   ScrollController? controller;
 
-  TextStyle get _textStyle => TextStyle(
+  TextStyle get _textStyle => const TextStyle(
         fontSize: 18.0,
         fontWeight: FontWeight.bold,
       );
@@ -52,8 +52,8 @@ class NotificationScaffoldState extends State<NotificationScaffold>
   @override
   void initState() {
     AnalyticsUtils.instance?.setCurrentScreen(
-      "NotificationScaffold",
-      "notification_scaffold.dart",
+      'NotificationScaffold',
+      'notification_scaffold.dart',
     );
     controller = ScrollController()..addListener(_scrollListener);
     super.initState();
@@ -68,17 +68,17 @@ class NotificationScaffoldState extends State<NotificationScaffold>
   Widget _notificationItem(Notifications notification) {
     return InkWell(
       onLongPress: () {
-        ApUtils.shareTo("${notification.info!.title}\n${notification.link}");
+        ApUtils.shareTo('${notification.info!.title}\n${notification.link}');
         AnalyticsUtils.instance?.logEvent('share_long_click');
       },
       onTap: () {
-        ApUtils.launchUrl(notification.link);
+        ApUtils.launchUrl(notification.link!);
         AnalyticsUtils.instance?.logEvent('notification_link_click');
       },
       child: Container(
         width: double.infinity,
-        padding: EdgeInsets.all(16.0),
-        decoration: BoxDecoration(
+        padding: const EdgeInsets.all(16.0),
+        decoration: const BoxDecoration(
           border: Border(
             top: BorderSide(color: Colors.grey, width: 0.5),
           ),
@@ -91,7 +91,7 @@ class NotificationScaffoldState extends State<NotificationScaffold>
               style: _textStyle,
               textAlign: TextAlign.left,
             ),
-            SizedBox(height: 8.0),
+            const SizedBox(height: 8.0),
             Row(
               children: <Widget>[
                 Expanded(
@@ -126,13 +126,15 @@ class NotificationScaffoldState extends State<NotificationScaffold>
     switch (widget.state) {
       case NotificationState.loading:
         return Container(
-            child: CircularProgressIndicator(), alignment: Alignment.center);
+          alignment: Alignment.center,
+          child: const CircularProgressIndicator(),
+        );
       case NotificationState.error:
       case NotificationState.empty:
         return InkWell(
           onTap: () {
             widget.onRefresh.call();
-            AnalyticsUtils.instance?.logEvent(AnalyticsConstants.REFRESH);
+            AnalyticsUtils.instance?.logEvent(AnalyticsConstants.refresh);
           },
           child: HintContent(
             icon: ApIcon.assignment,
@@ -151,7 +153,7 @@ class NotificationScaffoldState extends State<NotificationScaffold>
           onRefresh: widget.onRefresh,
           child: ListView.builder(
             controller: controller,
-            itemBuilder: (context, index) {
+            itemBuilder: (BuildContext context, int index) {
               return _notificationItem(widget.notificationList[index]);
             },
             itemCount: widget.notificationList.length,
@@ -179,7 +181,8 @@ class NotificationScaffoldState extends State<NotificationScaffold>
 //          onSuccess: (NotificationsData data) {
 //            for (var notification in data.data.notifications)
 //              notificationList.add(notification);
-//            if (mounted) setState(() => widget.state = NotificationState.finish);
+//            if (mounted)
+//              setState(() => widget.state = NotificationState.finish);
 //          },
 //          onFailure: (DioError e) {
 //            ApUtils.handleDioError(context, e);

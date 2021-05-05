@@ -28,7 +28,7 @@ import 'package:flutter/rendering.dart';
 
 export 'package:ap_common/models/course_data.dart';
 
-typedef CourseNotifyCallback(
+typedef CourseNotifyCallback = Function(
     CourseNotify? courseNotify, CourseNotifyState state);
 
 enum CourseState { loading, finish, error, empty, offlineEmpty, custom }
@@ -42,7 +42,7 @@ class CourseConfig extends InheritedWidget {
   final bool? showInstructors;
   final bool? showClassroomLocation;
 
-  CourseConfig({
+  const CourseConfig({
     this.showSectionTime,
     this.showInstructors,
     this.showClassroomLocation,
@@ -60,7 +60,9 @@ class CourseConfig extends InheritedWidget {
 }
 
 class CourseScaffold extends StatefulWidget {
-  /// 必要欄位，總共有 `loading` `finish` `error` `empty` `offlineEmpty` `custom` 的狀態，只有`finish`才會顯示課表介面，其餘都是顯示錯誤狀況
+  /// 必要欄位，總共有
+  /// `loading` `finish` `error` `empty` `offlineEmpty` `custom` 的狀態，
+  /// 只有`finish`才會顯示課表介面，其餘都是顯示錯誤狀況
   final CourseState state;
   final String? customStateHint;
   final CourseData courseData;
@@ -99,7 +101,7 @@ class CourseScaffold extends StatefulWidget {
     this.notifyData,
     this.autoNotifySave = true,
     this.onNotifyClick,
-    this.courseNotifySaveKey = ApConstants.SEMESTER_LATEST,
+    this.courseNotifySaveKey = ApConstants.semesterLatest,
     this.customStateHint,
     this.itemPicker,
     this.onSearchButtonClick,
@@ -135,13 +137,13 @@ class CourseScaffoldState extends State<CourseScaffold> {
   @override
   void initState() {
     showSectionTime = widget.showSectionTime ??
-        Preferences.getBool(ApConstants.SHOW_SECTION_TIME, true);
+        Preferences.getBool(ApConstants.showSectionTime, true);
     showInstructors = widget.showInstructors ??
-        Preferences.getBool(ApConstants.SHOW_INSTRUCTORS, true);
+        Preferences.getBool(ApConstants.showInstructors, true);
     showClassroomLocation = widget.showClassroomLocation ??
-        Preferences.getBool(ApConstants.SHOW_CLASSROOM_LOCATION, true);
+        Preferences.getBool(ApConstants.showClassroomLocation, true);
     showSearchButton = widget.showSearchButton ??
-        Preferences.getBool(ApConstants.SHOW_COURSE_SEARCH_BUTTON, true);
+        Preferences.getBool(ApConstants.showCourseSearchButton, true);
     super.initState();
   }
 
@@ -180,21 +182,21 @@ class CourseScaffoldState extends State<CourseScaffold> {
                     showSectionTimeOnChanged: (value) {
                       setState(() => showSectionTime = value);
                       Preferences.setBool(
-                          ApConstants.SHOW_SECTION_TIME, showSectionTime!);
+                          ApConstants.showSectionTime, showSectionTime!);
                     },
                     showInstructorsOnChanged: (value) {
                       setState(() => showInstructors = value);
                       Preferences.setBool(
-                          ApConstants.SHOW_INSTRUCTORS, showInstructors!);
+                          ApConstants.showInstructors, showInstructors!);
                     },
                     showClassroomLocationOnChanged: (value) {
                       setState(() => showClassroomLocation = value);
-                      Preferences.setBool(ApConstants.SHOW_CLASSROOM_LOCATION,
+                      Preferences.setBool(ApConstants.showClassroomLocation,
                           showClassroomLocation!);
                     },
                     showSearchButtonOnChanged: (value) {
                       setState(() => showSearchButton = value);
-                      Preferences.setBool(ApConstants.SHOW_COURSE_SEARCH_BUTTON,
+                      Preferences.setBool(ApConstants.showCourseSearchButton,
                           showSearchButton!);
                     },
                   ),
@@ -217,7 +219,6 @@ class CourseScaffoldState extends State<CourseScaffold> {
                   if (widget.semesterData != null || widget.itemPicker != null)
                     Row(
                       mainAxisAlignment: MainAxisAlignment.center,
-                      mainAxisSize: MainAxisSize.max,
                       children: <Widget>[
 //              ItemPicker(
 //                onSelected: (int index) {},
@@ -250,7 +251,7 @@ class CourseScaffoldState extends State<CourseScaffold> {
                       onRefresh: () async {
                         await widget.onRefresh!();
                         AnalyticsUtils.instance?.logEvent('course_refresh');
-                        return null;
+                        return;
                       },
                       child: _body(),
                     ),
@@ -259,7 +260,7 @@ class CourseScaffoldState extends State<CourseScaffold> {
               ),
             ),
             if (widget.state == CourseState.finish && isTablet) ...[
-              SizedBox(width: 16.0),
+              const SizedBox(width: 16.0),
               Expanded(
                 flex: 2,
                 child: Material(
@@ -279,12 +280,12 @@ class CourseScaffoldState extends State<CourseScaffold> {
         floatingActionButtonLocation: FloatingActionButtonLocation.endDocked,
         floatingActionButton: showSearchButton!
             ? FloatingActionButton(
-                child: Icon(Icons.search),
                 onPressed: () {
                   AnalyticsUtils.instance
                       ?.logEvent('course_search_button_click');
                   _pickSemester();
                 },
+                child: const Icon(Icons.search),
               )
             : null,
         bottomNavigationBar: isTablet
@@ -298,7 +299,7 @@ class CourseScaffoldState extends State<CourseScaffold> {
                       color: _contentStyle == _ContentStyle.table
                           ? ApTheme.of(context).yellow
                           : ApTheme.of(context).grey,
-                      icon: Icon(Icons.grid_on),
+                      icon: const Icon(Icons.grid_on),
                       onPressed: () {
                         setState(() => _contentStyle = _ContentStyle.table);
                       },
@@ -308,7 +309,7 @@ class CourseScaffoldState extends State<CourseScaffold> {
                       color: _contentStyle == _ContentStyle.list
                           ? ApTheme.of(context).yellow
                           : ApTheme.of(context).grey,
-                      icon: Icon(Icons.format_list_bulleted),
+                      icon: const Icon(Icons.format_list_bulleted),
                       onPressed: () {
                         setState(() => _contentStyle = _ContentStyle.list);
                       },
@@ -339,9 +340,8 @@ class CourseScaffoldState extends State<CourseScaffold> {
   Widget _body() {
     switch (widget.state) {
       case CourseState.loading:
-        return Container(
+        return const Center(
           child: CircularProgressIndicator(),
-          alignment: Alignment.center,
         );
       case CourseState.empty:
       case CourseState.error:
@@ -349,10 +349,11 @@ class CourseScaffoldState extends State<CourseScaffold> {
       case CourseState.custom:
         return InkWell(
           onTap: () {
-            if (widget.state == CourseState.empty)
+            if (widget.state == CourseState.empty) {
               _pickSemester();
-            else
+            } else {
               widget.onRefresh?.call();
+            }
           },
           child: HintContent(
             icon: ApIcon.classIcon,
@@ -362,8 +363,8 @@ class CourseScaffoldState extends State<CourseScaffold> {
       default:
         if (isTablet || _contentStyle == _ContentStyle.table) {
           return SingleChildScrollView(
-            physics: AlwaysScrollableScrollPhysics(),
-            padding: EdgeInsets.symmetric(
+            physics: const AlwaysScrollableScrollPhysics(),
+            padding: const EdgeInsets.symmetric(
               vertical: 8.0,
             ),
             child: RepaintBoundary(
@@ -387,22 +388,29 @@ class CourseScaffoldState extends State<CourseScaffold> {
   }
 
   Future<void> _captureCourseTable() async {
-    RenderRepaintBoundary boundary = _repaintBoundaryGlobalKey.currentContext!
-        .findRenderObject() as RenderRepaintBoundary;
-    ui.Image image = await boundary.toImage(pixelRatio: 3.0);
-    ByteData? byteData = await image.toByteData(format: ui.ImageByteFormat.png);
-    DateTime now = DateTime.now();
-    String formattedDate = DateFormat('yyyyMMdd_hhmmss').format(now);
+    final RenderRepaintBoundary? boundary =
+        _repaintBoundaryGlobalKey.currentContext!.findRenderObject()
+            as RenderRepaintBoundary?;
+    if (boundary == null) {
+      ApUtils.showToast(context, app.unknownError);
+      return;
+    }
+    final ui.Image image = await boundary.toImage(pixelRatio: 3.0);
+    final ByteData? byteData =
+        await image.toByteData(format: ui.ImageByteFormat.png);
+    final DateTime now = DateTime.now();
+    final String formattedDate = DateFormat('yyyyMMdd_hhmmss').format(now);
     if (byteData != null) {
       await ApUtils.saveImage(
         context,
         byteData,
-        "course_table_$formattedDate",
+        'course_table_$formattedDate',
         ApLocalizations.of(context).exportCourseTableSuccess,
       );
       AnalyticsUtils.instance?.logEvent('export_course_table_image_success');
-    } else
+    } else {
       ApUtils.showToast(context, app.unknownError);
+    }
   }
 
   BorderSide get _innerBorderSide => BorderSide(
@@ -415,7 +423,11 @@ class CourseScaffoldState extends State<CourseScaffold> {
     final maxTimeCode = widget.courseData.maxTimeCodeIndex!;
     final minTimeCode = widget.courseData.minTimeCodeIndex!;
     final hasHoliday = widget.courseData.hasHoliday;
-    var columns = <Column>[Column(children: [])];
+    final columns = <Column>[
+      Column(
+        children: [],
+      )
+    ];
     columns[0].children.add(
           _weekBorder(''),
         );
@@ -439,8 +451,11 @@ class CourseScaffoldState extends State<CourseScaffold> {
       ]
     ];
     for (var i = 0; i < courseBorderCollection.length; i++) {
-      for (var j = 0; j < maxTimeCode - minTimeCode + 1; j++)
-        courseBorderCollection[i].add(CourseBorder());
+      for (var j = 0; j < maxTimeCode - minTimeCode + 1; j++) {
+        courseBorderCollection[i].add(
+          const CourseBorder(),
+        );
+      }
     }
     for (var i = 0; i < widget.courseData.courses!.length; i++) {
       final course = widget.courseData.courses![i];
@@ -464,15 +479,17 @@ class CourseScaffoldState extends State<CourseScaffold> {
       final courseBorders = courseBorderCollection[i];
       for (var j = 0; j < courseBorders.length; j++) {
         int repeat = 0;
-        if (courseBorders[j].course != null)
+        if (courseBorders[j].course != null) {
           for (var k = j + 1; k < courseBorders.length; k++) {
             if (courseBorders[k].course != null &&
                 courseBorders[j].course!.title ==
                     courseBorders[k].course!.title) {
               repeat++;
-            } else
+            } else {
               break;
+            }
           }
+        }
         if (repeat != 0) {
           final timeCode = courseBorders[j].timeCode!.copyWith();
           timeCode.endTime = courseBorders[j + repeat].timeCode!.endTime;
@@ -522,7 +539,7 @@ class CourseScaffoldState extends State<CourseScaffold> {
         Column(
           children: [
             _weekBorder(app.weekdaysCourse[i]),
-            ...(courseBorderCollection[i]),
+            ...courseBorderCollection[i],
           ],
         ),
       );
@@ -556,7 +573,7 @@ class CourseScaffoldState extends State<CourseScaffold> {
   }
 
   Widget _weekBorder(String text) => Container(
-        padding: EdgeInsets.symmetric(vertical: 2.0),
+        padding: const EdgeInsets.symmetric(vertical: 2.0),
         alignment: Alignment.center,
         decoration: BoxDecoration(
           border: Border(bottom: _innerBorderSide),
@@ -572,7 +589,7 @@ class CourseScaffoldState extends State<CourseScaffold> {
       );
 
   void _pickSemester() {
-    if (widget.semesterData != null)
+    if (widget.semesterData != null) {
       showDialog(
         context: context,
         builder: (_) => SimpleOptionDialog(
@@ -582,6 +599,7 @@ class CourseScaffoldState extends State<CourseScaffold> {
           onSelected: widget.onSelect,
         ),
       );
+    }
     if (widget.onSearchButtonClick != null) widget.onSearchButtonClick!();
   }
 }
@@ -607,7 +625,7 @@ class CourseContent extends StatefulWidget {
     this.notifyData,
     this.autoNotifySave = true,
     this.onNotifyClick,
-    this.courseNotifySaveKey = ApConstants.SEMESTER_LATEST,
+    this.courseNotifySaveKey = ApConstants.semesterLatest,
     this.enableAddToCalendar = true,
     this.androidResourceIcon,
   }) : super(key: key);
@@ -621,14 +639,14 @@ class _CourseContentState extends State<CourseContent> {
   Widget build(BuildContext context) {
     CourseNotifyState? _state;
     if (widget.enableNotifyControl && widget.notifyData != null) {
-      _state = (widget.notifyData!.getByCode(
+      _state = widget.notifyData!.getByCode(
                 widget.course.code,
                 widget.timeCode.startTime,
                 widget.weekday,
               ) ==
               null
           ? CourseNotifyState.cancel
-          : CourseNotifyState.schedule);
+          : CourseNotifyState.schedule;
     }
     return Padding(
       padding: const EdgeInsets.symmetric(
@@ -666,7 +684,6 @@ class _CourseContentState extends State<CourseContent> {
                     final endTime = format.parse(widget.timeCode.endTime);
                     final Event event = Event(
                       title: widget.course.title!,
-                      description: '',
                       location: widget.course.location?.toString() ?? '',
                       startDate: startTime.weekTime(widget.weekday),
                       endDate: endTime.weekTime(widget.weekday),
@@ -723,25 +740,25 @@ class _CourseContentState extends State<CourseContent> {
                       setState(() {});
                       AnalyticsUtils.instance?.logEvent('course_notify_cancel');
                     }
-                    if (widget.onNotifyClick != null)
+                    if (widget.onNotifyClick != null) {
                       widget.onNotifyClick!(
                           courseNotify,
                           CourseNotifyState.values[(_state!.index + 1) %
                               (CourseNotifyState.values.length)]);
+                    }
                   },
                 )
             ],
           ),
-          SizedBox(height: 8.0),
+          const SizedBox(height: 8.0),
           Row(
-            crossAxisAlignment: CrossAxisAlignment.center,
             children: <Widget>[
               Expanded(
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
-                      '${widget.course.getInstructors()}',
+                      widget.course.getInstructors(),
                       style: TextStyle(
                         fontSize: 18.0,
                         color: ApTheme.of(context).grey,
@@ -759,7 +776,6 @@ class _CourseContentState extends State<CourseContent> {
                 ),
               ),
               Column(
-                crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
                   Text(
                     '${widget.timeCode.startTime}-${widget.timeCode.endTime}',
@@ -821,7 +837,7 @@ class TimeCodeBorder extends StatelessWidget {
                 fontSize: showSectionTime ? 16.0 : 14.0,
               ),
             ),
-            if (showSectionTime) TextSpan(text: '${timeCode.endTime}'),
+            if (showSectionTime) TextSpan(text: timeCode.endTime),
           ],
         ),
         textAlign: TextAlign.center,
@@ -842,26 +858,30 @@ class CourseList extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final ApLocalizations app = ApLocalizations.of(context);
     return ListView.builder(
       itemBuilder: (_, index) {
-        var course = courses[index];
+        final course = courses[index];
         return Card(
           elevation: 4.0,
-          margin: EdgeInsets.all(8.0),
+          margin: const EdgeInsets.all(8.0),
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(12.0),
           ),
           child: ListTile(
-            contentPadding:
-                EdgeInsets.symmetric(vertical: 8.0, horizontal: 24.0),
+            contentPadding: const EdgeInsets.symmetric(
+              vertical: 8.0,
+              horizontal: 24.0,
+            ),
             title: Text(
               courses[index].title!,
-              style: TextStyle(
+              style: const TextStyle(
                 height: 1.3,
                 fontSize: 20.0,
               ),
             ),
             subtitle: Padding(
+              padding: const EdgeInsets.symmetric(vertical: 8.0),
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: <Widget>[
@@ -876,30 +896,30 @@ class CourseList extends StatelessWidget {
                         children: [
                           if (course.className != null) ...[
                             TextSpan(
-                                text:
-                                    '${ApLocalizations.of(context).studentClass}：',
-                                style: TextStyle(fontWeight: FontWeight.bold)),
+                              text: '${app.studentClass}：',
+                              style:
+                                  const TextStyle(fontWeight: FontWeight.bold),
+                            ),
                             TextSpan(text: '${course.className}\n'),
                           ],
                           TextSpan(
-                              text:
-                                  '${ApLocalizations.of(context).courseDialogProfessor}：',
-                              style: TextStyle(fontWeight: FontWeight.bold)),
+                            text: '${app.courseDialogProfessor}：',
+                            style: const TextStyle(fontWeight: FontWeight.bold),
+                          ),
                           TextSpan(text: '${course.getInstructors()}\n'),
                           if (course.location != null) ...[
                             TextSpan(
-                                text:
-                                    '${ApLocalizations.of(context).courseDialogLocation}：',
-                                style: TextStyle(fontWeight: FontWeight.bold)),
+                              text: '${app.courseDialogLocation}：',
+                              style:
+                                  const TextStyle(fontWeight: FontWeight.bold),
+                            ),
                             TextSpan(text: '${course.location.toString()}\n'),
                           ],
                           TextSpan(
-                            text:
-                                '${ApLocalizations.of(context).courseDialogTime}：',
-                            style: TextStyle(fontWeight: FontWeight.bold),
+                            text: '${app.courseDialogTime}：',
+                            style: const TextStyle(fontWeight: FontWeight.bold),
                           ),
-                          TextSpan(
-                              text: '${course.getTimesShortName(timeCodes)}'),
+                          TextSpan(text: course.getTimesShortName(timeCodes)),
                         ],
                       ),
                     ),
@@ -908,20 +928,19 @@ class CourseList extends StatelessWidget {
                       course.units != null ||
                       course.hours != null)
                     Expanded(
-                      flex: 1,
                       child: Column(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: <Widget>[
                           if (course.required != null)
                             Text(
-                              '${course.required}',
+                              course.required!,
                               style: TextStyle(
                                 color: ApTheme.of(context).blueAccent,
                                 fontSize: 18.0,
                               ),
                               textAlign: TextAlign.center,
                             ),
-                          SizedBox(height: 16.0),
+                          const SizedBox(height: 16.0),
                           if (course.units != null)
                             SelectableText.rich(
                               TextSpan(
@@ -929,13 +948,14 @@ class CourseList extends StatelessWidget {
                                   color: ApTheme.of(context).grey,
                                   fontSize: 16.0,
                                 ),
-                                children: [
+                                children: <TextSpan>[
                                   TextSpan(
-                                      text:
-                                          '${ApLocalizations.of(context).units}：',
-                                      style: TextStyle(
-                                          fontWeight: FontWeight.bold)),
-                                  TextSpan(text: '${course.units}'),
+                                    text: '${app.units}：',
+                                    style: const TextStyle(
+                                      fontWeight: FontWeight.bold,
+                                    ),
+                                  ),
+                                  TextSpan(text: course.units),
                                 ],
                               ),
                             ),
@@ -948,12 +968,12 @@ class CourseList extends StatelessWidget {
                                 ),
                                 children: [
                                   TextSpan(
-                                    text:
-                                        '${ApLocalizations.of(context).courseHours}：',
-                                    style:
-                                        TextStyle(fontWeight: FontWeight.bold),
+                                    text: '${app.courseHours}：',
+                                    style: const TextStyle(
+                                      fontWeight: FontWeight.bold,
+                                    ),
                                   ),
-                                  TextSpan(text: '${course.hours}'),
+                                  TextSpan(text: course.hours),
                                 ],
                               ),
                             ),
@@ -962,7 +982,6 @@ class CourseList extends StatelessWidget {
                     )
                 ],
               ),
-              padding: EdgeInsets.symmetric(vertical: 8.0),
             ),
           ),
         );
@@ -1023,20 +1042,21 @@ class CourseBorder extends StatelessWidget {
             ? Container()
             : InkWell(
                 onTap: () {
-                  this
-                      .onPressed
-                      ?.call(sectionTime!.weekday!, timeCode!, course!);
+                  onPressed?.call(sectionTime!.weekday!, timeCode!, course!);
                   AnalyticsUtils.instance?.logEvent('course_border_click');
                 },
                 radius: 6.0,
                 child: Padding(
-                  padding: EdgeInsets.symmetric(vertical: 2.0, horizontal: 4.0),
+                  padding: const EdgeInsets.symmetric(
+                    vertical: 2.0,
+                    horizontal: 4.0,
+                  ),
                   child: Center(
                     child: AutoSizeText.rich(
                       TextSpan(
                         children: [
                           TextSpan(
-                            text: '${course!.title ?? ' '}',
+                            text: course!.title ?? ' ',
                             style: TextStyle(
                               fontSize: 16.0,
                               fontWeight:
@@ -1115,7 +1135,7 @@ class _CourseScaffoldSettingDialogState
       title: ap.courseScaffoldSetting,
       actionText: ApLocalizations.current.confirm,
       actionFunction: () => Navigator.of(context, rootNavigator: true).pop(),
-      contentPadding: EdgeInsets.all(0.0),
+      contentPadding: const EdgeInsets.all(0.0),
       contentWidget: Column(
         children: [
           CheckboxListTile(
@@ -1170,7 +1190,7 @@ class _CourseScaffoldSettingDialogState
 
 extension DateTimeExtension on DateTime {
   DateTime weekTime(int weekday) {
-    var now = DateTime.now();
+    final now = DateTime.now();
     return DateTime(
       now.year,
       now.month,
