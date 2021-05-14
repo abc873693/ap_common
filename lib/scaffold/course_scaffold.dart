@@ -7,7 +7,7 @@ import 'package:ap_common/config/ap_constants.dart';
 import 'package:ap_common/models/course_data.dart';
 import 'package:ap_common/models/course_notify_data.dart';
 import 'package:ap_common/models/semester_data.dart';
-import 'package:ap_common/resources/ap_assets.dart';
+import 'package:ap_common/resources/resources.dart';
 import 'package:ap_common/resources/ap_colors.dart';
 import 'package:ap_common/resources/ap_icon.dart';
 import 'package:ap_common/resources/ap_theme.dart';

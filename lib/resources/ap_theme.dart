@@ -1,4 +1,4 @@
-import 'package:ap_common/resources/ap_assets.dart';
+import 'package:ap_common/resources/resources.dart';
 import 'package:cupertino_back_gesture/cupertino_back_gesture.dart';
 import 'package:flutter/material.dart';
 
@@ -230,7 +230,7 @@ class ApTheme extends InheritedWidget {
         return ApImageAssets.dashLineLight;
       case Brightness.dark:
       default:
-        return ApImageAssets.dashLineDarkTheme;
+        return ApImageAssets.dashLineDark;
     }
   }
 
@@ -240,7 +240,7 @@ class ApTheme extends InheritedWidget {
         return ApImageAssets.drawerBackgroundLight;
       case Brightness.dark:
       default:
-        return ApImageAssets.drawerBackgroundDarkTheme;
+        return ApImageAssets.drawerBackgroundDark;
     }
   }
 

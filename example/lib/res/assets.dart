@@ -7,8 +7,8 @@ class ImageAssets {
   static const String drawerIconLight = '$basePath/drawer-icon.webp';
   static const String drawerIconDark = '$basePath/drawer-icon.webp';
   static const String K = '$basePath/K.webp';
-  static const String dashLineLight = '$basePath/dash_line.webp';
-  static const String dashLineDarkTheme = '$basePath/dash_line_dark_theme.webp';
+  static const String dashLineLight = '$basePath/dash_line_light.webp';
+  static const String dashLineDarkTheme = '$basePath/dash_line_dark.webp';
 
   static String sectionJiangong = '$basePath/section_jiangong.webp';
   static String sectionYanchao = '$basePath/section_yanchao.webp';
