@@ -6,7 +6,7 @@ import 'package:flutter/services.dart';
 import '../res/assets.dart';
 
 class UserInfoPage extends StatefulWidget {
-  static const String routerName = "/userInfo";
+  static const String routerName = '/userInfo';
   final UserInfo userInfo;
 
   const UserInfoPage({Key key, this.userInfo}) : super(key: key);
@@ -25,12 +25,12 @@ class UserInfoPageState extends State<UserInfoPage> {
   Widget build(BuildContext context) {
     return UserInfoScaffold(
       userInfo: widget.userInfo,
-      actions: <Widget>[],
       enableBarCode: true,
       onRefresh: () async {
-        String rawString = await rootBundle.loadString(FileAssets.userInfo);
-        var userInfo = UserInfo.fromRawJson(rawString);
-        if (userInfo != null)
+        final String rawString =
+            await rootBundle.loadString(FileAssets.userInfo);
+        final userInfo = UserInfo.fromRawJson(rawString);
+        if (userInfo != null) {
           setState(
             () => widget.userInfo
               ..name = userInfo.name
@@ -41,6 +41,7 @@ class UserInfoPageState extends State<UserInfoPage> {
               ..email = userInfo.email
               ..id = userInfo.id,
           );
+        }
 //        FirebaseAnalyticsUtils.instance.logUserInfo(userInfo);
         return null;
       },

@@ -33,8 +33,8 @@ class CoursePageState extends State<CoursePage> {
   String customStateHint = '';
 
   String get courseNotifyCacheKey => Preferences.getString(
-        ApConstants.CURRENT_SEMESTER_CODE,
-        ApConstants.SEMESTER_LATEST,
+        ApConstants.currentSemesterCode,
+        ApConstants.semesterLatest,
       );
 
   @override
@@ -57,7 +57,6 @@ class CoursePageState extends State<CoursePage> {
       notifyData: notifyData,
       customHint: isOffline ? ap.offlineCourse : '',
       customStateHint: customStateHint,
-      enableNotifyControl: true,
       courseNotifySaveKey: courseNotifyCacheKey,
       androidResourceIcon: Constants.ANDROID_DEFAULT_NOTIFICATION_NAME,
       enableCaptureCourseTable: true,
@@ -73,35 +72,38 @@ class CoursePageState extends State<CoursePage> {
     );
   }
 
-  void _getSemester() async {
-    String rawString = await rootBundle.loadString(FileAssets.semesters);
+  Future<void> _getSemester() async {
+    final String rawString = await rootBundle.loadString(FileAssets.semesters);
     semesterData = SemesterData.fromRawJson(rawString);
-    var i = 0;
-    if (semesterData.defaultSemester != null)
-      semesterData.data.forEach((option) {
-        if (option.text == semesterData.defaultSemester.text)
+    if (semesterData.defaultSemester != null) {
+      for (int i = 0; i < semesterData.data.length; i++) {
+        final option = semesterData.data[i];
+        if (option.text == semesterData.defaultSemester.text) {
           semesterData.currentIndex = i;
+        }
         i++;
-      });
+      }
+    }
     _getCourseTables();
   }
 
-  _getCourseTables() async {
-    String rawString = await rootBundle.loadString(FileAssets.courses);
+  Future<void> _getCourseTables() async {
+    final String rawString = await rootBundle.loadString(FileAssets.courses);
     courseData = CourseData.fromRawJson(rawString);
     Preferences.setString(
-      ApConstants.CURRENT_SEMESTER_CODE,
-      ApConstants.SEMESTER_LATEST,
+      ApConstants.currentSemesterCode,
+      ApConstants.semesterLatest,
     );
     courseData.save(courseNotifyCacheKey);
-    if (mounted && courseData != null)
+    if (mounted && courseData != null) {
       setState(() {
-        if (courseData?.courses == null)
+        if (courseData?.courses == null) {
           state = CourseState.empty;
-        else {
+        } else {
           state = CourseState.finish;
-          notifyData= CourseNotifyData.load(courseNotifyCacheKey);
+          notifyData = CourseNotifyData.load(courseNotifyCacheKey);
         }
       });
+    }
   }
 }

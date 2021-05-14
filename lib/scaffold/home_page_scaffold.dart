@@ -86,6 +86,13 @@ class HomePageScaffoldState extends State<HomePageScaffold> {
   @override
   Widget build(BuildContext context) {
     return WillPopScope(
+      onWillPop: () async {
+        if (Platform.isAndroid) {
+          _showLogoutDialog();
+          return false;
+        }
+        return true;
+      },
       child: Row(
         children: [
           if (isTablet) widget.drawer!,
@@ -126,8 +133,8 @@ class HomePageScaffoldState extends State<HomePageScaffold> {
                                       .bottomNavigationSelect,
                                   type: BottomNavigationBarType.fixed,
                                   selectedFontSize: 12.0,
-                                  unselectedFontSize: 12.0,
-                                  selectedIconTheme: IconThemeData(size: 24.0),
+                                  selectedIconTheme:
+                                      const IconThemeData(size: 24.0),
                                   onTap: widget.onTabTapped,
                                   items: widget.bottomNavigationBarItems!,
                                 ),
@@ -136,36 +143,32 @@ class HomePageScaffoldState extends State<HomePageScaffold> {
           ),
         ],
       ),
-      onWillPop: () async {
-        if (Platform.isAndroid) {
-          _showLogoutDialog();
-          return false;
-        }
-        return true;
-      },
     );
   }
 
-  setTimer() {
-    if (widget.autoPlay)
+  void setTimer() {
+    if (widget.autoPlay) {
       _timer = Timer.periodic(
         widget.autoPlayDuration,
         (Timer timer) {
           if (widget.state == HomeState.finish &&
               widget.announcements.length > 1 &&
-              pageController!.hasClients)
+              pageController!.hasClients) {
             setState(() {
               _currentNewsIndex++;
-              if (_currentNewsIndex >= widget.announcements.length)
+              if (_currentNewsIndex >= widget.announcements.length) {
                 _currentNewsIndex = 0;
+              }
               pageController?.animateToPage(
                 _currentNewsIndex,
-                duration: Duration(milliseconds: 500),
+                duration: const Duration(milliseconds: 500),
                 curve: Curves.easeOutQuint,
               );
             });
+          }
         },
       );
+    }
   }
 
   Widget _newsImage(
@@ -188,7 +191,7 @@ class HomePageScaffoldState extends State<HomePageScaffold> {
         setTimer();
       },
       child: AnimatedContainer(
-        duration: Duration(milliseconds: 500),
+        duration: const Duration(milliseconds: 500),
         curve: Curves.easeOutQuint,
         margin: EdgeInsets.symmetric(
           vertical: MediaQuery.of(context).size.height * (active ? 0.05 : 0.15),
@@ -213,7 +216,7 @@ class HomePageScaffoldState extends State<HomePageScaffold> {
     }
     pageController = PageController(viewportFraction: viewportFraction);
     pageController!.addListener(() {
-      int next = pageController!.page!.round();
+      final int next = pageController!.page!.round();
       if (_currentNewsIndex != next) {
         setState(() {
           _currentNewsIndex = next;
@@ -222,16 +225,15 @@ class HomePageScaffoldState extends State<HomePageScaffold> {
     });
     switch (widget.state) {
       case HomeState.loading:
-        return Center(
+        return const Center(
           child: CircularProgressIndicator(),
         );
       case HomeState.finish:
         return Column(
-          crossAxisAlignment: CrossAxisAlignment.center,
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
             Hero(
-              tag: ApConstants.TAG_ANNOUNCEMENT_TITLE,
+              tag: ApConstants.tagAnnouncementTitle,
               child: Material(
                 color: Colors.transparent,
                 child: Text(
@@ -244,8 +246,8 @@ class HomePageScaffoldState extends State<HomePageScaffold> {
                 ),
               ),
             ),
-            Hero(
-              tag: ApConstants.TAG_ANNOUNCEMENT_ICON,
+            const Hero(
+              tag: ApConstants.tagAnnouncementIcon,
               child: Icon(Icons.arrow_drop_down),
             ),
             Expanded(
@@ -253,7 +255,7 @@ class HomePageScaffoldState extends State<HomePageScaffold> {
                 controller: pageController,
                 itemCount: widget.announcements.length,
                 itemBuilder: (context, int currentIndex) {
-                  bool active = (currentIndex == _currentNewsIndex);
+                  final bool active = currentIndex == _currentNewsIndex;
                   return _newsImage(
                     widget.announcements[currentIndex],
                     orientation,
@@ -271,6 +273,7 @@ class HomePageScaffoldState extends State<HomePageScaffold> {
                 children: [
                   TextSpan(
                       text:
+                          // ignore: lines_longer_than_80_chars
                           '${widget.announcements.length >= 10 && _currentNewsIndex < 9 ? '0' : ''}'
                           '${_currentNewsIndex + 1}',
                       style: TextStyle(color: ApTheme.of(context).red)),
@@ -326,7 +329,10 @@ class HomePageScaffoldState extends State<HomePageScaffold> {
   }
 
   void showBasicHint({required String text}) {
-    showSnackBar(text: text, duration: Duration(seconds: 2));
+    showSnackBar(
+      text: text,
+      duration: const Duration(seconds: 2),
+    );
   }
 
   ScaffoldFeatureController<SnackBar, SnackBarClosedReason>? showSnackBar({
@@ -338,7 +344,7 @@ class HomePageScaffoldState extends State<HomePageScaffold> {
     return _scaffoldMessengerKey.currentState?.showSnackBar(
       SnackBar(
         content: Text(text),
-        duration: duration ?? Duration(days: 1),
+        duration: duration ?? const Duration(days: 1),
         action: actionText == null
             ? null
             : SnackBarAction(

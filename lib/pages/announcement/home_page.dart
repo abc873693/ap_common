@@ -27,7 +27,7 @@ enum _State { notLogin, loading, done, error }
 enum _DataType { announcement, application }
 
 class AnnouncementHomePage extends StatefulWidget {
-  static const String routerName = "/announcement";
+  static const String routerName = '/announcement';
 
   final Widget? loginDescriptionWidget;
   final Widget? reviewDescriptionWidget;
@@ -49,7 +49,7 @@ class AnnouncementHomePage extends StatefulWidget {
 class _AnnouncementHomePageState extends State<AnnouncementHomePage> {
   final TextEditingController _username = TextEditingController();
   final TextEditingController _password = TextEditingController();
-  final _reviewDescription = TextEditingController();
+  final TextEditingController _reviewDescription = TextEditingController();
 
   ApLocalizations get ap => ApLocalizations.of(context);
 
@@ -78,19 +78,24 @@ class _AnnouncementHomePageState extends State<AnnouncementHomePage> {
         decorationColor: ApTheme.of(context).blueAccent,
       );
 
-  GoogleSignIn _googleSignIn = GoogleSignIn(scopes: ['email']);
+  final GoogleSignIn _googleSignIn = GoogleSignIn(
+    scopes: <String>['email'],
+  );
 
   String _reviewStateText(bool? reviewStatus) {
-    if (reviewStatus == null)
+    if (reviewStatus == null) {
       return ap.waitingForReview;
-    else
+    } else {
       return reviewStatus ? ap.reviewApproval : ap.reviewReject;
+    }
   }
 
   @override
   void initState() {
     //FA.setCurrentScreen('ScorePage', 'score_page.dart');
-    _getPreference();
+    Future<dynamic>.microtask(
+      () => _getPreference(),
+    );
     super.initState();
   }
 
@@ -105,11 +110,18 @@ class _AnnouncementHomePageState extends State<AnnouncementHomePage> {
       appBar: AppBar(
         title: Text(ap.announcementReviewSystem),
         backgroundColor: ApTheme.of(context).blue,
-        actions: [
+        actions: <Widget>[
           if (state == _State.done && loginData?.level != PermissionLevel.user)
             TextButton(
+              onPressed: () async {
+                setState(() {
+                  onlyShowNotReview = !onlyShowNotReview!;
+                });
+                Preferences.setBool(ApConstants.announcementOnlyNotReview,
+                    onlyShowNotReview!);
+              },
               child: Row(
-                children: [
+                children: <Widget>[
                   Checkbox(
                     value: onlyShowNotReview,
                     onChanged: (bool? value) {
@@ -117,7 +129,7 @@ class _AnnouncementHomePageState extends State<AnnouncementHomePage> {
                         onlyShowNotReview = value;
                       });
                       Preferences.setBool(
-                          ApConstants.ANNOUNCEMENT_ONLY_NOT_REVIEW,
+                          ApConstants.announcementOnlyNotReview,
                           onlyShowNotReview!);
                     },
                     activeColor: ApTheme.of(context).yellow,
@@ -125,27 +137,20 @@ class _AnnouncementHomePageState extends State<AnnouncementHomePage> {
                   ),
                   Text(
                     ap.onlyShowNotReview,
-                    style: TextStyle(color: Colors.white),
+                    style: const TextStyle(color: Colors.white),
                   ),
                 ],
               ),
-              onPressed: () async {
-                setState(() {
-                  onlyShowNotReview = !onlyShowNotReview!;
-                });
-                Preferences.setBool(ApConstants.ANNOUNCEMENT_ONLY_NOT_REVIEW,
-                    onlyShowNotReview!);
-              },
             ),
-          if (Preferences.getBool(ApConstants.ANNOUNCEMENT_IS_LOGIN, false))
+          if (Preferences.getBool(ApConstants.announcementIsLogin, false))
             IconButton(
-              icon: Icon(Icons.exit_to_app),
+              icon: const Icon(Icons.exit_to_app),
               tooltip: ap.logout,
               onPressed: () async {
                 if (AnnouncementHelper.instance.loginType ==
                     AnnouncementLoginType.google) await _googleSignIn.signOut();
                 setState(() {
-                  Preferences.setBool(ApConstants.ANNOUNCEMENT_IS_LOGIN, false);
+                  Preferences.setBool(ApConstants.announcementIsLogin, false);
                   state = _State.notLogin;
                   loginData = null;
                 });
@@ -157,12 +162,11 @@ class _AnnouncementHomePageState extends State<AnnouncementHomePage> {
           (loginData == null || loginData?.level == PermissionLevel.user)
               ? null
               : FloatingActionButton(
-                  child: Icon(Icons.add),
                   onPressed: () async {
-                    var success = await Navigator.push(
+                    final dynamic success = await Navigator.push(
                       context,
-                      MaterialPageRoute(
-                        builder: (_) => AnnouncementEditPage(
+                      MaterialPageRoute<dynamic>(
+                        builder: (_) => const AnnouncementEditPage(
                           mode: Mode.add,
                         ),
                       ),
@@ -171,26 +175,27 @@ class _AnnouncementHomePageState extends State<AnnouncementHomePage> {
                       _getAnnouncements();
                     }
                   },
+                  child: const Icon(Icons.add),
                 ),
       body: RefreshIndicator(
         onRefresh: () async {
           await _getAnnouncements();
           await _getApplications();
-          return null;
+          return;
         },
         child: _body(),
       ),
     );
   }
 
-  _body() {
+  Widget _body() {
     switch (state) {
       case _State.notLogin:
         return _loginContent();
       case _State.loading:
         return Container(
-          child: CircularProgressIndicator(),
           alignment: Alignment.center,
+          child: const CircularProgressIndicator(),
         );
       case _State.error:
         return InkWell(
@@ -208,58 +213,62 @@ class _AnnouncementHomePageState extends State<AnnouncementHomePage> {
           case PermissionLevel.user:
             return SingleChildScrollView(
               child: Column(
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: [
-                  SizedBox(height: 8.0),
+                children: <Widget>[
+                  const SizedBox(height: 8.0),
                   widget.reviewDescriptionWidget ??
                       SelectableText.rich(
                         TextSpan(
                           style: TextStyle(
                               color: ApTheme.of(context).grey, fontSize: 16.0),
-                          children: [
+                          children: <TextSpan>[
                             TextSpan(
                               text: '${sprintf(
                                 ap.newsRuleDescription1,
-                                [
+                                <String>[
                                   widget.organizationDomain ?? '',
                                 ],
                               )}\n',
-                              style: TextStyle(fontWeight: FontWeight.normal),
+                              style: const TextStyle(
+                                  fontWeight: FontWeight.normal),
                             ),
                             TextSpan(
-                              text: '${ap.newsRuleDescription2}',
-                              style: TextStyle(fontWeight: FontWeight.bold),
+                              text: ap.newsRuleDescription2,
+                              style:
+                                  const TextStyle(fontWeight: FontWeight.bold),
                             ),
                             TextSpan(
-                              text: '${ap.newsRuleDescription3}',
-                              style: TextStyle(fontWeight: FontWeight.normal),
+                              text: ap.newsRuleDescription3,
+                              style: const TextStyle(
+                                  fontWeight: FontWeight.normal),
                             ),
                           ],
                         ),
                         textAlign: TextAlign.center,
                       ),
-                  SizedBox(height: 32.0),
+                  const SizedBox(height: 32.0),
                   Padding(
                     padding: const EdgeInsets.symmetric(horizontal: 8.0),
                     child: ApButton(
                       text: ap.apply,
                       onPressed: () async {
-                        var success = await Navigator.push(
+                        final dynamic success = await Navigator.push(
                           context,
-                          MaterialPageRoute(
-                            builder: (_) => AnnouncementEditPage(
+                          MaterialPageRoute<dynamic>(
+                            builder: (_) => const AnnouncementEditPage(
                               mode: Mode.application,
                             ),
                           ),
                         );
-                        if (success ?? false) _getApplications();
+                        if (success is bool && success) {
+                          _getApplications();
+                        }
                       },
                     ),
                   ),
-                  SizedBox(height: 16.0),
+                  const SizedBox(height: 16.0),
                   Text(ap.myApplications),
-                  SizedBox(height: 8.0),
-                  for (var item in applications ?? [])
+                  const SizedBox(height: 8.0),
+                  for (Announcement item in applications ?? <Announcement>[])
                     if ((onlyShowNotReview! && item.reviewStatus == null) ||
                         (!onlyShowNotReview!))
                       _item(_DataType.application, item)
@@ -273,19 +282,18 @@ class _AnnouncementHomePageState extends State<AnnouncementHomePage> {
                 data: Theme.of(context)
                     .copyWith(dividerColor: Colors.transparent),
                 child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  children: [
-                    SizedBox(height: 8.0, width: double.infinity),
+                  children: <Widget>[
+                    const SizedBox(height: 8.0, width: double.infinity),
                     Text(ap.allApplications),
-                    SizedBox(height: 8.0),
-                    for (var item in applications ?? [])
+                    const SizedBox(height: 8.0),
+                    for (Announcement item in applications ?? <Announcement>[])
                       if ((onlyShowNotReview! && item.reviewStatus == null) ||
                           (!onlyShowNotReview!))
                         _item(_DataType.application, item),
-                    SizedBox(height: 16.0),
+                    const SizedBox(height: 16.0),
                     Text(ap.allAnnouncements),
-                    SizedBox(height: 8.0),
-                    for (var item in announcements ?? [])
+                    const SizedBox(height: 8.0),
+                    for (Announcement item in applications ?? <Announcement>[])
                       _item(_DataType.announcement, item),
                   ],
                 ),
@@ -295,13 +303,12 @@ class _AnnouncementHomePageState extends State<AnnouncementHomePage> {
     }
   }
 
-  _loginContent() {
-    Widget usernameTextField = TextField(
-      maxLines: 1,
+  Widget _loginContent() {
+    final Widget usernameTextField = TextField(
       controller: _username,
       textInputAction: TextInputAction.next,
       focusNode: usernameFocusNode,
-      onSubmitted: (text) {
+      onSubmitted: (String text) {
         usernameFocusNode?.unfocus();
         FocusScope.of(context).requestFocus(passwordFocusNode);
       },
@@ -310,12 +317,11 @@ class _AnnouncementHomePageState extends State<AnnouncementHomePage> {
       ),
       style: _editTextStyle,
     );
-    Widget passwordTextField = TextField(
-      maxLines: 1,
+    final Widget passwordTextField = TextField(
       textInputAction: TextInputAction.send,
       controller: _password,
       focusNode: passwordFocusNode,
-      onSubmitted: (text) {
+      onSubmitted: (String text) {
         passwordFocusNode?.unfocus();
         _login(AnnouncementLoginType.normal);
       },
@@ -327,34 +333,35 @@ class _AnnouncementHomePageState extends State<AnnouncementHomePage> {
     );
     return Column(
       mainAxisAlignment: MainAxisAlignment.center,
-      mainAxisSize: MainAxisSize.max,
       children: <Widget>[
         widget.loginDescriptionWidget ??
             SelectableText.rich(
               TextSpan(
                 style:
                     TextStyle(color: ApTheme.of(context).grey, fontSize: 16.0),
-                children: [
+                children: <TextSpan>[
                   TextSpan(
-                      text: '${sprintf(
-                        ap.newsRuleDescription1,
-                        [
-                          widget.organizationDomain ?? '',
-                        ],
-                      )}',
-                      style: TextStyle(fontWeight: FontWeight.normal)),
+                    text: sprintf(
+                      ap.newsRuleDescription1,
+                      <String>[
+                        widget.organizationDomain ?? '',
+                      ],
+                    ),
+                    style: const TextStyle(fontWeight: FontWeight.normal),
+                  ),
                   TextSpan(
-                      text: '${ap.newsRuleDescription3}',
-                      style: TextStyle(fontWeight: FontWeight.normal)),
+                    text: ap.newsRuleDescription3,
+                    style: const TextStyle(fontWeight: FontWeight.normal),
+                  ),
                 ],
               ),
               textAlign: TextAlign.center,
             ),
-        if (widget.enableNormalLogin) ...[
-          SizedBox(height: 8.0),
+        if (widget.enableNormalLogin) ...<Widget>[
+          const SizedBox(height: 8.0),
           usernameTextField,
           passwordTextField,
-          SizedBox(height: 24.0),
+          const SizedBox(height: 24.0),
           ApButton(
             text: ap.login,
             onPressed: () async {
@@ -369,8 +376,8 @@ class _AnnouncementHomePageState extends State<AnnouncementHomePage> {
             _login(AnnouncementLoginType.google);
           },
         ),
-        if (!kIsWeb && (Platform.isIOS || Platform.isMacOS)) ...[
-          SizedBox(height: 16.0),
+        if (!kIsWeb && (Platform.isIOS || Platform.isMacOS)) ...<Widget>[
+          const SizedBox(height: 16.0),
           ApButton(
             text: 'Sign In with Apple',
             onPressed: () async {
@@ -394,9 +401,9 @@ class _AnnouncementHomePageState extends State<AnnouncementHomePage> {
                 item.reviewStatus != null
             ? null
             : () async {
-                var success = await Navigator.push(
+                final dynamic success = await Navigator.push(
                   context,
-                  MaterialPageRoute(
+                  MaterialPageRoute<dynamic>(
                     builder: (_) => AnnouncementEditPage(
                       mode: dataType == _DataType.announcement
                           ? Mode.edit
@@ -405,11 +412,9 @@ class _AnnouncementHomePageState extends State<AnnouncementHomePage> {
                     ),
                   ),
                 );
-                if (success ?? false) {
-                  if (success) {
-                    _getAnnouncements();
-                    _getApplications();
-                  }
+                if (success is bool && success) {
+                  _getAnnouncements();
+                  _getApplications();
                 }
               },
         child: ExpansionTile(
@@ -418,14 +423,14 @@ class _AnnouncementHomePageState extends State<AnnouncementHomePage> {
             padding: const EdgeInsets.only(top: 8.0),
             child: Text(
               item.title!,
-              style: TextStyle(fontSize: 18.0),
+              style: const TextStyle(fontSize: 18.0),
             ),
           ),
           trailing: Column(
             mainAxisAlignment: MainAxisAlignment.center,
-            children: [
+            children: <Widget>[
               if (loginData?.level != PermissionLevel.user &&
-                  item.reviewStatus == null) ...[
+                  item.reviewStatus == null) ...<Widget>[
                 IconButton(
                   icon: Icon(
                     dataType == _DataType.announcement
@@ -443,7 +448,7 @@ class _AnnouncementHomePageState extends State<AnnouncementHomePage> {
                           ? YesNoDialog(
                               title: ap.deleteNewsTitle,
                               contentWidget: Text(
-                                "${ap.deleteNewsContent}",
+                                ap.deleteNewsContent,
                                 textAlign: TextAlign.center,
                               ),
                               leftActionText: ap.determine,
@@ -451,6 +456,7 @@ class _AnnouncementHomePageState extends State<AnnouncementHomePage> {
                               leftActionFunction: () {
                                 AnnouncementHelper.instance.deleteAnnouncement(
                                   data: item,
+                                  // ignore: always_specify_types
                                   callback: GeneralCallback.simple(
                                     context,
                                     (_) {
@@ -469,7 +475,7 @@ class _AnnouncementHomePageState extends State<AnnouncementHomePage> {
                                 controller: _reviewDescription,
                                 maxLines: 3,
                                 decoration: InputDecoration(
-                                  border: OutlineInputBorder(),
+                                  border: const OutlineInputBorder(),
                                   fillColor: ApTheme.of(context).blueAccent,
                                   labelStyle: TextStyle(
                                     color: ApTheme.of(context).grey,
@@ -483,6 +489,7 @@ class _AnnouncementHomePageState extends State<AnnouncementHomePage> {
                                 AnnouncementHelper.instance.approveApplication(
                                   applicationId: item.applicationId,
                                   reviewDescription: _reviewDescription.text,
+                                  // ignore: always_specify_types
                                   callback: GeneralCallback.simple(
                                     context,
                                     (_) {
@@ -499,6 +506,7 @@ class _AnnouncementHomePageState extends State<AnnouncementHomePage> {
                                 AnnouncementHelper.instance.rejectApplication(
                                   applicationId: item.applicationId,
                                   reviewDescription: _reviewDescription.text,
+                                  // ignore: always_specify_types
                                   callback: GeneralCallback.simple(
                                     context,
                                     (_) {
@@ -518,76 +526,14 @@ class _AnnouncementHomePageState extends State<AnnouncementHomePage> {
               ],
             ],
           ),
-          children: [
-            RichText(
-              text: TextSpan(
-                style: _defaultStyle,
-                children: [
-                  if (loginData!.level != PermissionLevel.user) ...[
-                    TextSpan(
-                      text: '${ap.weight}：',
-                      style: TextStyle(fontWeight: FontWeight.bold),
-                    ),
-                    TextSpan(text: '${item.weight ?? 1}\n'),
-                  ],
-                  TextSpan(
-                    text: '${ap.imageUrl}：',
-                    style: TextStyle(fontWeight: FontWeight.bold),
-                  ),
-                  TextSpan(
-                    text: '${item.imgUrl}',
-                    style: TextStyle(
-                      color: ApTheme.of(context).blueAccent,
-                      decoration: TextDecoration.underline,
-                    ),
-                    recognizer: TapGestureRecognizer()
-                      ..onTap = () {
-                        ApUtils.launchUrl(item.imgUrl);
-                      },
-                  ),
-                  TextSpan(
-                    text: '\n${ap.url}：',
-                    style: TextStyle(fontWeight: FontWeight.bold),
-                  ),
-                  TextSpan(
-                    text: '${item.url}',
-                    style: TextStyle(
-                      color: ApTheme.of(context).blueAccent,
-                      decoration: TextDecoration.underline,
-                    ),
-                    recognizer: TapGestureRecognizer()
-                      ..onTap = () {
-                        ApUtils.launchUrl(item.url);
-                      },
-                  ),
-                  TextSpan(
-                    text: '\n${ap.expireTime}：',
-                    style: TextStyle(fontWeight: FontWeight.bold),
-                  ),
-                  TextSpan(text: '${item.expireTime ?? ap.noExpiration}\n'),
-                  TextSpan(
-                    text: '${ap.description}：',
-                    style: TextStyle(fontWeight: FontWeight.bold),
-                  ),
-                  TextSpan(text: '${item.description}'),
-                  TextSpan(
-                    text: '\n${ap.reviewDescription}：',
-                    style: TextStyle(fontWeight: FontWeight.bold),
-                  ),
-                  TextSpan(text: '${item.reviewDescription ?? ''}'),
-                ],
-              ),
-            ),
-            SizedBox(height: 16.0),
-          ],
           subtitle: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
+            children: <Widget>[
               if (dataType == _DataType.application)
                 RichText(
                   text: TextSpan(
                     style: _defaultStyle,
-                    children: [
+                    children: <TextSpan>[
                       TextSpan(text: '${ap.reviewState}：'),
                       TextSpan(
                         text: _reviewStateText(item.reviewStatus),
@@ -602,18 +548,80 @@ class _AnnouncementHomePageState extends State<AnnouncementHomePage> {
                 ),
               if (loginData!.level != PermissionLevel.user)
                 Wrap(
-                  children: [
-                    for (String? tag in item.tags ?? []) ...[
+                  children: <Widget>[
+                    for (String? tag in item.tags ?? <String>[]) ...<Widget>[
                       Chip(
                         label: Text(tag!),
                         backgroundColor: tag.color,
                       ),
-                      SizedBox(width: 8.0),
+                      const SizedBox(width: 8.0),
                     ]
                   ],
                 ),
             ],
           ),
+          children: <Widget>[
+            RichText(
+              text: TextSpan(
+                style: _defaultStyle,
+                children: <TextSpan>[
+                  if (loginData!.level != PermissionLevel.user) ...<TextSpan>[
+                    TextSpan(
+                      text: '${ap.weight}：',
+                      style: const TextStyle(fontWeight: FontWeight.bold),
+                    ),
+                    TextSpan(text: '${item.weight ?? 1}\n'),
+                  ],
+                  TextSpan(
+                    text: '${ap.imageUrl}：',
+                    style: const TextStyle(fontWeight: FontWeight.bold),
+                  ),
+                  TextSpan(
+                    text: item.imgUrl,
+                    style: TextStyle(
+                      color: ApTheme.of(context).blueAccent,
+                      decoration: TextDecoration.underline,
+                    ),
+                    recognizer: TapGestureRecognizer()
+                      ..onTap = () {
+                        ApUtils.launchUrl(item.imgUrl!);
+                      },
+                  ),
+                  TextSpan(
+                    text: '\n${ap.url}：',
+                    style: const TextStyle(fontWeight: FontWeight.bold),
+                  ),
+                  TextSpan(
+                    text: item.url,
+                    style: TextStyle(
+                      color: ApTheme.of(context).blueAccent,
+                      decoration: TextDecoration.underline,
+                    ),
+                    recognizer: TapGestureRecognizer()
+                      ..onTap = () {
+                        ApUtils.launchUrl(item.url!);
+                      },
+                  ),
+                  TextSpan(
+                    text: '\n${ap.expireTime}：',
+                    style: const TextStyle(fontWeight: FontWeight.bold),
+                  ),
+                  TextSpan(text: '${item.expireTime ?? ap.noExpiration}\n'),
+                  TextSpan(
+                    text: '${ap.description}：',
+                    style: const TextStyle(fontWeight: FontWeight.bold),
+                  ),
+                  TextSpan(text: item.description),
+                  TextSpan(
+                    text: '\n${ap.reviewDescription}：',
+                    style: const TextStyle(fontWeight: FontWeight.bold),
+                  ),
+                  TextSpan(text: item.reviewDescription ?? ''),
+                ],
+              ),
+            ),
+            const SizedBox(height: 16.0),
+          ],
         ),
       ),
     );
@@ -621,10 +629,11 @@ class _AnnouncementHomePageState extends State<AnnouncementHomePage> {
 
   Future<void> _getAnnouncements() async {
     AnnouncementHelper.instance.getAllAnnouncements(
+      // ignore: always_specify_types
       callback: GeneralCallback.simple(
         context,
         (List<Announcement>? data) {
-          this.announcements = data;
+          announcements = data;
           setState(() => state = _State.done);
         },
       ),
@@ -633,34 +642,37 @@ class _AnnouncementHomePageState extends State<AnnouncementHomePage> {
 
   Future<void> _getApplications() async {
     AnnouncementHelper.instance.getApplications(
+      // ignore: always_specify_types
       callback: GeneralCallback.simple(
         context,
         (List<Announcement>? data) {
-          this.applications = data;
+          applications = data;
           setState(() => state = _State.done);
         },
       ),
     );
   }
 
-  _getPreference() async {
-    await Future.delayed(Duration(microseconds: 50));
-    bool isLogin =
-        Preferences.getBool(ApConstants.ANNOUNCEMENT_IS_LOGIN, false);
+  Future<void> _getPreference() async {
+    final bool isLogin =
+        Preferences.getBool(ApConstants.announcementIsLogin, false);
     onlyShowNotReview =
-        Preferences.getBool(ApConstants.ANNOUNCEMENT_ONLY_NOT_REVIEW, false);
+        Preferences.getBool(ApConstants.announcementOnlyNotReview, false);
     _username.text =
-        Preferences.getString(ApConstants.ANNOUNCEMENT_USERNAME, '');
+        Preferences.getString(ApConstants.announcementUsername, '');
     _password.text =
-        Preferences.getStringSecurity(ApConstants.ANNOUNCEMENT_PASSWORD, '')!;
+        Preferences.getStringSecurity(ApConstants.announcementPassword, '')!;
     if (isLogin) {
       setState(() => state = _State.done);
-      this.loginData = AnnouncementLoginData.load();
-      if (kDebugMode)
-        print(
-            'token is expire = ${this.loginData?.isExpired} level = ${loginData!.level}');
-      if (this.loginData?.isExpired ?? true) {
-        int index = Preferences.getInt(ApConstants.ANNOUNCEMENT_LOGIN_TYPE, 0);
+      loginData = AnnouncementLoginData.load();
+      if (kDebugMode) {
+        debugPrint('token is expire = '
+            '${loginData?.isExpired} '
+            'level = ${loginData!.level}');
+      }
+      if (loginData?.isExpired ?? true) {
+        final int index =
+            Preferences.getInt(ApConstants.announcementLoginType, 0);
         _login(AnnouncementLoginType.values[index]);
       } else {
         AnnouncementHelper.instance.setAuthorization(loginData!.key);
@@ -676,70 +688,74 @@ class _AnnouncementHomePageState extends State<AnnouncementHomePage> {
     }
   }
 
-  void _login(AnnouncementLoginType loginType) async {
+  Future<void> _login(AnnouncementLoginType loginType) async {
     if (loginType == AnnouncementLoginType.normal &&
         (_username.text.isEmpty || _password.text.isEmpty)) {
       ApUtils.showToast(context, ap.doNotEmpty);
     } else {
-      final isNotLogin =
-          !Preferences.getBool(ApConstants.ANNOUNCEMENT_IS_LOGIN, false);
-      if (isNotLogin)
+      final bool isNotLogin =
+          !Preferences.getBool(ApConstants.announcementIsLogin, false);
+      if (isNotLogin) {
         showDialog(
           context: context,
           builder: (BuildContext context) => WillPopScope(
-            child: ProgressDialog(ap.logining),
             onWillPop: () async {
               return false;
             },
+            child: ProgressDialog(ap.logining),
           ),
           barrierDismissible: false,
         );
+      }
       String? idToken =
-          Preferences.getBool(ApConstants.ANNOUNCEMENT_IS_LOGIN, false)
+          Preferences.getBool(ApConstants.announcementIsLogin, false)
               ? Preferences.getStringSecurity(
-                  ApConstants.ANNOUNCEMENT_ID_TOKEN, null)
+                  ApConstants.announcementIdToken, null)
               : null;
 
-      final callback = GeneralCallback<AnnouncementLoginData>(
-        onError: (response) {
+      final GeneralCallback<AnnouncementLoginData> callback =
+          GeneralCallback<AnnouncementLoginData>(
+        onError: (GeneralResponse response) {
           if (isNotLogin) Navigator.of(context, rootNavigator: true).pop();
           ApUtils.showToast(context, response.message);
         },
-        onFailure: (dioError) async {
+        onFailure: (DioError dioError) async {
           if (isNotLogin) Navigator.of(context, rootNavigator: true).pop();
           ApUtils.showToast(context, dioError.i18nMessage);
           if (dioError.type == DioErrorType.response &&
               dioError.response!.statusCode == 403) {
-            if (loginType == AnnouncementLoginType.google)
+            if (loginType == AnnouncementLoginType.google) {
               await _googleSignIn.signOut();
+            }
           }
         },
-        onSuccess: (loginData) {
+        onSuccess: (AnnouncementLoginData loginData) {
           this.loginData = loginData;
           this.loginData!.save();
-          if (kDebugMode) print(loginData.key);
+          if (kDebugMode) debugPrint(loginData.key);
           if (isNotLogin) Navigator.of(context, rootNavigator: true).pop();
-          if (loginType == AnnouncementLoginType.normal)
+          if (loginType == AnnouncementLoginType.normal) {
             Preferences.setStringSecurity(
-                ApConstants.ANNOUNCEMENT_PASSWORD, _password.text);
-          else
+                ApConstants.announcementPassword, _password.text);
+          } else {
             Preferences.setStringSecurity(
-                ApConstants.ANNOUNCEMENT_ID_TOKEN, idToken!);
+                ApConstants.announcementIdToken, idToken!);
+          }
           ApUtils.showToast(context, ap.loginSuccess);
-          Preferences.setBool(ApConstants.ANNOUNCEMENT_IS_LOGIN, true);
+          Preferences.setBool(ApConstants.announcementIsLogin, true);
           Preferences.setInt(
-              ApConstants.ANNOUNCEMENT_LOGIN_TYPE, loginType.index);
+              ApConstants.announcementLoginType, loginType.index);
           setState(() {
             if (loginData.level != PermissionLevel.user) _getAnnouncements();
             _getApplications();
           });
         },
       );
-      print(loginType);
+      debugPrint('$loginType');
       switch (loginType) {
         case AnnouncementLoginType.normal:
           Preferences.setString(
-              ApConstants.ANNOUNCEMENT_USERNAME, _username.text);
+              ApConstants.announcementUsername, _username.text);
           AnnouncementHelper.instance.login(
             username: _username.text,
             password: _password.text,
@@ -748,29 +764,34 @@ class _AnnouncementHomePageState extends State<AnnouncementHomePage> {
           break;
         case AnnouncementLoginType.google:
           try {
-            final isSignIn = await _googleSignIn.isSignedIn();
-            var data = isSignIn
+            final bool isSignIn = await _googleSignIn.isSignedIn();
+            final GoogleSignInAccount? data = isSignIn
                 ? await _googleSignIn.signInSilently()
                 : await _googleSignIn.signIn();
             if (data != null) {
-              final authentication = await data.authentication;
+              final GoogleSignInAuthentication authentication =
+                  await data.authentication;
               idToken = authentication.idToken;
               AnnouncementHelper.instance
                   .googleLogin(idToken: idToken, callback: callback);
-            } else if (isNotLogin)
+            } else if (isNotLogin) {
               Navigator.of(context, rootNavigator: true).pop();
+            }
           } catch (e, s) {
             ApUtils.showToast(context, ap.thirdPartyLoginFail);
             CrashlyticsUtils.instance?.recordError(e, s);
             if (isNotLogin) Navigator.of(context, rootNavigator: true).pop();
-            if (CrashlyticsUtils.instance != null) throw e;
+            if (CrashlyticsUtils.instance != null) rethrow;
           }
           break;
         case AnnouncementLoginType.apple:
           try {
             if (idToken == null) {
-              final credential = await SignInWithApple.getAppleIDCredential(
-                scopes: [AppleIDAuthorizationScopes.email],
+              final AuthorizationCredentialAppleID credential =
+                  await SignInWithApple.getAppleIDCredential(
+                scopes: <AppleIDAuthorizationScopes>[
+                  AppleIDAuthorizationScopes.email
+                ],
               );
               idToken = credential.identityToken;
             }

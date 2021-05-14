@@ -9,8 +9,9 @@ import 'package:flutter/cupertino.dart';
 import 'package:sprintf/sprintf.dart';
 
 class CourseNotifyData {
+  // ignore: constant_identifier_names
   static const VERSION = 2;
-  static const INITIAL_ID = 1;
+  static const initialId = 1;
 
   late int version;
   late int lastId;
@@ -20,33 +21,37 @@ class CourseNotifyData {
 
   CourseNotifyData({
     this.version = VERSION,
-    this.lastId = INITIAL_ID,
+    this.lastId = initialId,
     this.data = const [],
   });
 
-  factory CourseNotifyData.fromRawJson(String str) =>
-      CourseNotifyData.fromJson(json.decode(str));
+  factory CourseNotifyData.fromRawJson(String str) => CourseNotifyData.fromJson(
+        json.decode(str) as Map<String, dynamic>,
+      );
 
   String toRawJson() => json.encode(toJson());
 
   factory CourseNotifyData.fromJson(Map<String, dynamic> json) =>
       CourseNotifyData(
-        version: json["version"] == null ? null : json["version"],
-        lastId: json["lastId"] == null ? null : json["lastId"],
-        data: json["data"] == null
+        version: json['version'] as int,
+        lastId: json['lastId'] as int,
+        data: json['data'] == null
             ? []
             : List<CourseNotify>.from(
-                json["data"].map((x) => CourseNotify.fromJson(x))),
+                (json['data'] as List<dynamic>).map(
+                  (x) => CourseNotify.fromJson(x as Map<String, dynamic>),
+                ),
+              ),
       );
 
   Map<String, dynamic> toJson() => {
-        "version": version,
-        "lastId": lastId,
-        "data": List<dynamic>.from(data.map((x) => x.toJson())),
+        'version': version,
+        'lastId': lastId,
+        'data': List<dynamic>.from(data.map((x) => x.toJson())),
       };
 
   CourseNotify? getByCode(String? code, String? startTime, int weekIndex) {
-    for (var value in data) {
+    for (final value in data) {
       if (value.code == code &&
           value.startTime == startTime &&
           value.weekday == weekIndex) return value;
@@ -56,82 +61,86 @@ class CourseNotifyData {
 
   void save() {
     Preferences.setString(
-      '${ApConstants.PACKAGE_NAME}'
+      '${ApConstants.packageName}'
       '.course_notify_data_$tag',
-      this.toRawJson(),
+      toRawJson(),
     );
   }
 
   void update(BuildContext context, String tag, CourseData courseData) {
-    final key = '${ApConstants.PACKAGE_NAME}.course_notify_data_$tag';
+    final key = '${ApConstants.packageName}.course_notify_data_$tag';
     final ap = ApLocalizations.of(context);
-    var cache = CourseNotifyData.load(key);
-    cache.data.forEach((courseNotify) {
-      courseData.courses?.forEach((courseDetail) {
+    final cache = CourseNotifyData.load(key);
+    for (final courseNotify in cache.data) {
+      for (final courseDetail in courseData.courses!) {
         if (courseDetail.code == courseNotify.code) {
           courseNotify.title = sprintf(ap.courseNotifyContent, [
             courseNotify.title,
-            courseNotify.location == null || courseNotify.location!.isEmpty
-                ? ap.courseNotifyUnknown
-                : courseNotify.location
+            if (courseNotify.location == null || courseNotify.location!.isEmpty)
+              ap.courseNotifyUnknown
+            else
+              courseNotify.location
           ]);
         }
-      });
-    });
+      }
+    }
     Preferences.setString(
       key,
-      this.toRawJson(),
+      toRawJson(),
     );
   }
 
   factory CourseNotifyData.load(String? tag) {
-    String rawString = Preferences.getString(
-      '${ApConstants.PACKAGE_NAME}.'
+    final String rawString = Preferences.getString(
+      '${ApConstants.packageName}.'
           'course_notify_data_$tag',
       '',
     );
-    if (rawString == '')
+    if (rawString == '') {
       return CourseNotifyData(data: [])..tag = tag;
-    else
+    } else {
       return CourseNotifyData.fromRawJson(rawString)..tag = tag;
+    }
   }
 
   factory CourseNotifyData.loadCurrent() {
-    var semester = Preferences.getString(
-      ApConstants.CURRENT_SEMESTER_CODE,
-      ApConstants.SEMESTER_LATEST,
+    final semester = Preferences.getString(
+      ApConstants.currentSemesterCode,
+      ApConstants.semesterLatest,
     );
-    String rawString = Preferences.getString(
-      '${ApConstants.PACKAGE_NAME}.'
+    final String rawString = Preferences.getString(
+      '${ApConstants.packageName}.'
           'course_notify_data_$semester',
       '',
     );
-    print(rawString);
-    if (rawString == '')
+    debugPrint(rawString);
+    if (rawString == '') {
       return CourseNotifyData(data: [])..tag = semester;
-    else
+    } else {
       return CourseNotifyData.fromRawJson(rawString)..tag = semester;
+    }
   }
 
   static void clearOldVersionNotification({
     required String tag,
     required String newTag,
   }) {
-    String rawString = Preferences.getString(
-      '${ApConstants.PACKAGE_NAME}.'
+    final String rawString = Preferences.getString(
+      '${ApConstants.packageName}.'
           'course_notify_data_$tag',
       '',
     );
-    print(rawString);
+    debugPrint(rawString);
     if (rawString.isNotEmpty) {
-      var courseNotifyData = CourseNotifyData.fromRawJson(rawString);
-      courseNotifyData.data.forEach(
-          (element) => NotificationUtils.cancelCourseNotify(id: element.id));
+      final courseNotifyData = CourseNotifyData.fromRawJson(rawString);
+      for (final element in courseNotifyData.data) {
+        NotificationUtils.cancelCourseNotify(id: element.id);
+      }
       courseNotifyData.data.clear();
       courseNotifyData.tag = newTag;
       courseNotifyData.save();
     }
-    Preferences.remove('${ApConstants.PACKAGE_NAME}.course_notify_data_$tag');
+    Preferences.remove('${ApConstants.packageName}.course_notify_data_$tag');
   }
 }
 
@@ -142,7 +151,8 @@ class CourseNotify {
   String? code;
 
   ///The day of the week [DateTime.monday]..[DateTime.sunday].
-  ///In accordance with ISO 8601 a week starts with Monday, which has the value 1.
+  ///In accordance with ISO 8601 a week starts with Monday,
+  /// which has the value 1.
   int weekday;
 
   String startTime;
@@ -158,29 +168,31 @@ class CourseNotify {
     this.code,
   });
 
-  factory CourseNotify.fromRawJson(String str) =>
-      CourseNotify.fromJson(json.decode(str));
+  factory CourseNotify.fromRawJson(String str) => CourseNotify.fromJson(
+        json.decode(str) as Map<String, dynamic>,
+      );
 
   String toRawJson() => json.encode(toJson());
 
   factory CourseNotify.fromJson(Map<String, dynamic> json) => CourseNotify(
-        id: json["id"] == null ? null : json["id"],
-        title: json["title"] == null ? null : json["title"],
-        location: json["location"] == null ? null : json["location"],
-        code: json["code"] == null ? null : json["code"],
-        weekday: json["weekday"] == null
-            ? (json["weeklyIndex"] == null ? null : json["weeklyIndex"] + 1)
-            : json["weekday"],
-        startTime: json["startTime"] == null ? null : json["startTime"],
+        id: json['id'] as int,
+        title: json['title'] as String,
+        location: json['location'] as String,
+        code: json['code'] as String,
+        weekday: json['weekday'] as int? ??
+            (json['weeklyIndex'] == null
+                ? 1
+                : (json['weeklyIndex'] as int) + 1),
+        startTime: json['startTime'] as String,
       );
 
   Map<String, dynamic> toJson() => {
-        "id": id,
-        "title": title == null ? null : title,
-        "location": location == null ? null : location,
-        "code": code == null ? null : code,
-        "weekday": weekday,
-        "startTime": startTime,
+        'id': id,
+        'title': title,
+        'location': location,
+        'code': code,
+        'weekday': weekday,
+        'startTime': startTime,
       };
 
   factory CourseNotify.fromCourse({

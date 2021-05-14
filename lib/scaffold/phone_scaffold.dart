@@ -10,7 +10,7 @@ import 'package:flutter/material.dart';
 enum PhoneState { loading, finish, error }
 
 class PhoneScaffold extends StatefulWidget {
-  static const String routerName = "/info/phone";
+  static const String routerName = '/info/phone';
 
   final PhoneState state;
   final List<PhoneModel> phoneModelList;
@@ -32,7 +32,7 @@ class PhoneScaffoldState extends State<PhoneScaffold>
 
   ApLocalizations get ap => ApLocalizations.of(context);
 
-  TextStyle get _textStyle => TextStyle(
+  TextStyle get _textStyle => const TextStyle(
         fontSize: 18.0,
         fontWeight: FontWeight.bold,
       );
@@ -51,8 +51,8 @@ class PhoneScaffoldState extends State<PhoneScaffold>
   @override
   void initState() {
     AnalyticsUtils.instance?.setCurrentScreen(
-      "PhoneScaffold",
-      "phone_scaffold.dart",
+      'PhoneScaffold',
+      'phone_scaffold.dart',
     );
     super.initState();
   }
@@ -71,7 +71,7 @@ class PhoneScaffoldState extends State<PhoneScaffold>
   Widget _body() {
     switch (widget.state) {
       case PhoneState.loading:
-        return Center(
+        return const Center(
           child: CircularProgressIndicator(),
         );
       case PhoneState.error:
@@ -85,7 +85,7 @@ class PhoneScaffoldState extends State<PhoneScaffold>
           itemBuilder: (context, index) {
             if (widget.phoneModelList[index].number.isEmpty) {
               return Padding(
-                padding: EdgeInsets.symmetric(
+                padding: const EdgeInsets.symmetric(
                   vertical: 8.0,
                   horizontal: 16.0,
                 ),
@@ -95,8 +95,9 @@ class PhoneScaffoldState extends State<PhoneScaffold>
                   textAlign: TextAlign.left,
                 ),
               );
-            } else
+            } else {
               return _phoneItem(widget.phoneModelList[index]);
+            }
           },
         );
     }
@@ -104,12 +105,24 @@ class PhoneScaffoldState extends State<PhoneScaffold>
 
   Widget _phoneItem(PhoneModel phone) {
     return InkWell(
+      onTap: () {
+        AnalyticsUtils.instance?.logEvent('call_phone_click');
+        try {
+          ApUtils.callPhone(phone.number);
+          AnalyticsUtils.instance?.logEvent('call_phone_success');
+        } catch (e) {
+          AnalyticsUtils.instance?.logEvent('call_phone_error');
+        }
+      },
       child: Container(
-        padding: EdgeInsets.all(16.0),
+        padding: const EdgeInsets.all(16.0),
         width: double.infinity,
-        decoration: BoxDecoration(
+        decoration: const BoxDecoration(
           border: Border(
-            bottom: BorderSide(color: Colors.grey, width: 0.5),
+            bottom: BorderSide(
+              color: Colors.grey,
+              width: 0.5,
+            ),
           ),
         ),
         child: Column(
@@ -120,7 +133,7 @@ class PhoneScaffoldState extends State<PhoneScaffold>
               style: _textStyle,
               textAlign: TextAlign.left,
             ),
-            SizedBox(height: 8.0),
+            const SizedBox(height: 8.0),
             Text(
               phone.number,
               style: _textGreyStyle,
@@ -129,15 +142,6 @@ class PhoneScaffoldState extends State<PhoneScaffold>
           ],
         ),
       ),
-      onTap: () {
-        AnalyticsUtils.instance?.logEvent('call_phone_click');
-        try {
-          ApUtils.callPhone(phone.number);
-          AnalyticsUtils.instance?.logEvent('call_phone_success');
-        } catch (e) {
-          AnalyticsUtils.instance?.logEvent('call_phone_error');
-        }
-      },
     );
   }
 }

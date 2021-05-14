@@ -11,7 +11,7 @@ import '../config/constants.dart';
 import '../res/assets.dart';
 
 class LoginPage extends StatefulWidget {
-  static const String routerName = "/login";
+  static const String routerName = '/login';
 
   @override
   LoginPageState createState() => LoginPageState();
@@ -26,8 +26,8 @@ class LoginPageState extends State<LoginPage> {
   final usernameFocusNode = FocusNode();
   final passwordFocusNode = FocusNode();
 
-  var isRememberPassword = true;
-  var isAutoLogin = false;
+  bool isRememberPassword = true;
+  bool isAutoLogin = false;
 
   int gravity = Toast.bottom;
 
@@ -52,11 +52,10 @@ class LoginPageState extends State<LoginPage> {
         ApTextField(
           controller: _username,
           keyboardType: TextInputType.emailAddress,
-          textInputAction: TextInputAction.next,
           focusNode: usernameFocusNode,
           nextFocusNode: passwordFocusNode,
           labelText: ap.studentId,
-          autofillHints: [AutofillHints.username],
+          autofillHints: const [AutofillHints.username],
         ),
         ApTextField(
           obscureText: true,
@@ -68,9 +67,9 @@ class LoginPageState extends State<LoginPage> {
             _login();
           },
           labelText: ap.password,
-          autofillHints: [AutofillHints.password],
+          autofillHints: const [AutofillHints.password],
         ),
-        SizedBox(height: 8.0),
+        const SizedBox(height: 8.0),
         Row(
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
@@ -86,7 +85,7 @@ class LoginPageState extends State<LoginPage> {
             ),
           ],
         ),
-        SizedBox(height: 8.0),
+        const SizedBox(height: 8.0),
         ApButton(
           text: ap.login,
           onPressed: () {
@@ -118,7 +117,7 @@ class LoginPageState extends State<LoginPage> {
     );
   }
 
-  _onRememberPasswordChanged(bool value) async {
+  Future<void> _onRememberPasswordChanged(bool value) async {
     setState(() {
       isRememberPassword = value;
       if (!isRememberPassword) isAutoLogin = false;
@@ -127,7 +126,7 @@ class LoginPageState extends State<LoginPage> {
     });
   }
 
-  _onAutoLoginChanged(bool value) async {
+  Future<void> _onAutoLoginChanged(bool value) async {
     setState(() {
       isAutoLogin = value;
       isRememberPassword = isAutoLogin;
@@ -136,7 +135,7 @@ class LoginPageState extends State<LoginPage> {
     });
   }
 
-  _getPreference() async {
+  Future<void> _getPreference() async {
     isRememberPassword =
         Preferences.getBool(Constants.PREF_REMEMBER_PASSWORD, true);
     isAutoLogin = Preferences.getBool(Constants.PREF_AUTO_LOGIN, false);
@@ -148,7 +147,7 @@ class LoginPageState extends State<LoginPage> {
     });
   }
 
-  _login() async {
+  Future<void> _login() async {
     if (_username.text.isEmpty || _password.text.isEmpty) {
       ApUtils.showToast(context, ap.doNotEmpty, gravity: gravity);
     } else {
@@ -156,14 +155,15 @@ class LoginPageState extends State<LoginPage> {
     }
   }
 
-  asyncLogin() {
+  void asyncLogin() {
     showDialog(
       context: context,
       builder: (BuildContext context) => WillPopScope(
-          child: ProgressDialog(ap.logining),
-          onWillPop: () async {
-            return false;
-          }),
+        onWillPop: () async {
+          return false;
+        },
+        child: ProgressDialog(ap.logining),
+      ),
       barrierDismissible: false,
     );
     Preferences.setString(Constants.PREF_USERNAME, _username.text);
@@ -177,16 +177,16 @@ class LoginPageState extends State<LoginPage> {
     Navigator.of(context).pop(true);
   }
 
-  _offlineLogin() async {
-    String username = Preferences.getString(Constants.PREF_USERNAME, '');
-    String password =
+  Future<void> _offlineLogin() async {
+    final String username = Preferences.getString(Constants.PREF_USERNAME, '');
+    final String password =
         Preferences.getStringSecurity(Constants.PREF_PASSWORD, '');
     if (username.isEmpty || password.isEmpty) {
       ApUtils.showToast(context, ap.noOfflineLoginData);
     } else {
-      if (username != _username.text || password != _password.text)
+      if (username != _username.text || password != _password.text) {
         ApUtils.showToast(context, ap.offlineLoginPasswordError);
-      else {
+      } else {
         Preferences.setBool(Constants.PREF_IS_OFFLINE_LOGIN, true);
         ApUtils.showToast(context, ap.loadOfflineData);
         Navigator.of(context).pop(true);
@@ -194,7 +194,7 @@ class LoginPageState extends State<LoginPage> {
     }
   }
 
-  void clearSetting() async {
+  Future<void> clearSetting() async {
     Preferences.setBool(Constants.PREF_AUTO_LOGIN, false);
     setState(() {
       isAutoLogin = false;

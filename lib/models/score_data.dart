@@ -12,40 +12,47 @@ class ScoreData {
     this.detail,
   });
 
-  factory ScoreData.fromRawJson(String str) =>
-      ScoreData.fromJson(json.decode(str));
+  factory ScoreData.fromRawJson(String str) => ScoreData.fromJson(
+        json.decode(str) as Map<String, dynamic>,
+      );
 
   String toRawJson() => json.encode(toJson());
 
-  factory ScoreData.fromJson(Map<String, dynamic> json) => new ScoreData(
-        scores:
-            new List<Score>.from(json["scores"].map((x) => Score.fromJson(x))),
-        detail: Detail.fromJson(json["detail"]),
+  factory ScoreData.fromJson(Map<String, dynamic> json) => ScoreData(
+        scores: List<Score>.from(
+          (json['scores'] as List<dynamic>).map(
+            (x) => Score.fromJson(x as Map<String, dynamic>),
+          ),
+        ),
+        detail: Detail.fromJson(
+          json['detail'] as Map<String, dynamic>,
+        ),
       );
 
   Map<String, dynamic> toJson() => {
-        "scores": new List<dynamic>.from(scores!.map((x) => x.toJson())),
-        "detail": detail!.toJson(),
+        'scores': List<dynamic>.from(scores!.map((x) => x.toJson())),
+        'detail': detail!.toJson(),
       };
 
   void save(String tag) {
     Preferences.setString(
-      '${ApConstants.PACKAGE_NAME}'
+      '${ApConstants.packageName}'
       '.score_data_$tag',
-      this.toRawJson(),
+      toRawJson(),
     );
   }
 
   static ScoreData? load(String tag) {
-    String rawString = Preferences.getString(
-      '${ApConstants.PACKAGE_NAME}'
+    final String rawString = Preferences.getString(
+      '${ApConstants.packageName}'
           '.score_data_$tag',
       '',
     );
-    if (rawString == '')
+    if (rawString == '') {
       return null;
-    else
+    } else {
       return ScoreData.fromRawJson(rawString);
+    }
   }
 }
 
@@ -68,30 +75,32 @@ class Detail {
     this.classPercentage,
   });
 
-  factory Detail.fromRawJson(String str) => Detail.fromJson(json.decode(str));
+  factory Detail.fromRawJson(String str) => Detail.fromJson(
+        json.decode(str) as Map<String, dynamic>,
+      );
 
-  bool get isCreditEmpty => (creditTaken == null && creditEarned == null);
+  bool get isCreditEmpty => creditTaken == null && creditEarned == null;
 
   String toRawJson() => json.encode(toJson());
 
-  factory Detail.fromJson(Map<String, dynamic> json) => new Detail(
-        creditTaken: json["creditTaken"],
-        creditEarned: json["creditEarned"],
-        conduct: json["conduct"],
-        average: json["average"],
-        classRank: json["classRank"],
-        departmentRank: json["departmentRank"],
-        classPercentage: json["classPercentage"],
+  factory Detail.fromJson(Map<String, dynamic> json) => Detail(
+        creditTaken: json['creditTaken'] as double,
+        creditEarned: json['creditEarned'] as double,
+        conduct: json['conduct'] as double,
+        average: json['average'] as double,
+        classRank: json['classRank'] as String,
+        departmentRank: json['departmentRank'] as String,
+        classPercentage: json['classPercentage'] as double,
       );
 
   Map<String, dynamic> toJson() => {
-        "creditTaken": creditTaken,
-        "creditEarned": creditEarned,
-        "conduct": conduct,
-        "average": average,
-        "classRank": classRank,
-        "departmentRank": departmentRank,
-        "classPercentage": classPercentage,
+        'creditTaken': creditTaken,
+        'creditEarned': creditEarned,
+        'conduct': conduct,
+        'average': average,
+        'classRank': classRank,
+        'departmentRank': departmentRank,
+        'classPercentage': classPercentage,
       };
 }
 
@@ -124,37 +133,39 @@ class Score {
     this.remark,
   });
 
-  factory Score.fromRawJson(String str) => Score.fromJson(json.decode(str));
+  factory Score.fromRawJson(String str) => Score.fromJson(
+        json.decode(str) as Map<String, dynamic>,
+      );
 
   String toRawJson() => json.encode(toJson());
 
-  factory Score.fromJson(Map<String, dynamic> json) => new Score(
-        courseNumber: json["courseNumber"],
-        isPreScore: json["isPreScore"] ?? false,
-        title: json["title"],
-        units: json["units"],
-        hours: json["hours"],
-        required: json["required"],
-        at: json["at"],
-        middleScore: json["middleScore"],
-        generalScore: json['generalScore'],
-        finalScore: json["finalScore"],
-        semesterScore: json["semesterScore"],
-        remark: json["remark"],
+  factory Score.fromJson(Map<String, dynamic> json) => Score(
+        courseNumber: json['courseNumber'] as String?,
+        isPreScore: json['isPreScore'] as bool? ?? false,
+        title: json['title'] as String?,
+        units: json['units'] as String?,
+        hours: json['hours'] as String?,
+        required: json['required'] as String?,
+        at: json['at'] as String?,
+        middleScore: json['middleScore'] as String?,
+        generalScore: json['generalScore'] as String?,
+        finalScore: json['finalScore'] as String?,
+        semesterScore: json['semesterScore'] as String?,
+        remark: json['remark'] as String?,
       );
 
   Map<String, dynamic> toJson() => {
-        "courseNumber": courseNumber,
-        "isPreScore": isPreScore,
-        "title": title,
-        "units": units,
-        "hours": hours,
-        "required": required,
-        "at": at,
-        "middleScore": middleScore,
-        "generalScore": generalScore,
-        "finalScore": finalScore,
-        "semesterScore": semesterScore,
-        "remark": remark,
+        'courseNumber': courseNumber,
+        'isPreScore': isPreScore,
+        'title': title,
+        'units': units,
+        'hours': hours,
+        'required': required,
+        'at': at,
+        'middleScore': middleScore,
+        'generalScore': generalScore,
+        'finalScore': finalScore,
+        'semesterScore': semesterScore,
+        'remark': remark,
       };
 }

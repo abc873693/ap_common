@@ -8,22 +8,22 @@ extension ApSupportLanguageExtension on ApSupportLanguage {
   String get code {
     switch (index) {
       case 1:
-        return ApSupportLanguageConstants.ZH;
+        return ApSupportLanguageConstants.zh;
       case 2:
-        return ApSupportLanguageConstants.EN;
+        return ApSupportLanguageConstants.en;
       case 0:
       default:
-        return ApSupportLanguageConstants.SYSTEM;
+        return ApSupportLanguageConstants.system;
     }
   }
 
   static int fromCode(String code) {
     switch (code) {
-      case ApSupportLanguageConstants.ZH:
+      case ApSupportLanguageConstants.zh:
         return 1;
-      case ApSupportLanguageConstants.EN:
+      case ApSupportLanguageConstants.en:
         return 2;
-      case ApSupportLanguageConstants.SYSTEM:
+      case ApSupportLanguageConstants.system:
       default:
         return 0;
     }
@@ -31,7 +31,7 @@ extension ApSupportLanguageExtension on ApSupportLanguage {
 }
 
 class ApSupportLanguageConstants {
-  static const SYSTEM = 'system';
-  static const ZH = 'zh';
-  static const EN = 'en';
+  static const system = 'system';
+  static const zh = 'zh';
+  static const en = 'en';
 }

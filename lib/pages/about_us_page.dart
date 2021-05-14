@@ -13,7 +13,7 @@ import 'package:url_launcher/url_launcher.dart';
 
 class AboutUsPage extends StatefulWidget {
   /// /aboutus
-  static const String routerName = "/about";
+  static const String routerName = '/about';
   final String assetImage;
   final String fbFanPageUrl;
   final String fbFanPageId;
@@ -45,8 +45,8 @@ class AboutUsPageState extends State<AboutUsPage> {
   @override
   void initState() {
     AnalyticsUtils.instance?.setCurrentScreen(
-      "AboutUsPage",
-      "about_us_page.dart",
+      'AboutUsPage',
+      'about_us_page.dart',
     );
     super.initState();
   }
@@ -58,13 +58,12 @@ class AboutUsPageState extends State<AboutUsPage> {
 
   @override
   Widget build(BuildContext context) {
-    var expandedHeight = MediaQuery.of(context).size.height * 0.25;
+    final double expandedHeight = MediaQuery.of(context).size.height * 0.25;
     return Scaffold(
       body: CustomScrollView(
         slivers: <Widget>[
           SliverAppBar(
             expandedHeight: expandedHeight,
-            floating: false,
             pinned: true,
             title: Text(app.about),
             actions: widget.actions,
@@ -86,8 +85,10 @@ class AboutUsPageState extends State<AboutUsPage> {
                 children: <Widget>[
                   _item(app.aboutItcTitle, app.aboutItcContent),
                   Padding(
-                    padding:
-                        EdgeInsets.symmetric(vertical: 20.0, horizontal: 26.0),
+                    padding: const EdgeInsets.symmetric(
+                      vertical: 20.0,
+                      horizontal: 26.0,
+                    ),
                     child: Align(
                       alignment: Alignment.topRight,
                       child: Image.asset(
@@ -100,79 +101,90 @@ class AboutUsPageState extends State<AboutUsPage> {
                 ],
               ),
               Card(
-                margin: EdgeInsets.symmetric(vertical: 8.0, horizontal: 16.0),
+                margin: const EdgeInsets.symmetric(
+                  vertical: 8.0,
+                  horizontal: 16.0,
+                ),
                 elevation: 4.0,
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(12.0),
                 ),
                 child: Container(
-                  padding: EdgeInsets.only(
-                      top: 24.0, left: 16.0, bottom: 16.0, right: 16.0),
+                  padding: const EdgeInsets.only(
+                    top: 24.0,
+                    left: 16.0,
+                    bottom: 16.0,
+                    right: 16.0,
+                  ),
                   width: double.infinity,
                   child: Column(
-                    mainAxisSize: MainAxisSize.max,
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: <Widget>[
                       SelectableText(
                         app.aboutContactUsTitle,
-                        style: TextStyle(fontSize: 18.0),
+                        style: const TextStyle(fontSize: 18.0),
                       ),
-                      SizedBox(
+                      const SizedBox(
                         height: 4.0,
                       ),
                       Padding(
-                        padding: EdgeInsets.symmetric(horizontal: 16.0),
+                        padding: const EdgeInsets.symmetric(horizontal: 16.0),
                         child: Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: <Widget>[
                             IconButton(
                               icon: Image.asset(ApImageAssets.fb),
                               onPressed: () {
-                                if (kIsWeb)
+                                if (kIsWeb) {
                                   launch(widget.fbFanPageUrl);
-                                else if (Platform.isAndroid)
+                                } else if (Platform.isAndroid) {
                                   launch('fb://page/${widget.fbFanPageId}')
-                                      .catchError((onError) =>
+                                      .catchError((dynamic onError) =>
                                           launch(widget.fbFanPageUrl));
-                                else if (Platform.isIOS)
+                                } else if (Platform.isIOS) {
                                   launch('fb://profile/${widget.fbFanPageId}')
-                                      .catchError((onError) =>
+                                      .catchError((dynamic onError) =>
                                           launch(widget.fbFanPageUrl));
-                                else
+                                } else {
                                   launch(widget.fbFanPageUrl).catchError(
-                                    (onError) {
+                                    (dynamic onError) {
                                       ApUtils.showToast(
                                         context,
                                         app.platformError,
                                       );
                                     },
                                   );
-                                AnalyticsUtils.instance?.logEvent("fb_click");
+                                }
+                                AnalyticsUtils.instance?.logEvent('fb_click');
                               },
                               iconSize: 48.0,
                             ),
                             IconButton(
                               icon: Image.asset(ApImageAssets.github),
                               onPressed: () {
-                                if (kIsWeb)
+                                if (kIsWeb) {
                                   launch(widget.githubUrl);
-                                else if (Platform.isAndroid)
+                                } else if (Platform.isAndroid) {
                                   launch('github://organization/${widget.githubName}')
-                                      .catchError((onError) =>
-                                          launch(widget.githubUrl));
-                                else if (Platform.isIOS)
+                                      // ignore: always_specify_types
+                                      .catchError(
+                                    (dynamic onError) =>
+                                        launch(widget.githubUrl),
+                                  );
+                                } else if (Platform.isIOS) {
                                   launch(widget.githubUrl);
-                                else
+                                } else {
                                   launch(widget.githubUrl).catchError(
-                                    (onError) {
+                                    (dynamic onError) {
                                       ApUtils.showToast(
                                         context,
                                         app.platformError,
                                       );
                                     },
                                   );
+                                }
                                 AnalyticsUtils.instance
-                                    ?.logEvent("github_click");
+                                    ?.logEvent('github_click');
                               },
                               iconSize: 48.0,
                             ),
@@ -180,7 +192,7 @@ class AboutUsPageState extends State<AboutUsPage> {
                               icon: Image.asset(ApImageAssets.email),
                               onPressed: () {
                                 launch('mailto:${widget.email}').catchError(
-                                  (onError) {
+                                  (dynamic onError) {
                                     ApUtils.showToast(
                                       context,
                                       app.platformError,
@@ -188,7 +200,7 @@ class AboutUsPageState extends State<AboutUsPage> {
                                   },
                                 );
                                 AnalyticsUtils.instance
-                                    ?.logEvent("email_click");
+                                    ?.logEvent('email_click');
                               },
                               iconSize: 48.0,
                             ),
@@ -207,25 +219,24 @@ class AboutUsPageState extends State<AboutUsPage> {
     );
   }
 
-  _item(String text, String subText) => Card(
-        margin: EdgeInsets.symmetric(vertical: 8.0, horizontal: 16.0),
+  Widget _item(String text, String subText) => Card(
+        margin: const EdgeInsets.symmetric(vertical: 8.0, horizontal: 16.0),
         elevation: 4.0,
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(12.0),
         ),
         child: Container(
-          padding:
-              EdgeInsets.only(top: 24.0, left: 16.0, bottom: 16.0, right: 16.0),
+          padding: const EdgeInsets.only(
+              top: 24.0, left: 16.0, bottom: 16.0, right: 16.0),
           width: double.infinity,
           child: Column(
-            mainAxisSize: MainAxisSize.max,
             crossAxisAlignment: CrossAxisAlignment.start,
             children: <Widget>[
               SelectableLinkify(
                 text: text,
-                style: TextStyle(fontSize: 18.0),
+                style: const TextStyle(fontSize: 18.0),
               ),
-              SizedBox(
+              const SizedBox(
                 height: 4.0,
               ),
               SelectableLinkify(
@@ -234,8 +245,9 @@ class AboutUsPageState extends State<AboutUsPage> {
                   fontSize: 14.0,
                   color: ApTheme.of(context).grey,
                 ),
-                options: LinkifyOptions(humanize: false),
-                onOpen: (link) async => ApUtils.launchUrl(link.url),
+                options: const LinkifyOptions(humanize: false),
+                onOpen: (LinkableElement link) async =>
+                    ApUtils.launchUrl(link.url),
               ),
             ],
           ),

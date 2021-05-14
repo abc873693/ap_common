@@ -31,8 +31,13 @@ class ApTheme extends InheritedWidget {
     return true;
   }
 
+  // ignore: constant_identifier_names
   static const String DARK = 'dark';
+
+  // ignore: constant_identifier_names
   static const String LIGHT = 'light';
+
+  // ignore: constant_identifier_names
   static const String SYSTEM = 'system';
 
   static String code = ApTheme.LIGHT;
@@ -82,7 +87,7 @@ class ApTheme extends InheritedWidget {
   Color get semesterText {
     switch (brightness) {
       case Brightness.dark:
-        return Color(0xffffffff);
+        return const Color(0xffffffff);
       case Brightness.light:
       default:
         return ApColors.blue500;
@@ -109,23 +114,23 @@ class ApTheme extends InheritedWidget {
     }
   }
 
-  get disabled {
+  Color get disabled {
     switch (brightness) {
       case Brightness.dark:
-        return Color(0xFF424242);
+        return const Color(0xFF424242);
       case Brightness.light:
       default:
-        return Color(0xFFBDBDBD);
+        return const Color(0xFFBDBDBD);
     }
   }
 
   Color get calendarTileSelect {
     switch (brightness) {
       case Brightness.dark:
-        return Color(0xff000000);
+        return const Color(0xff000000);
       case Brightness.light:
       default:
-        return Color(0xffffffff);
+        return const Color(0xffffffff);
     }
   }
 
@@ -165,7 +170,7 @@ class ApTheme extends InheritedWidget {
         return ApColors.grey100;
       case Brightness.light:
       default:
-        return Color(0xff737373);
+        return const Color(0xff737373);
     }
   }
 
@@ -175,11 +180,11 @@ class ApTheme extends InheritedWidget {
         return ApColors.onyx;
       case Brightness.light:
       default:
-        return Color(0xffffffff);
+        return const Color(0xffffffff);
     }
   }
 
-  get snackBarActionTextColor {
+  Color get snackBarActionTextColor {
     switch (brightness) {
       case Brightness.dark:
         return ApColors.yellow500;
@@ -192,10 +197,10 @@ class ApTheme extends InheritedWidget {
   Color get toastBackground {
     switch (brightness) {
       case Brightness.light:
-        return Color(0xAA000000);
+        return const Color(0xAA000000);
       case Brightness.dark:
       default:
-        return Color(0xAAFFFFFF);
+        return const Color(0xAAFFFFFF);
     }
   }
 
@@ -282,7 +287,7 @@ class ApTheme extends InheritedWidget {
   Color get background {
     switch (brightness) {
       case Brightness.dark:
-        return Color(0xff121212);
+        return const Color(0xff121212);
       case Brightness.light:
       default:
         return Colors.white;
@@ -292,17 +297,17 @@ class ApTheme extends InheritedWidget {
   static ThemeData get light => ThemeData(
         //platform: TargetPlatform.iOS,
         brightness: Brightness.light,
-        appBarTheme: AppBarTheme(
+        appBarTheme: const AppBarTheme(
           color: ApColors.blue500,
         ),
         pageTransitionsTheme: _pageTransitionsTheme,
         accentColor: ApColors.blue500,
         unselectedWidgetColor: ApColors.grey500,
         backgroundColor: Colors.black12,
-        textSelectionTheme: TextSelectionThemeData(
+        textSelectionTheme: const TextSelectionThemeData(
           selectionColor: ApColors.blue200,
         ),
-        inputDecorationTheme: InputDecorationTheme(
+        inputDecorationTheme: const InputDecorationTheme(
           labelStyle: TextStyle(color: Colors.white),
           border: UnderlineInputBorder(
             borderSide: BorderSide(color: Colors.white),
@@ -315,17 +320,17 @@ class ApTheme extends InheritedWidget {
         //platform: TargetPlatform.iOS,
         brightness: Brightness.dark,
         pageTransitionsTheme: _pageTransitionsTheme,
-        appBarTheme: AppBarTheme(
+        appBarTheme: const AppBarTheme(
           color: ApColors.blueDark,
         ),
         scaffoldBackgroundColor: ApColors.onyx,
         accentColor: ApColors.blue300,
         unselectedWidgetColor: ApColors.grey200,
         backgroundColor: Colors.black12,
-        textSelectionTheme: TextSelectionThemeData(
+        textSelectionTheme: const TextSelectionThemeData(
           selectionColor: ApColors.blue200,
         ),
-        inputDecorationTheme: InputDecorationTheme(
+        inputDecorationTheme: const InputDecorationTheme(
           labelStyle: TextStyle(color: Colors.white),
           border: UnderlineInputBorder(
             borderSide: BorderSide(color: Colors.white),

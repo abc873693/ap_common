@@ -13,7 +13,7 @@ export 'package:flutter_keyboard_visibility/flutter_keyboard_visibility.dart';
 enum LogoMode { text, image }
 
 class LoginScaffold extends StatefulWidget {
-  static const String routerName = "/login";
+  static const String routerName = '/login';
   final LogoMode logoMode;
   final String logoSource;
   final List<Widget> forms;
@@ -40,10 +40,11 @@ class LoginScaffoldState extends State<LoginScaffold> {
         widget.enableKeyboardDoneButton) {
       KeyboardVisibilityController().onChange.listen(
         (bool visible) {
-          if (visible)
+          if (visible) {
             ApUtils.showOverlay(context, ApLocalizations.of(context).done);
-          else
+          } else {
             ApUtils.removeOverlay();
+          }
         },
       );
     }
@@ -64,8 +65,8 @@ class LoginScaffoldState extends State<LoginScaffold> {
       resizeToAvoidBottomInset: orientation == Orientation.portrait,
       body: AutofillGroup(
         child: Container(
-          alignment: Alignment(0, 0),
-          padding: EdgeInsets.symmetric(horizontal: 30.0),
+          alignment: const Alignment(0, 0),
+          padding: const EdgeInsets.symmetric(horizontal: 30.0),
           child: orientation == Orientation.portrait
               ? Column(
                   crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -98,8 +99,8 @@ class LoginScaffoldState extends State<LoginScaffold> {
     }
   }
 
-  _renderContent(Orientation orientation) {
-    List<Widget> list = orientation == Orientation.portrait
+  List<Widget> _renderContent(Orientation orientation) {
+    final List<Widget> list = orientation == Orientation.portrait
         ? <Widget>[
             Center(
               child: logo,
@@ -143,6 +144,7 @@ class TextCheckBox extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
+      onTap: (onChanged == null) ? null : () => onChanged?.call(value),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.end,
         children: <Widget>[
@@ -159,11 +161,10 @@ class TextCheckBox extends StatelessWidget {
           ),
           Text(
             text,
-            style: TextStyle(color: Colors.white),
+            style: const TextStyle(color: Colors.white),
           )
         ],
       ),
-      onTap: (onChanged == null) ? null : () => onChanged?.call(value),
     );
   }
 }
@@ -180,16 +181,16 @@ class ApButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
+    return SizedBox(
       width: double.infinity,
       child: ElevatedButton(
         style: ElevatedButton.styleFrom(
-          shape: RoundedRectangleBorder(
+          shape: const RoundedRectangleBorder(
             borderRadius: BorderRadius.all(
               Radius.circular(30.0),
             ),
           ),
-          padding: EdgeInsets.all(14.0),
+          padding: const EdgeInsets.all(14.0),
           primary: Colors.white,
         ),
         onPressed: onPressed,
@@ -219,7 +220,10 @@ class ApFlatButton extends StatelessWidget {
         onPressed: onPressed,
         child: Text(
           text!,
-          style: TextStyle(color: Colors.white, fontSize: 16.0),
+          style: const TextStyle(
+            color: Colors.white,
+            fontSize: 16.0,
+          ),
         ),
       ),
     );
@@ -239,7 +243,7 @@ class TextLogo extends StatelessWidget {
     return Text(
       text,
       textAlign: TextAlign.center,
-      style: TextStyle(
+      style: const TextStyle(
         fontSize: 120,
         color: Colors.white,
       ),
@@ -278,7 +282,6 @@ class ApTextField extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return TextField(
-      maxLines: 1,
       obscureText: obscureText,
       controller: controller,
       textInputAction: textInputAction,
@@ -288,15 +291,16 @@ class ApTextField extends StatelessWidget {
       onChanged: onChanged,
       onSubmitted: (text) {
         focusNode?.unfocus();
-        if (nextFocusNode != null)
+        if (nextFocusNode != null) {
           FocusScope.of(context).requestFocus(nextFocusNode);
+        }
         onSubmitted?.call(text);
       },
       decoration: InputDecoration(
         labelText: labelText,
         counterText: '',
       ),
-      style: TextStyle(
+      style: const TextStyle(
         color: Colors.white,
         fontSize: 18.0,
         decorationColor: Colors.white,

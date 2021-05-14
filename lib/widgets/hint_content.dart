@@ -6,7 +6,7 @@ class HintContent extends StatelessWidget {
   final IconData icon;
   final String content;
 
-  HintContent({
+  const HintContent({
     required this.icon,
     required this.content,
   });
@@ -19,7 +19,7 @@ class HintContent extends StatelessWidget {
         direction: Axis.vertical,
         children: <Widget>[
           Container(
-            padding: EdgeInsets.all(25.0),
+            padding: const EdgeInsets.all(25.0),
             decoration: BoxDecoration(
               image: DecorationImage(
                 image: AssetImage(ApTheme.of(context).dashLine),
@@ -31,7 +31,7 @@ class HintContent extends StatelessWidget {
               color: ApTheme.of(context).blueAccent,
             ),
           ),
-          SizedBox(height: 20.0),
+          const SizedBox(height: 20.0),
           Text(
             content,
             textAlign: TextAlign.center,

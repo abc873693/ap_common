@@ -16,20 +16,21 @@ class CourseData {
   List<TimeCode>? timeCodes;
 
   bool get hasHoliday {
-    for (var course in courses!) {
+    for (final course in courses!) {
       if (course.times == null) continue;
-      for (var section in course.times!)
+      for (final section in course.times!) {
         if (section.weekday == DateTime.saturday ||
             section.weekday == DateTime.sunday) return true;
+      }
     }
     return false;
   }
 
   int? get maxTimeCodeIndex {
     int? index = 10;
-    for (var course in courses!) {
+    for (final course in courses!) {
       if (course.times == null) continue;
-      for (var time in course.times!) {
+      for (final time in course.times!) {
         if (time.index! > index!) {
           index = time.index;
         }
@@ -40,9 +41,9 @@ class CourseData {
 
   int? get minTimeCodeIndex {
     int? index = 10;
-    for (var course in courses!) {
+    for (final Course course in courses!) {
       if (course.times == null) continue;
-      for (var time in course.times!) {
+      for (final time in course.times!) {
         if (time.index! < index!) {
           index = time.index;
         }
@@ -60,51 +61,60 @@ class CourseData {
         timeCodes: timeCodes ?? this.timeCodes,
       );
 
-  factory CourseData.fromRawJson(String str) =>
-      CourseData.fromJson(json.decode(str));
+  factory CourseData.fromRawJson(String str) => CourseData.fromJson(
+        json.decode(str) as Map<String, dynamic>,
+      );
 
   String toRawJson() => json.encode(toJson());
 
   factory CourseData.fromJson(Map<String, dynamic> json) => CourseData(
-        courses: json["courses"] == null
+        courses: json['courses'] == null
             ? null
-            : List<Course>.from(json["courses"].map((x) => Course.fromJson(x))),
-        timeCodes: json["timeCodes"] == null
+            : List<Course>.from(
+                (json['courses'] as List<dynamic>).map(
+                  (x) => Course.fromJson(x as Map<String, dynamic>),
+                ),
+              ),
+        timeCodes: json['timeCodes'] == null
             ? null
             : List<TimeCode>.from(
-                json["timeCodes"].map((x) => TimeCode.fromJson(x))),
+                (json['timeCodes'] as List<dynamic>).map(
+                  (x) => TimeCode.fromJson(x as Map<String, dynamic>),
+                ),
+              ),
       );
 
   Map<String, dynamic> toJson() => {
-        "courses": courses == null
+        'courses': courses == null
             ? null
             : List<dynamic>.from(courses!.map((x) => x.toJson())),
-        "timeCodes": timeCodes == null
+        'timeCodes': timeCodes == null
             ? null
             : List<dynamic>.from(timeCodes!.map((x) => x.toJson())),
       };
 
   void save(String tag) {
     Preferences.setString(
-      '${ApConstants.PACKAGE_NAME}'
+      '${ApConstants.packageName}'
       '.course_data_$tag',
-      this.toRawJson(),
+      toRawJson(),
     );
   }
 
   static CourseData? load(String tag) {
-    String rawString = Preferences.getString(
-      '${ApConstants.PACKAGE_NAME}'
+    final String rawString = Preferences.getString(
+      '${ApConstants.packageName}'
           '.course_data_$tag',
       '',
     );
-    if (rawString == '')
+    if (rawString == '') {
       return null;
-    else
+    } else {
       return CourseData.fromRawJson(rawString);
+    }
   }
 
-  static migrateFrom0_10() async {
+  static Future<void> migrateFrom0_10() async {
     Preferences.prefs?.getKeys().forEach((key) {
       if (key.contains('course_data')) {
         debugPrint(key);
@@ -114,7 +124,7 @@ class CourseData {
   }
 
   List<List<Course>> get weekDayCourseList {
-    List<List<Course>> list = [
+    final List<List<Course>> list = [
       [],
       [],
       [],
@@ -125,8 +135,8 @@ class CourseData {
         [],
       ]
     ];
-    for (var course in courses!) {
-      for (var time in course.times!) {
+    for (final course in courses!) {
+      for (final time in course.times!) {
         for (int i = 0; i < timeCodes!.length; i++) {
           list[time.weekday! - 1].add(course);
         }
@@ -197,64 +207,75 @@ class Course {
         instructors: instructors ?? this.instructors,
       );
 
-  factory Course.fromRawJson(String str) => Course.fromJson(json.decode(str));
+  factory Course.fromRawJson(String str) => Course.fromJson(
+        json.decode(str) as Map<String, dynamic>,
+      );
 
   String toRawJson() => json.encode(toJson());
 
   factory Course.fromJson(Map<String, dynamic> json) => Course(
-        code: json["code"] == null ? null : json["code"],
-        title: json["title"] == null ? null : json["title"],
-        className: json["className"] == null ? null : json["className"],
-        group: json["group"] == null ? null : json["group"],
-        units: json["units"] == null ? null : json["units"],
-        hours: json["hours"] == null ? null : json["hours"],
-        required: json["required"] == null ? null : json["required"],
-        at: json["at"] == null ? null : json["at"],
-        times: json["sectionTimes"] == null
+        code: json['code'] as String?,
+        title: json['title'] as String?,
+        className: json['className'] as String?,
+        group: json['group'] as String?,
+        units: json['units'] as String?,
+        hours: json['hours'] as String?,
+        required: json['required'] as String?,
+        at: json['at'] as String?,
+        times: json['sectionTimes'] == null
             ? null
             : List<SectionTime>.from(
-                json["sectionTimes"].map((x) => SectionTime.fromJson(x))),
-        location: json["location"] == null
+                (json['sectionTimes'] as List<dynamic>).map(
+                  (x) => SectionTime.fromJson(x as Map<String, dynamic>),
+                ),
+              ),
+        location: json['location'] == null
             ? null
-            : Location.fromJson(json["location"]),
-        instructors: json["instructors"] == null
+            : Location.fromJson(json['location'] as Map<String, dynamic>),
+        instructors: json['instructors'] == null
             ? null
-            : List<String>.from(json["instructors"].map((x) => x)),
+            : List<String>.from(
+                (json['instructors'] as List<dynamic>).map(
+                  (dynamic x) => x,
+                ),
+              ),
       );
 
   Map<String, dynamic> toJson() => {
-        "code": code == null ? null : code,
-        "title": title == null ? null : title,
-        "className": className == null ? null : className,
-        "group": group == null ? null : group,
-        "units": units == null ? null : units,
-        "hours": hours == null ? null : hours,
-        "required": required == null ? null : required,
-        "at": at == null ? null : at,
-        "sectionTimes": times == null
+        'code': code,
+        'title': title,
+        'className': className,
+        'group': group,
+        'units': units,
+        'hours': hours,
+        'required': required,
+        'at': at,
+        'sectionTimes': times == null
             ? null
             : List<dynamic>.from(times!.map((x) => x.toJson())),
-        "location": location == null ? null : location!.toJson(),
-        "instructors": instructors == null
+        'location': location == null ? null : location!.toJson(),
+        'instructors': instructors == null
             ? null
             : List<dynamic>.from(instructors!.map((x) => x)),
       };
 
   String getInstructors() {
-    String text = "";
-    if (instructors!.length > 0) {
-      text += instructors![0];
-      for (var i = 1; i < instructors!.length; i++)
-        text += ",${instructors![i]}";
+    ///Use https://dart-lang.github.io/linter/lints/use_string_buffers.html
+    final buffer = StringBuffer();
+    if (instructors!.isNotEmpty) {
+      buffer.write(instructors![0]);
+      for (var i = 1; i < instructors!.length; i++) {
+        buffer.write(',${instructors![i]}');
+      }
     }
-    return text;
+    return buffer.toString();
   }
 
   String getTimesShortName(List<TimeCode>? timeCode) {
     String text = '';
     if ((times?.length ?? 0) == 0) return text;
     int startIndex = -1, repeat = 0;
-    final len = (times?.length ?? 0);
+    final len = times?.length ?? 0;
     for (var i = 0; i < len; i++) {
       final time = times![i];
       if (startIndex != -1 &&
@@ -272,8 +293,8 @@ class Course {
         }
       } else {
         startIndex = i;
-        text +=
-            '${text.isEmpty ? '' : ' '}(${ApLocalizations.current.weekdaysCourse[time.weekDayIndex]}) '
+        text += '${text.isEmpty ? '' : ' '}'
+            '(${ApLocalizations.current.weekdaysCourse[time.weekDayIndex]}) '
             '${timeCode![time.index!].title}';
       }
     }
@@ -300,18 +321,18 @@ class Location {
       );
 
   factory Location.fromRawJson(String str) =>
-      Location.fromJson(json.decode(str));
+      Location.fromJson(json.decode(str) as Map<String, dynamic>);
 
   String toRawJson() => json.encode(toJson());
 
   factory Location.fromJson(Map<String, dynamic> json) => Location(
-        room: json["room"] == null ? null : json["room"],
-        building: json["building"] == null ? null : json["building"],
+        room: json['room'] as String?,
+        building: json['building'] as String?,
       );
 
   Map<String, dynamic> toJson() => {
-        "room": room == null ? null : room,
-        "building": building == null ? null : building,
+        'room': room,
+        'building': building,
       };
 
   @override
@@ -327,7 +348,8 @@ class SectionTime {
   });
 
   ///The day of the week [DateTime.monday]..[DateTime.sunday].
-  ///In accordance with ISO 8601 a week starts with Monday, which has the value 1.
+  ///In accordance with ISO 8601 a week starts with Monday,
+  /// which has the value 1.
   int? weekday;
 
   /// index of [CourseData.timeCodes]
@@ -340,23 +362,24 @@ class SectionTime {
     int? index,
   }) =>
       SectionTime(
-        weekday: weekDay ?? this.weekday,
+        weekday: weekDay ?? weekday,
         index: index ?? this.index,
       );
 
-  factory SectionTime.fromRawJson(String str) =>
-      SectionTime.fromJson(json.decode(str));
+  factory SectionTime.fromRawJson(String str) => SectionTime.fromJson(
+        json.decode(str) as Map<String, dynamic>,
+      );
 
   String toRawJson() => json.encode(toJson());
 
   factory SectionTime.fromJson(Map<String, dynamic> json) => SectionTime(
-        weekday: json["weekday"] == null ? null : json["weekday"],
-        index: json["index"] == null ? null : json["index"],
+        weekday: json['weekday'] as int,
+        index: json['index'] as int,
       );
 
   Map<String, dynamic> toJson() => {
-        "weekday": weekday == null ? null : weekday,
-        "index": index == null ? null : index,
+        'weekday': weekday,
+        'index': index,
       };
 }
 
@@ -383,20 +406,20 @@ class TimeCode {
       );
 
   factory TimeCode.fromRawJson(String str) =>
-      TimeCode.fromJson(json.decode(str));
+      TimeCode.fromJson(json.decode(str) as Map<String, dynamic>);
 
   String toRawJson() => json.encode(toJson());
 
   factory TimeCode.fromJson(Map<String, dynamic> json) => TimeCode(
-        title: json["title"] == null ? null : json["title"],
-        startTime: json["startTime"] == null ? null : json["startTime"],
-        endTime: json["endTime"] == null ? null : json["endTime"],
+        title: json['title'] as String,
+        startTime: json['startTime'] as String,
+        endTime: json['endTime'] as String,
       );
 
   Map<String, dynamic> toJson() => {
-        "title": title,
-        "startTime": startTime,
-        "endTime": endTime,
+        'title': title,
+        'startTime': startTime,
+        'endTime': endTime,
       };
 }
 

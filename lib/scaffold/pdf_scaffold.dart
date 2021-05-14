@@ -16,7 +16,7 @@ class PdfScaffold extends StatefulWidget {
   final Uint8List? data;
   final String? fileName;
 
-  PdfScaffold({
+  const PdfScaffold({
     Key? key,
     required this.state,
     this.onRefresh,
@@ -38,9 +38,8 @@ class _PdfScaffoldState extends State<PdfScaffold> {
   Widget build(BuildContext context) {
     switch (widget.state) {
       case PdfState.loading:
-        return Container(
+        return const Center(
           child: CircularProgressIndicator(),
-          alignment: Alignment.center,
         );
       case PdfState.error:
         return errorContent;
@@ -56,7 +55,6 @@ class _PdfScaffoldState extends State<PdfScaffold> {
             mainAxisAlignment: MainAxisAlignment.end,
             children: [
               FloatingActionButton(
-                child: Icon(ApIcon.share),
                 onPressed: () async {
                   AnalyticsUtils.instance?.logEvent('export_by_share');
                   await Printing.sharePdf(
@@ -64,10 +62,10 @@ class _PdfScaffoldState extends State<PdfScaffold> {
                     filename: '${widget.fileName ?? 'export'}.pdf',
                   );
                 },
+                child: Icon(ApIcon.share),
               ),
-              SizedBox(height: 16.0),
+              const SizedBox(height: 16.0),
               FloatingActionButton(
-                child: Icon(ApIcon.print),
                 onPressed: () async {
                   AnalyticsUtils.instance?.logEvent('export_by_printing');
                   await Printing.layoutPdf(
@@ -75,6 +73,7 @@ class _PdfScaffoldState extends State<PdfScaffold> {
                     onLayout: (PdfPageFormat format) => widget.data!,
                   );
                 },
+                child: Icon(ApIcon.print),
               ),
             ],
           ),

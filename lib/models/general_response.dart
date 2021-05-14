@@ -9,32 +9,39 @@ class GeneralResponse {
     required this.message,
   });
 
-  static const SUCCESS = 200;
-  static const UNKNOWN_ERROR = 1000;
-  static const PLATFORM_NOT_SUPPORT = 1001;
+  static const int successCode = 200;
+  static const int unknownErrorCode = 1000;
+  static const int platformNotSupportCode = 1001;
 
-  static GeneralResponse success() =>
-      GeneralResponse(statusCode: SUCCESS, message: '');
+  factory GeneralResponse.success() => GeneralResponse(
+        statusCode: successCode,
+        message: '',
+      );
 
-  static GeneralResponse unknownError() =>
-      GeneralResponse(statusCode: UNKNOWN_ERROR, message: '');
+  factory GeneralResponse.unknownError() => GeneralResponse(
+        statusCode: unknownErrorCode,
+        message: '',
+      );
 
-  static GeneralResponse platformNotSupport() => GeneralResponse(
-      statusCode: PLATFORM_NOT_SUPPORT, message: 'platform not support');
+  factory GeneralResponse.platformNotSupport() => GeneralResponse(
+        statusCode: platformNotSupportCode,
+        message: 'platform not support',
+      );
 
-  factory GeneralResponse.fromRawJson(String str) =>
-      GeneralResponse.fromJson(json.decode(str));
+  factory GeneralResponse.fromRawJson(String str) => GeneralResponse.fromJson(
+        json.decode(str) as Map<String, dynamic>,
+      );
 
   String toRawJson() => json.encode(toJson());
 
   factory GeneralResponse.fromJson(Map<String, dynamic> json) =>
       GeneralResponse(
-        statusCode: json["code"] == null ? null : json["code"],
-        message: json["description"] == null ? null : json["description"],
+        statusCode: json['code'] as int,
+        message: json['description'] as String,
       );
 
   Map<String, dynamic> toJson() => {
-        "code": statusCode,
-        "description": message,
+        'code': statusCode,
+        'description': message,
       };
 }

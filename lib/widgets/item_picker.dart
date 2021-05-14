@@ -34,8 +34,9 @@ class ItemPicker extends StatelessWidget {
             onSelected: onSelected,
           ),
         );
-        if (featureTag != null)
+        if (featureTag != null) {
           AnalyticsUtils.instance?.logEvent('${featureTag}_item_picker_click');
+        }
       },
       child: Padding(
         padding: const EdgeInsets.symmetric(
@@ -47,7 +48,7 @@ class ItemPicker extends StatelessWidget {
           children: <Widget>[
             Expanded(
               child: Text(
-                items.length == 0 ? '' : items[currentIndex],
+                items.isEmpty ? '' : items[currentIndex],
                 style: TextStyle(
                   color: ApTheme.of(context).semesterText,
                   fontSize: 18.0,
@@ -55,7 +56,7 @@ class ItemPicker extends StatelessWidget {
                 textAlign: TextAlign.center,
               ),
             ),
-            SizedBox(width: 8.0),
+            const SizedBox(width: 8.0),
             Icon(
               ApIcon.keyboardArrowDown,
               color: ApTheme.of(context).semesterText,

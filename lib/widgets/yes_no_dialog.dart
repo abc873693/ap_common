@@ -23,7 +23,7 @@ class YesNoDialog extends StatelessWidget {
       this.rightActionFunction})
       : super(key: key);
 
-  static showSample(BuildContext context) => showDialog(
+  static void showSample(BuildContext context) => showDialog(
         context: context,
         builder: (BuildContext context) => YesNoDialog(
           title: '預約成功',
@@ -33,15 +33,13 @@ class YesNoDialog extends StatelessWidget {
           ),
           leftActionText: '取消',
           rightActionText: '預約',
-          leftActionFunction: null,
-          rightActionFunction: null,
         ),
       );
 
   @override
   Widget build(BuildContext context) {
     return AlertDialog(
-      shape: RoundedRectangleBorder(
+      shape: const RoundedRectangleBorder(
         borderRadius: BorderRadius.all(
           Radius.circular(16),
         ),
@@ -55,8 +53,8 @@ class YesNoDialog extends StatelessWidget {
           fontSize: 18.0,
         ),
       ),
-      titlePadding: EdgeInsets.symmetric(vertical: 16.0),
-      contentPadding: EdgeInsets.all(0.0),
+      titlePadding: const EdgeInsets.symmetric(vertical: 16.0),
+      contentPadding: const EdgeInsets.all(0.0),
       content: Column(
         mainAxisSize: MainAxisSize.min,
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -64,14 +62,17 @@ class YesNoDialog extends StatelessWidget {
         children: <Widget>[
           Container(
             width: double.infinity,
-            decoration: BoxDecoration(
+            decoration: const BoxDecoration(
               border: Border(
                 top: BorderSide(color: Colors.grey, width: 0.5),
                 bottom: BorderSide(color: Colors.grey, width: 0.5),
               ),
             ),
             padding: contentWidgetPadding ??
-                EdgeInsets.symmetric(horizontal: 30.0, vertical: 24.0),
+                const EdgeInsets.symmetric(
+                  horizontal: 30.0,
+                  vertical: 24.0,
+                ),
             child: contentWidget,
           ),
           Row(
@@ -79,17 +80,21 @@ class YesNoDialog extends StatelessWidget {
             children: <Widget>[
               Expanded(
                 child: InkWell(
-                  borderRadius: BorderRadius.only(
+                  borderRadius: const BorderRadius.only(
                     bottomLeft: Radius.circular(16.0),
                   ),
+                  onTap: () {
+                    Navigator.of(context, rootNavigator: true).pop();
+                    leftActionFunction?.call();
+                  },
                   child: Container(
-                    decoration: BoxDecoration(
+                    decoration: const BoxDecoration(
                       border: Border(
                         right: BorderSide(color: Colors.grey, width: 0.5),
                       ),
                     ),
                     alignment: Alignment.center,
-                    padding: EdgeInsets.symmetric(vertical: 16.0),
+                    padding: const EdgeInsets.symmetric(vertical: 16.0),
                     child: Text(
                       leftActionText ?? ApLocalizations.current.confirm,
                       style: TextStyle(
@@ -98,20 +103,20 @@ class YesNoDialog extends StatelessWidget {
                       ),
                     ),
                   ),
-                  onTap: () {
-                    Navigator.of(context, rootNavigator: true).pop();
-                    leftActionFunction?.call();
-                  },
                 ),
               ),
               Expanded(
                 child: InkWell(
-                  borderRadius: BorderRadius.only(
+                  borderRadius: const BorderRadius.only(
                     bottomRight: Radius.circular(16.0),
                   ),
+                  onTap: () {
+                    Navigator.of(context, rootNavigator: true).pop();
+                    rightActionFunction?.call();
+                  },
                   child: Container(
                     alignment: Alignment.center,
-                    padding: EdgeInsets.symmetric(vertical: 16.0),
+                    padding: const EdgeInsets.symmetric(vertical: 16.0),
                     child: Text(
                       rightActionText ?? ApLocalizations.current.cancel,
                       style: TextStyle(
@@ -120,10 +125,6 @@ class YesNoDialog extends StatelessWidget {
                       ),
                     ),
                   ),
-                  onTap: () {
-                    Navigator.of(context, rootNavigator: true).pop();
-                    rightActionFunction?.call();
-                  },
                 ),
               ),
             ],

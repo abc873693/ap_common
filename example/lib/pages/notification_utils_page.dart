@@ -30,14 +30,14 @@ class _NotificationUtilsTestPageState extends State<NotificationUtilsTestPage> {
       ),
       body: ListView(
         children: [
-          Padding(
-            padding: const EdgeInsets.all(8.0),
+          const Padding(
+            padding: EdgeInsets.all(8.0),
             child: Text(
               '基本顯示',
               style: TextStyle(color: Colors.grey),
             ),
           ),
-          Divider(height: 0.0),
+          const Divider(height: 0.0),
           ListTile(
             onTap: () {
               NotificationUtils.show(
@@ -49,11 +49,11 @@ class _NotificationUtilsTestPageState extends State<NotificationUtilsTestPage> {
               );
             },
             title: Text(app.showNow),
-            subtitle: Text('NotificationUtils.show'),
+            subtitle: const Text('NotificationUtils.show'),
           ),
-          Divider(height: 0.0),
-          Padding(
-            padding: const EdgeInsets.all(8.0),
+          const Divider(height: 0.0),
+          const Padding(
+            padding: EdgeInsets.all(8.0),
             child: Text(
               '定時顯示',
               style: TextStyle(color: Colors.grey),
@@ -68,16 +68,16 @@ class _NotificationUtilsTestPageState extends State<NotificationUtilsTestPage> {
                 title: app.testTitle,
                 content: app.testContent,
                 dateTime: DateTime.now().add(
-                  Duration(seconds: 5),
+                  const Duration(seconds: 5),
                 ),
               );
             },
             title: Text(app.showInFiveSeconds),
-            subtitle: Text('NotificationUtils.schedule'),
+            subtitle: const Text('NotificationUtils.schedule'),
           ),
-          Divider(height: 0.0),
-          Padding(
-            padding: const EdgeInsets.all(8.0),
+          const Divider(height: 0.0),
+          const Padding(
+            padding: EdgeInsets.all(8.0),
             child: Text(
               '設定每週通知',
               style: TextStyle(color: Colors.grey),
@@ -103,20 +103,20 @@ class _NotificationUtilsTestPageState extends State<NotificationUtilsTestPage> {
           ),
           ListTile(
             onTap: () async {
-              var dayOfTime = await showTimePicker(
+              final dayOfTime = await showTimePicker(
                 context: context,
                 initialTime: TimeOfDay(
                   hour: time.hour,
                   minute: time.minute,
                 ),
               );
-              if (dayOfTime != null) setState(() => this.time = dayOfTime);
+              if (dayOfTime != null) setState(() => time = dayOfTime);
             },
             title: Text(app.setTimeOfDay),
           ),
           ListTile(
             onTap: () {
-              int id = Random().nextInt(10000);
+              final int id = Random().nextInt(10000);
               NotificationUtils.scheduleWeeklyNotify(
                 id: id,
                 androidChannelId: '1',
@@ -142,11 +142,11 @@ class _NotificationUtilsTestPageState extends State<NotificationUtilsTestPage> {
                 ],
               ),
             ),
-            subtitle: Text('NotificationUtils.scheduleWeeklyNotify'),
+            subtitle: const Text('NotificationUtils.scheduleWeeklyNotify'),
           ),
-          Divider(height: 0.0),
-          Padding(
-            padding: const EdgeInsets.all(8.0),
+          const Divider(height: 0.0),
+          const Padding(
+            padding: EdgeInsets.all(8.0),
             child: Text(
               '其他功能',
               style: TextStyle(color: Colors.grey),
@@ -154,7 +154,7 @@ class _NotificationUtilsTestPageState extends State<NotificationUtilsTestPage> {
           ),
           ListTile(
             onTap: () async {
-              var result = await NotificationUtils.requestPermissions();
+              final result = await NotificationUtils.requestPermissions();
               if (result != null) {
                 DialogUtils.showDefault(
                   context: context,
@@ -166,19 +166,20 @@ class _NotificationUtilsTestPageState extends State<NotificationUtilsTestPage> {
               }
             },
             title: Text(app.requestPermission),
-            subtitle: Text(
+            subtitle: const Text(
                 'NotificationUtils.requestPermissions (iOS & macOS limit)'),
           ),
           ListTile(
             onTap: () async {
-              var list = await NotificationUtils.getPendingNotificationList();
+              final list = await NotificationUtils.getPendingNotificationList();
               showDialog(
                 context: context,
                 builder: (_) => SimpleOptionDialog(
                   title: app.getPendingNotificationList,
                   items: [
                     for (var item in list)
-                      'id = ${item.id}, title = ${item.title}\n body = ${item.body}'
+                      'id = ${item.id}, '
+                          'title = ${item.title}\n body = ${item.body}'
                   ],
                   index: -1,
                   onSelected: (int index) {
@@ -188,15 +189,16 @@ class _NotificationUtilsTestPageState extends State<NotificationUtilsTestPage> {
               );
             },
             title: Text(app.getPendingNotificationList),
-            subtitle: Text('NotificationUtils.getPendingNotificationList'),
+            subtitle:
+                const Text('NotificationUtils.getPendingNotificationList'),
           ),
-          Divider(height: 0.0),
+          const Divider(height: 0.0),
           ListTile(
             onTap: () {
               NotificationUtils.cancelAll();
             },
             title: Text(app.cancelAll),
-            subtitle: Text('NotificationUtils.cancelAll'),
+            subtitle: const Text('NotificationUtils.cancelAll'),
           ),
         ],
       ),

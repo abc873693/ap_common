@@ -82,27 +82,28 @@ class UserInfoScaffoldState extends State<UserInfoScaffold> {
         onRefresh: () async {
           if (widget.onRefresh != null) await widget.onRefresh!();
           AnalyticsUtils.instance?.logEvent('user_info_refresh');
-          return null;
+          return;
         },
         child: ListView(
           physics: const AlwaysScrollableScrollPhysics(),
           children: <Widget>[
-            SizedBox(height: 8.0),
-            widget.userInfo.pictureBytes != null
-                ? SizedBox(
-                    height: 320,
-                    child: AspectRatio(
-                      aspectRatio: 2.0,
-                      child: Hero(
-                        tag: widget.heroTag ?? ApConstants.TAG_STUDENT_PICTURE,
-                        child: Image.memory(
-                          widget.userInfo.pictureBytes!,
-                        ),
-                      ),
+            const SizedBox(height: 8.0),
+            if (widget.userInfo.pictureBytes != null)
+              SizedBox(
+                height: 320,
+                child: AspectRatio(
+                  aspectRatio: 2.0,
+                  child: Hero(
+                    tag: widget.heroTag ?? ApConstants.tagStudentPicture,
+                    child: Image.memory(
+                      widget.userInfo.pictureBytes!,
                     ),
-                  )
-                : SizedBox(height: 0.0),
-            SizedBox(height: 8.0),
+                  ),
+                ),
+              )
+            else
+              const SizedBox(height: 0.0),
+            const SizedBox(height: 8.0),
             UserInfoCard(
               userInfo: widget.userInfo,
               codeMode: codeMode,
@@ -151,12 +152,12 @@ class UserInfoCard extends StatelessWidget {
   Widget build(BuildContext context) {
     return Card(
       elevation: 4.0,
-      margin: EdgeInsets.all(16.0),
+      margin: const EdgeInsets.all(16.0),
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(12.0),
       ),
       child: Padding(
-        padding: EdgeInsets.all(16.0),
+        padding: const EdgeInsets.all(16.0),
         child: Column(
           children: <Widget>[
             if (enableBarCode)
@@ -176,36 +177,36 @@ class UserInfoCard extends StatelessWidget {
               title: Text(ApLocalizations.of(context).studentNameCht),
               subtitle: Text(userInfo?.name ?? ''),
             ),
-            Divider(height: 1.0),
+            const Divider(height: 1.0),
             if (userInfo?.educationSystem != null) ...[
               ListTile(
                 title: Text(ApLocalizations.of(context).educationSystem),
                 subtitle: Text(userInfo?.educationSystem ?? ''),
               ),
-              Divider(height: 1.0),
+              const Divider(height: 1.0),
             ],
             if (userInfo?.email != null) ...[
               ListTile(
                 title: Text(ApLocalizations.of(context).email),
                 subtitle: Text(userInfo?.email ?? ''),
               ),
-              Divider(height: 1.0),
+              const Divider(height: 1.0),
             ],
             ListTile(
               title: Text(ApLocalizations.of(context).department),
               subtitle: Text(userInfo?.department ?? ''),
             ),
-            Divider(height: 1.0),
+            const Divider(height: 1.0),
             ListTile(
               title: Text(ApLocalizations.of(context).studentClass),
               subtitle: Text(userInfo?.className ?? ''),
             ),
-            Divider(height: 1.0),
+            const Divider(height: 1.0),
             ListTile(
               title: Text(ApLocalizations.of(context).studentId),
               subtitle: Text(userInfo?.id ?? ''),
             ),
-            Divider(height: 1.0),
+            const Divider(height: 1.0),
           ],
         ),
       ),
