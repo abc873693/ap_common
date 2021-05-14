@@ -16,12 +16,10 @@ final messages = new MessageLookup();
 
 typedef String MessageIfAbsent(String messageStr, List<dynamic> args);
 
-// ignore_for_file: lines_longer_than_80_chars
 class MessageLookup extends MessageLookupByLibrary {
   String get localeName => 'zh_TW';
 
   final messages = _notInlinedMessages(_notInlinedMessages);
-
   static Map<String, Function> _notInlinedMessages(_) => <String, Function>{
         "about": MessageLookupByLibrary.simpleMessage("關於我們"),
         "aboutAuthorContent": MessageLookupByLibrary.simpleMessage(

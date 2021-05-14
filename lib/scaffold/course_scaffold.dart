@@ -425,6 +425,7 @@ class CourseScaffoldState extends State<CourseScaffold> {
     final hasHoliday = widget.courseData.hasHoliday;
     final columns = <Column>[
       Column(
+        // ignore: prefer_const_literals_to_create_immutables
         children: [],
       )
     ];

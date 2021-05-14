@@ -16,12 +16,10 @@ final messages = new MessageLookup();
 
 typedef String MessageIfAbsent(String messageStr, List<dynamic> args);
 
-// ignore_for_file: lines_longer_than_80_chars
 class MessageLookup extends MessageLookupByLibrary {
   String get localeName => 'en';
 
   final messages = _notInlinedMessages(_notInlinedMessages);
-
   static Map<String, Function> _notInlinedMessages(_) => <String, Function>{
         "about": MessageLookupByLibrary.simpleMessage("About Us"),
         "aboutAuthorContent": MessageLookupByLibrary.simpleMessage(
@@ -219,7 +217,7 @@ class MessageLookup extends MessageLookupByLibrary {
         "courseVibrateHint": MessageLookupByLibrary.simpleMessage(
             "Will turn on silent mode during class, turn back to normal mode after class!"),
         "courseVibratePermission": MessageLookupByLibrary.simpleMessage(
-            "Need don't Disturb access to auto mute."),
+            "Need don\'t Disturb access to auto mute."),
         "credits": MessageLookupByLibrary.simpleMessage("Credits"),
         "creditsTakenEarned":
             MessageLookupByLibrary.simpleMessage("Credits Taken/Earned"),

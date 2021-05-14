@@ -1,5 +1,10 @@
 include: package:lint/analysis_options.yaml
 
+analyzer:
+  exclude:
+    # l10n generated code
+    - lib/l10n/intl/*.dart
+
 linter:
   rules:
     # ------ Disable individual rules ----- #
