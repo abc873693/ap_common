@@ -4,6 +4,8 @@ analyzer:
   exclude:
     # l10n generated code
     - lib/l10n/intl/*.dart
+    # example
+    - example/**
 
 linter:
   rules:
