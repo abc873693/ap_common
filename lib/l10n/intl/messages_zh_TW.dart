@@ -70,27 +70,9 @@ class MessageLookup extends MessageLookupByLibrary {
         "birthDay": MessageLookupByLibrary.simpleMessage("出生日"),
         "birthMonth": MessageLookupByLibrary.simpleMessage("出生月"),
         "bus": MessageLookupByLibrary.simpleMessage("校車系統"),
-        "busCancelReserve": MessageLookupByLibrary.simpleMessage("取消預定校車"),
-        "busCancelReserveConfirmContent":
-            MessageLookupByLibrary.simpleMessage("要取消從%s\n%s 的校車嗎？"),
-        "busCancelReserveConfirmContent1":
-            MessageLookupByLibrary.simpleMessage("要取消從"),
-        "busCancelReserveConfirmContent2":
-            MessageLookupByLibrary.simpleMessage("到"),
-        "busCancelReserveConfirmContent3":
-            MessageLookupByLibrary.simpleMessage("的校車嗎？"),
-        "busCancelReserveConfirmTitle":
-            MessageLookupByLibrary.simpleMessage("確定要"),
-        "busCancelReserveFail": MessageLookupByLibrary.simpleMessage("取消預約失敗"),
-        "busCancelReserveSuccess":
-            MessageLookupByLibrary.simpleMessage("取消預約成功！"),
-        "busCount": MessageLookupByLibrary.simpleMessage("(%s / %s)"),
-        "busEmpty":
-            MessageLookupByLibrary.simpleMessage("Oops！目前校車沒上班喔～\n請選擇其他班次 😋"),
         "busFailInfinity": MessageLookupByLibrary.simpleMessage("學校校車系統或許壞掉惹～"),
         "busNotPick":
             MessageLookupByLibrary.simpleMessage("您尚未選擇日期！\n請先選擇日期 %s"),
-        "busNotPickDate": MessageLookupByLibrary.simpleMessage("選擇乘車時間"),
         "busNotify": MessageLookupByLibrary.simpleMessage("校車提醒"),
         "busNotifyContent":
             MessageLookupByLibrary.simpleMessage("您有一班 %s 從%s出發的校車！"),
@@ -99,25 +81,6 @@ class MessageLookup extends MessageLookupByLibrary {
         "busNotifyJiangong": MessageLookupByLibrary.simpleMessage("建工"),
         "busNotifySubTitle": MessageLookupByLibrary.simpleMessage("發車前三十分鐘提醒"),
         "busNotifyYanchao": MessageLookupByLibrary.simpleMessage("燕巢"),
-        "busPickDate": MessageLookupByLibrary.simpleMessage("選擇乘車時間：%s"),
-        "busReservationEmpty": MessageLookupByLibrary.simpleMessage(
-            "Oops！您還沒有預約任何校車喔～\n多多搭乘大眾運輸，節能減碳救地球 😋"),
-        "busReservations": MessageLookupByLibrary.simpleMessage("校車紀錄"),
-        "busReserve": MessageLookupByLibrary.simpleMessage("預定校車"),
-        "busReserveCancelDate": MessageLookupByLibrary.simpleMessage("取消日期"),
-        "busReserveCancelLocation":
-            MessageLookupByLibrary.simpleMessage("上車地點"),
-        "busReserveCancelTime": MessageLookupByLibrary.simpleMessage("取消班次"),
-        "busReserveConfirmContent":
-            MessageLookupByLibrary.simpleMessage("要預定從%s\n%s 的校車嗎？"),
-        "busReserveConfirmTitle":
-            MessageLookupByLibrary.simpleMessage("確定要預定本次校車？"),
-        "busReserveDate": MessageLookupByLibrary.simpleMessage("預約日期"),
-        "busReserveFailTitle":
-            MessageLookupByLibrary.simpleMessage("Oops 預約失敗"),
-        "busReserveLocation": MessageLookupByLibrary.simpleMessage("上車地點"),
-        "busReserveSuccess": MessageLookupByLibrary.simpleMessage("預約成功！"),
-        "busReserveTime": MessageLookupByLibrary.simpleMessage("預約班次"),
         "busRule": MessageLookupByLibrary.simpleMessage("校車搭乘規則"),
         "calculateUnits": MessageLookupByLibrary.simpleMessage("學分試算"),
         "calculateUnitsContent":
@@ -131,7 +94,6 @@ class MessageLookup extends MessageLookupByLibrary {
         "campus": MessageLookupByLibrary.simpleMessage("校區"),
         "campusNotSupport":
             MessageLookupByLibrary.simpleMessage("所在的校區無法使用此功能"),
-        "canNotReserve": MessageLookupByLibrary.simpleMessage("無法預約"),
         "canNotUseFeature":
             MessageLookupByLibrary.simpleMessage("此帳號無法使用此功能或是學校系統出了問題"),
         "cancel": MessageLookupByLibrary.simpleMessage("取消"),
@@ -386,9 +348,7 @@ class MessageLookup extends MessageLookupByLibrary {
         "reject": MessageLookupByLibrary.simpleMessage("駁回"),
         "rememberPassword": MessageLookupByLibrary.simpleMessage("記住密碼"),
         "requiredUnits": MessageLookupByLibrary.simpleMessage("必修學分"),
-        "reserve": MessageLookupByLibrary.simpleMessage("預約"),
         "reserveDeadline": MessageLookupByLibrary.simpleMessage("預約截止時間"),
-        "reserved": MessageLookupByLibrary.simpleMessage("已預約"),
         "reserving": MessageLookupByLibrary.simpleMessage("預約中..."),
         "retry": MessageLookupByLibrary.simpleMessage("重試"),
         "reviewApplication": MessageLookupByLibrary.simpleMessage("審查申請"),
@@ -436,7 +396,6 @@ class MessageLookup extends MessageLookupByLibrary {
         "simcourse": MessageLookupByLibrary.simpleMessage("模擬選課"),
         "skip": MessageLookupByLibrary.simpleMessage("稍後再說"),
         "somethingError": MessageLookupByLibrary.simpleMessage("發生錯誤"),
-        "specialBus": MessageLookupByLibrary.simpleMessage("特殊班次"),
         "splashContent":
             MessageLookupByLibrary.simpleMessage("我們全都包了\n只剩下學校不包我們"),
         "studentClass": MessageLookupByLibrary.simpleMessage("班級"),
@@ -467,13 +426,11 @@ class MessageLookup extends MessageLookupByLibrary {
         "tokenExpiredTitle": MessageLookupByLibrary.simpleMessage("重新登入"),
         "totalClassmates": MessageLookupByLibrary.simpleMessage("總人數"),
         "traditionalChinese": MessageLookupByLibrary.simpleMessage("繁體中文"),
-        "trialBus": MessageLookupByLibrary.simpleMessage("試辦車次"),
         "tue": MessageLookupByLibrary.simpleMessage("二"),
         "tuesday": MessageLookupByLibrary.simpleMessage("週二"),
         "tutor": MessageLookupByLibrary.simpleMessage("導師"),
         "units": MessageLookupByLibrary.simpleMessage("學分"),
         "unitsTotal": MessageLookupByLibrary.simpleMessage("總學分"),
-        "unknown": MessageLookupByLibrary.simpleMessage("未知"),
         "unknownError":
             MessageLookupByLibrary.simpleMessage("未知錯誤 請聯絡臉書粉絲專頁反應"),
         "update": MessageLookupByLibrary.simpleMessage("更新"),

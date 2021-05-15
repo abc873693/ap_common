@@ -78,30 +78,10 @@ class MessageLookup extends MessageLookupByLibrary {
         "birthDay": MessageLookupByLibrary.simpleMessage("Birth Day"),
         "birthMonth": MessageLookupByLibrary.simpleMessage("Birth Month"),
         "bus": MessageLookupByLibrary.simpleMessage("Bus System"),
-        "busCancelReserve":
-            MessageLookupByLibrary.simpleMessage("Cancel bus reservation"),
-        "busCancelReserveConfirmContent": MessageLookupByLibrary.simpleMessage(
-            "Are you sure you want to cancel this seat from %s at %s ?"),
-        "busCancelReserveConfirmContent1": MessageLookupByLibrary.simpleMessage(
-            "Are you sure you want to cancel this seat from "),
-        "busCancelReserveConfirmContent2":
-            MessageLookupByLibrary.simpleMessage(" to "),
-        "busCancelReserveConfirmContent3":
-            MessageLookupByLibrary.simpleMessage(" ?"),
-        "busCancelReserveConfirmTitle":
-            MessageLookupByLibrary.simpleMessage("Are you sure you want to "),
-        "busCancelReserveFail":
-            MessageLookupByLibrary.simpleMessage("Faild to cancele"),
-        "busCancelReserveSuccess":
-            MessageLookupByLibrary.simpleMessage("Canceled Successfully!"),
-        "busCount": MessageLookupByLibrary.simpleMessage("(%s / %s)"),
-        "busEmpty": MessageLookupByLibrary.simpleMessage(
-            "Oops! No any buses now~\n Please choose another one. 😋"),
         "busFailInfinity": MessageLookupByLibrary.simpleMessage(
             "Bus info system is out of service!"),
         "busNotPick": MessageLookupByLibrary.simpleMessage(
             "Date has not been chosen.\n Please choose a date first %s"),
-        "busNotPickDate": MessageLookupByLibrary.simpleMessage("Chosen Date"),
         "busNotify":
             MessageLookupByLibrary.simpleMessage("Bus Reservation Reminder"),
         "busNotifyContent": MessageLookupByLibrary.simpleMessage(
@@ -112,26 +92,6 @@ class MessageLookup extends MessageLookupByLibrary {
         "busNotifySubTitle": MessageLookupByLibrary.simpleMessage(
             "The reminder will pop up 30 minutes before reserving the bus"),
         "busNotifyYanchao": MessageLookupByLibrary.simpleMessage("YanChao"),
-        "busPickDate": MessageLookupByLibrary.simpleMessage("Chosen Date: %s"),
-        "busReservationEmpty": MessageLookupByLibrary.simpleMessage(
-            "Server is out of service\nPlease contact with school authority"),
-        "busReservations": MessageLookupByLibrary.simpleMessage("Bus record"),
-        "busReserve": MessageLookupByLibrary.simpleMessage("Bus reservation"),
-        "busReserveCancelDate": MessageLookupByLibrary.simpleMessage("Date"),
-        "busReserveCancelLocation":
-            MessageLookupByLibrary.simpleMessage("Location"),
-        "busReserveCancelTime": MessageLookupByLibrary.simpleMessage("Time"),
-        "busReserveConfirmContent": MessageLookupByLibrary.simpleMessage(
-            "Do you want to reserve a seat from %s at %s ?"),
-        "busReserveConfirmTitle": MessageLookupByLibrary.simpleMessage(
-            "Do you want to reserve this bus?"),
-        "busReserveDate": MessageLookupByLibrary.simpleMessage("Date"),
-        "busReserveFailTitle":
-            MessageLookupByLibrary.simpleMessage("Oops! Failed to reserve."),
-        "busReserveLocation": MessageLookupByLibrary.simpleMessage("Location"),
-        "busReserveSuccess":
-            MessageLookupByLibrary.simpleMessage("Reserved successfully!"),
-        "busReserveTime": MessageLookupByLibrary.simpleMessage("Time"),
         "busRule": MessageLookupByLibrary.simpleMessage("Bus Rule"),
         "calculateUnits":
             MessageLookupByLibrary.simpleMessage("Calculate Units"),
@@ -148,8 +108,6 @@ class MessageLookup extends MessageLookupByLibrary {
         "campus": MessageLookupByLibrary.simpleMessage(" campus"),
         "campusNotSupport": MessageLookupByLibrary.simpleMessage(
             "Campus not support this feature ~"),
-        "canNotReserve":
-            MessageLookupByLibrary.simpleMessage("Can\'t be reserved"),
         "canNotUseFeature": MessageLookupByLibrary.simpleMessage(
             "This account can\"t use this feature or school system happend error"),
         "cancel": MessageLookupByLibrary.simpleMessage("No"),
@@ -192,8 +150,6 @@ class MessageLookup extends MessageLookupByLibrary {
             MessageLookupByLibrary.simpleMessage("Professor"),
         "courseDialogTime": MessageLookupByLibrary.simpleMessage("Time"),
         "courseDialogTitle": MessageLookupByLibrary.simpleMessage("Class Info"),
-        "courseEmpty": MessageLookupByLibrary.simpleMessage(
-            "Oops! No any classes in this semester~\n Please choose another one. 😋"),
         "courseHoliday": MessageLookupByLibrary.simpleMessage(
             "Rotate the screen to see weekend schedule %s"),
         "courseHours": MessageLookupByLibrary.simpleMessage("Hours"),
@@ -432,7 +388,6 @@ class MessageLookup extends MessageLookupByLibrary {
         "password": MessageLookupByLibrary.simpleMessage("Password"),
         "passwordError": MessageLookupByLibrary.simpleMessage("Wrong password"),
         "passwordHint": MessageLookupByLibrary.simpleMessage("Password"),
-        "people": MessageLookupByLibrary.simpleMessage("PX"),
         "percentage": MessageLookupByLibrary.simpleMessage("Top % in Class"),
         "phones": MessageLookupByLibrary.simpleMessage("Tel no."),
         "pickAndUploadToImgur":
@@ -453,10 +408,8 @@ class MessageLookup extends MessageLookupByLibrary {
         "reason": MessageLookupByLibrary.simpleMessage("Reason"),
         "reject": MessageLookupByLibrary.simpleMessage("Rejected"),
         "rememberPassword": MessageLookupByLibrary.simpleMessage("Remember"),
-        "reserve": MessageLookupByLibrary.simpleMessage("Reserve"),
         "reserveDeadline":
             MessageLookupByLibrary.simpleMessage("Reserve Deadline"),
-        "reserved": MessageLookupByLibrary.simpleMessage("Reserved"),
         "reserving": MessageLookupByLibrary.simpleMessage("Reserving..."),
         "retry": MessageLookupByLibrary.simpleMessage("Retry"),
         "reviewApplication":
@@ -515,7 +468,6 @@ class MessageLookup extends MessageLookupByLibrary {
         "skip": MessageLookupByLibrary.simpleMessage("Skip"),
         "somethingError":
             MessageLookupByLibrary.simpleMessage("An error has occurred."),
-        "specialBus": MessageLookupByLibrary.simpleMessage("Special Bus"),
         "splashContent": MessageLookupByLibrary.simpleMessage(
             "We did all the things\nOnly did the school leave us."),
         "studentClass": MessageLookupByLibrary.simpleMessage("Class"),
@@ -552,12 +504,10 @@ class MessageLookup extends MessageLookupByLibrary {
         "totalClassmates":
             MessageLookupByLibrary.simpleMessage("Total Classmates"),
         "traditionalChinese": MessageLookupByLibrary.simpleMessage("繁體中文"),
-        "trialBus": MessageLookupByLibrary.simpleMessage("Trial Bus"),
         "tue": MessageLookupByLibrary.simpleMessage("Tue."),
         "tuesday": MessageLookupByLibrary.simpleMessage("Tue"),
         "tutor": MessageLookupByLibrary.simpleMessage("Tutor"),
         "units": MessageLookupByLibrary.simpleMessage("Units"),
-        "unknown": MessageLookupByLibrary.simpleMessage("Unknown"),
         "unknownError": MessageLookupByLibrary.simpleMessage(
             "An unknown error has occured, Please report to our Facebook page."),
         "update": MessageLookupByLibrary.simpleMessage("Update"),
