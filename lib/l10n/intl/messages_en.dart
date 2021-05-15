@@ -40,9 +40,9 @@ class MessageLookup extends MessageLookupByLibrary {
             "“Ask not why nobody is doing this. You are \"nobody\".”\n\nWe did this cause no one did it.\nWe created KUAS Wifi Login, KUASAP and KUAS Gourmet, Course Selection Sim, etc&#8230;\nTo bring convenience to everyone\"s on campus!"),
         "account": MessageLookupByLibrary.simpleMessage("Account"),
         "addApplication":
-            MessageLookupByLibrary.simpleMessage("Add Application"),
+            MessageLookupByLibrary.simpleMessage("New application"),
         "addCalendarContent": MessageLookupByLibrary.simpleMessage(
-            "Are you sure to add \"%s\" to your calendar?"),
+            "Do you want to add \"%s\" to your calendar?"),
         "addDate": MessageLookupByLibrary.simpleMessage("Add Date"),
         "addSuccess": MessageLookupByLibrary.simpleMessage("Add Success"),
         "addTag": MessageLookupByLibrary.simpleMessage("Add Tag"),
@@ -60,13 +60,13 @@ class MessageLookup extends MessageLookupByLibrary {
             MessageLookupByLibrary.simpleMessage("Announcement Review System"),
         "announcements": MessageLookupByLibrary.simpleMessage("News"),
         "apiServerError": MessageLookupByLibrary.simpleMessage(
-            "AP Server Error\nPlease report to fans page"),
+            "AP Server is out of service\nPlease report to our Facebook page"),
         "appVersion": MessageLookupByLibrary.simpleMessage("App Version"),
         "applicant": MessageLookupByLibrary.simpleMessage("Applicant"),
-        "applicationSubmitSuccess":
-            MessageLookupByLibrary.simpleMessage("Application Submit Success"),
+        "applicationSubmitSuccess": MessageLookupByLibrary.simpleMessage(
+            "Application has submited successfully"),
         "apply": MessageLookupByLibrary.simpleMessage("Apply"),
-        "approve": MessageLookupByLibrary.simpleMessage("Approve"),
+        "approve": MessageLookupByLibrary.simpleMessage("Approved"),
         "autoFill": MessageLookupByLibrary.simpleMessage("Auto Fill"),
         "autoLogin": MessageLookupByLibrary.simpleMessage("Auto login"),
         "average": MessageLookupByLibrary.simpleMessage("Average"),
@@ -74,63 +74,63 @@ class MessageLookup extends MessageLookupByLibrary {
         "beginCalculate":
             MessageLookupByLibrary.simpleMessage("Begin Calculate"),
         "betaFunction": MessageLookupByLibrary.simpleMessage(
-            "This is a beta version, please report a bug if an error occurred!"),
+            "This is a beta version. Please report any bugs when encountering an error!"),
         "birthDay": MessageLookupByLibrary.simpleMessage("Birth Day"),
         "birthMonth": MessageLookupByLibrary.simpleMessage("Birth Month"),
         "bus": MessageLookupByLibrary.simpleMessage("Bus System"),
         "busCancelReserve":
-            MessageLookupByLibrary.simpleMessage("Cancel Bus Reservation"),
+            MessageLookupByLibrary.simpleMessage("Cancel bus reservation"),
         "busCancelReserveConfirmContent": MessageLookupByLibrary.simpleMessage(
-            "Are you sure to cancel a seat from %s at %s ?"),
+            "Are you sure you want to cancel this seat from %s at %s ?"),
         "busCancelReserveConfirmContent1": MessageLookupByLibrary.simpleMessage(
-            "Are you sure to cancel a seat from "),
+            "Are you sure you want to cancel this seat from "),
         "busCancelReserveConfirmContent2":
             MessageLookupByLibrary.simpleMessage(" to "),
         "busCancelReserveConfirmContent3":
             MessageLookupByLibrary.simpleMessage(" ?"),
-        "busCancelReserveConfirmTitle": MessageLookupByLibrary.simpleMessage(
-            "<b>Cancel</b> this reservation?"),
+        "busCancelReserveConfirmTitle":
+            MessageLookupByLibrary.simpleMessage("Are you sure you want to "),
         "busCancelReserveFail":
-            MessageLookupByLibrary.simpleMessage("Fail Canceled"),
+            MessageLookupByLibrary.simpleMessage("Faild to cancele"),
         "busCancelReserveSuccess":
-            MessageLookupByLibrary.simpleMessage("Successfully Canceled!"),
+            MessageLookupByLibrary.simpleMessage("Canceled Successfully!"),
         "busCount": MessageLookupByLibrary.simpleMessage("(%s / %s)"),
         "busEmpty": MessageLookupByLibrary.simpleMessage(
-            "Oops! No bus now~\n Please choose another 😋"),
+            "Oops! No any buses now~\n Please choose another one. 😋"),
         "busFailInfinity": MessageLookupByLibrary.simpleMessage(
-            "Bus system perhaps broken!!!"),
+            "Bus info system is out of service!"),
         "busNotPick": MessageLookupByLibrary.simpleMessage(
-            "You have not chosen a date!\n Please choose a date first %s"),
+            "Date has not been chosen.\n Please choose a date first %s"),
         "busNotPickDate": MessageLookupByLibrary.simpleMessage("Chosen Date"),
         "busNotify":
             MessageLookupByLibrary.simpleMessage("Bus Reservation Reminder"),
         "busNotifyContent": MessageLookupByLibrary.simpleMessage(
-            "You\"ve got a bus departing at %s from %s!"),
+            "The bus has departed at %s from %s!"),
         "busNotifyHint": MessageLookupByLibrary.simpleMessage(
-            "Reminder will pop up 30 mins before reserved bus !\nIf you reserved or canceled the seat via website, please restart the app."),
+            "We will remind you to reserve the bus 30 minutes before!\nIf you have reserved or canceled the seat via website, please restart this app."),
         "busNotifyJiangong": MessageLookupByLibrary.simpleMessage("JianGong"),
         "busNotifySubTitle": MessageLookupByLibrary.simpleMessage(
-            "Reminder 30 mins before reserved bus"),
+            "The reminder will pop up 30 minutes before reserving the bus"),
         "busNotifyYanchao": MessageLookupByLibrary.simpleMessage("YanChao"),
         "busPickDate": MessageLookupByLibrary.simpleMessage("Chosen Date: %s"),
         "busReservationEmpty": MessageLookupByLibrary.simpleMessage(
-            "School Server Error\nPlease report to school"),
-        "busReservations": MessageLookupByLibrary.simpleMessage("Bus Record"),
-        "busReserve": MessageLookupByLibrary.simpleMessage("Bus Reservation"),
+            "Server is out of service\nPlease contact with school authority"),
+        "busReservations": MessageLookupByLibrary.simpleMessage("Bus record"),
+        "busReserve": MessageLookupByLibrary.simpleMessage("Bus reservation"),
         "busReserveCancelDate": MessageLookupByLibrary.simpleMessage("Date"),
         "busReserveCancelLocation":
             MessageLookupByLibrary.simpleMessage("Location"),
         "busReserveCancelTime": MessageLookupByLibrary.simpleMessage("Time"),
         "busReserveConfirmContent": MessageLookupByLibrary.simpleMessage(
-            "Are you sure to reserve a seat from %s at %s ?"),
-        "busReserveConfirmTitle":
-            MessageLookupByLibrary.simpleMessage("Reserve this bus?"),
+            "Do you want to reserve a seat from %s at %s ?"),
+        "busReserveConfirmTitle": MessageLookupByLibrary.simpleMessage(
+            "Do you want to reserve this bus?"),
         "busReserveDate": MessageLookupByLibrary.simpleMessage("Date"),
         "busReserveFailTitle":
-            MessageLookupByLibrary.simpleMessage("Oops Book Fail"),
+            MessageLookupByLibrary.simpleMessage("Oops! Failed to reserve."),
         "busReserveLocation": MessageLookupByLibrary.simpleMessage("Location"),
         "busReserveSuccess":
-            MessageLookupByLibrary.simpleMessage("Successfully Reserved!"),
+            MessageLookupByLibrary.simpleMessage("Reserved successfully!"),
         "busReserveTime": MessageLookupByLibrary.simpleMessage("Time"),
         "busRule": MessageLookupByLibrary.simpleMessage("Bus Rule"),
         "calculateUnits":
@@ -141,35 +141,36 @@ class MessageLookup extends MessageLookupByLibrary {
         "calendarAppNotFound": MessageLookupByLibrary.simpleMessage(
             "Can\"t found any calendar apps."),
         "callPhone": MessageLookupByLibrary.simpleMessage("Call"),
-        "callPhoneContent": MessageLookupByLibrary.simpleMessage(
-            "Are you sure to call \"%s\"?"),
+        "callPhoneContent":
+            MessageLookupByLibrary.simpleMessage("do you want to call \"%s\"?"),
         "callPhoneTitle":
             MessageLookupByLibrary.simpleMessage("Call this number"),
         "campus": MessageLookupByLibrary.simpleMessage(" campus"),
         "campusNotSupport": MessageLookupByLibrary.simpleMessage(
             "Campus not support this feature ~"),
-        "canNotReserve": MessageLookupByLibrary.simpleMessage("Can\"t reserve"),
+        "canNotReserve":
+            MessageLookupByLibrary.simpleMessage("Can\'t be reserved"),
         "canNotUseFeature": MessageLookupByLibrary.simpleMessage(
             "This account can\"t use this feature or school system happend error"),
         "cancel": MessageLookupByLibrary.simpleMessage("No"),
         "cancelAllNotify":
-            MessageLookupByLibrary.simpleMessage("Cancel All Notify"),
+            MessageLookupByLibrary.simpleMessage("Cancel all notifications"),
         "cancelAllNotifySubTitle": MessageLookupByLibrary.simpleMessage(
-            "Clean all notify include unknown notify"),
+            "Clean all notifications including unknown notification"),
         "cancelNotifySuccess":
-            MessageLookupByLibrary.simpleMessage("Cancel Success"),
+            MessageLookupByLibrary.simpleMessage("Cancel successful"),
         "canceling": MessageLookupByLibrary.simpleMessage("Canceling..."),
         "captcha": MessageLookupByLibrary.simpleMessage("Captcha"),
-        "captchaError": MessageLookupByLibrary.simpleMessage("Captcha Error"),
+        "captchaError": MessageLookupByLibrary.simpleMessage("Wrong captcha"),
         "changeEmail": MessageLookupByLibrary.simpleMessage("Change Email"),
         "checkLoginHint": MessageLookupByLibrary.simpleMessage(
             "Check your username and password then retry"),
         "choseLanguageTitle": MessageLookupByLibrary.simpleMessage("Language"),
         "classRank": MessageLookupByLibrary.simpleMessage("Class Rank"),
         "classroomCourseTableSearch": MessageLookupByLibrary.simpleMessage(
-            "Classroom Coursetable Search"),
+            "Classroom course table search"),
         "clickToRetry": MessageLookupByLibrary.simpleMessage(
-            "An error occurred, click to retry"),
+            "An error has occurred, click here to retry"),
         "clickToView": MessageLookupByLibrary.simpleMessage("View"),
         "closeAppHint":
             MessageLookupByLibrary.simpleMessage("Do you want to close App?"),
@@ -181,7 +182,7 @@ class MessageLookup extends MessageLookupByLibrary {
         "continueToUse": MessageLookupByLibrary.simpleMessage("Continue"),
         "course": MessageLookupByLibrary.simpleMessage("Class Schedule"),
         "courseClickHint":
-            MessageLookupByLibrary.simpleMessage("Click subject show more."),
+            MessageLookupByLibrary.simpleMessage("Click subject to show more."),
         "courseDialogLocation":
             MessageLookupByLibrary.simpleMessage("Location"),
         "courseDialogMessages": MessageLookupByLibrary.simpleMessage(
@@ -192,50 +193,53 @@ class MessageLookup extends MessageLookupByLibrary {
         "courseDialogTime": MessageLookupByLibrary.simpleMessage("Time"),
         "courseDialogTitle": MessageLookupByLibrary.simpleMessage("Class Info"),
         "courseEmpty": MessageLookupByLibrary.simpleMessage(
-            "Oops! No class for this semester~\n Please choose another semester 😋"),
+            "Oops! No any classes in this semester~\n Please choose another one. 😋"),
         "courseHoliday": MessageLookupByLibrary.simpleMessage(
-            "Rotate Screen to see weekend schedule %s"),
+            "Rotate the screen to see weekend schedule %s"),
         "courseHours": MessageLookupByLibrary.simpleMessage("Hours"),
         "courseInfo": MessageLookupByLibrary.simpleMessage("Course info"),
         "courseNotify": MessageLookupByLibrary.simpleMessage("Class Reminder"),
         "courseNotifyContent": MessageLookupByLibrary.simpleMessage(
-            "Class %s will be at room %s!"),
-        "courseNotifyEmpty":
-            MessageLookupByLibrary.simpleMessage("Oops! No class need notify~"),
+            "The class %s will be delivered at room %s!"),
+        "courseNotifyEmpty": MessageLookupByLibrary.simpleMessage(
+            "Oops! No class notification~"),
         "courseNotifyError":
-            MessageLookupByLibrary.simpleMessage("Oops! Something was wrong~"),
+            MessageLookupByLibrary.simpleMessage("Oops! Something went wrong~"),
         "courseNotifyHint": MessageLookupByLibrary.simpleMessage(
-            "Reminder will pop up 10 mins before class starts!"),
+            "The reminder will pop up 10 minutes before the class starts!"),
         "courseNotifySubTitle": MessageLookupByLibrary.simpleMessage(
-            "Reminder 10 mins before class starts, click item to cancel."),
+            "The reminder will pop up 10 minutes before the class starts. Click the item to cancel it."),
         "courseNotifyUnknown":
             MessageLookupByLibrary.simpleMessage("Outerspace~"),
         "courseScaffoldSetting":
             MessageLookupByLibrary.simpleMessage("Course Table Setting"),
-        "courseVibrate":
-            MessageLookupByLibrary.simpleMessage("Silent Mode During Class"),
+        "courseVibrate": MessageLookupByLibrary.simpleMessage(
+            "Silent Mode has turned on during the class"),
         "courseVibrateHint": MessageLookupByLibrary.simpleMessage(
-            "Will turn on silent mode during class, turn back to normal mode after class!"),
+            "This app will turn on silent mode during the class, and turn off after the class!"),
         "courseVibratePermission": MessageLookupByLibrary.simpleMessage(
-            "Need don\'t Disturb access to auto mute."),
+            "This app requires a permission to Do Not Disturb Mode to enable auto mute."),
         "credits": MessageLookupByLibrary.simpleMessage("Credits"),
         "creditsTakenEarned":
             MessageLookupByLibrary.simpleMessage("Credits Taken/Earned"),
         "dark": MessageLookupByLibrary.simpleMessage("Dark"),
         "date": MessageLookupByLibrary.simpleMessage("Date"),
         "delayReason": MessageLookupByLibrary.simpleMessage("Delay Reason"),
-        "deleteNewsContent":
-            MessageLookupByLibrary.simpleMessage("Sure delete?"),
-        "deleteNewsTitle": MessageLookupByLibrary.simpleMessage("Delete News"),
-        "deleteSuccess": MessageLookupByLibrary.simpleMessage("Delete Success"),
+        "deleteNewsContent": MessageLookupByLibrary.simpleMessage(
+            "Are you sure you want to delete it?"),
+        "deleteNewsTitle":
+            MessageLookupByLibrary.simpleMessage("Delete latest news"),
+        "deleteSuccess":
+            MessageLookupByLibrary.simpleMessage("Delete successful"),
         "department": MessageLookupByLibrary.simpleMessage("Department"),
         "departmentRank":
             MessageLookupByLibrary.simpleMessage("Department Rank"),
         "description": MessageLookupByLibrary.simpleMessage("Description"),
         "determine": MessageLookupByLibrary.simpleMessage("Yes"),
-        "doNotEmpty": MessageLookupByLibrary.simpleMessage("Don\"t Empty"),
+        "doNotEmpty":
+            MessageLookupByLibrary.simpleMessage("Don\'t remain empty"),
         "donateContent": MessageLookupByLibrary.simpleMessage(
-            "Help and support the programmer\nto use new features!"),
+            "Support the programmer\nto use new features!"),
         "donateTitle": MessageLookupByLibrary.simpleMessage("Donate"),
         "done": MessageLookupByLibrary.simpleMessage("Done"),
         "dotAp": MessageLookupByLibrary.simpleMessage("AP"),
@@ -255,11 +259,11 @@ class MessageLookup extends MessageLookupByLibrary {
         "environmentSettings":
             MessageLookupByLibrary.simpleMessage("Environment"),
         "events": MessageLookupByLibrary.simpleMessage("Events"),
-        "expireTime": MessageLookupByLibrary.simpleMessage("Expire Time"),
-        "exportCourseTable":
-            MessageLookupByLibrary.simpleMessage("Export courseTable to image"),
+        "expireTime": MessageLookupByLibrary.simpleMessage("Expiration Time"),
+        "exportCourseTable": MessageLookupByLibrary.simpleMessage(
+            "Export the course table to image"),
         "exportCourseTableSuccess": MessageLookupByLibrary.simpleMessage(
-            "Export Successful~ Please check directory."),
+            "Export successful~ Please check files."),
         "feedback": MessageLookupByLibrary.simpleMessage("Suggestions"),
         "feedbackViaFacebook":
             MessageLookupByLibrary.simpleMessage("Message to Facebook Page"),
@@ -267,21 +271,21 @@ class MessageLookup extends MessageLookupByLibrary {
         "finalScore": MessageLookupByLibrary.simpleMessage("Final Score"),
         "firstLoginHint": MessageLookupByLibrary.simpleMessage(
             "For first-time login, please fill in the last four number of your ID as your password"),
-        "formatError": MessageLookupByLibrary.simpleMessage("Format Error"),
+        "formatError": MessageLookupByLibrary.simpleMessage("Wrong format"),
         "fri": MessageLookupByLibrary.simpleMessage("Fri."),
         "friday": MessageLookupByLibrary.simpleMessage("Fri"),
         "fromJiangong": MessageLookupByLibrary.simpleMessage("From JianGong"),
         "fromYanchao": MessageLookupByLibrary.simpleMessage("From YanChao"),
         "functionNotOpen": MessageLookupByLibrary.simpleMessage(
-            "Coming Soon~\nDonate to use this feature now!"),
+            "Coming Soon~\nDonate us to unlock this feature now!"),
         "generalEductionCourse":
             MessageLookupByLibrary.simpleMessage("General education course"),
         "generalScore": MessageLookupByLibrary.simpleMessage("General Score"),
         "goToSettings": MessageLookupByLibrary.simpleMessage("Settings"),
         "grandPermissionFail": MessageLookupByLibrary.simpleMessage(
-            "Grand permission fail, please try again."),
+            "Unable to grand permission. Please try again."),
         "guest": MessageLookupByLibrary.simpleMessage("Guest"),
-        "headPhotoSetting": MessageLookupByLibrary.simpleMessage("Show Photo"),
+        "headPhotoSetting": MessageLookupByLibrary.simpleMessage("Show Photos"),
         "headPhotoSettingSubTitle": MessageLookupByLibrary.simpleMessage(
             "Side menu shows the photo sticker"),
         "home": MessageLookupByLibrary.simpleMessage("Home"),
@@ -297,7 +301,7 @@ class MessageLookup extends MessageLookupByLibrary {
             "Image size must below %.1fMB, Plese pick another one."),
         "imageUrl": MessageLookupByLibrary.simpleMessage("Image Link"),
         "imgurUploadDescription": MessageLookupByLibrary.simpleMessage(
-            "For saving server load,\nImage will upload to Imgur publicly."),
+            "To lower the server load,\nimage will be uploaded to Imgur."),
         "instructorsComment": MessageLookupByLibrary.simpleMessage("Comment"),
         "language": MessageLookupByLibrary.simpleMessage("Language"),
         "later": MessageLookupByLibrary.simpleMessage("LATER"),
@@ -309,9 +313,9 @@ class MessageLookup extends MessageLookupByLibrary {
         "leaveDelayHint": MessageLookupByLibrary.simpleMessage(
             "Because over time, need to fill delay reason."),
         "leaveEmpty": MessageLookupByLibrary.simpleMessage(
-            "Oops! No absent record for this semester~\nPlease choose another semester 😋"),
+            "Oops! No data for this semester~\nPlease choose another semester 😋"),
         "leaveNight": MessageLookupByLibrary.simpleMessage(
-            "Rotate screen to see night school absent record"),
+            "Rotate the screen to see night school absent records"),
         "leaveProof": MessageLookupByLibrary.simpleMessage("Leave Proof"),
         "leaveProofHint":
             MessageLookupByLibrary.simpleMessage("Please pick image"),
@@ -331,9 +335,11 @@ class MessageLookup extends MessageLookupByLibrary {
         "loading": MessageLookupByLibrary.simpleMessage("Loading"),
         "login": MessageLookupByLibrary.simpleMessage("Login"),
         "loginFail": MessageLookupByLibrary.simpleMessage(
-            "student id or password error or this student id is not available"),
-        "loginFirst": MessageLookupByLibrary.simpleMessage("Please login"),
-        "loginSuccess": MessageLookupByLibrary.simpleMessage("Login Success"),
+            "Wrong student ID or password, or this student ID isn\'t available"),
+        "loginFirst":
+            MessageLookupByLibrary.simpleMessage("Please login first"),
+        "loginSuccess":
+            MessageLookupByLibrary.simpleMessage("Login Successful"),
         "logining": MessageLookupByLibrary.simpleMessage("Logging..."),
         "logout": MessageLookupByLibrary.simpleMessage("Logout"),
         "logoutCheck": MessageLookupByLibrary.simpleMessage(
@@ -364,9 +370,9 @@ class MessageLookup extends MessageLookupByLibrary {
             MessageLookupByLibrary.simpleMessage("My Applications"),
         "name": MessageLookupByLibrary.simpleMessage("Name"),
         "newsContentFormat": MessageLookupByLibrary.simpleMessage(
-            "Weight：%d\nImage Link：%s\nLink：%s\nExpire Time：%s\nDescription：%s"),
+            "Weight：%d\nImage Link：%s\nLink：%s\nExpire：%s\nDescription：%s"),
         "newsExpireTimeHint": MessageLookupByLibrary.simpleMessage(
-            "No expiration time, please pick time."),
+            "Expiration time hasn\'t been set, please pick a time."),
         "newsRuleDescription1": MessageLookupByLibrary.simpleMessage(
             "This feature provides information about the school or student\"s publication of the school.\n\nPlease use school email (%s) application it"),
         "newsRuleDescription2": MessageLookupByLibrary.simpleMessage(
@@ -375,10 +381,11 @@ class MessageLookup extends MessageLookupByLibrary {
             "The AP team has the final right to modify."),
         "newsRuleTitle":
             MessageLookupByLibrary.simpleMessage("News publication rules"),
-        "noApplicationHint": MessageLookupByLibrary.simpleMessage(
-            "Not found application by application_id."),
+        "noApplicationHint":
+            MessageLookupByLibrary.simpleMessage("No matching application_id."),
         "noData": MessageLookupByLibrary.simpleMessage("No Data"),
-        "noExpiration": MessageLookupByLibrary.simpleMessage("No Expiration"),
+        "noExpiration":
+            MessageLookupByLibrary.simpleMessage("No expiration time"),
         "noInternet":
             MessageLookupByLibrary.simpleMessage("No internet connection"),
         "noOfflineData":
@@ -392,12 +399,13 @@ class MessageLookup extends MessageLookupByLibrary {
         "noPermissionUpdateHint":
             MessageLookupByLibrary.simpleMessage("No permission to update."),
         "none": MessageLookupByLibrary.simpleMessage("None"),
-        "notFoundData": MessageLookupByLibrary.simpleMessage("Not Found Data~"),
+        "notFoundData":
+            MessageLookupByLibrary.simpleMessage("No matching Data~"),
         "notLogin": MessageLookupByLibrary.simpleMessage("Not Login"),
         "notLoginHint": MessageLookupByLibrary.simpleMessage(
             "Not Login, please check login status."),
-        "notSupportImageType":
-            MessageLookupByLibrary.simpleMessage("Not Support Image Type"),
+        "notSupportImageType": MessageLookupByLibrary.simpleMessage(
+            "Image format is no supported"),
         "notificationItem":
             MessageLookupByLibrary.simpleMessage("Notification"),
         "notifications": MessageLookupByLibrary.simpleMessage("News"),
@@ -414,21 +422,21 @@ class MessageLookup extends MessageLookupByLibrary {
         "offlineScore": MessageLookupByLibrary.simpleMessage("Offline Score"),
         "ok": MessageLookupByLibrary.simpleMessage("OK"),
         "onlyShowNotReview":
-            MessageLookupByLibrary.simpleMessage("Only Show Not Review"),
+            MessageLookupByLibrary.simpleMessage("Not been reviewed"),
         "onlySupportInSchool":
-            MessageLookupByLibrary.simpleMessage("Only current student"),
+            MessageLookupByLibrary.simpleMessage("Enrolled students only"),
         "openDrawer": MessageLookupByLibrary.simpleMessage("Open Menu"),
         "otherInfo": MessageLookupByLibrary.simpleMessage("Other"),
         "otherSettings": MessageLookupByLibrary.simpleMessage("Settings"),
         "outlined": MessageLookupByLibrary.simpleMessage("Outlined"),
         "password": MessageLookupByLibrary.simpleMessage("Password"),
-        "passwordError": MessageLookupByLibrary.simpleMessage("Password Error"),
+        "passwordError": MessageLookupByLibrary.simpleMessage("Wrong password"),
         "passwordHint": MessageLookupByLibrary.simpleMessage("Password"),
         "people": MessageLookupByLibrary.simpleMessage("PX"),
         "percentage": MessageLookupByLibrary.simpleMessage("Top % in Class"),
         "phones": MessageLookupByLibrary.simpleMessage("Tel no."),
         "pickAndUploadToImgur":
-            MessageLookupByLibrary.simpleMessage("Pick and Upload to Imgur"),
+            MessageLookupByLibrary.simpleMessage("Pick on and upload to Imgur"),
         "pickSemester": MessageLookupByLibrary.simpleMessage("Choose Semester"),
         "pickTeacher": MessageLookupByLibrary.simpleMessage("Pick Teacher"),
         "platformError": MessageLookupByLibrary.simpleMessage(
@@ -443,7 +451,7 @@ class MessageLookup extends MessageLookupByLibrary {
             "Do you like APP?\nPlease write a comment and rating on the store\nThis is our motivation!"),
         "ratingDialogTitle": MessageLookupByLibrary.simpleMessage("Rate App"),
         "reason": MessageLookupByLibrary.simpleMessage("Reason"),
-        "reject": MessageLookupByLibrary.simpleMessage("Reject"),
+        "reject": MessageLookupByLibrary.simpleMessage("Rejected"),
         "rememberPassword": MessageLookupByLibrary.simpleMessage("Remember"),
         "reserve": MessageLookupByLibrary.simpleMessage("Reserve"),
         "reserveDeadline":
@@ -453,7 +461,7 @@ class MessageLookup extends MessageLookupByLibrary {
         "retry": MessageLookupByLibrary.simpleMessage("Retry"),
         "reviewApplication":
             MessageLookupByLibrary.simpleMessage("Review Application"),
-        "reviewApproval": MessageLookupByLibrary.simpleMessage("Approval"),
+        "reviewApproval": MessageLookupByLibrary.simpleMessage("Approved"),
         "reviewDescription":
             MessageLookupByLibrary.simpleMessage("Review Description"),
         "reviewReject": MessageLookupByLibrary.simpleMessage("Rejected"),
@@ -464,7 +472,7 @@ class MessageLookup extends MessageLookupByLibrary {
             MessageLookupByLibrary.simpleMessage("Counts：%s\nDate：%s"),
         "rewardAndPenaltyEmpty": MessageLookupByLibrary.simpleMessage(
             "Oops！No reward and penalty for this semester~\n Please choose another semester 😋"),
-        "roomList": MessageLookupByLibrary.simpleMessage("Classroom List"),
+        "roomList": MessageLookupByLibrary.simpleMessage("Classroom list"),
         "sat": MessageLookupByLibrary.simpleMessage("Sat."),
         "saturday": MessageLookupByLibrary.simpleMessage("Sat"),
         "schedule": MessageLookupByLibrary.simpleMessage("Events"),
@@ -474,7 +482,7 @@ class MessageLookup extends MessageLookupByLibrary {
             MessageLookupByLibrary.simpleMessage("School Navigation"),
         "score": MessageLookupByLibrary.simpleMessage("Report Card"),
         "scoreEmpty": MessageLookupByLibrary.simpleMessage(
-            "Oops! No record for this semester~\nPlease choose another semester 😋"),
+            "Oops! No data for this semester~\nPlease choose another semester 😋"),
         "search": MessageLookupByLibrary.simpleMessage("Search"),
         "searchResult": MessageLookupByLibrary.simpleMessage("Result"),
         "searchStudentIdError":
@@ -488,9 +496,9 @@ class MessageLookup extends MessageLookupByLibrary {
         "sendFrom":
             MessageLookupByLibrary.simpleMessage("Sent from KUAS AP Android"),
         "setNoExpireTime":
-            MessageLookupByLibrary.simpleMessage("Set No Expiration Time"),
+            MessageLookupByLibrary.simpleMessage("Set to no expiration Time"),
         "settingInternet":
-            MessageLookupByLibrary.simpleMessage("Internet Settings"),
+            MessageLookupByLibrary.simpleMessage("Internet settings"),
         "settings": MessageLookupByLibrary.simpleMessage("Settings"),
         "share": MessageLookupByLibrary.simpleMessage("Share"),
         "shareTo": MessageLookupByLibrary.simpleMessage("Share to…"),
@@ -506,10 +514,10 @@ class MessageLookup extends MessageLookupByLibrary {
             MessageLookupByLibrary.simpleMessage("Course Selection Sim"),
         "skip": MessageLookupByLibrary.simpleMessage("Skip"),
         "somethingError":
-            MessageLookupByLibrary.simpleMessage("Error Occurred."),
+            MessageLookupByLibrary.simpleMessage("An error has occurred."),
         "specialBus": MessageLookupByLibrary.simpleMessage("Special Bus"),
-        "splashContent":
-            MessageLookupByLibrary.simpleMessage("我們全都包了\n只剩下學校不包我們"),
+        "splashContent": MessageLookupByLibrary.simpleMessage(
+            "We did all the things\nOnly did the school leave us."),
         "studentClass": MessageLookupByLibrary.simpleMessage("Class"),
         "studentId": MessageLookupByLibrary.simpleMessage("Student ID"),
         "studentNameCht": MessageLookupByLibrary.simpleMessage("Name"),
@@ -525,22 +533,22 @@ class MessageLookup extends MessageLookupByLibrary {
         "tagRepeatHint": MessageLookupByLibrary.simpleMessage("Tag Repeat"),
         "tapHereToLogin": MessageLookupByLibrary.simpleMessage("Tap to Login"),
         "teacher": MessageLookupByLibrary.simpleMessage("Teacher"),
-        "teacherConfirmContent":
-            MessageLookupByLibrary.simpleMessage("This App only for students!"),
+        "teacherConfirmContent": MessageLookupByLibrary.simpleMessage(
+            "This app is created for students."),
         "teacherConfirmTitle":
             MessageLookupByLibrary.simpleMessage("Are you a teacher?"),
         "theme": MessageLookupByLibrary.simpleMessage("Theme"),
         "thirdPartyLoginFail":
-            MessageLookupByLibrary.simpleMessage("Third Party Login Fail~"),
+            MessageLookupByLibrary.simpleMessage("Fail to Third Party Login~"),
         "thu": MessageLookupByLibrary.simpleMessage("Thu."),
         "thursday": MessageLookupByLibrary.simpleMessage("Thu"),
         "timeoutMessage": MessageLookupByLibrary.simpleMessage(
-            "Try again later, Connection Timeout"),
+            "Connection timed out. Please try again later."),
         "title": MessageLookupByLibrary.simpleMessage("Title"),
         "tokenExpiredContent": MessageLookupByLibrary.simpleMessage(
-            "Cookie has expired, please re-login!"),
+            "Cookie has expired, please re-login once!"),
         "tokenExpiredTitle":
-            MessageLookupByLibrary.simpleMessage("Re-login Required"),
+            MessageLookupByLibrary.simpleMessage("Re-login is required"),
         "totalClassmates":
             MessageLookupByLibrary.simpleMessage("Total Classmates"),
         "traditionalChinese": MessageLookupByLibrary.simpleMessage("繁體中文"),
@@ -551,27 +559,28 @@ class MessageLookup extends MessageLookupByLibrary {
         "units": MessageLookupByLibrary.simpleMessage("Units"),
         "unknown": MessageLookupByLibrary.simpleMessage("Unknown"),
         "unknownError": MessageLookupByLibrary.simpleMessage(
-            "Unknown Error, Please contact Facebook fans page."),
+            "An unknown error has occured, Please report to our Facebook page."),
         "update": MessageLookupByLibrary.simpleMessage("Update"),
         "updateAndApprove":
-            MessageLookupByLibrary.simpleMessage("Update and Approve"),
+            MessageLookupByLibrary.simpleMessage("Updated and Approved"),
         "updateAndReject":
-            MessageLookupByLibrary.simpleMessage("Update and Reject"),
-        "updateAndroidContent":
-            MessageLookupByLibrary.simpleMessage("Update available for %s!"),
-        "updateContent":
-            MessageLookupByLibrary.simpleMessage("Update available for %s!"),
-        "updateIosContent":
-            MessageLookupByLibrary.simpleMessage("Update available for %s!"),
-        "updateNoteTitle": MessageLookupByLibrary.simpleMessage("Update Notes"),
-        "updateSuccess": MessageLookupByLibrary.simpleMessage("Update Success"),
+            MessageLookupByLibrary.simpleMessage("Updated and Rejected"),
+        "updateAndroidContent": MessageLookupByLibrary.simpleMessage(
+            "An update is available for %s!"),
+        "updateContent": MessageLookupByLibrary.simpleMessage(
+            "An update is available for %s!"),
+        "updateIosContent": MessageLookupByLibrary.simpleMessage(
+            "An update is available for %s!"),
+        "updateNoteTitle": MessageLookupByLibrary.simpleMessage("What\'s New"),
+        "updateSuccess":
+            MessageLookupByLibrary.simpleMessage("Update successful"),
         "updateTitle": MessageLookupByLibrary.simpleMessage("Updated"),
         "uploading": MessageLookupByLibrary.simpleMessage("Uploading"),
         "url": MessageLookupByLibrary.simpleMessage("Link"),
         "userInfo": MessageLookupByLibrary.simpleMessage("Personal Info"),
         "userNotSupport": MessageLookupByLibrary.simpleMessage(
             "User can\"t use this feature ~"),
-        "usernameError": MessageLookupByLibrary.simpleMessage("Username Error"),
+        "usernameError": MessageLookupByLibrary.simpleMessage("Wrong username"),
         "version": MessageLookupByLibrary.simpleMessage("v.%s"),
         "waitingForReview":
             MessageLookupByLibrary.simpleMessage("Waiting for review"),
