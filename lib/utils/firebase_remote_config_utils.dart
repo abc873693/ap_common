@@ -14,9 +14,9 @@ class FirebaseRemoteConfigUtils {
       await remoteConfig.fetch();
       await remoteConfig.activate();
       return VersionInfo(
-        code: remoteConfig.getInt(ApConstants.APP_VERSION),
-        isForceUpdate: remoteConfig.getBool(ApConstants.IS_FORCE_UPDATE),
-        content: remoteConfig.getString(ApConstants.NEW_VERSION_CONTENT),
+        code: remoteConfig.getInt(ApConstants.appVersion),
+        isForceUpdate: remoteConfig.getBool(ApConstants.isForceUpdate),
+        content: remoteConfig.getString(ApConstants.newVersionContent),
       );
     } catch (exception) {} finally {}
     return null;
@@ -25,8 +25,8 @@ class FirebaseRemoteConfigUtils {
 
 extension RemoteConfigExtension on RemoteConfig {
   VersionInfo get versionInfo => VersionInfo(
-        code: getInt(ApConstants.APP_VERSION),
-        isForceUpdate: getBool(ApConstants.IS_FORCE_UPDATE),
-        content: getString(ApConstants.NEW_VERSION_CONTENT),
+        code: getInt(ApConstants.appVersion),
+        isForceUpdate: getBool(ApConstants.isForceUpdate),
+        content: getString(ApConstants.newVersionContent),
       );
 }

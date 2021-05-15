@@ -67,24 +67,24 @@ class FirebaseAnalyticsUtils extends AnalyticsUtils {
       await analytics?.logEvent(
         name: 'user_info',
         parameters: <String, dynamic>{
-          AnalyticsConstants.DEPARTMENT: userInfo.department,
+          AnalyticsConstants.department: userInfo.department,
         },
       );
       FirebaseAnalyticsUtils.instance.setUserProperty(
-        AnalyticsConstants.DEPARTMENT,
+        AnalyticsConstants.department,
         userInfo.department,
       );
     }
     if (userInfo.className != null && userInfo.className!.isNotEmpty) {
       FirebaseAnalyticsUtils.instance.setUserProperty(
-        AnalyticsConstants.CLASS_NAME,
+        AnalyticsConstants.className,
         userInfo.className,
       );
     }
     if (userInfo.id != null && userInfo.id!.isNotEmpty) {
       await analytics?.setUserId(userInfo.id);
       FirebaseAnalyticsUtils.instance.setUserProperty(
-        AnalyticsConstants.STUDENT_ID,
+        AnalyticsConstants.studentId,
         userInfo.id,
       );
     }
@@ -179,7 +179,7 @@ class FirebaseAnalyticsUtils extends AnalyticsUtils {
         break;
     }
     setUserProperty(
-      AnalyticsConstants.THEME,
+      AnalyticsConstants.theme,
       brightness == Brightness.light ? ApTheme.LIGHT : ApTheme.DARK,
     );
   }
