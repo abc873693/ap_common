@@ -71,11 +71,7 @@ class ApUtils {
     newUrl = newUrl.replaceAll('-', '');
     newUrl = newUrl.replaceAll(' ', '');
     newUrl = 'tel:$newUrl';
-    if (await canLaunch(newUrl)) {
-      await launch(newUrl);
-    } else {
-      throw 'Could not launch $newUrl';
-    }
+    await launch(newUrl);
   }
 
   static Future<void> shareTo(String content) async {
