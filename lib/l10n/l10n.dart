@@ -391,10 +391,10 @@ class ApLocalizations {
   }
 
   /// `人`
-  String get people {
+  String get unknown {
     return Intl.message(
       '人',
-      name: 'people',
+      name: 'unknown',
       desc: '',
       args: [],
     );
@@ -860,10 +860,10 @@ class ApLocalizations {
     );
   }
 
-  /// `Send from %s Android`
+  /// `Send from %s %s`
   String get sendFrom {
     return Intl.message(
-      'Send from %s Android',
+      'Send from %s %s',
       name: 'sendFrom',
       desc: '',
       args: [],
@@ -885,46 +885,6 @@ class ApLocalizations {
     return Intl.message(
       '貢獻一點心力支持作者，\n可以提早使用未開放功能！',
       name: 'donateContent',
-      desc: '',
-      args: [],
-    );
-  }
-
-  /// `校車預約將於發車前三十分鐘提醒！\n若在網頁預約或取消校車請重登入此App。`
-  String get busNotifyHint {
-    return Intl.message(
-      '校車預約將於發車前三十分鐘提醒！\n若在網頁預約或取消校車請重登入此App。',
-      name: 'busNotifyHint',
-      desc: '',
-      args: [],
-    );
-  }
-
-  /// `您有一班 %s 從%s出發的校車！`
-  String get busNotifyContent {
-    return Intl.message(
-      '您有一班 %s 從%s出發的校車！',
-      name: 'busNotifyContent',
-      desc: '',
-      args: [],
-    );
-  }
-
-  /// `建工`
-  String get busNotifyJiangong {
-    return Intl.message(
-      '建工',
-      name: 'busNotifyJiangong',
-      desc: '',
-      args: [],
-    );
-  }
-
-  /// `燕巢`
-  String get busNotifyYanchao {
-    return Intl.message(
-      '燕巢',
-      name: 'busNotifyYanchao',
       desc: '',
       args: [],
     );
@@ -1025,6 +985,36 @@ class ApLocalizations {
     return Intl.message(
       '前往設定',
       name: 'goToSettings',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `最新消息`
+  String get notifications {
+    return Intl.message(
+      '最新消息',
+      name: 'notifications',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `常用電話`
+  String get phones {
+    return Intl.message(
+      '常用電話',
+      name: 'phones',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `行事曆`
+  String get events {
+    return Intl.message(
+      '行事曆',
+      name: 'events',
       desc: '',
       args: [],
     );
@@ -1170,26 +1160,6 @@ class ApLocalizations {
     );
   }
 
-  /// `校車提醒`
-  String get busNotify {
-    return Intl.message(
-      '校車提醒',
-      name: 'busNotify',
-      desc: '',
-      args: [],
-    );
-  }
-
-  /// `發車前三十分鐘提醒`
-  String get busNotifySubTitle {
-    return Intl.message(
-      '發車前三十分鐘提醒',
-      name: 'busNotifySubTitle',
-      desc: '',
-      args: [],
-    );
-  }
-
   /// `回饋意見`
   String get feedback {
     return Intl.message(
@@ -1215,6 +1185,16 @@ class ApLocalizations {
     return Intl.message(
       'App 版本',
       name: 'appVersion',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// ``
+  String get aboutDetail {
+    return Intl.message(
+      '',
+      name: 'aboutDetail',
       desc: '',
       args: [],
     );
@@ -1430,36 +1410,6 @@ class ApLocalizations {
     );
   }
 
-  /// `最新消息`
-  String get notifications {
-    return Intl.message(
-      '最新消息',
-      name: 'notifications',
-      desc: '',
-      args: [],
-    );
-  }
-
-  /// `常用電話`
-  String get phones {
-    return Intl.message(
-      '常用電話',
-      name: 'phones',
-      desc: '',
-      args: [],
-    );
-  }
-
-  /// `行事曆`
-  String get events {
-    return Intl.message(
-      '行事曆',
-      name: 'events',
-      desc: '',
-      args: [],
-    );
-  }
-
   /// `個人資訊`
   String get userInfo {
     return Intl.message(
@@ -1550,26 +1500,6 @@ class ApLocalizations {
     );
   }
 
-  /// `建工上車`
-  String get fromJiangong {
-    return Intl.message(
-      '建工上車',
-      name: 'fromJiangong',
-      desc: '',
-      args: [],
-    );
-  }
-
-  /// `燕巢上車`
-  String get fromYanchao {
-    return Intl.message(
-      '燕巢上車',
-      name: 'fromYanchao',
-      desc: '',
-      args: [],
-    );
-  }
-
   /// `Lorem ipsum`
   String get loremTitle {
     return Intl.message(
@@ -1620,10 +1550,10 @@ class ApLocalizations {
     );
   }
 
-  /// `09:20`
+  /// `9:20`
   String get loremTime {
     return Intl.message(
-      '09:20',
+      '9:20',
       name: 'loremTime',
       desc: '',
       args: [],
@@ -1881,60 +1811,50 @@ class ApLocalizations {
   }
 
   /// `學分試算`
-  String get calculateUnits {
+  String get calculateCredits {
     return Intl.message(
       '學分試算',
-      name: 'calculateUnits',
+      name: 'calculateCredits',
       desc: '',
       args: [],
     );
   }
 
   /// `必修學分`
-  String get requiredUnits {
+  String get requiredCredits {
     return Intl.message(
       '必修學分',
-      name: 'requiredUnits',
+      name: 'requiredCredits',
       desc: '',
       args: [],
     );
   }
 
   /// `選修學分`
-  String get electiveUnits {
+  String get electiveCredits {
     return Intl.message(
       '選修學分',
-      name: 'electiveUnits',
+      name: 'electiveCredits',
       desc: '',
       args: [],
     );
   }
 
   /// `其他學分`
-  String get otherUnits {
+  String get otherCredits {
     return Intl.message(
       '其他學分',
-      name: 'otherUnits',
+      name: 'otherCredits',
       desc: '',
       args: [],
     );
   }
 
   /// `總學分`
-  String get unitsTotal {
+  String get totalCredits {
     return Intl.message(
       '總學分',
-      name: 'unitsTotal',
-      desc: '',
-      args: [],
-    );
-  }
-
-  /// `學期`
-  String get semester {
-    return Intl.message(
-      '學期',
-      name: 'semester',
+      name: 'totalCredits',
       desc: '',
       args: [],
     );
@@ -2075,6 +1995,16 @@ class ApLocalizations {
     return Intl.message(
       '校車搭乘規則',
       name: 'busRule',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `人`
+  String get people {
+    return Intl.message(
+      '人',
+      name: 'people',
       desc: '',
       args: [],
     );
@@ -2300,10 +2230,10 @@ class ApLocalizations {
     );
   }
 
-  /// `1. 圖片且上傳至 Imgur\n請使用JPEG有壓縮過的檔案\n建議不要超過100KB\n2. 標題建議放活動名稱，不要太長\n3. 活動網址連結\n4. 內容說明(建議100字內 避免跑版)\n5.必須為非營利活動\n\n`
+  /// `1. 圖片且上傳至 Imgur\n請使用JPEG有壓縮過的檔案\n建議不要超過100KB\n2. 標題建議放活動名稱，不要太長\n3. 活動網址連結\n4. 內容說明(建議100字內 避免跑版)\n5.必須為非營利活動\n`
   String get newsRuleDescription2 {
     return Intl.message(
-      '1. 圖片且上傳至 Imgur\n請使用JPEG有壓縮過的檔案\n建議不要超過100KB\n2. 標題建議放活動名稱，不要太長\n3. 活動網址連結\n4. 內容說明(建議100字內 避免跑版)\n5.必須為非營利活動\n\n',
+      '1. 圖片且上傳至 Imgur\n請使用JPEG有壓縮過的檔案\n建議不要超過100KB\n2. 標題建議放活動名稱，不要太長\n3. 活動網址連結\n4. 內容說明(建議100字內 避免跑版)\n5.必須為非營利活動\n',
       name: 'newsRuleDescription2',
       desc: '',
       args: [],
@@ -3040,11 +2970,31 @@ class ApLocalizations {
     );
   }
 
+  /// `身分證字號`
+  String get idCard {
+    return Intl.message(
+      '身分證字號',
+      name: 'idCard',
+      desc: '',
+      args: [],
+    );
+  }
+
   /// `身分證末四碼`
-  String get idCardLastCode {
+  String get idCardLast4Code {
     return Intl.message(
       '身分證末四碼',
-      name: 'idCardLastCode',
+      name: 'idCardLast4Code',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `身分證末六碼`
+  String get idCardLast6Code {
+    return Intl.message(
+      '身分證末六碼',
+      name: 'idCardLast6Code',
       desc: '',
       args: [],
     );

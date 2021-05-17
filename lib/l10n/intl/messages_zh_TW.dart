@@ -26,6 +26,7 @@ class MessageLookup extends MessageLookupByLibrary {
             "高科校務通v1 & v2\n呂紹榕(Louie Lu), 姜尚德(JohnThunder), \nregisterAutumn, 詹濬鍵(Evans), \n陳建霖(HearSilent), 陳冠蓁, 徐羽柔\n高科校務通v3\n房志剛(Rainvisitor),林義翔(takidog)\n林鈺軒(Lin YuHsuan),周鈺禮(Gary)\n中山校務通\n房志剛(Rainvisitor),胡智強（JohnHuCC)\n台科校務通\n房志剛(Rainvisitor),林義翔(takidog)\n文藻校務通\n林義翔(takidog),房志剛(Rainvisitor)"),
         "aboutAuthorTitle": MessageLookupByLibrary.simpleMessage("作者群"),
         "aboutContactUsTitle": MessageLookupByLibrary.simpleMessage("聯繫我們"),
+        "aboutDetail": MessageLookupByLibrary.simpleMessage(""),
         "aboutItcContent": MessageLookupByLibrary.simpleMessage(
             "在103學年度，\n我們也成立了高應大資訊研習社！\n\n如果你對資訊有熱誠或是對我們作品有興趣，歡迎來社課或是講座，也可以來找我們聊聊天。"),
         "aboutItcTitle": MessageLookupByLibrary.simpleMessage("高科資研社"),
@@ -73,16 +74,8 @@ class MessageLookup extends MessageLookupByLibrary {
         "busFailInfinity": MessageLookupByLibrary.simpleMessage("學校校車系統或許壞掉惹～"),
         "busNotPick":
             MessageLookupByLibrary.simpleMessage("您尚未選擇日期！\n請先選擇日期 %s"),
-        "busNotify": MessageLookupByLibrary.simpleMessage("校車提醒"),
-        "busNotifyContent":
-            MessageLookupByLibrary.simpleMessage("您有一班 %s 從%s出發的校車！"),
-        "busNotifyHint": MessageLookupByLibrary.simpleMessage(
-            "校車預約將於發車前三十分鐘提醒！\n若在網頁預約或取消校車請重登入此App。"),
-        "busNotifyJiangong": MessageLookupByLibrary.simpleMessage("建工"),
-        "busNotifySubTitle": MessageLookupByLibrary.simpleMessage("發車前三十分鐘提醒"),
-        "busNotifyYanchao": MessageLookupByLibrary.simpleMessage("燕巢"),
         "busRule": MessageLookupByLibrary.simpleMessage("校車搭乘規則"),
-        "calculateUnits": MessageLookupByLibrary.simpleMessage("學分試算"),
+        "calculateCredits": MessageLookupByLibrary.simpleMessage("學分試算"),
         "calculateUnitsContent":
             MessageLookupByLibrary.simpleMessage("計算僅供參考 其餘以學校公告為主"),
         "calculating": MessageLookupByLibrary.simpleMessage("計算中..."),
@@ -172,7 +165,7 @@ class MessageLookup extends MessageLookupByLibrary {
         "dotLeave": MessageLookupByLibrary.simpleMessage("缺曠"),
         "easterEggJuke": MessageLookupByLibrary.simpleMessage("這不是彩蛋"),
         "educationSystem": MessageLookupByLibrary.simpleMessage("學制"),
-        "electiveUnits": MessageLookupByLibrary.simpleMessage("選修學分"),
+        "electiveCredits": MessageLookupByLibrary.simpleMessage("選修學分"),
         "email": MessageLookupByLibrary.simpleMessage("電子信箱"),
         "emptyClassroomSearch": MessageLookupByLibrary.simpleMessage("空教室查詢"),
         "english": MessageLookupByLibrary.simpleMessage("English"),
@@ -193,8 +186,6 @@ class MessageLookup extends MessageLookupByLibrary {
         "formatError": MessageLookupByLibrary.simpleMessage("格式錯誤"),
         "fri": MessageLookupByLibrary.simpleMessage("五"),
         "friday": MessageLookupByLibrary.simpleMessage("週五"),
-        "fromJiangong": MessageLookupByLibrary.simpleMessage("建工上車"),
-        "fromYanchao": MessageLookupByLibrary.simpleMessage("燕巢上車"),
         "functionNotOpen":
             MessageLookupByLibrary.simpleMessage("功能尚未開放\n私密粉絲團 小編會告訴你何時開放！"),
         "generalEductionCourse": MessageLookupByLibrary.simpleMessage("通識課程"),
@@ -210,7 +201,9 @@ class MessageLookup extends MessageLookupByLibrary {
         "iKnow": MessageLookupByLibrary.simpleMessage("我知道了"),
         "iconStyle": MessageLookupByLibrary.simpleMessage("圖案風格"),
         "id": MessageLookupByLibrary.simpleMessage("身分證字號"),
-        "idCardLastCode": MessageLookupByLibrary.simpleMessage("身分證末四碼"),
+        "idCard": MessageLookupByLibrary.simpleMessage("身分證字號"),
+        "idCardLast4Code": MessageLookupByLibrary.simpleMessage("身分證末四碼"),
+        "idCardLast6Code": MessageLookupByLibrary.simpleMessage("身分證末六碼"),
         "idHint": MessageLookupByLibrary.simpleMessage("學號"),
         "imageCompressHint": MessageLookupByLibrary.simpleMessage(
             "因檔案超出 %.1fMB 自動將其壓縮至 %.2f MB"),
@@ -263,7 +256,7 @@ class MessageLookup extends MessageLookupByLibrary {
         "loremSemester": MessageLookupByLibrary.simpleMessage("104學年度第1學期"),
         "loremSentence":
             MessageLookupByLibrary.simpleMessage("Lorem ipsum dolor sit amet."),
-        "loremTime": MessageLookupByLibrary.simpleMessage("09:20"),
+        "loremTime": MessageLookupByLibrary.simpleMessage("9:20"),
         "loremTitle": MessageLookupByLibrary.simpleMessage("Lorem ipsum"),
         "midtermAlerts": MessageLookupByLibrary.simpleMessage("期中預警"),
         "midtermAlertsContent":
@@ -283,7 +276,7 @@ class MessageLookup extends MessageLookupByLibrary {
         "newsRuleDescription1": MessageLookupByLibrary.simpleMessage(
             "本系統提供社團或學生\n刊登學校相關資訊\n需使用有學校域名(%s)的第三方驗證帳號登入\n"),
         "newsRuleDescription2": MessageLookupByLibrary.simpleMessage(
-            "1. 圖片且上傳至 Imgur\n請使用JPEG有壓縮過的檔案\n建議不要超過100KB\n2. 標題建議放活動名稱，不要太長\n3. 活動網址連結\n4. 內容說明(建議100字內 避免跑版)\n5.必須為非營利活動\n\n"),
+            "1. 圖片且上傳至 Imgur\n請使用JPEG有壓縮過的檔案\n建議不要超過100KB\n2. 標題建議放活動名稱，不要太長\n3. 活動網址連結\n4. 內容說明(建議100字內 避免跑版)\n5.必須為非營利活動\n"),
         "newsRuleDescription3":
             MessageLookupByLibrary.simpleMessage("校務通團隊有最終修改權利"),
         "newsRuleTitle": MessageLookupByLibrary.simpleMessage("最新消息刊登規則"),
@@ -320,9 +313,9 @@ class MessageLookup extends MessageLookupByLibrary {
         "onlyShowNotReview": MessageLookupByLibrary.simpleMessage("只顯示尚未審查"),
         "onlySupportInSchool": MessageLookupByLibrary.simpleMessage("僅限在校生使用"),
         "openDrawer": MessageLookupByLibrary.simpleMessage("打開功能表"),
+        "otherCredits": MessageLookupByLibrary.simpleMessage("其他學分"),
         "otherInfo": MessageLookupByLibrary.simpleMessage("其他資訊"),
         "otherSettings": MessageLookupByLibrary.simpleMessage("其他設定"),
-        "otherUnits": MessageLookupByLibrary.simpleMessage("其他學分"),
         "outlined": MessageLookupByLibrary.simpleMessage("輪廓"),
         "password": MessageLookupByLibrary.simpleMessage("密碼"),
         "passwordError": MessageLookupByLibrary.simpleMessage("密碼輸入錯誤"),
@@ -347,7 +340,7 @@ class MessageLookup extends MessageLookupByLibrary {
         "reason": MessageLookupByLibrary.simpleMessage("原因"),
         "reject": MessageLookupByLibrary.simpleMessage("駁回"),
         "rememberPassword": MessageLookupByLibrary.simpleMessage("記住密碼"),
-        "requiredUnits": MessageLookupByLibrary.simpleMessage("必修學分"),
+        "requiredCredits": MessageLookupByLibrary.simpleMessage("必修學分"),
         "reserveDeadline": MessageLookupByLibrary.simpleMessage("預約截止時間"),
         "reserving": MessageLookupByLibrary.simpleMessage("預約中..."),
         "retry": MessageLookupByLibrary.simpleMessage("重試"),
@@ -379,11 +372,9 @@ class MessageLookup extends MessageLookupByLibrary {
         "searchStudentIdFormat":
             MessageLookupByLibrary.simpleMessage("姓名：%s\n學號：%s\n"),
         "searchUsername": MessageLookupByLibrary.simpleMessage("學號查詢"),
-        "semester": MessageLookupByLibrary.simpleMessage("學期"),
         "semesterScore": MessageLookupByLibrary.simpleMessage("學期成績"),
         "semesterScoreTitle": MessageLookupByLibrary.simpleMessage("學期成績"),
-        "sendFrom":
-            MessageLookupByLibrary.simpleMessage("Send from %s Android"),
+        "sendFrom": MessageLookupByLibrary.simpleMessage("Send from %s %s"),
         "setNoExpireTime": MessageLookupByLibrary.simpleMessage("設定無到期時間"),
         "settingInternet": MessageLookupByLibrary.simpleMessage("設定網路"),
         "settings": MessageLookupByLibrary.simpleMessage("設定"),
@@ -425,12 +416,13 @@ class MessageLookup extends MessageLookupByLibrary {
             MessageLookupByLibrary.simpleMessage("登入資訊過期，請重新登入！"),
         "tokenExpiredTitle": MessageLookupByLibrary.simpleMessage("重新登入"),
         "totalClassmates": MessageLookupByLibrary.simpleMessage("總人數"),
+        "totalCredits": MessageLookupByLibrary.simpleMessage("總學分"),
         "traditionalChinese": MessageLookupByLibrary.simpleMessage("繁體中文"),
         "tue": MessageLookupByLibrary.simpleMessage("二"),
         "tuesday": MessageLookupByLibrary.simpleMessage("週二"),
         "tutor": MessageLookupByLibrary.simpleMessage("導師"),
         "units": MessageLookupByLibrary.simpleMessage("學分"),
-        "unitsTotal": MessageLookupByLibrary.simpleMessage("總學分"),
+        "unknown": MessageLookupByLibrary.simpleMessage("人"),
         "unknownError":
             MessageLookupByLibrary.simpleMessage("未知錯誤 請聯絡臉書粉絲專頁反應"),
         "update": MessageLookupByLibrary.simpleMessage("更新"),
