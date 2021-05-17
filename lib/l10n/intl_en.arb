@@ -354,5 +354,9 @@
   "tag": "Tag",
   "addTag": "Add Tag",
   "tagRepeatHint": "Tag Repeat",
-  "tagName": "Tag Name"
+  "tagName": "Tag Name",
+  "appTrackingDialogTitle": "App Tracking",
+  "appTrackingDialogContent": "This app version will require us to obtain consent",
+  "analyticsDescription": "Analytics",
+  "crashReportDescription": "Crash Report"
 }

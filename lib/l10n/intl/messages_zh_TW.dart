@@ -48,6 +48,8 @@ class MessageLookup extends MessageLookupByLibrary {
         "admissionGuide": MessageLookupByLibrary.simpleMessage("入學指南"),
         "allAnnouncements": MessageLookupByLibrary.simpleMessage("所有最新消息"),
         "allApplications": MessageLookupByLibrary.simpleMessage("所有審查"),
+        "analyticsDescription": MessageLookupByLibrary.simpleMessage(
+            "體驗分析：包含使用者在操作上的紀錄，幫助我們提供更好使用者體驗"),
         "announcementEmpty":
             MessageLookupByLibrary.simpleMessage("Oops！沒有任何最新消息 😋"),
         "announcementReviewSystem":
@@ -55,6 +57,10 @@ class MessageLookup extends MessageLookupByLibrary {
         "announcements": MessageLookupByLibrary.simpleMessage("最新消息"),
         "apiServerError":
             MessageLookupByLibrary.simpleMessage("校務通伺服器錯誤\n可向粉絲專頁回報"),
+        "appTrackingDialogContent": MessageLookupByLibrary.simpleMessage(
+            "這個 App 版本會要求我們必須取得同意，才能追蹤來自此裝置的分析資料。若不開啟此功能我們將無法取得以下資料，幫助改善使用者體驗與 App 穩定性。\n\n相關資料只有校務通開發團隊成員可存取，我們會致力於保護您的資料。"),
+        "appTrackingDialogTitle":
+            MessageLookupByLibrary.simpleMessage("App 追蹤說明"),
         "appVersion": MessageLookupByLibrary.simpleMessage("App 版本"),
         "applicant": MessageLookupByLibrary.simpleMessage("申請人"),
         "applicationSubmitSuccess":
@@ -143,6 +149,8 @@ class MessageLookup extends MessageLookupByLibrary {
             MessageLookupByLibrary.simpleMessage("將於上課時轉為震動，下課時恢復！"),
         "courseVibratePermission":
             MessageLookupByLibrary.simpleMessage("需要「零打擾存取權」方能自動轉為震動。"),
+        "crashReportDescription": MessageLookupByLibrary.simpleMessage(
+            "崩潰分析：當 App 因為意外崩潰，幫助我們可以追蹤相關的問題並修正"),
         "credits": MessageLookupByLibrary.simpleMessage("學分"),
         "creditsTakenEarned": MessageLookupByLibrary.simpleMessage("修習學分/實得學分"),
         "dark": MessageLookupByLibrary.simpleMessage("深色"),

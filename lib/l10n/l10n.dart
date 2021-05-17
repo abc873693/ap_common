@@ -3609,6 +3609,46 @@ class ApLocalizations {
       args: [],
     );
   }
+
+  /// `App 追蹤說明`
+  String get appTrackingDialogTitle {
+    return Intl.message(
+      'App 追蹤說明',
+      name: 'appTrackingDialogTitle',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `這個 App 版本會要求我們必須取得同意，才能追蹤來自此裝置的分析資料。若不開啟此功能我們將無法取得以下資料，幫助改善使用者體驗與 App 穩定性。\n\n相關資料只有校務通開發團隊成員可存取，我們會致力於保護您的資料。`
+  String get appTrackingDialogContent {
+    return Intl.message(
+      '這個 App 版本會要求我們必須取得同意，才能追蹤來自此裝置的分析資料。若不開啟此功能我們將無法取得以下資料，幫助改善使用者體驗與 App 穩定性。\n\n相關資料只有校務通開發團隊成員可存取，我們會致力於保護您的資料。',
+      name: 'appTrackingDialogContent',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `體驗分析：包含使用者在操作上的紀錄，幫助我們提供更好使用者體驗`
+  String get analyticsDescription {
+    return Intl.message(
+      '體驗分析：包含使用者在操作上的紀錄，幫助我們提供更好使用者體驗',
+      name: 'analyticsDescription',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `崩潰分析：當 App 因為意外崩潰，幫助我們可以追蹤相關的問題並修正`
+  String get crashReportDescription {
+    return Intl.message(
+      '崩潰分析：當 App 因為意外崩潰，幫助我們可以追蹤相關的問題並修正',
+      name: 'crashReportDescription',
+      desc: '',
+      args: [],
+    );
+  }
 }
 
 class AppLocalizationDelegate extends LocalizationsDelegate<ApLocalizations> {

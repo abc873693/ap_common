@@ -56,6 +56,8 @@ class MessageLookup extends MessageLookupByLibrary {
             MessageLookupByLibrary.simpleMessage("All Announcements"),
         "allApplications":
             MessageLookupByLibrary.simpleMessage("All Applications"),
+        "analyticsDescription":
+            MessageLookupByLibrary.simpleMessage("Analytics"),
         "announcementEmpty": MessageLookupByLibrary.simpleMessage(
             "Oops！There is no latest news 😋"),
         "announcementReviewSystem":
@@ -63,6 +65,10 @@ class MessageLookup extends MessageLookupByLibrary {
         "announcements": MessageLookupByLibrary.simpleMessage("News"),
         "apiServerError": MessageLookupByLibrary.simpleMessage(
             "AP Server is out of service\nPlease report to our Facebook page"),
+        "appTrackingDialogContent": MessageLookupByLibrary.simpleMessage(
+            "This app version will require us to obtain consent"),
+        "appTrackingDialogTitle":
+            MessageLookupByLibrary.simpleMessage("App Tracking"),
         "appVersion": MessageLookupByLibrary.simpleMessage("App Version"),
         "applicant": MessageLookupByLibrary.simpleMessage("Applicant"),
         "applicationSubmitSuccess": MessageLookupByLibrary.simpleMessage(
@@ -167,6 +173,8 @@ class MessageLookup extends MessageLookupByLibrary {
             "This app will turn on silent mode during the class, and turn off after the class!"),
         "courseVibratePermission": MessageLookupByLibrary.simpleMessage(
             "This app requires a permission to Do Not Disturb Mode to enable auto mute."),
+        "crashReportDescription":
+            MessageLookupByLibrary.simpleMessage("Crash Report"),
         "credits": MessageLookupByLibrary.simpleMessage("Credits"),
         "creditsTakenEarned":
             MessageLookupByLibrary.simpleMessage("Credits Taken/Earned"),
