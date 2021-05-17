@@ -420,6 +420,16 @@ class ApLocalizations {
     );
   }
 
+  /// `Oops！目前校車沒上班喔～\n請選擇其他班次 😋`
+  String get busEmpty {
+    return Intl.message(
+      'Oops！目前校車沒上班喔～\n請選擇其他班次 😋',
+      name: 'busEmpty',
+      desc: '',
+      args: [],
+    );
+  }
+
   /// `Oops！本學期沒有任何課哦～\n請選擇其他學期 😋`
   String get courseEmpty {
     return Intl.message(
@@ -1855,6 +1865,16 @@ class ApLocalizations {
     return Intl.message(
       '總學分',
       name: 'totalCredits',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `學期`
+  String get semester {
+    return Intl.message(
+      '學期',
+      name: 'semester',
       desc: '',
       args: [],
     );

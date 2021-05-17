@@ -77,6 +77,8 @@ class MessageLookup extends MessageLookupByLibrary {
         "birthDay": MessageLookupByLibrary.simpleMessage("出生日"),
         "birthMonth": MessageLookupByLibrary.simpleMessage("出生月"),
         "bus": MessageLookupByLibrary.simpleMessage("校車系統"),
+        "busEmpty":
+            MessageLookupByLibrary.simpleMessage("Oops！目前校車沒上班喔～\n請選擇其他班次 😋"),
         "busFailInfinity": MessageLookupByLibrary.simpleMessage("學校校車系統或許壞掉惹～"),
         "busNotPick":
             MessageLookupByLibrary.simpleMessage("您尚未選擇日期！\n請先選擇日期 %s"),
@@ -380,6 +382,7 @@ class MessageLookup extends MessageLookupByLibrary {
         "searchStudentIdFormat":
             MessageLookupByLibrary.simpleMessage("姓名：%s\n學號：%s\n"),
         "searchUsername": MessageLookupByLibrary.simpleMessage("學號查詢"),
+        "semester": MessageLookupByLibrary.simpleMessage("學期"),
         "semesterScore": MessageLookupByLibrary.simpleMessage("學期成績"),
         "semesterScoreTitle": MessageLookupByLibrary.simpleMessage("學期成績"),
         "sendFrom": MessageLookupByLibrary.simpleMessage("Send from %s %s"),

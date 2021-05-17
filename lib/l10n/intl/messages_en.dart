@@ -86,6 +86,8 @@ class MessageLookup extends MessageLookupByLibrary {
         "birthDay": MessageLookupByLibrary.simpleMessage("Birth Day"),
         "birthMonth": MessageLookupByLibrary.simpleMessage("Birth Month"),
         "bus": MessageLookupByLibrary.simpleMessage("Campus Bus System"),
+        "busEmpty": MessageLookupByLibrary.simpleMessage(
+            "Oops! No any buses now~\nPlease choose another one."),
         "busFailInfinity": MessageLookupByLibrary.simpleMessage(
             "Bus campus system is out of service!"),
         "busNotPick": MessageLookupByLibrary.simpleMessage(
@@ -462,6 +464,7 @@ class MessageLookup extends MessageLookupByLibrary {
             MessageLookupByLibrary.simpleMessage("Name：%s\nStudent ID：%s\n"),
         "searchUsername":
             MessageLookupByLibrary.simpleMessage("Search Student ID"),
+        "semester": MessageLookupByLibrary.simpleMessage("Semester"),
         "semesterScore": MessageLookupByLibrary.simpleMessage("Semester Score"),
         "semesterScoreTitle": MessageLookupByLibrary.simpleMessage("Final"),
         "sendFrom": MessageLookupByLibrary.simpleMessage("Sent from %s %s"),
