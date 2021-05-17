@@ -46,5 +46,7 @@
     <!-- Permission options for the `photos` group -->
     <key>NSPhotoLibraryUsageDescription</key>
     <string>photos</string>
+    <key>NSUserTrackingUsageDescription</key>
+    <string>This identifier will be used to deliver personalized ads to you.</string>
 </dict>
 </plist>

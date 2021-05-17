@@ -1,5 +1,6 @@
 import 'package:ap_common/models/version_info.dart';
 import 'package:ap_common/utils/ap_utils.dart';
+import 'package:ap_common/utils/app_tracking_utils.dart';
 import 'package:ap_common/utils/dialog_utils.dart';
 import 'package:ap_common/utils/notification_utils.dart';
 import 'package:ap_common_example/config/constants.dart';
@@ -73,6 +74,16 @@ class _DialogUtilsTestPageState extends State<DialogUtilsTestPage> {
             },
             title: const Text('App內評分'),
             subtitle: const Text('ApUtils.showAppReviewDialog'),
+          ),
+          ListTile(
+            onTap: () {
+              AppTrackingUtils.show(
+                context: context,
+                onTap: () async {},
+              );
+            },
+            title: const Text('App 追蹤'),
+            subtitle: const Text('ApUtils.showAppTracking'),
           ),
         ],
       ),
