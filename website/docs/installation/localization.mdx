@@ -1,0 +1,49 @@
+---
+sidebar_position: 3
+---
+
+# 多國語言(i18n)
+
+使用官方的 flutter_localization 實作，預設使用英文(en)
+
+ - 繁體中文(zh-TW)
+ - 英文(en)
+
+在 `MaterialApp` 加入多國語言支援
+
+```dart
+    ThemeMode themeMode = ThemeMode.system;
+    Locale locale;
+
+    @override
+      Widget build(BuildContext context) {
+        return MaterialApp(
+              // 在此設定使用的語言，否則會按照系統提供語言，若為不支援語言 預設為英文
+              localeResolutionCallback:
+                    (Locale locale, Iterable<Locale> supportedLocales) {
+                  String languageCode = Preferences.getString(
+                    ApConstants.PREF_LANGUAGE_CODE,
+                    ApSupportLanguageConstants.SYSTEM,
+                  );
+                  if (languageCode == ApSupportLanguageConstants.SYSTEM)
+                    return this.locale = ApLocalizations.delegate.isSupported(locale)
+                        ? locale
+                        : Locale('en');
+                  else
+                    return Locale(
+                      languageCode,
+                      languageCode == ApSupportLanguageConstants.ZH ? 'TW' : null,
+                    );
+                },
+              localizationsDelegates: [
+                  ApLocalizations.delegate,
+              ],
+              locale: locale,
+              supportedLocales: [
+                const Locale('en'), // English
+                const Locale('zh', 'TW'), // Traditional Chinese
+              ],
+            );
+    }
+
+```
