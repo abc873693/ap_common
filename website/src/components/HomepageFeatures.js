@@ -4,32 +4,35 @@ import styles from './HomepageFeatures.module.css';
 
 const FeatureList = [
   {
-    title: 'Easy to Use',
+    title: 'Better UI/UX',
     Svg: require('../../static/img/undraw_docusaurus_mountain.svg').default,
     description: (
       <>
-        Docusaurus was designed from the ground up to be easily installed and
-        used to get your website up and running quickly.
+        以 <a href="https://material.io/design">Material Design</a>
+        設計學生常使用到的課表、成績等使用者介面，
+        提供更好的使用者體驗
       </>
     ),
   },
   {
-    title: 'Focus on What Matters',
+    title: 'More Powerful',
     Svg: require('../../static/img/undraw_docusaurus_tree.svg').default,
     description: (
       <>
-        Docusaurus lets you focus on your docs, and we&apos;ll do the chores. Go
-        ahead and move your docs into the <code>docs</code> directory.
+        使用 Google 開源的框架 <a href="https://flutter.dev/design">Flutter</a> 開發，
+        讓你的 App 可以部署到 <code>Android</code>、<code>iOS</code>、<code>Web</code>、
+        <code>macOS</code>、<code>Linux</code> 與 <code>Windows</code> 等多個平台
       </>
     ),
   },
   {
-    title: 'Powered by React',
+    title: 'Open Source',
     Svg: require('../../static/img/undraw_docusaurus_react.svg').default,
     description: (
       <>
-        Extend or customize your website layout by reusing React. Docusaurus can
-        be extended while reusing the same header and footer.
+        永遠開放原始碼，
+        可於 <code>GitHub</code> 找到我們的程式碼，
+        並於 <a href="https://pub.dev/ap_common">Pub</a> 提供套件
       </>
     ),
   },
