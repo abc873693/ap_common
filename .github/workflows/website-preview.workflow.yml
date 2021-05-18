@@ -1,0 +1,31 @@
+name: website-preview
+
+on:
+  pull_request:
+    paths:
+      - "docs/**"
+      - "website/**"
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - uses: actions/setup-node@v2-beta
+        with:
+          node-version: '12'
+      - name: NPM Install
+        working-directory: ./website
+        run: yarn
+      - name: Check Linting
+        working-directory: ./website
+        run: yarn run check:linting
+      - name: Check Formatting
+        working-directory: ./website
+        run: yarn run check:formatting
+      - name: Check TS Compiles
+        working-directory: ./website
+        run: yarn run check:typescript
+      - name: Check Spelling & Grammar
+        working-directory: ./website
+        run: yarn run check:spelling
