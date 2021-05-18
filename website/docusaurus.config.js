@@ -10,6 +10,20 @@ module.exports = {
   organizationName: 'AP-Common', // Usually your GitHub org/user name.
   projectName: 'AP-Common', // Usually your repo name.
   themeConfig: {
+    prism: {
+      additionalLanguages: [
+        'dart',
+        'bash',
+        'java',
+        'kotlin',
+        'objectivec',
+        'swift',
+        'groovy',
+        'ruby',
+        'json',
+        'yaml',
+      ],
+    },
     navbar: {
       title: '校務通系列共用工程',
       logo: {
