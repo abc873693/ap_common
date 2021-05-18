@@ -1,17 +1,17 @@
 /** @type {import('@docusaurus/types').DocusaurusConfig} */
 module.exports = {
-  title: 'My Site',
-  tagline: 'Dinosaurs are cool',
-  url: 'https://your-docusaurus-test-site.com',
+  title: '校務通系列共用工程',
+  tagline: '史上最強大校務系統 App',
+  url: 'https://ap-common.web.app',
   baseUrl: '/',
   onBrokenLinks: 'throw',
   onBrokenMarkdownLinks: 'warn',
   favicon: 'img/favicon.ico',
-  organizationName: 'facebook', // Usually your GitHub org/user name.
-  projectName: 'docusaurus', // Usually your repo name.
+  organizationName: 'AP-Common', // Usually your GitHub org/user name.
+  projectName: 'AP-Common', // Usually your repo name.
   themeConfig: {
     navbar: {
-      title: 'My Site',
+      title: '校務通系列共用工程',
       logo: {
         alt: 'My Site Logo',
         src: 'img/logo.svg',
@@ -25,7 +25,12 @@ module.exports = {
         },
         {to: '/blog', label: 'Blog', position: 'left'},
         {
-          href: 'https://github.com/facebook/docusaurus',
+          href: 'https://pub.dev/packages/ap_common',
+          label: 'Pub',
+          position: 'right',
+        },
+        {
+          href: 'https://github.com/abc873693/ap_common',
           label: 'GitHub',
           position: 'right',
         },
@@ -47,16 +52,12 @@ module.exports = {
           title: 'Community',
           items: [
             {
-              label: 'Stack Overflow',
-              href: 'https://stackoverflow.com/questions/tagged/docusaurus',
+              label: '高雄科技大學資訊研習社',
+              href: 'https://github.com/NKUST-ITC',
             },
             {
-              label: 'Discord',
-              href: 'https://discordapp.com/invite/docusaurus',
-            },
-            {
-              label: 'Twitter',
-              href: 'https://twitter.com/docusaurus',
+              label: '中山大學程式研習社',
+              href: 'https://github.com/nsysu-code-club',
             },
           ],
         },
@@ -69,12 +70,12 @@ module.exports = {
             },
             {
               label: 'GitHub',
-              href: 'https://github.com/facebook/docusaurus',
+              href: 'https://github.com/abc873693/ap_common',
             },
           ],
         },
       ],
-      copyright: `Copyright © ${new Date().getFullYear()} My Project, Inc. Built with Docusaurus.`,
+      copyright: `Copyright © ${new Date().getFullYear()} AP-Common, Built with Docusaurus.`,
     },
   },
   presets: [
