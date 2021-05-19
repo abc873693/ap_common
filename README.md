@@ -75,62 +75,6 @@
 ```
 
 
-### 
-
-
-
-## Pages
-
-此項目必須加入多國語言設定，否則會無法正常使用
-
-### 關於我們 AboutUsPage
-
-提供校務通系列的歷任作者及社群介紹，可在此頁面放置自己專案的License，期望您使用這份套件時可以加入此頁面，以及PR這個頁面加入您的資訊，我會同步到所有校務通專案中
-
-<center class="half">
-  <img src="images/pages/about_us_page/mobile_1.png" alt="drawing" width="180"/>
-  <img src="images/pages/about_us_page/mobile_2.png" alt="drawing" width="180"/>
-  <img src="images/pages/about_us_page/mobile_3.png" alt="drawing" width="180"/>
-</center>
-
-| 參數名稱                         | 型態                             | 描述                             |
-| ------------------------------- | ------------------------------- | ------------------------------- |
-| assetImage | String | 頂端 Header 的圖片，採Asset Image 載入 |
-| fbFanPageUrl | String | Facebook 粉絲專頁網址 |
-| fbFanPageId | String | Facebook 粉絲專頁id，點擊facebook logo時優先以 app link 的方法開啟 |
-| githubUrl | String | GitHub 網址 |
-| githubName | String | GitHub 的 username 或 Oraganization GitHub logo時優先以 app link 的方法開啟 |
-| email | String | 聯絡 email |
-| appLicense | String | App的License |
-| actions | List<Widget> | 右上角的元件列表，為Flutter Scaffold原生的API |
-| logEvent | Function(String name, String value) | 可搜集使用者行為的事件 |
-| setCurrentScreen | Function | 可搜集目前畫面的事件 |
-
-### 開放原始碼 OpenSourcePage
-
-列出校務通系統有使用到的開放原始碼的License
-
-### 最新消息詳細資訊 AnnouncementContentPage
-
-最新消息詳細資訊，採用頁面顯示
-
-手機介面
-
- <img src="images/pages/announcement_content_page/mobile.jpg" alt="drawing" width="200"/>
-
-平板 or 桌面版介面
-
- <img src="images/pages/announcement_content_page/tablet.png" alt="drawing" width="600"/>
-
-
-| 參數名稱                         | 型態                             | 描述                             |
-| ------------------------------- | ------------------------------- | ------------------------------- |
-| announcement | Announcement | 最新消息 |
-| logEvent | Function(String name, String value) | 可搜集使用者行為的事件 |
-| setCurrentScreen | Function | 可搜集目前畫面的事件 |
-
--------
-
 ## Scaffold
 
 ### 首頁骨架 ScoreScaffold
