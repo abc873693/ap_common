@@ -4,4 +4,49 @@ sidebar_position: 1
 
 # 如何開始
 
-確保已安裝好 Flutter 環境
+歡迎來到校務通系列共用工程，此套件提供給使用 Flutter 開發校務系統 App 的工具
+
+## 事前準備
+
+ - [Flutter v2.0 以後](https://flutter.dev/docs/get-started/install) 並建立專案
+
+## 安裝流程 
+
+在 `pubspec.yaml` 中加入 package
+
+```yaml title="pubspec.yaml"
+    # 官方多國語套件
+dependencies:
+    flutter_localizations:
+        sdk: flutter
+    ap_common: ^0.17.0
+```
+
+執行取得套件
+
+```bash
+    flutter package get
+```
+
+## 執行範例專案(可選)
+
+可嘗試執行範例專案測試環境可以正常使用此套件
+
+至 `GitHub` 下載 [專案](https://github.com/abc873693/ap_common/example)
+
+
+```bash
+  git clone https://github.com/abc873693/ap_common/
+```
+
+切換目錄至 [`exmaple`](https://github.com/abc873693/ap_common/example)
+
+```bash
+  cd example 
+```
+
+並執行 
+
+```bash
+  flutter run
+```
