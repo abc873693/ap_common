@@ -34,18 +34,18 @@ module.exports = {
         {
           type: 'doc',
           docId: 'installation/overview',
-          position: 'left',
+          position: 'right',
           label: 'Tutorial',
         },
-        {to: '/blog', label: 'Blog', position: 'left'},
-        {
-          href: 'https://pub.dev/packages/ap_common',
-          label: 'Pub',
-          position: 'right',
-        },
+        {to: '/blog', label: 'Blog', position: 'right'},
         {
           href: 'https://github.com/abc873693/ap_common',
           label: 'GitHub',
+          position: 'right',
+        },
+        {
+          href: 'https://pub.dev/packages/ap_common',
+          label: 'Pub',
           position: 'right',
         },
       ],
@@ -98,15 +98,14 @@ module.exports = {
       {
         docs: {
           sidebarPath: require.resolve('./sidebars.js'),
-          // TODO Please change this to your repo.
           editUrl:
-            'https://github.com/facebook/docusaurus/edit/master/website/',
+            'https://github.com/abc873693/ap_common/edit/master/website/',
         },
         blog: {
           showReadingTime: true,
           // TODO Please change this to your repo.
           editUrl:
-            'https://github.com/facebook/docusaurus/edit/master/website/blog/',
+            'https://github.com/abc873693/ap_common/edit/master/website/blog/',
         },
         theme: {
           customCss: require.resolve('./src/css/custom.css'),
