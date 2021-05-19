@@ -4,14 +4,24 @@ sidebar_position: 2
 
 # 主題色設定
 
-支援
+校務通主題目前提供：
   - 淺色主題
   - 深色主題
 
-在 MaterialApp 上一層加入主題色模式(ThemeMode)設定 否則無法正常顯示  
-此功能只支援 flutter v1.9 以上
+## 如何設定
 
-```dart
+在 `MaterialApp` 的上一層加入 `ApTheme`，並設定主題色模式 [`ThemeMode`](https://api.flutter.dev/flutter/material/MaterialApp/themeMode.html)
+
+
+:::caution
+此 API 只支援 Flutter v1.9 以上
+:::
+
+在 `MaterialApp` 的參數 `theme` 設定 `ApTheme.light`，參數 `darkTheme` 設定 `ApTheme.dark`，
+
+並設定與 `ApTheme` 設定相同的 `themeMode`，`ApTheme` 會根據 `themeMode` 切換主題顏色
+
+```dart title="app.dart"
     ThemeMode themeMode = ThemeMode.system;
 
     @override
@@ -27,48 +37,23 @@ sidebar_position: 2
     }
 
 ```
-## 多國語言支援列表
 
-使用官方的 flutter_localization 實作，預設使用英文(en)
+## 原理說明
 
- - 繁體中文(zh-TW)
- - 英文(en)
+MaterialApp 預設主題(`Theme`) 由參數 `theme` 所決定，若有設定參數 `darkTheme`(深色主題)，
 
-在 `MaterialApp` 加入多國語言支援
+且系統主題或是 themeMode 設定 `ThemeMode.dark` 時，則由參數 `darkTheme` 決定
 
-```dart
-    ThemeMode themeMode = ThemeMode.system;
-    Locale locale;
+可透過參數 `themeMode` 設定主題切換
 
-    @override
-      Widget build(BuildContext context) {
-        return MaterialApp(
-              // 在此設定使用的語言，否則會按照系統提供語言，若為不支援語言 預設為英文
-              localeResolutionCallback:
-                    (Locale locale, Iterable<Locale> supportedLocales) {
-                  String languageCode = Preferences.getString(
-                    ApConstants.PREF_LANGUAGE_CODE,
-                    ApSupportLanguageConstants.SYSTEM,
-                  );
-                  if (languageCode == ApSupportLanguageConstants.SYSTEM)
-                    return this.locale = ApLocalizations.delegate.isSupported(locale)
-                        ? locale
-                        : Locale('en');
-                  else
-                    return Locale(
-                      languageCode,
-                      languageCode == ApSupportLanguageConstants.ZH ? 'TW' : null,
-                    );
-                },
-              localizationsDelegates: [
-                  ApLocalizations.delegate,
-              ],
-              locale: locale,
-              supportedLocales: [
-                const Locale('en'), // English
-                const Locale('zh', 'TW'), // Traditional Chinese
-              ],
-            );
-    }
+此 `enum` 總共有三種：
+  - `system`：系統主題，若系統不支援深色主題，則使用 `theme`
+  - `light`：淺色主題
+  - `dark`：深色主題
 
-```
+## 支援深色主題的系統
+
+ - Android `9.0` 或以上
+ - iOS `13` 或以上
+ - macOS Mojave `10.14.2` 或以上
+ - Winodws 10 Build `14393.10` 以後
