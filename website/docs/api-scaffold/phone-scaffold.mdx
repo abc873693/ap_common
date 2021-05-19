@@ -1,0 +1,29 @@
+---
+sidebar_position: 8
+---
+
+# 學校電話骨架 PhoneScaffold
+
+提供電話列表的骨架
+  - 點擊會撥打`PhoneModel` 中的 `number`
+  - 此骨架沒有使用Scaffold包裝
+  - `PhoneModel` 中的 `number` 為 `Null` 時則作為標題區隔
+
+手機介面，不包含 `AppBar` 及 `BottomNavigationBar` 的區塊
+
+<img src="images/scaffolds/phone/mobile.png" alt="drawing" width="200"/>
+
+
+| 參數名稱                         | 型態                             | 描述                             |
+| ------------------------------- | ------------------------------- | ------------------------------- |
+| state | NotificationState | 必要欄位，總共有 `loading` `finish` `error` 的狀態，只有`finish`才會顯示，其餘都是顯示錯誤狀況 |
+| notificationList | `List<PhoneModel>` | 電話列表 |
+| logEvent | Function(String name, String value) | 可搜集使用者行為的事件 |
+| setCurrentScreen | Function | 可搜集目前畫面的事件 |
+
+### PhoneModel
+
+| 參數名稱                         | 型態                             | 描述                             |
+| ------------------------------- | ------------------------------- | ------------------------------- |
+| name | String | 名稱 |
+| number | String | 電話號碼 |

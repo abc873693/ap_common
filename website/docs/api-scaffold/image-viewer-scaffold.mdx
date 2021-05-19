@@ -1,0 +1,13 @@
+---
+sidebar_position: 5
+---
+
+# 圖片瀏覽器骨架 ImageViewerScaffold
+
+以 Package [photo_view](https://pub.dev/packages/photo_view) 封裝的圖片瀏覽器，可設定複數的圖片，透過TabBarView瀏覽，若 `imageViewers` 的數量為1時則不顯示Tab
+
+| 參數名稱                         | 型態                             | 描述                             |
+| ------------------------------- | ------------------------------- | ------------------------------- |
+| title | String | Scaffold 標題 |
+| imageViewers | `List<ImageViewer>` | 圖片瀏覽器物件，載入assetName的圖片 |
+| actions | `List<Widget>` | 右上角的元件列表，為Flutter Scaffold原生的API |
