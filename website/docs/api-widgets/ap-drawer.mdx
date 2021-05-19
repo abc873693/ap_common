@@ -1,0 +1,24 @@
+---
+sidebar_position: 1
+---
+
+# 抽屜 ApDrawer
+
+此項目必須加入主題色設定，否則會無法正常使用
+
+提供校務通v3風格抽屜，Flutter 原生的 `Drawer` 封裝  
+另提供
+ - DrawerItem
+ - DrawerSubItem
+
+ <img src="images/widgets/ap_drawer.jpg" alt="drawing" width="200"/>
+
+
+| 參數名稱                         | 型態                             | 描述                             |
+| ------------------------------- | ------------------------------- | ------------------------------- |
+| userInfo | UserInfo | 使用者資訊，會在Header顯示 `照片`、`名字`、`學號` |
+| onTapHeader | Function | Header點擊事件 |
+| imageAsset | Function | Header 右邊的圖片，使用 Asset Image 載入|
+| widgets | `List<Announcements>` | 抽屜主體的Widget List，屬於Flutter原生API |
+| imageHeroTag | String | Header中的圖片支援Flutter Hero，可自訂 Tag 對應畫面的tag，預設為 `tag_student_picture` |
+| displayPicture | bool | 是否顯示照片，`true`時顯示 `ApIcon` 中的 `person`  |
