@@ -14,11 +14,11 @@ dependencies:
 #    path: ../../GitHub-NKUST-ITC/ap_common
   url_launcher: ^6.0.3
   #firebase must use particular version
-  firebase_core: ^1.1.1
+  firebase_core: ^1.2.0
   firebase_analytics: ^8.0.4
-  firebase_crashlytics: ^2.0.3
-  firebase_messaging: ^9.1.4
-  firebase_remote_config: ^0.10.0-dev.3
+  firebase_crashlytics: ^2.0.4
+  firebase_messaging: ^10.0.0
+  firebase_remote_config: ^0.10.0-dev.4
 
 dev_dependencies:
   flutter_test:
