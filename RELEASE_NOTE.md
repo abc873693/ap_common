@@ -1,2 +1,3 @@
 
-* 套用 ap_common 最新版本
+* 更新套件版本
+* 支援 Firebase Performances
