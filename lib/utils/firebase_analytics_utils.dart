@@ -6,6 +6,7 @@ import 'package:ap_common/models/user_info.dart';
 import 'package:ap_common/resources/ap_theme.dart';
 import 'package:firebase_analytics/firebase_analytics.dart';
 import 'package:ap_common/utils/analytics_utils.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
 import 'firebase_utils.dart';
@@ -15,12 +16,15 @@ export 'package:firebase_analytics/firebase_analytics.dart';
 class FirebaseAnalyticsUtils extends AnalyticsUtils {
   static FirebaseAnalyticsUtils? _instance;
 
+  static bool get isSupported =>
+      (kIsWeb || Platform.isAndroid || Platform.isIOS);
+
   static FirebaseAnalyticsUtils get instance {
     return _instance ??= FirebaseAnalyticsUtils();
   }
 
   FirebaseAnalyticsUtils() {
-    if (FirebaseUtils.isSupportAnalytics) analytics = FirebaseAnalytics();
+    if (isSupported) analytics = FirebaseAnalytics();
   }
 
   FirebaseAnalytics? analytics;
@@ -132,17 +136,6 @@ class FirebaseAnalyticsUtils extends AnalyticsUtils {
       },
     );
     debugPrint('log CaptchaErrorEvent succeeded');
-  }
-
-  Future<void> logAction(String name, String action,
-      {String message = ''}) async {
-    await analytics?.logEvent(
-      name: name,
-      parameters: <String, dynamic>{
-        'action': action,
-        'message': message,
-      },
-    );
   }
 
   Future<void> logLeavesImageSize(File source) async {

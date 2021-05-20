@@ -1,4 +1,3 @@
-import 'dart:async';
 import 'dart:io';
 
 import 'package:firebase_performance/firebase_performance.dart';
@@ -13,14 +12,14 @@ class FirebasePerformancesUtils {
     return _instance ??= FirebasePerformancesUtils();
   }
 
+  static bool get isSupported =>
+      !kIsWeb && (Platform.isAndroid || Platform.isIOS);
+
   FirebasePerformancesUtils() {
     if (isSupported) performance = FirebasePerformance.instance;
   }
 
   FirebasePerformance? performance;
-
-  static bool get isSupported =>
-      !kIsWeb && (Platform.isAndroid || Platform.isIOS);
 
   Trace? newTrace(String name) {
     return performance?.newTrace(name);

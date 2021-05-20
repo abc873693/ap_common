@@ -7,6 +7,7 @@ import 'package:ap_common/utils/crashlytics_utils.dart';
 import 'package:ap_common/utils/notification_utils.dart';
 import 'package:ap_common_firebase/utils/firebase_analytics_utils.dart';
 import 'package:ap_common_firebase/utils/firebase_crashlytics_utils.dart';
+import 'package:ap_common_firebase/utils/firebase_message_utils.dart';
 import 'package:firebase_analytics/firebase_analytics.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/foundation.dart';
@@ -26,22 +27,26 @@ class FirebaseUtils {
   static bool get isSupportCore =>
       (kIsWeb || Platform.isAndroid || Platform.isIOS || Platform.isMacOS);
 
+  @deprecated
   static bool get isSupportAnalytics =>
       (kIsWeb || Platform.isAndroid || Platform.isIOS);
 
+  @deprecated
   static bool get isSupportCloudMessage =>
       (kIsWeb || Platform.isAndroid || Platform.isIOS || Platform.isMacOS);
 
+  @deprecated
   static bool get isSupportCrashlytics =>
       (!kIsWeb && (Platform.isAndroid || Platform.isIOS || Platform.isMacOS));
 
+  @deprecated
   static bool get isSupportRemoteConfig =>
       (!kIsWeb && (Platform.isAndroid || Platform.isIOS || Platform.isMacOS));
 
   static FirebaseAnalytics? init() {
-    if (isSupportCrashlytics)
+    if (FirebaseCrashlyticsUtils.isSupported)
       CrashlyticsUtils.instance = FirebaseCrashlyticsUtils.instance;
-    if (isSupportAnalytics) {
+    if (FirebaseAnalyticsUtils.isSupported) {
       AnalyticsUtils.instance = FirebaseAnalyticsUtils.instance;
       return FirebaseAnalyticsUtils.instance.analytics;
     }
@@ -53,7 +58,7 @@ class FirebaseUtils {
     String? vapidKey,
     bool customOnClickAction = false,
   }) async {
-    if (!isSupportCloudMessage) return;
+    if (!FirebaseMessagingUtils.isSupported) return;
     FirebaseMessaging firebaseMessaging = FirebaseMessaging.instance;
     await Future.delayed(Duration(seconds: 2));
     FirebaseMessaging.onMessage.listen((RemoteMessage message) async {
