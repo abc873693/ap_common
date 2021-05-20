@@ -293,7 +293,7 @@ class _AnnouncementHomePageState extends State<AnnouncementHomePage> {
                     const SizedBox(height: 16.0),
                     Text(ap.allAnnouncements),
                     const SizedBox(height: 8.0),
-                    for (Announcement item in applications ?? <Announcement>[])
+                    for (Announcement item in announcements ?? <Announcement>[])
                       _item(_DataType.announcement, item),
                   ],
                 ),
