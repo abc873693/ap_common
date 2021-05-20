@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:ap_common/resources/ap_icon.dart';
 import 'package:ap_common/resources/resources.dart';
 import 'package:ap_common/resources/ap_theme.dart';
 import 'package:ap_common/utils/analytics_utils.dart';
@@ -12,7 +13,7 @@ import 'package:flutter_linkify/flutter_linkify.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class AboutUsPage extends StatefulWidget {
-  /// /aboutus
+  /// /about
   static const String routerName = '/about';
   final String assetImage;
   final String fbFanPageUrl;
@@ -21,6 +22,10 @@ class AboutUsPage extends StatefulWidget {
   final String githubName;
   final String email;
   final String appLicense;
+  final String? applicationName;
+  final String? applicationVersion;
+  final Widget? applicationIcon;
+  final String? applicationLegalese;
   final List<Widget>? actions;
 
   const AboutUsPage({
@@ -33,6 +38,10 @@ class AboutUsPage extends StatefulWidget {
     required this.email,
     required this.appLicense,
     this.actions,
+    this.applicationName,
+    this.applicationVersion,
+    this.applicationIcon,
+    this.applicationLegalese,
   }) : super(key: key);
 
   @override
@@ -66,7 +75,25 @@ class AboutUsPageState extends State<AboutUsPage> {
             expandedHeight: expandedHeight,
             pinned: true,
             title: Text(app.about),
-            actions: widget.actions,
+            actions: [
+              ...widget.actions ?? [],
+              IconButton(
+                icon: Icon(ApIcon.codeIcon),
+                onPressed: () {
+                  Navigator.of(context).push(
+                    MaterialPageRoute(
+                      builder: (_) => LicensePage(
+                        applicationName: widget.applicationName,
+                        applicationVersion: widget.applicationVersion,
+                        applicationIcon: widget.applicationIcon,
+                        applicationLegalese: widget.applicationLegalese,
+                      ),
+                    ),
+                  );
+                  AnalyticsUtils.instance?.logEvent('license_page_click');
+                },
+              ),
+            ],
             backgroundColor: ApTheme.of(context).blue,
             flexibleSpace: FlexibleSpaceBar(
               background: Image.asset(
