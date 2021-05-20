@@ -2,7 +2,6 @@ import 'dart:typed_data';
 
 import 'package:ap_common/pages/about_us_page.dart';
 import 'package:ap_common/pages/announcement/home_page.dart';
-import 'package:ap_common/pages/open_source_page.dart';
 import 'package:ap_common/resources/ap_theme.dart';
 import 'package:ap_common/utils/ap_localizations.dart';
 import 'package:ap_common/utils/preferences.dart';
@@ -89,8 +88,6 @@ class MyAppState extends State<MyApp> with WidgetsBindingObserver {
             Navigator.defaultRouteName: (context) => HomePage(),
             AboutUsPage.routerName: (BuildContext context) =>
                 HomePageState.aboutPage(context),
-            OpenSourcePage.routerName: (BuildContext context) =>
-                const OpenSourcePage(),
             AnnouncementHomePage.routerName: (BuildContext context) =>
                 const AnnouncementHomePage(),
           },
