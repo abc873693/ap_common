@@ -1,5 +1,10 @@
+## [0.9.0-dev.3] - 2021/05/20
+
+* 修正 analytics 版本導致 iOS 編譯錯誤
+
 ## [0.9.0-dev.2] - 2021/05/20
 
+***[Bad Vesion]***
 * 更新套件版本
 * 支援 Firebase Performances
 

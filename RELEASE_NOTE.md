@@ -1,3 +1,2 @@
 
-* 更新套件版本
-* 支援 Firebase Performances
+* 修正 analytics 版本導致 iOS 編譯錯誤
