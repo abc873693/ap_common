@@ -1,3 +1,10 @@
+## [0.17.0-dev.3] - 2021/05/20
+### [Break Change]
+
+* 移除 `OpenSourcePage`
+* `AboutUsPage` 加入開啟授權
+* 修正最新消息審查系統顯示最新消息錯誤
+
 ## [0.17.0-dev.2] - 2021/05/17
 ### [Break Change]
 
