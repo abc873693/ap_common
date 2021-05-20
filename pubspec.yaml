@@ -15,7 +15,7 @@ dependencies:
   url_launcher: ^6.0.3
   #firebase must use particular version
   firebase_core: ^1.2.0
-  firebase_analytics: ^8.0.4
+  firebase_analytics: ^8.1.0
   firebase_crashlytics: ^2.0.4
   firebase_messaging: ^10.0.0
   firebase_remote_config: ^0.10.0-dev.4
