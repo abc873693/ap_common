@@ -4,15 +4,9 @@ sidebar_position: 6
 
 # 匯出課表圖片
 
-`Android` 與 `iOS` 使用 [`photo_manager`](https://pub.dev/packages/photo_manager) 實作
+實作可參考 [`ApUtils.saveImage`](../api-utils/utils#saveimage) 中
 
-`macOS` 使用使用 [`path_provider`](https://pub.dev/packages/photo_manager) 細節可參考原專案
-
-實作細節可參考原專案
-
-並包裝至 [`ApUtils.saveImage`](../api-utils/utils#saveImage) 中
-
-:::caution
+:::caution 注意
 若未設定此頁面會影響以下功能
 
 - [課表骨架](../api-scaffolds/course-scaffold) 中的匯出課表圖片
@@ -50,7 +44,7 @@ Web 版本可參考 [`issues`](https://github.com/abc873693/ap_common/issues/48)
 </manifest>
 ```
 
-:::caution
+:::caution 注意
 因為後續版本(Android 11) 會使 `requestLegacyExternalStorage` 無效，但仍建議加入使舊系統版本裝置支援
 :::
 
