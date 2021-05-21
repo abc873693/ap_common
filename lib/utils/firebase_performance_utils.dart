@@ -16,10 +16,16 @@ class FirebasePerformancesUtils {
       !kIsWeb && (Platform.isAndroid || Platform.isIOS);
 
   FirebasePerformancesUtils() {
-    if (isSupported) performance = FirebasePerformance.instance;
+    if (isSupported) {
+      performance = FirebasePerformance.instance;
+    }
   }
 
   FirebasePerformance? performance;
+
+  void init() {
+    performance?.setPerformanceCollectionEnabled(!kDebugMode);
+  }
 
   Trace? newTrace(String name) {
     return performance?.newTrace(name);
