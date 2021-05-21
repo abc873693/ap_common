@@ -1,12 +1,14 @@
 ---
-sidebar_position: 3
+sidebar_position: 2
 ---
 
 # Dialog 工具
 
-### showDefault
+方便開啟校務通風格的對話框
 
-開啟簡易的[一般對話框](#一班對話框-DefaultDialog)
+## showDefault
+
+以簡易方法開啟的 [一般對話框](../api-widgets/default-dialog)
 
 | 參數名稱                         | 型態                             | 描述                             |
 | ------------------------------- | ------------------------------- | ------------------------------- |
@@ -14,31 +16,54 @@ sidebar_position: 3
 | title | String | 標題 |
 | content | String | 內容 |
 
-### showAnnouncementRule
+## showAnnouncementRule
 
-開啟最新消息規則
-
-| 參數名稱                         | 型態                             | 描述                             |
-| ------------------------------- | ------------------------------- | ------------------------------- |
-| context | BuildContext | Flutter Widget context |
-| onRightButtonClick | Function | 點擊 `聯絡粉專` 事件 |
-
-### showNewVersionContent
-
-開啟新版本資訊，利用 `versionInfo` 中的 `code` 計算目前版本號，Android 為 `Version Code`，iOS 和 macOS 為 `Builder Number`，若超過版本號，則判斷 `versionInfo` 中的 `isForceUpdate` 是否強制更新開啟新版本資訊
+開啟校務通最新消息規則對話框
+:::caution 注意
+此功能於現行的校務通已很少使用，未來可能會移除
+:::
 
 | 參數名稱                         | 型態                             | 描述                             |
 | ------------------------------- | ------------------------------- | ------------------------------- |
 | context | BuildContext | Flutter Widget context |
-| versionInfo | VersionInfo | 版本資訊 |
-| appName | String | App 名稱 |
+| onRightButtonClick | Function() | 點擊 `聯絡粉專` 事件 |
+
+## showUpdateContent
+
+開啟更新資訊，標題固定，內容自訂顯示字串
+
+| 參數名稱                         | 型態                             | 描述                             |
+| ------------------------------- | ------------------------------- | ------------------------------- |
+| context | BuildContext | Flutter Widget context |
+| content | String | 更新內容 |
+
+## showNewVersionContent
+
+開啟新版本資訊對話框，若有新版本則提供更新連結
+
+:::caution 注意
+此功能至正式穩定版可能還會有變動
+:::
+
+利用 `versionInfo` 中的 `code` 計算目前版本號
+ - Android 為 `Version Code`
+ - iOS 和 macOS 為 `Builder Number`
+ - 若超過版本號，則判斷 `versionInfo` 中的 `isForceUpdate` 是否強制更新開啟新版本資訊
+
+版本內容([`VersionInfo`](../api-models/version-info) 中的 `content`)，若有設定 `githubRepositoryName` 與 `githubBranchName`，內容則會從 GitHub 專案中讀取 `changelog.json`
+
+:::info Issues
+目前部分系統有提供 API 檢查商店版本，但尚未實作，可參考 [issues](https://github.com/abc873693/ap_common/issues/22)
+:::
+
+| 參數名稱                         | 型態                             | 描述                             |
+| ------------------------------- | ------------------------------- | ------------------------------- |
+| context | BuildContext | Flutter Widget context |
+| versionInfo | [`VersionInfo`](../api-models/version-info) | 版本資訊 |
+| appName | String |  名稱 |
 | iOSAppId | String | iOS App Id |
 | defaultUrl | String | 若無法開啟商店平台(Play Store 或 Apple Store)，則開啟此網址 |
-
-#### VersionInfo
-
-| 參數名稱                         | 型態                             | 描述                             |
-| ------------------------------- | ------------------------------- | ------------------------------- |
-| code | int | 版本號，Android 為 `Version Code`，iOS 和 macOS 為 `Builder Number` |
-| isForceUpdate | VersionInfo | 是否強制更新 |
-| content | String | 更新內容 |
+| snapStoreId | String | Linux Snap Store 提供的 Id |
+| windowsPath | String | Windows 下載網址 |
+| githubRepositoryName | String | GitHub 專案的名稱 |
+| githubBranchName | String | GitHub 專案分支名稱 |
