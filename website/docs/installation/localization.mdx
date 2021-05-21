@@ -4,28 +4,59 @@ sidebar_position: 3
 
 # 多國語言(i18n)
 
-使用官方的 flutter_localization 實作，預設使用英文(en)
+使用官方的 [`flutter_localization`](https://flutter.dev/docs/development/accessibility-and-localization/internationalization) 
+實作，預設使用英文(`en`)
 
  - 繁體中文(zh-TW)
  - 英文(en)
 
+:::caution
+若未正確設定，會導致各個 [Scaffold](../scaffolds/overview) 和 [Widget](../widgets/overview) 內部所使用的字串無法正確被讀取
+:::
+
+## 設定
+
 在 `MaterialApp` 加入多國語言支援
 
-```dart
-    ThemeMode themeMode = ThemeMode.system;
+```dart title="app.dart"
+    @override
+      Widget build(BuildContext context) {
+        return MaterialApp(
+              localizationsDelegates: [
+                  ApLocalizations.delegate,
+              ],
+              supportedLocales: [
+                const Locale('en'), // English
+                const Locale('zh', 'TW'), // Traditional Chinese
+              ],
+            );
+    }
+
+```
+
+## 自訂使用的語言(可選)
+
+Localization 所使用的語言第一次會根據 `localeResolutionCallback` 回傳值的設定，預設讀取系統語言
+
+可加入 `Callback` 修改預設語言，可參考以下範例
+
+並透過 `Preferences` 載入上一次的設定，其參數為 `Locale` 中的 `languageCode`，若為 `ApSupportLanguageConstants.system` 則使用系統語言
+
+```dart title="app.dart"
     Locale locale;
 
     @override
       Widget build(BuildContext context) {
         return MaterialApp(
-              // 在此設定使用的語言，否則會按照系統提供語言，若為不支援語言 預設為英文
+              // 若是不支援語言 預設為英文
+              locale: locale,
               localeResolutionCallback:
                     (Locale locale, Iterable<Locale> supportedLocales) {
                   String languageCode = Preferences.getString(
-                    ApConstants.PREF_LANGUAGE_CODE,
-                    ApSupportLanguageConstants.SYSTEM,
+                    ApConstants.prefLanguageCode,
+                    ApSupportLanguageConstants.system,
                   );
-                  if (languageCode == ApSupportLanguageConstants.SYSTEM)
+                  if (languageCode == ApSupportLanguageConstants.system)
                     return this.locale = ApLocalizations.delegate.isSupported(locale)
                         ? locale
                         : Locale('en');
@@ -35,15 +66,22 @@ sidebar_position: 3
                       languageCode == ApSupportLanguageConstants.ZH ? 'TW' : null,
                     );
                 },
-              localizationsDelegates: [
-                  ApLocalizations.delegate,
-              ],
-              locale: locale,
-              supportedLocales: [
-                const Locale('en'), // English
-                const Locale('zh', 'TW'), // Traditional Chinese
-              ],
             );
     }
 
+```
+
+## 動態載入語言(可選)
+
+若希望動態載入不同語言時可將 `MaterailApp` 包裝至 `StatusfulWidget` 中
+
+並透過 `load` 載入新的設定
+
+```dart title='app.dart'
+  void loadLocale(Locale locale) {
+    setState(() {
+      this.locale = locale;
+      ApLocalizations.delegate.load(locale);
+    });
+  }
 ```
