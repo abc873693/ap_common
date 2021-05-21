@@ -4,7 +4,7 @@ module.exports = {
   tagline: '史上最強大校務系統 App',
   url: 'https://ap-common.web.app',
   baseUrl: '/',
-  onBrokenLinks: 'throw',
+  // onBrokenLinks: 'throw',
   onBrokenMarkdownLinks: 'warn',
   favicon: 'img/favicon.ico',
   organizationName: 'AP-Common', // Usually your GitHub org/user name.
