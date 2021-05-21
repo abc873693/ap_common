@@ -4,7 +4,15 @@ sidebar_position: 4
 
 # 本地通知
 
-使用 [`flutter_local_notification`](https://pub.dev/packages/flutter_local_notifications) 實作
+使用 [`flutter_local_notification`](https://pub.dev/packages/flutter_local_notifications) 實作，細節可參考原專案
+
+:::caution
+若未設定此頁面會影響以下功能
+
+- 使用到 [NotifcationUtils](../api-utils/notification-utils) 的功能
+- [課表骨架](../api-scaffolds/course-scaffold) 中的上課提醒
+:::
+## 限制
 
 目前只支援 `Android` 、 `iOS` 、 `macOS` 系統，並有以下限制
 
@@ -12,59 +20,38 @@ sidebar_position: 4
 * **iOS 8.0+**. iOS 10 以下使用 UILocalNotification APIs. iOS 10 以上(包含)使用 [UserNotification APIs](https://developer.apple.com/documentation/usernotifications) (aka the User Notifications Framework)
 * **macOS 10.11+**. 在 macOS 10.14 以下使用 [NSUserNotification APIs](https://developer.apple.com/documentation/foundation/nsusernotification) 在 macOS 10.14 以下使用 [UserNotification APIs](https://developer.apple.com/documentation/usernotifications) (aka the User Notifications Framework)
 
+## 設定
+
 ### Android 
 
-需在原生專案中的 `app/scr/main/AndroidManifest.xml` 中
-
-加入 `RECEIVE_BOOT_COMPLETED` 及 `VIBRATE` 權限 
-
-```xml
-<uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED"/>
-<uses-permission android:name="android.permission.VIBRATE" />
-```
-
-確保App更新保持規劃通知保持運作，需加入
-
-```xml
-<receiver android:name="com.dexterous.flutterlocalnotifications.ScheduledNotificationBootReceiver">
-    <intent-filter>
-        <action android:name="android.intent.action.BOOT_COMPLETED"/>
-        <action android:name="android.intent.action.MY_PACKAGE_REPLACED"/>
-    </intent-filter>
-</receiver>
-<receiver android:name="com.dexterous.flutterlocalnotifications.ScheduledNotificationReceiver" />
-```
+自 [`flutter_local_notification v3.0.1+4`](https://pub.dev/packages/flutter_local_notifications/versions/3.0.1+4/changelog) 以後不需在專案中的 `android/app/scr/main/AndroidManifest.xml` 設定原生通知設定
 
 更多 `AndroidManifest.xml` 設定 [可參考](https://github.com/MaikuB/flutter_local_notifications/blob/master/flutter_local_notifications/example/android/app/src/main/AndroidManifest.xml)
 
-並在 `app/scr/main/res/drawable` 加入 `ic_stat_name.png`，此圖是在通知顯示時在狀態列(status bar)顯示的圖案
+在 `app/scr/main/res/drawable` 加入 `ic_stat_name.png`，此圖是在通知顯示時在狀態列(status bar)顯示的圖案
 
-## iOS
+### iOS
 
 在 `Runner` 中的 `AppDelegate.m/AppDelegate.swift`
 
 加入下列程式碼在 `didFinishLaunchingWithOptions` 方法下
 
 Objective-C:
-```objc
+```objc title='AppDelegate.m'
 if (@available(iOS 10.0, *)) {
   [UNUserNotificationCenter currentNotificationCenter].delegate = (id<UNUserNotificationCenterDelegate>) self;
-}
-if(![[NSUserDefaults standardUserDefaults]objectForKey:@"Notification"]){
-    [[UIApplication sharedApplication] cancelAllLocalNotifications];
-    [[NSUserDefaults standardUserDefaults]setBool:YES forKey:@"Notification"];
 }
 ```
 
 Swift:
-```swift
+```swift title='AppDelegate.swift'
 if #available(iOS 10.0, *) {
   UNUserNotificationCenter.current().delegate = self as? UNUserNotificationCenterDelegate
 }
-if(!UserDefaults.standard.bool(forKey: "Notification")) {
-    UIApplication.shared.cancelAllLocalNotifications()
-    UserDefaults.standard.set(true, forKey: "Notification")
-}
 ```
+
+開啟 `Xcode` 在 `Runner` 中的 `Signing & Capabilities` 加入 `Push Notification` 的權限
+
+### macOS
 
 開啟 `Xcode` 在 `Runner` 中的 `Signing & Capabilities` 加入 `Push Notification` 的權限
