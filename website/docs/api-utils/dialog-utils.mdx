@@ -8,7 +8,7 @@ sidebar_position: 2
 
 ## showDefault
 
-以簡易方法開啟的 [一般對話框](docs/api-widgets/default-dialog)
+以簡易方法開啟的 [一般對話框](../api-widgets/default-dialog)
 
 | 參數名稱                         | 型態                             | 描述                             |
 | ------------------------------- | ------------------------------- | ------------------------------- |
@@ -50,7 +50,7 @@ sidebar_position: 2
  - iOS 和 macOS 為 `Builder Number`
  - 若超過版本號，則判斷 `versionInfo` 中的 `isForceUpdate` 是否強制更新開啟新版本資訊
 
-版本內容([`VersionInfo`](docs/api-models/version-info) 中的 `content`)，若有設定 `githubRepositoryName` 與 `githubBranchName`，內容則會從 GitHub 專案中讀取 `changelog.json`
+版本內容([`VersionInfo`](../api-models/version-info) 中的 `content`)，若有設定 `githubRepositoryName` 與 `githubBranchName`，內容則會從 GitHub 專案中讀取 `changelog.json`
 
 :::info Issues
 目前部分系統有提供 API 檢查商店版本，但尚未實作，可參考 [issues](https://github.com/abc873693/ap_common/issues/22)
@@ -59,7 +59,7 @@ sidebar_position: 2
 | 參數名稱                         | 型態                             | 描述                             |
 | ------------------------------- | ------------------------------- | ------------------------------- |
 | context | BuildContext | Flutter Widget context |
-| versionInfo | [`VersionInfo`](docs/api-models/version-info) | 版本資訊 |
+| versionInfo | [`VersionInfo`](../api-models/version-info) | 版本資訊 |
 | appName | String |  名稱 |
 | iOSAppId | String | iOS App Id |
 | defaultUrl | String | 若無法開啟商店平台(Play Store 或 Apple Store)，則開啟此網址 |
