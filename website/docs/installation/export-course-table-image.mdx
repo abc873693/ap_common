@@ -1,0 +1,69 @@
+---
+sidebar_position: 6
+---
+
+# 匯出課表圖片
+
+`Android` 與 `iOS` 使用 [`photo_manager`](https://pub.dev/packages/photo_manager) 實作
+
+`macOS` 使用使用 [`path_provider`](https://pub.dev/packages/photo_manager) 細節可參考原專案
+
+實作細節可參考原專案
+
+並包裝至 [`ApUtils.saveImage`](../api-utils/utils#saveImage) 中
+
+:::caution
+若未設定此頁面會影響以下功能
+
+- [課表骨架](../api-scaffolds/course-scaffold) 中的匯出課表圖片
+
+:::
+
+## 限制
+
+此功能只支援，默認相關功能會不顯示
+
+- Android
+- iOS
+- macOS
+- Winodws([有路徑問題](https://github.com/abc873693/ap_common/issues/66))
+- Linux([有路徑問題](https://github.com/abc873693/ap_common/issues/66))
+
+Web 版本可參考 [`issues`](https://github.com/abc873693/ap_common/issues/48)
+
+## 設定
+
+### Android
+
+因 Android 10 (Q API 29) 以後使用新的 API 存取檔案系統，至 `android/app/src/main/AndroidManifest.xml` 增加 `android:requestLegacyExternalStorage="true"`
+
+```xml title='AndroidManifest.xml'
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    package="com.examlpe.ap_common">
+
+    <application
+        android:name="io.flutter.app.FlutterApplication"
+        android:label="ap_common_example"
+        android:requestLegacyExternalStorage="true"
+        android:icon="@mipmap/ic_launcher">
+    </application>
+</manifest>
+```
+
+:::caution
+因為後續版本(Android 11) 會使 `requestLegacyExternalStorage` 無效，但仍建議加入使舊系統版本裝置支援
+:::
+
+### iOS
+
+在 `ios/Runner/Info.plist` `dict` 中加入
+
+```xml title='Info.plist'
+  <key>NSPhotoLibraryUsageDescription</key>
+  <string>Would be export course table image.</string>
+```
+
+字串中的說明為取得權限時會出現的文字說明，可根據你的 App 語言做修改
+
+### macOS
+
