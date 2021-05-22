@@ -4,6 +4,11 @@ sidebar_position: 9
 
 # 設定頁元件 SettingPageWidget
 
+:::caution 使用時必須先完成 
+ - [主題色設定](../installation/theme)
+ - [多國語言設定](../installation/localization)
+:::
+
 提供校務通設定頁通常會使用到的元件
 
  <img src="../../img/widgets/setting_page_widgets.jpg" alt="drawing" width="300"/>
@@ -14,7 +19,7 @@ sidebar_position: 9
 
 | 參數名稱                         | 型態                             | 描述                             |
 | ------------------------------- | ------------------------------- | ------------------------------- |
-| text | String | 內容文字 |
+| text | `String` | 內容文字 |
 
 ### SettingSwitch
 
@@ -24,28 +29,97 @@ sidebar_position: 9
 
 | 參數名稱                         | 型態                             | 描述                             |
 | ------------------------------- | ------------------------------- | ------------------------------- |
-| text | String | 內容文字 |
-| subText | String | 內容文字說明 |
-| value | bool | 是否開啟 |
-| onChanged | String | 點擊事件 |
+| text | `String` | 內容文字 |
+| subText | `String` | 內容文字說明 |
+| value | `bool` | 是否開啟 |
+| onChanged | `void Function(bool)` | 點擊事件 |
 
 ### SettingItem
 
 設定頁的項目元件，使用 Flutter 中的 `ListTile` 封裝
 
-設定頁小標題
-
 | 參數名稱                         | 型態                             | 描述                             |
 | ------------------------------- | ------------------------------- | ------------------------------- |
-| text | String | 內容文字 |
-| subText | String | 內容文字說明 |
-| onTap | String | 點擊事件 |
+| text | `String` | 內容文字 |
+| subText | `String` | 內容文字說明 |
+| onTap | `Function()` | 點擊事件 |
 
 ### CheckCourseNotifyItem
 
-目前上課提醒的封裝元件，顯示目前上課提醒的項目，使用 `SettingItem` 封裝
+:::caution 使用時必須先完成
+ - [NotifiactionUitls 設定 ](../installation/local-notification)
+ - [Preference 設定 ](../installation/shared-preferences)
+:::
 
-設定頁小標題
+目前上課提醒的封裝元件，顯示目前上課提醒的項目，是 `SettingItem` 封裝的元件
 
 | 參數名稱                         | 型態                             | 描述                             |
 | ------------------------------- | ------------------------------- | ------------------------------- |
+
+### ClearAllNotifyItem
+
+:::caution 使用時必須先完成
+ - [NotifiactionUitls 設定 ](../installation/local-notification)
+ - [Preference 設定 ](../installation/shared-preferences)
+:::
+
+點擊取消所有上課提醒的項目的封裝元件，是 `SettingItem` 封裝的元件
+
+| 參數名稱                         | 型態                             | 描述                             |
+| ------------------------------- | ------------------------------- | ------------------------------- |
+| tag | `String` | 自訂 tag 並使用 `CourseNotifyData.load(tag)` 載入對應資料 |
+
+### ChangeLanguageItem
+
+:::caution 使用時必須先完成
+ - [Preference 設定 ](../installation/shared-preferences)
+:::
+
+選擇目前的語言，並透過 `Preferences` 儲存到 `ApConstants.prefLanguageCode`，對應編號可參考 `ApSupportLanguageConstants`，依序為 `系統語言`、`英文`、`繁體中文`
+
+並會使用 `AnalyticsUtils` 分析紀錄
+- 當點擊時，紀錄事件 `language_setting_click`
+- 修改成功，紀錄事件 `change_language` 並儲存語言代號 `code`
+- 設定使用者屬性 `language`
+
+| 參數名稱                         | 型態                             | 描述                             |
+| ------------------------------- | ------------------------------- | ------------------------------- |
+| onChange | `Function(Locale)` | 當修改成功時會回傳 `Locale` |
+| textList | `List<String>` | 語言列表預設使用 `ApLocalizations` 定義的 |
+
+### ChangeThemeModeItem
+
+:::caution 使用時必須先完成
+ - [Preference 設定 ](../installation/shared-preferences)
+:::
+
+選擇目前的主題，使用 `ThemeMode` 所定義的索引順序，並透過 `Preferences` 儲存到 `ApConstants.prefThemeModeIndex`，依序為 `系統主題`、`淺色`、`深色`
+
+並會使用 `AnalyticsUtils` 分析紀錄
+- 當點擊時，紀錄事件 `theme_mode_setting_click`
+- 修改成功，紀錄事件 `change_theme` 並儲存主題代號 `code`
+- 設定使用者屬性 `theme`
+
+| 參數名稱                         | 型態                             | 描述                             |
+| ------------------------------- | ------------------------------- | ------------------------------- |
+| onChange | `Function(ThemeMode)` | 當修改成功時會回傳 `ThemeMode` |
+| textList | `List<String>` | 主題列表預設使用 `ApLocalizations` 定義的 |
+
+### ChangeIconStyleItem
+
+:::caution 使用時必須先完成
+ - [Preference 設定 ](../installation/shared-preferences)
+:::
+
+選擇 `ApIcon` 的風格，使用 `ApIcon` 所定義的順序，並透過 `Preferences` 儲存到 `ApConstants.prefIconStyleCode`，依序為 `filled`、`outlined`
+
+此元件修改成功時會自動設定 `ApIcon` 
+
+並會使用 `AnalyticsUtils` 分析紀錄
+- 當點擊時，紀錄事件 `icon_style_setting_click`
+- 修改成功，紀錄事件 `change_icon_style` 並儲存圖案風格代號 `code`
+
+| 參數名稱                         | 型態                             | 描述                             |
+| ------------------------------- | ------------------------------- | ------------------------------- |
+| onChange | `Function(String)` | 當修改成功時會回傳圖案代號 |
+| textList | `List<String>` | 主題列表預設使用 `ApLocalizations` 定義的 |

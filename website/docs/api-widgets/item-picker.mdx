@@ -4,6 +4,10 @@ sidebar_position: 6
 
 # 選項選擇器 ItemPicker
 
+:::caution 使用時必須先完成 
+ - [主題色設定](../installation/theme)
+:::
+
 將 `SimpleOptionDialog` 功能整合至一個元件，點擊時會顯示 `SimpleOptionDialog`
 
  <img src="../../img/widgets/item_picker.jpg" alt="drawing" width="200"/>
@@ -14,3 +18,12 @@ sidebar_position: 6
 | dialogTitle | String | `SimpleOptionDialog` 的標題 |
 | currentIndex | int | 目前的選項的索引值 |
 | onSelected | Function(int index) | `SimpleOptionDialog` 點擊事件，回傳索引值 |
+| featureTag | String | 事件記錄的前綴標籤 |
+
+## 分析事件
+
+使用抽象函式 `AnalyticsUtils`
+
+| 事件名稱                         | 描述                             |
+| ------------------------------- | ------------------------------- |
+| `${featureTag}_item_picker_click` | 當點擊時紀錄 |
