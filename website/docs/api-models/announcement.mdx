@@ -1,0 +1,76 @@
+---
+sidebar_position: 2
+---
+
+# Announcement
+
+作為首頁輪播所使用的類別，與最新消息審查系統共用類別
+
+## AnnouncementData
+
+| 參數名稱                         | 型態                             | 描述                             |
+| ------------------------------- | ------------------------------- | ------------------------------- |
+| data | `List<Announcement>` | 最新消息列表 |
+
+## Announcement
+
+| 參數名稱                         | 型態                             | 描述                             |
+| ------------------------------- | ------------------------------- | ------------------------------- |
+| title | `String` | 標題 |
+| id | `String` | 最新消息id |
+| tags | `List<String>` | 標籤，目前用來區隔不同學校的最新消息 |
+| nextId | `Location` | 下一個最新消息id |
+| lastId | `int` | 最後一個最新消息的id |
+| weight | `int` | 權重 `HomeScaffold` 會從權重大的排序顯示 |
+| imgUrl | `String` | 圖片網址 |
+| url | `int` | 活動連結 |
+| description | `int` | 描述 會在 `AnnouncementContentPage` 顯示 |
+| publishTime | `int` | 發布時間，格式 `YYYY-MM-DDTHH:mm::ss` |
+| expireTime | `int` | 過期時間 `HomeScaffold` 會讓超過此時間的最新消息不顯示，格式 `YYYY-MM-DDTHH:mm::ss` |
+| applicant | `String` | 申請人名字 |
+| applicationId | `String` | 申請人 ID，通常為電子信箱 |
+| reviewStatus | `bool` | 審查狀態，若為 `null` 代表尚未審查，`true` 代表通過，`false` 代表失敗 |
+| reviewDescription | `String` | 審查說明，由審查人員填寫，讓申請者得知審查不通過原因 |
+
+## 範例
+
+```json
+{
+    "data": [
+        {
+            "title": "高科大楠梓校區 民謠吉他社 《久逢知吉》大型成發",
+            "weight": 0,
+            "url": "https://imgur.com/gallery/jmyXaq3",
+            "imgUrl": "https://i.imgur.com/zESMBwN.jpg",
+            "description": "《久逢知吉》大型成果發表會\n來看表演還有機會抽到西堤餐券、威秀電影票、小米行動電源…等多項精美好禮?\n這麼好康的事還不來嗎 心動不如馬上行動❤️\n帶上你的親朋好友一起來欣賞\n_\n\n♦️P.M.6：00~6：30簽到，即可領取抽獎券，打卡還可以兌換活動周邊商品♦️\n?活動時間：6/8（二）P.M.6：00~9：00?\n?活動地點：活動中心B1音樂廳?\n_\n6月8號 我們不見不散?",
+            "location": null,
+            "expireTime": "2021-06-07T22:00:00Z",
+            "tag": [
+                "zh"
+            ],
+            "publishedAt": "2021-05-13T20:21:55Z",
+            "id": 5,
+            "lastId": null,
+            "nextId": 14
+        },
+        {
+            "title": "第54屆大專生命成長營",
+            "weight": 0,
+            "url": "https://bwyouth.wixsite.com/camp2021",
+            "imgUrl": "https://i.imgur.com/Ai7b5af.jpg",
+            "description": "第54屆大專生命成長營開跑囉！\n\n揮別疫情，迎接溫暖與希望\n\n讓自己的生命更上一層樓！\n\n「課程內容」\n\n1.新世紀生命價值觀\n\n2.美好的人際關係\n\n3.關心健康關愛生命\n\n4.建立崇高的生命目標",
+            "location": null,
+            "expireTime": "2021-06-09T20:00:00Z",
+            "tag": [
+                "nkust",
+                "zh"
+            ],
+            "publishedAt": "2021-05-14T01:23:03Z",
+            "id": 14,
+            "nextId": null,
+            "lastId": 5
+        }
+    ]
+}
+
+```
