@@ -28,7 +28,7 @@ module.exports = {
       title: '校務通系列共用工程',
       logo: {
         alt: 'My Site Logo',
-        src: 'img/logo.svg',
+        src: 'img/ap.png',
       },
       items: [
         {
