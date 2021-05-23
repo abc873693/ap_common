@@ -1,12 +1,12 @@
 ---
-sidebar_position: 7
+sidebar_position: 6
 ---
 
 # 使用者資訊骨架 UserInfoScaffold
 
 提供使用者資訊骨架
- - 可點擊右上角的icon，切換顯示Qr Code 或 Bar Code
- - Qr Code 或 Bar Code 顯示時內容是學號
+ - 可點擊右上角的icon，切換顯示 QR Code 或 Bar Code
+ - QR Code 或 Bar Code 顯示時內容是學號
  - 部分欄位為 `Null` 時則不顯示
 
 手機介面
@@ -18,21 +18,17 @@ sidebar_position: 7
 
 | 參數名稱                         | 型態                             | 描述                             |
 | ------------------------------- | ------------------------------- | ------------------------------- |
-| userInfo | UserInfo | 使用者資訊物件 |
-| heroTag | String | 照片的 Hero Tag，預設為 `tag_student_picture` |
-| actions | `List<Widget>` | 右上角的元件列表，為Flutter Scaffold原生的API |
+| userInfo | [`UserInfo`](../api-models/user-info) | 使用者資訊物件 |
+| heroTag | `String` | 照片的 Hero Tag，預設為 `tag_student_picture` |
+| actions | `List<Widget>` | 右上角的元件列表，為 Flutter `Scaffold` 原生的API |
 | onRefresh | `Future<UserInfo> Function()` | 下拉更新事件，需回傳更新後的使用者資訊 |
-| enableBarCode | bool | 是否顯示Bar Code |
+| enableBarCode | `bool` | 是否顯示 Bar Code |
 
-### UserInfo
+## 分析事件
 
-| 參數名稱                         | 型態                             | 描述                             |
-| ------------------------------- | ------------------------------- | ------------------------------- |
-| educationSystem | String | 學制 |
-| department | String | 科系 |
-| className | String | 班級名稱 |
-| id | String | 學號 |
-| name | String | 名字 |
-| pictureUrl | String | 照片網址，但 `UserInfoScaffold` 不使用此載入圖片 |
-| email | String | 電子信箱 |
-| pictureBytes | Uint8List | 照片Raw Data，`UserInfoScaffold` 使用此載入圖片 |
+使用抽象函式 `AnalyticsUtils.instance.logEvent()`
+
+| 事件名稱                         | 描述                             |
+| ------------------------------- | ------------------------------- |
+| `user_info_barcode_switch` | 切換 Qc Code 及 Bar Code 的點擊事件 |
+| `user_info_refresh` | 下拉式更新事件 |
