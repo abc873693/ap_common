@@ -10,8 +10,6 @@ PODS:
     - AppAuth/ExternalUserAgent (= 1.4.0)
   - AppAuth/Core (1.4.0)
   - AppAuth/ExternalUserAgent (1.4.0)
-  - device_info (0.0.1):
-    - Flutter
   - Flutter (1.0.0)
   - flutter_keyboard_visibility (0.0.1):
     - Flutter
@@ -63,7 +61,6 @@ DEPENDENCIES:
   - add_2_calendar (from `.symlinks/plugins/add_2_calendar/ios`)
   - ap_common_plugin (from `.symlinks/plugins/ap_common_plugin/ios`)
   - app_tracking_transparency (from `.symlinks/plugins/app_tracking_transparency/ios`)
-  - device_info (from `.symlinks/plugins/device_info/ios`)
   - Flutter (from `Flutter`)
   - flutter_keyboard_visibility (from `.symlinks/plugins/flutter_keyboard_visibility/ios`)
   - flutter_local_notifications (from `.symlinks/plugins/flutter_local_notifications/ios`)
@@ -95,8 +92,6 @@ EXTERNAL SOURCES:
     :path: ".symlinks/plugins/ap_common_plugin/ios"
   app_tracking_transparency:
     :path: ".symlinks/plugins/app_tracking_transparency/ios"
-  device_info:
-    :path: ".symlinks/plugins/device_info/ios"
   Flutter:
     :path: Flutter
   flutter_keyboard_visibility:
@@ -133,7 +128,6 @@ SPEC CHECKSUMS:
   ap_common_plugin: f5861976eed0e60431f1eb939796a0eb93d73e69
   app_tracking_transparency: 5b1745ef9ade815f7455cb6a0848349589afb7c5
   AppAuth: 31bcec809a638d7bd2f86ea8a52bd45f6e81e7c7
-  device_info: d7d233b645a32c40dfdc212de5cf646ca482f175
   Flutter: 434fef37c0980e73bb6479ef766c45957d4b510c
   flutter_keyboard_visibility: 0339d06371254c3eb25eeb90ba8d17dca8f9c069
   flutter_local_notifications: 0c0b1ae97e741e1521e4c1629a459d04b9aec743
