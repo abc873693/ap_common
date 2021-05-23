@@ -8,12 +8,13 @@ sidebar_position: 4
  - 支援響應式介面
    - 利用手機水平與垂直顯示區隔，水平模式視為平板模式
    - 平板模式時，Logo 與 `forms` 會水平顯示
- - `forms` 會包裝在 Flutter v1.20 支援的 `AutofillGroup` 使區塊內的`TextFeild` 支援自動填入(Autofill)
+ - `forms` 會包裝在 Flutter v1.20 支援的 [`AutofillGroup`](https://api.flutter.dev/flutter/widgets/AutofillGroup-class.html) 使區塊內的`TextFeild` 支援自動填入(Autofill)
+   - iOS 必須設定 [Associated Domains Entitlement](https://developer.apple.com/documentation/xcode/supporting-associated-domains) 關聯相關網站的快速填入
  - 提供校務通風格的元件
-   - ApButton : RaisedButton封裝
-   - ApFlatButton : FlatButton封裝
-   - ApTextFeild : TextFeild封裝
-   - ApCheckBox : CheckBox封裝
+   - ApButton : [`ElevatedButton`](https://api.flutter.dev/flutter/material/ElevatedButton-class.html) 封裝
+   - ApFlatButton : [`TextButton`](https://api.flutter.dev/flutter/material/TextButton-class.html) 封裝
+   - ApTextFeild : [`TextFeild`](https://api.flutter.dev/flutter/material/TextField-class.html) 封裝
+   - ApCheckBox : [`CheckBox`](https://api.flutter.dev/flutter/material/Checkbox-class.html) 封裝
 
  手機介面
 
@@ -23,9 +24,10 @@ sidebar_position: 4
 
  <img src="../../img/scaffolds/login/tablet.png" alt="drawing" width="600"/>
 
+## 參數
+
 | 參數名稱                         | 型態                             | 描述                             |
 | ------------------------------- | ------------------------------- | ------------------------------- |
-| logoSource | String | 必要欄位，Logo的來源，由 `loginMode` 決定Logo顯示方式 |
+| logoSource | `String` | 必要欄位，Logo的來源，由 `loginMode` 決定Logo顯示方式 |
 | form | `List<Widget>` | 必要欄位，骨架正中間的表單資訊，採自由實作 |
-| logoMode | LogoMode | LogoMode，logoMode 為 `text`時顯示 `logoSource` 的資訊，logoMode 為 `image` 時載入 `logoSource` 路徑的 asset image|
-| enableKeyboardDoneButton | bool | 是否顯示鍵盤完成按鍵，會顯示在虛擬鍵盤正上方 |
+| logoMode | `LogoMode` | LogoMode，logoMode 為 `text`時顯示 `logoSource` 的資訊，logoMode 為 `image` 時載入 `logoSource` 路徑的 asset image|
