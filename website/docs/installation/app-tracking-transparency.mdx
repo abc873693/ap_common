@@ -1,0 +1,34 @@
+---
+sidebar_position: 7
+---
+
+# App 透明度追蹤
+
+因應 iOS 14 以後上架需加入 [`App 透明度追蹤 API`](https://developer.apple.com/documentation/apptrackingtransparency)
+
+`iOS` 使用 [`app_tracking_transparency`](https://pub.dev/packages/app_tracking_transparency) 實作，細節可參考原專案
+
+:::caution 注意
+需根據上架需求，通常為審查委員會要求加入
+:::
+
+## 限制
+
+此功能只支援 `iOS`
+
+## 設定
+
+### Android
+
+尚未支援
+
+### iOS
+
+在 `ios/Runner/Info.plist` `dict` 中加入
+
+```xml title='Info.plist'
+  <key>NSUserTrackingUsageDescription</key>
+  <string>We would like to log your usage to improve user experience, and collect crash report to fix bugs and improve stability.</string>
+```
+
+字串中的說明為取得權限時會出現的文字說明，可根據你的 App 語言做修改

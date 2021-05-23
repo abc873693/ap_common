@@ -1,0 +1,40 @@
+---
+sidebar_position: 7
+---
+
+# SharedPreference
+
+使用 [API 說明](../api-utils/preference-utils)
+
+:::caution 注意
+若未設定此頁面會影響以下功能
+
+- [Preference](../api-utils/preference-utils) 的功能
+- [課表骨架](../api-scaffolds/course-scaffold) 中的上課提醒
+- 課表小工具
+:::
+
+## 設定
+
+在 `main()` 執行 `runApp` 前執行 `Preferences.init()` 一定要加 `await`
+
+```dart title='main.dart'
+import 'package:ap_common/utils/preferences.dart';
+
+Future<void> main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  await Preferences.init(key: Constants.key, iv: Constants.iv);
+  runApp(const MyApp());
+}
+``
+
+金鑰的部分可以另外使用獨立靜態變數儲存
+
+```dart title='constants.dart'
+import 'package:encrypt/encrypt.dart';
+
+class Constants {
+  static final key = Key.fromUtf8('<修改成自己的Key>');
+  static final iv = IV.fromUtf8('<修改成自己的IV Key>');
+}
+```

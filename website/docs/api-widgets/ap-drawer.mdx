@@ -1,0 +1,51 @@
+---
+sidebar_position: 1
+---
+
+# 側選單 ApDrawer
+
+提供校務通v3風格側選單，Flutter 原生的 `Drawer` 封裝  
+
+另提供
+ - DrawerItem
+ - DrawerSubItem
+
+ <img src="../../img/widgets/ap_drawer.jpg" alt="drawing" width="200"/>
+
+:::caution 使用時必須先完成 
+ - [主題色設定](../installation/theme)
+ - [多國語言設定](../installation/localization)
+:::
+
+## ApDrawer
+
+側選單，通常放在左側
+
+| 參數名稱                         | 型態                             | 描述                             |
+| ------------------------------- | ------------------------------- | ------------------------------- |
+| userInfo | [`UserInfo`](https://pub.dev/documentation/ap_common/latest/models_user_info/UserInfo-class.html) | 使用者資訊，會在Header顯示 `照片`、`名字`、`學號` |
+| onTapHeader | `Function()` | Header 點擊事件 |
+| imageAsset | `String` | Header 右邊的圖片，使用 Asset Image 載入|
+| widgets | `List<Widget>` | 抽屜主體的Widget List，屬於Flutter原生API |
+| imageHeroTag | `String` | Header 中的圖片支援Flutter Hero，可自訂 Tag 對應畫面的tag，預設為 `tag_student_picture` |
+| displayPicture | `bool` | 是否顯示照片，`true`時顯示 `ApIcon.person` 的圖案  |
+
+## DrawerItem
+
+側選單的項目，通常放在側選單中
+
+| 參數名稱                         | 型態                             | 描述                             |
+| ------------------------------- | ------------------------------- | ------------------------------- |
+| icon | `IconData` | 圖案資料，可使用 `Icons` 系列 |
+| title | `String` | 標題 |
+| onTap | `Function()` | 點擊事件 |
+
+## DrawerSubItem
+
+側選單的子項目，通常放在側選單項目中
+
+| 參數名稱                         | 型態                             | 描述                             |
+| ------------------------------- | ------------------------------- | ------------------------------- |
+| icon | `IconData` | 圖案資料，可使用 `Icons` 系列 |
+| title | `String` | 標題 |
+| onTap | `Function()` | 點擊事件 |

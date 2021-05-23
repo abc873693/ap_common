@@ -1,0 +1,24 @@
+---
+sidebar_position: 8
+---
+
+# 是否對話框 YesNoDialog
+
+:::caution 使用時必須先完成 
+ - [主題色設定](../installation/theme)
+ - [多國語言設定](../installation/localization)
+:::
+
+提供校務通v3風格對話框，使用 Flutter 官方的 `AlertDialog` 封裝
+
+<img src="../../img/widgets/yes_no_dialog.jpg" alt="drawing" width="300"/>
+
+| 參數名稱                         | 型態                             | 描述                             |
+| ------------------------------- | ------------------------------- | ------------------------------- |
+| title | `String` | 對話框標題 |
+| contentWidget | `Widget` | 對話框內容的 Widget |
+| contentWidgetPadding | `EdgeInsetsGeometry` | 對話框內容的 Widget 的內縮間距 |
+| leftActionText | `String` | 左邊按鍵的文字 |
+| rightActionText | `String` | 右邊按鍵的文字 |
+| leftActionFunction | `Function` | 左邊按鍵點擊事件 |
+| rightActionFunction | `Function` | 右邊按鍵點擊事件 |

@@ -1,0 +1,27 @@
+name: Deploy to Firebase Hosting on PR
+on:
+  pull_request:
+    paths:
+      - "docs/**"
+      - "website/**"
+jobs:
+  build_and_preview:
+    if: '${{ github.event.pull_request.head.repo.full_name == github.repository }}'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - uses: actions/setup-node@v2-beta
+        with:
+          node-version: '15'
+      - name: Run Build
+        working-directory: ./website
+        run: |
+          yarn
+          yarn run build
+      - uses: FirebaseExtended/action-hosting-deploy@v0
+        with:
+          repoToken: '${{ secrets.GITHUB_TOKEN }}'
+          firebaseServiceAccount: '${{ secrets.FIREBASE_SERVICE_ACCOUNT_AP_COMMON }}'
+          projectId: ap-common
+          entryPoint: "website"
+          expires: 7d

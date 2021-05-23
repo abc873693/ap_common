@@ -1,0 +1,40 @@
+---
+sidebar_position: 5
+---
+
+# 匯出至行事曆 App
+
+使用 [`add_2_calendar`](https://pub.dev/packages/add_2_calendar) 實作，細節可參考原專案
+
+:::caution
+若未設定此頁面會影響以下功能
+
+- [課表骨架](../api-scaffolds/course-scaffold) 中的匯出至行事曆
+
+:::
+
+## 限制
+
+此功能只支援，默認相關功能會不顯示
+
+- Android
+- iOS
+
+## 設定
+
+### Android
+
+無須設定
+
+### iOS
+
+在 `ios/Runner/Info.plist` `dict` 中加入
+
+```xml title='Info.plist'
+  <key>NSCalendarsUsageDescription</key>
+	<string>Feature calendar would be add schedule to calendar app</string>
+```
+
+字串中的說明為取得權限時會出現的文字說明，可根據你的 App 語言做修改
+
+------

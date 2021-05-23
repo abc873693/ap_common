@@ -1,0 +1,29 @@
+---
+sidebar_position: 3
+---
+
+# PDF骨架 PdfView
+
+以套件 [pdf](https://pub.dev/packages/pdf) 封裝的PDF瀏覽器，另包含列印功能使用同作者開發的 [printing](https://pub.dev/packages/printing)，支援所有平台
+
+手機介面，不包含 `AppBar` 及 `BottomNavigationBar` 的區塊
+
+<img src="../../img/scaffolds/pdf/mobile.png" alt="drawing" width="200"/>
+
+## 參數
+
+| 參數名稱                         | 型態                             | 描述                             |
+| ------------------------------- | ------------------------------- | ------------------------------- |
+| state | `PdfState` | 畫面狀態，總共有 `loading`、`finish`、`error`，以防載入不正確資料或是其他錯誤 |
+| onRefresh | `Function()` | 當 `state` 為 `PdfState.error` 點擊畫面的事件 |
+| byteList | `Uint8List` | PDF 的 Raw Data |
+| fileName | `String` | 檔案名稱，匯出或下載會使用到 |
+
+## 分析事件
+
+使用抽象函式 `AnalyticsUtils.instance.logEvent()`
+
+| 事件名稱                         | 描述                             |
+| ------------------------------- | ------------------------------- |
+| `export_by_share` | 匯出透過分享 |
+| `export_by_printing` | 匯出透過印表機 |

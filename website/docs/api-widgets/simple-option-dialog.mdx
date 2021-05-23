@@ -1,0 +1,20 @@
+---
+sidebar_position: 7
+---
+
+# 選項對話框 SimpleOptionDialog
+
+:::caution 使用時必須先完成 
+ - [主題色設定](../installation/theme)
+:::
+
+提供選項對話框，項目以 `DialogOption` 顯示，透過 `index` 設定目前選取的項目
+
+ <img src="../../img/widgets/simple_option_dialog.jpg" alt="drawing" width="200"/>
+
+| 參數名稱                         | 型態                             | 描述                             |
+| ------------------------------- | ------------------------------- | ------------------------------- |
+| title | `String` | 標題 |
+| items | `List<String>` | 選項列表，純文字顯示 |
+| index | `int` | 目前的選項的索引值 |
+| onSelected | `Function(int index)` | 點擊事件，回傳索引值 |

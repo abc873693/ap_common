@@ -1,0 +1,31 @@
+---
+sidebar_position: 2
+---
+
+# 學校電話骨架 PhoneListView
+
+提供電話列表的骨架
+  - 點擊會撥打`PhoneModel` 中的 `number`
+  - `PhoneModel` 中的 `number` 為 `null` 時則作為標題區隔
+
+撥打功能使用 [ApUtils.callPhone](../api-utils/utils#callphone)
+
+手機介面，不包含 `AppBar` 及 `BottomNavigationBar` 的區塊
+
+<img src="../../img/scaffolds/phone/mobile.png" alt="drawing" width="200"/>
+
+
+| 參數名稱                         | 型態                             | 描述                             |
+| ------------------------------- | ------------------------------- | ------------------------------- |
+| state | PhoneState | 必要欄位，總共有 `loading` `finish` `error` 的狀態，只有`finish`才會顯示，其餘都是顯示錯誤狀況 |
+| phoneModelList | `List<PhoneModel>` | 電話列表 |
+
+## 分析事件
+
+使用抽象函式 `AnalyticsUtils.instance.logEvent()`
+
+| 事件名稱                         | 描述                             |
+| ------------------------------- | ------------------------------- |
+| `call_phone_click` | 項目的點擊事件 |
+| `call_phone_success` | 撥打電話成功 |
+| `call_phone_error` | 撥打電話錯誤 |

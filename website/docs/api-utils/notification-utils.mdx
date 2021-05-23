@@ -1,0 +1,94 @@
+---
+sidebar_position: 3
+---
+
+# Notification 工具
+
+封裝 [`flutter_local_notification`](https://pub.dev/packages/flutter_local_notifications) 細節可參考原專案
+
+:::caution 注意
+使用時必須先完成 [相關設定](../installation/local-notification)
+:::
+
+## show 
+
+立即顯示通知
+
+| 參數名稱                         | 型態                             | 描述                             |
+| ------------------------------- | ------------------------------- | ------------------------------- |
+| id | `int` | 區分通知的編號 |
+| androidChannelId | `String` | Android 通知頻道 Id，可參考 [文件](https://developer.android.com/training/notify-user/channels) |
+| androidChannelDescription | `String` | Android 通知頻道名稱，可參考 [文件](https://developer.android.com/training/notify-user/channels) |
+| title | `String` | 通知標題 |
+| content | `String` | 通知內容 |
+| enableVibration | `bool` | 是否開啟震動，預設為 `true` |
+| androidResourceIcon | `String` | Android 通知圖示，使用原生資源檔路徑，預設為讀取 `@drawable/ic_stat_name` |
+| settings | `InitializationSettings` | 通知初始設定 |
+| onSelectNotification | `VoidCallback` | 當點擊通知的事件 |
+
+## scheduleWeeklyNotify 
+
+於每週固定時間通知
+
+| 參數名稱                         | 型態                             | 描述                             |
+| ------------------------------- | ------------------------------- | ------------------------------- |
+| id | `int` | 區分通知的編號 |
+| androidChannelId | `String` | Android 通知頻道 Id，可參考 [文件](https://developer.android.com/training/notify-user/channels) |
+| androidChannelDescription | `String` | Android 通知頻道名稱，可參考 [文件](https://developer.android.com/training/notify-user/channels) |
+| day | `Day` | 每週的星期幾 |
+| time | `Time` | 時間 |
+| title | `String` | 通知標題 |
+| content | `String` | 通知內容 |
+<!-- | enableVibration | bool | 是否開啟震動，預設為 `true` | -->
+| androidResourceIcon | `String` | Android 通知圖示，使用原生資源檔路徑，預設為讀取 `@drawable/ic_stat_name` |
+| settings | `InitializationSettings` | 通知初始設定 |
+| onSelectNotification | `VoidCallback` | 當點擊通知的事件 |
+
+## schedule 
+
+於特定的時間通知
+
+| 參數名稱                         | 型態                             | 描述                             |
+| ------------------------------- | ------------------------------- | ------------------------------- |
+| id | `int` | 區分通知的編號 |
+| androidChannelId | `String` | Android 通知頻道 Id，可參考 [文件](https://developer.android.com/training/notify-user/channels) |
+| androidChannelDescription | `String` | Android 通知頻道名稱，可參考 [文件](https://developer.android.com/training/notify-user/channels) |
+| dateTime | `DateTime` | 日期與時間 |
+| title | `String` | 通知標題 |
+| content | `String` | 通知內容 |
+<!-- | enableVibration | bool | 是否開啟震動，預設為 `true` | -->
+| androidResourceIcon | `String` | Android 通知圖示，使用原生資源檔路徑，預設為讀取 `@drawable/ic_stat_name` |
+| settings | `InitializationSettings` | 通知初始設定 |
+| onSelectNotification | `VoidCallback` | 當點擊通知的事件 |
+
+## requestPermissions
+
+要求系統權限，若成功取得權限則回傳 `true`，若該系統無相關權限回傳 `null`
+
+| 參數名稱                         | 型態                             | 描述                             |
+| ------------------------------- | ------------------------------- | ------------------------------- |
+| sound | `bool` | 是否要求開啟聲音，預設為 `true`，僅限 `iOS`、`macOS` 有效 |
+| alert | `bool` | 是否要求彈出，預設為 `true`，僅限 `iOS`、`macOS` 有效 |
+| badge | `bool` | 是否要求顯示在 app 圖案上，預設為 `true`，僅限 `iOS`、`macOS` 有效 |
+
+## getPendingNotificationList
+
+取得正在等待發出的通知列表，回傳值為 `List<PendingNotificationRequest>`
+
+| 參數名稱                         | 型態                             | 描述                             |
+| ------------------------------- | ------------------------------- | ------------------------------- |
+
+## cancel
+
+取消/關閉通知
+
+| 參數名稱                         | 型態                             | 描述                             |
+| ------------------------------- | ------------------------------- | ------------------------------- |
+| id | `int` | 通知 id |
+
+## cancelAll
+
+關閉所有通知
+
+| 參數名稱                         | 型態                             | 描述                             |
+| ------------------------------- | ------------------------------- | ------------------------------- |

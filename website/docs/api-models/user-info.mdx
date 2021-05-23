@@ -1,0 +1,31 @@
+---
+sidebar_position: 5
+---
+
+# UserInfo
+
+使用者資訊
+
+| 參數名稱                         | 型態                             | 描述                             |
+| ------------------------------- | ------------------------------- | ------------------------------- |
+| educationSystem | `String` | 學制 |
+| department | `String` | 科系 |
+| className | `String` | 班級名稱 |
+| id | `String` | 學號 |
+| name | `String` | 名字 |
+| pictureUrl | `String` | 照片網址，但 `UserInfoScaffold` 不使用此載入圖片 |
+| email | `String` | 電子信箱 |
+| pictureBytes | `Uint8List` | 照片Raw Data，`UserInfoScaffold` 使用此載入圖片 |
+
+## 範例
+
+```json
+{
+    "educationSystem": "日間部四技",
+    "department": "停車管理系",
+    "className": "停車管理系四甲",
+    "id": "1101234532",
+    "name": "Dash",
+    "pictureUrl": "https://i.imgur.com/5MBrWIB.png"
+}
+```
