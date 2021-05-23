@@ -1,8 +1,4 @@
-import 'dart:io';
-
 import 'package:ap_common/resources/ap_theme.dart';
-import 'package:ap_common/utils/ap_localizations.dart';
-import 'package:ap_common/utils/ap_utils.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
@@ -17,14 +13,12 @@ class LoginScaffold extends StatefulWidget {
   final LogoMode logoMode;
   final String logoSource;
   final List<Widget> forms;
-  final bool enableKeyboardDoneButton;
 
   const LoginScaffold({
     Key? key,
     required this.logoSource,
     required this.forms,
     this.logoMode = LogoMode.text,
-    this.enableKeyboardDoneButton = false,
   }) : super(key: key);
 
   @override
@@ -35,49 +29,28 @@ class LoginScaffoldState extends State<LoginScaffold> {
   bool get isTablet => MediaQuery.of(context).size.shortestSide >= 600;
 
   @override
-  void initState() {
-    if ((!kIsWeb && (Platform.isAndroid || Platform.isIOS)) &&
-        widget.enableKeyboardDoneButton) {
-      KeyboardVisibilityController().onChange.listen(
-        (bool visible) {
-          if (visible) {
-            ApUtils.showOverlay(context, ApLocalizations.of(context).done);
-          } else {
-            ApUtils.removeOverlay();
-          }
-        },
-      );
-    }
-    super.initState();
-  }
-
-  @override
-  void dispose() {
-//    KeyboardVisibility.onChange.
-    super.dispose();
-  }
-
-  @override
   Widget build(BuildContext context) {
     final orientation = MediaQuery.of(context).orientation;
     return Scaffold(
       backgroundColor: ApTheme.of(context).blue,
       resizeToAvoidBottomInset: orientation == Orientation.portrait,
       body: AutofillGroup(
-        child: Container(
-          alignment: const Alignment(0, 0),
-          padding: const EdgeInsets.symmetric(horizontal: 30.0),
-          child: orientation == Orientation.portrait
-              ? Column(
-                  crossAxisAlignment: CrossAxisAlignment.stretch,
-                  mainAxisAlignment: MainAxisAlignment.spaceAround,
-                  mainAxisSize: MainAxisSize.min,
-                  children: _renderContent(orientation),
-                )
-              : Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: _renderContent(orientation),
-                ),
+        child: KeyboardDismissOnTap(
+          child: Container(
+            alignment: const Alignment(0, 0),
+            padding: const EdgeInsets.symmetric(horizontal: 30.0),
+            child: orientation == Orientation.portrait
+                ? Column(
+                    crossAxisAlignment: CrossAxisAlignment.stretch,
+                    mainAxisAlignment: MainAxisAlignment.spaceAround,
+                    mainAxisSize: MainAxisSize.min,
+                    children: _renderContent(orientation),
+                  )
+                : Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: _renderContent(orientation),
+                  ),
+          ),
         ),
       ),
     );
