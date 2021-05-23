@@ -35,19 +35,19 @@ sidebar_position: 3
 | group | `String` | 課程分組 |
 | units | `String` | 學分數 |
 | hours | `String` | 上課時數(單位：小時) |
-| required | String | 課程類型，選修、必修等等，右上角藍字 |
+| required | `String` | 課程類型，選修、必修等等，右上角藍字 |
 | times | `List<SectionTime>` | 上課節次 |
 | location | `Location` | 上課位置 |
 | instructors | `List<String>` | 授課老師 |
 
-## Location
+### Location
 
 上課位置
 
 | 參數名稱                         | 型態                             | 描述                             |
 | ------------------------------- | ------------------------------- | ------------------------------- |
-| room | String | 上課教室 |
-| building | String | 上課大樓 |
+| room | `String` | 上課教室 |
+| building | `String` | 上課大樓 |
 
 ### SectionTime
 
@@ -55,8 +55,8 @@ sidebar_position: 3
 
 | 參數名稱                         | 型態                             | 描述                             |
 | ------------------------------- | ------------------------------- | ------------------------------- |
-| weekday | int | 該堂課星期幾，數字從 `1` 開始，為星期一到星期日 |
-| index | int | 節次索引值，對應 `CourseData` 中的 `timeCodes` |
+| weekday | `int` | 該堂課星期幾，數字從 `1` 開始，為星期一到星期日 |
+| index | `int` | 節次索引值，對應 `CourseData` 中的 `timeCodes` |
 
 ### TimeCode
 
@@ -64,9 +64,9 @@ sidebar_position: 3
 
 | 參數名稱                         | 型態                             | 描述                             |
 | ------------------------------- | ------------------------------- | ------------------------------- |
-| title | String | 節次標題 |
-| startTime | String | 開始時間，格式 `HH:mm` |
-| endTime | String | 結束時間，格式 `HH:mm` |
+| title | `String` | 節次標題 |
+| startTime | `String` | 開始時間，格式 `HH:mm` |
+| endTime | `String` | 結束時間，格式 `HH:mm` |
 
 ## 範例
 
