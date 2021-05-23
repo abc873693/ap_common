@@ -1,8 +1,8 @@
 ---
-sidebar_position: 8
+sidebar_position: 1
 ---
 
-# 校園最新消息骨架 NotificationScaffold
+# 校園最新消息骨架 NotificationListView
 
 提供校園最新消息列表的骨架
   - 點擊時會開啟 `Notification` 中的 `link` 設定的連結
@@ -15,12 +15,10 @@ sidebar_position: 8
 
 | 參數名稱                         | 型態                             | 描述                             |
 | ------------------------------- | ------------------------------- | ------------------------------- |
-| state | NotificationState | 必要欄位，總共有 `loading` `finish` `error` `empty` `offlineEmpty` 的狀態，只有`finish`才會顯示，其餘都是顯示錯誤狀況 |
+| state | `NotificationState` | 必要欄位，總共有 `loading` `finish` `error` `empty` `offlineEmpty` 的狀態，只有`finish`才會顯示，其餘都是顯示錯誤狀況 |
 | notificationList | `List<Notifications>` | 校園最新消息列表 |
-| onRefresh | Function | 下拉更新事件 |
-| onLoadingMore | Function | 滾動最底事件 |
-| logEvent | Function(String name, String value) | 可搜集使用者行為的事件 |
-| setCurrentScreen | Function | 可搜集目前畫面的事件 |
+| onRefresh | `Function()` | 下拉更新事件 |
+| onLoadingMore | `Function()` | 滾動最底事件 |
 
 ### Notifications
 
