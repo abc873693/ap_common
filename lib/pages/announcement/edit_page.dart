@@ -13,6 +13,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/painting.dart';
 import 'package:flutter/widgets.dart';
+import 'package:flutter_keyboard_visibility/flutter_keyboard_visibility.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:intl/intl.dart' show DateFormat;
 
@@ -156,280 +157,266 @@ class _AnnouncementEditPageState extends State<AnnouncementEditPage> {
         title: Text(title),
         backgroundColor: ApTheme.of(context).blue,
       ),
-      body: Form(
-        key: _formKey,
-        child: ListView(
-          padding: const EdgeInsets.symmetric(horizontal: 16.0),
-          children: <Widget>[
-            SizedBox(height: dividerHeight),
-            TextFormField(
-              controller: _title,
-              validator: (value) {
-                if (value!.isEmpty) {
-                  return app.doNotEmpty;
-                }
-                return null;
-              },
-              decoration: InputDecoration(
-                border: const OutlineInputBorder(),
-                fillColor: ApTheme.of(context).blueAccent,
-                labelStyle: TextStyle(
-                  color: ApTheme.of(context).grey,
-                ),
-                labelText: app.title,
-              ),
-            ),
-            SizedBox(height: dividerHeight),
-            if (widget.mode != Mode.application) ...[
-              Text(app.tag),
-              Wrap(
-                children: [
-                  for (String? tag in tags ?? []) ...[
-                    Chip(
-                      label: Text(tag!),
-                      backgroundColor: tag.color,
-                      onDeleted: () {
-                        setState(() => tags!.remove(tag));
-                      },
-                    ),
-                    const SizedBox(width: 8.0),
-                  ],
-                  GestureDetector(
-                    onTap: () {
-                      _newTag.clear();
-                      showDialog(
-                        context: context,
-                        builder: (BuildContext context) => DefaultDialog(
-                          title: app.addTag,
-                          contentWidget: TextField(
-                            controller: _newTag,
-                            decoration: InputDecoration(
-                              border: InputBorder.none,
-                              hintText: app.tagName,
-                            ),
-                          ),
-                          actionText: ApLocalizations.of(context).confirm,
-                          actionFunction: () {
-                            if (_newTag.text.isEmpty) {
-                              ApUtils.showToast(context, app.doNotEmpty);
-                            } else {
-                              final newTag = _newTag.text;
-                              final index = tags!.indexOf(newTag);
-                              if (index == -1) {
-                                setState(() => tags!.add(newTag));
-                                Navigator.of(context, rootNavigator: true)
-                                    .pop();
-                              } else {
-                                ApUtils.showToast(context, app.tagRepeatHint);
-                              }
-                            }
-                          },
-                        ),
-                      );
-                    },
-                    child: Chip(
-                      label: const Icon(Icons.add),
-                      backgroundColor: ApTheme.of(context).blueAccent,
-                    ),
-                  ),
-                ],
-              ),
+      body: KeyboardDismissOnTap(
+        child: Form(
+          key: _formKey,
+          child: ListView(
+            padding: const EdgeInsets.symmetric(horizontal: 16.0),
+            children: <Widget>[
               SizedBox(height: dividerHeight),
               TextFormField(
-                controller: _weight,
+                controller: _title,
                 validator: (value) {
                   if (value!.isEmpty) {
                     return app.doNotEmpty;
-                  } else {
-                    try {
-                      int.parse(value);
-                    } catch (e) {
-                      return app.formatError;
-                    }
                   }
                   return null;
                 },
-                keyboardType: TextInputType.number,
                 decoration: InputDecoration(
                   border: const OutlineInputBorder(),
                   fillColor: ApTheme.of(context).blueAccent,
                   labelStyle: TextStyle(
                     color: ApTheme.of(context).grey,
                   ),
-                  labelText: app.weight,
+                  labelText: app.title,
                 ),
               ),
-            ],
-            SizedBox(height: dividerHeight),
-            TextFormField(
-              controller: _imgUrl,
-              enabled: false,
-              validator: (value) {
-                if (value!.isEmpty) {
-                  return app.doNotEmpty;
-                }
-                return null;
-              },
-              keyboardType: TextInputType.url,
-              decoration: InputDecoration(
-                border: const OutlineInputBorder(),
-                fillColor: ApTheme.of(context).blueAccent,
-                labelStyle: TextStyle(
-                  color: ApTheme.of(context).grey,
-                ),
-                labelText: app.imageUrl,
-              ),
-            ),
-            const SizedBox(height: 8.0),
-            Center(
-              child: Column(
-                children: _imgurUploadWidget,
-              ),
-            ),
-            FractionallySizedBox(
-              widthFactor: 0.7,
-              child: ElevatedButton(
-                style: ElevatedButton.styleFrom(
-                  shape: const RoundedRectangleBorder(
-                    borderRadius: BorderRadius.all(
-                      Radius.circular(30.0),
-                    ),
-                  ),
-                  padding: const EdgeInsets.symmetric(
-                    horizontal: 8.0,
-                  ),
-                  primary: ApTheme.of(context).blueAccent,
-                ),
-                onPressed: () async {
-                  final PickedFile? image = await ApUtils.pickImage();
-                  if (image != null) {
-                    setState(
-                        () => imgurUploadState = _ImgurUploadState.uploading);
-                    ImgurHelper.instance!.uploadImageToImgur(
-                      file: image,
-                      callback: GeneralCallback(
-                        onFailure: (dioError) {
-                          ApUtils.showToast(context, dioError.message);
-                          setState(() => imgurUploadState = _imgUrl.text.isEmpty
-                              ? _ImgurUploadState.noFile
-                              : _ImgurUploadState.done);
-                        },
-                        onError: (generalResponse) {
-                          ApUtils.showToast(context, generalResponse.message);
-                          setState(() => imgurUploadState = _imgUrl.text.isEmpty
-                              ? _ImgurUploadState.noFile
-                              : _ImgurUploadState.done);
-                        },
-                        onSuccess: (data) {
-                          _imgUrl.text = data!.link!;
-                          setState(
-                              () => imgurUploadState = _ImgurUploadState.done);
+              SizedBox(height: dividerHeight),
+              if (widget.mode != Mode.application) ...[
+                Text(app.tag),
+                Wrap(
+                  children: [
+                    for (String? tag in tags ?? []) ...[
+                      Chip(
+                        label: Text(tag!),
+                        backgroundColor: tag.color,
+                        onDeleted: () {
+                          setState(() => tags!.remove(tag));
                         },
                       ),
-                    );
-                  }
-                },
-                child: Text(
-                  app.pickAndUploadToImgur,
-                  style: const TextStyle(color: Colors.white),
-                ),
-              ),
-            ),
-            SizedBox(height: dividerHeight),
-            TextFormField(
-              controller: _url,
-              validator: (value) {
-                return null;
-              },
-              keyboardType: TextInputType.url,
-              decoration: InputDecoration(
-                border: const OutlineInputBorder(),
-                fillColor: ApTheme.of(context).blueAccent,
-                labelStyle: TextStyle(
-                  color: ApTheme.of(context).grey,
-                ),
-                labelText: app.url,
-              ),
-            ),
-            SizedBox(height: dividerHeight),
-            Container(color: ApTheme.of(context).grey, height: 1),
-            const SizedBox(height: 8.0),
-            FractionallySizedBox(
-              widthFactor: 0.7,
-              child: ElevatedButton(
-                style: ElevatedButton.styleFrom(
-                  shape: const RoundedRectangleBorder(
-                    borderRadius: BorderRadius.all(
-                      Radius.circular(30.0),
+                      const SizedBox(width: 8.0),
+                    ],
+                    GestureDetector(
+                      onTap: () {
+                        _newTag.clear();
+                        showDialog(
+                          context: context,
+                          builder: (BuildContext context) => DefaultDialog(
+                            title: app.addTag,
+                            contentWidget: TextField(
+                              controller: _newTag,
+                              decoration: InputDecoration(
+                                border: InputBorder.none,
+                                hintText: app.tagName,
+                              ),
+                            ),
+                            actionText: ApLocalizations.of(context).confirm,
+                            actionFunction: () {
+                              if (_newTag.text.isEmpty) {
+                                ApUtils.showToast(context, app.doNotEmpty);
+                              } else {
+                                final newTag = _newTag.text;
+                                final index = tags!.indexOf(newTag);
+                                if (index == -1) {
+                                  setState(() => tags!.add(newTag));
+                                  Navigator.of(context, rootNavigator: true)
+                                      .pop();
+                                } else {
+                                  ApUtils.showToast(context, app.tagRepeatHint);
+                                }
+                              }
+                            },
+                          ),
+                        );
+                      },
+                      child: Chip(
+                        label: const Icon(Icons.add),
+                        backgroundColor: ApTheme.of(context).blueAccent,
+                      ),
                     ),
+                  ],
+                ),
+                SizedBox(height: dividerHeight),
+                TextFormField(
+                  controller: _weight,
+                  validator: (value) {
+                    if (value!.isEmpty) {
+                      return app.doNotEmpty;
+                    } else {
+                      try {
+                        int.parse(value);
+                      } catch (e) {
+                        return app.formatError;
+                      }
+                    }
+                    return null;
+                  },
+                  keyboardType: TextInputType.number,
+                  decoration: InputDecoration(
+                    border: const OutlineInputBorder(),
+                    fillColor: ApTheme.of(context).blueAccent,
+                    labelStyle: TextStyle(
+                      color: ApTheme.of(context).grey,
+                    ),
+                    labelText: app.weight,
                   ),
-                  padding: const EdgeInsets.symmetric(
-                    horizontal: 8.0,
-                    vertical: 4.0,
-                  ),
-                  primary: ApTheme.of(context).blueAccent,
                 ),
-                onPressed: () async {
-                  setState(() {
-                    expireTime = null;
-                  });
-                },
-                child: Text(
-                  app.setNoExpireTime,
-                  style: const TextStyle(color: Colors.white),
-                ),
-              ),
-            ),
-            const SizedBox(height: 8.0),
-            ListTile(
-              onTap: _pickStartDateTime,
-              contentPadding: const EdgeInsets.symmetric(
-                horizontal: 24,
-                vertical: 8,
-              ),
-              leading: Icon(
-                ApIcon.accessTime,
-                size: 30,
-                color: ApTheme.of(context).grey,
-              ),
-              trailing: Icon(
-                ApIcon.keyboardArrowDown,
-                size: 30,
-                color: ApTheme.of(context).grey,
-              ),
-              title: Text(
-                app.expireTime,
-                style: const TextStyle(fontSize: 20),
-              ),
-              subtitle: Text(
-                expireTime == null
-                    ? app.newsExpireTimeHint
-                    : dateFormat.format(expireTime!),
-                style: const TextStyle(fontSize: 20),
-              ),
-            ),
-            Container(color: ApTheme.of(context).grey, height: 1),
-            SizedBox(height: dividerHeight),
-            TextFormField(
-              maxLines: 5,
-              controller: _description,
-              validator: (value) {
-                return null;
-              },
-              decoration: InputDecoration(
-                border: const OutlineInputBorder(),
-                fillColor: ApTheme.of(context).blueAccent,
-                labelStyle: TextStyle(
-                  color: ApTheme.of(context).grey,
-                ),
-                labelText: app.description,
-              ),
-            ),
-            if (widget.mode == Mode.editApplication) ...[
+              ],
               SizedBox(height: dividerHeight),
               TextFormField(
-                maxLines: 2,
-                controller: _reviewDescription,
+                controller: _imgUrl,
+                enabled: false,
+                validator: (value) {
+                  if (value!.isEmpty) {
+                    return app.doNotEmpty;
+                  }
+                  return null;
+                },
+                keyboardType: TextInputType.url,
+                decoration: InputDecoration(
+                  border: const OutlineInputBorder(),
+                  fillColor: ApTheme.of(context).blueAccent,
+                  labelStyle: TextStyle(
+                    color: ApTheme.of(context).grey,
+                  ),
+                  labelText: app.imageUrl,
+                ),
+              ),
+              const SizedBox(height: 8.0),
+              Center(
+                child: Column(
+                  children: _imgurUploadWidget,
+                ),
+              ),
+              FractionallySizedBox(
+                widthFactor: 0.7,
+                child: ElevatedButton(
+                  style: ElevatedButton.styleFrom(
+                    shape: const RoundedRectangleBorder(
+                      borderRadius: BorderRadius.all(
+                        Radius.circular(30.0),
+                      ),
+                    ),
+                    padding: const EdgeInsets.symmetric(
+                      horizontal: 8.0,
+                    ),
+                    primary: ApTheme.of(context).blueAccent,
+                  ),
+                  onPressed: () async {
+                    final PickedFile? image = await ApUtils.pickImage();
+                    if (image != null) {
+                      setState(
+                          () => imgurUploadState = _ImgurUploadState.uploading);
+                      ImgurHelper.instance!.uploadImageToImgur(
+                        file: image,
+                        callback: GeneralCallback(
+                          onFailure: (dioError) {
+                            ApUtils.showToast(context, dioError.message);
+                            setState(() => imgurUploadState =
+                                _imgUrl.text.isEmpty
+                                    ? _ImgurUploadState.noFile
+                                    : _ImgurUploadState.done);
+                          },
+                          onError: (generalResponse) {
+                            ApUtils.showToast(context, generalResponse.message);
+                            setState(() => imgurUploadState =
+                                _imgUrl.text.isEmpty
+                                    ? _ImgurUploadState.noFile
+                                    : _ImgurUploadState.done);
+                          },
+                          onSuccess: (data) {
+                            _imgUrl.text = data!.link!;
+                            setState(() =>
+                                imgurUploadState = _ImgurUploadState.done);
+                          },
+                        ),
+                      );
+                    }
+                  },
+                  child: Text(
+                    app.pickAndUploadToImgur,
+                    style: const TextStyle(color: Colors.white),
+                  ),
+                ),
+              ),
+              SizedBox(height: dividerHeight),
+              TextFormField(
+                controller: _url,
+                validator: (value) {
+                  return null;
+                },
+                keyboardType: TextInputType.url,
+                decoration: InputDecoration(
+                  border: const OutlineInputBorder(),
+                  fillColor: ApTheme.of(context).blueAccent,
+                  labelStyle: TextStyle(
+                    color: ApTheme.of(context).grey,
+                  ),
+                  labelText: app.url,
+                ),
+              ),
+              SizedBox(height: dividerHeight),
+              Container(color: ApTheme.of(context).grey, height: 1),
+              const SizedBox(height: 8.0),
+              FractionallySizedBox(
+                widthFactor: 0.7,
+                child: ElevatedButton(
+                  style: ElevatedButton.styleFrom(
+                    shape: const RoundedRectangleBorder(
+                      borderRadius: BorderRadius.all(
+                        Radius.circular(30.0),
+                      ),
+                    ),
+                    padding: const EdgeInsets.symmetric(
+                      horizontal: 8.0,
+                      vertical: 4.0,
+                    ),
+                    primary: ApTheme.of(context).blueAccent,
+                  ),
+                  onPressed: () async {
+                    setState(() {
+                      expireTime = null;
+                    });
+                  },
+                  child: Text(
+                    app.setNoExpireTime,
+                    style: const TextStyle(color: Colors.white),
+                  ),
+                ),
+              ),
+              const SizedBox(height: 8.0),
+              ListTile(
+                onTap: _pickStartDateTime,
+                contentPadding: const EdgeInsets.symmetric(
+                  horizontal: 24,
+                  vertical: 8,
+                ),
+                leading: Icon(
+                  ApIcon.accessTime,
+                  size: 30,
+                  color: ApTheme.of(context).grey,
+                ),
+                trailing: Icon(
+                  ApIcon.keyboardArrowDown,
+                  size: 30,
+                  color: ApTheme.of(context).grey,
+                ),
+                title: Text(
+                  app.expireTime,
+                  style: const TextStyle(fontSize: 20),
+                ),
+                subtitle: Text(
+                  expireTime == null
+                      ? app.newsExpireTimeHint
+                      : dateFormat.format(expireTime!),
+                  style: const TextStyle(fontSize: 20),
+                ),
+              ),
+              Container(color: ApTheme.of(context).grey, height: 1),
+              SizedBox(height: dividerHeight),
+              TextFormField(
+                maxLines: 5,
+                controller: _description,
                 validator: (value) {
                   return null;
                 },
@@ -439,40 +426,28 @@ class _AnnouncementEditPageState extends State<AnnouncementEditPage> {
                   labelStyle: TextStyle(
                     color: ApTheme.of(context).grey,
                   ),
-                  labelText: app.reviewDescription,
+                  labelText: app.description,
                 ),
               ),
-            ],
-            const SizedBox(height: 36),
-            FractionallySizedBox(
-              widthFactor: 0.8,
-              child: ElevatedButton(
-                style: ElevatedButton.styleFrom(
-                  shape: const RoundedRectangleBorder(
-                    borderRadius: BorderRadius.all(
-                      Radius.circular(30.0),
+              if (widget.mode == Mode.editApplication) ...[
+                SizedBox(height: dividerHeight),
+                TextFormField(
+                  maxLines: 2,
+                  controller: _reviewDescription,
+                  validator: (value) {
+                    return null;
+                  },
+                  decoration: InputDecoration(
+                    border: const OutlineInputBorder(),
+                    fillColor: ApTheme.of(context).blueAccent,
+                    labelStyle: TextStyle(
+                      color: ApTheme.of(context).grey,
                     ),
-                  ),
-                  padding: const EdgeInsets.symmetric(
-                    horizontal: 8.0,
-                    vertical: 4.0,
-                  ),
-                  primary: ApTheme.of(context).blueAccent,
-                ),
-                onPressed: () {
-                  _announcementSubmit();
-                },
-                child: Text(
-                  buttonText,
-                  style: const TextStyle(
-                    color: Colors.white,
-                    fontSize: 18.0,
+                    labelText: app.reviewDescription,
                   ),
                 ),
-              ),
-            ),
-            if (widget.mode == Mode.editApplication) ...[
-              const SizedBox(height: 18),
+              ],
+              const SizedBox(height: 36),
               FractionallySizedBox(
                 widthFactor: 0.8,
                 child: ElevatedButton(
@@ -486,13 +461,13 @@ class _AnnouncementEditPageState extends State<AnnouncementEditPage> {
                       horizontal: 8.0,
                       vertical: 4.0,
                     ),
-                    primary: ApTheme.of(context).yellow,
+                    primary: ApTheme.of(context).blueAccent,
                   ),
                   onPressed: () {
-                    _announcementSubmit(isApproval: true);
+                    _announcementSubmit();
                   },
                   child: Text(
-                    app.updateAndApprove,
+                    buttonText,
                     style: const TextStyle(
                       color: Colors.white,
                       fontSize: 18.0,
@@ -500,37 +475,67 @@ class _AnnouncementEditPageState extends State<AnnouncementEditPage> {
                   ),
                 ),
               ),
-              const SizedBox(height: 18),
-              FractionallySizedBox(
-                widthFactor: 0.8,
-                child: ElevatedButton(
-                  style: ElevatedButton.styleFrom(
-                    shape: const RoundedRectangleBorder(
-                      borderRadius: BorderRadius.all(
-                        Radius.circular(30.0),
+              if (widget.mode == Mode.editApplication) ...[
+                const SizedBox(height: 18),
+                FractionallySizedBox(
+                  widthFactor: 0.8,
+                  child: ElevatedButton(
+                    style: ElevatedButton.styleFrom(
+                      shape: const RoundedRectangleBorder(
+                        borderRadius: BorderRadius.all(
+                          Radius.circular(30.0),
+                        ),
+                      ),
+                      padding: const EdgeInsets.symmetric(
+                        horizontal: 8.0,
+                        vertical: 4.0,
+                      ),
+                      primary: ApTheme.of(context).yellow,
+                    ),
+                    onPressed: () {
+                      _announcementSubmit(isApproval: true);
+                    },
+                    child: Text(
+                      app.updateAndApprove,
+                      style: const TextStyle(
+                        color: Colors.white,
+                        fontSize: 18.0,
                       ),
                     ),
-                    padding: const EdgeInsets.symmetric(
-                      horizontal: 8.0,
-                      vertical: 4.0,
-                    ),
-                    primary: ApTheme.of(context).red,
                   ),
-                  onPressed: () {
-                    _announcementSubmit(isApproval: false);
-                  },
-                  child: Text(
-                    app.updateAndReject,
-                    style: const TextStyle(
-                      color: Colors.white,
-                      fontSize: 18.0,
+                ),
+                const SizedBox(height: 18),
+                FractionallySizedBox(
+                  widthFactor: 0.8,
+                  child: ElevatedButton(
+                    style: ElevatedButton.styleFrom(
+                      shape: const RoundedRectangleBorder(
+                        borderRadius: BorderRadius.all(
+                          Radius.circular(30.0),
+                        ),
+                      ),
+                      padding: const EdgeInsets.symmetric(
+                        horizontal: 8.0,
+                        vertical: 4.0,
+                      ),
+                      primary: ApTheme.of(context).red,
+                    ),
+                    onPressed: () {
+                      _announcementSubmit(isApproval: false);
+                    },
+                    child: Text(
+                      app.updateAndReject,
+                      style: const TextStyle(
+                        color: Colors.white,
+                        fontSize: 18.0,
+                      ),
                     ),
                   ),
                 ),
-              ),
+              ],
+              const SizedBox(height: 36),
             ],
-            const SizedBox(height: 36),
-          ],
+          ),
         ),
       ),
     );
