@@ -10,9 +10,9 @@ sidebar_position: 1
 
 | 參數名稱                         | 型態                             | 描述                             |
 | ------------------------------- | ------------------------------- | ------------------------------- |
-| context | BuildContext | Flutter Widget context |
-| message | String | 想要顯示的文字 |
-| gravity | int | 顯示位置，預設為 `Toast.bottom` |
+| context | `BuildContext` | Flutter Widget context |
+| message | `String` | 想要顯示的文字 |
+| gravity | `int` | 顯示位置，預設為 `Toast.bottom` |
 
 ## pushCupertinoStyle
 
@@ -24,8 +24,8 @@ sidebar_position: 1
 
 | 參數名稱                         | 型態                             | 描述                             |
 | ------------------------------- | ------------------------------- | ------------------------------- |
-| context | BuildContext | Flutter Widget context |
-| page | Widget | 開啟頁面 |
+| context | `BuildContext` | Flutter Widget context |
+| page | `Widget` | 開啟頁面 |
 
 
 ## launchUrl
@@ -38,7 +38,7 @@ Android 11 以後已不支援 `canLaunch` 故不會進行例外處理
 
 | 參數名稱                         | 型態                             | 描述                             |
 | ------------------------------- | ------------------------------- | ------------------------------- |
-| url | String | URL |
+| url | `String` | URL |
 
 ## callPhone
 
@@ -50,7 +50,7 @@ Android 11 以後已不支援 `canLaunch` 故不會進行例外處理
 
 | 參數名稱                         | 型態                             | 描述                             |
 | ------------------------------- | ------------------------------- | ------------------------------- |
-| url | String | URL |
+| url | `String` | URL |
 
 ## shareTo
 
@@ -64,7 +64,7 @@ ${分享內容}\n\nSend from ${App名稱} ${作業系統名稱}
 
 | 參數名稱                         | 型態                             | 描述                             |
 | ------------------------------- | ------------------------------- | ------------------------------- |
-| content | String | 分享內容 |
+| content | `String` | 分享內容 |
 
 ## launchFbFansPage
 
@@ -72,8 +72,8 @@ ${分享內容}\n\nSend from ${App名稱} ${作業系統名稱}
 
 | 參數名稱                         | 型態                             | 描述                             |
 | ------------------------------- | ------------------------------- | ------------------------------- |
-| context | BuildContext | Flutter Widget context |
-| fansPageId | String | 粉絲專頁 id |
+| context | `BuildContext` | Flutter Widget context |
+| fansPageId | `String` | 粉絲專頁 id |
 
 ## showAppReviewDialog
 
@@ -81,8 +81,8 @@ ${分享內容}\n\nSend from ${App名稱} ${作業系統名稱}
 
 | 參數名稱                         | 型態                             | 描述                             |
 | ------------------------------- | ------------------------------- | ------------------------------- |
-| context | BuildContext | Flutter Widget context |
-| defaultUrl | String | 無原生API則開啟網址 |
+| context | `BuildContext` | Flutter Widget context |
+| defaultUrl | `String` | 無原生API則開啟網址 |
 
 ## showAppReviewSheet
 
@@ -90,8 +90,8 @@ ${分享內容}\n\nSend from ${App名稱} ${作業系統名稱}
 
 | 參數名稱                         | 型態                             | 描述                             |
 | ------------------------------- | ------------------------------- | ------------------------------- |
-| context | BuildContext | Flutter Widget context |
-| defaultUrl | String | 無原生API則開啟網址 |
+| context | `BuildContext` | Flutter Widget context |
+| defaultUrl | `String` | 無原生API則開啟網址 |
 
 ## openAppReview
 
@@ -99,7 +99,7 @@ ${分享內容}\n\nSend from ${App名稱} ${作業系統名稱}
 
 | 參數名稱                         | 型態                             | 描述                             |
 | ------------------------------- | ------------------------------- | ------------------------------- |
-| defaultUrl | String | 無原生API則開啟網址 |
+| defaultUrl | `String` | 無原生API則開啟網址 |
 
 ## pickImage
 
@@ -107,8 +107,8 @@ ${分享內容}\n\nSend from ${App名稱} ${作業系統名稱}
 
 | 參數名稱                         | 型態                             | 描述                             |
 | ------------------------------- | ------------------------------- | ------------------------------- |
-| imageSource | ImageSource | 圖片來源，平台為 `Android`/`iOS`/`Web` 有效，`ImageSource.gallery` 代表使用相簿取得，`ImageSource.camera` 代表使用鏡頭拍攝 |
-| preferredCameraDevice | CameraDevice | 鏡頭來源，需 `imageSource` 設定 `ImageSource.camera`才有效，平台為 `Android`/`iOS`/`Web` 有效，`CameraDevice.front` 代表前鏡頭，`CameraDevice.rear` 代表後鏡頭，預設值為 `CameraDevice.front` |
+| imageSource | `ImageSource` | 圖片來源，平台為 `Android`/`iOS`/`Web` 有效，`ImageSource.gallery` 代表使用相簿取得，`ImageSource.camera` 代表使用鏡頭拍攝 |
+| preferredCameraDevice | `CameraDevice` | 鏡頭來源，需 `imageSource` 設定 `ImageSource.camera`才有效，平台為 `Android`/`iOS`/`Web` 有效，`CameraDevice.front` 代表前鏡頭，`CameraDevice.rear` 代表後鏡頭，預設值為 `CameraDevice.front` |
 | extensions | `List<String>?` | 限制副檔名，平台為 `macOS`/`Windows`/`Linux` 有效，預設值為 `['jpg', 'jpeg']` |
 
 ## saveImage
@@ -121,7 +121,7 @@ ${分享內容}\n\nSend from ${App名稱} ${作業系統名稱}
 
 | 參數名稱                         | 型態                             | 描述                             |
 | ------------------------------- | ------------------------------- | ------------------------------- |
-| context | BuildContext | Flutter Widget context |
-| byteData | ByteData | 影像的位元資料 |
-| fileName | String | 檔案名稱 |
-| successMessage | String | 儲存成功訊息 |
+| context | `BuildContext` | Flutter Widget context |
+| byteData | `ByteData` | 影像的位元資料 |
+| fileName | `String` | 檔案名稱 |
+| successMessage | `String` | 儲存成功訊息 |
