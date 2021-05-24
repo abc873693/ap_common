@@ -3,13 +3,13 @@ import 'dart:typed_data';
 import 'package:ap_common/callback/general_callback.dart';
 import 'package:ap_common/models/notification_data.dart';
 import 'package:ap_common/models/phone_model.dart';
-import 'package:ap_common/scaffold/notification_scaffold.dart';
-import 'package:ap_common/scaffold/phone_scaffold.dart';
 import 'package:ap_common/resources/ap_icon.dart';
 import 'package:ap_common/resources/ap_theme.dart';
-import 'package:ap_common/scaffold/pdf_scaffold.dart';
 import 'package:ap_common/utils/analytics_utils.dart';
 import 'package:ap_common/utils/ap_localizations.dart';
+import 'package:ap_common/views/notification_list_view.dart';
+import 'package:ap_common/views/pdf_view.dart';
+import 'package:ap_common/views/phone_list_view.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
@@ -104,7 +104,7 @@ class SchoolInfoPageState extends State<SchoolInfoPage>
         controller: controller,
         physics: const NeverScrollableScrollPhysics(),
         children: [
-          NotificationScaffold(
+          NotificationListView(
             state: notificationState,
             notificationList: notificationList,
             onRefresh: () async {
@@ -118,11 +118,11 @@ class SchoolInfoPageState extends State<SchoolInfoPage>
               await _getNotifications();
             },
           ),
-          PhoneScaffold(
+          PhoneListView(
             state: phoneState,
             phoneModelList: phoneModelList,
           ),
-          PdfScaffold(
+          PdfView(
             state: pdfState,
             onRefresh: () => _getSchedules(),
             data: data,
@@ -173,7 +173,7 @@ class SchoolInfoPageState extends State<SchoolInfoPage>
         'https://raw.githubusercontent.com/NKUST-ITC/NKUST-AP-Flutter/master/school_schedule.pdf');
   }
 
-  Future<void>  downloadFdf(String url) async {
+  Future<void> downloadFdf(String url) async {
     try {
       final response = await Dio().get(
         url,
