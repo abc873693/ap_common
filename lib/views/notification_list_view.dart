@@ -10,15 +10,13 @@ import 'package:flutter/material.dart';
 
 enum NotificationState { loading, finish, loadingMore, error, empty, offline }
 
-class NotificationScaffold extends StatefulWidget {
-  static const String routerName = '/info/notification';
-
+class NotificationListView extends StatefulWidget {
   final NotificationState state;
   final List<Notifications> notificationList;
   final Future<void> Function() onRefresh;
   final Future<void> Function()? onLoadingMore;
 
-  const NotificationScaffold({
+  const NotificationListView({
     Key? key,
     required this.state,
     required this.notificationList,
@@ -27,10 +25,10 @@ class NotificationScaffold extends StatefulWidget {
   }) : super(key: key);
 
   @override
-  NotificationScaffoldState createState() => NotificationScaffoldState();
+  NotificationListViewState createState() => NotificationListViewState();
 }
 
-class NotificationScaffoldState extends State<NotificationScaffold>
+class NotificationListViewState extends State<NotificationListView>
     with AutomaticKeepAliveClientMixin {
   @override
   bool get wantKeepAlive => true;
@@ -52,8 +50,8 @@ class NotificationScaffoldState extends State<NotificationScaffold>
   @override
   void initState() {
     AnalyticsUtils.instance?.setCurrentScreen(
-      'NotificationScaffold',
-      'notification_scaffold.dart',
+      'NotificationListView',
+      'notification_list_view.dart',
     );
     controller = ScrollController()..addListener(_scrollListener);
     super.initState();
@@ -62,7 +60,7 @@ class NotificationScaffoldState extends State<NotificationScaffold>
   @override
   void dispose() {
     super.dispose();
-    controller!.removeListener(_scrollListener);
+    controller?.removeListener(_scrollListener);
   }
 
   Widget _notificationItem(Notifications notification) {
@@ -170,31 +168,4 @@ class NotificationScaffoldState extends State<NotificationScaffold>
       }
     }
   }
-
-//  _getNotifications() async {
-//    if (Preferences.getBool(Constants.PREF_IS_OFFLINE_LOGIN, false)) {
-//      setState(() => widget.state = NotificationState.offline);
-//    } else
-//      Helper.instance.getNotifications(
-//        page: page,
-//        callback: GeneralCallback(
-//          onSuccess: (NotificationsData data) {
-//            for (var notification in data.data.notifications)
-//              notificationList.add(notification);
-//            if (mounted)
-//              setState(() => widget.state = NotificationState.finish);
-//          },
-//          onFailure: (DioError e) {
-//            ApUtils.handleDioError(context, e);
-//            if (mounted && notificationList.length == 0)
-//              setState(() => widget.state = NotificationState.error);
-//          },
-//          onError: (GeneralResponse response) {
-//            ApUtils.showToast(context, ap.somethingError);
-//            if (mounted && notificationList.length == 0)
-//              setState(() => widget.state = NotificationState.error);
-//          },
-//        ),
-//      );
-//  }
 }

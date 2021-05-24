@@ -10,13 +10,13 @@ import 'package:pdf/pdf.dart';
 
 enum PdfState { loading, finish, error }
 
-class PdfScaffold extends StatefulWidget {
+class PdfView extends StatefulWidget {
   final PdfState state;
   final Function()? onRefresh;
   final Uint8List? data;
   final String? fileName;
 
-  const PdfScaffold({
+  const PdfView({
     Key? key,
     required this.state,
     this.onRefresh,
@@ -25,12 +25,16 @@ class PdfScaffold extends StatefulWidget {
   }) : super(key: key);
 
   @override
-  _PdfScaffoldState createState() => _PdfScaffoldState();
+  _PdfViewState createState() => _PdfViewState();
 }
 
-class _PdfScaffoldState extends State<PdfScaffold> {
+class _PdfViewState extends State<PdfView> {
   @override
   void initState() {
+    AnalyticsUtils.instance?.setCurrentScreen(
+      'PdfView',
+      'pdf_view.dart',
+    );
     super.initState();
   }
 
@@ -83,7 +87,7 @@ class _PdfScaffoldState extends State<PdfScaffold> {
 
   Widget get errorContent => InkWell(
         onTap: () {
-          if (widget.onRefresh != null) widget.onRefresh!();
+          widget.onRefresh?.call();
         },
         child: HintContent(
           icon: ApIcon.error,

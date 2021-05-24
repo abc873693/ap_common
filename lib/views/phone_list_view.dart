@@ -9,23 +9,23 @@ import 'package:flutter/material.dart';
 
 enum PhoneState { loading, finish, error }
 
-class PhoneScaffold extends StatefulWidget {
+class PhoneListView extends StatefulWidget {
   static const String routerName = '/info/phone';
 
   final PhoneState state;
   final List<PhoneModel> phoneModelList;
 
-  const PhoneScaffold({
+  const PhoneListView({
     Key? key,
     required this.state,
     required this.phoneModelList,
   }) : super(key: key);
 
   @override
-  PhoneScaffoldState createState() => PhoneScaffoldState();
+  PhoneListViewState createState() => PhoneListViewState();
 }
 
-class PhoneScaffoldState extends State<PhoneScaffold>
+class PhoneListViewState extends State<PhoneListView>
     with AutomaticKeepAliveClientMixin {
   @override
   bool get wantKeepAlive => true;
@@ -51,8 +51,8 @@ class PhoneScaffoldState extends State<PhoneScaffold>
   @override
   void initState() {
     AnalyticsUtils.instance?.setCurrentScreen(
-      'PhoneScaffold',
-      'phone_scaffold.dart',
+      'PhoneListView',
+      'phone_list_view.dart',
     );
     super.initState();
   }
