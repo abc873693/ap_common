@@ -325,9 +325,6 @@ class HomePageState extends State<HomePage> {
             if (announcements == null || announcements.isEmpty) {
               state = HomeState.empty;
             } else {
-              newsMap?.forEach((_, data) {
-                data.rand
-              });
               state = HomeState.finish;
             }
           });
