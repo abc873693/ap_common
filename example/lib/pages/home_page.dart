@@ -326,9 +326,7 @@ class HomePageState extends State<HomePage> {
               state = HomeState.empty;
             } else {
               newsMap?.forEach((_, data) {
-                data.sort((a, b) {
-                  return b.weight.compareTo(a.weight);
-                });
+                data.rand
               });
               state = HomeState.finish;
             }

@@ -1,5 +1,7 @@
 import 'dart:convert';
 
+import 'dart:math';
+
 class AnnouncementData {
   List<Announcement>? data;
 
@@ -30,6 +32,18 @@ class AnnouncementData {
             ? null
             : List<dynamic>.from(data!.map((x) => x.toJson())),
       };
+
+  void sortAndRandom() {
+    final random = Random();
+    for (final i in data ?? []) {
+      i.randomWeight = random.nextInt(1000);
+    }
+    data?.sort((a, b) {
+      final compare = b.weight!.compareTo(a.weight!);
+      final compareRandom = b.randomWeight!.compareTo(a.randomWeight!);
+      return compare == 0 ? compareRandom : compare;
+    });
+  }
 }
 
 class Announcement {
@@ -48,6 +62,7 @@ class Announcement {
   bool? reviewStatus;
   String? reviewDescription;
   List<String?>? tags;
+  int? randomWeight;
 
   Announcement({
     this.title,
@@ -65,6 +80,7 @@ class Announcement {
     this.reviewStatus,
     this.reviewDescription,
     this.tags,
+    this.randomWeight,
   });
 
   factory Announcement.fromRawJson(String str) =>

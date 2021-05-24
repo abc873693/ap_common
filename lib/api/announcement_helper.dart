@@ -253,6 +253,7 @@ class AnnouncementHelper {
     GeneralCallback<List<Announcement>?>? callback,
     String? locale,
     List<String>? tags,
+    bool sortAndRandom = true,
   }) async {
     try {
       final Response<Map<String, dynamic>> response = await dio.post(
@@ -265,9 +266,7 @@ class AnnouncementHelper {
       AnnouncementData data = AnnouncementData(data: <Announcement>[]);
       if (response.statusCode != 204) {
         data = AnnouncementData.fromJson(response.data!);
-        data.data?.sort((Announcement a, Announcement b) {
-          return b.weight!.compareTo(a.weight!);
-        });
+        if (sortAndRandom) data.sortAndRandom();
       }
       return (callback == null)
           ? data.data
