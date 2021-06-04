@@ -7,14 +7,14 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:hive/hive.dart';
 
-class CloudMessagePage extends StatefulWidget {
-  const CloudMessagePage({Key? key}) : super(key: key);
+class CloudMessageListPage extends StatefulWidget {
+  const CloudMessageListPage({Key? key}) : super(key: key);
 
   @override
-  _CloudMessagePageState createState() => _CloudMessagePageState();
+  _CloudMessageListPageState createState() => _CloudMessageListPageState();
 }
 
-class _CloudMessagePageState extends State<CloudMessagePage> {
+class _CloudMessageListPageState extends State<CloudMessageListPage> {
   Box<CloudMessage> box = CloudMessageUtils.instance.box;
 
   ApLocalizations get ap => ApLocalizations.of(context);
