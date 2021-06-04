@@ -14,7 +14,7 @@ packages:
       path: ".."
       relative: true
     source: path
-    version: "0.17.0-dev.2"
+    version: "0.17.0-dev.4"
   ap_common_plugin:
     dependency: "direct main"
     description:
@@ -343,6 +343,20 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "0.10.0"
+  hive:
+    dependency: transitive
+    description:
+      name: hive
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "2.0.4"
+  hive_flutter:
+    dependency: transitive
+    description:
+      name: hive_flutter
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "1.0.0"
   http:
     dependency: transitive
     description:
@@ -580,7 +594,7 @@ packages:
       name: photo_manager
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "1.0.6"
+    version: "1.2.1"
   photo_view:
     dependency: transitive
     description:
@@ -795,7 +809,7 @@ packages:
       name: url_launcher
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "6.0.3"
+    version: "6.0.6"
   url_launcher_linux:
     dependency: transitive
     description:
@@ -816,7 +830,7 @@ packages:
       name: url_launcher_platform_interface
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "2.0.2"
+    version: "2.0.3"
   url_launcher_web:
     dependency: transitive
     description:
