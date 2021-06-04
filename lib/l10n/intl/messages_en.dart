@@ -27,8 +27,6 @@ class MessageLookup extends MessageLookupByLibrary {
         "aboutAuthorTitle": MessageLookupByLibrary.simpleMessage("Made by"),
         "aboutContactUsTitle":
             MessageLookupByLibrary.simpleMessage("Contact Us"),
-        "aboutDetail": MessageLookupByLibrary.simpleMessage(
-            "The best KUAS Campus App\\nKUAS AP\\n\\nAre you a freshman?\\nDon\'t know about school info, telephone numbers, or up coming events?\\nBeenhere a few years?\\nHave checking class schedule, report card and reserving bus seatsdrove you crazy?\\n\\nNo more, no more worries, anymore!\\n\\nKUAS AP lets no matter old or newfellow\\nhave control over your life in KUAS!\\n\\nFrom checking class schedule, report card toyour absence records!\\nPlus reserving/canceling bus seats with newest school feeds!\\n\\n\\n\\nMuch Simple, Many Convenient, Very instinct, wow!\\n\\n☆FABULOUS☆"),
         "aboutItcContent": MessageLookupByLibrary.simpleMessage(
             "In year 2014,\nwe founded KUAS Information Technology Club!\n\nIf you\'re enthusiastic or drawn to our projects, join our classes and talks or come by to chat!"),
         "aboutItcTitle": MessageLookupByLibrary.simpleMessage("NKUST IT Club"),
@@ -209,7 +207,7 @@ class MessageLookup extends MessageLookupByLibrary {
         "educationSystem": MessageLookupByLibrary.simpleMessage("Scheme"),
         "electiveCredits":
             MessageLookupByLibrary.simpleMessage("Elective Credits"),
-        "email": MessageLookupByLibrary.simpleMessage("Change Email Address"),
+        "email": MessageLookupByLibrary.simpleMessage("Email Address"),
         "emptyClassroomSearch":
             MessageLookupByLibrary.simpleMessage("Empty Classroom Search"),
         "english": MessageLookupByLibrary.simpleMessage("English"),
@@ -336,6 +334,7 @@ class MessageLookup extends MessageLookupByLibrary {
         "myApplications":
             MessageLookupByLibrary.simpleMessage("My Applications"),
         "name": MessageLookupByLibrary.simpleMessage("Name"),
+        "news": MessageLookupByLibrary.simpleMessage("News"),
         "newsContentFormat": MessageLookupByLibrary.simpleMessage(
             "Weight：%d\nImage Link：%s\nLink：%s\nExpire：%s\nDescription：%s"),
         "newsExpireTimeHint": MessageLookupByLibrary.simpleMessage(
@@ -374,7 +373,7 @@ class MessageLookup extends MessageLookupByLibrary {
             "Image format is no supported."),
         "notificationItem":
             MessageLookupByLibrary.simpleMessage("Notification"),
-        "notifications": MessageLookupByLibrary.simpleMessage("News"),
+        "notifications": MessageLookupByLibrary.simpleMessage("notifications"),
         "offlineBusReservations":
             MessageLookupByLibrary.simpleMessage("Offline Bus Reservation"),
         "offlineCourse":

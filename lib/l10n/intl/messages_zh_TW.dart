@@ -26,7 +26,6 @@ class MessageLookup extends MessageLookupByLibrary {
             "高科校務通v1 & v2\n呂紹榕(Louie Lu), 姜尚德(JohnThunder), \nregisterAutumn, 詹濬鍵(Evans), \n陳建霖(HearSilent), 陳冠蓁, 徐羽柔\n高科校務通v3\n房志剛(Rainvisitor),林義翔(takidog)\n林鈺軒(Lin YuHsuan),周鈺禮(Gary)\n中山校務通\n房志剛(Rainvisitor),胡智強（JohnHuCC)\n台科校務通\n房志剛(Rainvisitor),林義翔(takidog)\n文藻校務通\n林義翔(takidog),房志剛(Rainvisitor)"),
         "aboutAuthorTitle": MessageLookupByLibrary.simpleMessage("作者群"),
         "aboutContactUsTitle": MessageLookupByLibrary.simpleMessage("聯繫我們"),
-        "aboutDetail": MessageLookupByLibrary.simpleMessage(""),
         "aboutItcContent": MessageLookupByLibrary.simpleMessage(
             "在103學年度，\n我們也成立了高應大資訊研習社！\n\n如果你對資訊有熱誠或是對我們作品有興趣，歡迎來社課或是講座，也可以來找我們聊聊天。"),
         "aboutItcTitle": MessageLookupByLibrary.simpleMessage("高科資研社"),
@@ -279,6 +278,7 @@ class MessageLookup extends MessageLookupByLibrary {
         "monday": MessageLookupByLibrary.simpleMessage("週一"),
         "myApplications": MessageLookupByLibrary.simpleMessage("我的申請"),
         "name": MessageLookupByLibrary.simpleMessage("名字"),
+        "news": MessageLookupByLibrary.simpleMessage("最新消息"),
         "newsContentFormat": MessageLookupByLibrary.simpleMessage(
             "權重：%d\n圖片網址：%s\n連結網址：%s\n到期時間：%s\n描述：%s"),
         "newsExpireTimeHint":
@@ -309,7 +309,7 @@ class MessageLookup extends MessageLookupByLibrary {
         "notLoginHint": MessageLookupByLibrary.simpleMessage("尚未登入 請檢查登入狀態"),
         "notSupportImageType": MessageLookupByLibrary.simpleMessage("不支援圖片格式"),
         "notificationItem": MessageLookupByLibrary.simpleMessage("通知項目"),
-        "notifications": MessageLookupByLibrary.simpleMessage("最新消息"),
+        "notifications": MessageLookupByLibrary.simpleMessage("通知"),
         "offlineBusReservations":
             MessageLookupByLibrary.simpleMessage("離線校車紀錄"),
         "offlineCourse": MessageLookupByLibrary.simpleMessage("離線課表"),

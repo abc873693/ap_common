@@ -257,11 +257,11 @@ class ApTextField extends StatelessWidget {
     return TextField(
       obscureText: obscureText,
       controller: controller,
-      textInputAction: textInputAction,
-      keyboardType: keyboardType,
       focusNode: focusNode,
       maxLength: maxLength,
       onChanged: onChanged,
+      keyboardType: keyboardType,
+      textInputAction: textInputAction,
       onSubmitted: (text) {
         focusNode?.unfocus();
         if (nextFocusNode != null) {

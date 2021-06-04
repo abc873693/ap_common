@@ -1000,11 +1000,21 @@ class ApLocalizations {
     );
   }
 
-  /// `最新消息`
+  /// `通知`
   String get notifications {
     return Intl.message(
-      '最新消息',
+      '通知',
       name: 'notifications',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `最新消息`
+  String get news {
+    return Intl.message(
+      '最新消息',
+      name: 'news',
       desc: '',
       args: [],
     );
@@ -1075,6 +1085,26 @@ class ApLocalizations {
     return Intl.message(
       '姓名',
       name: 'studentNameCht',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `電子信箱`
+  String get email {
+    return Intl.message(
+      '電子信箱',
+      name: 'email',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `更改電子信箱`
+  String get changeEmail {
+    return Intl.message(
+      '更改電子信箱',
+      name: 'changeEmail',
       desc: '',
       args: [],
     );
@@ -1195,16 +1225,6 @@ class ApLocalizations {
     return Intl.message(
       'App 版本',
       name: 'appVersion',
-      desc: '',
-      args: [],
-    );
-  }
-
-  /// ``
-  String get aboutDetail {
-    return Intl.message(
-      '',
-      name: 'aboutDetail',
       desc: '',
       args: [],
     );
@@ -2940,16 +2960,6 @@ class ApLocalizations {
     );
   }
 
-  /// `電子信箱`
-  String get email {
-    return Intl.message(
-      '電子信箱',
-      name: 'email',
-      desc: '',
-      args: [],
-    );
-  }
-
   /// `校園導覽`
   String get schoolNavigation {
     return Intl.message(
@@ -3095,16 +3105,6 @@ class ApLocalizations {
     return Intl.message(
       '印表機',
       name: 'printing',
-      desc: '',
-      args: [],
-    );
-  }
-
-  /// `更改電子信箱`
-  String get changeEmail {
-    return Intl.message(
-      '更改電子信箱',
-      name: 'changeEmail',
       desc: '',
       args: [],
     );
