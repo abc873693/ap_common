@@ -141,7 +141,9 @@ extension RemoteMessageExtension on RemoteMessage {
     try {
       CloudMessageUtils.instance.box.add(cloudMessage);
     } on HiveError catch (_) {
-      debugPrint('Not initial hive, please use ApHiveHelper.init() in main()');
+      debugPrint(
+        'Not initial hive, please use ApHiveUtils.instance.init() in main()',
+      );
     }
   }
 }
