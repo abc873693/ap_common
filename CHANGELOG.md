@@ -1,3 +1,8 @@
+## [0.17.0] - 2021/06/06
+### [Break Change]
+
+* 加入 `CloudMessageListPage` 並使用 Hive 實作本地儲存雲端通知
+
 ## [0.17.0-dev.4] - 2021/05/24
 ### [Break Change]
 
