@@ -5,22 +5,22 @@ import 'package:hive_flutter/hive_flutter.dart';
 
 export 'package:ap_common/models/cloud_message.dart';
 
-class ApHiveHelper {
+class ApHiveUtils {
   static const String boxName = 'RemoteMessageList';
 
-  static ApHiveHelper? _instance;
+  static ApHiveUtils? _instance;
 
   // ignore: prefer_constructors_over_static_methods
-  static ApHiveHelper get instance {
-    return _instance ?? ApHiveHelper();
+  static ApHiveUtils get instance {
+    return _instance ?? ApHiveUtils();
   }
 
-  ApHiveHelper() {
+  ApHiveUtils() {
     Hive.registerAdapter(CloudMessageAdapter());
   }
 
   Future<void> init() async {
     await Hive.initFlutter();
-    await CloudMessageUtils.instance.init();
+    await CloudMessageUtils.instance.initBox();
   }
 }

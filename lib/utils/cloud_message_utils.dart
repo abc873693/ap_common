@@ -1,4 +1,4 @@
-import 'package:ap_common/api/ap_hive_helper.dart';
+import 'package:ap_common/utils/ap_hive_utils.dart';
 import 'package:hive/hive.dart';
 
 export 'package:ap_common/models/cloud_message.dart';
@@ -16,7 +16,7 @@ class CloudMessageUtils {
     return _instance ?? CloudMessageUtils();
   }
 
-  Future<void> init() async {
+  Future<void> initBox() async {
     await Hive.openBox<CloudMessage>(boxName);
   }
 }
