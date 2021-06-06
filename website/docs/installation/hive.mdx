@@ -1,0 +1,27 @@
+---
+sidebar_position: 8
+---
+
+# Hive 初始化
+
+:::caution 若未設定此頁面會影響以下功能
+
+- [ApHiveUtils](../api-utils/ap-hive-utils) 的功能
+- [雲端通知列表頁面](../api-pages/cloud-message-page)
+:::
+
+使用 [API 說明](../api-utils/ap-hive-utils)
+
+## 設定
+
+在 `main()` 執行 `runApp` 前執行 `ApHiveUtils.instance.init()` 一定要加 `await`
+
+```dart title='main.dart'
+import 'package:ap_common/utils/preferences.dart';
+
+Future<void> main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  await ApHiveUtils.instance.init();
+  runApp(const MyApp());
+}
+```
