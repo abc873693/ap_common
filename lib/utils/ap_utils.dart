@@ -6,6 +6,7 @@ import 'package:ap_common/utils/ap_localizations.dart';
 import 'package:ap_common/utils/crashlytics_utils.dart';
 import 'package:ap_common/utils/toast.dart';
 import 'package:ap_common/widgets/yes_no_dialog.dart';
+import 'package:file_saver/file_saver.dart';
 import 'package:file_selector/file_selector.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
@@ -14,16 +15,17 @@ import 'package:flutter/widgets.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:in_app_review/in_app_review.dart';
 import 'package:package_info_plus/package_info_plus.dart';
-import 'package:path_provider/path_provider.dart';
 import 'package:path/path.dart' as path;
+import 'package:path_provider/path_provider.dart';
 import 'package:photo_manager/photo_manager.dart';
 import 'package:share/share.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 export 'package:dio/dio.dart';
-export 'package:path_provider/path_provider.dart';
-export 'package:package_info_plus/package_info_plus.dart';
 export 'package:image_picker/image_picker.dart';
+export 'package:package_info_plus/package_info_plus.dart';
+export 'package:path_provider/path_provider.dart';
+
 export 'toast.dart';
 
 class ApUtils {
@@ -236,8 +238,7 @@ class ApUtils {
     final ApLocalizations ap = ApLocalizations.of(context);
     try {
       bool hasGrantPermission = true;
-      if (kIsWeb) {
-      } else if (Platform.isAndroid || Platform.isIOS) {
+      if (!kIsWeb && (Platform.isAndroid || Platform.isIOS)) {
         hasGrantPermission = await PhotoManager.requestPermission();
       }
       if (hasGrantPermission) {
@@ -252,7 +253,13 @@ class ApUtils {
         }
         final String filePath = path.join(downloadDir, '$fileName.png');
         bool success = true;
-        if (!kIsWeb && (Platform.isAndroid || Platform.isIOS)) {
+        if (kIsWeb) {
+          await FileSaver.instance.saveFile(
+            fileName,
+            pngBytes,
+            'png',
+          );
+        } else if (Platform.isAndroid || Platform.isIOS) {
           final AssetEntity? imageEntity = await PhotoManager.editor.saveImage(
             pngBytes,
             title: fileName,
