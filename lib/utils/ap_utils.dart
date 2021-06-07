@@ -246,7 +246,7 @@ class ApUtils {
         String downloadDir = '';
         if (kIsWeb) {
           downloadDir = '';
-        } else if (Platform.isMacOS) {
+        } else if (Platform.isMacOS || Platform.isWindows || Platform.isLinux) {
           downloadDir = (await getDownloadsDirectory())!.path;
         } else {
           downloadDir = '';
