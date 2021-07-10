@@ -15,7 +15,7 @@ dependencies:
   shared_preferences: ^2.0.5
   url_launcher: ^6.0.6
   share: ^2.0.1
-  package_info_plus: ^1.0.0
+  package_info_plus: ^1.0.3
   sprintf: ^6.0.0
   intl: ">=0.16.0 <1.0.0"
   cached_network_image: ^3.0.0
@@ -24,15 +24,15 @@ dependencies:
   dio: ^4.0.0
   dio_cookie_manager: ^2.0.0
   cookie_jar: ^3.0.1
-  flutter_local_notifications: ^5.0.0+3
+  flutter_local_notifications: ^6.0.0
   timezone: ^0.7.0
   flutter_keyboard_visibility: ^5.0.1
   add_2_calendar: ^2.1.0
   in_app_review: ^2.0.2
   barcode_widget: ^2.0.1
   barcode: ^2.1.0
-  printing: ^5.2.1
-  pdf: ^3.3.0
+  printing: ^5.4.3
+  pdf: ^3.4.2
   auto_size_text_pk: ^3.0.0
   flutter_linkify: ^5.0.2
   file_selector: ^0.8.2
@@ -45,12 +45,12 @@ dependencies:
   jwt_decoder: ^2.0.1
   sign_in_with_apple: ^3.0.0
   image_picker: ^0.7.4
-  photo_manager: ^1.2.1
+  photo_manager: ^1.2.5
   cupertino_back_gesture: ^0.1.0
   app_tracking_transparency: ^2.0.0+1
   hive: ^2.0.4
   hive_flutter: ^1.0.0
-  file_saver: ^0.0.6
+  file_saver: ^0.0.8
 
 dev_dependencies:
   flutter_test:
