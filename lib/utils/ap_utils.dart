@@ -267,7 +267,8 @@ class ApUtils {
         } else {
           await File(filePath).writeAsBytes(pngBytes);
         }
-        ApUtils.showToast(context, success ? successMessage : ap.unknownError);
+        ApUtils.showToast(
+            context, success ? '$successMessage\n$filePath' : ap.unknownError);
       } else {
         ApUtils.showToast(context, ap.grandPermissionFail);
       }
