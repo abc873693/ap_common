@@ -10,6 +10,8 @@ PODS:
     - AppAuth/ExternalUserAgent (= 1.4.0)
   - AppAuth/Core (1.4.0)
   - AppAuth/ExternalUserAgent (1.4.0)
+  - file_saver (0.0.1):
+    - Flutter
   - Flutter (1.0.0)
   - flutter_keyboard_visibility (0.0.1):
     - Flutter
@@ -41,11 +43,12 @@ PODS:
     - Flutter
   - path_provider (0.0.1):
     - Flutter
-  - photo_manager (0.0.1):
+  - photo_manager (1.0.0):
     - Flutter
+    - FlutterMacOS
   - printing (1.0.0):
     - Flutter
-  - share (0.0.1):
+  - share_plus (0.0.1):
     - Flutter
   - shared_preferences (0.0.1):
     - Flutter
@@ -61,6 +64,7 @@ DEPENDENCIES:
   - add_2_calendar (from `.symlinks/plugins/add_2_calendar/ios`)
   - ap_common_plugin (from `.symlinks/plugins/ap_common_plugin/ios`)
   - app_tracking_transparency (from `.symlinks/plugins/app_tracking_transparency/ios`)
+  - file_saver (from `.symlinks/plugins/file_saver/ios`)
   - Flutter (from `Flutter`)
   - flutter_keyboard_visibility (from `.symlinks/plugins/flutter_keyboard_visibility/ios`)
   - flutter_local_notifications (from `.symlinks/plugins/flutter_local_notifications/ios`)
@@ -71,7 +75,7 @@ DEPENDENCIES:
   - path_provider (from `.symlinks/plugins/path_provider/ios`)
   - photo_manager (from `.symlinks/plugins/photo_manager/ios`)
   - printing (from `.symlinks/plugins/printing/ios`)
-  - share (from `.symlinks/plugins/share/ios`)
+  - share_plus (from `.symlinks/plugins/share_plus/ios`)
   - shared_preferences (from `.symlinks/plugins/shared_preferences/ios`)
   - sign_in_with_apple (from `.symlinks/plugins/sign_in_with_apple/ios`)
   - sqflite (from `.symlinks/plugins/sqflite/ios`)
@@ -92,6 +96,8 @@ EXTERNAL SOURCES:
     :path: ".symlinks/plugins/ap_common_plugin/ios"
   app_tracking_transparency:
     :path: ".symlinks/plugins/app_tracking_transparency/ios"
+  file_saver:
+    :path: ".symlinks/plugins/file_saver/ios"
   Flutter:
     :path: Flutter
   flutter_keyboard_visibility:
@@ -112,8 +118,8 @@ EXTERNAL SOURCES:
     :path: ".symlinks/plugins/photo_manager/ios"
   printing:
     :path: ".symlinks/plugins/printing/ios"
-  share:
-    :path: ".symlinks/plugins/share/ios"
+  share_plus:
+    :path: ".symlinks/plugins/share_plus/ios"
   shared_preferences:
     :path: ".symlinks/plugins/shared_preferences/ios"
   sign_in_with_apple:
@@ -128,6 +134,7 @@ SPEC CHECKSUMS:
   ap_common_plugin: f5861976eed0e60431f1eb939796a0eb93d73e69
   app_tracking_transparency: 5b1745ef9ade815f7455cb6a0848349589afb7c5
   AppAuth: 31bcec809a638d7bd2f86ea8a52bd45f6e81e7c7
+  file_saver: 503e386464dbe118f630e17b4c2e1190fa0cf808
   Flutter: 434fef37c0980e73bb6479ef766c45957d4b510c
   flutter_keyboard_visibility: 0339d06371254c3eb25eeb90ba8d17dca8f9c069
   flutter_local_notifications: 0c0b1ae97e741e1521e4c1629a459d04b9aec743
@@ -140,9 +147,9 @@ SPEC CHECKSUMS:
   in_app_review: 4a97249f7a2f539a0f294c2d9196b7fe35e49541
   package_info_plus: 6c92f08e1f853dc01228d6f553146438dafcd14e
   path_provider: abfe2b5c733d04e238b0d8691db0cfd63a27a93c
-  photo_manager: f7c619c2cc8c2adb8d85c63363babac477de9c67
+  photo_manager: 84fa94fbeb82e607333ea9a13c43b58e0903a463
   printing: eafa00acb682c0ca029d4d98d0798f55a1e27102
-  share: 0b2c3e82132f5888bccca3351c504d0003b3b410
+  share_plus: 056a1e8ac890df3e33cb503afffaf1e9b4fbae68
   shared_preferences: af6bfa751691cdc24be3045c43ec037377ada40d
   sign_in_with_apple: 34f3f5456a45fd7ac5fb42905e2ad31dae061b4a
   sqflite: 6d358c025f5b867b29ed92fc697fd34924e11904
