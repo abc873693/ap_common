@@ -1,2 +1,5 @@
 
-* 加入 `CloudMessageListPage` 並使用 Hive 實作本地儲存雲端通知
+* 修正追蹤對話框跑版
+* 改善桌面版與網頁版圖片儲存
+* 改善圖片儲存提示字
+* 使用 share_plus 取代 share 以支援全平台
