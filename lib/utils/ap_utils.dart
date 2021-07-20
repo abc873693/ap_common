@@ -115,14 +115,12 @@ class ApUtils {
       context: context,
       builder: (BuildContext context) => YesNoDialog(
         title: app.ratingDialogTitle,
-        contentWidget: RichText(
-          textAlign: TextAlign.center,
-          text: TextSpan(
-            style: TextStyle(
-                color: ApTheme.of(context).grey, height: 1.3, fontSize: 16.0),
-            children: <TextSpan>[
-              TextSpan(text: app.ratingDialogContent),
-            ],
+        contentWidget: Text(
+          app.ratingDialogContent,
+          style: TextStyle(
+            color: ApTheme.of(context).grey,
+            height: 1.3,
+            fontSize: 16.0,
           ),
         ),
         leftActionText: app.later,
