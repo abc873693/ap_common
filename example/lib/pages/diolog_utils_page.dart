@@ -79,7 +79,9 @@ class _DialogUtilsTestPageState extends State<DialogUtilsTestPage> {
             onTap: () {
               AppTrackingUtils.show(
                 context: context,
-                onTap: () async {},
+                onTap: () async {
+                  Navigator.of(context).pop();
+                },
               );
             },
             title: const Text('App 追蹤'),
