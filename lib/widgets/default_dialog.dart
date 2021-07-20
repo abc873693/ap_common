@@ -58,6 +58,9 @@ class DefaultDialog extends StatelessWidget {
         children: <Widget>[
           Container(
             width: double.infinity,
+            constraints: BoxConstraints(
+              maxHeight: MediaQuery.of(context).size.height * 0.5,
+            ),
             decoration: const BoxDecoration(
               border: Border(
                 top: BorderSide(color: Colors.grey, width: 0.5),

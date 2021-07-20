@@ -38,55 +38,56 @@ class AppTrackingUtils {
         },
         child: DefaultDialog(
           title: ap.appTrackingDialogTitle,
-          contentWidget: Column(
-            children: [
-              Text(
-                ap.appTrackingDialogContent,
-                style: TextStyle(
-                  color: ApTheme.of(context).grey,
-                  height: 1.3,
-                  fontSize: 18.0,
+          contentWidget: SingleChildScrollView(
+            child: Column(
+              children: [
+                Text(
+                  ap.appTrackingDialogContent,
+                  style: TextStyle(
+                    color: ApTheme.of(context).grey,
+                    height: 1.3,
+                    fontSize: 18.0,
+                  ),
                 ),
-              ),
-              const SizedBox(height: 16.0),
-              Row(
-                children: [
-                  Icon(
-                    Icons.analytics_outlined,
-                    color: ApTheme.of(context).grey,
-                  ),
-                  const SizedBox(width: 8.0),
-                  Expanded(
-                    child: Text(
-                      ap.analyticsDescription,
-                      style: TextStyle(
-                        color: ApTheme.of(context).grey,
-                        fontSize: 16.0,
+                const SizedBox(height: 16.0),
+                Row(
+                  children: [
+                    Icon(
+                      Icons.analytics_outlined,
+                      color: ApTheme.of(context).grey,
+                    ),
+                    const SizedBox(width: 8.0),
+                    Expanded(
+                      child: Text(
+                        ap.analyticsDescription,
+                        style: TextStyle(
+                          color: ApTheme.of(context).grey,
+                        ),
                       ),
                     ),
-                  ),
-                ],
-              ),
-              const SizedBox(height: 8.0),
-              Row(
-                children: [
-                  Icon(
-                    Icons.bug_report_outlined,
-                    color: ApTheme.of(context).grey,
-                  ),
-                  const SizedBox(width: 8.0),
-                  Expanded(
-                    child: Text(
-                      ap.crashReportDescription,
-                      style: TextStyle(
-                        color: ApTheme.of(context).grey,
-                        fontSize: 16.0,
+                  ],
+                ),
+                const SizedBox(height: 8.0),
+                Row(
+                  children: [
+                    Icon(
+                      Icons.bug_report_outlined,
+                      color: ApTheme.of(context).grey,
+                    ),
+                    const SizedBox(width: 8.0),
+                    Expanded(
+                      child: Text(
+                        ap.crashReportDescription,
+                        style: TextStyle(
+                          color: ApTheme.of(context).grey,
+                          fontSize: 16.0,
+                        ),
                       ),
                     ),
-                  ),
-                ],
-              ),
-            ],
+                  ],
+                ),
+              ],
+            ),
           ),
           actionText: ap.continueToUse,
           actionFunction: onTap ??
