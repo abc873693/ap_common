@@ -40,7 +40,7 @@ class ApUtils {
     Toast.show(
       message,
       context,
-      duration: Toast.lengthShort,
+      duration: Toast.lengthLong,
       gravity: gravity ?? Toast.bottom,
       textStyle: TextStyle(
         color: ApTheme.of(context).toastText,
