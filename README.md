@@ -15,26 +15,14 @@
 | `firebase_crashlytics`️ |    ✔️    |  ✔️  |   ️   |    ️  |
 | `firebase_messaging`️ |    ✔️    |  ✔️  |   ✔️   |  ✔️  |
 | `firebase_remote_config`️ |    ✔️    |  ✔️  |   ✔️   |    |
-| `firebase_performance`️ |    ✔️    |  ✔️  |  ️   |    |
+| `firebase_performance`️ |    ✔️    |  ✔️  |  ️   |  ✔️ |
 
 ## Getting Started
 
 在 `pubspec.yaml` 中加入 package
 
-v0.5.0 版本以後
-
 ```yaml
-    ap_common_firebase: ^0.5.0
-```
-
-
-v0.5.0 版本以前
-
-```yaml
-  ap_common_firebase:
-    git:
-      url: https://github.com/abc873693/ap_common_firebase
-      ref: v0.5.0
+    ap_common_firebase: ^0.11.0
 ```
 
 執行加入套件
@@ -42,3 +30,5 @@ v0.5.0 版本以前
 ```bash
   $ flutter package get
 ```
+
+參考 [FlutterFire](https://firebase.flutter.dev/docs/overview) 的官方文件，加入對應 Firebase 功能的設定
