@@ -25,6 +25,8 @@
   "changePassword": "Change Password",
   "newPassword": "New Password",
   "newPasswordConfirm": "Confirm New Password",
+  "newPasswordNotMatchHint": "Passwords do not match, please try again !",
+  "newPasswordLeastCharacter": "Passwords at least %i characters.",
   "changePasswordSuccessHint1": "Change sucees, please use new password to login",
   "changePasswordSuccessHint2": "Change sucees, app will use new password to login",
   "autoLogin": "Auto login",

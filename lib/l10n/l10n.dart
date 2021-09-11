@@ -310,6 +310,26 @@ class ApLocalizations {
     );
   }
 
+  /// `密碼不一致，請重新輸入!`
+  String get newPasswordNotMatchHint {
+    return Intl.message(
+      '密碼不一致，請重新輸入!',
+      name: 'newPasswordNotMatchHint',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `密碼長度至少 %i 碼!`
+  String get newPasswordLeastCharacter {
+    return Intl.message(
+      '密碼長度至少 %i 碼!',
+      name: 'newPasswordLeastCharacter',
+      desc: '',
+      args: [],
+    );
+  }
+
   /// `更改成功，請使用新密碼登入`
   String get changePasswordSuccessHint1 {
     return Intl.message(

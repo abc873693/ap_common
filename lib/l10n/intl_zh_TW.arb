@@ -25,6 +25,8 @@
   "changePassword": "修改密碼",
   "newPassword": "新密碼",
   "newPasswordConfirm": "確認新密碼",
+  "newPasswordNotMatchHint": "密碼不一致，請重新輸入!",
+  "newPasswordLeastCharacter": "密碼長度至少 %i 碼!",
   "changePasswordSuccessHint1": "更改成功，請使用新密碼登入",
   "changePasswordSuccessHint2": "更改成功，App 將使用新密碼自動登入",
   "autoLogin": "自動登入",

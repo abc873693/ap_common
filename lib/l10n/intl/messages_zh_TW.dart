@@ -285,6 +285,10 @@ class MessageLookup extends MessageLookupByLibrary {
         "name": MessageLookupByLibrary.simpleMessage("名字"),
         "newPassword": MessageLookupByLibrary.simpleMessage("新密碼"),
         "newPasswordConfirm": MessageLookupByLibrary.simpleMessage("確認新密碼"),
+        "newPasswordLeastCharacter":
+            MessageLookupByLibrary.simpleMessage("密碼長度至少 %i 碼!"),
+        "newPasswordNotMatchHint":
+            MessageLookupByLibrary.simpleMessage("密碼不一致，請重新輸入!"),
         "news": MessageLookupByLibrary.simpleMessage("最新消息"),
         "newsContentFormat": MessageLookupByLibrary.simpleMessage(
             "權重：%d\n圖片網址：%s\n連結網址：%s\n到期時間：%s\n描述：%s"),

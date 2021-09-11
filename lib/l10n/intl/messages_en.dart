@@ -343,6 +343,10 @@ class MessageLookup extends MessageLookupByLibrary {
         "newPassword": MessageLookupByLibrary.simpleMessage("New Password"),
         "newPasswordConfirm":
             MessageLookupByLibrary.simpleMessage("Confirm New Password"),
+        "newPasswordLeastCharacter": MessageLookupByLibrary.simpleMessage(
+            "Passwords at least %i characters."),
+        "newPasswordNotMatchHint": MessageLookupByLibrary.simpleMessage(
+            "Passwords do not match, please try again !"),
         "news": MessageLookupByLibrary.simpleMessage("News"),
         "newsContentFormat": MessageLookupByLibrary.simpleMessage(
             "Weight：%d\nImage Link：%s\nLink：%s\nExpire：%s\nDescription：%s"),
