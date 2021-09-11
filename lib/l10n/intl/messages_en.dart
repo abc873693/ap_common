@@ -118,6 +118,10 @@ class MessageLookup extends MessageLookupByLibrary {
         "captcha": MessageLookupByLibrary.simpleMessage("Captcha"),
         "captchaError": MessageLookupByLibrary.simpleMessage("Wrong captcha"),
         "changeEmail": MessageLookupByLibrary.simpleMessage("Change Email"),
+        "changePassword":
+            MessageLookupByLibrary.simpleMessage("Change Password"),
+        "changePasswordSuccessHint1": MessageLookupByLibrary.simpleMessage(
+            "Change sucees, please use new password to login"),
         "checkLoginHint": MessageLookupByLibrary.simpleMessage(
             "Please confirm your username and password before retrying."),
         "choseLanguageTitle": MessageLookupByLibrary.simpleMessage("Language"),
@@ -334,6 +338,9 @@ class MessageLookup extends MessageLookupByLibrary {
         "myApplications":
             MessageLookupByLibrary.simpleMessage("My Applications"),
         "name": MessageLookupByLibrary.simpleMessage("Name"),
+        "newPassword": MessageLookupByLibrary.simpleMessage("New Password"),
+        "newPasswordConfirm":
+            MessageLookupByLibrary.simpleMessage("Confirm New Password"),
         "news": MessageLookupByLibrary.simpleMessage("News"),
         "newsContentFormat": MessageLookupByLibrary.simpleMessage(
             "Weight：%d\nImage Link：%s\nLink：%s\nExpire：%s\nDescription：%s"),

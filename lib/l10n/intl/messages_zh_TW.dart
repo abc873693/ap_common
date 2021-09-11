@@ -105,6 +105,9 @@ class MessageLookup extends MessageLookupByLibrary {
         "captcha": MessageLookupByLibrary.simpleMessage("驗證碼"),
         "captchaError": MessageLookupByLibrary.simpleMessage("驗證碼錯誤"),
         "changeEmail": MessageLookupByLibrary.simpleMessage("更改電子信箱"),
+        "changePassword": MessageLookupByLibrary.simpleMessage("修改密碼"),
+        "changePasswordSuccessHint1":
+            MessageLookupByLibrary.simpleMessage("更改成功，請使用新密碼登入"),
         "checkLoginHint": MessageLookupByLibrary.simpleMessage("請檢查帳號密碼"),
         "choseLanguageTitle": MessageLookupByLibrary.simpleMessage("語言"),
         "classRank": MessageLookupByLibrary.simpleMessage("班名次"),
@@ -278,6 +281,8 @@ class MessageLookup extends MessageLookupByLibrary {
         "monday": MessageLookupByLibrary.simpleMessage("週一"),
         "myApplications": MessageLookupByLibrary.simpleMessage("我的申請"),
         "name": MessageLookupByLibrary.simpleMessage("名字"),
+        "newPassword": MessageLookupByLibrary.simpleMessage("新密碼"),
+        "newPasswordConfirm": MessageLookupByLibrary.simpleMessage("確認新密碼"),
         "news": MessageLookupByLibrary.simpleMessage("最新消息"),
         "newsContentFormat": MessageLookupByLibrary.simpleMessage(
             "權重：%d\n圖片網址：%s\n連結網址：%s\n到期時間：%s\n描述：%s"),

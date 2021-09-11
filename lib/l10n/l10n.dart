@@ -280,6 +280,48 @@ class ApLocalizations {
     );
   }
 
+  /// `修改密碼`
+  String get changePassword {
+    return Intl.message(
+      '修改密碼',
+      name: 'changePassword',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `新密碼`
+  String get newPassword {
+    return Intl.message(
+      '新密碼',
+      name: 'newPassword',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `確認新密碼`
+  String get newPasswordConfirm {
+    return Intl.message(
+      '確認新密碼',
+      name: 'newPasswordConfirm',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `更改成功，請使用新密碼登入`
+  String get changePasswordSuccessHint1 {
+    return Intl.message(
+      '更改成功，請使用新密碼登入',
+      name: 'changePasswordSuccessHint1',
+      desc: '',
+      args: [],
+    );
+  }
+
+  // skipped getter for the 'changePasswordSuccessHint2                                                                                                                                                                                                      ' key
+
   /// `自動登入`
   String get autoLogin {
     return Intl.message(
