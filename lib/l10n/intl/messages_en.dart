@@ -122,6 +122,8 @@ class MessageLookup extends MessageLookupByLibrary {
             MessageLookupByLibrary.simpleMessage("Change Password"),
         "changePasswordSuccessHint1": MessageLookupByLibrary.simpleMessage(
             "Change sucees, please use new password to login"),
+        "changePasswordSuccessHint2": MessageLookupByLibrary.simpleMessage(
+            "Change sucees, app will use new password to login"),
         "checkLoginHint": MessageLookupByLibrary.simpleMessage(
             "Please confirm your username and password before retrying."),
         "choseLanguageTitle": MessageLookupByLibrary.simpleMessage("Language"),

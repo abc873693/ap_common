@@ -26,7 +26,7 @@
   "newPassword": "新密碼",
   "newPasswordConfirm": "確認新密碼",
   "changePasswordSuccessHint1": "更改成功，請使用新密碼登入",
-  "changePasswordSuccessHint2                                                                                                                                                                                                      ": "更改成功，App 將使用新密碼自動登入",
+  "changePasswordSuccessHint2": "更改成功，App 將使用新密碼自動登入",
   "autoLogin": "自動登入",
   "version": "v.%s",
   "logining": "登入中...",

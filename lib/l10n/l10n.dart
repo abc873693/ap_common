@@ -320,7 +320,15 @@ class ApLocalizations {
     );
   }
 
-  // skipped getter for the 'changePasswordSuccessHint2                                                                                                                                                                                                      ' key
+  /// `更改成功，App 將使用新密碼自動登入`
+  String get changePasswordSuccessHint2 {
+    return Intl.message(
+      '更改成功，App 將使用新密碼自動登入',
+      name: 'changePasswordSuccessHint2',
+      desc: '',
+      args: [],
+    );
+  }
 
   /// `自動登入`
   String get autoLogin {

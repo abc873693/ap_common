@@ -108,6 +108,8 @@ class MessageLookup extends MessageLookupByLibrary {
         "changePassword": MessageLookupByLibrary.simpleMessage("修改密碼"),
         "changePasswordSuccessHint1":
             MessageLookupByLibrary.simpleMessage("更改成功，請使用新密碼登入"),
+        "changePasswordSuccessHint2":
+            MessageLookupByLibrary.simpleMessage("更改成功，App 將使用新密碼自動登入"),
         "checkLoginHint": MessageLookupByLibrary.simpleMessage("請檢查帳號密碼"),
         "choseLanguageTitle": MessageLookupByLibrary.simpleMessage("語言"),
         "classRank": MessageLookupByLibrary.simpleMessage("班名次"),
