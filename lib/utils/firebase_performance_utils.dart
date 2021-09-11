@@ -13,7 +13,7 @@ class FirebasePerformancesUtils {
   }
 
   static bool get isSupported =>
-      !kIsWeb && (Platform.isAndroid || Platform.isIOS);
+      kIsWeb || Platform.isAndroid || Platform.isIOS;
 
   FirebasePerformancesUtils() {
     if (isSupported) {
