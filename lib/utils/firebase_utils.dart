@@ -29,20 +29,4 @@ class FirebaseUtils {
 
   static bool get isSupportCore =>
       (kIsWeb || Platform.isAndroid || Platform.isIOS || Platform.isMacOS);
-
-  @deprecated
-  static bool get isSupportAnalytics =>
-      (kIsWeb || Platform.isAndroid || Platform.isIOS);
-
-  @deprecated
-  static bool get isSupportCloudMessage =>
-      (kIsWeb || Platform.isAndroid || Platform.isIOS || Platform.isMacOS);
-
-  @deprecated
-  static bool get isSupportCrashlytics =>
-      (!kIsWeb && (Platform.isAndroid || Platform.isIOS || Platform.isMacOS));
-
-  @deprecated
-  static bool get isSupportRemoteConfig =>
-      (!kIsWeb && (Platform.isAndroid || Platform.isIOS || Platform.isMacOS));
 }
