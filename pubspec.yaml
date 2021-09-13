@@ -12,36 +12,36 @@ dependencies:
   flutter_localizations:
     sdk: flutter
 
-  shared_preferences: ^2.0.5
+  shared_preferences: ^2.0.7
   url_launcher: ^6.0.6
   share_plus: ^2.1.4
-  package_info_plus: ^1.0.3
+  package_info_plus: ^1.0.6
   sprintf: ^6.0.0
   intl: ">=0.16.0 <1.0.0"
-  cached_network_image: ^3.0.0
+  cached_network_image: ^3.1.0
   photo_view: ^0.12.0
-  encrypt: ^5.0.0
+  encrypt: ^5.0.1
   dio: ^4.0.0
   dio_cookie_manager: ^2.0.0
   cookie_jar: ^3.0.1
   flutter_local_notifications: ^6.0.0
   timezone: ^0.7.0
-  flutter_keyboard_visibility: ^5.0.1
-  add_2_calendar: ^2.1.0
-  in_app_review: ^2.0.2
+  flutter_keyboard_visibility: ^5.0.3
+  add_2_calendar: ^2.1.1
+  in_app_review: ^2.0.3
   barcode_widget: ^2.0.1
   barcode: ^2.1.0
-  printing: ^5.4.3
-  pdf: ^3.4.2
+  printing: ^5.5.0
+  pdf: ^3.5.0
   auto_size_text_pk: ^3.0.0
   flutter_linkify: ^5.0.2
   file_selector: ^0.8.2
-  file_selector_macos: ^0.0.1
-  file_selector_linux: ^0.0.1
-  file_selector_windows: ^0.0.1
+  file_selector_macos: ^0.0.4+1
+  file_selector_linux: ^0.0.2+1
+  file_selector_windows: ^0.0.2+1
   path: ^1.7.0
   path_provider: ^2.0.1
-  google_sign_in: ^5.0.2
+  google_sign_in: ^5.1.0
   jwt_decoder: ^2.0.1
   sign_in_with_apple: ^3.0.0
   image_picker: ^0.7.4
@@ -50,7 +50,7 @@ dependencies:
   app_tracking_transparency: ^2.0.0+1
   hive: ^2.0.4
   hive_flutter: ^1.0.0
-  file_saver: ^0.0.8
+  file_saver: ^0.0.10
 
 dev_dependencies:
   flutter_test:
