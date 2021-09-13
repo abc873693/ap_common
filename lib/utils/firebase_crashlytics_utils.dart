@@ -38,11 +38,12 @@ class FirebaseCrashlyticsUtils extends CrashlyticsUtils {
     Iterable<DiagnosticsNode>? information,
     bool? printDetails,
   }) async {
+    information ??= const [];
     await crashlytics?.recordError(
       exception,
       stack,
       reason: reason,
-      information: information!,
+      information: information,
       printDetails: printDetails,
     );
   }
