@@ -130,16 +130,16 @@ EXTERNAL SOURCES:
     :path: ".symlinks/plugins/url_launcher/ios"
 
 SPEC CHECKSUMS:
-  add_2_calendar: c201b1c7dc0299280f1b1a8158aa80e15a8f8912
+  add_2_calendar: e9d68636aed37fb18e12f5a3d74c2e0589487af0
   ap_common_plugin: f5861976eed0e60431f1eb939796a0eb93d73e69
   app_tracking_transparency: 5b1745ef9ade815f7455cb6a0848349589afb7c5
   AppAuth: 31bcec809a638d7bd2f86ea8a52bd45f6e81e7c7
   file_saver: 503e386464dbe118f630e17b4c2e1190fa0cf808
-  Flutter: 434fef37c0980e73bb6479ef766c45957d4b510c
+  Flutter: 50d75fe2f02b26cc09d224853bb45737f8b3214a
   flutter_keyboard_visibility: 0339d06371254c3eb25eeb90ba8d17dca8f9c069
   flutter_local_notifications: 0c0b1ae97e741e1521e4c1629a459d04b9aec743
   FMDB: 2ce00b547f966261cd18927a3ddb07cb6f3db82a
-  google_sign_in: 6bd214b9c154f881422f5fe27b66aaa7bbd580cc
+  google_sign_in: de494e5e993986afae63e22a32441e30c35c9823
   GoogleSignIn: 7137d297ddc022a7e0aa4619c86d72c909fa7213
   GTMAppAuth: 197a8dabfea5d665224aa00d17f164fc2248dab9
   GTMSessionFetcher: b3503b20a988c4e20cc189aa798fd18220133f52
@@ -157,4 +157,4 @@ SPEC CHECKSUMS:
 
 PODFILE CHECKSUM: 594ce1bf9aa9816ad9e314c59a90dcdadbfc8c5e
 
-COCOAPODS: 1.10.1
+COCOAPODS: 1.10.2
