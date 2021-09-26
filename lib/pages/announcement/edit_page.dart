@@ -129,15 +129,15 @@ class _AnnouncementEditPageState extends State<AnnouncementEditPage> {
       announcements = widget.announcement;
       _title.text = announcements!.title!;
       _imgUrl.text = announcements!.imgUrl!;
-      if (announcements!.url!.isNotEmpty) {
+      if (announcements!.imgUrl != null && announcements!.imgUrl!.isNotEmpty) {
         imgurUploadState = _ImgurUploadState.done;
       }
-      _url.text = announcements!.url!;
+      _url.text = announcements!.url ?? '';
       _weight.text = announcements!.weight.toString();
       if (announcements!.expireTime != null) {
         expireTime = formatter.parse(announcements!.expireTime!);
       }
-      _description.text = announcements!.description!;
+      _description.text = announcements!.description ?? '';
       tags = announcements!.tags ?? [];
     } else {
       announcements = Announcement();
