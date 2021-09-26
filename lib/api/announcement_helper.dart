@@ -121,9 +121,10 @@ class AnnouncementHelper {
       this.username = username;
       this.password = password;
       loginType = AnnouncementLoginType.normal;
-      return callback == null
-          ? loginData
-          : callback.onSuccess(loginData) as AnnouncementLoginData;
+      if (callback != null) {
+        callback.onSuccess(loginData);
+      }
+      return loginData;
     } on DioError catch (dioError) {
       if (callback == null) {
         rethrow;
@@ -160,9 +161,10 @@ class AnnouncementHelper {
       setAuthorization(loginData.key);
       code = idToken;
       loginType = AnnouncementLoginType.google;
-      return callback == null
-          ? loginData
-          : callback.onSuccess(loginData) as AnnouncementLoginData;
+      if (callback != null) {
+        callback.onSuccess(loginData);
+      }
+      return loginData;
     } on DioError catch (dioError) {
       if (callback == null) {
         rethrow;
@@ -200,9 +202,10 @@ class AnnouncementHelper {
       setAuthorization(loginData.key);
       code = idToken;
       loginType = AnnouncementLoginType.apple;
-      return callback == null
-          ? loginData
-          : callback.onSuccess(loginData) as AnnouncementLoginData;
+      if (callback != null) {
+        callback.onSuccess(loginData);
+      }
+      return loginData;
     } on DioError catch (dioError) {
       if (callback == null) {
         rethrow;
@@ -236,9 +239,10 @@ class AnnouncementHelper {
           return b.weight!.compareTo(a.weight!);
         });
       }
-      return (callback == null)
-          ? data.data
-          : callback.onSuccess(data.data) as List<Announcement>;
+      if (callback != null) {
+        callback.onSuccess(data.data);
+      }
+      return data.data;
     } on DioError catch (dioError) {
       if (callback == null) {
         rethrow;
@@ -268,9 +272,10 @@ class AnnouncementHelper {
         data = AnnouncementData.fromJson(response.data!);
         if (sortAndRandom) data.sortAndRandom();
       }
-      return (callback == null)
-          ? data.data
-          : callback.onSuccess(data.data) as List<Announcement>;
+      if (callback != null) {
+        callback.onSuccess(data.data);
+      }
+      return data.data;
     } on DioError catch (dioError) {
       if (callback == null) {
         rethrow;
@@ -298,9 +303,10 @@ class AnnouncementHelper {
         '/announcements/add',
         data: data.toUpdateJson(),
       );
-      return callback == null
-          ? response
-          : callback.onSuccess(response) as Response<dynamic>;
+      if (callback != null) {
+        callback.onSuccess(response);
+      }
+      return response;
     } on DioError catch (dioError) {
       if (callback == null) {
         rethrow;
@@ -320,9 +326,10 @@ class AnnouncementHelper {
         '/announcements/update/${data.id}',
         data: data.toUpdateJson(),
       );
-      return callback == null
-          ? response
-          : callback.onSuccess(response) as Response<dynamic>;
+      if (callback != null) {
+        callback.onSuccess(response);
+      }
+      return response;
     } on DioError catch (dioError) {
       if (callback == null) {
         rethrow;
@@ -342,9 +349,10 @@ class AnnouncementHelper {
         '/announcements/delete/${data.id}',
         data: data.toUpdateJson(),
       );
-      return callback == null
-          ? response
-          : callback.onSuccess(response) as Response<dynamic>;
+      if (callback != null) {
+        callback.onSuccess(response);
+      }
+      return response;
     } on DioError catch (dioError) {
       if (callback == null) {
         rethrow;
@@ -370,9 +378,10 @@ class AnnouncementHelper {
           return b.weight!.compareTo(a.weight!);
         });
       }
-      return (callback == null)
-          ? data.data
-          : callback.onSuccess(data.data) as List<Announcement>;
+      if (callback != null) {
+        callback.onSuccess(data.data);
+      }
+      return data.data;
     } on DioError catch (dioError) {
       if (callback == null) {
         rethrow;
@@ -400,9 +409,10 @@ class AnnouncementHelper {
         '/application',
         data: data.toUpdateJson(),
       );
-      return callback == null
-          ? response
-          : callback.onSuccess(response) as Response<dynamic>;
+      if (callback != null) {
+        callback.onSuccess(response);
+      }
+      return response;
     } on DioError catch (dioError) {
       if (callback == null) {
         rethrow;
@@ -425,9 +435,10 @@ class AnnouncementHelper {
           'description': reviewDescription ?? '',
         },
       );
-      return callback == null
-          ? response
-          : callback.onSuccess(response) as Response<dynamic>;
+      if (callback != null) {
+        callback.onSuccess(response);
+      }
+      return response;
     } on DioError catch (dioError) {
       if (callback == null) {
         rethrow;
@@ -450,9 +461,10 @@ class AnnouncementHelper {
           'description': reviewDescription ?? '',
         },
       );
-      return callback == null
-          ? response
-          : callback.onSuccess(response) as Response<dynamic>;
+      if (callback != null) {
+        callback.onSuccess(response);
+      }
+      return response;
     } on DioError catch (dioError) {
       if (callback == null) {
         rethrow;
@@ -471,9 +483,10 @@ class AnnouncementHelper {
       final Response<dynamic> response = await dio.delete(
         '/application/$applicationId',
       );
-      return callback == null
-          ? response
-          : callback.onSuccess(response) as Response<dynamic>;
+      if (callback != null) {
+        callback.onSuccess(response);
+      }
+      return response;
     } on DioError catch (dioError) {
       if (callback == null) {
         rethrow;
@@ -493,9 +506,10 @@ class AnnouncementHelper {
         '/application/${data.applicationId}',
         data: data.toUpdateApplicationJson(),
       );
-      return callback == null
-          ? response
-          : callback.onSuccess(response) as Response<dynamic>;
+      if (callback != null) {
+        callback.onSuccess(response);
+      }
+      return response;
     } on DioError catch (dioError) {
       if (callback == null) {
         rethrow;
