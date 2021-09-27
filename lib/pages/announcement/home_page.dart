@@ -117,8 +117,8 @@ class _AnnouncementHomePageState extends State<AnnouncementHomePage> {
                 setState(() {
                   onlyShowNotReview = !onlyShowNotReview!;
                 });
-                Preferences.setBool(ApConstants.announcementOnlyNotReview,
-                    onlyShowNotReview!);
+                Preferences.setBool(
+                    ApConstants.announcementOnlyNotReview, onlyShowNotReview!);
               },
               child: Row(
                 children: <Widget>[
@@ -128,8 +128,7 @@ class _AnnouncementHomePageState extends State<AnnouncementHomePage> {
                       setState(() {
                         onlyShowNotReview = value;
                       });
-                      Preferences.setBool(
-                          ApConstants.announcementOnlyNotReview,
+                      Preferences.setBool(ApConstants.announcementOnlyNotReview,
                           onlyShowNotReview!);
                     },
                     activeColor: ApTheme.of(context).yellow,
@@ -443,8 +442,7 @@ class _AnnouncementHomePageState extends State<AnnouncementHomePage> {
                   onPressed: () async {
                     showDialog(
                       context: context,
-                      builder: (BuildContext context) => dataType ==
-                              _DataType.announcement
+                      builder: (_) => dataType == _DataType.announcement
                           ? YesNoDialog(
                               title: ap.deleteNewsTitle,
                               contentWidget: Text(
@@ -494,7 +492,9 @@ class _AnnouncementHomePageState extends State<AnnouncementHomePage> {
                                     context,
                                     (_) {
                                       ApUtils.showToast(
-                                          context, ap.updateSuccess);
+                                        context,
+                                        ap.updateSuccess,
+                                      );
                                       _reviewDescription.text = '';
                                       _getAnnouncements();
                                       _getApplications();
@@ -668,7 +668,8 @@ class _AnnouncementHomePageState extends State<AnnouncementHomePage> {
       if (kDebugMode) {
         debugPrint('token is expire = '
             '${loginData?.isExpired} '
-            'level = ${loginData!.level}');
+            'level = ${loginData!.level} '
+            'token = ${loginData!.key}');
       }
       if (loginData?.isExpired ?? true) {
         final int index =
@@ -707,11 +708,10 @@ class _AnnouncementHomePageState extends State<AnnouncementHomePage> {
           barrierDismissible: false,
         );
       }
-      String? idToken =
-          Preferences.getBool(ApConstants.announcementIsLogin, false)
-              ? Preferences.getStringSecurity(
-                  ApConstants.announcementIdToken, null)
-              : null;
+      String? idToken = Preferences.getBool(
+              ApConstants.announcementIsLogin, false)
+          ? Preferences.getStringSecurity(ApConstants.announcementIdToken, null)
+          : null;
 
       final GeneralCallback<AnnouncementLoginData> callback =
           GeneralCallback<AnnouncementLoginData>(
