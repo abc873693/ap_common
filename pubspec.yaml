@@ -1,6 +1,6 @@
 name: ap_common
 description: The school affairs(AP) series shares the engineering kit, rapid development of the school affairs series(AP) app
-version: 0.19.0
+version: 0.19.1
 homepage: https://github.com/abc873693/ap_common
 
 environment:
