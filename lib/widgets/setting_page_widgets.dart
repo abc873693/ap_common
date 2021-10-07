@@ -15,17 +15,23 @@ import 'option_dialog.dart';
 export 'package:package_info_plus/package_info_plus.dart';
 
 class SettingTitle extends StatelessWidget {
-  final String? text;
+  final String text;
 
-  const SettingTitle({Key? key, this.text}) : super(key: key);
+  const SettingTitle({
+    Key? key,
+    required this.text,
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return Padding(
       padding: const EdgeInsets.fromLTRB(16.0, 16.0, 16.0, 8.0),
       child: Text(
-        text!,
-        style: TextStyle(color: ApTheme.of(context).blueText, fontSize: 14.0),
+        text,
+        style: TextStyle(
+          color: ApTheme.of(context).blueText,
+          fontSize: 14.0,
+        ),
         textAlign: TextAlign.start,
       ),
     );

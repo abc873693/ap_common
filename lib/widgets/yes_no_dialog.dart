@@ -12,16 +12,16 @@ class YesNoDialog extends StatelessWidget {
   final Function? leftActionFunction;
   final Function? rightActionFunction;
 
-  const YesNoDialog(
-      {Key? key,
-      this.title,
-      this.contentWidget,
-      this.contentWidgetPadding,
-      this.leftActionText,
-      this.rightActionText,
-      this.leftActionFunction,
-      this.rightActionFunction})
-      : super(key: key);
+  const YesNoDialog({
+    Key? key,
+    this.title,
+    this.contentWidget,
+    this.contentWidgetPadding,
+    this.leftActionText,
+    this.rightActionText,
+    this.leftActionFunction,
+    this.rightActionFunction,
+  }) : super(key: key);
 
   static void showSample(BuildContext context) => showDialog(
         context: context,
