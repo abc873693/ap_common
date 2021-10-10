@@ -35,11 +35,13 @@ class AnnouncementEditPage extends StatefulWidget {
 
   final Mode mode;
   final Announcement? announcement;
+  final bool needFetch;
 
   const AnnouncementEditPage({
     Key? key,
     required this.mode,
     this.announcement,
+    this.needFetch = false,
   }) : super(key: key);
 
   @override
@@ -51,7 +53,7 @@ class _AnnouncementEditPageState extends State<AnnouncementEditPage> {
 
   ApLocalizations get app => ApLocalizations.of(context);
 
-  Announcement? announcements;
+  late Announcement announcements;
 
   final _title = TextEditingController();
   final _description = TextEditingController();
@@ -126,19 +128,11 @@ class _AnnouncementEditPageState extends State<AnnouncementEditPage> {
   @override
   void initState() {
     if (widget.mode == Mode.edit || widget.mode == Mode.editApplication) {
-      announcements = widget.announcement;
-      _title.text = announcements!.title!;
-      _imgUrl.text = announcements!.imgUrl!;
-      if (announcements!.imgUrl != null && announcements!.imgUrl!.isNotEmpty) {
-        imgurUploadState = _ImgurUploadState.done;
+      announcements = widget.announcement!;
+      _mapData();
+      if (widget.needFetch) {
+        _fetchData();
       }
-      _url.text = announcements!.url ?? '';
-      _weight.text = announcements!.weight.toString();
-      if (announcements!.expireTime != null) {
-        expireTime = formatter.parse(announcements!.expireTime!);
-      }
-      _description.text = announcements!.description ?? '';
-      tags = announcements!.tags ?? [];
     } else {
       announcements = Announcement();
     }
@@ -571,18 +565,61 @@ class _AnnouncementEditPageState extends State<AnnouncementEditPage> {
     }
   }
 
+  void _mapData() {
+    _title.text = announcements.title ?? '';
+    _imgUrl.text = announcements.imgUrl ?? '';
+    if (announcements.imgUrl != null && announcements.imgUrl!.isNotEmpty) {
+      imgurUploadState = _ImgurUploadState.done;
+    }
+    if (announcements.expireTime != null) {
+      expireTime = formatter.parse(announcements.expireTime!);
+    }
+    _url.text = announcements.url ?? '';
+    _weight.text = announcements.weight?.toString() ?? '0';
+    _description.text = announcements.description ?? '';
+    tags = announcements.tags ?? [];
+  }
+
+  void _fetchData() {
+    if (widget.mode == Mode.edit) {
+      AnnouncementHelper.instance.getAnnouncement(
+        id: announcements.id!,
+        callback: GeneralCallback.simple(
+          context,
+          (Announcement data) {
+            announcements = data;
+            _mapData();
+            setState(() {});
+          },
+        ),
+      );
+    } else if (widget.mode == Mode.editApplication) {
+      AnnouncementHelper.instance.getApplication(
+        id: announcements.applicationId!,
+        callback: GeneralCallback.simple(
+          context,
+          (Announcement data) {
+            announcements = data;
+            _mapData();
+            setState(() {});
+          },
+        ),
+      );
+    }
+  }
+
   Future<void> _announcementSubmit({bool? isApproval}) async {
     if (_formKey.currentState!.validate()) {
-      announcements!.title = _title.text;
-      announcements!.description = _description.text;
-      announcements!.imgUrl = _imgUrl.text;
-      announcements!.url = _url.text;
-      announcements!.weight =
+      announcements.title = _title.text;
+      announcements.description = _description.text;
+      announcements.imgUrl = _imgUrl.text;
+      announcements.url = _url.text;
+      announcements.weight =
           _weight.text.isNotEmpty ? int.tryParse(_weight.text) : 0;
-      announcements!.expireTime =
+      announcements.expireTime =
           (expireTime == null) ? null : expireTime!.parseToString();
-      announcements!.reviewDescription = _reviewDescription.text;
-      announcements!.tags = tags;
+      announcements.reviewDescription = _reviewDescription.text;
+      announcements.tags = tags;
       final callback = GeneralCallback.simple(
         context,
         (Response _) async {
@@ -601,8 +638,8 @@ class _AnnouncementEditPageState extends State<AnnouncementEditPage> {
               if (isApproval != null) {
                 if (isApproval) {
                   await AnnouncementHelper.instance.approveApplication(
-                    applicationId: announcements!.applicationId,
-                    reviewDescription: announcements!.reviewDescription,
+                    applicationId: announcements.applicationId,
+                    reviewDescription: announcements.reviewDescription,
                     callback: GeneralCallback.simple(
                       context,
                       (_) => _,
@@ -610,8 +647,8 @@ class _AnnouncementEditPageState extends State<AnnouncementEditPage> {
                   );
                 } else {
                   await AnnouncementHelper.instance.rejectApplication(
-                    applicationId: announcements!.applicationId,
-                    reviewDescription: announcements!.reviewDescription,
+                    applicationId: announcements.applicationId,
+                    reviewDescription: announcements.reviewDescription,
                     callback: GeneralCallback.simple(
                       context,
                       (_) => _,
@@ -627,25 +664,25 @@ class _AnnouncementEditPageState extends State<AnnouncementEditPage> {
       switch (widget.mode) {
         case Mode.add:
           AnnouncementHelper.instance.addAnnouncement(
-            data: announcements!,
+            data: announcements,
             callback: callback,
           );
           break;
         case Mode.edit:
           AnnouncementHelper.instance.updateAnnouncement(
-            data: announcements!,
+            data: announcements,
             callback: callback,
           );
           break;
         case Mode.application:
           AnnouncementHelper.instance.addApplication(
-            data: announcements!,
+            data: announcements,
             callback: callback,
           );
           break;
         case Mode.editApplication:
           AnnouncementHelper.instance.updateApplication(
-            data: announcements!,
+            data: announcements,
             callback: callback,
           );
           break;

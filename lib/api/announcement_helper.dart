@@ -82,7 +82,7 @@ class AnnouncementHelper {
 
   void setLocale(Locale locale) {
     if (locale.languageCode == 'zh' || locale.languageCode == 'en') {
-      dio.options.headers['locale'] = locale.languageCode;
+      dio.options.headers['lapplicationocale'] = locale.languageCode;
     } else {
       dio.options.headers['locale'] = 'en';
     }
@@ -286,6 +286,32 @@ class AnnouncementHelper {
     return null;
   }
 
+  Future<Announcement?> getAnnouncement({
+    required int id,
+    String? locale,
+    GeneralCallback<Announcement>? callback,
+  }) async {
+    try {
+      final Response<Map<String, dynamic>> response = await dio.get(
+        '/announcements/$id',
+      );
+      final Announcement data = Announcement.fromJson(
+        response.data!['data'] as Map<String, dynamic>,
+      );
+      if (callback != null) {
+        callback.onSuccess(data);
+      }
+      return data;
+    } on DioError catch (dioError) {
+      if (callback == null) {
+        rethrow;
+      } else {
+        callback.onFailure(dioError);
+      }
+    }
+    return null;
+  }
+
   Future<Response<dynamic>?> addAnnouncement({
     required Announcement data,
     GeneralCallback<Response<dynamic>>? callback,
@@ -382,6 +408,30 @@ class AnnouncementHelper {
         callback.onSuccess(data.data);
       }
       return data.data;
+    } on DioError catch (dioError) {
+      if (callback == null) {
+        rethrow;
+      } else {
+        callback.onFailure(dioError);
+      }
+    }
+    return null;
+  }
+
+  Future<Announcement?> getApplication({
+    required String id,
+    String? locale,
+    GeneralCallback<Announcement>? callback,
+  }) async {
+    try {
+      final Response<Map<String, dynamic>> response = await dio.get(
+        '/application/$id',
+      );
+      final Announcement data = Announcement.fromJson(response.data!);
+      if (callback != null) {
+        callback.onSuccess(data);
+      }
+      return data;
     } on DioError catch (dioError) {
       if (callback == null) {
         rethrow;
