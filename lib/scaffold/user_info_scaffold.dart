@@ -1,7 +1,7 @@
 import 'package:ap_common/config/ap_constants.dart';
 import 'package:ap_common/models/user_info.dart';
-import 'package:ap_common/resources/resources.dart';
 import 'package:ap_common/resources/ap_theme.dart';
+import 'package:ap_common/resources/resources.dart';
 import 'package:ap_common/utils/analytics_utils.dart';
 import 'package:ap_common/utils/ap_localizations.dart';
 import 'package:barcode/barcode.dart';

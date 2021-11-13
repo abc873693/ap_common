@@ -5,8 +5,8 @@ import 'package:ap_common/utils/analytics_utils.dart';
 import 'package:ap_common/utils/ap_localizations.dart';
 import 'package:ap_common/widgets/hint_content.dart';
 import 'package:flutter/material.dart';
-import 'package:printing/printing.dart';
 import 'package:pdf/pdf.dart';
+import 'package:printing/printing.dart';
 
 enum PdfState { loading, finish, error }
 

@@ -8,12 +8,11 @@ import 'package:ap_common/resources/ap_theme.dart';
 import 'package:ap_common/utils/analytics_utils.dart';
 import 'package:ap_common/utils/ap_localizations.dart';
 import 'package:ap_common/widgets/ap_network_image.dart';
+import 'package:ap_common/widgets/hint_content.dart';
+import 'package:ap_common/widgets/yes_no_dialog.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-
-import 'package:ap_common/widgets/hint_content.dart';
-import 'package:ap_common/widgets/yes_no_dialog.dart';
 
 export 'package:ap_common/models/announcement_data.dart';
 

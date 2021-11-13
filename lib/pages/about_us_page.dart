@@ -1,8 +1,8 @@
 import 'dart:io';
 
 import 'package:ap_common/resources/ap_icon.dart';
-import 'package:ap_common/resources/resources.dart';
 import 'package:ap_common/resources/ap_theme.dart';
+import 'package:ap_common/resources/resources.dart';
 import 'package:ap_common/utils/analytics_utils.dart';
 import 'package:ap_common/utils/ap_localizations.dart';
 import 'package:ap_common/utils/ap_utils.dart';

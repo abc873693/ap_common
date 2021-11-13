@@ -2,9 +2,9 @@ import 'dart:convert';
 
 import 'package:ap_common/callback/general_callback.dart';
 import 'package:ap_common/models/announcement_data.dart';
+import 'package:cookie_jar/cookie_jar.dart';
 import 'package:dio/dio.dart';
 import 'package:dio_cookie_manager/dio_cookie_manager.dart';
-import 'package:cookie_jar/cookie_jar.dart';
 
 class GitHubHelper {
   static const String basePath = 'https://gist.githubusercontent.com/';
