@@ -8,6 +8,7 @@ import 'package:ap_common/utils/preferences.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 
 import 'config/constants.dart';
@@ -43,6 +44,15 @@ class MyAppState extends State<MyApp> with WidgetsBindingObserver {
     themeMode = ThemeMode
         .values[Preferences.getInt(Constants.PREF_THEME_MODE_INDEX, 0)];
     WidgetsBinding.instance.addObserver(this);
+    Future.microtask(() async {
+      SystemChrome.setEnabledSystemUIMode(SystemUiMode.edgeToEdge);
+      SystemChrome.setSystemUIOverlayStyle(
+        const SystemUiOverlayStyle(
+          systemNavigationBarContrastEnforced: true,
+          systemNavigationBarColor: Colors.transparent,
+        ),
+      );
+    });
     super.initState();
   }
 
