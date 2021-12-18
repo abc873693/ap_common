@@ -8,9 +8,8 @@ import 'package:ap_common/utils/ap_localizations.dart';
 import 'package:ap_common/utils/ap_utils.dart';
 import 'package:ap_common/utils/notification_utils.dart';
 import 'package:ap_common/utils/preferences.dart';
+import 'package:ap_common/widgets/option_dialog.dart';
 import 'package:flutter/material.dart';
-
-import 'option_dialog.dart';
 
 export 'package:package_info_plus/package_info_plus.dart';
 
@@ -197,7 +196,9 @@ class ChangeLanguageItem extends StatelessWidget {
           ApLocalizations.of(context).english,
         ];
     final code = Preferences.getString(
-        ApConstants.prefLanguageCode, ApSupportLanguageConstants.system);
+      ApConstants.prefLanguageCode,
+      ApSupportLanguageConstants.system,
+    );
     final languageIndex = ApSupportLanguageExtension.fromCode(code);
     return SettingItem(
       text: ap.language,

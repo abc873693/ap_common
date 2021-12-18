@@ -27,8 +27,9 @@ class DialogOption extends StatelessWidget {
               child: Text(
                 text,
                 style: TextStyle(
-                    fontSize: 16.0,
-                    color: check ? ApTheme.of(context).blueAccent : null),
+                  fontSize: 16.0,
+                  color: check ? ApTheme.of(context).blueAccent : null,
+                ),
                 overflow: TextOverflow.clip,
               ),
             ),

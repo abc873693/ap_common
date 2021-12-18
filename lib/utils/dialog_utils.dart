@@ -150,7 +150,10 @@ class DialogUtils {
       textAlign: TextAlign.center,
       text: TextSpan(
         style: TextStyle(
-            color: ApTheme.of(context).grey, height: 1.3, fontSize: 16.0),
+          color: ApTheme.of(context).grey,
+          height: 1.3,
+          fontSize: 16.0,
+        ),
         children: <TextSpan>[
           TextSpan(
             text: '$updateContent\n'

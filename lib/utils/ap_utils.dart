@@ -8,10 +8,8 @@ import 'package:ap_common/utils/toast.dart';
 import 'package:ap_common/widgets/yes_no_dialog.dart';
 import 'package:file_saver/file_saver.dart';
 import 'package:file_selector/file_selector.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:in_app_review/in_app_review.dart';
 import 'package:package_info_plus/package_info_plus.dart';
@@ -100,7 +98,9 @@ class ApUtils {
     } else {
       ApUtils.launchUrl(fansPageUrl).catchError(
         (dynamic onError) => ApUtils.showToast(
-            context, ApLocalizations.of(context).platformError),
+          context,
+          ApLocalizations.of(context).platformError,
+        ),
       );
     }
   }
@@ -155,7 +155,10 @@ class ApUtils {
             textAlign: TextAlign.center,
             text: TextSpan(
               style: TextStyle(
-                  color: ApTheme.of(context).grey, height: 1.3, fontSize: 18.0),
+                color: ApTheme.of(context).grey,
+                height: 1.3,
+                fontSize: 18.0,
+              ),
               children: <TextSpan>[
                 TextSpan(text: app.ratingDialogContent),
               ],
@@ -171,7 +174,9 @@ class ApUtils {
                 child: Text(
                   app.later,
                   style: TextStyle(
-                      color: ApTheme.of(context).blue, fontSize: 16.0),
+                    color: ApTheme.of(context).blue,
+                    fontSize: 16.0,
+                  ),
                 ),
               ),
               TextButton(
@@ -179,7 +184,9 @@ class ApUtils {
                 child: Text(
                   app.rateNow,
                   style: TextStyle(
-                      color: ApTheme.of(context).blue, fontSize: 16.0),
+                    color: ApTheme.of(context).blue,
+                    fontSize: 16.0,
+                  ),
                 ),
               ),
             ],
@@ -268,9 +275,14 @@ class ApUtils {
           await File(filePath).writeAsBytes(pngBytes);
         }
         ApUtils.showToast(
-            context, success ? '$successMessage\n$filePath' : ap.unknownError);
+          context,
+          success ? '$successMessage\n$filePath' : ap.unknownError,
+        );
       } else {
-        ApUtils.showToast(context, ap.grandPermissionFail);
+        ApUtils.showToast(
+          context,
+          ap.grandPermissionFail,
+        );
       }
     } catch (e, s) {
       ApUtils.showToast(context, ap.unknownError);

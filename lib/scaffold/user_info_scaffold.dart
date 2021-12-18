@@ -4,7 +4,6 @@ import 'package:ap_common/resources/ap_theme.dart';
 import 'package:ap_common/resources/resources.dart';
 import 'package:ap_common/utils/analytics_utils.dart';
 import 'package:ap_common/utils/ap_localizations.dart';
-import 'package:barcode/barcode.dart';
 import 'package:barcode_widget/barcode_widget.dart';
 import 'package:flutter/material.dart';
 
@@ -71,8 +70,10 @@ class UserInfoScaffoldState extends State<UserInfoScaffold> {
                 width: 24.0,
               ),
               onPressed: () {
-                setState(() => codeMode = BarCodeMode
-                    .values[(codeMode.index + 1) % BarCodeMode.values.length]);
+                setState(
+                  () => codeMode = BarCodeMode
+                      .values[(codeMode.index + 1) % BarCodeMode.values.length],
+                );
                 AnalyticsUtils.instance?.logEvent('user_info_barcode_switch');
               },
             ),

@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 
 /// Copy from https://github.com/appdev/FlutterToast
 /// Source Code https://github.com/appdev/FlutterToast/blob/4d446c80a1807094a3e10c8293e4b7f3c6429f9d/lib/toast.dart
@@ -64,23 +63,25 @@ class ToastView {
 
     _overlayEntry = OverlayEntry(
       builder: (BuildContext context) => ToastWidget(
-          widget: SizedBox(
+        widget: SizedBox(
+          width: MediaQuery.of(context).size.width,
+          child: Container(
+            alignment: Alignment.center,
             width: MediaQuery.of(context).size.width,
             child: Container(
-                alignment: Alignment.center,
-                width: MediaQuery.of(context).size.width,
-                child: Container(
-                  decoration: BoxDecoration(
-                    color: background,
-                    borderRadius: BorderRadius.circular(backgroundRadius),
-                    border: border,
-                  ),
-                  margin: const EdgeInsets.symmetric(horizontal: 20),
-                  padding: const EdgeInsets.fromLTRB(16, 10, 16, 10),
-                  child: Text(msg ?? '', softWrap: true, style: textStyle),
-                )),
+              decoration: BoxDecoration(
+                color: background,
+                borderRadius: BorderRadius.circular(backgroundRadius),
+                border: border,
+              ),
+              margin: const EdgeInsets.symmetric(horizontal: 20),
+              padding: const EdgeInsets.fromLTRB(16, 10, 16, 10),
+              child: Text(msg ?? '', softWrap: true, style: textStyle),
+            ),
           ),
-          gravity: gravity),
+        ),
+        gravity: gravity,
+      ),
     );
     _isVisible = true;
     overlayState?.insert(_overlayEntry!);

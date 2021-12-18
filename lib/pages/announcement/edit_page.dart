@@ -1,23 +1,15 @@
-import 'dart:ui';
-
 import 'package:ap_common/api/announcement_helper.dart';
 import 'package:ap_common/api/imgur_helper.dart';
 import 'package:ap_common/models/announcement_data.dart';
+import 'package:ap_common/pages/announcement/home_page.dart' show TagColors;
 import 'package:ap_common/resources/ap_icon.dart';
 import 'package:ap_common/resources/ap_theme.dart';
 import 'package:ap_common/utils/ap_localizations.dart';
 import 'package:ap_common/utils/ap_utils.dart';
 import 'package:ap_common/widgets/ap_network_image.dart';
 import 'package:ap_common/widgets/default_dialog.dart';
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/painting.dart';
-import 'package:flutter/widgets.dart';
 import 'package:flutter_keyboard_visibility/flutter_keyboard_visibility.dart';
-import 'package:image_picker/image_picker.dart';
-import 'package:intl/intl.dart' show DateFormat;
-
-import 'home_page.dart' show TagColors;
 
 enum _ImgurUploadState { noFile, uploading, done }
 enum Mode { add, edit, application, editApplication }
@@ -300,28 +292,32 @@ class _AnnouncementEditPageState extends State<AnnouncementEditPage> {
                     final PickedFile? image = await ApUtils.pickImage();
                     if (image != null) {
                       setState(
-                          () => imgurUploadState = _ImgurUploadState.uploading);
+                        () => imgurUploadState = _ImgurUploadState.uploading,
+                      );
                       ImgurHelper.instance!.uploadImageToImgur(
                         file: image,
                         callback: GeneralCallback(
                           onFailure: (dioError) {
                             ApUtils.showToast(context, dioError.message);
-                            setState(() => imgurUploadState =
-                                _imgUrl.text.isEmpty
-                                    ? _ImgurUploadState.noFile
-                                    : _ImgurUploadState.done);
+                            setState(
+                              () => imgurUploadState = _imgUrl.text.isEmpty
+                                  ? _ImgurUploadState.noFile
+                                  : _ImgurUploadState.done,
+                            );
                           },
                           onError: (generalResponse) {
                             ApUtils.showToast(context, generalResponse.message);
-                            setState(() => imgurUploadState =
-                                _imgUrl.text.isEmpty
-                                    ? _ImgurUploadState.noFile
-                                    : _ImgurUploadState.done);
+                            setState(
+                              () => imgurUploadState = _imgUrl.text.isEmpty
+                                  ? _ImgurUploadState.noFile
+                                  : _ImgurUploadState.done,
+                            );
                           },
                           onSuccess: (data) {
                             _imgUrl.text = data!.link!;
-                            setState(() =>
-                                imgurUploadState = _ImgurUploadState.done);
+                            setState(
+                              () => imgurUploadState = _ImgurUploadState.done,
+                            );
                           },
                         ),
                       );
@@ -658,6 +654,7 @@ class _AnnouncementEditPageState extends State<AnnouncementEditPage> {
               }
               break;
           }
+          if (!mounted) return;
           Navigator.of(context).pop(true);
         },
       );

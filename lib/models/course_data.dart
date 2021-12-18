@@ -1,7 +1,6 @@
 import 'dart:convert';
 
 import 'package:ap_common/config/ap_constants.dart';
-import 'package:ap_common/l10n/l10n.dart';
 import 'package:ap_common/utils/ap_localizations.dart';
 import 'package:ap_common/utils/preferences.dart';
 import 'package:flutter/material.dart';
@@ -274,7 +273,8 @@ class Course {
   String getTimesShortName(List<TimeCode>? timeCode) {
     String text = '';
     if ((times?.length ?? 0) == 0) return text;
-    int startIndex = -1, repeat = 0;
+    int startIndex = -1;
+    int repeat = 0;
     final len = times?.length ?? 0;
     for (var i = 0; i < len; i++) {
       final time = times![i];

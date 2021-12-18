@@ -24,12 +24,13 @@ import 'package:auto_size_text_pk/auto_size_text_pk.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
-import 'package:intl/intl.dart';
 
 export 'package:ap_common/models/course_data.dart';
 
 typedef CourseNotifyCallback = Function(
-    CourseNotify? courseNotify, CourseNotifyState state);
+  CourseNotify? courseNotify,
+  CourseNotifyState state,
+);
 
 enum CourseState { loading, finish, error, empty, offlineEmpty, custom }
 enum CourseNotifyState { schedule, cancel }
@@ -182,22 +183,30 @@ class CourseScaffoldState extends State<CourseScaffold> {
                     showSectionTimeOnChanged: (value) {
                       setState(() => showSectionTime = value);
                       Preferences.setBool(
-                          ApConstants.showSectionTime, showSectionTime!);
+                        ApConstants.showSectionTime,
+                        showSectionTime!,
+                      );
                     },
                     showInstructorsOnChanged: (value) {
                       setState(() => showInstructors = value);
                       Preferences.setBool(
-                          ApConstants.showInstructors, showInstructors!);
+                        ApConstants.showInstructors,
+                        showInstructors!,
+                      );
                     },
                     showClassroomLocationOnChanged: (value) {
                       setState(() => showClassroomLocation = value);
-                      Preferences.setBool(ApConstants.showClassroomLocation,
-                          showClassroomLocation!);
+                      Preferences.setBool(
+                        ApConstants.showClassroomLocation,
+                        showClassroomLocation!,
+                      );
                     },
                     showSearchButtonOnChanged: (value) {
                       setState(() => showSearchButton = value);
-                      Preferences.setBool(ApConstants.showCourseSearchButton,
-                          showSearchButton!);
+                      Preferences.setBool(
+                        ApConstants.showCourseSearchButton,
+                        showSearchButton!,
+                      );
                     },
                   ),
                 );
@@ -401,6 +410,7 @@ class CourseScaffoldState extends State<CourseScaffold> {
     final DateTime now = DateTime.now();
     final String formattedDate = DateFormat('yyyyMMdd_hhmmss').format(now);
     if (byteData != null) {
+      if (!mounted) return;
       await ApUtils.saveImage(
         context,
         byteData,
@@ -409,6 +419,7 @@ class CourseScaffoldState extends State<CourseScaffold> {
       );
       AnalyticsUtils.instance?.logEvent('export_course_table_image_success');
     } else {
+      if (!mounted) return;
       ApUtils.showToast(context, app.unknownError);
     }
   }
@@ -601,7 +612,7 @@ class CourseScaffoldState extends State<CourseScaffold> {
         ),
       );
     }
-    if (widget.onSearchButtonClick != null) widget.onSearchButtonClick!();
+    widget.onSearchButtonClick?.call();
   }
 }
 
@@ -699,9 +710,11 @@ class _CourseContentState extends State<CourseContent> {
                   widget.notifyData != null &&
                   NotificationUtils.isSupport)
                 IconButton(
-                  icon: Icon(_state == CourseNotifyState.schedule
-                      ? Icons.alarm_on
-                      : Icons.alarm_off),
+                  icon: Icon(
+                    _state == CourseNotifyState.schedule
+                        ? Icons.alarm_on
+                        : Icons.alarm_off,
+                  ),
                   onPressed: () async {
                     var courseNotify = widget.notifyData!.getByCode(
                       widget.course.code,
@@ -717,14 +730,18 @@ class _CourseContentState extends State<CourseContent> {
                           timeCode: widget.timeCode,
                         );
                         await NotificationUtils.scheduleCourseNotify(
-                            context: context,
-                            courseNotify: courseNotify,
-                            day: NotificationUtils.getDay(widget.weekday),
-                            androidResourceIcon: widget.androidResourceIcon);
+                          context: context,
+                          courseNotify: courseNotify,
+                          day: NotificationUtils.getDay(widget.weekday),
+                          androidResourceIcon: widget.androidResourceIcon,
+                        );
                         widget.notifyData!.lastId++;
                         widget.notifyData!.data.add(courseNotify);
-                        ApUtils.showToast(context,
-                            ApLocalizations.of(context).courseNotifyHint);
+                        if (!mounted) return;
+                        ApUtils.showToast(
+                          context,
+                          ApLocalizations.of(context).courseNotifyHint,
+                        );
                         AnalyticsUtils.instance
                             ?.logEvent('course_notify_schedule');
                       } else {
@@ -734,18 +751,23 @@ class _CourseContentState extends State<CourseContent> {
                         widget.notifyData!.data.removeWhere((data) {
                           return data.id == courseNotify!.id;
                         });
-                        ApUtils.showToast(context,
-                            ApLocalizations.of(context).cancelNotifySuccess);
+                        if (!mounted) return;
+                        ApUtils.showToast(
+                          context,
+                          ApLocalizations.of(context).cancelNotifySuccess,
+                        );
                       }
                       widget.notifyData!.save();
                       setState(() {});
                       AnalyticsUtils.instance?.logEvent('course_notify_cancel');
                     }
                     if (widget.onNotifyClick != null) {
+                      if (!mounted) return;
                       widget.onNotifyClick!(
-                          courseNotify,
-                          CourseNotifyState.values[(_state!.index + 1) %
-                              (CourseNotifyState.values.length)]);
+                        courseNotify,
+                        CourseNotifyState.values[(_state!.index + 1) %
+                            (CourseNotifyState.values.length)],
+                      );
                     }
                   },
                 )
@@ -1136,7 +1158,7 @@ class _CourseScaffoldSettingDialogState
       title: ap.courseScaffoldSetting,
       actionText: ApLocalizations.current.confirm,
       actionFunction: () => Navigator.of(context, rootNavigator: true).pop(),
-      contentPadding: const EdgeInsets.all(0.0),
+      contentPadding: EdgeInsets.zero,
       contentWidget: Column(
         children: [
           CheckboxListTile(

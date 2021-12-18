@@ -241,9 +241,10 @@ class _Cookie implements Cookie {
           codeUnit >= 127 ||
           separators.contains(newName[i])) {
         throw FormatException(
-            "Invalid character in cookie name, code unit: '$codeUnit'",
-            newName,
-            i);
+          "Invalid character in cookie name, code unit: '$codeUnit'",
+          newName,
+          i,
+        );
       }
     }
     return newName;
@@ -269,9 +270,10 @@ class _Cookie implements Cookie {
           (codeUnit >= 0x3C && codeUnit <= 0x5B) ||
           (codeUnit >= 0x5D && codeUnit <= 0x7E))) {
         throw FormatException(
-            "Invalid character in cookie value, code unit: '$codeUnit'",
-            newValue,
-            i);
+          "Invalid character in cookie value, code unit: '$codeUnit'",
+          newValue,
+          i,
+        );
       }
     }
     return newValue;
@@ -287,7 +289,8 @@ class _Cookie implements Cookie {
       // CTLs = %x00-1F / %x7F
       if (codeUnit < 0x20 || codeUnit >= 0x7f || codeUnit == 0x3b /*;*/) {
         throw FormatException(
-            "Invalid character in cookie path, code unit: '$codeUnit'");
+          "Invalid character in cookie path, code unit: '$codeUnit'",
+        );
       }
     }
   }
@@ -404,7 +407,9 @@ class _Cookie implements Cookie {
     int year = toInt(yearStr);
     if (year >= 70 && year <= 99) {
       year += 1900;
-    } else if (year >= 0 && year <= 69) year += 2000;
+    } else if (year >= 0 && year <= 69) {
+      year += 2000;
+    }
     if (year < 1601) error();
 
     final int dayOfMonth = toInt(dayOfMonthStr);

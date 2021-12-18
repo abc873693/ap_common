@@ -1,6 +1,5 @@
+import 'package:ap_common/resources/ap_theme.dart';
 import 'package:flutter/material.dart';
-
-import '../resources/ap_theme.dart';
 
 class DefaultDialog extends StatelessWidget {
   final String title;
@@ -50,7 +49,6 @@ class DefaultDialog extends StatelessWidget {
         ),
       ),
       titlePadding: const EdgeInsets.symmetric(vertical: 16.0),
-      contentPadding: const EdgeInsets.all(0.0),
       content: Column(
         mainAxisSize: MainAxisSize.min,
         crossAxisAlignment: CrossAxisAlignment.start,

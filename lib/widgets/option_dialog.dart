@@ -1,6 +1,5 @@
+import 'package:ap_common/widgets/dialog_option.dart';
 import 'package:flutter/material.dart';
-
-import 'dialog_option.dart';
 
 class SimpleOptionDialog extends StatelessWidget {
   final String title;
@@ -26,7 +25,7 @@ class SimpleOptionDialog extends StatelessWidget {
                 Radius.circular(8),
               ),
             ),
-            contentPadding: const EdgeInsets.all(0.0),
+            contentPadding: EdgeInsets.zero,
             content: SizedBox(
               width: MediaQuery.of(context).size.width * 0.8,
               height: MediaQuery.of(context).size.height * 0.8,

@@ -4,7 +4,7 @@
 
 import 'dart:convert';
 
-import 'course_data.dart' show TimeCode;
+import 'package:ap_common/models/course_data.dart' show TimeCode;
 
 class TimeCodeConfig {
   List<TimeCode>? timeCodes;

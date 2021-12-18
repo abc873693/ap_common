@@ -3,7 +3,6 @@ import 'dart:convert';
 import 'package:ap_common/callback/general_callback.dart';
 import 'package:ap_common/models/announcement_data.dart';
 import 'package:cookie_jar/cookie_jar.dart';
-import 'package:dio/dio.dart';
 import 'package:dio_cookie_manager/dio_cookie_manager.dart';
 
 class GitHubHelper {
@@ -40,11 +39,13 @@ class GitHubHelper {
       final Map<String, List<Announcement>?> map =
           <String, List<Announcement>>{};
       final dynamic json = jsonDecode(response.data!);
-      json.forEach((String key, Map<String, dynamic> data) {
-        if (key != 'data') {
-          map[key] = AnnouncementData.fromJson(data).data;
-        }
-      });
+      if (json is Map<String, Map<String, dynamic>>) {
+        json.forEach((String key, Map<String, dynamic> data) {
+          if (key != 'data') {
+            map[key] = AnnouncementData.fromJson(data).data;
+          }
+        });
+      }
       return callback?.onSuccess(map) as Map<String, List<Announcement>>;
     } on DioError catch (e) {
       if (callback != null) {

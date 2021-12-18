@@ -34,7 +34,7 @@ class AnnouncementData {
 
   void sortAndRandom() {
     final random = Random();
-    for (final i in data ?? []) {
+    for (final Announcement i in data ?? []) {
       i.randomWeight = random.nextInt(1000);
     }
     data?.sort((a, b) {

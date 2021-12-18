@@ -5,7 +5,6 @@ import 'package:ap_common/callback/general_callback.dart';
 import 'package:ap_common/l10n/l10n.dart';
 import 'package:ap_common/models/announcement_data.dart';
 import 'package:ap_common/models/announcement_login_data.dart';
-import 'package:dio/dio.dart';
 
 export 'package:ap_common/callback/general_callback.dart';
 export 'package:ap_common/models/announcement_login_data.dart';
@@ -580,7 +579,9 @@ class AnnouncementHelper {
   }
 
   void handleCrudError(
-      DioError dioError, GeneralCallback<Response<dynamic>> callback) {
+    DioError dioError,
+    GeneralCallback<Response<dynamic>> callback,
+  ) {
     if (dioError.isNotPermission) {
       callback.onError(
         GeneralResponse(

@@ -1,6 +1,4 @@
 import 'package:ap_common/resources/ap_theme.dart';
-import 'package:flutter/cupertino.dart';
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_keyboard_visibility/flutter_keyboard_visibility.dart';
 
@@ -36,8 +34,7 @@ class LoginScaffoldState extends State<LoginScaffold> {
       resizeToAvoidBottomInset: orientation == Orientation.portrait,
       body: AutofillGroup(
         child: KeyboardDismissOnTap(
-          child: Container(
-            alignment: const Alignment(0, 0),
+          child: Padding(
             padding: const EdgeInsets.symmetric(horizontal: 30.0),
             child: orientation == Orientation.portrait
                 ? Column(

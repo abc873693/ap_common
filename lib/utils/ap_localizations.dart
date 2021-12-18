@@ -1,8 +1,7 @@
+import 'package:ap_common/l10n/l10n.dart';
 import 'package:ap_common/resources/ap_icon.dart';
 import 'package:dio/dio.dart';
 import 'package:intl/intl.dart';
-
-import '../l10n/l10n.dart';
 
 export 'package:ap_common/l10n/l10n.dart';
 export 'package:ap_common/models/ap_support_language.dart';

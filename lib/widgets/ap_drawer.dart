@@ -51,7 +51,7 @@ class ApDrawerState extends State<ApDrawer> {
               child: Stack(
                 children: <Widget>[
                   UserAccountsDrawerHeader(
-                    margin: const EdgeInsets.all(0),
+                    margin: EdgeInsets.zero,
                     currentAccountPicture:
                         widget.userInfo?.pictureBytes != null &&
                                 widget.displayPicture

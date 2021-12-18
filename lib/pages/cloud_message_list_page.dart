@@ -1,11 +1,9 @@
-import 'package:ap_common/models/cloud_message.dart';
 import 'package:ap_common/pages/cloud_message_content_page.dart';
 import 'package:ap_common/utils/ap_localizations.dart';
 import 'package:ap_common/utils/ap_utils.dart';
 import 'package:ap_common/utils/cloud_message_utils.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:hive/hive.dart';
 
 class CloudMessageListPage extends StatefulWidget {
   const CloudMessageListPage({Key? key}) : super(key: key);

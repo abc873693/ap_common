@@ -1,9 +1,8 @@
 import 'package:ap_common/resources/ap_icon.dart';
 import 'package:ap_common/resources/ap_theme.dart';
 import 'package:ap_common/utils/analytics_utils.dart';
+import 'package:ap_common/widgets/option_dialog.dart';
 import 'package:flutter/material.dart';
-
-import 'option_dialog.dart';
 
 class ItemPicker extends StatelessWidget {
   final List<String> items;

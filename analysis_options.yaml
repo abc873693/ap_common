@@ -4,6 +4,7 @@ analyzer:
   exclude:
     # l10n generated code
     - lib/l10n/intl/*.dart
+    - lib/l10n/l10n.dart
     # example
     - example/**
 

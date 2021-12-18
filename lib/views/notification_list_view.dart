@@ -163,7 +163,7 @@ class NotificationListViewState extends State<NotificationListView>
   void _scrollListener() {
     if (controller!.position.extentAfter < 500) {
       if (widget.state == NotificationState.finish) {
-        if (widget.onLoadingMore != null) widget.onLoadingMore!();
+        widget.onLoadingMore?.call();
         AnalyticsUtils.instance?.logEvent('notification_load_more');
       }
     }

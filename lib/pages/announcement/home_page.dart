@@ -3,6 +3,7 @@ import 'dart:io';
 import 'package:ap_common/api/announcement_helper.dart';
 import 'package:ap_common/config/ap_constants.dart';
 import 'package:ap_common/models/announcement_data.dart';
+import 'package:ap_common/pages/announcement/edit_page.dart';
 import 'package:ap_common/resources/ap_icon.dart';
 import 'package:ap_common/resources/ap_theme.dart';
 import 'package:ap_common/scaffold/login_scaffold.dart';
@@ -13,15 +14,12 @@ import 'package:ap_common/utils/preferences.dart';
 import 'package:ap_common/widgets/hint_content.dart';
 import 'package:ap_common/widgets/progress_dialog.dart';
 import 'package:ap_common/widgets/yes_no_dialog.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:sign_in_with_apple/sign_in_with_apple.dart';
 import 'package:sprintf/sprintf.dart';
-
-import 'edit_page.dart';
 
 enum _State { notLogin, loading, done, error }
 enum _DataType { announcement, application }
@@ -118,7 +116,9 @@ class _AnnouncementHomePageState extends State<AnnouncementHomePage> {
                   onlyShowNotReview = !onlyShowNotReview!;
                 });
                 Preferences.setBool(
-                    ApConstants.announcementOnlyNotReview, onlyShowNotReview!);
+                  ApConstants.announcementOnlyNotReview,
+                  onlyShowNotReview!,
+                );
               },
               child: Row(
                 children: <Widget>[
@@ -128,8 +128,10 @@ class _AnnouncementHomePageState extends State<AnnouncementHomePage> {
                       setState(() {
                         onlyShowNotReview = value;
                       });
-                      Preferences.setBool(ApConstants.announcementOnlyNotReview,
-                          onlyShowNotReview!);
+                      Preferences.setBool(
+                        ApConstants.announcementOnlyNotReview,
+                        onlyShowNotReview!,
+                      );
                     },
                     activeColor: ApTheme.of(context).yellow,
                     checkColor: ApTheme.of(context).blue,
@@ -218,7 +220,9 @@ class _AnnouncementHomePageState extends State<AnnouncementHomePage> {
                       SelectableText.rich(
                         TextSpan(
                           style: TextStyle(
-                              color: ApTheme.of(context).grey, fontSize: 16.0),
+                            color: ApTheme.of(context).grey,
+                            fontSize: 16.0,
+                          ),
                           children: <TextSpan>[
                             TextSpan(
                               text: '${sprintf(
@@ -228,7 +232,8 @@ class _AnnouncementHomePageState extends State<AnnouncementHomePage> {
                                 ],
                               )}\n',
                               style: const TextStyle(
-                                  fontWeight: FontWeight.normal),
+                                fontWeight: FontWeight.normal,
+                              ),
                             ),
                             TextSpan(
                               text: ap.newsRuleDescription2,
@@ -238,7 +243,8 @@ class _AnnouncementHomePageState extends State<AnnouncementHomePage> {
                             TextSpan(
                               text: ap.newsRuleDescription3,
                               style: const TextStyle(
-                                  fontWeight: FontWeight.normal),
+                                fontWeight: FontWeight.normal,
+                              ),
                             ),
                           ],
                         ),
@@ -459,7 +465,9 @@ class _AnnouncementHomePageState extends State<AnnouncementHomePage> {
                                     context,
                                     (_) {
                                       ApUtils.showToast(
-                                          context, ap.updateSuccess);
+                                        context,
+                                        ap.updateSuccess,
+                                      );
                                       _reviewDescription.text = '';
                                       _getAnnouncements();
                                     },
@@ -511,7 +519,9 @@ class _AnnouncementHomePageState extends State<AnnouncementHomePage> {
                                     context,
                                     (_) {
                                       ApUtils.showToast(
-                                          context, ap.updateSuccess);
+                                        context,
+                                        ap.updateSuccess,
+                                      );
                                       _reviewDescription.text = '';
                                       _getAnnouncements();
                                       _getApplications();
@@ -666,10 +676,12 @@ class _AnnouncementHomePageState extends State<AnnouncementHomePage> {
       setState(() => state = _State.done);
       loginData = AnnouncementLoginData.load();
       if (kDebugMode) {
-        debugPrint('token is expire = '
-            '${loginData?.isExpired} '
-            'level = ${loginData!.level} '
-            'token = ${loginData!.key}');
+        debugPrint(
+          'token is expire = '
+          '${loginData?.isExpired} '
+          'level = ${loginData!.level} '
+          'token = ${loginData!.key}',
+        );
       }
       if (loginData?.isExpired ?? true) {
         final int index =
@@ -709,7 +721,9 @@ class _AnnouncementHomePageState extends State<AnnouncementHomePage> {
         );
       }
       String? idToken = Preferences.getBool(
-              ApConstants.announcementIsLogin, false)
+        ApConstants.announcementIsLogin,
+        false,
+      )
           ? Preferences.getStringSecurity(ApConstants.announcementIdToken, null)
           : null;
 
@@ -736,15 +750,21 @@ class _AnnouncementHomePageState extends State<AnnouncementHomePage> {
           if (isNotLogin) Navigator.of(context, rootNavigator: true).pop();
           if (loginType == AnnouncementLoginType.normal) {
             Preferences.setStringSecurity(
-                ApConstants.announcementPassword, _password.text);
+              ApConstants.announcementPassword,
+              _password.text,
+            );
           } else {
             Preferences.setStringSecurity(
-                ApConstants.announcementIdToken, idToken!);
+              ApConstants.announcementIdToken,
+              idToken!,
+            );
           }
           ApUtils.showToast(context, ap.loginSuccess);
           Preferences.setBool(ApConstants.announcementIsLogin, true);
           Preferences.setInt(
-              ApConstants.announcementLoginType, loginType.index);
+            ApConstants.announcementLoginType,
+            loginType.index,
+          );
           setState(() {
             if (loginData.level != PermissionLevel.user) _getAnnouncements();
             _getApplications();
@@ -755,7 +775,9 @@ class _AnnouncementHomePageState extends State<AnnouncementHomePage> {
       switch (loginType) {
         case AnnouncementLoginType.normal:
           Preferences.setString(
-              ApConstants.announcementUsername, _username.text);
+            ApConstants.announcementUsername,
+            _username.text,
+          );
           AnnouncementHelper.instance.login(
             username: _username.text,
             password: _password.text,
@@ -775,6 +797,7 @@ class _AnnouncementHomePageState extends State<AnnouncementHomePage> {
               AnnouncementHelper.instance
                   .googleLogin(idToken: idToken, callback: callback);
             } else if (isNotLogin) {
+              if (!mounted) return;
               Navigator.of(context, rootNavigator: true).pop();
             }
           } catch (e, s) {

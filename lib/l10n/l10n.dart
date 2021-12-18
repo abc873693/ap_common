@@ -19,7 +19,7 @@ class ApLocalizations {
 
   static ApLocalizations get current {
     assert(_current != null,
-        'No instance of ApLocalizations was loaded. Try to initialize the ApLocalizations delegate before accessing ApLocalizations.current.');
+        'No instance of ApLocalizations was loaded. Try to initialize the ApLocalizations delegate before accessing ApLocalizations.current.',);
     return _current!;
   }
 
@@ -3753,8 +3753,10 @@ class AppLocalizationDelegate extends LocalizationsDelegate<ApLocalizations> {
 
   @override
   bool isSupported(Locale locale) => _isSupported(locale);
+
   @override
   Future<ApLocalizations> load(Locale locale) => ApLocalizations.load(locale);
+
   @override
   bool shouldReload(AppLocalizationDelegate old) => false;
 

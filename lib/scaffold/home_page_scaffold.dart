@@ -10,7 +10,6 @@ import 'package:ap_common/utils/ap_localizations.dart';
 import 'package:ap_common/widgets/ap_network_image.dart';
 import 'package:ap_common/widgets/hint_content.dart';
 import 'package:ap_common/widgets/yes_no_dialog.dart';
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
@@ -177,7 +176,7 @@ class HomePageScaffoldState extends State<HomePageScaffold> {
   ) {
     return GestureDetector(
       onTap: () {
-        if (widget.onImageTapped != null) widget.onImageTapped!(announcement);
+        widget.onImageTapped?.call(announcement);
         AnalyticsUtils.instance?.logEvent('announcement_image_click');
       },
       onTapDown: (detail) {
@@ -239,9 +238,10 @@ class HomePageScaffoldState extends State<HomePageScaffold> {
                   widget.announcements[_currentNewsIndex].title!,
                   textAlign: TextAlign.center,
                   style: TextStyle(
-                      fontSize: 20.0,
-                      color: ApTheme.of(context).grey,
-                      fontWeight: FontWeight.w500),
+                    fontSize: 20.0,
+                    color: ApTheme.of(context).grey,
+                    fontWeight: FontWeight.w500,
+                  ),
                 ),
               ),
             ),
@@ -271,11 +271,12 @@ class HomePageScaffoldState extends State<HomePageScaffold> {
                     TextStyle(color: ApTheme.of(context).grey, fontSize: 24.0),
                 children: [
                   TextSpan(
-                      text:
-                          // ignore: lines_longer_than_80_chars
-                          '${widget.announcements.length >= 10 && _currentNewsIndex < 9 ? '0' : ''}'
-                          '${_currentNewsIndex + 1}',
-                      style: TextStyle(color: ApTheme.of(context).red)),
+                    text:
+                        // ignore: lines_longer_than_80_chars
+                        '${widget.announcements.length >= 10 && _currentNewsIndex < 9 ? '0' : ''}'
+                        '${_currentNewsIndex + 1}',
+                    style: TextStyle(color: ApTheme.of(context).red),
+                  ),
                   TextSpan(text: ' / ${widget.announcements.length}'),
                 ],
               ),

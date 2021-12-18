@@ -193,7 +193,7 @@ class ScoreScaffoldState extends State<ScoreScaffold> {
         ),
       );
     }
-    if (widget.onSearchButtonClick != null) widget.onSearchButtonClick!();
+    widget.onSearchButtonClick?.call();
   }
 }
 

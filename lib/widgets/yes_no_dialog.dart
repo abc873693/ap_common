@@ -1,7 +1,6 @@
 import 'package:ap_common/l10n/l10n.dart';
+import 'package:ap_common/resources/ap_theme.dart';
 import 'package:flutter/material.dart';
-
-import '../resources/ap_theme.dart';
 
 class YesNoDialog extends StatelessWidget {
   final String? title;
@@ -9,8 +8,8 @@ class YesNoDialog extends StatelessWidget {
   final EdgeInsetsGeometry? contentWidgetPadding;
   final String? leftActionText;
   final String? rightActionText;
-  final Function? leftActionFunction;
-  final Function? rightActionFunction;
+  final VoidCallback? leftActionFunction;
+  final VoidCallback? rightActionFunction;
 
   const YesNoDialog({
     Key? key,
@@ -54,7 +53,6 @@ class YesNoDialog extends StatelessWidget {
         ),
       ),
       titlePadding: const EdgeInsets.symmetric(vertical: 16.0),
-      contentPadding: const EdgeInsets.all(0.0),
       content: Column(
         mainAxisSize: MainAxisSize.min,
         crossAxisAlignment: CrossAxisAlignment.start,

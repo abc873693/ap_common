@@ -1,8 +1,7 @@
+import 'package:ap_common/resources/ap_colors.dart';
 import 'package:ap_common/resources/resources.dart';
 import 'package:cupertino_back_gesture/cupertino_back_gesture.dart';
 import 'package:flutter/material.dart';
-
-import 'ap_colors.dart';
 
 export 'package:cupertino_back_gesture/cupertino_back_gesture.dart';
 
