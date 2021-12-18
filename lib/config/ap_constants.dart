@@ -19,8 +19,7 @@ class ApConstants {
 
   static const semesterLatest = 'latest';
   static const currentSemesterCode = 'ap_common.current_semester_code';
-  static const showCourseSearchButton =
-      'ap_common.show_course_search_button';
+  static const showCourseSearchButton = 'ap_common.show_course_search_button';
   static const showSectionTime = 'ap_common.show_section_time';
   static const showInstructors = 'ap_common.show_instructors';
   static const showClassroomLocation = 'ap_common.show_classroom_location';

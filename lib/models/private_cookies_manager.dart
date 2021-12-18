@@ -185,19 +185,30 @@ class _Cookie implements Cookie {
   @override
   String toString() {
     final StringBuffer sb = StringBuffer();
-    sb..write(_name)..write('=')..write(_value);
+    sb
+      ..write(_name)
+      ..write('=')
+      ..write(_value);
     final expires = this.expires;
     if (expires != null) {
-      sb..write('; Expires=')..write(HttpDate.format(expires));
+      sb
+        ..write('; Expires=')
+        ..write(HttpDate.format(expires));
     }
     if (maxAge != null) {
-      sb..write('; Max-Age=')..write(maxAge);
+      sb
+        ..write('; Max-Age=')
+        ..write(maxAge);
     }
     if (domain != null) {
-      sb..write('; Domain=')..write(domain);
+      sb
+        ..write('; Domain=')
+        ..write(domain);
     }
     if (path != null) {
-      sb..write('; Path=')..write(path);
+      sb
+        ..write('; Path=')
+        ..write(path);
     }
     if (secure) sb.write('; Secure');
     if (httpOnly) sb.write('; HttpOnly');

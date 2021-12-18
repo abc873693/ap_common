@@ -9,8 +9,11 @@ class ApImageAssets {
       'packages/ap_common/assets/images/drawer_background_light.webp';
   static const String drawerBackgroundDark =
       'packages/ap_common/assets/images/drawer_background_dark.webp';
-  static const String nkutstItc = 'packages/ap_common/assets/images/nkutst_itc.webp';
+  static const String nkutstItc =
+      'packages/ap_common/assets/images/nkutst_itc.webp';
   static const String fb = 'packages/ap_common/assets/images/fb.webp';
-  static const String dashLineDark = 'packages/ap_common/assets/images/dash_line_dark.webp';
-  static const String dashLineLight = 'packages/ap_common/assets/images/dash_line_light.webp';
+  static const String dashLineDark =
+      'packages/ap_common/assets/images/dash_line_dark.webp';
+  static const String dashLineLight =
+      'packages/ap_common/assets/images/dash_line_light.webp';
 }
