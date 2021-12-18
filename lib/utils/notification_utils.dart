@@ -88,7 +88,7 @@ class NotificationUtils {
       android: AndroidNotificationDetails(
         androidChannelId,
         androidChannelDescription,
-        androidChannelDescription,
+        channelDescription: androidChannelDescription,
         icon: androidResourceIcon,
         importance: Importance.max,
         enableVibration: enableVibration,
@@ -165,7 +165,7 @@ class NotificationUtils {
       android: AndroidNotificationDetails(
         androidChannelId,
         androidChannelDescription,
-        androidChannelDescription,
+        channelDescription: androidChannelDescription,
         icon: androidResourceIcon,
         importance: Importance.max,
         enableVibration: false,
@@ -215,7 +215,7 @@ class NotificationUtils {
       android: AndroidNotificationDetails(
         androidChannelId,
         androidChannelDescription,
-        androidChannelDescription,
+        channelDescription: androidChannelDescription,
         icon: androidResourceIcon,
         importance: Importance.max,
         enableVibration: false,
