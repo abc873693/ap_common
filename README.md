@@ -1,6 +1,6 @@
 # 校務通系列介面與函式共用
 
-[![](https://img.shields.io/badge/Flutter-v2.5.1-blue)](https://github.com/flutter/flutter)
+[![](https://img.shields.io/badge/Flutter-v2.8.1-blue)](https://github.com/flutter/flutter)
 [![](https://img.shields.io/pub/v/ap_common.svg?style=flat-square)](https://pub.dev/packages/ap_common/)
 
 長期校務通相關系列的app，介面與相關功能都極為相似，將相關的介面與函式庫，製作此套件以方便維護。
@@ -25,7 +25,7 @@
     # 官方多國語套件
     flutter_localizations:
         sdk: flutter
-    ap_common: ^0.19.1
+    ap_common: ^0.19.2
 ```
 
 執行加入套件
