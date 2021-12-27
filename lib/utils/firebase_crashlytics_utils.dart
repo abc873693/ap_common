@@ -1,8 +1,8 @@
 import 'dart:async';
 import 'dart:io';
 
-import 'package:ap_common_firebase/utils/firebase_utils.dart';
 import 'package:ap_common/utils/crashlytics_utils.dart';
+import 'package:ap_common_firebase/utils/firebase_utils.dart';
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
@@ -46,5 +46,15 @@ class FirebaseCrashlyticsUtils extends CrashlyticsUtils {
       information: information,
       printDetails: printDetails,
     );
+  }
+
+  @override
+  Future<void> setCustomKey(String key, Object value) async {
+    await crashlytics?.setCustomKey(key, value);
+  }
+
+  @override
+  Future<void> setCrashlyticsCollectionEnabled(bool enabled) async {
+    await crashlytics?.setCrashlyticsCollectionEnabled(enabled);
   }
 }
