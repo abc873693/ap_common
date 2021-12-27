@@ -1,3 +1,3 @@
 ### 基於 Flutter v2.8.1 開發
 
-* 更新套件至最新版本
+* 修正 `LoginScaffold` UI
