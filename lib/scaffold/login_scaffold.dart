@@ -37,11 +37,13 @@ class LoginScaffoldState extends State<LoginScaffold> {
           child: Padding(
             padding: const EdgeInsets.symmetric(horizontal: 30.0),
             child: orientation == Orientation.portrait
-                ? Column(
-                    crossAxisAlignment: CrossAxisAlignment.stretch,
-                    mainAxisAlignment: MainAxisAlignment.spaceAround,
-                    mainAxisSize: MainAxisSize.min,
-                    children: _renderContent(orientation),
+                ? Center(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.stretch,
+                      mainAxisAlignment: MainAxisAlignment.spaceAround,
+                      mainAxisSize: MainAxisSize.min,
+                      children: _renderContent(orientation),
+                    ),
                   )
                 : Row(
                     mainAxisAlignment: MainAxisAlignment.center,
