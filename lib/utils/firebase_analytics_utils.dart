@@ -4,8 +4,8 @@ import 'dart:io';
 import 'package:ap_common/config/analytics_constants.dart';
 import 'package:ap_common/models/user_info.dart';
 import 'package:ap_common/resources/ap_theme.dart';
-import 'package:firebase_analytics/firebase_analytics.dart';
 import 'package:ap_common/utils/analytics_utils.dart';
+import 'package:firebase_analytics/firebase_analytics.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
@@ -24,7 +24,7 @@ class FirebaseAnalyticsUtils extends AnalyticsUtils {
   }
 
   FirebaseAnalyticsUtils() {
-    if (isSupported) analytics = FirebaseAnalytics();
+    if (isSupported) analytics = FirebaseAnalytics.instance;
   }
 
   FirebaseAnalytics? analytics;
@@ -40,7 +40,7 @@ class FirebaseAnalyticsUtils extends AnalyticsUtils {
   }
 
   Future<void> setUserId(String id) async {
-    await analytics?.setUserId(id);
+    await analytics?.setUserId(id: id);
     debugPrint('setUserId succeeded');
   }
 
@@ -86,7 +86,7 @@ class FirebaseAnalyticsUtils extends AnalyticsUtils {
       );
     }
     if (userInfo.id != null && userInfo.id!.isNotEmpty) {
-      await analytics?.setUserId(userInfo.id);
+      await analytics?.setUserId(id: userInfo.id);
       FirebaseAnalyticsUtils.instance.setUserProperty(
         AnalyticsConstants.studentId,
         userInfo.id,
