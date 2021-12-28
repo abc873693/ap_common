@@ -53,6 +53,7 @@ class YesNoDialog extends StatelessWidget {
         ),
       ),
       titlePadding: const EdgeInsets.symmetric(vertical: 16.0),
+      contentPadding: EdgeInsets.zero,
       content: Column(
         mainAxisSize: MainAxisSize.min,
         crossAxisAlignment: CrossAxisAlignment.start,
