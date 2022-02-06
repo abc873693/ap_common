@@ -352,7 +352,7 @@ packages:
     source: hosted
     version: "0.8.1+2"
   file_selector_windows:
-    dependency: "direct main"
+    dependency: transitive
     description:
       name: file_selector_windows
       url: "https://pub.dartlang.org"
