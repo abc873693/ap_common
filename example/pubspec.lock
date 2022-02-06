@@ -14,7 +14,7 @@ packages:
       path: ".."
       relative: true
     source: path
-    version: "0.19.3"
+    version: "0.19.4"
   ap_common_plugin:
     dependency: "direct main"
     description:
@@ -224,7 +224,7 @@ packages:
       name: file_selector
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "0.8.2"
+    version: "0.8.3"
   file_selector_linux:
     dependency: transitive
     description:
@@ -245,7 +245,7 @@ packages:
       name: file_selector_platform_interface
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "2.0.2"
+    version: "2.0.4"
   file_selector_web:
     dependency: transitive
     description:
@@ -259,7 +259,7 @@ packages:
       name: file_selector_windows
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "0.0.2+1"
+    version: "0.8.2"
   flutter:
     dependency: "direct main"
     description: flutter
@@ -680,7 +680,7 @@ packages:
       name: plugin_platform_interface
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "2.0.0"
+    version: "2.1.2"
   pointycastle:
     dependency: transitive
     description:
