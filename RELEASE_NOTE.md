@@ -1,1 +1,1 @@
-* 遷移至 Null-Safety
+* 修正 Android 12 export 錯誤
