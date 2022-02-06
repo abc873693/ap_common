@@ -4,9 +4,9 @@ import 'dart:typed_data';
 import 'package:ap_common/resources/ap_theme.dart';
 import 'package:ap_common/utils/ap_localizations.dart';
 import 'package:ap_common/utils/crashlytics_utils.dart';
+import 'package:ap_common/utils/file_saver_web.dart';
 import 'package:ap_common/utils/toast.dart';
 import 'package:ap_common/widgets/yes_no_dialog.dart';
-import 'package:file_saver/file_saver.dart';
 import 'package:file_selector/file_selector.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
@@ -259,10 +259,10 @@ class ApUtils {
         final String filePath = path.join(downloadDir, '$fileName.png');
         bool success = true;
         if (kIsWeb) {
-          await FileSaver.instance.saveFile(
-            fileName,
+          await FileSaverWeb().downloadFile(
             pngBytes,
-            'png',
+            fileName,
+            'image/png',
           );
         } else if (Platform.isAndroid || Platform.isIOS) {
           final AssetEntity? imageEntity = await PhotoManager.editor.saveImage(

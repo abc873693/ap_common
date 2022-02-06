@@ -49,7 +49,6 @@ dependencies:
   app_tracking_transparency: ^2.0.2
   hive: ^2.0.4
   hive_flutter: ^1.0.0
-  file_saver: ^0.0.10
 
 dev_dependencies:
   flutter_test:

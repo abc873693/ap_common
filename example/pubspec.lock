@@ -218,13 +218,6 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "6.1.0"
-  file_saver:
-    dependency: transitive
-    description:
-      name: file_saver
-      url: "https://pub.dartlang.org"
-    source: hosted
-    version: "0.0.10"
   file_selector:
     dependency: transitive
     description:
