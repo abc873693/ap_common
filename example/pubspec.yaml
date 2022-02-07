@@ -23,7 +23,7 @@ dependencies:
   ap_common:
       path: ../
 
-  ap_common_plugin: 0.2.2
+  ap_common_plugin: 0.3.1
 #    path: ../../../GitHub/ap_common_plugin
 
 dev_dependencies:
