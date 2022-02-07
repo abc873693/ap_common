@@ -1,3 +1,3 @@
-### 基於 Flutter v2.8.1 開發
+### 基於 Flutter v2.10.0 開發
 
-* 修正對話間距 UI
+* 移除不支援 android embedding v2 的套件
