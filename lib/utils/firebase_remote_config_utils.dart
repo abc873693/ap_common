@@ -16,16 +16,16 @@ class FirebaseRemoteConfigUtils {
   }
 
   FirebaseRemoteConfigUtils() {
-    if (isSupported) remoteConfig = RemoteConfig.instance;
+    if (isSupported) remoteConfig = FirebaseRemoteConfig.instance;
   }
 
-  RemoteConfig? remoteConfig;
+  FirebaseRemoteConfig? remoteConfig;
 
   static bool get isSupported =>
       !kIsWeb && (Platform.isAndroid || Platform.isIOS || Platform.isMacOS);
 }
 
-extension RemoteConfigExtension on RemoteConfig {
+extension RemoteConfigExtension on FirebaseRemoteConfig {
   VersionInfo get versionInfo => VersionInfo(
         code: getInt(ApConstants.appVersion),
         isForceUpdate: getBool(ApConstants.isForceUpdate),
