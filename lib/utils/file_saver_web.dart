@@ -1,10 +1,11 @@
 import 'dart:async';
+import 'dart:typed_data';
+
 // In order to *not* need this ignore, consider extracting the "web" version
 // of your plugin as a separate package, instead of inlining it in the same
 // package as the core of your plugin.
 // ignore: avoid_web_libraries_in_flutter
-import 'dart:html';
-import 'dart:typed_data';
+import 'package:universal_html/html.dart';
 
 /// Reference: https://github.com/incrediblezayed/file_saver/blob/main/lib/file_saver_web.dart
 /// A web implementation of the FileSaver plugin.
