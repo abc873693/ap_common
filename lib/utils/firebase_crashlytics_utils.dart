@@ -5,7 +5,6 @@ import 'package:ap_common/utils/crashlytics_utils.dart';
 import 'package:ap_common_firebase/utils/firebase_utils.dart';
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:flutter/foundation.dart';
-import 'package:flutter/material.dart';
 
 export 'package:firebase_crashlytics/firebase_crashlytics.dart';
 
