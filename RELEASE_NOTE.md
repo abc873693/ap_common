@@ -1,3 +1,3 @@
-### 基於 Flutter v2.10.0 開發
+### 基於 Flutter v2.10.2 開發
 
-* 移除不支援 android embedding v2 的套件
+* 支援 ApTextField Widget Keys
