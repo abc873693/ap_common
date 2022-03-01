@@ -254,6 +254,7 @@ class ApTextField extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return TextField(
+      key: key,
       obscureText: obscureText,
       controller: controller,
       focusNode: focusNode,
