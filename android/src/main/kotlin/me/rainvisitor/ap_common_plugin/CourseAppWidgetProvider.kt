@@ -6,6 +6,7 @@ import android.appwidget.AppWidgetProvider
 import android.content.ComponentName
 import android.content.Context
 import android.content.Intent
+import android.os.Build
 import android.util.Log
 import android.widget.RemoteViews
 import org.json.JSONObject
@@ -31,7 +32,11 @@ class CourseAppWidgetProvider : AppWidgetProvider() {
     private fun getPendingSelfIntent(context: Context, action: String): PendingIntent? {
         val intent = Intent(context, javaClass) // An intent directed at the current class (the "self").
         intent.action = action
-        return PendingIntent.getBroadcast(context, 0, intent, 0)
+        return PendingIntent.getBroadcast(context, 0, intent, if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
+            PendingIntent.FLAG_MUTABLE
+        } else {
+            PendingIntent.FLAG_UPDATE_CURRENT
+        })
     }
 
     override fun onUpdate(
@@ -51,7 +56,11 @@ class CourseAppWidgetProvider : AppWidgetProvider() {
         val packageName: String = context.packageName
         val pendingIntent: PendingIntent = context.packageManager.getLaunchIntentForPackage(packageName)
                 .let { intent ->
-                    PendingIntent.getActivity(context, 0, intent, 0)
+                    PendingIntent.getActivity(context, 0, intent, if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
+                        PendingIntent.FLAG_MUTABLE
+                    } else {
+                        PendingIntent.FLAG_UPDATE_CURRENT
+                    })
                 }
         return RemoteViews(
                 context.packageName,
