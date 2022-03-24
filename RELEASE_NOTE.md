@@ -1,1 +1,1 @@
-* 修正 Android 12 export 錯誤
+* 修正小工具 Android 12 錯誤
