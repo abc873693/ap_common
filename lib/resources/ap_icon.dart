@@ -81,7 +81,7 @@ class ApIcon {
         return Icons.class_;
       case ApIcon.outlined:
       default:
-        return Icons.class__outlined;
+        return Icons.class_outlined;
     }
   }
 
