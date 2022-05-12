@@ -11,4 +11,4 @@ PRODUCT_NAME = ap_common_example
 PRODUCT_BUNDLE_IDENTIFIER = me.rainvisitor.apCommonExample
 
 // The copyright displayed in application information
-PRODUCT_COPYRIGHT = Copyright © 2020 me.rainvisitor. All rights reserved.
+PRODUCT_COPYRIGHT = Copyright © 2022 me.rainvisitor. All rights reserved.
