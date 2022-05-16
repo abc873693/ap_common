@@ -242,11 +242,11 @@ class ApUtils {
   ) async {
     final ApLocalizations ap = ApLocalizations.of(context);
     try {
-      bool hasGrantPermission = true;
+      PermissionState hasGrantPermission = PermissionState.notDetermined;
       if (!kIsWeb && (Platform.isAndroid || Platform.isIOS)) {
-        hasGrantPermission = await PhotoManager.requestPermission();
+        hasGrantPermission = await PhotoManager.requestPermissionExtend();
       }
-      if (hasGrantPermission) {
+      if (hasGrantPermission == PermissionState.authorized) {
         final Uint8List pngBytes = byteData.buffer.asUint8List();
         String downloadDir = '';
         if (kIsWeb) {
