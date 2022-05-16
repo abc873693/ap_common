@@ -4,13 +4,13 @@ import 'dart:io';
 import 'package:ap_common/models/version_info.dart';
 import 'package:ap_common/resources/ap_theme.dart';
 import 'package:ap_common/utils/ap_localizations.dart';
+import 'package:ap_common/utils/ap_utils.dart';
 import 'package:ap_common/widgets/default_dialog.dart';
 import 'package:ap_common/widgets/yes_no_dialog.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:package_info_plus/package_info_plus.dart';
 import 'package:sprintf/sprintf.dart';
-import 'package:url_launcher/url_launcher.dart';
 
 class DialogUtils {
   static void showDefault({
@@ -176,7 +176,7 @@ class DialogUtils {
               title: app.updateTitle,
               actionText: app.update,
               contentWidget: contentWidget,
-              actionFunction: () => launch(url),
+              actionFunction: () => ApUtils.launchUrl(url),
             ),
           ),
         );
@@ -188,7 +188,7 @@ class DialogUtils {
             contentWidget: contentWidget,
             leftActionText: app.skip,
             rightActionText: app.update,
-            rightActionFunction: () => launch(url),
+            rightActionFunction: () => ApUtils.launchUrl(url),
           ),
         );
       }

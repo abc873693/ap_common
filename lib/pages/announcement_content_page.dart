@@ -11,7 +11,6 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_linkify/flutter_linkify.dart';
 import 'package:photo_view/photo_view.dart';
-import 'package:url_launcher/url_launcher.dart';
 
 enum _Status { loading, finish, error, empty }
 
@@ -176,7 +175,7 @@ class AnnouncementContentPageState extends State<AnnouncementContentPage> {
             primary: ApTheme.of(context).yellow,
           ),
           onPressed: () {
-            launch(widget.announcement.url!);
+            ApUtils.launchUrl(widget.announcement.url!);
             AnalyticsUtils.instance?.logEvent('announcement_link_click');
           },
           child: Icon(

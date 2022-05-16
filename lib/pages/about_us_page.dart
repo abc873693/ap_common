@@ -9,7 +9,6 @@ import 'package:ap_common/utils/ap_utils.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_linkify/flutter_linkify.dart';
-import 'package:url_launcher/url_launcher.dart';
 
 class AboutUsPage extends StatefulWidget {
   /// /about
@@ -162,21 +161,26 @@ class AboutUsPageState extends State<AboutUsPage> {
                                 icon: Image.asset(ApImageAssets.fb),
                                 onPressed: () {
                                   if (kIsWeb) {
-                                    launch(widget.fbFanPageUrl);
+                                    ApUtils.launchUrl(widget.fbFanPageUrl);
                                   } else if (Platform.isAndroid) {
-                                    launch('fb://page/${widget.fbFanPageId}')
-                                        .catchError(
-                                      (dynamic onError) =>
-                                          launch(widget.fbFanPageUrl),
+                                    ApUtils.launchUrl(
+                                      'fb://page/${widget.fbFanPageId}',
+                                    ).catchError(
+                                      (dynamic onError) => ApUtils.launchUrl(
+                                        widget.fbFanPageUrl,
+                                      ),
                                     );
                                   } else if (Platform.isIOS) {
-                                    launch('fb://profile/${widget.fbFanPageId}')
-                                        .catchError(
-                                      (dynamic onError) =>
-                                          launch(widget.fbFanPageUrl),
+                                    ApUtils.launchUrl(
+                                      'fb://profile/${widget.fbFanPageId}',
+                                    ).catchError(
+                                      (dynamic onError) => ApUtils.launchUrl(
+                                        widget.fbFanPageUrl,
+                                      ),
                                     );
                                   } else {
-                                    launch(widget.fbFanPageUrl).catchError(
+                                    ApUtils.launchUrl(widget.fbFanPageUrl)
+                                        .catchError(
                                       (dynamic onError) {
                                         ApUtils.showToast(
                                           context,
@@ -193,18 +197,21 @@ class AboutUsPageState extends State<AboutUsPage> {
                                 icon: Image.asset(ApImageAssets.github),
                                 onPressed: () {
                                   if (kIsWeb) {
-                                    launch(widget.githubUrl);
+                                    ApUtils.launchUrl(widget.githubUrl);
                                   } else if (Platform.isAndroid) {
-                                    launch('github://organization/${widget.githubName}')
+                                    ApUtils.launchUrl(
+                                      'github://organization/${widget.githubName}',
+                                    )
                                         // ignore: always_specify_types
                                         .catchError(
                                       (dynamic onError) =>
-                                          launch(widget.githubUrl),
+                                          ApUtils.launchUrl(widget.githubUrl),
                                     );
                                   } else if (Platform.isIOS) {
-                                    launch(widget.githubUrl);
+                                    ApUtils.launchUrl(widget.githubUrl);
                                   } else {
-                                    launch(widget.githubUrl).catchError(
+                                    ApUtils.launchUrl(widget.githubUrl)
+                                        .catchError(
                                       (dynamic onError) {
                                         ApUtils.showToast(
                                           context,
@@ -221,7 +228,8 @@ class AboutUsPageState extends State<AboutUsPage> {
                               IconButton(
                                 icon: Image.asset(ApImageAssets.email),
                                 onPressed: () {
-                                  launch('mailto:${widget.email}').catchError(
+                                  ApUtils.launchUrl('mailto:${widget.email}')
+                                      .catchError(
                                     (dynamic onError) {
                                       ApUtils.showToast(
                                         context,

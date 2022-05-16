@@ -17,7 +17,7 @@ import 'package:path/path.dart' as path;
 import 'package:path_provider/path_provider.dart';
 import 'package:photo_manager/photo_manager.dart';
 import 'package:share_plus/share_plus.dart';
-import 'package:url_launcher/url_launcher.dart';
+import 'package:url_launcher/url_launcher.dart' as url_launcher;
 
 export 'package:dio/dio.dart';
 export 'package:image_picker/image_picker.dart';
@@ -61,7 +61,7 @@ class ApUtils {
   }
 
   static Future<void> launchUrl(String url) async {
-    await launch(url);
+    await url_launcher.launchUrl(Uri.parse(url));
   }
 
   static Future<void> callPhone(String url) async {
@@ -71,7 +71,7 @@ class ApUtils {
     newUrl = newUrl.replaceAll('-', '');
     newUrl = newUrl.replaceAll(' ', '');
     newUrl = 'tel:$newUrl';
-    await launch(newUrl);
+    await url_launcher.launchUrl(Uri.parse(newUrl));
   }
 
   static Future<void> shareTo(String content) async {
