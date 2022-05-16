@@ -12,6 +12,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_keyboard_visibility/flutter_keyboard_visibility.dart';
 
 enum _ImgurUploadState { noFile, uploading, done }
+
 enum Mode { add, edit, application, editApplication }
 
 extension ParseDateTimes on DateTime {
@@ -289,7 +290,7 @@ class _AnnouncementEditPageState extends State<AnnouncementEditPage> {
                     primary: ApTheme.of(context).blueAccent,
                   ),
                   onPressed: () async {
-                    final PickedFile? image = await ApUtils.pickImage();
+                    final XFile? image = await ApUtils.pickImage();
                     if (image != null) {
                       setState(
                         () => imgurUploadState = _ImgurUploadState.uploading,

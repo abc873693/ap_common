@@ -30,7 +30,7 @@ class ImgurHelper {
   }
 
   Future<ImgurUploadData?> uploadImageToImgur({
-    required PickedFile file,
+    required XFile file,
     GeneralCallback<ImgurUploadData?>? callback,
   }) async {
     try {

@@ -209,15 +209,15 @@ class ApUtils {
     }
   }
 
-  static Future<PickedFile?> pickImage({
+  static Future<XFile?> pickImage({
     ImageSource? imageSource,
     CameraDevice? preferredCameraDevice,
     List<String>? extensions,
   }) async {
-    PickedFile? image;
+    XFile? image;
     if (kIsWeb || Platform.isAndroid || Platform.isIOS) {
       final ImagePicker imagePicker = ImagePicker();
-      image = await imagePicker.getImage(
+      image = await imagePicker.pickImage(
         source: imageSource ?? ImageSource.gallery,
         preferredCameraDevice: preferredCameraDevice ?? CameraDevice.rear,
       );
@@ -226,10 +226,9 @@ class ApUtils {
         label: 'images',
         extensions: extensions ?? <String>['jpg', 'jpeg'],
       );
-      final XFile? file = await openFile(
+      image = await openFile(
         acceptedTypeGroups: <XTypeGroup>[typeGroup],
       );
-      if (file != null) image = PickedFile(file.path);
     }
     return image;
   }
