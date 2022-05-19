@@ -300,7 +300,6 @@ class ApTheme extends InheritedWidget {
           color: ApColors.blue500,
         ),
         pageTransitionsTheme: _pageTransitionsTheme,
-        accentColor: ApColors.blue500,
         unselectedWidgetColor: ApColors.grey500,
         backgroundColor: Colors.black12,
         textSelectionTheme: const TextSelectionThemeData(
@@ -323,7 +322,6 @@ class ApTheme extends InheritedWidget {
           color: ApColors.blueDark,
         ),
         scaffoldBackgroundColor: ApColors.onyx,
-        accentColor: ApColors.blue300,
         unselectedWidgetColor: ApColors.grey200,
         backgroundColor: Colors.black12,
         textSelectionTheme: const TextSelectionThemeData(
