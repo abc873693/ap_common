@@ -216,7 +216,7 @@ class ChangeLanguageItem extends StatelessWidget {
               switch (index) {
                 case 0:
                   final List<Locale>? locales =
-                      WidgetsBinding.instance?.window.locales;
+                      WidgetsBinding.instance.window.locales;
                   if (locales == null || locales.isEmpty) {
                     locale = const Locale('en');
                   } else {
