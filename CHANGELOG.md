@@ -1,3 +1,10 @@
+## [0.21.0-dev.0] - 2022/05/24
+### [Break Change]
+### 基於 Flutter v3.0.0 開發
+
+* Flutter 3 支援更新
+* 修正 Image Picker 格式
+
 ## [0.20.1] - 2022/02/07
 ### 基於 Flutter v2.10.2 開發
 
