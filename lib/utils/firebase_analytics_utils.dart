@@ -161,7 +161,7 @@ class FirebaseAnalyticsUtils extends AnalyticsUtils {
     Brightness brightness;
     switch (themeMode) {
       case ThemeMode.system:
-        brightness = WidgetsBinding.instance!.window.platformBrightness;
+        brightness = WidgetsBinding.instance.window.platformBrightness;
         break;
       case ThemeMode.light:
         brightness = Brightness.light;
