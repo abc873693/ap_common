@@ -74,11 +74,15 @@ class ApUtils {
     await url_launcher.launchUrl(Uri.parse(newUrl));
   }
 
-  static Future<void> shareTo(String content) async {
+  static Future<void> shareTo(
+    String content, {
+    Rect? sharePositionOrigin,
+  }) async {
     final PackageInfo packageInfo = await PackageInfo.fromPlatform();
     Share.share(
       '$content\n\n'
       'Send from ${packageInfo.appName} ${Platform.operatingSystem}',
+      sharePositionOrigin: sharePositionOrigin,
     );
   }
 
