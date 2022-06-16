@@ -1,7 +1,10 @@
+import 'package:ap_common/l10n/intl/messages_all.dart';
 import 'package:ap_common/l10n/l10n.dart';
 import 'package:ap_common/resources/ap_icon.dart';
 import 'package:dio/dio.dart';
+import 'package:flutter/widgets.dart';
 import 'package:intl/intl.dart';
+import 'package:multiple_localization/multiple_localization.dart';
 
 export 'package:ap_common/l10n/l10n.dart';
 export 'package:ap_common/models/ap_support_language.dart';
@@ -88,5 +91,31 @@ extension DioErrorI18nExtension on DioError {
     } else {
       return null;
     }
+  }
+}
+
+const _ApLocalizationsDelegate apLocalizationsDelegate =
+    _ApLocalizationsDelegate();
+
+class _ApLocalizationsDelegate extends LocalizationsDelegate<ApLocalizations> {
+  const _ApLocalizationsDelegate();
+
+  @override
+  bool isSupported(Locale locale) {
+    return ApLocalizations.delegate.isSupported(locale);
+  }
+
+  @override
+  Future<ApLocalizations> load(Locale locale) {
+    return MultipleLocalizations.load(
+      initializeMessages,
+      locale,
+      (l) => ApLocalizations(),
+    );
+  }
+
+  @override
+  bool shouldReload(LocalizationsDelegate<ApLocalizations> old) {
+    return false;
   }
 }
