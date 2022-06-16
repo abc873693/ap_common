@@ -25,7 +25,7 @@ dependencies:
   dio: ^4.0.6
   dio_cookie_manager: ^2.0.0
   cookie_jar: ^3.0.1
-  flutter_local_notifications: ^9.5.3+1
+  flutter_local_notifications: ^9.6.1
   timezone: ^0.8.0
   flutter_keyboard_visibility: ^5.2.0
   add_2_calendar: ^2.1.3
