@@ -299,6 +299,9 @@ class ApTheme extends InheritedWidget {
         appBarTheme: const AppBarTheme(
           color: ApColors.blue500,
         ),
+        colorScheme: ColorScheme.fromSwatch(
+          accentColor: ApColors.blue500,
+        ),
         pageTransitionsTheme: _pageTransitionsTheme,
         unselectedWidgetColor: ApColors.grey500,
         backgroundColor: Colors.black12,
@@ -320,6 +323,10 @@ class ApTheme extends InheritedWidget {
         pageTransitionsTheme: _pageTransitionsTheme,
         appBarTheme: const AppBarTheme(
           color: ApColors.blueDark,
+        ),
+        colorScheme: ColorScheme.fromSwatch(
+          brightness: Brightness.dark,
+          accentColor: ApColors.blue300,
         ),
         scaffoldBackgroundColor: ApColors.onyx,
         unselectedWidgetColor: ApColors.grey200,
