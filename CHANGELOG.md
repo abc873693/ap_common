@@ -1,3 +1,8 @@
+## [0.21.0-dev.1] - 2022/06/16
+### 基於 Flutter v3.0.2 開發
+* 修正 `share` 在 iPad 錯誤
+* 改善多國語言無法多次呼叫 `initializeMessages` 的問題
+
 ## [0.21.0-dev.0] - 2022/05/24
 ### [Break Change]
 ### 基於 Flutter v3.0.0 開發
