@@ -69,6 +69,7 @@ extension DioErrorI18nExtension on DioError {
         return ApLocalizations.current.timeoutMessage;
       case DioErrorType.response:
         if (response!.data is Map<String, dynamic>) {
+          //ignore: avoid_dynamic_calls
           return (response!.data['description'] ?? message) as String;
         } else {
           return message;
@@ -87,6 +88,7 @@ extension DioErrorI18nExtension on DioError {
   String? get falconMessage {
     // Define in falcon description
     if (isJsonResponse) {
+      //ignore: avoid_dynamic_calls
       return (response!.data['description'] ?? message) as String;
     } else {
       return null;

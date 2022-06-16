@@ -6,6 +6,7 @@ import 'package:add_2_calendar/add_2_calendar.dart';
 import 'package:ap_common/config/ap_constants.dart';
 import 'package:ap_common/models/course_data.dart';
 import 'package:ap_common/models/course_notify_data.dart';
+import 'package:ap_common/models/general_response.dart';
 import 'package:ap_common/models/semester_data.dart';
 import 'package:ap_common/resources/ap_colors.dart';
 import 'package:ap_common/resources/ap_icon.dart';
@@ -33,7 +34,9 @@ typedef CourseNotifyCallback = Function(
 );
 
 enum CourseState { loading, finish, error, empty, offlineEmpty, custom }
+
 enum CourseNotifyState { schedule, cancel }
+
 enum _ContentStyle { list, table }
 
 const _courseHeight = 55.0;
@@ -413,9 +416,17 @@ class CourseScaffoldState extends State<CourseScaffold> {
       if (!mounted) return;
       await ApUtils.saveImage(
         context,
-        byteData,
-        'course_table_$formattedDate',
-        ApLocalizations.of(context).exportCourseTableSuccess,
+        byteData: byteData,
+        successMessage: 'course_table_$formattedDate',
+        fileName: ApLocalizations.of(context).exportCourseTableSuccess,
+        onSuccess: (GeneralResponse r) => Toast.show(
+          r.message,
+          context,
+        ),
+        onError: (GeneralResponse e) => Toast.show(
+          e.message,
+          context,
+        ),
       );
       AnalyticsUtils.instance?.logEvent('export_course_table_image_success');
     } else {

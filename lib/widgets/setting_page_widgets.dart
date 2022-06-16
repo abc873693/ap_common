@@ -215,9 +215,9 @@ class ChangeLanguageItem extends StatelessWidget {
               final String code = ApSupportLanguage.values[index].code;
               switch (index) {
                 case 0:
-                  final List<Locale>? locales =
+                  final List<Locale> locales =
                       WidgetsBinding.instance.window.locales;
-                  if (locales == null || locales.isEmpty) {
+                  if (locales.isEmpty) {
                     locale = const Locale('en');
                   } else {
                     locale = locales.first;
