@@ -37,12 +37,14 @@ class AnnouncementLoginData {
   Map<String, dynamic> get decodedToken => JwtDecoder.decode(key!);
 
   bool get isExpired => JwtDecoder.isExpired(key!);
-
   PermissionLevel get level =>
+      //ignore: avoid_dynamic_calls
       PermissionLevel.values[decodedToken['user']['permission_level'] as int];
 
+  //ignore: avoid_dynamic_calls
   String? get loginType => decodedToken['user']['login_type'] as String;
 
+  //ignore: avoid_dynamic_calls
   String? get username => decodedToken['user']['username'] as String;
 
   void save() {

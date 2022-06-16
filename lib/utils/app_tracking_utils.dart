@@ -99,6 +99,7 @@ class AppTrackingUtils {
                     await AppTrackingTransparency
                         .requestTrackingAuthorization();
                   }
+                  //ignore: use_build_context_synchronously
                   Navigator.of(context).pop();
                 } on PlatformException {
                   Navigator.of(context).pop();

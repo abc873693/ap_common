@@ -1,6 +1,7 @@
 import 'dart:io';
 import 'dart:typed_data';
 
+import 'package:ap_common/callback/general_callback.dart';
 import 'package:ap_common/resources/ap_theme.dart';
 import 'package:ap_common/utils/ap_localizations.dart';
 import 'package:ap_common/utils/crashlytics_utils.dart';
@@ -114,7 +115,7 @@ class ApUtils {
     String defaultUrl,
   ) async {
     await Future<void>.delayed(const Duration(seconds: 1));
-    final ApLocalizations app = ApLocalizations.of(context);
+    final ApLocalizations app = ApLocalizations.current;
     showDialog(
       context: context,
       builder: (BuildContext context) => YesNoDialog(
@@ -238,11 +239,13 @@ class ApUtils {
   }
 
   static Future<void> saveImage(
-    BuildContext context,
-    ByteData byteData,
-    String fileName,
-    String successMessage,
-  ) async {
+    BuildContext context, {
+    required ByteData byteData,
+    required String fileName,
+    required String successMessage,
+    GeneralResponseCallback? onSuccess,
+    GeneralResponseCallback? onError,
+  }) async {
     final ApLocalizations ap = ApLocalizations.of(context);
     try {
       PermissionState hasGrantPermission = PermissionState.notDetermined;
@@ -277,14 +280,20 @@ class ApUtils {
         } else {
           await File(filePath).writeAsBytes(pngBytes);
         }
-        ApUtils.showToast(
-          context,
-          success ? '$successMessage\n$filePath' : ap.unknownError,
+        onSuccess?.call(
+          success
+              ? GeneralResponse(
+                  statusCode: 200,
+                  message: '$successMessage\n$filePath',
+                )
+              : GeneralResponse.unknownError(),
         );
       } else {
-        ApUtils.showToast(
-          context,
-          ap.grandPermissionFail,
+        onSuccess?.call(
+          GeneralResponse(
+            statusCode: 401,
+            message: ap.grandPermissionFail,
+          ),
         );
       }
     } catch (e, s) {

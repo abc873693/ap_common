@@ -7,9 +7,7 @@ import 'package:ap_common/utils/ap_localizations.dart';
 import 'package:ap_common/utils/ap_utils.dart';
 import 'package:ap_common/widgets/default_dialog.dart';
 import 'package:ap_common/widgets/yes_no_dialog.dart';
-import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
-import 'package:package_info_plus/package_info_plus.dart';
 import 'package:sprintf/sprintf.dart';
 
 class DialogUtils {
@@ -137,6 +135,7 @@ class DialogUtils {
         options: Options(responseType: ResponseType.plain),
       );
       final dynamic json = jsonDecode(response.data as String);
+      //ignore: avoid_dynamic_calls
       versionInfo.content = json['${versionInfo.code}'][app.locale] as String;
     }
     final String versionContent = '${'\n$versionName\n'}${versionInfo.content}';
@@ -150,6 +149,7 @@ class DialogUtils {
       textAlign: TextAlign.center,
       text: TextSpan(
         style: TextStyle(
+          //ignore: use_build_context_synchronously
           color: ApTheme.of(context).grey,
           height: 1.3,
           fontSize: 16.0,
