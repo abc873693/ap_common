@@ -14,6 +14,10 @@ sidebar_position: 3
 若未正確設定，會導致各個 [Scaffold](../api-scaffolds/overview) 和 [Widget](../api-widgets/overview) 內部所使用的字串無法正確被讀取
 :::
 
+:::warning
+請勿使用 `apLocalizationsDelegate`，在 `v0.21.0` 以前版本會使用 `apLocalizationsDelegate`，整合 [multiple_localization](https://pub.dev/packages/multiple_localization) 避免無法使用多重本地化初始化
+:::
+
 ## 設定
 
 在 `MaterialApp` 加入多國語言支援
@@ -23,7 +27,7 @@ sidebar_position: 3
       Widget build(BuildContext context) {
         return MaterialApp(
               localizationsDelegates: [
-                  ApLocalizations.delegate,
+                  apLocalizationsDelegate
               ],
               supportedLocales: [
                 const Locale('en'), // English
@@ -57,7 +61,7 @@ Localization 所使用的語言第一次會根據 `localeResolutionCallback` 回
                     ApSupportLanguageConstants.system,
                   );
                   if (languageCode == ApSupportLanguageConstants.system)
-                    return this.locale = ApLocalizations.delegate.isSupported(locale)
+                    return this.locale = apLocalizationsDelegate.isSupported(locale)
                         ? locale
                         : Locale('en');
                   else
@@ -81,7 +85,7 @@ Localization 所使用的語言第一次會根據 `localeResolutionCallback` 回
   void loadLocale(Locale locale) {
     setState(() {
       this.locale = locale;
-      ApLocalizations.delegate.load(locale);
+      apLocalizationsDelegate.load(locale);
     });
   }
 ```
