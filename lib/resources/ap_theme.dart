@@ -299,6 +299,7 @@ class ApTheme extends InheritedWidget {
         appBarTheme: const AppBarTheme(
           color: ApColors.blue500,
         ),
+        indicatorColor: ApColors.blue500,
         colorScheme: ColorScheme.fromSwatch(
           accentColor: ApColors.blue500,
         ),
@@ -328,6 +329,7 @@ class ApTheme extends InheritedWidget {
           brightness: Brightness.dark,
           accentColor: ApColors.blue300,
         ),
+        indicatorColor: ApColors.blue300,
         scaffoldBackgroundColor: ApColors.onyx,
         unselectedWidgetColor: ApColors.grey200,
         backgroundColor: Colors.black12,
