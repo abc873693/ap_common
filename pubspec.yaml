@@ -15,12 +15,12 @@ dependencies:
   url_launcher: ^6.0.3
   platform: ^3.1.0
   #firebase must use particular version
-  firebase_core: ^1.17.0
-  firebase_analytics: ^9.1.8
-  firebase_crashlytics: ^2.8.0
-  firebase_messaging: ^11.4.0
-  firebase_remote_config: ^2.0.7
-  firebase_performance: ^0.8.0+12
+  firebase_core: ^1.18.0
+  firebase_analytics: ^9.1.10
+  firebase_crashlytics: ^2.8.2
+  firebase_messaging: ^11.4.2
+  firebase_remote_config: ^2.0.9
+  firebase_performance: ^0.8.0+14
 
 dev_dependencies:
   flutter_test:
