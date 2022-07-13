@@ -57,7 +57,7 @@ class Preferences {
     );
   }
 
-  static String? getStringSecurity(String key, String? defaultValue) {
+  static String getStringSecurity(String key, String defaultValue) {
     final String data = prefs?.getString(key) ?? '';
     if (data == '') {
       return defaultValue;

@@ -22,6 +22,7 @@ import 'package:sign_in_with_apple/sign_in_with_apple.dart';
 import 'package:sprintf/sprintf.dart';
 
 enum _State { notLogin, loading, done, error }
+
 enum _DataType { announcement, application }
 
 class AnnouncementHomePage extends StatefulWidget {
@@ -724,8 +725,8 @@ class _AnnouncementHomePageState extends State<AnnouncementHomePage> {
         ApConstants.announcementIsLogin,
         false,
       )
-          ? Preferences.getStringSecurity(ApConstants.announcementIdToken, null)
-          : null;
+          ? Preferences.getStringSecurity(ApConstants.announcementIdToken, '')
+          : '';
 
       final GeneralCallback<AnnouncementLoginData> callback =
           GeneralCallback<AnnouncementLoginData>(
