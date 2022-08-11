@@ -672,7 +672,7 @@ class _AnnouncementHomePageState extends State<AnnouncementHomePage> {
     _username.text =
         Preferences.getString(ApConstants.announcementUsername, '');
     _password.text =
-        Preferences.getStringSecurity(ApConstants.announcementPassword, '')!;
+        Preferences.getStringSecurity(ApConstants.announcementPassword, '');
     if (isLogin) {
       setState(() => state = _State.done);
       loginData = AnnouncementLoginData.load();
