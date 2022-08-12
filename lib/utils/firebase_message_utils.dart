@@ -24,8 +24,11 @@ class FirebaseMessagingUtils {
   }
 
   static bool get isSupported =>
-      (kIsWeb || Platform.isAndroid || Platform.isIOS) &&
-      FirebaseMessaging.instance.isSupported();
+      (kIsWeb || Platform.isAndroid || Platform.isIOS || Platform.isMacOS);
+
+  Future<bool> isBrowserSupported() async {
+    return FirebaseMessaging.instance.isSupported();
+  }
 
   FirebaseMessagingUtils() {
     if (isSupported) {
@@ -40,7 +43,9 @@ class FirebaseMessagingUtils {
     String? vapidKey,
     bool customOnClickAction = false,
   }) async {
-    if (!FirebaseMessagingUtils.isSupported) return;
+    if (!FirebaseMessagingUtils.isSupported || !(await isBrowserSupported())) {
+      return;
+    }
     FirebaseMessaging.onMessage.listen((RemoteMessage message) async {
       if (message.notification != null) {
         debugPrint("onMessage: $message");
