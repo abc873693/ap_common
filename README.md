@@ -22,7 +22,7 @@
 在 `pubspec.yaml` 中加入 package
 
 ```yaml
-    ap_common_firebase: ^0.11.0
+    ap_common_firebase: ^0.15.0
 ```
 
 執行加入套件
