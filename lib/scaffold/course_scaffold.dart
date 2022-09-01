@@ -482,7 +482,6 @@ class CourseScaffoldState extends State<CourseScaffold> {
     }
     for (var i = 0; i < widget.courseData.courses!.length; i++) {
       final course = widget.courseData.courses![i];
-      if (course.title!.contains('燈光設計及技術')) continue;
       for (var j = 0; j < (course.times?.length ?? 0); j++) {
         final time = course.times![j];
         final timeCodeIndex = time.index!;
