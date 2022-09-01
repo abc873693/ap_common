@@ -2,7 +2,11 @@ import 'dart:convert';
 
 import 'package:ap_common/config/ap_constants.dart';
 import 'package:ap_common/utils/preferences.dart';
+import 'package:json_annotation/json_annotation.dart';
 
+part 'score_data.g.dart';
+
+@JsonSerializable()
 class ScoreData {
   List<Score>? scores;
   Detail? detail;
@@ -12,27 +16,16 @@ class ScoreData {
     this.detail,
   });
 
+  factory ScoreData.fromJson(Map<String, dynamic> json) =>
+      _$ScoreDataFromJson(json);
+
+  Map<String, dynamic> toJson() => _$ScoreDataToJson(this);
+
   factory ScoreData.fromRawJson(String str) => ScoreData.fromJson(
         json.decode(str) as Map<String, dynamic>,
       );
 
-  String toRawJson() => json.encode(toJson());
-
-  factory ScoreData.fromJson(Map<String, dynamic> json) => ScoreData(
-        scores: List<Score>.from(
-          (json['scores'] as List<dynamic>).map(
-            (x) => Score.fromJson(x as Map<String, dynamic>),
-          ),
-        ),
-        detail: Detail.fromJson(
-          json['detail'] as Map<String, dynamic>,
-        ),
-      );
-
-  Map<String, dynamic> toJson() => {
-        'scores': List<dynamic>.from(scores!.map((x) => x.toJson())),
-        'detail': detail!.toJson(),
-      };
+  String toRawJson() => jsonEncode(toJson());
 
   void save(String tag) {
     Preferences.setString(
@@ -56,6 +49,7 @@ class ScoreData {
   }
 }
 
+@JsonSerializable()
 class Detail {
   double? creditTaken;
   double? creditEarned;
@@ -75,35 +69,20 @@ class Detail {
     this.classPercentage,
   });
 
+  bool get isCreditEmpty => creditTaken == null && creditEarned == null;
+
+  factory Detail.fromJson(Map<String, dynamic> json) => _$DetailFromJson(json);
+
+  Map<String, dynamic> toJson() => _$DetailToJson(this);
+
   factory Detail.fromRawJson(String str) => Detail.fromJson(
         json.decode(str) as Map<String, dynamic>,
       );
 
-  bool get isCreditEmpty => creditTaken == null && creditEarned == null;
-
-  String toRawJson() => json.encode(toJson());
-
-  factory Detail.fromJson(Map<String, dynamic> json) => Detail(
-        creditTaken: json['creditTaken'] as double,
-        creditEarned: json['creditEarned'] as double,
-        conduct: json['conduct'] as double,
-        average: json['average'] as double,
-        classRank: json['classRank'] as String,
-        departmentRank: json['departmentRank'] as String,
-        classPercentage: json['classPercentage'] as double,
-      );
-
-  Map<String, dynamic> toJson() => {
-        'creditTaken': creditTaken,
-        'creditEarned': creditEarned,
-        'conduct': conduct,
-        'average': average,
-        'classRank': classRank,
-        'departmentRank': departmentRank,
-        'classPercentage': classPercentage,
-      };
+  String toRawJson() => jsonEncode(toJson());
 }
 
+@JsonSerializable()
 class Score {
   String? courseNumber;
   bool isPreScore;
@@ -133,39 +112,13 @@ class Score {
     this.remark,
   });
 
+  factory Score.fromJson(Map<String, dynamic> json) => _$ScoreFromJson(json);
+
+  Map<String, dynamic> toJson() => _$ScoreToJson(this);
+
   factory Score.fromRawJson(String str) => Score.fromJson(
         json.decode(str) as Map<String, dynamic>,
       );
 
-  String toRawJson() => json.encode(toJson());
-
-  factory Score.fromJson(Map<String, dynamic> json) => Score(
-        courseNumber: json['courseNumber'] as String?,
-        isPreScore: json['isPreScore'] as bool? ?? false,
-        title: json['title'] as String?,
-        units: json['units'] as String?,
-        hours: json['hours'] as String?,
-        required: json['required'] as String?,
-        at: json['at'] as String?,
-        middleScore: json['middleScore'] as String?,
-        generalScore: json['generalScore'] as String?,
-        finalScore: json['finalScore'] as String?,
-        semesterScore: json['semesterScore'] as String?,
-        remark: json['remark'] as String?,
-      );
-
-  Map<String, dynamic> toJson() => {
-        'courseNumber': courseNumber,
-        'isPreScore': isPreScore,
-        'title': title,
-        'units': units,
-        'hours': hours,
-        'required': required,
-        'at': at,
-        'middleScore': middleScore,
-        'generalScore': generalScore,
-        'finalScore': finalScore,
-        'semesterScore': semesterScore,
-        'remark': remark,
-      };
+  String toRawJson() => jsonEncode(toJson());
 }

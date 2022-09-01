@@ -1,6 +1,11 @@
 import 'dart:convert';
 import 'dart:math';
 
+import 'package:json_annotation/json_annotation.dart';
+
+part 'announcement_data.g.dart';
+
+@JsonSerializable()
 class AnnouncementData {
   List<Announcement>? data;
 
@@ -8,29 +13,16 @@ class AnnouncementData {
     this.data,
   });
 
+  factory AnnouncementData.fromJson(Map<String, dynamic> json) =>
+      _$AnnouncementDataFromJson(json);
+
+  Map<String, dynamic> toJson() => _$AnnouncementDataToJson(this);
+
   factory AnnouncementData.fromRawJson(String str) => AnnouncementData.fromJson(
         json.decode(str) as Map<String, dynamic>,
       );
 
-  String toRawJson() => json.encode(toJson());
-
-  factory AnnouncementData.fromJson(Map<String, dynamic> json) =>
-      AnnouncementData(
-        data: json['data'] == null
-            ? null
-            : List<Announcement>.from(
-                (json['data'] as List<dynamic>).map<Announcement>(
-                  // ignore: always_specify_types
-                  (x) => Announcement.fromJson(x as Map<String, dynamic>),
-                ),
-              ),
-      );
-
-  Map<String, dynamic> toJson() => {
-        'data': data == null
-            ? null
-            : List<dynamic>.from(data!.map((x) => x.toJson())),
-      };
+  String toRawJson() => jsonEncode(toJson());
 
   void sortAndRandom() {
     final random = Random();
@@ -45,6 +37,7 @@ class AnnouncementData {
   }
 }
 
+@JsonSerializable()
 class Announcement {
   String? title;
   int? id;
@@ -60,6 +53,7 @@ class Announcement {
   String? applicationId;
   bool? reviewStatus;
   String? reviewDescription;
+  @JsonKey(name: 'tag')
   List<String?>? tags;
   int? randomWeight;
 
@@ -82,52 +76,18 @@ class Announcement {
     this.randomWeight,
   });
 
-  factory Announcement.fromRawJson(String str) =>
-      Announcement.fromJson(json.decode(str) as Map<String, dynamic>);
+  factory Announcement.fromJson(Map<String, dynamic> json) =>
+      _$AnnouncementFromJson(json);
 
-  String toRawJson() => json.encode(toJson());
+  Map<String, dynamic> toJson() => _$AnnouncementToJson(this);
 
-  String toRawUpdateJson() => json.encode(toUpdateJson());
-
-  factory Announcement.fromJson(Map<String, dynamic> json) => Announcement(
-        title: json['title'] as String?,
-        id: json['id'] as int?,
-        nextId: json['nextId'] as int?,
-        lastId: json['lastId'] as int?,
-        weight: json['weight'] as int?,
-        imgUrl: json['imgUrl'] as String?,
-        url: json['url'] as String?,
-        description: json['description'] as String?,
-        publishedTime: json['publishedTime'] as String?,
-        expireTime: json['expireTime'] as String?,
-        applicant: json['applicant'] as String?,
-        applicationId: json['application_id'] as String?,
-        reviewStatus: json['reviewStatus'] as bool?,
-        reviewDescription: json['reviewDescription'] as String?,
-        tags: List<String>.from(
-          (json['tag'] as List<dynamic>).map(
-            (dynamic x) => x,
-          ),
-        ),
+  factory Announcement.fromRawJson(String str) => Announcement.fromJson(
+        json.decode(str) as Map<String, dynamic>,
       );
 
-  Map<String, dynamic> toJson() => {
-        'title': title,
-        'id': id,
-        'nextId': nextId,
-        'lastId': lastId,
-        'weight': weight,
-        'imgUrl': imgUrl,
-        'url': url,
-        'description': description,
-        'publishedTime': publishedTime,
-        'expireTime': expireTime,
-        'applicant': applicant,
-        'application_id': expireTime,
-        'reviewStatus': reviewStatus,
-        'reviewDescription': reviewDescription,
-        'tag': tags,
-      };
+  String toRawJson() => jsonEncode(toJson());
+
+  String toRawUpdateJson() => json.encode(toUpdateJson());
 
   Map<String, dynamic> toUpdateJson() => {
         'title': title,

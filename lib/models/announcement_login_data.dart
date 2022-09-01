@@ -2,10 +2,14 @@ import 'dart:convert';
 
 import 'package:ap_common/config/ap_constants.dart';
 import 'package:ap_common/utils/preferences.dart';
+import 'package:json_annotation/json_annotation.dart';
 import 'package:jwt_decoder/jwt_decoder.dart';
+
+part 'announcement_login_data.g.dart';
 
 enum PermissionLevel { user, editor, admin }
 
+@JsonSerializable()
 class AnnouncementLoginData {
   AnnouncementLoginData({
     this.key,
@@ -20,23 +24,22 @@ class AnnouncementLoginData {
         key: key ?? this.key,
       );
 
-  factory AnnouncementLoginData.fromRawJson(String str) =>
-      AnnouncementLoginData.fromJson(json.decode(str) as Map<String, dynamic>);
-
-  String toRawJson() => json.encode(toJson());
-
   factory AnnouncementLoginData.fromJson(Map<String, dynamic> json) =>
-      AnnouncementLoginData(
-        key: json['key'] as String,
+      _$AnnouncementLoginDataFromJson(json);
+
+  Map<String, dynamic> toJson() => _$AnnouncementLoginDataToJson(this);
+
+  factory AnnouncementLoginData.fromRawJson(String str) =>
+      AnnouncementLoginData.fromJson(
+        json.decode(str) as Map<String, dynamic>,
       );
 
-  Map<String, dynamic> toJson() => {
-        'key': key,
-      };
+  String toRawJson() => jsonEncode(toJson());
 
   Map<String, dynamic> get decodedToken => JwtDecoder.decode(key!);
 
   bool get isExpired => JwtDecoder.isExpired(key!);
+
   PermissionLevel get level =>
       //ignore: avoid_dynamic_calls
       PermissionLevel.values[decodedToken['user']['permission_level'] as int];

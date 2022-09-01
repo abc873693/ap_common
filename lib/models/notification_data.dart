@@ -4,6 +4,11 @@
 
 import 'dart:convert';
 
+import 'package:json_annotation/json_annotation.dart';
+
+part 'notification_data.g.dart';
+
+@JsonSerializable()
 class NotificationsData {
   Data? data;
 
@@ -11,23 +16,17 @@ class NotificationsData {
     this.data,
   });
 
+  factory NotificationsData.fromJson(Map<String, dynamic> json) =>
+      _$NotificationsDataFromJson(json);
+
+  Map<String, dynamic> toJson() => _$NotificationsDataToJson(this);
+
   factory NotificationsData.fromRawJson(String str) =>
       NotificationsData.fromJson(
         json.decode(str) as Map<String, dynamic>,
       );
 
-  String toRawJson() => json.encode(toJson());
-
-  factory NotificationsData.fromJson(Map<String, dynamic> json) =>
-      NotificationsData(
-        data: Data.fromJson(
-          json['data'] as Map<String, dynamic>,
-        ),
-      );
-
-  Map<String, dynamic> toJson() => {
-        'data': data!.toJson(),
-      };
+  String toRawJson() => jsonEncode(toJson());
 
   factory NotificationsData.sample() {
     return NotificationsData.fromRawJson(
@@ -36,8 +35,10 @@ class NotificationsData {
   }
 }
 
+@JsonSerializable()
 class Data {
   int? page;
+  @JsonKey(name: 'notification')
   List<Notifications>? notifications;
 
   Data({
@@ -45,28 +46,18 @@ class Data {
     this.notifications,
   });
 
+  factory Data.fromJson(Map<String, dynamic> json) => _$DataFromJson(json);
+
+  Map<String, dynamic> toJson() => _$DataToJson(this);
+
   factory Data.fromRawJson(String str) => Data.fromJson(
         json.decode(str) as Map<String, dynamic>,
       );
 
-  String toRawJson() => json.encode(toJson());
-
-  factory Data.fromJson(Map<String, dynamic> json) => Data(
-        page: json['page'] as int,
-        notifications: List<Notifications>.from(
-          (json['notification'] as List<dynamic>).map(
-            (x) => Notifications.fromJson(x as Map<String, dynamic>),
-          ),
-        ),
-      );
-
-  Map<String, dynamic> toJson() => {
-        'page': page,
-        'notification':
-            List<dynamic>.from(notifications!.map((x) => x.toJson())),
-      };
+  String toRawJson() => jsonEncode(toJson());
 }
 
+@JsonSerializable()
 class Notifications {
   String? link;
   Info? info;
@@ -76,25 +67,19 @@ class Notifications {
     this.info,
   });
 
+  factory Notifications.fromJson(Map<String, dynamic> json) =>
+      _$NotificationsFromJson(json);
+
+  Map<String, dynamic> toJson() => _$NotificationsToJson(this);
+
   factory Notifications.fromRawJson(String str) => Notifications.fromJson(
         json.decode(str) as Map<String, dynamic>,
       );
 
-  String toRawJson() => json.encode(toJson());
-
-  factory Notifications.fromJson(Map<String, dynamic> json) => Notifications(
-        link: json['link'] as String,
-        info: Info.fromJson(
-          json['info'] as Map<String, dynamic>,
-        ),
-      );
-
-  Map<String, dynamic> toJson() => {
-        'link': link,
-        'info': info!.toJson(),
-      };
+  String toRawJson() => jsonEncode(toJson());
 }
 
+@JsonSerializable()
 class Info {
   int? id;
   String? title;
@@ -108,23 +93,13 @@ class Info {
     this.date,
   });
 
+  factory Info.fromJson(Map<String, dynamic> json) => _$InfoFromJson(json);
+
+  Map<String, dynamic> toJson() => _$InfoToJson(this);
+
   factory Info.fromRawJson(String str) => Info.fromJson(
         json.decode(str) as Map<String, dynamic>,
       );
 
-  String toRawJson() => json.encode(toJson());
-
-  factory Info.fromJson(Map<String, dynamic> json) => Info(
-        id: json['id'] as int,
-        title: json['title'] as String,
-        department: json['department'] as String,
-        date: json['date'] as String,
-      );
-
-  Map<String, dynamic> toJson() => {
-        'id': id,
-        'title': title,
-        'department': department,
-        'date': date,
-      };
+  String toRawJson() => jsonEncode(toJson());
 }

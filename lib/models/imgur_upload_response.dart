@@ -4,6 +4,11 @@
 
 import 'dart:convert';
 
+import 'package:json_annotation/json_annotation.dart';
+
+part 'imgur_upload_response.g.dart';
+
+@JsonSerializable(fieldRename: FieldRename.snake)
 class ImgurUploadResponse {
   ImgurUploadResponse({
     this.status,
@@ -15,40 +20,20 @@ class ImgurUploadResponse {
   bool? success;
   ImgurUploadData? data;
 
-  ImgurUploadResponse copyWith({
-    int? status,
-    bool? success,
-    ImgurUploadData? data,
-  }) =>
-      ImgurUploadResponse(
-        status: status ?? this.status,
-        success: success ?? this.success,
-        data: data ?? this.data,
-      );
+  factory ImgurUploadResponse.fromJson(Map<String, dynamic> json) =>
+      _$ImgurUploadResponseFromJson(json);
+
+  Map<String, dynamic> toJson() => _$ImgurUploadResponseToJson(this);
 
   factory ImgurUploadResponse.fromRawJson(String str) =>
       ImgurUploadResponse.fromJson(
         json.decode(str) as Map<String, dynamic>,
       );
 
-  String toRawJson() => json.encode(toJson());
-
-  factory ImgurUploadResponse.fromJson(Map<String, dynamic> json) =>
-      ImgurUploadResponse(
-        status: json['status'] as int,
-        success: json['success'] as bool?,
-        data: json['data'] == null
-            ? null
-            : ImgurUploadData.fromJson(json['data'] as Map<String, dynamic>),
-      );
-
-  Map<String, dynamic> toJson() => {
-        'status': status,
-        'success': success,
-        'data': data == null ? null : data!.toJson(),
-      };
+  String toRawJson() => jsonEncode(toJson());
 }
 
+@JsonSerializable(fieldRename: FieldRename.snake)
 class ImgurUploadData {
   ImgurUploadData({
     this.id,
@@ -175,87 +160,14 @@ class ImgurUploadData {
         hls: hls ?? this.hls,
       );
 
+  factory ImgurUploadData.fromJson(Map<String, dynamic> json) =>
+      _$ImgurUploadDataFromJson(json);
+
+  Map<String, dynamic> toJson() => _$ImgurUploadDataToJson(this);
+
   factory ImgurUploadData.fromRawJson(String str) => ImgurUploadData.fromJson(
         json.decode(str) as Map<String, dynamic>,
       );
 
-  String toRawJson() => json.encode(toJson());
-
-  factory ImgurUploadData.fromJson(Map<String, dynamic> json) =>
-      ImgurUploadData(
-        id: json['id'] as String?,
-        deletehash: json['deletehash'] as String?,
-        accountId: json['account_id'],
-        accountUrl: json['account_url'],
-        adType: json['ad_type'],
-        adUrl: json['ad_url'],
-        title: json['title'],
-        description: json['description'],
-        name: json['name'] as String?,
-        type: json['type'] as String?,
-        width: json['width'] as int?,
-        height: json['height'] as int?,
-        size: json['size'] as int?,
-        views: json['views'] as int?,
-        section: json['section'],
-        vote: json['vote'],
-        bandwidth: json['bandwidth'] as int?,
-        animated: json['animated'] as bool?,
-        favorite: json['favorite'] as bool?,
-        inGallery: json['in_gallery'] as bool?,
-        inMostViral: json['in_most_viral'] as bool?,
-        hasSound: json['has_sound'] as bool?,
-        isAd: json['is_ad'] as bool?,
-        nsfw: json['nsfw'],
-        link: json['link'] as String?,
-        tags: json['tags'] == null
-            ? null
-            : List<dynamic>.from(
-                json['tags'] as List<dynamic>,
-              ),
-        datetime: json['datetime'] as int?,
-        mp4: json['mp4'] as String?,
-        hls: json['hls'] as String?,
-      );
-
-  Map<String, dynamic> toJson() => {
-        'id': id,
-        'deletehash': deletehash,
-        'account_id': accountId,
-        'account_url': accountUrl,
-        'ad_type': adType,
-        'ad_url': adUrl,
-        'title': title,
-        'description': description,
-        'name': name,
-        'type': type,
-        'width': width,
-        'height': height,
-        'size': size,
-        'views': views,
-        'section': section,
-        'vote': vote,
-        'bandwidth': bandwidth,
-        'animated': animated,
-        'favorite': favorite,
-        'in_gallery': inGallery,
-        'in_most_viral': inMostViral,
-        'has_sound': hasSound,
-        'is_ad': isAd,
-        'nsfw': nsfw,
-        'link': link,
-        'tags': tags == null ? null : List<dynamic>.from(tags!.map((x) => x)),
-        'datetime': datetime,
-        'mp4': mp4,
-        'hls': hls,
-      };
-
-  Map<String, dynamic> toSaveJson() => {
-        'id': id,
-        'deletehash': deletehash,
-        'link': link,
-        'datetime': datetime,
-      };
-
-  String toSaveRawJson() => json.encode(toJson());
+  String toRawJson() => jsonEncode(toJson());
 }

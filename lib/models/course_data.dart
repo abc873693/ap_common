@@ -4,7 +4,11 @@ import 'package:ap_common/config/ap_constants.dart';
 import 'package:ap_common/utils/ap_localizations.dart';
 import 'package:ap_common/utils/preferences.dart';
 import 'package:flutter/material.dart';
+import 'package:json_annotation/json_annotation.dart';
 
+part 'course_data.g.dart';
+
+@JsonSerializable()
 class CourseData {
   CourseData({
     this.courses,
@@ -60,37 +64,16 @@ class CourseData {
         timeCodes: timeCodes ?? this.timeCodes,
       );
 
+  factory CourseData.fromJson(Map<String, dynamic> json) =>
+      _$CourseDataFromJson(json);
+
+  Map<String, dynamic> toJson() => _$CourseDataToJson(this);
+
   factory CourseData.fromRawJson(String str) => CourseData.fromJson(
         json.decode(str) as Map<String, dynamic>,
       );
 
-  String toRawJson() => json.encode(toJson());
-
-  factory CourseData.fromJson(Map<String, dynamic> json) => CourseData(
-        courses: json['courses'] == null
-            ? null
-            : List<Course>.from(
-                (json['courses'] as List<dynamic>).map(
-                  (x) => Course.fromJson(x as Map<String, dynamic>),
-                ),
-              ),
-        timeCodes: json['timeCodes'] == null
-            ? null
-            : List<TimeCode>.from(
-                (json['timeCodes'] as List<dynamic>).map(
-                  (x) => TimeCode.fromJson(x as Map<String, dynamic>),
-                ),
-              ),
-      );
-
-  Map<String, dynamic> toJson() => {
-        'courses': courses == null
-            ? null
-            : List<dynamic>.from(courses!.map((x) => x.toJson())),
-        'timeCodes': timeCodes == null
-            ? null
-            : List<dynamic>.from(timeCodes!.map((x) => x.toJson())),
-      };
+  String toRawJson() => jsonEncode(toJson());
 
   void save(String tag) {
     Preferences.setString(
@@ -152,6 +135,7 @@ class CourseData {
   }
 }
 
+@JsonSerializable()
 class Course {
   Course({
     this.code,
@@ -175,6 +159,7 @@ class Course {
   String? hours;
   String? required;
   String? at;
+  @JsonKey(name: 'sectionTimes')
   List<SectionTime>? times;
   Location? location;
   List<String>? instructors;
@@ -206,57 +191,15 @@ class Course {
         instructors: instructors ?? this.instructors,
       );
 
+  factory Course.fromJson(Map<String, dynamic> json) => _$CourseFromJson(json);
+
+  Map<String, dynamic> toJson() => _$CourseToJson(this);
+
   factory Course.fromRawJson(String str) => Course.fromJson(
         json.decode(str) as Map<String, dynamic>,
       );
 
-  String toRawJson() => json.encode(toJson());
-
-  factory Course.fromJson(Map<String, dynamic> json) => Course(
-        code: json['code'] as String?,
-        title: json['title'] as String?,
-        className: json['className'] as String?,
-        group: json['group'] as String?,
-        units: json['units'] as String?,
-        hours: json['hours'] as String?,
-        required: json['required'] as String?,
-        at: json['at'] as String?,
-        times: json['sectionTimes'] == null
-            ? null
-            : List<SectionTime>.from(
-                (json['sectionTimes'] as List<dynamic>).map(
-                  (x) => SectionTime.fromJson(x as Map<String, dynamic>),
-                ),
-              ),
-        location: json['location'] == null
-            ? null
-            : Location.fromJson(json['location'] as Map<String, dynamic>),
-        instructors: json['instructors'] == null
-            ? null
-            : List<String>.from(
-                (json['instructors'] as List<dynamic>).map(
-                  (dynamic x) => x,
-                ),
-              ),
-      );
-
-  Map<String, dynamic> toJson() => {
-        'code': code,
-        'title': title,
-        'className': className,
-        'group': group,
-        'units': units,
-        'hours': hours,
-        'required': required,
-        'at': at,
-        'sectionTimes': times == null
-            ? null
-            : List<dynamic>.from(times!.map((x) => x.toJson())),
-        'location': location == null ? null : location!.toJson(),
-        'instructors': instructors == null
-            ? null
-            : List<dynamic>.from(instructors!.map((x) => x)),
-      };
+  String toRawJson() => jsonEncode(toJson());
 
   String getInstructors() {
     ///Use https://dart-lang.github.io/linter/lints/use_string_buffers.html
@@ -302,6 +245,7 @@ class Course {
   }
 }
 
+@JsonSerializable()
 class Location {
   Location({
     this.room,
@@ -320,20 +264,16 @@ class Location {
         building: building ?? this.building,
       );
 
-  factory Location.fromRawJson(String str) =>
-      Location.fromJson(json.decode(str) as Map<String, dynamic>);
+  factory Location.fromJson(Map<String, dynamic> json) =>
+      _$LocationFromJson(json);
 
-  String toRawJson() => json.encode(toJson());
+  Map<String, dynamic> toJson() => _$LocationToJson(this);
 
-  factory Location.fromJson(Map<String, dynamic> json) => Location(
-        room: json['room'] as String?,
-        building: json['building'] as String?,
+  factory Location.fromRawJson(String str) => Location.fromJson(
+        json.decode(str) as Map<String, dynamic>,
       );
 
-  Map<String, dynamic> toJson() => {
-        'room': room,
-        'building': building,
-      };
+  String toRawJson() => jsonEncode(toJson());
 
   @override
   String toString() {
@@ -341,6 +281,7 @@ class Location {
   }
 }
 
+@JsonSerializable()
 class SectionTime {
   SectionTime({
     this.weekday,
@@ -366,23 +307,19 @@ class SectionTime {
         index: index ?? this.index,
       );
 
+  factory SectionTime.fromJson(Map<String, dynamic> json) =>
+      _$SectionTimeFromJson(json);
+
+  Map<String, dynamic> toJson() => _$SectionTimeToJson(this);
+
   factory SectionTime.fromRawJson(String str) => SectionTime.fromJson(
         json.decode(str) as Map<String, dynamic>,
       );
 
-  String toRawJson() => json.encode(toJson());
-
-  factory SectionTime.fromJson(Map<String, dynamic> json) => SectionTime(
-        weekday: json['weekday'] as int,
-        index: json['index'] as int,
-      );
-
-  Map<String, dynamic> toJson() => {
-        'weekday': weekday,
-        'index': index,
-      };
+  String toRawJson() => jsonEncode(toJson());
 }
 
+@JsonSerializable()
 class TimeCode {
   TimeCode({
     required this.title,
@@ -405,22 +342,16 @@ class TimeCode {
         endTime: endTime ?? this.endTime,
       );
 
-  factory TimeCode.fromRawJson(String str) =>
-      TimeCode.fromJson(json.decode(str) as Map<String, dynamic>);
+  factory TimeCode.fromJson(Map<String, dynamic> json) =>
+      _$TimeCodeFromJson(json);
 
-  String toRawJson() => json.encode(toJson());
+  Map<String, dynamic> toJson() => _$TimeCodeToJson(this);
 
-  factory TimeCode.fromJson(Map<String, dynamic> json) => TimeCode(
-        title: json['title'] as String,
-        startTime: json['startTime'] as String,
-        endTime: json['endTime'] as String,
+  factory TimeCode.fromRawJson(String str) => TimeCode.fromJson(
+        json.decode(str) as Map<String, dynamic>,
       );
 
-  Map<String, dynamic> toJson() => {
-        'title': title,
-        'startTime': startTime,
-        'endTime': endTime,
-      };
+  String toRawJson() => jsonEncode(toJson());
 }
 
 extension TimeCodeExtension on List<TimeCode> {

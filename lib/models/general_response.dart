@@ -1,7 +1,14 @@
 import 'dart:convert';
 
+import 'package:json_annotation/json_annotation.dart';
+
+part 'general_response.g.dart';
+
+@JsonSerializable()
 class GeneralResponse {
+  @JsonKey(name: 'code')
   final int statusCode;
+  @JsonKey(name: 'description')
   final String message;
 
   GeneralResponse({
@@ -28,20 +35,14 @@ class GeneralResponse {
         message: 'platform not support',
       );
 
+  factory GeneralResponse.fromJson(Map<String, dynamic> json) =>
+      _$GeneralResponseFromJson(json);
+
+  Map<String, dynamic> toJson() => _$GeneralResponseToJson(this);
+
   factory GeneralResponse.fromRawJson(String str) => GeneralResponse.fromJson(
         json.decode(str) as Map<String, dynamic>,
       );
 
-  String toRawJson() => json.encode(toJson());
-
-  factory GeneralResponse.fromJson(Map<String, dynamic> json) =>
-      GeneralResponse(
-        statusCode: json['code'] as int,
-        message: json['description'] as String,
-      );
-
-  Map<String, dynamic> toJson() => {
-        'code': statusCode,
-        'description': message,
-      };
+  String toRawJson() => jsonEncode(toJson());
 }

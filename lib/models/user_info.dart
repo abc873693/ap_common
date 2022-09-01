@@ -1,10 +1,13 @@
 import 'dart:convert';
-
 import 'dart:typed_data';
 
 import 'package:ap_common/config/ap_constants.dart';
 import 'package:ap_common/utils/preferences.dart';
+import 'package:json_annotation/json_annotation.dart';
 
+part 'user_info.g.dart';
+
+@JsonSerializable()
 class UserInfo {
   String? educationSystem;
   String? department;
@@ -14,6 +17,7 @@ class UserInfo {
   String? pictureUrl;
   String? email;
 
+  @JsonKey(ignore: true)
   Uint8List? pictureBytes;
 
   UserInfo({
@@ -27,30 +31,16 @@ class UserInfo {
     this.email,
   });
 
-  factory UserInfo.fromRawJson(String str) =>
-      UserInfo.fromJson(json.decode(str) as Map<String, dynamic>);
+  factory UserInfo.fromJson(Map<String, dynamic> json) =>
+      _$UserInfoFromJson(json);
 
-  String toRawJson() => json.encode(toJson());
+  Map<String, dynamic> toJson() => _$UserInfoToJson(this);
 
-  factory UserInfo.fromJson(Map<String, dynamic> json) => UserInfo(
-        educationSystem: json['educationSystem'] as String,
-        department: json['department'] as String,
-        className: json['className'] as String,
-        id: json['id'] as String,
-        name: json['name'] as String,
-        pictureUrl: json['pictureUrl'] as String,
-        email: json['email'] as String,
+  factory UserInfo.fromRawJson(String str) => UserInfo.fromJson(
+        json.decode(str) as Map<String, dynamic>,
       );
 
-  Map<String, dynamic> toJson() => {
-        'educationSystem': educationSystem,
-        'department': department,
-        'className': className,
-        'id': id,
-        'name': name,
-        'pictureUrl': pictureUrl,
-        'email': email
-      };
+  String toRawJson() => jsonEncode(toJson());
 
   void save(String tag) {
     Preferences.setString(
