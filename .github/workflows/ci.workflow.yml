@@ -27,6 +27,9 @@ jobs:
           channel: 'stable'
       - name: Upgrades flutter
         run: flutter upgrade
+      - run: flutter pub get
+      - name: Model test
+        run: flutter test test/model_test.dart
       - name: Analyze files
         run: flutter analyze .
       - name: Build Web
