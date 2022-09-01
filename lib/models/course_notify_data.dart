@@ -6,49 +6,39 @@ import 'package:ap_common/utils/ap_localizations.dart';
 import 'package:ap_common/utils/notification_utils.dart';
 import 'package:ap_common/utils/preferences.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:json_annotation/json_annotation.dart';
 import 'package:sprintf/sprintf.dart';
 
+part 'course_notify_data.g.dart';
+
+@JsonSerializable()
 class CourseNotifyData {
   // ignore: constant_identifier_names
   static const VERSION = 2;
   static const initialId = 1;
 
-  late int version;
-  late int lastId;
+  int version;
+  int lastId;
   List<CourseNotify> data;
 
   String? tag;
 
   CourseNotifyData({
-    this.version = VERSION,
-    this.lastId = initialId,
+    this.version = 2,
+    this.lastId = 1,
     this.data = const [],
   });
+
+  factory CourseNotifyData.fromJson(Map<String, dynamic> json) =>
+      _$CourseNotifyDataFromJson(json);
+
+  Map<String, dynamic> toJson() => _$CourseNotifyDataToJson(this);
 
   factory CourseNotifyData.fromRawJson(String str) => CourseNotifyData.fromJson(
         json.decode(str) as Map<String, dynamic>,
       );
 
-  String toRawJson() => json.encode(toJson());
-
-  factory CourseNotifyData.fromJson(Map<String, dynamic> json) =>
-      CourseNotifyData(
-        version: json['version'] as int,
-        lastId: json['lastId'] as int,
-        data: json['data'] == null
-            ? []
-            : List<CourseNotify>.from(
-                (json['data'] as List<dynamic>).map(
-                  (x) => CourseNotify.fromJson(x as Map<String, dynamic>),
-                ),
-              ),
-      );
-
-  Map<String, dynamic> toJson() => {
-        'version': version,
-        'lastId': lastId,
-        'data': List<dynamic>.from(data.map((x) => x.toJson())),
-      };
+  String toRawJson() => jsonEncode(toJson());
 
   CourseNotify? getByCode(String? code, String? startTime, int weekIndex) {
     for (final value in data) {
@@ -144,6 +134,7 @@ class CourseNotifyData {
   }
 }
 
+@JsonSerializable()
 class CourseNotify {
   int id;
   String? title;
@@ -168,32 +159,16 @@ class CourseNotify {
     this.code,
   });
 
+  factory CourseNotify.fromJson(Map<String, dynamic> json) =>
+      _$CourseNotifyFromJson(json);
+
+  Map<String, dynamic> toJson() => _$CourseNotifyToJson(this);
+
   factory CourseNotify.fromRawJson(String str) => CourseNotify.fromJson(
         json.decode(str) as Map<String, dynamic>,
       );
 
-  String toRawJson() => json.encode(toJson());
-
-  factory CourseNotify.fromJson(Map<String, dynamic> json) => CourseNotify(
-        id: json['id'] as int,
-        title: json['title'] as String,
-        location: json['location'] as String,
-        code: json['code'] as String,
-        weekday: json['weekday'] as int? ??
-            (json['weeklyIndex'] == null
-                ? 1
-                : (json['weeklyIndex'] as int) + 1),
-        startTime: json['startTime'] as String,
-      );
-
-  Map<String, dynamic> toJson() => {
-        'id': id,
-        'title': title,
-        'location': location,
-        'code': code,
-        'weekday': weekday,
-        'startTime': startTime,
-      };
+  String toRawJson() => jsonEncode(toJson());
 
   factory CourseNotify.fromCourse({
     required int id,

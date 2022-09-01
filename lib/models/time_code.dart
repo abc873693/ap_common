@@ -5,7 +5,11 @@
 import 'dart:convert';
 
 import 'package:ap_common/models/course_data.dart' show TimeCode;
+import 'package:json_annotation/json_annotation.dart';
 
+part 'time_code.g.dart';
+
+@JsonSerializable()
 class TimeCodeConfig {
   List<TimeCode>? timeCodes;
 
@@ -13,27 +17,16 @@ class TimeCodeConfig {
     this.timeCodes,
   });
 
+  factory TimeCodeConfig.fromJson(Map<String, dynamic> json) =>
+      _$TimeCodeConfigFromJson(json);
+
+  Map<String, dynamic> toJson() => _$TimeCodeConfigToJson(this);
+
   factory TimeCodeConfig.fromRawJson(String str) => TimeCodeConfig.fromJson(
         json.decode(str) as Map<String, dynamic>,
       );
 
-  String toRawJson() => json.encode(toJson());
-
-  factory TimeCodeConfig.fromJson(Map<String, dynamic> json) => TimeCodeConfig(
-        timeCodes: json['timeCodes'] == null
-            ? null
-            : List<TimeCode>.from(
-                (json['timeCodes'] as List<dynamic>).map(
-                  (dynamic x) => TimeCode.fromJson(x as Map<String, dynamic>),
-                ),
-              ),
-      );
-
-  Map<String, dynamic> toJson() => {
-        'timeCodes': timeCodes == null
-            ? null
-            : List<dynamic>.from(timeCodes!.map((x) => x.toJson())),
-      };
+  String toRawJson() => jsonEncode(toJson());
 
   List<String?> get textList {
     final List<String?> tmp = [];

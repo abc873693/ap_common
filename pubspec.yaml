@@ -26,6 +26,7 @@ dependencies:
   hive: ^2.0.4
   universal_html: ^2.0.8
   platform: ^3.1.0
+  json_annotation: ^4.6.0
   # Flutter UI Package
   photo_view: ^0.14.0
   barcode_widget: ^2.0.1
@@ -61,6 +62,7 @@ dev_dependencies:
   lint: ^1.5.3
   hive_generator: ^1.1.0
   build_runner: ^2.0.3
+  json_serializable: ^6.3.0
   spider: ^2.0.0
 
 flutter:

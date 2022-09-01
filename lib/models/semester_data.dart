@@ -2,9 +2,14 @@ import 'dart:convert';
 
 import 'package:ap_common/config/ap_constants.dart';
 import 'package:ap_common/utils/preferences.dart';
+import 'package:json_annotation/json_annotation.dart';
 
+part 'semester_data.g.dart';
+
+@JsonSerializable()
 class SemesterData {
   List<Semester>? data;
+  @JsonKey(name: 'default')
   Semester? defaultSemester;
   int currentIndex = 0;
 
@@ -34,28 +39,16 @@ class SemesterData {
     this.currentIndex = 0,
   });
 
-  factory SemesterData.fromRawJson(String str) =>
-      SemesterData.fromJson(json.decode(str) as Map<String, dynamic>);
+  factory SemesterData.fromJson(Map<String, dynamic> json) =>
+      _$SemesterDataFromJson(json);
 
-  String toRawJson() => json.encode(toJson());
+  Map<String, dynamic> toJson() => _$SemesterDataToJson(this);
 
-  factory SemesterData.fromJson(Map<String, dynamic> json) => SemesterData(
-        data: List<Semester>.from(
-          (json['data'] as List<dynamic>).map(
-            (x) => Semester.fromJson(x as Map<String, dynamic>),
-          ),
-        ),
-        defaultSemester: Semester.fromJson(
-          json['default'] as Map<String, dynamic>,
-        ),
-        currentIndex: json['currentIndex'] as int,
+  factory SemesterData.fromRawJson(String str) => SemesterData.fromJson(
+        json.decode(str) as Map<String, dynamic>,
       );
 
-  Map<String, dynamic> toJson() => {
-        'data': List<dynamic>.from(data!.map((x) => x.toJson())),
-        'default': defaultSemester!.toJson(),
-        'currentIndex': currentIndex,
-      };
+  String toRawJson() => jsonEncode(toJson());
 
   void save() {
     Preferences.setString(
@@ -79,6 +72,7 @@ class SemesterData {
   }
 }
 
+@JsonSerializable()
 class Semester {
   String? year;
   String? value;
@@ -94,21 +88,14 @@ class Semester {
     this.text,
   });
 
+  factory Semester.fromJson(Map<String, dynamic> json) =>
+      _$SemesterFromJson(json);
+
+  Map<String, dynamic> toJson() => _$SemesterToJson(this);
+
   factory Semester.fromRawJson(String str) => Semester.fromJson(
         json.decode(str) as Map<String, dynamic>,
       );
 
-  String toRawJson() => json.encode(toJson());
-
-  factory Semester.fromJson(Map<String, dynamic> json) => Semester(
-        year: json['year'] as String,
-        value: json['value'] as String,
-        text: json['text'] as String,
-      );
-
-  Map<String, dynamic> toJson() => {
-        'year': year,
-        'value': value,
-        'text': text,
-      };
+  String toRawJson() => jsonEncode(toJson());
 }
