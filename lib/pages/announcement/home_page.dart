@@ -810,15 +810,13 @@ class _AnnouncementHomePageState extends State<AnnouncementHomePage> {
           break;
         case AnnouncementLoginType.apple:
           try {
-            if (idToken == null) {
-              final AuthorizationCredentialAppleID credential =
-                  await SignInWithApple.getAppleIDCredential(
-                scopes: <AppleIDAuthorizationScopes>[
-                  AppleIDAuthorizationScopes.email
-                ],
-              );
-              idToken = credential.identityToken;
-            }
+            final AuthorizationCredentialAppleID credential =
+                await SignInWithApple.getAppleIDCredential(
+              scopes: <AppleIDAuthorizationScopes>[
+                AppleIDAuthorizationScopes.email
+              ],
+            );
+            idToken = credential.identityToken;
             AnnouncementHelper.instance
                 .appleLogin(idToken: idToken!, callback: callback);
           } catch (e, s) {

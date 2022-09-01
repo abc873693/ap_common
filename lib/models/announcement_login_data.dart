@@ -59,7 +59,7 @@ class AnnouncementLoginData {
   }
 
   static AnnouncementLoginData? load() {
-    final String? rawString = Preferences.getStringSecurity(
+    final String rawString = Preferences.getStringSecurity(
       '${ApConstants.packageName}'
           '.announcement_login_data',
       '',
@@ -67,7 +67,7 @@ class AnnouncementLoginData {
     if (rawString == '') {
       return null;
     } else {
-      return AnnouncementLoginData.fromRawJson(rawString!);
+      return AnnouncementLoginData.fromRawJson(rawString);
     }
   }
 }
