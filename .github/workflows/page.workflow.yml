@@ -20,9 +20,6 @@ jobs:
         with:
           flutter-version: '3.0.x'
           channel: 'stable'
-      - name: Upgrades flutter
-        run: flutter upgrade
-        working-directory: ./example
       - name: Enable Web
         run: flutter config --enable-web
         working-directory: ./example
