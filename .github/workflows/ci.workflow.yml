@@ -25,8 +25,6 @@ jobs:
         with:
           flutter-version: '3.0.x'
           channel: 'stable'
-      - name: Upgrades flutter
-        run: flutter upgrade
       - run: flutter pub get
       - name: Model test
         run: flutter test test/model_test.dart
