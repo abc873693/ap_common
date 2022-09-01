@@ -7,6 +7,9 @@ analyzer:
     - lib/l10n/l10n.dart
     # example
 #    - example/**
+    # other generated files
+    - lib/models/*.g.dart
+    - lib/**/*.g.dart
 
 linter:
   rules:
