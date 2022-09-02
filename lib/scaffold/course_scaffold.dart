@@ -41,6 +41,8 @@ enum _ContentStyle { list, table }
 
 const _courseHeight = 55.0;
 
+const _kCourseInvisibleKey = '${ApConstants.packageName}.course_invisible_';
+
 class CourseConfig extends InheritedWidget {
   final bool? showSectionTime;
   final bool? showInstructors;
@@ -138,6 +140,8 @@ class CourseScaffoldState extends State<CourseScaffold> {
       MediaQuery.of(context).size.shortestSide >= 680 ||
       MediaQuery.of(context).orientation == Orientation.landscape;
 
+  List<String> invisibleCourseCodes = <String>[];
+
   @override
   void initState() {
     showSectionTime = widget.showSectionTime ??
@@ -148,7 +152,14 @@ class CourseScaffoldState extends State<CourseScaffold> {
         Preferences.getBool(ApConstants.showClassroomLocation, true);
     showSearchButton = widget.showSearchButton ??
         Preferences.getBool(ApConstants.showCourseSearchButton, true);
+    fetchInvisibleCourseCodes();
     super.initState();
+  }
+
+  @override
+  void didUpdateWidget(covariant CourseScaffold oldWidget) {
+    fetchInvisibleCourseCodes();
+    super.didUpdateWidget(oldWidget);
   }
 
   @override
@@ -282,6 +293,15 @@ class CourseScaffoldState extends State<CourseScaffold> {
                     child: CourseList(
                       courses: widget.courseData.courses ?? [],
                       timeCodes: widget.courseData.timeCodes,
+                      invisibleCourseCodes: invisibleCourseCodes,
+                      onVisibilityChanged: (
+                        Course course,
+                        bool visibility,
+                      ) =>
+                          saveInvisibleCourseCodes(
+                        course: course,
+                        visibility: visibility,
+                      ),
                     ),
                   ),
                 ),
@@ -394,6 +414,15 @@ class CourseScaffoldState extends State<CourseScaffold> {
           return CourseList(
             courses: widget.courseData.courses ?? [],
             timeCodes: widget.courseData.timeCodes,
+            invisibleCourseCodes: invisibleCourseCodes,
+            onVisibilityChanged: (
+              Course course,
+              bool visibility,
+            ) =>
+                saveInvisibleCourseCodes(
+              course: course,
+              visibility: visibility,
+            ),
           );
         }
     }
@@ -482,6 +511,7 @@ class CourseScaffoldState extends State<CourseScaffold> {
     }
     for (var i = 0; i < widget.courseData.courses!.length; i++) {
       final course = widget.courseData.courses![i];
+      if (invisibleCourseCodes.contains(course.code)) continue;
       for (var j = 0; j < (course.times?.length ?? 0); j++) {
         final time = course.times![j];
         final timeCodeIndex = time.index!;
@@ -590,6 +620,11 @@ class CourseScaffoldState extends State<CourseScaffold> {
           weekday: weekday,
           courseNotifySaveKey: widget.courseNotifySaveKey,
           timeCode: timeCode,
+          invisibleCourseCodes: invisibleCourseCodes,
+          onVisibilityChanged: (bool visibility) => saveInvisibleCourseCodes(
+            course: course,
+            visibility: visibility,
+          ),
         );
       },
     );
@@ -625,6 +660,30 @@ class CourseScaffoldState extends State<CourseScaffold> {
     }
     widget.onSearchButtonClick?.call();
   }
+
+  void saveInvisibleCourseCodes({
+    required Course course,
+    required bool visibility,
+  }) {
+    if (visibility) {
+      invisibleCourseCodes.remove(course.code);
+    } else {
+      invisibleCourseCodes.add(course.code!);
+    }
+    Preferences.setStringList(
+      '$_kCourseInvisibleKey${widget.courseNotifySaveKey}',
+      invisibleCourseCodes,
+    );
+    setState(() {});
+  }
+
+  void fetchInvisibleCourseCodes() {
+    invisibleCourseCodes = Preferences.getStringList(
+      '$_kCourseInvisibleKey${widget.courseNotifySaveKey}',
+      [],
+    );
+    setState(() {});
+  }
 }
 
 class CourseContent extends StatefulWidget {
@@ -638,6 +697,8 @@ class CourseContent extends StatefulWidget {
   final String courseNotifySaveKey;
   final bool enableAddToCalendar;
   final String? androidResourceIcon;
+  final List<String> invisibleCourseCodes;
+  final ValueChanged<bool>? onVisibilityChanged;
 
   const CourseContent({
     Key? key,
@@ -651,6 +712,8 @@ class CourseContent extends StatefulWidget {
     this.courseNotifySaveKey = ApConstants.semesterLatest,
     this.enableAddToCalendar = true,
     this.androidResourceIcon,
+    this.invisibleCourseCodes = const <String>[],
+    this.onVisibilityChanged,
   }) : super(key: key);
 
   @override
@@ -671,6 +734,8 @@ class _CourseContentState extends State<CourseContent> {
           ? CourseNotifyState.cancel
           : CourseNotifyState.schedule;
     }
+    final bool visibility =
+        !widget.invisibleCourseCodes.contains(widget.course.code);
     return Padding(
       padding: const EdgeInsets.symmetric(
         horizontal: 16.0,
@@ -717,6 +782,18 @@ class _CourseContentState extends State<CourseContent> {
                         ?.logEvent('course_export_to_calendar');
                   },
                 ),
+              IconButton(
+                icon: Icon(
+                  visibility
+                      ? Icons.visibility_outlined
+                      : Icons.visibility_off_outlined,
+                ),
+                onPressed: () {
+                  setState(() {
+                    widget.onVisibilityChanged?.call(!visibility);
+                  });
+                },
+              ),
               if (widget.enableNotifyControl &&
                   widget.notifyData != null &&
                   NotificationUtils.isSupport)
@@ -882,11 +959,15 @@ class TimeCodeBorder extends StatelessWidget {
 
 class CourseList extends StatelessWidget {
   final List<Course> courses;
+  final List<String> invisibleCourseCodes;
+  final void Function(Course, bool)? onVisibilityChanged;
   final List<TimeCode>? timeCodes;
 
   const CourseList({
     Key? key,
     required this.courses,
+    this.invisibleCourseCodes = const <String>[],
+    this.onVisibilityChanged,
     this.timeCodes,
   }) : super(key: key);
 
@@ -896,6 +977,7 @@ class CourseList extends StatelessWidget {
     return ListView.builder(
       itemBuilder: (_, index) {
         final course = courses[index];
+        final bool visibility = !invisibleCourseCodes.contains(course.code);
         return Card(
           elevation: 4.0,
           margin: const EdgeInsets.all(8.0),
@@ -907,12 +989,28 @@ class CourseList extends StatelessWidget {
               vertical: 8.0,
               horizontal: 24.0,
             ),
-            title: Text(
-              courses[index].title!,
-              style: const TextStyle(
-                height: 1.3,
-                fontSize: 20.0,
-              ),
+            title: Row(
+              children: <Widget>[
+                Expanded(
+                  child: Text(
+                    courses[index].title!,
+                    style: const TextStyle(
+                      height: 1.3,
+                      fontSize: 20.0,
+                    ),
+                  ),
+                ),
+                const SizedBox(width: 8.0),
+                IconButton(
+                  icon: Icon(
+                    visibility
+                        ? Icons.visibility_outlined
+                        : Icons.visibility_off_outlined,
+                  ),
+                  onPressed: () =>
+                      onVisibilityChanged?.call(course, !visibility),
+                ),
+              ],
             ),
             subtitle: Padding(
               padding: const EdgeInsets.symmetric(vertical: 8.0),
