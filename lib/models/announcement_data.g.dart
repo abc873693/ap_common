@@ -33,7 +33,7 @@ Announcement _$AnnouncementFromJson(Map<String, dynamic> json) => Announcement(
       applicationId: json['applicationId'] as String?,
       reviewStatus: json['reviewStatus'] as bool?,
       reviewDescription: json['reviewDescription'] as String?,
-      tags: (json['tag'] as List<dynamic>?)?.map((e) => e as String?).toList(),
+      tags: (json['tag'] as List<dynamic>?)?.map((e) => e as String).toList(),
       randomWeight: json['randomWeight'] as int?,
     );
 

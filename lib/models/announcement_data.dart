@@ -54,7 +54,7 @@ class Announcement {
   bool? reviewStatus;
   String? reviewDescription;
   @JsonKey(name: 'tag')
-  List<String?>? tags;
+  List<String>? tags;
   int? randomWeight;
 
   Announcement({

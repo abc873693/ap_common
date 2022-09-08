@@ -60,7 +60,7 @@ class _AnnouncementEditPageState extends State<AnnouncementEditPage> {
 
   DateTime? expireTime;
 
-  List<String?>? tags;
+  List<String> tags = [];
 
   final _newTag = TextEditingController();
 
@@ -173,12 +173,12 @@ class _AnnouncementEditPageState extends State<AnnouncementEditPage> {
                 Text(app.tag),
                 Wrap(
                   children: [
-                    for (String? tag in tags ?? []) ...[
+                    for (String tag in tags) ...[
                       Chip(
-                        label: Text(tag!),
+                        label: Text(tag),
                         backgroundColor: tag.color,
                         onDeleted: () {
-                          setState(() => tags!.remove(tag));
+                          setState(() => tags.remove(tag));
                         },
                       ),
                       const SizedBox(width: 8.0),
@@ -203,9 +203,9 @@ class _AnnouncementEditPageState extends State<AnnouncementEditPage> {
                                 ApUtils.showToast(context, app.doNotEmpty);
                               } else {
                                 final newTag = _newTag.text;
-                                final index = tags!.indexOf(newTag);
+                                final index = tags.indexOf(newTag);
                                 if (index == -1) {
-                                  setState(() => tags!.add(newTag));
+                                  setState(() => tags.add(newTag));
                                   Navigator.of(context, rootNavigator: true)
                                       .pop();
                                 } else {

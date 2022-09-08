@@ -319,9 +319,9 @@ class AnnouncementHelper {
     try {
       data.tags ??= <String>[];
       data.tags!.addAll(
-        <String?>[
+        <String>[
           languageCode ?? 'zh',
-          if (organization != null) organization,
+          if (organization != null) organization!,
         ],
       );
       final Response<dynamic> response = await dio.post(
@@ -449,9 +449,9 @@ class AnnouncementHelper {
     try {
       data.tags ??= <String>[];
       data.tags?.addAll(
-        <String?>[
+        <String>[
           languageCode ?? 'zh',
-          if (organization != null) organization,
+          if (organization != null) organization!,
         ],
       );
       final Response<dynamic> response = await dio.post(
