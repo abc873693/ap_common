@@ -56,6 +56,7 @@ class Announcement {
   String? reviewDescription;
   @JsonKey(name: 'tag')
   List<String>? tags;
+  @JsonKey(ignore: true)
   int? randomWeight;
 
   Announcement({

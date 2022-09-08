@@ -34,7 +34,6 @@ Announcement _$AnnouncementFromJson(Map<String, dynamic> json) => Announcement(
       reviewStatus: json['reviewStatus'] as bool?,
       reviewDescription: json['reviewDescription'] as String?,
       tags: (json['tag'] as List<dynamic>?)?.map((e) => e as String).toList(),
-      randomWeight: json['randomWeight'] as int?,
     );
 
 Map<String, dynamic> _$AnnouncementToJson(Announcement instance) =>
@@ -54,5 +53,4 @@ Map<String, dynamic> _$AnnouncementToJson(Announcement instance) =>
       'reviewStatus': instance.reviewStatus,
       'reviewDescription': instance.reviewDescription,
       'tag': instance.tags,
-      'randomWeight': instance.randomWeight,
     };
