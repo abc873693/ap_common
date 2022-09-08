@@ -50,6 +50,7 @@ class Announcement {
   String? publishedTime;
   String? expireTime;
   String? applicant;
+  @JsonKey(name: 'application_id')
   String? applicationId;
   bool? reviewStatus;
   String? reviewDescription;
