@@ -57,7 +57,7 @@ class _PdfViewState extends State<PdfView> {
           ),
           floatingActionButton: Column(
             mainAxisAlignment: MainAxisAlignment.end,
-            children: [
+            children: <Widget>[
               FloatingActionButton(
                 onPressed: () async {
                   AnalyticsUtils.instance?.logEvent('export_by_share');

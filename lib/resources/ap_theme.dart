@@ -346,8 +346,8 @@ class ApTheme extends InheritedWidget {
       );
 }
 
-const _pageTransitionsTheme = PageTransitionsTheme(
-  builders: {
+const PageTransitionsTheme _pageTransitionsTheme = PageTransitionsTheme(
+  builders: <TargetPlatform, PageTransitionsBuilder>{
     TargetPlatform.android:
         CupertinoPageTransitionsBuilderCustomBackGestureWidth(),
     TargetPlatform.iOS: CupertinoPageTransitionsBuilderCustomBackGestureWidth(),

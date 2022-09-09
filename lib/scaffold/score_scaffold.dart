@@ -270,7 +270,7 @@ class _ScoreContentState extends State<ScoreContent> {
                   },
                   defaultVerticalAlignment: TableCellVerticalAlignment.middle,
                   border: _tableBorder,
-                  children: [
+                  children: <TableRow>[
                     TableRow(
                       children: <Widget>[
                         ScoreTextBorder(
@@ -289,7 +289,7 @@ class _ScoreContentState extends State<ScoreContent> {
                         ),
                       ],
                     ),
-                    for (var i = 0; i < widget.scoreData!.scores!.length; i++)
+                    for (int i = 0; i < widget.scoreData!.scores!.length; i++)
                       TableRow(
                         children: <Widget>[
                           ScoreTextBorder(
@@ -338,8 +338,8 @@ class _ScoreContentState extends State<ScoreContent> {
                     },
                     defaultVerticalAlignment: TableCellVerticalAlignment.middle,
                     border: _tableBorder,
-                    children: [
-                      for (var text in widget.details!)
+                    children: <TableRow>[
+                      for (String text in widget.details!)
                         TableRow(
                           children: <Widget>[
                             Container(

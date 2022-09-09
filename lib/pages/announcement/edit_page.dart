@@ -1,6 +1,7 @@
 import 'package:ap_common/api/announcement_helper.dart';
 import 'package:ap_common/api/imgur_helper.dart';
 import 'package:ap_common/models/announcement_data.dart';
+import 'package:ap_common/models/imgur_upload_response.dart';
 import 'package:ap_common/pages/announcement/home_page.dart' show TagColors;
 import 'package:ap_common/resources/ap_icon.dart';
 import 'package:ap_common/resources/ap_theme.dart';
@@ -42,29 +43,29 @@ class AnnouncementEditPage extends StatefulWidget {
 }
 
 class _AnnouncementEditPageState extends State<AnnouncementEditPage> {
-  final _formKey = GlobalKey<FormState>();
+  final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
 
   ApLocalizations get app => ApLocalizations.of(context);
 
   late Announcement announcements;
 
-  final _title = TextEditingController();
-  final _description = TextEditingController();
-  final _imgUrl = TextEditingController();
-  final _url = TextEditingController();
-  final _weight = TextEditingController();
-  final _reviewDescription = TextEditingController();
+  final TextEditingController _title = TextEditingController();
+  final TextEditingController _description = TextEditingController();
+  final TextEditingController _imgUrl = TextEditingController();
+  final TextEditingController _url = TextEditingController();
+  final TextEditingController _weight = TextEditingController();
+  final TextEditingController _reviewDescription = TextEditingController();
 
   DateFormat formatter = DateFormat('yyyy-MM-ddTHH:mm:ss');
   DateFormat dateFormat = DateFormat('yyyy-MM-dd HH:mm:ss');
 
   DateTime? expireTime;
 
-  List<String> tags = [];
+  List<String> tags = <String>[];
 
-  final _newTag = TextEditingController();
+  final TextEditingController _newTag = TextEditingController();
 
-  final dividerHeight = 16.0;
+  final double dividerHeight = 16.0;
 
   _ImgurUploadState imgurUploadState = _ImgurUploadState.noFile;
 
@@ -94,13 +95,13 @@ class _AnnouncementEditPageState extends State<AnnouncementEditPage> {
   List<Widget> get _imgurUploadWidget {
     switch (imgurUploadState) {
       case _ImgurUploadState.uploading:
-        return [
+        return <Widget>[
           const CircularProgressIndicator(),
           const SizedBox(height: 8.0),
           Text(app.uploading),
         ];
       case _ImgurUploadState.done:
-        return [
+        return <Widget>[
           Text(app.imagePreview),
           const SizedBox(height: 8.0),
           SizedBox(
@@ -111,7 +112,7 @@ class _AnnouncementEditPageState extends State<AnnouncementEditPage> {
         ];
       case _ImgurUploadState.noFile:
       default:
-        return [
+        return <Widget>[
           Text(app.imgurUploadDescription),
           const SizedBox(height: 8.0),
         ];
@@ -153,7 +154,7 @@ class _AnnouncementEditPageState extends State<AnnouncementEditPage> {
               SizedBox(height: dividerHeight),
               TextFormField(
                 controller: _title,
-                validator: (value) {
+                validator: (String? value) {
                   if (value!.isEmpty) {
                     return app.doNotEmpty;
                   }
@@ -169,11 +170,11 @@ class _AnnouncementEditPageState extends State<AnnouncementEditPage> {
                 ),
               ),
               SizedBox(height: dividerHeight),
-              if (widget.mode != Mode.application) ...[
+              if (widget.mode != Mode.application) ...<Widget>[
                 Text(app.tag),
                 Wrap(
-                  children: [
-                    for (String tag in tags) ...[
+                  children: <Widget>[
+                    for (String tag in tags) ...<Widget>[
                       Chip(
                         label: Text(tag),
                         backgroundColor: tag.color,
@@ -202,8 +203,8 @@ class _AnnouncementEditPageState extends State<AnnouncementEditPage> {
                               if (_newTag.text.isEmpty) {
                                 ApUtils.showToast(context, app.doNotEmpty);
                               } else {
-                                final newTag = _newTag.text;
-                                final index = tags.indexOf(newTag);
+                                final String newTag = _newTag.text;
+                                final int index = tags.indexOf(newTag);
                                 if (index == -1) {
                                   setState(() => tags.add(newTag));
                                   Navigator.of(context, rootNavigator: true)
@@ -226,7 +227,7 @@ class _AnnouncementEditPageState extends State<AnnouncementEditPage> {
                 SizedBox(height: dividerHeight),
                 TextFormField(
                   controller: _weight,
-                  validator: (value) {
+                  validator: (String? value) {
                     if (value!.isEmpty) {
                       return app.doNotEmpty;
                     } else {
@@ -253,7 +254,7 @@ class _AnnouncementEditPageState extends State<AnnouncementEditPage> {
               TextFormField(
                 controller: _imgUrl,
                 enabled: false,
-                validator: (value) {
+                validator: (String? value) {
                   if (value!.isEmpty) {
                     return app.doNotEmpty;
                   }
@@ -297,8 +298,8 @@ class _AnnouncementEditPageState extends State<AnnouncementEditPage> {
                       );
                       ImgurHelper.instance!.uploadImageToImgur(
                         file: image,
-                        callback: GeneralCallback(
-                          onFailure: (dioError) {
+                        callback: GeneralCallback<ImgurUploadData>(
+                          onFailure: (DioError dioError) {
                             ApUtils.showToast(context, dioError.message);
                             setState(
                               () => imgurUploadState = _imgUrl.text.isEmpty
@@ -306,7 +307,7 @@ class _AnnouncementEditPageState extends State<AnnouncementEditPage> {
                                   : _ImgurUploadState.done,
                             );
                           },
-                          onError: (generalResponse) {
+                          onError: (GeneralResponse generalResponse) {
                             ApUtils.showToast(context, generalResponse.message);
                             setState(
                               () => imgurUploadState = _imgUrl.text.isEmpty
@@ -314,7 +315,7 @@ class _AnnouncementEditPageState extends State<AnnouncementEditPage> {
                                   : _ImgurUploadState.done,
                             );
                           },
-                          onSuccess: (data) {
+                          onSuccess: (ImgurUploadData? data) {
                             _imgUrl.text = data!.link!;
                             setState(
                               () => imgurUploadState = _ImgurUploadState.done,
@@ -333,7 +334,7 @@ class _AnnouncementEditPageState extends State<AnnouncementEditPage> {
               SizedBox(height: dividerHeight),
               TextFormField(
                 controller: _url,
-                validator: (value) {
+                validator: (String? value) {
                   return null;
                 },
                 keyboardType: TextInputType.url,
@@ -408,7 +409,7 @@ class _AnnouncementEditPageState extends State<AnnouncementEditPage> {
               TextFormField(
                 maxLines: 5,
                 controller: _description,
-                validator: (value) {
+                validator: (String? value) {
                   return null;
                 },
                 decoration: InputDecoration(
@@ -420,12 +421,12 @@ class _AnnouncementEditPageState extends State<AnnouncementEditPage> {
                   labelText: app.description,
                 ),
               ),
-              if (widget.mode == Mode.editApplication) ...[
+              if (widget.mode == Mode.editApplication) ...<Widget>[
                 SizedBox(height: dividerHeight),
                 TextFormField(
                   maxLines: 2,
                   controller: _reviewDescription,
-                  validator: (value) {
+                  validator: (String? value) {
                     return null;
                   },
                   decoration: InputDecoration(
@@ -466,7 +467,7 @@ class _AnnouncementEditPageState extends State<AnnouncementEditPage> {
                   ),
                 ),
               ),
-              if (widget.mode == Mode.editApplication) ...[
+              if (widget.mode == Mode.editApplication) ...<Widget>[
                 const SizedBox(height: 18),
                 FractionallySizedBox(
                   widthFactor: 0.8,
@@ -532,7 +533,7 @@ class _AnnouncementEditPageState extends State<AnnouncementEditPage> {
     );
   }
 
-  Future _pickStartDateTime() async {
+  Future<void> _pickStartDateTime() async {
     final DateTime dateTime = expireTime ??
         DateTime.now().add(
           const Duration(days: 7),
@@ -574,14 +575,14 @@ class _AnnouncementEditPageState extends State<AnnouncementEditPage> {
     _url.text = announcements.url ?? '';
     _weight.text = announcements.weight?.toString() ?? '0';
     _description.text = announcements.description ?? '';
-    tags = announcements.tags ?? [];
+    tags = announcements.tags ?? <String>[];
   }
 
   void _fetchData() {
     if (widget.mode == Mode.edit) {
       AnnouncementHelper.instance.getAnnouncement(
         id: announcements.id!,
-        callback: GeneralCallback.simple(
+        callback: GeneralCallback<Announcement>.simple(
           context,
           (Announcement data) {
             announcements = data;
@@ -593,7 +594,7 @@ class _AnnouncementEditPageState extends State<AnnouncementEditPage> {
     } else if (widget.mode == Mode.editApplication) {
       AnnouncementHelper.instance.getApplication(
         id: announcements.applicationId!,
-        callback: GeneralCallback.simple(
+        callback: GeneralCallback<Announcement>.simple(
           context,
           (Announcement data) {
             announcements = data;
@@ -617,9 +618,10 @@ class _AnnouncementEditPageState extends State<AnnouncementEditPage> {
           (expireTime == null) ? null : expireTime!.parseToString();
       announcements.reviewDescription = _reviewDescription.text;
       announcements.tags = tags;
-      final callback = GeneralCallback.simple(
+      final GeneralCallback<Response<dynamic>> callback =
+          GeneralCallback<Response<dynamic>>.simple(
         context,
-        (Response _) async {
+        (_) async {
           switch (widget.mode) {
             case Mode.add:
               ApUtils.showToast(context, app.addSuccess);
@@ -637,7 +639,7 @@ class _AnnouncementEditPageState extends State<AnnouncementEditPage> {
                   await AnnouncementHelper.instance.approveApplication(
                     applicationId: announcements.applicationId,
                     reviewDescription: announcements.reviewDescription,
-                    callback: GeneralCallback.simple(
+                    callback: GeneralCallback<Response<dynamic>>.simple(
                       context,
                       (_) => _,
                     ),
@@ -646,7 +648,7 @@ class _AnnouncementEditPageState extends State<AnnouncementEditPage> {
                   await AnnouncementHelper.instance.rejectApplication(
                     applicationId: announcements.applicationId,
                     reviewDescription: announcements.reviewDescription,
-                    callback: GeneralCallback.simple(
+                    callback: GeneralCallback<Response<dynamic>>.simple(
                       context,
                       (_) => _,
                     ),

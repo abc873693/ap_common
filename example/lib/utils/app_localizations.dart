@@ -25,7 +25,7 @@ class AppLocalizations {
 
   static final Map<String, Map<String, String>> _localizedValues =
       <String, Map<String, String>>{
-    'en': {
+    'en': <String, String>{
       'app_name': 'NKUST AP',
       'update_note_content': '* Fix a part of school affairs system feature.',
       'about_open_source_content':
@@ -166,7 +166,7 @@ class AppLocalizations {
       'cancelAll': 'Cancel All',
       'dialogUtilTest': 'Dialog Util Test'
     },
-    'zh': {
+    'zh': <String, String>{
       'app_name': '高科校務通',
       'update_note_content': '* 修復部分校務通功能.',
       'about_open_source_content':
@@ -290,12 +290,12 @@ class AppLocalizations {
     return _localizedValues[locale.languageCode] ?? _localizedValues['en'];
   }
 
-  List<String> get busSegment => [
+  List<String> get busSegment => <String>[
         fromJiangong,
         fromYanchao,
       ];
 
-  List<String> get campuses => [
+  List<String> get campuses => <String>[
         jiangong,
         yanchao,
         first,

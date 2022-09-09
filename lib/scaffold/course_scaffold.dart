@@ -39,9 +39,10 @@ enum CourseNotifyState { schedule, cancel }
 
 enum _ContentStyle { list, table }
 
-const _courseHeight = 55.0;
+const double _courseHeight = 55.0;
 
-const _kCourseInvisibleKey = '${ApConstants.packageName}.course_invisible_';
+const String _kCourseInvisibleKey =
+    '${ApConstants.packageName}.course_invisible_';
 
 class CourseConfig extends InheritedWidget {
   final bool? showSectionTime;
@@ -176,8 +177,8 @@ class CourseScaffoldState extends State<CourseScaffold> {
       child: Scaffold(
         appBar: AppBar(
           title: Text(widget.title ?? app.course),
-          actions: [
-            ...widget.actions ?? [],
+          actions: <Widget>[
+            ...widget.actions ?? <Widget>[],
             if (widget.enableCaptureCourseTable)
               IconButton(
                 icon: Icon(ApIcon.download),
@@ -194,28 +195,28 @@ class CourseScaffoldState extends State<CourseScaffold> {
                     showInstructors: showInstructors,
                     showClassroomLocation: showClassroomLocation,
                     showSearchButton: showSearchButton,
-                    showSectionTimeOnChanged: (value) {
+                    showSectionTimeOnChanged: (bool? value) {
                       setState(() => showSectionTime = value);
                       Preferences.setBool(
                         ApConstants.showSectionTime,
                         showSectionTime!,
                       );
                     },
-                    showInstructorsOnChanged: (value) {
+                    showInstructorsOnChanged: (bool? value) {
                       setState(() => showInstructors = value);
                       Preferences.setBool(
                         ApConstants.showInstructors,
                         showInstructors!,
                       );
                     },
-                    showClassroomLocationOnChanged: (value) {
+                    showClassroomLocationOnChanged: (bool? value) {
                       setState(() => showClassroomLocation = value);
                       Preferences.setBool(
                         ApConstants.showClassroomLocation,
                         showClassroomLocation!,
                       );
                     },
-                    showSearchButtonOnChanged: (value) {
+                    showSearchButtonOnChanged: (bool? value) {
                       setState(() => showSearchButton = value);
                       Preferences.setBool(
                         ApConstants.showCourseSearchButton,
@@ -282,7 +283,7 @@ class CourseScaffoldState extends State<CourseScaffold> {
                 ],
               ),
             ),
-            if (widget.state == CourseState.finish && isTablet) ...[
+            if (widget.state == CourseState.finish && isTablet) ...<Widget>[
               const SizedBox(width: 16.0),
               Expanded(
                 flex: 2,
@@ -291,7 +292,7 @@ class CourseScaffoldState extends State<CourseScaffold> {
                   child: Container(
                     color: ApTheme.of(context).courseListTabletBackground,
                     child: CourseList(
-                      courses: widget.courseData.courses ?? [],
+                      courses: widget.courseData.courses ?? <Course>[],
                       timeCodes: widget.courseData.timeCodes,
                       invisibleCourseCodes: invisibleCourseCodes,
                       onVisibilityChanged: (
@@ -412,7 +413,7 @@ class CourseScaffoldState extends State<CourseScaffold> {
           );
         } else {
           return CourseList(
-            courses: widget.courseData.courses ?? [],
+            courses: widget.courseData.courses ?? <Course>[],
             timeCodes: widget.courseData.timeCodes,
             invisibleCourseCodes: invisibleCourseCodes,
             onVisibilityChanged: (
@@ -470,20 +471,20 @@ class CourseScaffoldState extends State<CourseScaffold> {
       );
 
   List<Widget> renderCourseTable() {
-    final timeCodes = widget.courseData.timeCodes;
-    final maxTimeCode = widget.courseData.maxTimeCodeIndex!;
-    final minTimeCode = widget.courseData.minTimeCodeIndex!;
-    final hasHoliday = widget.courseData.hasHoliday;
-    final columns = <Column>[
+    final List<TimeCode>? timeCodes = widget.courseData.timeCodes;
+    final int maxTimeCode = widget.courseData.maxTimeCodeIndex!;
+    final int minTimeCode = widget.courseData.minTimeCodeIndex!;
+    final bool hasHoliday = widget.courseData.hasHoliday;
+    final List<Column> columns = <Column>[
       Column(
         // ignore: prefer_const_literals_to_create_immutables
-        children: [],
+        children: <Widget>[],
       )
     ];
     columns[0].children.add(
           _weekBorder(''),
         );
-    for (var i = minTimeCode; i < maxTimeCode + 1; i++) {
+    for (int i = minTimeCode; i < maxTimeCode + 1; i++) {
       columns[0].children.add(
             TimeCodeBorder(
               timeCode: timeCodes![i],
@@ -491,33 +492,35 @@ class CourseScaffoldState extends State<CourseScaffold> {
             ),
           );
     }
-    final List<List<CourseBorder>> courseBorderCollection = [
-      [],
-      [],
-      [],
-      [],
-      [],
-      if (hasHoliday) ...[
-        [],
-        [],
+    final List<List<CourseBorder>> courseBorderCollection =
+        <List<CourseBorder>>[
+      <CourseBorder>[],
+      <CourseBorder>[],
+      <CourseBorder>[],
+      <CourseBorder>[],
+      <CourseBorder>[],
+      if (hasHoliday) ...<List<CourseBorder>>[
+        <CourseBorder>[],
+        <CourseBorder>[],
       ]
     ];
-    for (var i = 0; i < courseBorderCollection.length; i++) {
-      for (var j = 0; j < maxTimeCode - minTimeCode + 1; j++) {
+    for (int i = 0; i < courseBorderCollection.length; i++) {
+      for (int j = 0; j < maxTimeCode - minTimeCode + 1; j++) {
         courseBorderCollection[i].add(
           const CourseBorder(),
         );
       }
     }
-    for (var i = 0; i < widget.courseData.courses!.length; i++) {
-      final course = widget.courseData.courses![i];
+    for (int i = 0; i < widget.courseData.courses!.length; i++) {
+      final Course course = widget.courseData.courses![i];
       if (invisibleCourseCodes.contains(course.code)) continue;
-      for (var j = 0; j < (course.times?.length ?? 0); j++) {
-        final time = course.times![j];
-        final timeCodeIndex = time.index!;
-        final courseBorderIndex = timeCodeIndex - minTimeCode;
-        final len = ApColors.colors.length;
-        final color = ApColors.colors[i % len][300 + 100 * (i ~/ len)];
+      for (int j = 0; j < (course.times?.length ?? 0); j++) {
+        final SectionTime time = course.times![j];
+        final int timeCodeIndex = time.index!;
+        final int courseBorderIndex = timeCodeIndex - minTimeCode;
+        final int len = ApColors.colors.length;
+        final ui.Color? color =
+            ApColors.colors[i % len][300 + 100 * (i ~/ len)];
         courseBorderCollection[time.weekDayIndex][courseBorderIndex] =
             CourseBorder(
           sectionTime: time,
@@ -528,12 +531,12 @@ class CourseScaffoldState extends State<CourseScaffold> {
         );
       }
     }
-    for (var i = 0; i < courseBorderCollection.length; i++) {
-      final courseBorders = courseBorderCollection[i];
-      for (var j = 0; j < courseBorders.length; j++) {
+    for (int i = 0; i < courseBorderCollection.length; i++) {
+      final List<CourseBorder> courseBorders = courseBorderCollection[i];
+      for (int j = 0; j < courseBorders.length; j++) {
         int repeat = 0;
         if (courseBorders[j].course != null) {
-          for (var k = j + 1; k < courseBorders.length; k++) {
+          for (int k = j + 1; k < courseBorders.length; k++) {
             if (courseBorders[k].course != null &&
                 courseBorders[j].course!.title ==
                     courseBorders[k].course!.title) {
@@ -544,7 +547,7 @@ class CourseScaffoldState extends State<CourseScaffold> {
           }
         }
         if (repeat != 0) {
-          final timeCode = courseBorders[j].timeCode!.copyWith();
+          final TimeCode timeCode = courseBorders[j].timeCode!.copyWith();
           timeCode.endTime = courseBorders[j + repeat].timeCode!.endTime;
           courseBorders[j] = CourseBorder(
             timeCode: timeCode,
@@ -563,7 +566,7 @@ class CourseScaffoldState extends State<CourseScaffold> {
                 : null,
             onPressed: _onPressed,
           );
-          for (var k = j + 1; k < j + repeat + 1; k++) {
+          for (int k = j + 1; k < j + repeat + 1; k++) {
             courseBorders[k] = CourseBorder(
               course: courseBorders[k].course,
               height: 0.0,
@@ -590,16 +593,16 @@ class CourseScaffoldState extends State<CourseScaffold> {
       }
       columns.add(
         Column(
-          children: [
+          children: <Widget>[
             _weekBorder(app.weekdaysCourse[i]),
             ...courseBorderCollection[i],
           ],
         ),
       );
     }
-    return [
+    return <Widget>[
       columns[0],
-      for (var i = 1; i < columns.length; i++)
+      for (int i = 1; i < columns.length; i++)
         Expanded(
           child: columns[i],
         )
@@ -612,7 +615,7 @@ class CourseScaffoldState extends State<CourseScaffold> {
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(10.0),
       ),
-      builder: (builder) {
+      builder: (BuildContext builder) {
         return CourseContent(
           enableNotifyControl: widget.enableNotifyControl,
           course: course,
@@ -680,7 +683,7 @@ class CourseScaffoldState extends State<CourseScaffold> {
   void fetchInvisibleCourseCodes() {
     invisibleCourseCodes = Preferences.getStringList(
       '$_kCourseInvisibleKey${widget.courseNotifySaveKey}',
-      [],
+      <String>[],
     );
     setState(() {});
   }
@@ -767,9 +770,11 @@ class _CourseContentState extends State<CourseContent> {
                     width: 24.0,
                   ),
                   onPressed: () async {
-                    final format = DateFormat('HH:mm');
-                    final startTime = format.parse(widget.timeCode.startTime);
-                    final endTime = format.parse(widget.timeCode.endTime);
+                    final DateFormat format = DateFormat('HH:mm');
+                    final DateTime startTime =
+                        format.parse(widget.timeCode.startTime);
+                    final DateTime endTime =
+                        format.parse(widget.timeCode.endTime);
                     final Event event = Event(
                       title: widget.course.title!,
                       location: widget.course.location?.toString() ?? '',
@@ -804,7 +809,7 @@ class _CourseContentState extends State<CourseContent> {
                         : Icons.alarm_off,
                   ),
                   onPressed: () async {
-                    var courseNotify = widget.notifyData!.getByCode(
+                    CourseNotify? courseNotify = widget.notifyData!.getByCode(
                       widget.course.code,
                       widget.timeCode.startTime,
                       widget.weekday,
@@ -836,7 +841,8 @@ class _CourseContentState extends State<CourseContent> {
                         await NotificationUtils.cancelCourseNotify(
                           id: courseNotify.id,
                         );
-                        widget.notifyData!.data.removeWhere((data) {
+                        widget.notifyData!.data
+                            .removeWhere((CourseNotify data) {
                           return data.id == courseNotify!.id;
                         });
                         if (!mounted) return;
@@ -867,7 +873,7 @@ class _CourseContentState extends State<CourseContent> {
               Expanded(
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
+                  children: <Widget>[
                     Text(
                       widget.course.getInstructors(),
                       style: TextStyle(
@@ -887,7 +893,7 @@ class _CourseContentState extends State<CourseContent> {
                 ),
               ),
               Column(
-                children: [
+                children: <Widget>[
                   Text(
                     '${widget.timeCode.startTime}-${widget.timeCode.endTime}',
                     style: TextStyle(
@@ -918,7 +924,7 @@ class TimeCodeBorder extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final showSectionTime = CourseConfig.of(context).showSectionTime!;
+    final bool showSectionTime = CourseConfig.of(context).showSectionTime!;
     return Container(
       alignment: Alignment.center,
       decoration: BoxDecoration(
@@ -937,7 +943,7 @@ class TimeCodeBorder extends StatelessWidget {
             color: ApTheme.of(context).greyText,
             fontSize: 14.0,
           ),
-          children: [
+          children: <TextSpan>[
             if (showSectionTime) TextSpan(text: '${timeCode.startTime}\n'),
             TextSpan(
               text: '${timeCode.title}\n',
@@ -975,8 +981,8 @@ class CourseList extends StatelessWidget {
   Widget build(BuildContext context) {
     final ApLocalizations app = ApLocalizations.of(context);
     return ListView.builder(
-      itemBuilder: (_, index) {
-        final course = courses[index];
+      itemBuilder: (_, int index) {
+        final Course course = courses[index];
         final bool visibility = !invisibleCourseCodes.contains(course.code);
         return Card(
           elevation: 4.0,
@@ -1025,8 +1031,8 @@ class CourseList extends StatelessWidget {
                           color: ApTheme.of(context).grey,
                           fontSize: 16.0,
                         ),
-                        children: [
-                          if (course.className != null) ...[
+                        children: <TextSpan>[
+                          if (course.className != null) ...<TextSpan>[
                             TextSpan(
                               text: '${app.studentClass}：',
                               style:
@@ -1039,7 +1045,7 @@ class CourseList extends StatelessWidget {
                             style: const TextStyle(fontWeight: FontWeight.bold),
                           ),
                           TextSpan(text: '${course.getInstructors()}\n'),
-                          if (course.location != null) ...[
+                          if (course.location != null) ...<TextSpan>[
                             TextSpan(
                               text: '${app.courseDialogLocation}：',
                               style:
@@ -1098,7 +1104,7 @@ class CourseList extends StatelessWidget {
                                   color: ApTheme.of(context).grey,
                                   fontSize: 16.0,
                                 ),
-                                children: [
+                                children: <TextSpan>[
                                   TextSpan(
                                     text: '${app.courseHours}：',
                                     style: const TextStyle(
@@ -1147,8 +1153,8 @@ class CourseBorder extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final showInstructors = CourseConfig.of(context).showInstructors;
-    final showClassroomLocation =
+    final bool? showInstructors = CourseConfig.of(context).showInstructors;
+    final bool? showClassroomLocation =
         CourseConfig.of(context).showClassroomLocation;
     return Container(
       padding: EdgeInsets.only(
@@ -1186,7 +1192,7 @@ class CourseBorder extends StatelessWidget {
                   child: Center(
                     child: AutoSizeText.rich(
                       TextSpan(
-                        children: [
+                        children: <TextSpan>[
                           TextSpan(
                             text: course!.title ?? ' ',
                             style: TextStyle(
@@ -1262,19 +1268,19 @@ class _CourseScaffoldSettingDialogState
 
   @override
   Widget build(BuildContext context) {
-    final ap = ApLocalizations.current;
+    final ApLocalizations ap = ApLocalizations.current;
     return DefaultDialog(
       title: ap.courseScaffoldSetting,
       actionText: ApLocalizations.current.confirm,
       actionFunction: () => Navigator.of(context, rootNavigator: true).pop(),
       contentPadding: EdgeInsets.zero,
       contentWidget: Column(
-        children: [
+        children: <Widget>[
           CheckboxListTile(
             title: Text(ap.showSectionTime),
             secondary: Icon(ApIcon.accessTime),
             value: showSectionTime,
-            onChanged: (value) {
+            onChanged: (bool? value) {
               setState(() => showSectionTime = value);
               widget.showSectionTimeOnChanged?.call(value);
             },
@@ -1285,7 +1291,7 @@ class _CourseScaffoldSettingDialogState
             title: Text(ap.showInstructors),
             secondary: Icon(ApIcon.person),
             value: showInstructors,
-            onChanged: (value) {
+            onChanged: (bool? value) {
               setState(() => showInstructors = value);
               widget.showInstructorsOnChanged?.call(value);
             },
@@ -1296,7 +1302,7 @@ class _CourseScaffoldSettingDialogState
             title: Text(ap.showClassroomLocation),
             secondary: Icon(ApIcon.locationOn),
             value: showClassroomLocation,
-            onChanged: (value) {
+            onChanged: (bool? value) {
               setState(() => showClassroomLocation = value);
               widget.showClassroomLocationOnChanged?.call(value);
             },
@@ -1307,7 +1313,7 @@ class _CourseScaffoldSettingDialogState
             title: Text(ap.showSearchButton),
             secondary: Icon(ApIcon.search),
             value: showSearchButton,
-            onChanged: (value) {
+            onChanged: (bool? value) {
               setState(() => showSearchButton = value);
               widget.showSearchButtonOnChanged?.call(value);
             },
@@ -1322,7 +1328,7 @@ class _CourseScaffoldSettingDialogState
 
 extension DateTimeExtension on DateTime {
   DateTime weekTime(int weekday) {
-    final now = DateTime.now();
+    final DateTime now = DateTime.now();
     return DateTime(
       now.year,
       now.month,

@@ -61,7 +61,7 @@ class CoursePageState extends State<CoursePage> {
       androidResourceIcon: Constants.ANDROID_DEFAULT_NOTIFICATION_NAME,
       enableCaptureCourseTable: true,
       semesterData: semesterData,
-      onSelect: (index) {
+      onSelect: (int index) {
         semesterData.currentIndex = index;
         _getCourseTables();
       },
@@ -77,7 +77,7 @@ class CoursePageState extends State<CoursePage> {
     semesterData = SemesterData.fromRawJson(rawString);
     if (semesterData.defaultSemester != null) {
       for (int i = 0; i < semesterData.data.length; i++) {
-        final option = semesterData.data[i];
+        final Semester option = semesterData.data[i];
         if (option.text == semesterData.defaultSemester.text) {
           semesterData.currentIndex = i;
         }

@@ -50,12 +50,12 @@ class _CloudMessageContentPageState extends State<CloudMessageContentPage> {
           : null,
       body: SingleChildScrollView(
         child: Column(
-          children: [
+          children: <Widget>[
             if (item.imageUrl != null) ApNetworkImage(url: item.imageUrl!),
             Padding(
               padding: const EdgeInsets.all(8.0),
               child: Row(
-                children: [
+                children: <Widget>[
                   Expanded(
                     child: Text(
                       item.title,

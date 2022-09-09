@@ -60,8 +60,8 @@ class UserInfoScaffoldState extends State<UserInfoScaffold> {
       appBar: AppBar(
         title: Text(app.userInfo),
         backgroundColor: ApTheme.of(context).blue,
-        actions: [
-          ...widget.actions ?? [],
+        actions: <Widget>[
+          ...widget.actions ?? <Widget>[],
           if (widget.enableBarCode)
             IconButton(
               icon: Image.asset(
@@ -179,14 +179,14 @@ class UserInfoCard extends StatelessWidget {
               subtitle: Text(userInfo?.name ?? ''),
             ),
             const Divider(height: 1.0),
-            if (userInfo?.educationSystem != null) ...[
+            if (userInfo?.educationSystem != null) ...<Widget>[
               ListTile(
                 title: Text(ApLocalizations.of(context).educationSystem),
                 subtitle: Text(userInfo?.educationSystem ?? ''),
               ),
               const Divider(height: 1.0),
             ],
-            if (userInfo?.email != null) ...[
+            if (userInfo?.email != null) ...<Widget>[
               ListTile(
                 title: Text(ApLocalizations.of(context).email),
                 subtitle: Text(userInfo?.email ?? ''),

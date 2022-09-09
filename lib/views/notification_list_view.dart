@@ -66,7 +66,7 @@ class NotificationListViewState extends State<NotificationListView>
   Widget _notificationItem(Notifications notification) {
     return InkWell(
       onLongPress: () {
-        final box = context.findRenderObject() as RenderBox?;
+        final RenderBox? box = context.findRenderObject() as RenderBox?;
         ApUtils.shareTo(
           '${notification.info!.title}\n${notification.link}',
           sharePositionOrigin: box!.localToGlobal(Offset.zero) & box.size,

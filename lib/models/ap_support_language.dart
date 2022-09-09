@@ -31,7 +31,7 @@ extension ApSupportLanguageExtension on ApSupportLanguage {
 }
 
 class ApSupportLanguageConstants {
-  static const system = 'system';
-  static const zh = 'zh';
-  static const en = 'en';
+  static const String system = 'system';
+  static const String zh = 'zh';
+  static const String en = 'en';
 }

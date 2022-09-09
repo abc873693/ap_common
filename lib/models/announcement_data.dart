@@ -25,13 +25,13 @@ class AnnouncementData {
   String toRawJson() => jsonEncode(toJson());
 
   void sortAndRandom() {
-    final random = Random();
-    for (final Announcement i in data ?? []) {
+    final Random random = Random();
+    for (final Announcement i in data ?? <Announcement>[]) {
       i.randomWeight = random.nextInt(1000);
     }
-    data?.sort((a, b) {
-      final compare = b.weight!.compareTo(a.weight!);
-      final compareRandom = b.randomWeight!.compareTo(a.randomWeight!);
+    data?.sort((Announcement a, Announcement b) {
+      final int compare = b.weight!.compareTo(a.weight!);
+      final int compareRandom = b.randomWeight!.compareTo(a.randomWeight!);
       return compare == 0 ? compareRandom : compare;
     });
   }
@@ -91,7 +91,7 @@ class Announcement {
 
   String toRawUpdateJson() => json.encode(toUpdateJson());
 
-  Map<String, dynamic> toUpdateJson() => {
+  Map<String, dynamic> toUpdateJson() => <String, dynamic>{
         'title': title,
         'weight': weight,
         'imgUrl': imgUrl,
@@ -101,7 +101,7 @@ class Announcement {
         'tag': tags,
       };
 
-  Map<String, dynamic> toUpdateApplicationJson() => {
+  Map<String, dynamic> toUpdateApplicationJson() => <String, dynamic>{
         'title': title,
         'weight': weight,
         'imgUrl': imgUrl,
@@ -111,7 +111,8 @@ class Announcement {
         'tag': tags,
       };
 
-  Map<String, dynamic> toAddApplicationJson(String fcmToken) => {
+  Map<String, dynamic> toAddApplicationJson(String fcmToken) =>
+      <String, dynamic>{
         'title': title,
         'weight': weight,
         'imgUrl': imgUrl,

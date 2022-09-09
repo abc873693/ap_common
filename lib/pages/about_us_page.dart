@@ -73,13 +73,13 @@ class AboutUsPageState extends State<AboutUsPage> {
             expandedHeight: expandedHeight,
             pinned: true,
             title: Text(app.about),
-            actions: [
-              ...widget.actions ?? [],
+            actions: <Widget>[
+              ...widget.actions ?? <Widget>[],
               IconButton(
                 icon: Icon(ApIcon.codeIcon),
                 onPressed: () {
                   Navigator.of(context).push(
-                    MaterialPageRoute(
+                    MaterialPageRoute<void>(
                       builder: (_) => LicensePage(
                         applicationName: widget.applicationName,
                         applicationVersion: widget.applicationVersion,

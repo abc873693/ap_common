@@ -10,11 +10,15 @@ class PrivateCookieManager extends CookieManager {
   PrivateCookieManager(CookieJar cookieJar) : super(cookieJar);
 
   @override
-  void onResponse(Response response, ResponseInterceptorHandler handler) {
+  void onResponse(
+    Response<dynamic> response,
+    ResponseInterceptorHandler handler,
+  ) {
     _saveCookies(response)
         .then((_) => handler.next(response))
-        .catchError((e, stackTrace) {
-      final err = DioError(requestOptions: response.requestOptions, error: e);
+        .catchError((dynamic e, dynamic stackTrace) {
+      final DioError err =
+          DioError(requestOptions: response.requestOptions, error: e);
       err.stackTrace = stackTrace as StackTrace;
       handler.reject(err, true);
     });
@@ -25,8 +29,8 @@ class PrivateCookieManager extends CookieManager {
     if (err.response != null) {
       _saveCookies(err.response!)
           .then((_) => handler.next(err))
-          .catchError((e, stackTrace) {
-        final _err = DioError(
+          .catchError((dynamic e, dynamic stackTrace) {
+        final DioError _err = DioError(
           requestOptions: err.response!.requestOptions,
           error: e,
         );
@@ -38,13 +42,13 @@ class PrivateCookieManager extends CookieManager {
     }
   }
 
-  Future<void> _saveCookies(Response response) async {
-    final cookies = response.headers[HttpHeaders.setCookieHeader];
+  Future<void> _saveCookies(Response<dynamic> response) async {
+    final List<String>? cookies = response.headers[HttpHeaders.setCookieHeader];
 
     if (cookies != null) {
       await cookieJar.saveFromResponse(
         response.requestOptions.uri,
-        cookies.map((str) => _Cookie.fromSetCookieValue(str)).toList(),
+        cookies.map((String str) => _Cookie.fromSetCookieValue(str)).toList(),
       );
     }
   }
@@ -189,7 +193,7 @@ class _Cookie implements Cookie {
       ..write(_name)
       ..write('=')
       ..write(_value);
-    final expires = this.expires;
+    final DateTime? expires = this.expires;
     if (expires != null) {
       sb
         ..write('; Expires=')
@@ -216,7 +220,7 @@ class _Cookie implements Cookie {
   }
 
   static String _validateName(String newName) {
-    const separators = [
+    const List<String> separators = <String>[
       '(',
       ')',
       '<',
@@ -296,7 +300,7 @@ class _Cookie implements Cookie {
   }
 
   static DateTime _parseCookieDate(String date) {
-    const List monthsLowerCase = [
+    const List<String> monthsLowerCase = <String>[
       'jan',
       'feb',
       'mar',
@@ -358,7 +362,7 @@ class _Cookie implements Cookie {
       return int.parse(s.substring(0, index));
     }
 
-    final List<String> tokens = [];
+    final List<String> tokens = <String>[];
     while (!isEnd()) {
       while (!isEnd() && isDelimiter(date[position])) {
         position++;
@@ -378,7 +382,7 @@ class _Cookie implements Cookie {
     String? monthStr;
     String? yearStr;
 
-    for (final token in tokens) {
+    for (final String token in tokens) {
       if (token.isEmpty) continue;
       if (timeStr == null &&
           token.length >= 5 &&
@@ -417,7 +421,7 @@ class _Cookie implements Cookie {
 
     final int month = getMonth(monthStr) + 1;
 
-    final timeList = timeStr.split(':');
+    final List<String> timeList = timeStr.split(':');
     if (timeList.length != 3) error();
     final int hour = toInt(timeList[0]);
     final int minute = toInt(timeList[1]);

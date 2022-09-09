@@ -29,7 +29,7 @@ class _NotificationUtilsTestPageState extends State<NotificationUtilsTestPage> {
         title: Text(app.localNotificationTest),
       ),
       body: ListView(
-        children: [
+        children: <Widget>[
           const Padding(
             padding: EdgeInsets.all(8.0),
             child: Text(
@@ -103,7 +103,7 @@ class _NotificationUtilsTestPageState extends State<NotificationUtilsTestPage> {
           ),
           ListTile(
             onTap: () async {
-              final dayOfTime = await showTimePicker(
+              final TimeOfDay dayOfTime = await showTimePicker(
                 context: context,
                 initialTime: TimeOfDay(
                   hour: time.hour,
@@ -124,7 +124,7 @@ class _NotificationUtilsTestPageState extends State<NotificationUtilsTestPage> {
                 title: app.scheduleWeeklyNotifyTitle,
                 content: sprintf(
                   app.scheduleWeeklyNotifyContent,
-                  [
+                  <String>[
                     ApLocalizations.of(context).weekdays[day.value - 1],
                     time.format(context),
                   ],
@@ -136,7 +136,7 @@ class _NotificationUtilsTestPageState extends State<NotificationUtilsTestPage> {
             title: Text(
               sprintf(
                 app.scheduleWeeklyNotifyContent,
-                [
+                <String>[
                   ApLocalizations.of(context).weekdays[day.value - 1],
                   time.format(context),
                 ],
@@ -154,7 +154,7 @@ class _NotificationUtilsTestPageState extends State<NotificationUtilsTestPage> {
           ),
           ListTile(
             onTap: () async {
-              final result = await NotificationUtils.requestPermissions();
+              final bool result = await NotificationUtils.requestPermissions();
               if (result != null) {
                 DialogUtils.showDefault(
                   context: context,
@@ -171,13 +171,14 @@ class _NotificationUtilsTestPageState extends State<NotificationUtilsTestPage> {
           ),
           ListTile(
             onTap: () async {
-              final list = await NotificationUtils.getPendingNotificationList();
+              final List<PendingNotificationRequest> list =
+                  await NotificationUtils.getPendingNotificationList();
               showDialog(
                 context: context,
                 builder: (_) => SimpleOptionDialog(
                   title: app.getPendingNotificationList,
-                  items: [
-                    for (var item in list)
+                  items: <String>[
+                    for (PendingNotificationRequest item in list)
                       'id = ${item.id}, '
                           'title = ${item.title}\n body = ${item.body}'
                   ],

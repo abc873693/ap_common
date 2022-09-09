@@ -82,7 +82,7 @@ class PhoneListViewState extends State<PhoneListView>
       default:
         return ListView.builder(
           itemCount: widget.phoneModelList.length,
-          itemBuilder: (context, index) {
+          itemBuilder: (BuildContext context, int index) {
             if (widget.phoneModelList[index].number.isEmpty) {
               return Padding(
                 padding: const EdgeInsets.symmetric(

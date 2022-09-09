@@ -19,9 +19,9 @@ class CourseData {
   List<TimeCode>? timeCodes;
 
   bool get hasHoliday {
-    for (final course in courses!) {
+    for (final Course course in courses!) {
       if (course.times == null) continue;
-      for (final section in course.times!) {
+      for (final SectionTime section in course.times!) {
         if (section.weekday == DateTime.saturday ||
             section.weekday == DateTime.sunday) return true;
       }
@@ -31,9 +31,9 @@ class CourseData {
 
   int? get maxTimeCodeIndex {
     int? index = 10;
-    for (final course in courses!) {
+    for (final Course course in courses!) {
       if (course.times == null) continue;
-      for (final time in course.times!) {
+      for (final SectionTime time in course.times!) {
         if (time.index! > index!) {
           index = time.index;
         }
@@ -46,7 +46,7 @@ class CourseData {
     int? index = 10;
     for (final Course course in courses!) {
       if (course.times == null) continue;
-      for (final time in course.times!) {
+      for (final SectionTime time in course.times!) {
         if (time.index! < index!) {
           index = time.index;
         }
@@ -97,7 +97,7 @@ class CourseData {
   }
 
   static Future<void> migrateFrom0_10() async {
-    Preferences.prefs?.getKeys().forEach((key) {
+    Preferences.prefs?.getKeys().forEach((String key) {
       if (key.contains('course_data')) {
         debugPrint(key);
         Preferences.remove(key);
@@ -106,19 +106,19 @@ class CourseData {
   }
 
   List<List<Course>> get weekDayCourseList {
-    final List<List<Course>> list = [
-      [],
-      [],
-      [],
-      [],
-      [],
-      if (hasHoliday) ...[
-        [],
-        [],
+    final List<List<Course>> list = <List<Course>>[
+      <Course>[],
+      <Course>[],
+      <Course>[],
+      <Course>[],
+      <Course>[],
+      if (hasHoliday) ...<List<Course>>[
+        <Course>[],
+        <Course>[],
       ]
     ];
-    for (final course in courses!) {
-      for (final time in course.times!) {
+    for (final Course course in courses!) {
+      for (final SectionTime time in course.times!) {
         for (int i = 0; i < timeCodes!.length; i++) {
           list[time.weekday! - 1].add(course);
         }
@@ -203,10 +203,10 @@ class Course {
 
   String getInstructors() {
     ///Use https://dart-lang.github.io/linter/lints/use_string_buffers.html
-    final buffer = StringBuffer();
+    final StringBuffer buffer = StringBuffer();
     if (instructors!.isNotEmpty) {
       buffer.write(instructors![0]);
-      for (var i = 1; i < instructors!.length; i++) {
+      for (int i = 1; i < instructors!.length; i++) {
         buffer.write(',${instructors![i]}');
       }
     }
@@ -218,9 +218,9 @@ class Course {
     if ((times?.length ?? 0) == 0) return text;
     int startIndex = -1;
     int repeat = 0;
-    final len = times?.length ?? 0;
-    for (var i = 0; i < len; i++) {
-      final time = times![i];
+    final int len = times?.length ?? 0;
+    for (int i = 0; i < len; i++) {
+      final SectionTime time = times![i];
       if (startIndex != -1 &&
           time.index! - 1 == times![i - 1].index &&
           time.weekday == times![i - 1].weekday) {
@@ -228,7 +228,7 @@ class Course {
         if (i == len - 1 ||
             times![i + 1].weekday != times![i].weekday ||
             times![i + 1].index != times![i].index! + 1) {
-          final endTime = times![startIndex + repeat];
+          final SectionTime endTime = times![startIndex + repeat];
           text += '-'
               '${timeCode![endTime.index!].title}';
           repeat = 0;

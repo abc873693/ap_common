@@ -28,7 +28,7 @@ class LoginScaffoldState extends State<LoginScaffold> {
 
   @override
   Widget build(BuildContext context) {
-    final orientation = MediaQuery.of(context).orientation;
+    final Orientation orientation = MediaQuery.of(context).orientation;
     return Scaffold(
       backgroundColor: ApTheme.of(context).blue,
       resizeToAvoidBottomInset: orientation == Orientation.portrait,
@@ -262,7 +262,7 @@ class ApTextField extends StatelessWidget {
       onChanged: onChanged,
       keyboardType: keyboardType,
       textInputAction: textInputAction,
-      onSubmitted: (text) {
+      onSubmitted: (String text) {
         focusNode?.unfocus();
         if (nextFocusNode != null) {
           FocusScope.of(context).requestFocus(nextFocusNode);

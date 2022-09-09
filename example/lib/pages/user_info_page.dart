@@ -29,7 +29,7 @@ class UserInfoPageState extends State<UserInfoPage> {
       onRefresh: () async {
         final String rawString =
             await rootBundle.loadString(FileAssets.userInfo);
-        final userInfo = UserInfo.fromRawJson(rawString);
+        final UserInfo userInfo = UserInfo.fromRawJson(rawString);
         if (userInfo != null) {
           setState(
             () => widget.userInfo

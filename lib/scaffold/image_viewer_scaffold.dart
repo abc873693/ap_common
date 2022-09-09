@@ -57,8 +57,8 @@ class _ImageViewerScaffoldState extends State<ImageViewerScaffold>
         bottom: (widget.imageViewers.length > 1)
             ? TabBar(
                 controller: _tabController,
-                tabs: [
-                  for (var image in widget.imageViewers)
+                tabs: <Tab>[
+                  for (ImageViewer image in widget.imageViewers)
                     Tab(
                       text: image.title,
                     )
@@ -69,7 +69,7 @@ class _ImageViewerScaffoldState extends State<ImageViewerScaffold>
       body: TabBarView(
         controller: _tabController,
         children: <Widget>[
-          for (var image in widget.imageViewers)
+          for (ImageViewer image in widget.imageViewers)
             PhotoView(
               imageProvider: AssetImage(image.assetName),
             )

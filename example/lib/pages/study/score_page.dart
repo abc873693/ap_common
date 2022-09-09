@@ -47,7 +47,7 @@ class ScorePageState extends State<ScorePage> {
       customHint: isOffline ? ap.offlineScore : '',
       customStateHint: customStateHint,
       semesterData: semesterData,
-      onSelect: (index) {
+      onSelect: (int index) {
         semesterData.currentIndex = index;
         _getSemesterScore();
       },
@@ -58,7 +58,7 @@ class ScorePageState extends State<ScorePage> {
       onSearchButtonClick: () {
 //        key.currentState.pickSemester();
       },
-      details: [
+      details: <String>[
         '${ap.conductScore}：${scoreData?.detail?.conduct ?? ''}',
         '${ap.average}：${scoreData?.detail?.average ?? ''}',
         '${ap.classRank}：${scoreData?.detail?.classRank ?? ''}',
@@ -71,7 +71,7 @@ class ScorePageState extends State<ScorePage> {
     final String rawString = await rootBundle.loadString(FileAssets.semesters);
     semesterData = SemesterData.fromRawJson(rawString);
     for (int i = 0; i < semesterData.data.length; i++) {
-      final option = semesterData.data[i];
+      final Semester option = semesterData.data[i];
       if (option.text == semesterData.defaultSemester.text) {
         semesterData.currentIndex = i;
       }

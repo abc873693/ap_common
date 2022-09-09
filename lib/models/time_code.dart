@@ -29,8 +29,8 @@ class TimeCodeConfig {
   String toRawJson() => jsonEncode(toJson());
 
   List<String?> get textList {
-    final List<String?> tmp = [];
-    for (final timeCode in timeCodes ?? <TimeCode>[]) {
+    final List<String?> tmp = <String>[];
+    for (final TimeCode timeCode in timeCodes ?? <TimeCode>[]) {
       tmp.add(timeCode.title);
     }
     return tmp;

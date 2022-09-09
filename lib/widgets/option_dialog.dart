@@ -55,8 +55,8 @@ class SimpleOptionDialog extends StatelessWidget {
               ),
             ),
             title: Text(title),
-            children: [
-              for (var i = 0; i < (items.length); i++)
+            children: <Widget>[
+              for (int i = 0; i < (items.length); i++)
                 DialogOption(
                   text: items[i],
                   check: i == index,

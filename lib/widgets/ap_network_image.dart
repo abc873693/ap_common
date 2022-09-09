@@ -13,10 +13,19 @@ class ApNetworkImage extends StatelessWidget {
     return ApUtils.isSupportCacheNetworkImage
         ? CachedNetworkImage(
             imageUrl: url,
-            placeholder: (context, url) => const Center(
+            placeholder: (
+              BuildContext context,
+              String url,
+            ) =>
+                const Center(
               child: CircularProgressIndicator(),
             ),
-            errorWidget: (context, url, error) => Icon(ApIcon.error),
+            errorWidget: (
+              BuildContext context,
+              String url,
+              dynamic error,
+            ) =>
+                Icon(ApIcon.error),
           )
         : Image.network(url);
   }
