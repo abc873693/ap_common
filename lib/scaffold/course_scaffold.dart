@@ -292,7 +292,7 @@ class CourseScaffoldState extends State<CourseScaffold> {
                   child: Container(
                     color: ApTheme.of(context).courseListTabletBackground,
                     child: CourseList(
-                      courses: widget.courseData.courses ?? <Course>[],
+                      courses: widget.courseData.courses,
                       timeCodes: widget.courseData.timeCodes,
                       invisibleCourseCodes: invisibleCourseCodes,
                       onVisibilityChanged: (
@@ -413,7 +413,7 @@ class CourseScaffoldState extends State<CourseScaffold> {
           );
         } else {
           return CourseList(
-            courses: widget.courseData.courses ?? <Course>[],
+            courses: widget.courseData.courses,
             timeCodes: widget.courseData.timeCodes,
             invisibleCourseCodes: invisibleCourseCodes,
             onVisibilityChanged: (
@@ -471,9 +471,9 @@ class CourseScaffoldState extends State<CourseScaffold> {
       );
 
   List<Widget> renderCourseTable() {
-    final List<TimeCode>? timeCodes = widget.courseData.timeCodes;
-    final int maxTimeCode = widget.courseData.maxTimeCodeIndex!;
-    final int minTimeCode = widget.courseData.minTimeCodeIndex!;
+    final List<TimeCode> timeCodes = widget.courseData.timeCodes;
+    final int maxTimeCode = widget.courseData.maxTimeCodeIndex;
+    final int minTimeCode = widget.courseData.minTimeCodeIndex;
     final bool hasHoliday = widget.courseData.hasHoliday;
     final List<Column> columns = <Column>[
       Column(
@@ -487,7 +487,7 @@ class CourseScaffoldState extends State<CourseScaffold> {
     for (int i = minTimeCode; i < maxTimeCode + 1; i++) {
       columns[0].children.add(
             TimeCodeBorder(
-              timeCode: timeCodes![i],
+              timeCode: timeCodes[i],
               hasHoliday: hasHoliday,
             ),
           );
@@ -511,12 +511,12 @@ class CourseScaffoldState extends State<CourseScaffold> {
         );
       }
     }
-    for (int i = 0; i < widget.courseData.courses!.length; i++) {
-      final Course course = widget.courseData.courses![i];
+    for (int i = 0; i < widget.courseData.courses.length; i++) {
+      final Course course = widget.courseData.courses[i];
       if (invisibleCourseCodes.contains(course.code)) continue;
-      for (int j = 0; j < (course.times?.length ?? 0); j++) {
-        final SectionTime time = course.times![j];
-        final int timeCodeIndex = time.index!;
+      for (int j = 0; j < (course.times.length); j++) {
+        final SectionTime time = course.times[j];
+        final int timeCodeIndex = time.index;
         final int courseBorderIndex = timeCodeIndex - minTimeCode;
         final int len = ApColors.colors.length;
         final ui.Color? color =
@@ -524,7 +524,7 @@ class CourseScaffoldState extends State<CourseScaffold> {
         courseBorderCollection[time.weekDayIndex][courseBorderIndex] =
             CourseBorder(
           sectionTime: time,
-          timeCode: widget.courseData.timeCodes![timeCodeIndex],
+          timeCode: widget.courseData.timeCodes[timeCodeIndex],
           course: course,
           color: color,
           onPressed: _onPressed,
@@ -547,10 +547,10 @@ class CourseScaffoldState extends State<CourseScaffold> {
           }
         }
         if (repeat != 0) {
-          final TimeCode timeCode = courseBorders[j].timeCode!.copyWith();
-          timeCode.endTime = courseBorders[j + repeat].timeCode!.endTime;
           courseBorders[j] = CourseBorder(
-            timeCode: timeCode,
+            timeCode: courseBorders[j].timeCode!.copyWith(
+                  endTime: courseBorders[j + repeat].timeCode!.endTime,
+                ),
             sectionTime: courseBorders[j].sectionTime,
             course: courseBorders[j].course,
             height: _courseHeight * (repeat + 1),
@@ -671,7 +671,7 @@ class CourseScaffoldState extends State<CourseScaffold> {
     if (visibility) {
       invisibleCourseCodes.remove(course.code);
     } else {
-      invisibleCourseCodes.add(course.code!);
+      invisibleCourseCodes.add(course.code);
     }
     Preferences.setStringList(
       '$_kCourseInvisibleKey${widget.courseNotifySaveKey}',
@@ -751,7 +751,7 @@ class _CourseContentState extends State<CourseContent> {
             children: <Widget>[
               Expanded(
                 child: Text(
-                  widget.course.title!,
+                  widget.course.title,
                   style: TextStyle(
                     fontWeight: FontWeight.bold,
                     fontSize: 20.0,
@@ -776,7 +776,7 @@ class _CourseContentState extends State<CourseContent> {
                     final DateTime endTime =
                         format.parse(widget.timeCode.endTime);
                     final Event event = Event(
-                      title: widget.course.title!,
+                      title: widget.course.title,
                       location: widget.course.location?.toString() ?? '',
                       startDate: startTime.weekTime(widget.weekday),
                       endDate: endTime.weekTime(widget.weekday),
@@ -999,7 +999,7 @@ class CourseList extends StatelessWidget {
               children: <Widget>[
                 Expanded(
                   child: Text(
-                    courses[index].title!,
+                    courses[index].title,
                     style: const TextStyle(
                       height: 1.3,
                       fontSize: 20.0,
@@ -1180,7 +1180,7 @@ class CourseBorder extends StatelessWidget {
             ? Container()
             : InkWell(
                 onTap: () {
-                  onPressed?.call(sectionTime!.weekday!, timeCode!, course!);
+                  onPressed?.call(sectionTime!.weekday, timeCode!, course!);
                   AnalyticsUtils.instance?.logEvent('course_border_click');
                 },
                 radius: 6.0,
@@ -1194,7 +1194,7 @@ class CourseBorder extends StatelessWidget {
                       TextSpan(
                         children: <TextSpan>[
                           TextSpan(
-                            text: course!.title ?? ' ',
+                            text: course!.title,
                             style: TextStyle(
                               fontSize: 16.0,
                               fontWeight:

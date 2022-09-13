@@ -7,37 +7,37 @@ part of 'course_data.dart';
 // **************************************************************************
 
 CourseData _$CourseDataFromJson(Map<String, dynamic> json) => CourseData(
-      courses: (json['courses'] as List<dynamic>?)
-          ?.map((e) => Course.fromJson(e as Map<String, dynamic>))
+      courses: (json['courses'] as List<dynamic>)
+          .map((e) => Course.fromJson(e as Map<String, dynamic>))
           .toList(),
-      timeCodes: (json['timeCodes'] as List<dynamic>?)
-          ?.map((e) => TimeCode.fromJson(e as Map<String, dynamic>))
+      timeCodes: (json['timeCodes'] as List<dynamic>)
+          .map((e) => TimeCode.fromJson(e as Map<String, dynamic>))
           .toList(),
     );
 
 Map<String, dynamic> _$CourseDataToJson(CourseData instance) =>
     <String, dynamic>{
-      'courses': instance.courses?.map((e) => e.toJson()).toList(),
-      'timeCodes': instance.timeCodes?.map((e) => e.toJson()).toList(),
+      'courses': instance.courses.map((e) => e.toJson()).toList(),
+      'timeCodes': instance.timeCodes.map((e) => e.toJson()).toList(),
     };
 
 Course _$CourseFromJson(Map<String, dynamic> json) => Course(
-      code: json['code'] as String?,
-      title: json['title'] as String?,
+      code: json['code'] as String,
+      title: json['title'] as String,
       className: json['className'] as String?,
       group: json['group'] as String?,
       units: json['units'] as String?,
       hours: json['hours'] as String?,
       required: json['required'] as String?,
       at: json['at'] as String?,
-      times: (json['sectionTimes'] as List<dynamic>?)
-          ?.map((e) => SectionTime.fromJson(e as Map<String, dynamic>))
+      times: (json['sectionTimes'] as List<dynamic>)
+          .map((e) => SectionTime.fromJson(e as Map<String, dynamic>))
           .toList(),
       location: json['location'] == null
           ? null
           : Location.fromJson(json['location'] as Map<String, dynamic>),
-      instructors: (json['instructors'] as List<dynamic>?)
-          ?.map((e) => e as String)
+      instructors: (json['instructors'] as List<dynamic>)
+          .map((e) => e as String)
           .toList(),
     );
 
@@ -50,14 +50,14 @@ Map<String, dynamic> _$CourseToJson(Course instance) => <String, dynamic>{
       'hours': instance.hours,
       'required': instance.required,
       'at': instance.at,
-      'sectionTimes': instance.times?.map((e) => e.toJson()).toList(),
+      'sectionTimes': instance.times.map((e) => e.toJson()).toList(),
       'location': instance.location?.toJson(),
       'instructors': instance.instructors,
     };
 
 Location _$LocationFromJson(Map<String, dynamic> json) => Location(
-      room: json['room'] as String?,
-      building: json['building'] as String?,
+      room: json['room'] as String,
+      building: json['building'] as String,
     );
 
 Map<String, dynamic> _$LocationToJson(Location instance) => <String, dynamic>{
@@ -66,8 +66,8 @@ Map<String, dynamic> _$LocationToJson(Location instance) => <String, dynamic>{
     };
 
 SectionTime _$SectionTimeFromJson(Map<String, dynamic> json) => SectionTime(
-      weekday: json['weekday'] as int?,
-      index: json['index'] as int?,
+      weekday: json['weekday'] as int,
+      index: json['index'] as int,
     );
 
 Map<String, dynamic> _$SectionTimeToJson(SectionTime instance) =>

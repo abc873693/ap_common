@@ -93,7 +93,7 @@ class CourseNotifyData {
     final ApLocalizations ap = ApLocalizations.of(context);
     final CourseNotifyData cache = CourseNotifyData.load(key);
     for (final CourseNotify courseNotify in cache.data) {
-      for (final Course courseDetail in courseData.courses!) {
+      for (final Course courseDetail in courseData.courses) {
         if (courseDetail.code == courseNotify.code) {
           courseNotify.title = sprintf(ap.courseNotifyContent, <String?>[
             courseNotify.title,

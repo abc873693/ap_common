@@ -13,7 +13,7 @@ CourseNotifyData _$CourseNotifyDataFromJson(Map<String, dynamic> json) =>
       data: (json['data'] as List<dynamic>?)
               ?.map((e) => CourseNotify.fromJson(e as Map<String, dynamic>))
               .toList() ??
-          const [],
+          const <CourseNotify>[],
     )..tag = json['tag'] as String?;
 
 Map<String, dynamic> _$CourseNotifyDataToJson(CourseNotifyData instance) =>

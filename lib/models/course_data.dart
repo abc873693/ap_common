@@ -11,9 +11,14 @@ part 'course_data.g.dart';
 @JsonSerializable()
 class CourseData {
   CourseData({
-    this.courses,
-    this.timeCodes,
+    required this.courses,
+    required this.timeCodes,
   });
+
+  factory CourseData.empty() => CourseData(
+        courses: <Course>[],
+        timeCodes: <TimeCode>[],
+      );
 
   factory CourseData.fromJson(Map<String, dynamic> json) =>
       _$CourseDataFromJson(json);
@@ -35,13 +40,13 @@ class CourseData {
     }
   }
 
-  List<Course>? courses;
-  List<TimeCode>? timeCodes;
+  final List<Course> courses;
+  final List<TimeCode> timeCodes;
 
   bool get hasHoliday {
-    for (final Course course in courses!) {
-      if (course.times == null) continue;
-      for (final SectionTime section in course.times!) {
+    for (final Course course in courses) {
+      if (course.times.isEmpty) continue;
+      for (final SectionTime section in course.times) {
         if (section.weekday == DateTime.saturday ||
             section.weekday == DateTime.sunday) return true;
       }
@@ -49,12 +54,12 @@ class CourseData {
     return false;
   }
 
-  int? get maxTimeCodeIndex {
-    int? index = 10;
-    for (final Course course in courses!) {
-      if (course.times == null) continue;
-      for (final SectionTime time in course.times!) {
-        if (time.index! > index!) {
+  int get maxTimeCodeIndex {
+    int index = 10;
+    for (final Course course in courses) {
+      if (course.times.isEmpty) continue;
+      for (final SectionTime time in course.times) {
+        if (time.index > index) {
           index = time.index;
         }
       }
@@ -62,17 +67,17 @@ class CourseData {
     return index;
   }
 
-  int? get minTimeCodeIndex {
-    int? index = 10;
-    for (final Course course in courses!) {
-      if (course.times == null) continue;
-      for (final SectionTime time in course.times!) {
-        if (time.index! < index!) {
+  int get minTimeCodeIndex {
+    int index = 10;
+    for (final Course course in courses) {
+      if (course.times.isEmpty) continue;
+      for (final SectionTime time in course.times) {
+        if (time.index < index) {
           index = time.index;
         }
       }
     }
-    return index! < 10 ? 0 : index;
+    return index < 10 ? 0 : index;
   }
 
   CourseData copyWith({
@@ -117,10 +122,10 @@ class CourseData {
         <Course>[],
       ]
     ];
-    for (final Course course in courses!) {
-      for (final SectionTime time in course.times!) {
-        for (int i = 0; i < timeCodes!.length; i++) {
-          list[time.weekday! - 1].add(course);
+    for (final Course course in courses) {
+      for (final SectionTime time in course.times) {
+        for (int i = 0; i < timeCodes.length; i++) {
+          list[time.weekday - 1].add(course);
         }
       }
     }
@@ -128,8 +133,8 @@ class CourseData {
   }
 
   int getTimeCodeIndex(String section) {
-    for (int i = 0; i < timeCodes!.length; i++) {
-      if (timeCodes![i].title == section) return i;
+    for (int i = 0; i < timeCodes.length; i++) {
+      if (timeCodes[i].title == section) return i;
     }
     return -1;
   }
@@ -138,17 +143,17 @@ class CourseData {
 @JsonSerializable()
 class Course {
   Course({
-    this.code,
-    this.title,
+    required this.code,
+    required this.title,
     this.className,
     this.group,
-    this.units,
+    required this.units,
     this.hours,
     this.required,
     this.at,
-    this.times,
+    required this.times,
     this.location,
-    this.instructors,
+    required this.instructors,
   });
 
   factory Course.fromJson(Map<String, dynamic> json) => _$CourseFromJson(json);
@@ -157,18 +162,22 @@ class Course {
         json.decode(str) as Map<String, dynamic>,
       );
 
-  String? code;
-  String? title;
-  String? className;
-  String? group;
-  String? units;
-  String? hours;
-  String? required;
-  String? at;
+  final String code;
+  final String title;
+
+  //TODO nullable evaluation
+  final String? className;
+  final String? group;
+
+  //TODO nullable evaluation
+  final String? units;
+  final String? hours;
+  final String? required;
+  final String? at;
   @JsonKey(name: 'sectionTimes')
-  List<SectionTime>? times;
-  Location? location;
-  List<String>? instructors;
+  final List<SectionTime> times;
+  final Location? location;
+  final List<String> instructors;
 
   Map<String, dynamic> toJson() => _$CourseToJson(this);
 
@@ -177,10 +186,10 @@ class Course {
   String getInstructors() {
     ///Use https://dart-lang.github.io/linter/lints/use_string_buffers.html
     final StringBuffer buffer = StringBuffer();
-    if (instructors!.isNotEmpty) {
-      buffer.write(instructors![0]);
-      for (int i = 1; i < instructors!.length; i++) {
-        buffer.write(',${instructors![i]}');
+    if (instructors.isNotEmpty) {
+      buffer.write(instructors[0]);
+      for (int i = 1; i < instructors.length; i++) {
+        buffer.write(',${instructors[i]}');
       }
     }
     return buffer.toString();
@@ -188,22 +197,22 @@ class Course {
 
   String getTimesShortName(List<TimeCode>? timeCode) {
     String text = '';
-    if ((times?.length ?? 0) == 0) return text;
+    if (times.isEmpty) return text;
     int startIndex = -1;
     int repeat = 0;
-    final int len = times?.length ?? 0;
+    final int len = times.length;
     for (int i = 0; i < len; i++) {
-      final SectionTime time = times![i];
+      final SectionTime time = times[i];
       if (startIndex != -1 &&
-          time.index! - 1 == times![i - 1].index &&
-          time.weekday == times![i - 1].weekday) {
+          time.index - 1 == times[i - 1].index &&
+          time.weekday == times[i - 1].weekday) {
         repeat++;
         if (i == len - 1 ||
-            times![i + 1].weekday != times![i].weekday ||
-            times![i + 1].index != times![i].index! + 1) {
-          final SectionTime endTime = times![startIndex + repeat];
+            times[i + 1].weekday != times[i].weekday ||
+            times[i + 1].index != times[i].index + 1) {
+          final SectionTime endTime = times[startIndex + repeat];
           text += '-'
-              '${timeCode![endTime.index!].title}';
+              '${timeCode![endTime.index].title}';
           repeat = 0;
           startIndex = -1;
         }
@@ -211,7 +220,7 @@ class Course {
         startIndex = i;
         text += '${text.isEmpty ? '' : ' '}'
             '(${ApLocalizations.current.weekdaysCourse[time.weekDayIndex]}) '
-            '${timeCode![time.index!].title}';
+            '${timeCode![time.index].title}';
       }
     }
     return text;
@@ -248,8 +257,8 @@ class Course {
 @JsonSerializable()
 class Location {
   Location({
-    this.room,
-    this.building,
+    required this.room,
+    required this.building,
   });
 
   factory Location.fromJson(Map<String, dynamic> json) =>
@@ -258,8 +267,9 @@ class Location {
   factory Location.fromRawJson(String str) => Location.fromJson(
         json.decode(str) as Map<String, dynamic>,
       );
-  String? room;
-  String? building;
+
+  final String room;
+  final String building;
 
   Map<String, dynamic> toJson() => _$LocationToJson(this);
 
@@ -276,15 +286,15 @@ class Location {
 
   @override
   String toString() {
-    return '${building ?? ''}${room ?? ''}';
+    return '$building$room';
   }
 }
 
 @JsonSerializable()
 class SectionTime {
   SectionTime({
-    this.weekday,
-    this.index,
+    required this.weekday,
+    required this.index,
   });
 
   factory SectionTime.fromJson(Map<String, dynamic> json) =>
@@ -297,12 +307,12 @@ class SectionTime {
   ///The day of the week [DateTime.monday]..[DateTime.sunday].
   ///In accordance with ISO 8601 a week starts with Monday,
   /// which has the value 1.
-  int? weekday;
+  final int weekday;
 
   /// index of [CourseData.timeCodes]
-  int? index;
+  final int index;
 
-  int get weekDayIndex => weekday! - 1;
+  int get weekDayIndex => weekday - 1;
 
   Map<String, dynamic> toJson() => _$SectionTimeToJson(this);
 
@@ -333,9 +343,9 @@ class TimeCode {
         json.decode(str) as Map<String, dynamic>,
       );
 
-  String title;
-  String startTime;
-  String endTime;
+  final String title;
+  final String startTime;
+  final String endTime;
 
   Map<String, dynamic> toJson() => _$TimeCodeToJson(this);
 

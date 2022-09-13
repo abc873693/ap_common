@@ -12,7 +12,7 @@ part 'time_code.g.dart';
 @JsonSerializable()
 class TimeCodeConfig {
   TimeCodeConfig({
-    this.timeCodes,
+    required this.timeCodes,
   });
 
   factory TimeCodeConfig.fromJson(Map<String, dynamic> json) =>
@@ -22,15 +22,15 @@ class TimeCodeConfig {
         json.decode(str) as Map<String, dynamic>,
       );
 
-  List<TimeCode>? timeCodes;
+  List<TimeCode> timeCodes;
 
   Map<String, dynamic> toJson() => _$TimeCodeConfigToJson(this);
 
   String toRawJson() => jsonEncode(toJson());
 
-  List<String?> get textList {
-    final List<String?> tmp = <String>[];
-    for (final TimeCode timeCode in timeCodes ?? <TimeCode>[]) {
+  List<String> get textList {
+    final List<String> tmp = <String>[];
+    for (final TimeCode timeCode in timeCodes) {
       tmp.add(timeCode.title);
     }
     return tmp;
