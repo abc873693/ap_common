@@ -288,11 +288,11 @@ class _ScoreContentState extends State<ScoreContent> {
                         ),
                       ],
                     ),
-                    for (int i = 0; i < widget.scoreData!.scores!.length; i++)
+                    for (int i = 0; i < widget.scoreData!.scores.length; i++)
                       TableRow(
                         children: <Widget>[
                           ScoreTextBorder(
-                            text: widget.scoreData!.scores![i].title,
+                            text: widget.scoreData!.scores[i].title,
                             style: _textStyle,
                             onTap: (widget.onScoreSelect != null)
                                 ? () {
@@ -304,14 +304,14 @@ class _ScoreContentState extends State<ScoreContent> {
                           ),
                           if (widget.middleScoreBuilder == null)
                             ScoreTextBorder(
-                              text: widget.scoreData!.scores![i].middleScore,
+                              text: widget.scoreData!.scores[i].middleScore,
                               style: _textStyle,
                             ),
                           if (widget.middleScoreBuilder != null)
                             widget.middleScoreBuilder!(i),
                           if (widget.finalScoreBuilder == null)
                             ScoreTextBorder(
-                              text: widget.scoreData!.scores![i].semesterScore,
+                              text: widget.scoreData!.scores[i].semesterScore,
                               style: _textStyle,
                             ),
                           if (widget.finalScoreBuilder != null)

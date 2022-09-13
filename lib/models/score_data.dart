@@ -9,8 +9,8 @@ part 'score_data.g.dart';
 @JsonSerializable()
 class ScoreData {
   ScoreData({
-    this.scores,
-    this.detail,
+    required this.scores,
+    required this.detail,
   });
 
   factory ScoreData.fromJson(Map<String, dynamic> json) =>
@@ -33,8 +33,8 @@ class ScoreData {
     }
   }
 
-  List<Score>? scores;
-  Detail? detail;
+  final List<Score> scores;
+  final Detail detail;
 
   Map<String, dynamic> toJson() => _$ScoreDataToJson(this);
 
@@ -67,13 +67,13 @@ class Detail {
         json.decode(str) as Map<String, dynamic>,
       );
 
-  double? creditTaken;
-  double? creditEarned;
-  double? conduct;
-  double? average;
-  String? classRank;
-  String? departmentRank;
-  double? classPercentage;
+  final double? creditTaken;
+  final double? creditEarned;
+  final double? conduct;
+  final double? average;
+  final String? classRank;
+  final String? departmentRank;
+  final double? classPercentage;
 
   bool get isCreditEmpty => creditTaken == null && creditEarned == null;
 
@@ -85,10 +85,10 @@ class Detail {
 @JsonSerializable()
 class Score {
   Score({
-    this.courseNumber,
+    required this.courseNumber,
     this.isPreScore = false,
-    this.title,
-    this.units,
+    required this.title,
+    required this.units,
     this.hours,
     this.required,
     this.at,
@@ -105,20 +105,50 @@ class Score {
         json.decode(str) as Map<String, dynamic>,
       );
 
-  String? courseNumber;
-  bool isPreScore;
-  String? title;
-  String? units;
-  String? hours;
-  String? required;
-  String? at;
-  String? middleScore;
-  String? generalScore;
-  String? finalScore;
-  String? semesterScore;
-  String? remark;
+  final String? courseNumber;
+  final bool isPreScore;
+  final String title;
+  final String units;
+  final String? hours;
+  final String? required;
+  final String? at;
+  final String? middleScore;
+  final String? generalScore;
+  final String? finalScore;
+  final String? semesterScore;
+  final String? remark;
 
   Map<String, dynamic> toJson() => _$ScoreToJson(this);
 
   String toRawJson() => jsonEncode(toJson());
+
+  Score copyWith({
+    String? courseNumber,
+    bool? isPreScore,
+    String? title,
+    String? units,
+    String? hours,
+    String? required,
+    String? at,
+    String? middleScore,
+    String? generalScore,
+    String? finalScore,
+    String? semesterScore,
+    String? remark,
+  }) {
+    return Score(
+      courseNumber: courseNumber ?? this.courseNumber,
+      isPreScore: isPreScore ?? this.isPreScore,
+      title: title ?? this.title,
+      units: units ?? this.units,
+      hours: hours ?? this.hours,
+      required: required ?? this.required,
+      at: at ?? this.at,
+      middleScore: middleScore ?? this.middleScore,
+      generalScore: generalScore ?? this.generalScore,
+      finalScore: finalScore ?? this.finalScore,
+      semesterScore: semesterScore ?? this.semesterScore,
+      remark: units ?? this.remark,
+    );
+  }
 }
