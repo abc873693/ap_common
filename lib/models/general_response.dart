@@ -6,19 +6,10 @@ part 'general_response.g.dart';
 
 @JsonSerializable()
 class GeneralResponse {
-  @JsonKey(name: 'code')
-  final int statusCode;
-  @JsonKey(name: 'description')
-  final String message;
-
   GeneralResponse({
     required this.statusCode,
     required this.message,
   });
-
-  static const int successCode = 200;
-  static const int unknownErrorCode = 1000;
-  static const int platformNotSupportCode = 1001;
 
   factory GeneralResponse.success() => GeneralResponse(
         statusCode: successCode,
@@ -38,11 +29,21 @@ class GeneralResponse {
   factory GeneralResponse.fromJson(Map<String, dynamic> json) =>
       _$GeneralResponseFromJson(json);
 
-  Map<String, dynamic> toJson() => _$GeneralResponseToJson(this);
-
   factory GeneralResponse.fromRawJson(String str) => GeneralResponse.fromJson(
         json.decode(str) as Map<String, dynamic>,
       );
+
+  @JsonKey(name: 'code')
+  final int statusCode;
+
+  @JsonKey(name: 'description')
+  final String message;
+
+  static const int successCode = 200;
+  static const int unknownErrorCode = 1000;
+  static const int platformNotSupportCode = 1001;
+
+  Map<String, dynamic> toJson() => _$GeneralResponseToJson(this);
 
   String toRawJson() => jsonEncode(toJson());
 }

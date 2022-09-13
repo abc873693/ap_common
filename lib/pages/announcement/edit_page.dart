@@ -25,18 +25,18 @@ extension ParseDateTimes on DateTime {
 }
 
 class AnnouncementEditPage extends StatefulWidget {
-  static const String routerName = '/news/edit';
-
-  final Mode mode;
-  final Announcement? announcement;
-  final bool needFetch;
-
   const AnnouncementEditPage({
     Key? key,
     required this.mode,
     this.announcement,
     this.needFetch = false,
   }) : super(key: key);
+
+  static const String routerName = '/news/edit';
+
+  final Mode mode;
+  final Announcement? announcement;
+  final bool needFetch;
 
   @override
   _AnnouncementEditPageState createState() => _AnnouncementEditPageState();

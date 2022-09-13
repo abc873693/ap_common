@@ -2,9 +2,9 @@ import 'package:ap_common/resources/ap_theme.dart';
 import 'package:flutter/material.dart';
 
 class ProgressDialog extends StatelessWidget {
-  final String content;
-
   const ProgressDialog(this.content);
+
+  final String content;
 
   @override
   Widget build(BuildContext context) {

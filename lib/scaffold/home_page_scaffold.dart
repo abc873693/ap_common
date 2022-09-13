@@ -18,23 +18,6 @@ export 'package:ap_common/models/announcement_data.dart';
 enum HomeState { loading, finish, error, empty, offline }
 
 class HomePageScaffold extends StatefulWidget {
-  final HomeState state;
-  final String? title;
-  final List<Announcement> announcements;
-  final List<Widget>? actions;
-  final List<BottomNavigationBarItem>? bottomNavigationBarItems;
-
-  final Function(int index)? onTabTapped;
-  final Function(Announcement announcement)? onImageTapped;
-
-  final Widget? drawer;
-  final Widget? content;
-  final Widget? floatingActionButton;
-
-  final bool isLogin;
-  final bool autoPlay;
-  final Duration autoPlayDuration;
-
   const HomePageScaffold({
     Key? key,
     required this.state,
@@ -51,6 +34,23 @@ class HomePageScaffold extends StatefulWidget {
     this.autoPlay = true,
     this.autoPlayDuration = const Duration(milliseconds: 5000),
   }) : super(key: key);
+
+  final HomeState state;
+  final String? title;
+  final List<Announcement> announcements;
+  final List<Widget>? actions;
+  final List<BottomNavigationBarItem>? bottomNavigationBarItems;
+
+  final Function(int index)? onTabTapped;
+  final Function(Announcement announcement)? onImageTapped;
+
+  final Widget? drawer;
+  final Widget? content;
+  final Widget? floatingActionButton;
+
+  final bool isLogin;
+  final bool autoPlay;
+  final Duration autoPlayDuration;
 
   @override
   HomePageScaffoldState createState() => HomePageScaffoldState();

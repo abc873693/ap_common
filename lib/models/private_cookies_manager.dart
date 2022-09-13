@@ -55,6 +55,18 @@ class PrivateCookieManager extends CookieManager {
 }
 
 class _Cookie implements Cookie {
+  _Cookie(String name, String value)
+      : _name = _validateName(name),
+        _value = _validateValue(value),
+        httpOnly = true;
+
+  _Cookie.fromSetCookieValue(String value)
+      : _name = '',
+        _value = '' {
+    // Parse the 'set-cookie' header value.
+    _parseSetCookieValue(value);
+  }
+
   String _name;
   String _value;
   @override
@@ -68,11 +80,6 @@ class _Cookie implements Cookie {
   bool httpOnly = false;
   @override
   bool secure = false;
-
-  _Cookie(String name, String value)
-      : _name = _validateName(name),
-        _value = _validateValue(value),
-        httpOnly = true;
 
   @override
   String get name => _name;
@@ -99,13 +106,6 @@ class _Cookie implements Cookie {
   set value(String newValue) {
     _validateValue(newValue);
     _value = newValue;
-  }
-
-  _Cookie.fromSetCookieValue(String value)
-      : _name = '',
-        _value = '' {
-    // Parse the 'set-cookie' header value.
-    _parseSetCookieValue(value);
   }
 
   // Parse a 'set-cookie' header value according to the rules in RFC 6265.

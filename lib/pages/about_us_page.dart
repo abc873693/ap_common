@@ -11,21 +11,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_linkify/flutter_linkify.dart';
 
 class AboutUsPage extends StatefulWidget {
-  /// /about
-  static const String routerName = '/about';
-  final String assetImage;
-  final String fbFanPageUrl;
-  final String fbFanPageId;
-  final String githubUrl;
-  final String githubName;
-  final String email;
-  final String appLicense;
-  final String? applicationName;
-  final String? applicationVersion;
-  final Widget? applicationIcon;
-  final String? applicationLegalese;
-  final List<Widget>? actions;
-
   const AboutUsPage({
     Key? key,
     required this.assetImage,
@@ -41,6 +26,21 @@ class AboutUsPage extends StatefulWidget {
     this.applicationIcon,
     this.applicationLegalese,
   }) : super(key: key);
+
+  /// /about
+  static const String routerName = '/about';
+  final String assetImage;
+  final String fbFanPageUrl;
+  final String fbFanPageId;
+  final String githubUrl;
+  final String githubName;
+  final String email;
+  final String appLicense;
+  final String? applicationName;
+  final String? applicationVersion;
+  final Widget? applicationIcon;
+  final String? applicationLegalese;
+  final List<Widget>? actions;
 
   @override
   AboutUsPageState createState() => AboutUsPageState();

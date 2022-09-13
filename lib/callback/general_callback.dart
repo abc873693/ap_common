@@ -10,10 +10,6 @@ typedef DioErrorCallback = Function(DioError);
 typedef GeneralResponseCallback = Function(GeneralResponse);
 
 class GeneralCallback<T> {
-  final Function(DioError e) onFailure;
-  final Function(GeneralResponse response) onError;
-  final Function(T data) onSuccess;
-
   GeneralCallback({
     required this.onFailure,
     required this.onError,
@@ -30,6 +26,10 @@ class GeneralCallback<T> {
       onSuccess: onSuccess,
     );
   }
+
+  final Function(DioError e) onFailure;
+  final Function(GeneralResponse response) onError;
+  final Function(T data) onSuccess;
 
   static DioErrorCallback onFailureCallback(BuildContext context) =>
       (DioError dioError) => ApUtils.showToast(context, dioError.i18nMessage);

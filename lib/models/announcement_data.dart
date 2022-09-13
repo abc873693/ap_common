@@ -7,8 +7,6 @@ part 'announcement_data.g.dart';
 
 @JsonSerializable()
 class AnnouncementData {
-  List<Announcement>? data;
-
   AnnouncementData({
     this.data,
   });
@@ -16,11 +14,13 @@ class AnnouncementData {
   factory AnnouncementData.fromJson(Map<String, dynamic> json) =>
       _$AnnouncementDataFromJson(json);
 
-  Map<String, dynamic> toJson() => _$AnnouncementDataToJson(this);
-
   factory AnnouncementData.fromRawJson(String str) => AnnouncementData.fromJson(
         json.decode(str) as Map<String, dynamic>,
       );
+
+  List<Announcement>? data;
+
+  Map<String, dynamic> toJson() => _$AnnouncementDataToJson(this);
 
   String toRawJson() => jsonEncode(toJson());
 
@@ -39,26 +39,6 @@ class AnnouncementData {
 
 @JsonSerializable()
 class Announcement {
-  String? title;
-  int? id;
-  int? nextId;
-  int? lastId;
-  int? weight;
-  String? imgUrl;
-  String? url;
-  String? description;
-  String? publishedTime;
-  String? expireTime;
-  String? applicant;
-  @JsonKey(name: 'application_id')
-  String? applicationId;
-  bool? reviewStatus;
-  String? reviewDescription;
-  @JsonKey(name: 'tag')
-  List<String>? tags;
-  @JsonKey(ignore: true)
-  int? randomWeight;
-
   Announcement({
     this.title,
     this.id,
@@ -81,11 +61,31 @@ class Announcement {
   factory Announcement.fromJson(Map<String, dynamic> json) =>
       _$AnnouncementFromJson(json);
 
-  Map<String, dynamic> toJson() => _$AnnouncementToJson(this);
-
   factory Announcement.fromRawJson(String str) => Announcement.fromJson(
         json.decode(str) as Map<String, dynamic>,
       );
+
+  String? title;
+  int? id;
+  int? nextId;
+  int? lastId;
+  int? weight;
+  String? imgUrl;
+  String? url;
+  String? description;
+  String? publishedTime;
+  String? expireTime;
+  String? applicant;
+  @JsonKey(name: 'application_id')
+  String? applicationId;
+  bool? reviewStatus;
+  String? reviewDescription;
+  @JsonKey(name: 'tag')
+  List<String>? tags;
+  @JsonKey(ignore: true)
+  int? randomWeight;
+
+  Map<String, dynamic> toJson() => _$AnnouncementToJson(this);
 
   String toRawJson() => jsonEncode(toJson());
 

@@ -8,9 +8,6 @@ part 'score_data.g.dart';
 
 @JsonSerializable()
 class ScoreData {
-  List<Score>? scores;
-  Detail? detail;
-
   ScoreData({
     this.scores,
     this.detail,
@@ -19,21 +16,9 @@ class ScoreData {
   factory ScoreData.fromJson(Map<String, dynamic> json) =>
       _$ScoreDataFromJson(json);
 
-  Map<String, dynamic> toJson() => _$ScoreDataToJson(this);
-
   factory ScoreData.fromRawJson(String str) => ScoreData.fromJson(
         json.decode(str) as Map<String, dynamic>,
       );
-
-  String toRawJson() => jsonEncode(toJson());
-
-  void save(String tag) {
-    Preferences.setString(
-      '${ApConstants.packageName}'
-      '.score_data_$tag',
-      toRawJson(),
-    );
-  }
 
   static ScoreData? load(String tag) {
     final String rawString = Preferences.getString(
@@ -47,18 +32,25 @@ class ScoreData {
       return ScoreData.fromRawJson(rawString);
     }
   }
+
+  List<Score>? scores;
+  Detail? detail;
+
+  Map<String, dynamic> toJson() => _$ScoreDataToJson(this);
+
+  String toRawJson() => jsonEncode(toJson());
+
+  void save(String tag) {
+    Preferences.setString(
+      '${ApConstants.packageName}'
+      '.score_data_$tag',
+      toRawJson(),
+    );
+  }
 }
 
 @JsonSerializable()
 class Detail {
-  double? creditTaken;
-  double? creditEarned;
-  double? conduct;
-  double? average;
-  String? classRank;
-  String? departmentRank;
-  double? classPercentage;
-
   Detail({
     this.creditTaken,
     this.creditEarned,
@@ -69,34 +61,29 @@ class Detail {
     this.classPercentage,
   });
 
-  bool get isCreditEmpty => creditTaken == null && creditEarned == null;
-
   factory Detail.fromJson(Map<String, dynamic> json) => _$DetailFromJson(json);
-
-  Map<String, dynamic> toJson() => _$DetailToJson(this);
 
   factory Detail.fromRawJson(String str) => Detail.fromJson(
         json.decode(str) as Map<String, dynamic>,
       );
+
+  double? creditTaken;
+  double? creditEarned;
+  double? conduct;
+  double? average;
+  String? classRank;
+  String? departmentRank;
+  double? classPercentage;
+
+  bool get isCreditEmpty => creditTaken == null && creditEarned == null;
+
+  Map<String, dynamic> toJson() => _$DetailToJson(this);
 
   String toRawJson() => jsonEncode(toJson());
 }
 
 @JsonSerializable()
 class Score {
-  String? courseNumber;
-  bool isPreScore;
-  String? title;
-  String? units;
-  String? hours;
-  String? required;
-  String? at;
-  String? middleScore;
-  String? generalScore;
-  String? finalScore;
-  String? semesterScore;
-  String? remark;
-
   Score({
     this.courseNumber,
     this.isPreScore = false,
@@ -114,11 +101,24 @@ class Score {
 
   factory Score.fromJson(Map<String, dynamic> json) => _$ScoreFromJson(json);
 
-  Map<String, dynamic> toJson() => _$ScoreToJson(this);
-
   factory Score.fromRawJson(String str) => Score.fromJson(
         json.decode(str) as Map<String, dynamic>,
       );
+
+  String? courseNumber;
+  bool isPreScore;
+  String? title;
+  String? units;
+  String? hours;
+  String? required;
+  String? at;
+  String? middleScore;
+  String? generalScore;
+  String? finalScore;
+  String? semesterScore;
+  String? remark;
+
+  Map<String, dynamic> toJson() => _$ScoreToJson(this);
 
   String toRawJson() => jsonEncode(toJson());
 }

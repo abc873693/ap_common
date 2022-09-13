@@ -45,16 +45,16 @@ const String _kCourseInvisibleKey =
     '${ApConstants.packageName}.course_invisible_';
 
 class CourseConfig extends InheritedWidget {
-  final bool? showSectionTime;
-  final bool? showInstructors;
-  final bool? showClassroomLocation;
-
   const CourseConfig({
     this.showSectionTime,
     this.showInstructors,
     this.showClassroomLocation,
     required Widget child,
   }) : super(child: child);
+
+  final bool? showSectionTime;
+  final bool? showInstructors;
+  final bool? showClassroomLocation;
 
   static CourseConfig of(BuildContext context) {
     return context.dependOnInheritedWidgetOfExactType()!;
@@ -67,33 +67,6 @@ class CourseConfig extends InheritedWidget {
 }
 
 class CourseScaffold extends StatefulWidget {
-  /// 必要欄位，總共有
-  /// `loading` `finish` `error` `empty` `offlineEmpty` `custom` 的狀態，
-  /// 只有`finish`才會顯示課表介面，其餘都是顯示錯誤狀況
-  final CourseState state;
-  final String? customStateHint;
-  final CourseData courseData;
-  final String? title;
-  final Widget? itemPicker;
-  final SemesterData? semesterData;
-  final Function(int index)? onSelect;
-  final Function()? onSearchButtonClick;
-  final Function()? onRefresh;
-  final List<Widget>? actions;
-  final String? customHint;
-  final bool enableNotifyControl;
-  final CourseNotifyData? notifyData;
-  final bool autoNotifySave;
-  final CourseNotifyCallback? onNotifyClick;
-  final String courseNotifySaveKey;
-  final bool enableAddToCalendar;
-  final String? androidResourceIcon;
-  final bool enableCaptureCourseTable;
-  final bool? showSectionTime;
-  final bool? showInstructors;
-  final bool? showClassroomLocation;
-  final bool? showSearchButton;
-
   const CourseScaffold({
     Key? key,
     required this.state,
@@ -120,6 +93,33 @@ class CourseScaffold extends StatefulWidget {
     this.showClassroomLocation,
     this.showSearchButton,
   }) : super(key: key);
+
+  /// 必要欄位，總共有
+  /// `loading` `finish` `error` `empty` `offlineEmpty` `custom` 的狀態，
+  /// 只有`finish`才會顯示課表介面，其餘都是顯示錯誤狀況
+  final CourseState state;
+  final String? customStateHint;
+  final CourseData courseData;
+  final String? title;
+  final Widget? itemPicker;
+  final SemesterData? semesterData;
+  final Function(int index)? onSelect;
+  final Function()? onSearchButtonClick;
+  final Function()? onRefresh;
+  final List<Widget>? actions;
+  final String? customHint;
+  final bool enableNotifyControl;
+  final CourseNotifyData? notifyData;
+  final bool autoNotifySave;
+  final CourseNotifyCallback? onNotifyClick;
+  final String courseNotifySaveKey;
+  final bool enableAddToCalendar;
+  final String? androidResourceIcon;
+  final bool enableCaptureCourseTable;
+  final bool? showSectionTime;
+  final bool? showInstructors;
+  final bool? showClassroomLocation;
+  final bool? showSearchButton;
 
   @override
   CourseScaffoldState createState() => CourseScaffoldState();
@@ -690,19 +690,6 @@ class CourseScaffoldState extends State<CourseScaffold> {
 }
 
 class CourseContent extends StatefulWidget {
-  final bool enableNotifyControl;
-  final Course course;
-  final TimeCode timeCode;
-  final int weekday;
-  final CourseNotifyData? notifyData;
-  final bool autoNotifySave;
-  final CourseNotifyCallback? onNotifyClick;
-  final String courseNotifySaveKey;
-  final bool enableAddToCalendar;
-  final String? androidResourceIcon;
-  final List<String> invisibleCourseCodes;
-  final ValueChanged<bool>? onVisibilityChanged;
-
   const CourseContent({
     Key? key,
     required this.enableNotifyControl,
@@ -718,6 +705,19 @@ class CourseContent extends StatefulWidget {
     this.invisibleCourseCodes = const <String>[],
     this.onVisibilityChanged,
   }) : super(key: key);
+
+  final bool enableNotifyControl;
+  final Course course;
+  final TimeCode timeCode;
+  final int weekday;
+  final CourseNotifyData? notifyData;
+  final bool autoNotifySave;
+  final CourseNotifyCallback? onNotifyClick;
+  final String courseNotifySaveKey;
+  final bool enableAddToCalendar;
+  final String? androidResourceIcon;
+  final List<String> invisibleCourseCodes;
+  final ValueChanged<bool>? onVisibilityChanged;
 
   @override
   _CourseContentState createState() => _CourseContentState();
@@ -913,14 +913,14 @@ class _CourseContentState extends State<CourseContent> {
 }
 
 class TimeCodeBorder extends StatelessWidget {
-  final TimeCode timeCode;
-  final bool hasHoliday;
-
   const TimeCodeBorder({
     Key? key,
     required this.timeCode,
     required this.hasHoliday,
   }) : super(key: key);
+
+  final TimeCode timeCode;
+  final bool hasHoliday;
 
   @override
   Widget build(BuildContext context) {
@@ -964,11 +964,6 @@ class TimeCodeBorder extends StatelessWidget {
 }
 
 class CourseList extends StatelessWidget {
-  final List<Course> courses;
-  final List<String> invisibleCourseCodes;
-  final void Function(Course, bool)? onVisibilityChanged;
-  final List<TimeCode>? timeCodes;
-
   const CourseList({
     Key? key,
     required this.courses,
@@ -976,6 +971,11 @@ class CourseList extends StatelessWidget {
     this.onVisibilityChanged,
     this.timeCodes,
   }) : super(key: key);
+
+  final List<Course> courses;
+  final List<String> invisibleCourseCodes;
+  final void Function(Course, bool)? onVisibilityChanged;
+  final List<TimeCode>? timeCodes;
 
   @override
   Widget build(BuildContext context) {
@@ -1130,15 +1130,6 @@ class CourseList extends StatelessWidget {
 }
 
 class CourseBorder extends StatelessWidget {
-  final Course? course;
-  final SectionTime? sectionTime;
-  final TimeCode? timeCode;
-  final double height;
-  final double width;
-  final Border? border;
-  final Color? color;
-  final void Function(int weekday, TimeCode timeCode, Course course)? onPressed;
-
   const CourseBorder({
     Key? key,
     this.course,
@@ -1150,6 +1141,15 @@ class CourseBorder extends StatelessWidget {
     this.border,
     this.color,
   }) : super(key: key);
+
+  final Course? course;
+  final SectionTime? sectionTime;
+  final TimeCode? timeCode;
+  final double height;
+  final double width;
+  final Border? border;
+  final Color? color;
+  final void Function(int weekday, TimeCode timeCode, Course course)? onPressed;
 
   @override
   Widget build(BuildContext context) {
@@ -1224,15 +1224,6 @@ class CourseBorder extends StatelessWidget {
 }
 
 class CourseScaffoldSettingDialog extends StatefulWidget {
-  final bool? showSectionTime;
-  final bool? showInstructors;
-  final bool? showClassroomLocation;
-  final bool? showSearchButton;
-  final Function(bool?)? showSectionTimeOnChanged;
-  final Function(bool?)? showInstructorsOnChanged;
-  final Function(bool?)? showClassroomLocationOnChanged;
-  final Function(bool?)? showSearchButtonOnChanged;
-
   const CourseScaffoldSettingDialog({
     Key? key,
     required this.showSectionTime,
@@ -1244,6 +1235,15 @@ class CourseScaffoldSettingDialog extends StatefulWidget {
     this.showClassroomLocationOnChanged,
     this.showSearchButtonOnChanged,
   }) : super(key: key);
+
+  final bool? showSectionTime;
+  final bool? showInstructors;
+  final bool? showClassroomLocation;
+  final bool? showSearchButton;
+  final Function(bool?)? showSectionTimeOnChanged;
+  final Function(bool?)? showInstructorsOnChanged;
+  final Function(bool?)? showClassroomLocationOnChanged;
+  final Function(bool?)? showSearchButtonOnChanged;
 
   @override
   _CourseScaffoldSettingDialogState createState() =>

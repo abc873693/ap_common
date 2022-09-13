@@ -14,12 +14,12 @@ import 'package:flutter/material.dart';
 export 'package:package_info_plus/package_info_plus.dart';
 
 class SettingTitle extends StatelessWidget {
-  final String text;
-
   const SettingTitle({
     Key? key,
     required this.text,
   }) : super(key: key);
+
+  final String text;
 
   @override
   Widget build(BuildContext context) {
@@ -38,11 +38,6 @@ class SettingTitle extends StatelessWidget {
 }
 
 class SettingSwitch extends StatelessWidget {
-  final String text;
-  final String subText;
-  final bool value;
-  final void Function(bool) onChanged;
-
   const SettingSwitch({
     Key? key,
     required this.text,
@@ -50,6 +45,11 @@ class SettingSwitch extends StatelessWidget {
     required this.value,
     required this.onChanged,
   }) : super(key: key);
+
+  final String text;
+  final String subText;
+  final bool value;
+  final void Function(bool) onChanged;
 
   @override
   Widget build(BuildContext context) {
@@ -73,16 +73,16 @@ class SettingSwitch extends StatelessWidget {
 }
 
 class SettingItem extends StatelessWidget {
-  final String text;
-  final String subText;
-  final Function()? onTap;
-
   const SettingItem({
     Key? key,
     required this.text,
     required this.subText,
     this.onTap,
   }) : super(key: key);
+
+  final String text;
+  final String subText;
+  final Function()? onTap;
 
   @override
   Widget build(BuildContext context) {
@@ -101,9 +101,8 @@ class SettingItem extends StatelessWidget {
 }
 
 class CheckCourseNotifyItem extends StatelessWidget {
-  final String? tag;
-
   const CheckCourseNotifyItem({Key? key, this.tag}) : super(key: key);
+  final String? tag;
 
   @override
   Widget build(BuildContext context) {
@@ -149,9 +148,9 @@ class CheckCourseNotifyItem extends StatelessWidget {
 }
 
 class ClearAllNotifyItem extends StatelessWidget {
-  final String? tag;
-
   const ClearAllNotifyItem({Key? key, this.tag}) : super(key: key);
+
+  final String? tag;
 
   @override
   Widget build(BuildContext context) {
@@ -177,14 +176,14 @@ class ClearAllNotifyItem extends StatelessWidget {
 }
 
 class ChangeLanguageItem extends StatelessWidget {
-  final Function(Locale locale) onChange;
-  final List<String>? textList;
-
   const ChangeLanguageItem({
     Key? key,
     required this.onChange,
     this.textList,
   }) : super(key: key);
+
+  final Function(Locale locale) onChange;
+  final List<String>? textList;
 
   @override
   Widget build(BuildContext context) {
@@ -253,14 +252,14 @@ class ChangeLanguageItem extends StatelessWidget {
 }
 
 class ChangeThemeModeItem extends StatelessWidget {
-  final Function(ThemeMode themeMode) onChange;
-  final List<String>? textList;
-
   const ChangeThemeModeItem({
     Key? key,
     required this.onChange,
     this.textList,
   }) : super(key: key);
+
+  final Function(ThemeMode themeMode) onChange;
+  final List<String>? textList;
 
   @override
   Widget build(BuildContext context) {
@@ -302,12 +301,12 @@ class ChangeThemeModeItem extends StatelessWidget {
 }
 
 class ChangeIconStyleItem extends StatelessWidget {
-  final Function(String code) onChange;
-
   const ChangeIconStyleItem({
     Key? key,
     required this.onChange,
   }) : super(key: key);
+
+  final Function(String code) onChange;
 
   @override
   Widget build(BuildContext context) {

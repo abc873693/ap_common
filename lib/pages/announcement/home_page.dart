@@ -26,13 +26,6 @@ enum _State { notLogin, loading, done, error }
 enum _DataType { announcement, application }
 
 class AnnouncementHomePage extends StatefulWidget {
-  static const String routerName = '/announcement';
-
-  final Widget? loginDescriptionWidget;
-  final Widget? reviewDescriptionWidget;
-  final String? organizationDomain;
-  final bool enableNormalLogin;
-
   const AnnouncementHomePage({
     Key? key,
     this.loginDescriptionWidget,
@@ -40,6 +33,13 @@ class AnnouncementHomePage extends StatefulWidget {
     this.organizationDomain,
     this.enableNormalLogin = false,
   }) : super(key: key);
+
+  final Widget? loginDescriptionWidget;
+  final Widget? reviewDescriptionWidget;
+  final String? organizationDomain;
+  final bool enableNormalLogin;
+
+  static const String routerName = '/announcement';
 
   @override
   _AnnouncementHomePageState createState() => _AnnouncementHomePageState();

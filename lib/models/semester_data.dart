@@ -8,6 +8,32 @@ part 'semester_data.g.dart';
 
 @JsonSerializable()
 class SemesterData {
+  SemesterData({
+    this.data,
+    this.defaultSemester,
+    this.currentIndex = 0,
+  });
+
+  factory SemesterData.fromJson(Map<String, dynamic> json) =>
+      _$SemesterDataFromJson(json);
+
+  factory SemesterData.fromRawJson(String str) => SemesterData.fromJson(
+        json.decode(str) as Map<String, dynamic>,
+      );
+
+  static SemesterData? load() {
+    final String rawString = Preferences.getString(
+      '${ApConstants.packageName}'
+          'semester_data',
+      '',
+    );
+    if (rawString == '') {
+      return null;
+    } else {
+      return SemesterData.fromRawJson(rawString);
+    }
+  }
+
   List<Semester>? data;
   @JsonKey(name: 'default')
   Semester? defaultSemester;
@@ -33,20 +59,7 @@ class SemesterData {
     return texts;
   }
 
-  SemesterData({
-    this.data,
-    this.defaultSemester,
-    this.currentIndex = 0,
-  });
-
-  factory SemesterData.fromJson(Map<String, dynamic> json) =>
-      _$SemesterDataFromJson(json);
-
   Map<String, dynamic> toJson() => _$SemesterDataToJson(this);
-
-  factory SemesterData.fromRawJson(String str) => SemesterData.fromJson(
-        json.decode(str) as Map<String, dynamic>,
-      );
 
   String toRawJson() => jsonEncode(toJson());
 
@@ -57,31 +70,10 @@ class SemesterData {
       toRawJson(),
     );
   }
-
-  static SemesterData? load() {
-    final String rawString = Preferences.getString(
-      '${ApConstants.packageName}'
-          'semester_data',
-      '',
-    );
-    if (rawString == '') {
-      return null;
-    } else {
-      return SemesterData.fromRawJson(rawString);
-    }
-  }
 }
 
 @JsonSerializable()
 class Semester {
-  String? year;
-  String? value;
-  String? text;
-
-  String get code => '$year$value';
-
-//  String get cacheSaveTag => '${Helper.username}_$code';
-
   Semester({
     this.year,
     this.value,
@@ -91,11 +83,19 @@ class Semester {
   factory Semester.fromJson(Map<String, dynamic> json) =>
       _$SemesterFromJson(json);
 
-  Map<String, dynamic> toJson() => _$SemesterToJson(this);
-
   factory Semester.fromRawJson(String str) => Semester.fromJson(
         json.decode(str) as Map<String, dynamic>,
       );
+
+  String? year;
+  String? value;
+  String? text;
+
+  String get code => '$year$value';
+
+//  String get cacheSaveTag => '${Helper.username}_$code';
+
+  Map<String, dynamic> toJson() => _$SemesterToJson(this);
 
   String toRawJson() => jsonEncode(toJson());
 }

@@ -7,12 +7,12 @@ import 'package:ap_common/widgets/ap_network_image.dart';
 import 'package:flutter/material.dart';
 
 class CloudMessageContentPage extends StatefulWidget {
-  final CloudMessage message;
-
   const CloudMessageContentPage({
     Key? key,
     required this.message,
   }) : super(key: key);
+
+  final CloudMessage message;
 
   @override
   _CloudMessageContentPageState createState() =>

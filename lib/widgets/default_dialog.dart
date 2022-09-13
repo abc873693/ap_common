@@ -2,12 +2,6 @@ import 'package:ap_common/resources/ap_theme.dart';
 import 'package:flutter/material.dart';
 
 class DefaultDialog extends StatelessWidget {
-  final String title;
-  final Widget contentWidget;
-  final String actionText;
-  final Function() actionFunction;
-  final EdgeInsetsGeometry? contentPadding;
-
   const DefaultDialog({
     Key? key,
     required this.title,
@@ -16,6 +10,12 @@ class DefaultDialog extends StatelessWidget {
     required this.actionFunction,
     this.contentPadding,
   }) : super(key: key);
+
+  final String title;
+  final Widget contentWidget;
+  final String actionText;
+  final Function() actionFunction;
+  final EdgeInsetsGeometry? contentPadding;
 
   static void showSample(BuildContext context) => showDialog(
         context: context,

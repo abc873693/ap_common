@@ -16,19 +16,19 @@ class ImgurUploadResponse {
     this.data,
   });
 
-  int? status;
-  bool? success;
-  ImgurUploadData? data;
-
   factory ImgurUploadResponse.fromJson(Map<String, dynamic> json) =>
       _$ImgurUploadResponseFromJson(json);
-
-  Map<String, dynamic> toJson() => _$ImgurUploadResponseToJson(this);
 
   factory ImgurUploadResponse.fromRawJson(String str) =>
       ImgurUploadResponse.fromJson(
         json.decode(str) as Map<String, dynamic>,
       );
+
+  int? status;
+  bool? success;
+  ImgurUploadData? data;
+
+  Map<String, dynamic> toJson() => _$ImgurUploadResponseToJson(this);
 
   String toRawJson() => jsonEncode(toJson());
 }
@@ -66,6 +66,13 @@ class ImgurUploadData {
     this.mp4,
     this.hls,
   });
+
+  factory ImgurUploadData.fromJson(Map<String, dynamic> json) =>
+      _$ImgurUploadDataFromJson(json);
+
+  factory ImgurUploadData.fromRawJson(String str) => ImgurUploadData.fromJson(
+        json.decode(str) as Map<String, dynamic>,
+      );
 
   String? id;
   String? deletehash;
@@ -160,14 +167,7 @@ class ImgurUploadData {
         hls: hls ?? this.hls,
       );
 
-  factory ImgurUploadData.fromJson(Map<String, dynamic> json) =>
-      _$ImgurUploadDataFromJson(json);
-
   Map<String, dynamic> toJson() => _$ImgurUploadDataToJson(this);
-
-  factory ImgurUploadData.fromRawJson(String str) => ImgurUploadData.fromJson(
-        json.decode(str) as Map<String, dynamic>,
-      );
 
   String toRawJson() => jsonEncode(toJson());
 }

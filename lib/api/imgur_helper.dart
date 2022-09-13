@@ -11,16 +11,6 @@ export 'package:ap_common/callback/general_callback.dart';
 export 'package:ap_common/models/announcement_login_data.dart';
 
 class ImgurHelper {
-  static const String clientId = 'bf8e32144d00b04';
-
-  static ImgurHelper? _instance;
-
-  late Dio dio;
-
-  static ImgurHelper? get instance {
-    return _instance ??= ImgurHelper();
-  }
-
   ImgurHelper() {
     dio = Dio(
       BaseOptions(
@@ -28,6 +18,16 @@ class ImgurHelper {
       ),
     );
   }
+
+  static ImgurHelper? get instance {
+    return _instance ??= ImgurHelper();
+  }
+
+  late Dio dio;
+
+  static const String clientId = 'bf8e32144d00b04';
+
+  static ImgurHelper? _instance;
 
   Future<ImgurUploadData?> uploadImageToImgur({
     required XFile file,

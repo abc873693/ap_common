@@ -10,12 +10,6 @@ import 'package:flutter/material.dart';
 enum BarCodeMode { code39, qrCode }
 
 class UserInfoScaffold extends StatefulWidget {
-  final UserInfo userInfo;
-  final String? heroTag;
-  final List<Widget>? actions;
-  final Future<UserInfo> Function()? onRefresh;
-  final bool enableBarCode;
-
   const UserInfoScaffold({
     Key? key,
     required this.userInfo,
@@ -24,6 +18,12 @@ class UserInfoScaffold extends StatefulWidget {
     this.onRefresh,
     this.enableBarCode = false,
   }) : super(key: key);
+
+  final UserInfo userInfo;
+  final String? heroTag;
+  final List<Widget>? actions;
+  final Future<UserInfo> Function()? onRefresh;
+  final bool enableBarCode;
 
   @override
   UserInfoScaffoldState createState() => UserInfoScaffoldState();
@@ -118,16 +118,16 @@ class UserInfoScaffoldState extends State<UserInfoScaffold> {
 }
 
 class UserInfoCard extends StatelessWidget {
-  final UserInfo? userInfo;
-  final BarCodeMode? codeMode;
-  final bool enableBarCode;
-
   const UserInfoCard({
     Key? key,
     this.userInfo,
     this.codeMode,
     this.enableBarCode = false,
   }) : super(key: key);
+
+  final UserInfo? userInfo;
+  final BarCodeMode? codeMode;
+  final bool enableBarCode;
 
   Barcode get barcode {
     switch (codeMode) {

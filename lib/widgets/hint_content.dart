@@ -2,13 +2,13 @@ import 'package:ap_common/resources/ap_theme.dart';
 import 'package:flutter/material.dart';
 
 class HintContent extends StatelessWidget {
-  final IconData icon;
-  final String content;
-
   const HintContent({
     required this.icon,
     required this.content,
   });
+
+  final IconData icon;
+  final String content;
 
   @override
   Widget build(BuildContext context) {

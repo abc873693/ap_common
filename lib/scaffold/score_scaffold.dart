@@ -12,6 +12,27 @@ import 'package:flutter/material.dart';
 enum ScoreState { loading, finish, error, empty, offlineEmpty, custom }
 
 class ScoreScaffold extends StatefulWidget {
+  const ScoreScaffold({
+    Key? key,
+    required this.state,
+    required this.scoreData,
+    required this.onRefresh,
+    this.title,
+    this.itemPicker,
+    this.semesterData,
+    this.onSelect,
+    this.onSearchButtonClick,
+    this.middleTitle,
+    this.finalTitle,
+    this.onScoreSelect,
+    this.middleScoreBuilder,
+    this.finalScoreBuilder,
+    this.customHint,
+    this.isShowSearchButton = true,
+    this.details,
+    this.bottom,
+    this.customStateHint,
+  }) : super(key: key);
   static const String routerName = '/score';
 
   final ScoreState state;
@@ -35,28 +56,6 @@ class ScoreScaffold extends StatefulWidget {
   final String? customHint;
 
   final Widget? bottom;
-
-  const ScoreScaffold({
-    Key? key,
-    required this.state,
-    required this.scoreData,
-    required this.onRefresh,
-    this.title,
-    this.itemPicker,
-    this.semesterData,
-    this.onSelect,
-    this.onSearchButtonClick,
-    this.middleTitle,
-    this.finalTitle,
-    this.onScoreSelect,
-    this.middleScoreBuilder,
-    this.finalScoreBuilder,
-    this.customHint,
-    this.isShowSearchButton = true,
-    this.details,
-    this.bottom,
-    this.customStateHint,
-  }) : super(key: key);
 
   @override
   ScoreScaffoldState createState() => ScoreScaffoldState();
@@ -198,15 +197,6 @@ class ScoreScaffoldState extends State<ScoreScaffold> {
 }
 
 class ScoreContent extends StatefulWidget {
-  final ScoreData? scoreData;
-  final Function()? onRefresh;
-  final String? middleTitle;
-  final String? finalTitle;
-  final Function(int index)? onScoreSelect;
-  final Widget Function(int index)? middleScoreBuilder;
-  final Widget Function(int index)? finalScoreBuilder;
-  final List<String>? details;
-
   const ScoreContent({
     Key? key,
     required this.scoreData,
@@ -218,6 +208,15 @@ class ScoreContent extends StatefulWidget {
     this.finalScoreBuilder,
     this.details,
   }) : super(key: key);
+
+  final ScoreData? scoreData;
+  final Function()? onRefresh;
+  final String? middleTitle;
+  final String? finalTitle;
+  final Function(int index)? onScoreSelect;
+  final Widget Function(int index)? middleScoreBuilder;
+  final Widget Function(int index)? finalScoreBuilder;
+  final List<String>? details;
 
   @override
   _ScoreContentState createState() => _ScoreContentState();
@@ -366,17 +365,16 @@ class _ScoreContentState extends State<ScoreContent> {
 }
 
 class ScoreTextBorder extends StatelessWidget {
-  final String? text;
-  final TextStyle style;
-
-  final Function()? onTap;
-
   const ScoreTextBorder({
     Key? key,
     required this.text,
     required this.style,
     this.onTap,
   }) : super(key: key);
+  final String? text;
+  final TextStyle style;
+
+  final Function()? onTap;
 
   @override
   Widget build(BuildContext context) {

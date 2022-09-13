@@ -3,16 +3,16 @@ import 'package:ap_common/resources/ap_theme.dart';
 import 'package:flutter/material.dart';
 
 class DialogOption extends StatelessWidget {
-  final String text;
-  final bool check;
-  final Function() onPressed;
-
   const DialogOption({
     Key? key,
     required this.text,
     required this.check,
     required this.onPressed,
   }) : super(key: key);
+
+  final String text;
+  final bool check;
+  final Function() onPressed;
 
   @override
   Widget build(BuildContext context) {

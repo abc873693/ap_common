@@ -15,12 +15,12 @@ import 'package:photo_view/photo_view.dart';
 enum _Status { loading, finish, error, empty }
 
 class AnnouncementContentPage extends StatefulWidget {
-  final Announcement announcement;
-
   const AnnouncementContentPage({
     Key? key,
     required this.announcement,
   }) : super(key: key);
+
+  final Announcement announcement;
 
   @override
   AnnouncementContentPageState createState() => AnnouncementContentPageState();

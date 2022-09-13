@@ -3,26 +3,26 @@ import 'package:flutter/material.dart';
 import 'package:photo_view/photo_view.dart';
 
 class ImageViewer {
-  final String title;
-  final String assetName;
-
   ImageViewer({
     required this.title,
     required this.assetName,
   });
+
+  final String title;
+  final String assetName;
 }
 
 class ImageViewerScaffold extends StatefulWidget {
-  final String? title;
-  final List<ImageViewer> imageViewers;
-  final List<Widget>? actions;
-
   const ImageViewerScaffold({
     Key? key,
     this.title,
     required this.imageViewers,
     this.actions,
   }) : super(key: key);
+
+  final String? title;
+  final List<ImageViewer> imageViewers;
+  final List<Widget>? actions;
 
   @override
   _ImageViewerScaffoldState createState() => _ImageViewerScaffoldState();

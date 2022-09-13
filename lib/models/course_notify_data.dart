@@ -13,6 +13,50 @@ part 'course_notify_data.g.dart';
 
 @JsonSerializable()
 class CourseNotifyData {
+  CourseNotifyData({
+    this.version = 2,
+    this.lastId = 1,
+    this.data = const <CourseNotify>[],
+  });
+
+  factory CourseNotifyData.fromJson(Map<String, dynamic> json) =>
+      _$CourseNotifyDataFromJson(json);
+
+  factory CourseNotifyData.fromRawJson(String str) => CourseNotifyData.fromJson(
+        json.decode(str) as Map<String, dynamic>,
+      );
+
+  factory CourseNotifyData.load(String? tag) {
+    final String rawString = Preferences.getString(
+      '${ApConstants.packageName}.'
+          'course_notify_data_$tag',
+      '',
+    );
+    if (rawString == '') {
+      return CourseNotifyData(data: <CourseNotify>[])..tag = tag;
+    } else {
+      return CourseNotifyData.fromRawJson(rawString)..tag = tag;
+    }
+  }
+
+  factory CourseNotifyData.loadCurrent() {
+    final String semester = Preferences.getString(
+      ApConstants.currentSemesterCode,
+      ApConstants.semesterLatest,
+    );
+    final String rawString = Preferences.getString(
+      '${ApConstants.packageName}.'
+          'course_notify_data_$semester',
+      '',
+    );
+    debugPrint(rawString);
+    if (rawString == '') {
+      return CourseNotifyData(data: <CourseNotify>[])..tag = semester;
+    } else {
+      return CourseNotifyData.fromRawJson(rawString)..tag = semester;
+    }
+  }
+
   // ignore: constant_identifier_names
   static const int VERSION = 2;
   static const int initialId = 1;
@@ -23,20 +67,7 @@ class CourseNotifyData {
 
   String? tag;
 
-  CourseNotifyData({
-    this.version = 2,
-    this.lastId = 1,
-    this.data = const <CourseNotify>[],
-  });
-
-  factory CourseNotifyData.fromJson(Map<String, dynamic> json) =>
-      _$CourseNotifyDataFromJson(json);
-
   Map<String, dynamic> toJson() => _$CourseNotifyDataToJson(this);
-
-  factory CourseNotifyData.fromRawJson(String str) => CourseNotifyData.fromJson(
-        json.decode(str) as Map<String, dynamic>,
-      );
 
   String toRawJson() => jsonEncode(toJson());
 
@@ -80,37 +111,6 @@ class CourseNotifyData {
     );
   }
 
-  factory CourseNotifyData.load(String? tag) {
-    final String rawString = Preferences.getString(
-      '${ApConstants.packageName}.'
-          'course_notify_data_$tag',
-      '',
-    );
-    if (rawString == '') {
-      return CourseNotifyData(data: <CourseNotify>[])..tag = tag;
-    } else {
-      return CourseNotifyData.fromRawJson(rawString)..tag = tag;
-    }
-  }
-
-  factory CourseNotifyData.loadCurrent() {
-    final String semester = Preferences.getString(
-      ApConstants.currentSemesterCode,
-      ApConstants.semesterLatest,
-    );
-    final String rawString = Preferences.getString(
-      '${ApConstants.packageName}.'
-          'course_notify_data_$semester',
-      '',
-    );
-    debugPrint(rawString);
-    if (rawString == '') {
-      return CourseNotifyData(data: <CourseNotify>[])..tag = semester;
-    } else {
-      return CourseNotifyData.fromRawJson(rawString)..tag = semester;
-    }
-  }
-
   static void clearOldVersionNotification({
     required String tag,
     required String newTag,
@@ -137,20 +137,6 @@ class CourseNotifyData {
 
 @JsonSerializable()
 class CourseNotify {
-  int id;
-  String? title;
-  String? location;
-  String? code;
-
-  ///The day of the week [DateTime.monday]..[DateTime.sunday].
-  ///In accordance with ISO 8601 a week starts with Monday,
-  /// which has the value 1.
-  int weekday;
-
-  String startTime;
-
-  int get weekdayIndex => weekday - 1;
-
   CourseNotify({
     required this.id,
     required this.weekday,
@@ -159,17 +145,6 @@ class CourseNotify {
     this.location,
     this.code,
   });
-
-  factory CourseNotify.fromJson(Map<String, dynamic> json) =>
-      _$CourseNotifyFromJson(json);
-
-  Map<String, dynamic> toJson() => _$CourseNotifyToJson(this);
-
-  factory CourseNotify.fromRawJson(String str) => CourseNotify.fromJson(
-        json.decode(str) as Map<String, dynamic>,
-      );
-
-  String toRawJson() => jsonEncode(toJson());
 
   factory CourseNotify.fromCourse({
     required int id,
@@ -186,4 +161,29 @@ class CourseNotify {
       location: course.location.toString(),
     );
   }
+
+  factory CourseNotify.fromJson(Map<String, dynamic> json) =>
+      _$CourseNotifyFromJson(json);
+
+  factory CourseNotify.fromRawJson(String str) => CourseNotify.fromJson(
+        json.decode(str) as Map<String, dynamic>,
+      );
+
+  int id;
+  String? title;
+  String? location;
+  String? code;
+
+  ///The day of the week [DateTime.monday]..[DateTime.sunday].
+  ///In accordance with ISO 8601 a week starts with Monday,
+  /// which has the value 1.
+  int weekday;
+
+  String startTime;
+
+  int get weekdayIndex => weekday - 1;
+
+  Map<String, dynamic> toJson() => _$CourseNotifyToJson(this);
+
+  String toRawJson() => jsonEncode(toJson());
 }

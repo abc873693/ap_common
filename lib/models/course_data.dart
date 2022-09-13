@@ -15,6 +15,26 @@ class CourseData {
     this.timeCodes,
   });
 
+  factory CourseData.fromJson(Map<String, dynamic> json) =>
+      _$CourseDataFromJson(json);
+
+  factory CourseData.fromRawJson(String str) => CourseData.fromJson(
+        json.decode(str) as Map<String, dynamic>,
+      );
+
+  static CourseData? load(String tag) {
+    final String rawString = Preferences.getString(
+      '${ApConstants.packageName}'
+          '.course_data_$tag',
+      '',
+    );
+    if (rawString == '') {
+      return null;
+    } else {
+      return CourseData.fromRawJson(rawString);
+    }
+  }
+
   List<Course>? courses;
   List<TimeCode>? timeCodes;
 
@@ -64,14 +84,7 @@ class CourseData {
         timeCodes: timeCodes ?? this.timeCodes,
       );
 
-  factory CourseData.fromJson(Map<String, dynamic> json) =>
-      _$CourseDataFromJson(json);
-
   Map<String, dynamic> toJson() => _$CourseDataToJson(this);
-
-  factory CourseData.fromRawJson(String str) => CourseData.fromJson(
-        json.decode(str) as Map<String, dynamic>,
-      );
 
   String toRawJson() => jsonEncode(toJson());
 
@@ -81,19 +94,6 @@ class CourseData {
       '.course_data_$tag',
       toRawJson(),
     );
-  }
-
-  static CourseData? load(String tag) {
-    final String rawString = Preferences.getString(
-      '${ApConstants.packageName}'
-          '.course_data_$tag',
-      '',
-    );
-    if (rawString == '') {
-      return null;
-    } else {
-      return CourseData.fromRawJson(rawString);
-    }
   }
 
   static Future<void> migrateFrom0_10() async {
@@ -151,6 +151,12 @@ class Course {
     this.instructors,
   });
 
+  factory Course.fromJson(Map<String, dynamic> json) => _$CourseFromJson(json);
+
+  factory Course.fromRawJson(String str) => Course.fromJson(
+        json.decode(str) as Map<String, dynamic>,
+      );
+
   String? code;
   String? title;
   String? className;
@@ -164,40 +170,7 @@ class Course {
   Location? location;
   List<String>? instructors;
 
-  Course copyWith({
-    String? code,
-    String? title,
-    String? className,
-    String? group,
-    String? units,
-    String? hours,
-    String? required,
-    String? at,
-    List<SectionTime>? times,
-    Location? location,
-    List<String>? instructors,
-  }) =>
-      Course(
-        code: code ?? this.code,
-        title: title ?? this.title,
-        className: className ?? this.className,
-        group: group ?? this.group,
-        units: units ?? this.units,
-        hours: hours ?? this.hours,
-        required: required ?? this.required,
-        at: at ?? this.at,
-        times: times ?? this.times,
-        location: location ?? this.location,
-        instructors: instructors ?? this.instructors,
-      );
-
-  factory Course.fromJson(Map<String, dynamic> json) => _$CourseFromJson(json);
-
   Map<String, dynamic> toJson() => _$CourseToJson(this);
-
-  factory Course.fromRawJson(String str) => Course.fromJson(
-        json.decode(str) as Map<String, dynamic>,
-      );
 
   String toRawJson() => jsonEncode(toJson());
 
@@ -243,6 +216,33 @@ class Course {
     }
     return text;
   }
+
+  Course copyWith({
+    String? code,
+    String? title,
+    String? className,
+    String? group,
+    String? units,
+    String? hours,
+    String? required,
+    String? at,
+    List<SectionTime>? times,
+    Location? location,
+    List<String>? instructors,
+  }) =>
+      Course(
+        code: code ?? this.code,
+        title: title ?? this.title,
+        className: className ?? this.className,
+        group: group ?? this.group,
+        units: units ?? this.units,
+        hours: hours ?? this.hours,
+        required: required ?? this.required,
+        at: at ?? this.at,
+        times: times ?? this.times,
+        location: location ?? this.location,
+        instructors: instructors ?? this.instructors,
+      );
 }
 
 @JsonSerializable()
@@ -252,8 +252,18 @@ class Location {
     this.building,
   });
 
+  factory Location.fromJson(Map<String, dynamic> json) =>
+      _$LocationFromJson(json);
+
+  factory Location.fromRawJson(String str) => Location.fromJson(
+        json.decode(str) as Map<String, dynamic>,
+      );
   String? room;
   String? building;
+
+  Map<String, dynamic> toJson() => _$LocationToJson(this);
+
+  String toRawJson() => jsonEncode(toJson());
 
   Location copyWith({
     String? room,
@@ -263,17 +273,6 @@ class Location {
         room: room ?? this.room,
         building: building ?? this.building,
       );
-
-  factory Location.fromJson(Map<String, dynamic> json) =>
-      _$LocationFromJson(json);
-
-  Map<String, dynamic> toJson() => _$LocationToJson(this);
-
-  factory Location.fromRawJson(String str) => Location.fromJson(
-        json.decode(str) as Map<String, dynamic>,
-      );
-
-  String toRawJson() => jsonEncode(toJson());
 
   @override
   String toString() {
@@ -288,6 +287,13 @@ class SectionTime {
     this.index,
   });
 
+  factory SectionTime.fromJson(Map<String, dynamic> json) =>
+      _$SectionTimeFromJson(json);
+
+  factory SectionTime.fromRawJson(String str) => SectionTime.fromJson(
+        json.decode(str) as Map<String, dynamic>,
+      );
+
   ///The day of the week [DateTime.monday]..[DateTime.sunday].
   ///In accordance with ISO 8601 a week starts with Monday,
   /// which has the value 1.
@@ -298,6 +304,10 @@ class SectionTime {
 
   int get weekDayIndex => weekday! - 1;
 
+  Map<String, dynamic> toJson() => _$SectionTimeToJson(this);
+
+  String toRawJson() => jsonEncode(toJson());
+
   SectionTime copyWith({
     int? weekDay,
     int? index,
@@ -306,17 +316,6 @@ class SectionTime {
         weekday: weekDay ?? weekday,
         index: index ?? this.index,
       );
-
-  factory SectionTime.fromJson(Map<String, dynamic> json) =>
-      _$SectionTimeFromJson(json);
-
-  Map<String, dynamic> toJson() => _$SectionTimeToJson(this);
-
-  factory SectionTime.fromRawJson(String str) => SectionTime.fromJson(
-        json.decode(str) as Map<String, dynamic>,
-      );
-
-  String toRawJson() => jsonEncode(toJson());
 }
 
 @JsonSerializable()
@@ -327,9 +326,20 @@ class TimeCode {
     required this.endTime,
   });
 
+  factory TimeCode.fromJson(Map<String, dynamic> json) =>
+      _$TimeCodeFromJson(json);
+
+  factory TimeCode.fromRawJson(String str) => TimeCode.fromJson(
+        json.decode(str) as Map<String, dynamic>,
+      );
+
   String title;
   String startTime;
   String endTime;
+
+  Map<String, dynamic> toJson() => _$TimeCodeToJson(this);
+
+  String toRawJson() => jsonEncode(toJson());
 
   TimeCode copyWith({
     String? title,
@@ -341,17 +351,6 @@ class TimeCode {
         startTime: startTime ?? this.startTime,
         endTime: endTime ?? this.endTime,
       );
-
-  factory TimeCode.fromJson(Map<String, dynamic> json) =>
-      _$TimeCodeFromJson(json);
-
-  Map<String, dynamic> toJson() => _$TimeCodeToJson(this);
-
-  factory TimeCode.fromRawJson(String str) => TimeCode.fromJson(
-        json.decode(str) as Map<String, dynamic>,
-      );
-
-  String toRawJson() => jsonEncode(toJson());
 }
 
 extension TimeCodeExtension on List<TimeCode> {

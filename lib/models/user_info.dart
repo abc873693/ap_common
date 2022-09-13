@@ -9,17 +9,6 @@ part 'user_info.g.dart';
 
 @JsonSerializable()
 class UserInfo {
-  String? educationSystem;
-  String? department;
-  String? className;
-  String? id;
-  String? name;
-  String? pictureUrl;
-  String? email;
-
-  @JsonKey(ignore: true)
-  Uint8List? pictureBytes;
-
   UserInfo({
     this.educationSystem,
     this.department,
@@ -34,21 +23,9 @@ class UserInfo {
   factory UserInfo.fromJson(Map<String, dynamic> json) =>
       _$UserInfoFromJson(json);
 
-  Map<String, dynamic> toJson() => _$UserInfoToJson(this);
-
   factory UserInfo.fromRawJson(String str) => UserInfo.fromJson(
         json.decode(str) as Map<String, dynamic>,
       );
-
-  String toRawJson() => jsonEncode(toJson());
-
-  void save(String tag) {
-    Preferences.setString(
-      '${ApConstants.packageName}'
-      '.user_info_$tag',
-      toRawJson(),
-    );
-  }
 
   static UserInfo? load(String tag) {
     final String rawString = Preferences.getString(
@@ -61,5 +38,28 @@ class UserInfo {
     } else {
       return UserInfo.fromRawJson(rawString);
     }
+  }
+
+  String? educationSystem;
+  String? department;
+  String? className;
+  String? id;
+  String? name;
+  String? pictureUrl;
+  String? email;
+
+  @JsonKey(ignore: true)
+  Uint8List? pictureBytes;
+
+  Map<String, dynamic> toJson() => _$UserInfoToJson(this);
+
+  String toRawJson() => jsonEncode(toJson());
+
+  void save(String tag) {
+    Preferences.setString(
+      '${ApConstants.packageName}'
+      '.user_info_$tag',
+      toRawJson(),
+    );
   }
 }

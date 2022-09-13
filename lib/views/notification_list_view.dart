@@ -11,11 +11,6 @@ import 'package:flutter/material.dart';
 enum NotificationState { loading, finish, loadingMore, error, empty, offline }
 
 class NotificationListView extends StatefulWidget {
-  final NotificationState state;
-  final List<Notifications> notificationList;
-  final Future<void> Function() onRefresh;
-  final Future<void> Function()? onLoadingMore;
-
   const NotificationListView({
     Key? key,
     required this.state,
@@ -23,6 +18,11 @@ class NotificationListView extends StatefulWidget {
     required this.onRefresh,
     this.onLoadingMore,
   }) : super(key: key);
+
+  final NotificationState state;
+  final List<Notifications> notificationList;
+  final Future<void> Function() onRefresh;
+  final Future<void> Function()? onLoadingMore;
 
   @override
   NotificationListViewState createState() => NotificationListViewState();

@@ -15,26 +15,15 @@ class AnnouncementLoginData {
     this.key,
   });
 
-  String? key;
-
-  AnnouncementLoginData copyWith({
-    String? key,
-  }) =>
-      AnnouncementLoginData(
-        key: key ?? this.key,
-      );
-
   factory AnnouncementLoginData.fromJson(Map<String, dynamic> json) =>
       _$AnnouncementLoginDataFromJson(json);
-
-  Map<String, dynamic> toJson() => _$AnnouncementLoginDataToJson(this);
 
   factory AnnouncementLoginData.fromRawJson(String str) =>
       AnnouncementLoginData.fromJson(
         json.decode(str) as Map<String, dynamic>,
       );
 
-  String toRawJson() => jsonEncode(toJson());
+  String? key;
 
   Map<String, dynamic> get decodedToken => JwtDecoder.decode(key!);
 
@@ -49,6 +38,17 @@ class AnnouncementLoginData {
 
   //ignore: avoid_dynamic_calls
   String? get username => decodedToken['user']['username'] as String;
+
+  Map<String, dynamic> toJson() => _$AnnouncementLoginDataToJson(this);
+
+  String toRawJson() => jsonEncode(toJson());
+
+  AnnouncementLoginData copyWith({
+    String? key,
+  }) =>
+      AnnouncementLoginData(
+        key: key ?? this.key,
+      );
 
   void save() {
     Preferences.setStringSecurity(
