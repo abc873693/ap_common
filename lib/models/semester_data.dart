@@ -9,7 +9,7 @@ part 'semester_data.g.dart';
 @JsonSerializable()
 class SemesterData {
   SemesterData({
-    this.data,
+    required this.data,
     this.defaultSemester,
     this.currentIndex = 0,
   });
@@ -34,27 +34,27 @@ class SemesterData {
     }
   }
 
-  List<Semester>? data;
+  List<Semester> data;
   @JsonKey(name: 'default')
   Semester? defaultSemester;
   int currentIndex = 0;
 
   int get defaultIndex {
     if (defaultSemester == null) return 0;
-    for (int i = 0; i < data!.length; i++) {
-      if (defaultSemester!.text == data![i].text) return i;
+    for (int i = 0; i < data.length; i++) {
+      if (defaultSemester!.text == data[i].text) return i;
     }
     return 0;
   }
 
   Semester get currentSemester {
-    return data![currentIndex];
+    return data[currentIndex];
   }
 
   List<String> get semesters {
     final List<String> texts = <String>[];
-    for (final Semester semester in data!) {
-      texts.add(semester.text ?? '');
+    for (final Semester semester in data) {
+      texts.add(semester.text);
     }
     return texts;
   }
@@ -75,9 +75,9 @@ class SemesterData {
 @JsonSerializable()
 class Semester {
   Semester({
-    this.year,
-    this.value,
-    this.text,
+    required this.year,
+    required this.value,
+    required this.text,
   });
 
   factory Semester.fromJson(Map<String, dynamic> json) =>
@@ -87,9 +87,11 @@ class Semester {
         json.decode(str) as Map<String, dynamic>,
       );
 
-  String? year;
-  String? value;
-  String? text;
+  final String year;
+  final String value;
+
+  //TODO update to immutable
+  String text;
 
   String get code => '$year$value';
 

@@ -36,10 +36,10 @@ void main() {
     const String rawData =
         '{"data":[{"year":"111","value":"3","text":"111學年度 暑假"},{"year":"111","value":"2","text":"111學年度 下學期"},{"year":"111","value":"1","text":"111學年度 上學期"},{"year":"111","value":"0","text":"111學年度 碩專署"},{"year":"110","value":"3","text":"110學年度 暑假"},{"year":"110","value":"2","text":"110學年度 下學期"},{"year":"110","value":"1","text":"110學年度 上學期"}],"default":{"year":"111","value":"1","text":"111學年度 上學期"},"currentIndex":2}';
     final SemesterData data = SemesterData.fromRawJson(rawData);
-    expect(data.data!.first.year, '111');
-    expect(data.data!.first.value, '3');
-    expect(data.data!.first.code, '1113');
-    expect(data.data!.first.text, '111學年度 暑假');
+    expect(data.data.first.year, '111');
+    expect(data.data.first.value, '3');
+    expect(data.data.first.code, '1113');
+    expect(data.data.first.text, '111學年度 暑假');
     expect(data.defaultSemester!.text, '111學年度 上學期');
     expect(data.defaultIndex, 2);
   });
