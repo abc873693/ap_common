@@ -13,6 +13,11 @@ class ScoreData {
     required this.detail,
   });
 
+  factory ScoreData.empty() => ScoreData(
+        scores: <Score>[],
+        detail: Detail(),
+      );
+
   factory ScoreData.fromJson(Map<String, dynamic> json) =>
       _$ScoreDataFromJson(json);
 
