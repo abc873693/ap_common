@@ -42,7 +42,7 @@ class MyAppState extends State<MyApp> with WidgetsBindingObserver {
     themeMode = ThemeMode
         .values[Preferences.getInt(Constants.PREF_THEME_MODE_INDEX, 0)];
     WidgetsBinding.instance.addObserver(this);
-    Future.microtask(() async {
+    Future<void>.microtask(() async {
       SystemChrome.setEnabledSystemUIMode(SystemUiMode.edgeToEdge);
       SystemChrome.setSystemUIOverlayStyle(
         const SystemUiOverlayStyle(
@@ -90,10 +90,11 @@ class MyAppState extends State<MyApp> with WidgetsBindingObserver {
               );
             }
           },
-          onGenerateTitle: (context) => AppLocalizations.of(context).appName,
+          onGenerateTitle: (BuildContext context) =>
+              AppLocalizations.of(context).appName,
           debugShowCheckedModeBanner: false,
           routes: <String, WidgetBuilder>{
-            Navigator.defaultRouteName: (context) => HomePage(),
+            Navigator.defaultRouteName: (BuildContext context) => HomePage(),
             AboutUsPage.routerName: (BuildContext context) =>
                 HomePageState.aboutPage(context),
             AnnouncementHomePage.routerName: (BuildContext context) =>
@@ -103,7 +104,7 @@ class MyAppState extends State<MyApp> with WidgetsBindingObserver {
           darkTheme: ApTheme.dark,
           themeMode: themeMode,
           locale: locale,
-          localizationsDelegates: const <LocalizationsDelegate>[
+          localizationsDelegates: const <LocalizationsDelegate<dynamic>>[
             ApLocalizations.delegate,
             AppLocalizationsDelegate(),
             GlobalMaterialLocalizations.delegate,

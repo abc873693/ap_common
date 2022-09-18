@@ -246,7 +246,7 @@ class HomePageState extends State<HomePage> {
         );
       },
       onTabTapped: onTabTapped,
-      bottomNavigationBarItems: [
+      bottomNavigationBarItems: <BottomNavigationBarItem>[
         BottomNavigationBarItem(
           icon: Icon(ApIcon.face),
           label: ap.about,
@@ -313,8 +313,8 @@ class HomePageState extends State<HomePage> {
     //   ),
     // );
     AnnouncementHelper.instance.getAnnouncements(
-      tags: [],
-      callback: GeneralCallback(
+      tags: <String>[],
+      callback: GeneralCallback<List<Announcement>>(
         onFailure: (_) => setState(() => state = HomeState.error),
         onError: (_) => setState(() => state = HomeState.error),
         onSuccess: (List<Announcement> data) {
@@ -333,7 +333,7 @@ class HomePageState extends State<HomePage> {
 
   Future<void> _getUserInfo() async {
     final String rawString = await rootBundle.loadString(FileAssets.userInfo);
-    final userInfo = UserInfo.fromRawJson(rawString);
+    final UserInfo userInfo = UserInfo.fromRawJson(rawString);
     setState(() {
       this.userInfo = userInfo;
     });
@@ -345,7 +345,8 @@ class HomePageState extends State<HomePage> {
   Future<void> _getUserPicture() async {
     try {
       if ((userInfo?.pictureUrl) == null) return;
-      final response = await http.get(Uri.parse(userInfo.pictureUrl));
+      final http.Response response =
+          await http.get(Uri.parse(userInfo.pictureUrl));
       if (!response.body.contains('html')) {
         if (mounted) {
           setState(() {
@@ -359,8 +360,8 @@ class HomePageState extends State<HomePage> {
     }
   }
 
-  Future _login() async {
-    await Future.delayed(const Duration(microseconds: 30));
+  Future<void> _login() async {
+    await Future<void>.delayed(const Duration(microseconds: 30));
     // var username = Preferences.getString(Constants.PREF_USERNAME, '');
     // ignore: lines_longer_than_80_chars
     // var password = Preferences.getStringSecurity(Constants.PREF_PASSWORD, '');
@@ -374,14 +375,14 @@ class HomePageState extends State<HomePage> {
     _homeKey.currentState.showBasicHint(text: ap.loginSuccess);
   }
 
-  Future openLoginPage() async {
-    final dynamic result = await Navigator.of(context).push(
-      MaterialPageRoute(
+  Future<void> openLoginPage() async {
+    final bool result = await Navigator.of(context).push(
+      MaterialPageRoute<bool>(
         builder: (_) => LoginPage(),
       ),
     );
     checkLogin();
-    if (result is bool ?? false) {
+    if (result ?? false) {
       _getUserInfo();
       if (state != HomeState.finish) {
         _getAnnouncements();
@@ -393,7 +394,7 @@ class HomePageState extends State<HomePage> {
   }
 
   Future<void> checkLogin() async {
-    await Future.delayed(const Duration(microseconds: 30));
+    await Future<void>.delayed(const Duration(microseconds: 30));
     if (isLogin) {
       _homeKey.currentState.hideSnackBar();
     } else {

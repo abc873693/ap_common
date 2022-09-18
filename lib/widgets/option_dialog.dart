@@ -2,11 +2,6 @@ import 'package:ap_common/widgets/dialog_option.dart';
 import 'package:flutter/material.dart';
 
 class SimpleOptionDialog extends StatelessWidget {
-  final String title;
-  final List<String> items;
-  final int index;
-  final Function(int index)? onSelected;
-
   const SimpleOptionDialog({
     Key? key,
     required this.title,
@@ -14,6 +9,11 @@ class SimpleOptionDialog extends StatelessWidget {
     required this.onSelected,
     this.index = 0,
   }) : super(key: key);
+
+  final String title;
+  final List<String> items;
+  final int index;
+  final Function(int index)? onSelected;
 
   @override
   Widget build(BuildContext context) {
@@ -55,8 +55,8 @@ class SimpleOptionDialog extends StatelessWidget {
               ),
             ),
             title: Text(title),
-            children: [
-              for (var i = 0; i < (items.length); i++)
+            children: <Widget>[
+              for (int i = 0; i < (items.length); i++)
                 DialogOption(
                   text: items[i],
                   check: i == index,

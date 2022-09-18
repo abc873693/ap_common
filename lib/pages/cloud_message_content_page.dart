@@ -7,12 +7,12 @@ import 'package:ap_common/widgets/ap_network_image.dart';
 import 'package:flutter/material.dart';
 
 class CloudMessageContentPage extends StatefulWidget {
-  final CloudMessage message;
-
   const CloudMessageContentPage({
     Key? key,
     required this.message,
   }) : super(key: key);
+
+  final CloudMessage message;
 
   @override
   _CloudMessageContentPageState createState() =>
@@ -50,12 +50,12 @@ class _CloudMessageContentPageState extends State<CloudMessageContentPage> {
           : null,
       body: SingleChildScrollView(
         child: Column(
-          children: [
+          children: <Widget>[
             if (item.imageUrl != null) ApNetworkImage(url: item.imageUrl!),
             Padding(
               padding: const EdgeInsets.all(8.0),
               child: Row(
-                children: [
+                children: <Widget>[
                   Expanded(
                     child: Text(
                       item.title,

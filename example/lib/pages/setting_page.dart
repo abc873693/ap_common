@@ -68,7 +68,7 @@ class SettingPageState extends State<SettingPage> {
               text: ap.headPhotoSetting,
               subText: ap.headPhotoSettingSubTitle,
               value: displayPicture,
-              onChanged: (b) {
+              onChanged: (bool b) {
                 setState(() {
                   displayPicture = !displayPicture;
                 });
@@ -77,12 +77,12 @@ class SettingPageState extends State<SettingPage> {
               },
             ),
             ChangeLanguageItem(
-              onChange: (locale) {
+              onChange: (Locale locale) {
                 ShareDataWidget.of(context).data.loadLocale(locale);
               },
             ),
             ChangeThemeModeItem(
-              onChange: (themeMode) {
+              onChange: (ThemeMode themeMode) {
                 ShareDataWidget.of(context).data.loadTheme(themeMode);
               },
             ),

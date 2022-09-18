@@ -7,17 +7,18 @@ export 'package:flutter_keyboard_visibility/flutter_keyboard_visibility.dart';
 enum LogoMode { text, image }
 
 class LoginScaffold extends StatefulWidget {
-  static const String routerName = '/login';
-  final LogoMode logoMode;
-  final String logoSource;
-  final List<Widget> forms;
-
   const LoginScaffold({
     Key? key,
     required this.logoSource,
     required this.forms,
     this.logoMode = LogoMode.text,
   }) : super(key: key);
+
+  final LogoMode logoMode;
+  final String logoSource;
+  final List<Widget> forms;
+
+  static const String routerName = '/login';
 
   @override
   LoginScaffoldState createState() => LoginScaffoldState();
@@ -28,7 +29,7 @@ class LoginScaffoldState extends State<LoginScaffold> {
 
   @override
   Widget build(BuildContext context) {
-    final orientation = MediaQuery.of(context).orientation;
+    final Orientation orientation = MediaQuery.of(context).orientation;
     return Scaffold(
       backgroundColor: ApTheme.of(context).blue,
       resizeToAvoidBottomInset: orientation == Orientation.portrait,
@@ -102,16 +103,16 @@ class LoginScaffoldState extends State<LoginScaffold> {
 }
 
 class TextCheckBox extends StatelessWidget {
-  final bool value;
-  final String text;
-  final ValueChanged<bool?>? onChanged;
-
   const TextCheckBox({
     Key? key,
     required this.value,
     required this.text,
     required this.onChanged,
   }) : super(key: key);
+
+  final bool value;
+  final String text;
+  final ValueChanged<bool?>? onChanged;
 
   @override
   Widget build(BuildContext context) {
@@ -142,14 +143,14 @@ class TextCheckBox extends StatelessWidget {
 }
 
 class ApButton extends StatelessWidget {
-  final String text;
-  final Function()? onPressed;
-
   const ApButton({
     Key? key,
     required this.text,
     this.onPressed,
   }) : super(key: key);
+
+  final String text;
+  final Function()? onPressed;
 
   @override
   Widget build(BuildContext context) {
@@ -176,14 +177,14 @@ class ApButton extends StatelessWidget {
 }
 
 class ApFlatButton extends StatelessWidget {
-  final Function()? onPressed;
-  final String? text;
-
   const ApFlatButton({
     Key? key,
     this.onPressed,
     this.text,
   }) : super(key: key);
+
+  final Function()? onPressed;
+  final String? text;
 
   @override
   Widget build(BuildContext context) {
@@ -203,12 +204,11 @@ class ApFlatButton extends StatelessWidget {
 }
 
 class TextLogo extends StatelessWidget {
-  final String text;
-
   const TextLogo({
     Key? key,
     required this.text,
   }) : super(key: key);
+  final String text;
 
   @override
   Widget build(BuildContext context) {
@@ -224,18 +224,6 @@ class TextLogo extends StatelessWidget {
 }
 
 class ApTextField extends StatelessWidget {
-  final TextEditingController controller;
-  final FocusNode? focusNode;
-  final FocusNode? nextFocusNode;
-  final TextInputAction textInputAction;
-  final String labelText;
-  final Function(String text)? onSubmitted;
-  final Function(String text)? onChanged;
-  final bool obscureText;
-  final int? maxLength;
-  final TextInputType keyboardType;
-  final Iterable<String>? autofillHints;
-
   const ApTextField({
     Key? key,
     required this.controller,
@@ -251,6 +239,18 @@ class ApTextField extends StatelessWidget {
     this.autofillHints,
   }) : super(key: key);
 
+  final TextEditingController controller;
+  final FocusNode? focusNode;
+  final FocusNode? nextFocusNode;
+  final TextInputAction textInputAction;
+  final String labelText;
+  final Function(String text)? onSubmitted;
+  final Function(String text)? onChanged;
+  final bool obscureText;
+  final int? maxLength;
+  final TextInputType keyboardType;
+  final Iterable<String>? autofillHints;
+
   @override
   Widget build(BuildContext context) {
     return TextField(
@@ -262,7 +262,7 @@ class ApTextField extends StatelessWidget {
       onChanged: onChanged,
       keyboardType: keyboardType,
       textInputAction: textInputAction,
-      onSubmitted: (text) {
+      onSubmitted: (String text) {
         focusNode?.unfocus();
         if (nextFocusNode != null) {
           FocusScope.of(context).requestFocus(nextFocusNode);

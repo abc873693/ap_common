@@ -28,7 +28,7 @@ class AppTrackingUtils {
     required BuildContext context,
     VoidCallback? onTap,
   }) {
-    final ap = ApLocalizations.of(context);
+    final ApLocalizations ap = ApLocalizations.of(context);
     showDialog(
       context: context,
       barrierDismissible: false,
@@ -40,7 +40,7 @@ class AppTrackingUtils {
           title: ap.appTrackingDialogTitle,
           contentWidget: SingleChildScrollView(
             child: Column(
-              children: [
+              children: <Widget>[
                 Text(
                   ap.appTrackingDialogContent,
                   style: TextStyle(
@@ -51,7 +51,7 @@ class AppTrackingUtils {
                 ),
                 const SizedBox(height: 16.0),
                 Row(
-                  children: [
+                  children: <Widget>[
                     Icon(
                       Icons.analytics_outlined,
                       color: ApTheme.of(context).grey,
@@ -69,7 +69,7 @@ class AppTrackingUtils {
                 ),
                 const SizedBox(height: 8.0),
                 Row(
-                  children: [
+                  children: <Widget>[
                     Icon(
                       Icons.bug_report_outlined,
                       color: ApTheme.of(context).grey,

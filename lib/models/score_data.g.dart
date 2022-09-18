@@ -7,17 +7,15 @@ part of 'score_data.dart';
 // **************************************************************************
 
 ScoreData _$ScoreDataFromJson(Map<String, dynamic> json) => ScoreData(
-      scores: (json['scores'] as List<dynamic>?)
-          ?.map((e) => Score.fromJson(e as Map<String, dynamic>))
+      scores: (json['scores'] as List<dynamic>)
+          .map((e) => Score.fromJson(e as Map<String, dynamic>))
           .toList(),
-      detail: json['detail'] == null
-          ? null
-          : Detail.fromJson(json['detail'] as Map<String, dynamic>),
+      detail: Detail.fromJson(json['detail'] as Map<String, dynamic>),
     );
 
 Map<String, dynamic> _$ScoreDataToJson(ScoreData instance) => <String, dynamic>{
-      'scores': instance.scores?.map((e) => e.toJson()).toList(),
-      'detail': instance.detail?.toJson(),
+      'scores': instance.scores.map((e) => e.toJson()).toList(),
+      'detail': instance.detail.toJson(),
     };
 
 Detail _$DetailFromJson(Map<String, dynamic> json) => Detail(
@@ -43,8 +41,8 @@ Map<String, dynamic> _$DetailToJson(Detail instance) => <String, dynamic>{
 Score _$ScoreFromJson(Map<String, dynamic> json) => Score(
       courseNumber: json['courseNumber'] as String?,
       isPreScore: json['isPreScore'] as bool? ?? false,
-      title: json['title'] as String?,
-      units: json['units'] as String?,
+      title: json['title'] as String,
+      units: json['units'] as String,
       hours: json['hours'] as String?,
       required: json['required'] as String?,
       at: json['at'] as String?,

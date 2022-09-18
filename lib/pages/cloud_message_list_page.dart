@@ -38,8 +38,8 @@ class _CloudMessageListPageState extends State<CloudMessageListPage> {
           : null,
       body: ListView.builder(
         itemCount: box.length,
-        itemBuilder: (_, index) {
-          final item = box.getAt(index)!;
+        itemBuilder: (_, int index) {
+          final CloudMessage item = box.getAt(index)!;
           return ListTile(
             title: Text(
               item.title,

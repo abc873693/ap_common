@@ -24,7 +24,7 @@ class SchoolInfoPage extends StatefulWidget {
 
 class SchoolInfoPageState extends State<SchoolInfoPage>
     with SingleTickerProviderStateMixin {
-  final phoneModelList = [
+  final List<PhoneModel> phoneModelList = <PhoneModel>[
     PhoneModel('校安中心\n分機號碼：建工1 楠梓2 第一3 燕巢4 旗津5', '0800-550995'),
     PhoneModel('建工校區', ''),
     PhoneModel('校安專線', '0916-507-506'),
@@ -59,7 +59,7 @@ class SchoolInfoPageState extends State<SchoolInfoPage>
 
   NotificationState notificationState = NotificationState.loading;
 
-  List<Notifications> notificationList = [];
+  List<Notifications> notificationList = <Notifications>[];
   int page = 1;
 
   PhoneState phoneState = PhoneState.finish;
@@ -103,7 +103,7 @@ class SchoolInfoPageState extends State<SchoolInfoPage>
       body: TabBarView(
         controller: controller,
         physics: const NeverScrollableScrollPhysics(),
-        children: [
+        children: <Widget>[
           NotificationListView(
             state: notificationState,
             notificationList: notificationList,
@@ -131,14 +131,14 @@ class SchoolInfoPageState extends State<SchoolInfoPage>
       ),
       bottomNavigationBar: BottomNavigationBar(
         currentIndex: _currentIndex,
-        onTap: (index) {
+        onTap: (int index) {
           setState(() {
             _currentIndex = index;
             controller.animateTo(_currentIndex);
           });
         },
         fixedColor: ApTheme.of(context).yellow,
-        items: [
+        items: <BottomNavigationBarItem>[
           BottomNavigationBarItem(
             icon: Icon(ApIcon.fiberNew),
             label: ap.notifications,
@@ -159,7 +159,7 @@ class SchoolInfoPageState extends State<SchoolInfoPage>
   Future<void> _getNotifications() async {
     final String rawString =
         await rootBundle.loadString(FileAssets.notifications);
-    final data = NotificationsData.fromRawJson(rawString);
+    final NotificationsData data = NotificationsData.fromRawJson(rawString);
     if (mounted && data != null) {
       setState(() {
         notificationList.addAll(data.data.notifications);
@@ -175,13 +175,13 @@ class SchoolInfoPageState extends State<SchoolInfoPage>
 
   Future<void> downloadFdf(String url) async {
     try {
-      final response = await Dio().get(
+      final Response<Uint8List> response = await Dio().get(
         url,
         options: Options(responseType: ResponseType.bytes),
       );
       setState(() {
         pdfState = PdfState.finish;
-        data = response.data as Uint8List;
+        data = response.data;
       });
     } catch (e) {
       setState(() {

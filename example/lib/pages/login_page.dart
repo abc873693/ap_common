@@ -19,11 +19,11 @@ class LoginPage extends StatefulWidget {
 class LoginPageState extends State<LoginPage> {
   ApLocalizations ap;
 
-  final _username = TextEditingController();
-  final _password = TextEditingController();
+  final TextEditingController _username = TextEditingController();
+  final TextEditingController _password = TextEditingController();
 
-  final usernameFocusNode = FocusNode();
-  final passwordFocusNode = FocusNode();
+  final FocusNode usernameFocusNode = FocusNode();
+  final FocusNode passwordFocusNode = FocusNode();
 
   bool isRememberPassword = true;
   bool isAutoLogin = false;
@@ -54,19 +54,19 @@ class LoginPageState extends State<LoginPage> {
           focusNode: usernameFocusNode,
           nextFocusNode: passwordFocusNode,
           labelText: ap.studentId,
-          autofillHints: const [AutofillHints.username],
+          autofillHints: const <String>[AutofillHints.username],
         ),
         ApTextField(
           obscureText: true,
           textInputAction: TextInputAction.send,
           controller: _password,
           focusNode: passwordFocusNode,
-          onSubmitted: (text) {
+          onSubmitted: (String text) {
             passwordFocusNode.unfocus();
             _login();
           },
           labelText: ap.password,
-          autofillHints: const [AutofillHints.password],
+          autofillHints: const <String>[AutofillHints.password],
         ),
         const SizedBox(height: 8.0),
         Row(

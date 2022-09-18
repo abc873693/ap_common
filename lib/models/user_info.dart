@@ -9,46 +9,29 @@ part 'user_info.g.dart';
 
 @JsonSerializable()
 class UserInfo {
-  String? educationSystem;
-  String? department;
-  String? className;
-  String? id;
-  String? name;
-  String? pictureUrl;
-  String? email;
-
-  @JsonKey(ignore: true)
-  Uint8List? pictureBytes;
-
   UserInfo({
     this.educationSystem,
-    this.department,
+    required this.department,
     this.className,
-    this.id,
-    this.name,
+    required this.id,
+    required this.name,
     this.pictureUrl,
     this.pictureBytes,
     this.email,
   });
 
+  factory UserInfo.empty() => UserInfo(
+        id: '',
+        department: '',
+        name: '',
+      );
+
   factory UserInfo.fromJson(Map<String, dynamic> json) =>
       _$UserInfoFromJson(json);
-
-  Map<String, dynamic> toJson() => _$UserInfoToJson(this);
 
   factory UserInfo.fromRawJson(String str) => UserInfo.fromJson(
         json.decode(str) as Map<String, dynamic>,
       );
-
-  String toRawJson() => jsonEncode(toJson());
-
-  void save(String tag) {
-    Preferences.setString(
-      '${ApConstants.packageName}'
-      '.user_info_$tag',
-      toRawJson(),
-    );
-  }
 
   static UserInfo? load(String tag) {
     final String rawString = Preferences.getString(
@@ -61,5 +44,50 @@ class UserInfo {
     } else {
       return UserInfo.fromRawJson(rawString);
     }
+  }
+
+  final String? educationSystem;
+  final String department;
+  final String? className;
+  final String id;
+  final String name;
+  final String? pictureUrl;
+  final String? email;
+
+  @JsonKey(ignore: true)
+  Uint8List? pictureBytes;
+
+  Map<String, dynamic> toJson() => _$UserInfoToJson(this);
+
+  String toRawJson() => jsonEncode(toJson());
+
+  void save(String tag) {
+    Preferences.setString(
+      '${ApConstants.packageName}'
+      '.user_info_$tag',
+      toRawJson(),
+    );
+  }
+
+  UserInfo copyWith({
+    String? id,
+    String? educationSystem,
+    String? department,
+    String? className,
+    String? name,
+    String? pictureUrl,
+    String? email,
+    Uint8List? pictureBytes,
+  }) {
+    return UserInfo(
+      id: id ?? this.id,
+      educationSystem: educationSystem ?? this.educationSystem,
+      department: department ?? this.department,
+      className: className ?? this.className,
+      name: name ?? this.name,
+      pictureUrl: pictureUrl ?? this.pictureUrl,
+      email: email ?? this.email,
+      pictureBytes: pictureBytes ?? this.pictureBytes,
+    );
   }
 }

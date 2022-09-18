@@ -3,14 +3,6 @@ import 'package:ap_common/resources/ap_theme.dart';
 import 'package:flutter/material.dart';
 
 class YesNoDialog extends StatelessWidget {
-  final String? title;
-  final Widget? contentWidget;
-  final EdgeInsetsGeometry? contentWidgetPadding;
-  final String? leftActionText;
-  final String? rightActionText;
-  final VoidCallback? leftActionFunction;
-  final VoidCallback? rightActionFunction;
-
   const YesNoDialog({
     Key? key,
     this.title,
@@ -21,6 +13,14 @@ class YesNoDialog extends StatelessWidget {
     this.leftActionFunction,
     this.rightActionFunction,
   }) : super(key: key);
+
+  final String? title;
+  final Widget? contentWidget;
+  final EdgeInsetsGeometry? contentWidgetPadding;
+  final String? leftActionText;
+  final String? rightActionText;
+  final VoidCallback? leftActionFunction;
+  final VoidCallback? rightActionFunction;
 
   static void showSample(BuildContext context) => showDialog(
         context: context,

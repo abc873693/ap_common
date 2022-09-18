@@ -112,7 +112,7 @@ class _ApLocalizationsDelegate extends LocalizationsDelegate<ApLocalizations> {
     return MultipleLocalizations.load(
       initializeMessages,
       locale,
-      (l) => ApLocalizations.load(locale),
+      (String l) => ApLocalizations.load(locale),
     );
   }
 

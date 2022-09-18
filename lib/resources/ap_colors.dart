@@ -30,7 +30,7 @@ class ApColors {
   static const Color red500 = Color(0xffff4a5a);
   static const Color red800 = Color(0xff661d24);
 
-  static const List<MaterialColor> colors = [
+  static const List<MaterialColor> colors = <MaterialColor>[
     Colors.red,
     Colors.pink,
     Colors.purple,

@@ -17,7 +17,8 @@ class FileSaverWeb {
   ) async {
     bool _success = false;
     try {
-      final String _url = Url.createObjectUrlFromBlob(Blob([bytes], type));
+      final String _url =
+          Url.createObjectUrlFromBlob(Blob(<Uint8List>[bytes], type));
       final HtmlDocument htmlDocument = document;
       final AnchorElement anchor =
           htmlDocument.createElement('a') as AnchorElement;

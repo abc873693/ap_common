@@ -36,13 +36,13 @@ class Toast {
 }
 
 class ToastView {
-  static final ToastView _singleton = ToastView._internal();
-
   factory ToastView() {
     return _singleton;
   }
 
   ToastView._internal();
+
+  static final ToastView _singleton = ToastView._internal();
 
   static OverlayState? overlayState;
   static OverlayEntry? _overlayEntry;

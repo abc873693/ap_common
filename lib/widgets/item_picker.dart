@@ -5,12 +5,6 @@ import 'package:ap_common/widgets/option_dialog.dart';
 import 'package:flutter/material.dart';
 
 class ItemPicker extends StatelessWidget {
-  final List<String> items;
-  final int currentIndex;
-  final Function(int index)? onSelected;
-  final String dialogTitle;
-  final String? featureTag;
-
   const ItemPicker({
     Key? key,
     required this.items,
@@ -19,6 +13,12 @@ class ItemPicker extends StatelessWidget {
     required this.onSelected,
     this.featureTag,
   }) : super(key: key);
+
+  final List<String> items;
+  final int currentIndex;
+  final Function(int index)? onSelected;
+  final String dialogTitle;
+  final String? featureTag;
 
   @override
   Widget build(BuildContext context) {

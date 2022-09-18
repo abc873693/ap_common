@@ -6,8 +6,6 @@ import 'package:flutter/material.dart';
 export 'package:cupertino_back_gesture/cupertino_back_gesture.dart';
 
 class ApTheme extends InheritedWidget {
-  final ThemeMode themeMode;
-
   ApTheme(
     this.themeMode, {
     required Widget child,
@@ -20,6 +18,8 @@ class ApTheme extends InheritedWidget {
             child: child,
           ),
         );
+
+  final ThemeMode themeMode;
 
   static ApTheme of(BuildContext context) {
     return context.dependOnInheritedWidgetOfExactType()!;
@@ -346,8 +346,8 @@ class ApTheme extends InheritedWidget {
       );
 }
 
-const _pageTransitionsTheme = PageTransitionsTheme(
-  builders: {
+const PageTransitionsTheme _pageTransitionsTheme = PageTransitionsTheme(
+  builders: <TargetPlatform, PageTransitionsBuilder>{
     TargetPlatform.android:
         CupertinoPageTransitionsBuilderCustomBackGestureWidth(),
     TargetPlatform.iOS: CupertinoPageTransitionsBuilderCustomBackGestureWidth(),

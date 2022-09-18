@@ -11,11 +11,6 @@ import 'package:printing/printing.dart';
 enum PdfState { loading, finish, error }
 
 class PdfView extends StatefulWidget {
-  final PdfState state;
-  final Function()? onRefresh;
-  final Uint8List? data;
-  final String? fileName;
-
   const PdfView({
     Key? key,
     required this.state,
@@ -23,6 +18,11 @@ class PdfView extends StatefulWidget {
     this.data,
     this.fileName,
   }) : super(key: key);
+
+  final PdfState state;
+  final Function()? onRefresh;
+  final Uint8List? data;
+  final String? fileName;
 
   @override
   _PdfViewState createState() => _PdfViewState();
@@ -57,7 +57,7 @@ class _PdfViewState extends State<PdfView> {
           ),
           floatingActionButton: Column(
             mainAxisAlignment: MainAxisAlignment.end,
-            children: [
+            children: <Widget>[
               FloatingActionButton(
                 onPressed: () async {
                   AnalyticsUtils.instance?.logEvent('export_by_share');

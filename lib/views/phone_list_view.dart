@@ -10,16 +10,16 @@ import 'package:flutter/material.dart';
 enum PhoneState { loading, finish, error }
 
 class PhoneListView extends StatefulWidget {
-  static const String routerName = '/info/phone';
-
-  final PhoneState state;
-  final List<PhoneModel> phoneModelList;
-
   const PhoneListView({
     Key? key,
     required this.state,
     required this.phoneModelList,
   }) : super(key: key);
+
+  final PhoneState state;
+  final List<PhoneModel> phoneModelList;
+
+  static const String routerName = '/info/phone';
 
   @override
   PhoneListViewState createState() => PhoneListViewState();
@@ -82,7 +82,7 @@ class PhoneListViewState extends State<PhoneListView>
       default:
         return ListView.builder(
           itemCount: widget.phoneModelList.length,
-          itemBuilder: (context, index) {
+          itemBuilder: (BuildContext context, int index) {
             if (widget.phoneModelList[index].number.isEmpty) {
               return Padding(
                 padding: const EdgeInsets.symmetric(

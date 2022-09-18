@@ -27,7 +27,7 @@ class _DialogUtilsTestPageState extends State<DialogUtilsTestPage> {
         title: Text(app.dialogUtilTest),
       ),
       body: ListView(
-        children: [
+        children: <Widget>[
           const Padding(
             padding: EdgeInsets.all(8.0),
             child: Text(

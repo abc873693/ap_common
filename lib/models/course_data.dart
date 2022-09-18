@@ -11,77 +11,21 @@ part 'course_data.g.dart';
 @JsonSerializable()
 class CourseData {
   CourseData({
-    this.courses,
-    this.timeCodes,
+    required this.courses,
+    required this.timeCodes,
   });
 
-  List<Course>? courses;
-  List<TimeCode>? timeCodes;
-
-  bool get hasHoliday {
-    for (final course in courses!) {
-      if (course.times == null) continue;
-      for (final section in course.times!) {
-        if (section.weekday == DateTime.saturday ||
-            section.weekday == DateTime.sunday) return true;
-      }
-    }
-    return false;
-  }
-
-  int? get maxTimeCodeIndex {
-    int? index = 10;
-    for (final course in courses!) {
-      if (course.times == null) continue;
-      for (final time in course.times!) {
-        if (time.index! > index!) {
-          index = time.index;
-        }
-      }
-    }
-    return index;
-  }
-
-  int? get minTimeCodeIndex {
-    int? index = 10;
-    for (final Course course in courses!) {
-      if (course.times == null) continue;
-      for (final time in course.times!) {
-        if (time.index! < index!) {
-          index = time.index;
-        }
-      }
-    }
-    return index! < 10 ? 0 : index;
-  }
-
-  CourseData copyWith({
-    List<Course>? courses,
-    List<TimeCode>? timeCodes,
-  }) =>
-      CourseData(
-        courses: courses ?? this.courses,
-        timeCodes: timeCodes ?? this.timeCodes,
+  factory CourseData.empty() => CourseData(
+        courses: <Course>[],
+        timeCodes: <TimeCode>[],
       );
 
   factory CourseData.fromJson(Map<String, dynamic> json) =>
       _$CourseDataFromJson(json);
 
-  Map<String, dynamic> toJson() => _$CourseDataToJson(this);
-
   factory CourseData.fromRawJson(String str) => CourseData.fromJson(
         json.decode(str) as Map<String, dynamic>,
       );
-
-  String toRawJson() => jsonEncode(toJson());
-
-  void save(String tag) {
-    Preferences.setString(
-      '${ApConstants.packageName}'
-      '.course_data_$tag',
-      toRawJson(),
-    );
-  }
 
   static CourseData? load(String tag) {
     final String rawString = Preferences.getString(
@@ -96,8 +40,69 @@ class CourseData {
     }
   }
 
+  final List<Course> courses;
+  final List<TimeCode> timeCodes;
+
+  bool get hasHoliday {
+    for (final Course course in courses) {
+      if (course.times.isEmpty) continue;
+      for (final SectionTime section in course.times) {
+        if (section.weekday == DateTime.saturday ||
+            section.weekday == DateTime.sunday) return true;
+      }
+    }
+    return false;
+  }
+
+  int get maxTimeCodeIndex {
+    int index = 10;
+    for (final Course course in courses) {
+      if (course.times.isEmpty) continue;
+      for (final SectionTime time in course.times) {
+        if (time.index > index) {
+          index = time.index;
+        }
+      }
+    }
+    return index;
+  }
+
+  int get minTimeCodeIndex {
+    int index = 10;
+    for (final Course course in courses) {
+      if (course.times.isEmpty) continue;
+      for (final SectionTime time in course.times) {
+        if (time.index < index) {
+          index = time.index;
+        }
+      }
+    }
+    return index < 10 ? 0 : index;
+  }
+
+  CourseData copyWith({
+    List<Course>? courses,
+    List<TimeCode>? timeCodes,
+  }) =>
+      CourseData(
+        courses: courses ?? this.courses,
+        timeCodes: timeCodes ?? this.timeCodes,
+      );
+
+  Map<String, dynamic> toJson() => _$CourseDataToJson(this);
+
+  String toRawJson() => jsonEncode(toJson());
+
+  void save(String tag) {
+    Preferences.setString(
+      '${ApConstants.packageName}'
+      '.course_data_$tag',
+      toRawJson(),
+    );
+  }
+
   static Future<void> migrateFrom0_10() async {
-    Preferences.prefs?.getKeys().forEach((key) {
+    Preferences.prefs?.getKeys().forEach((String key) {
       if (key.contains('course_data')) {
         debugPrint(key);
         Preferences.remove(key);
@@ -106,21 +111,21 @@ class CourseData {
   }
 
   List<List<Course>> get weekDayCourseList {
-    final List<List<Course>> list = [
-      [],
-      [],
-      [],
-      [],
-      [],
-      if (hasHoliday) ...[
-        [],
-        [],
+    final List<List<Course>> list = <List<Course>>[
+      <Course>[],
+      <Course>[],
+      <Course>[],
+      <Course>[],
+      <Course>[],
+      if (hasHoliday) ...<List<Course>>[
+        <Course>[],
+        <Course>[],
       ]
     ];
-    for (final course in courses!) {
-      for (final time in course.times!) {
-        for (int i = 0; i < timeCodes!.length; i++) {
-          list[time.weekday! - 1].add(course);
+    for (final Course course in courses) {
+      for (final SectionTime time in course.times) {
+        for (int i = 0; i < timeCodes.length; i++) {
+          list[time.weekday - 1].add(course);
         }
       }
     }
@@ -128,8 +133,8 @@ class CourseData {
   }
 
   int getTimeCodeIndex(String section) {
-    for (int i = 0; i < timeCodes!.length; i++) {
-      if (timeCodes![i].title == section) return i;
+    for (int i = 0; i < timeCodes.length; i++) {
+      if (timeCodes[i].title == section) return i;
     }
     return -1;
   }
@@ -138,31 +143,88 @@ class CourseData {
 @JsonSerializable()
 class Course {
   Course({
-    this.code,
-    this.title,
+    required this.code,
+    required this.title,
     this.className,
     this.group,
-    this.units,
+    required this.units,
     this.hours,
     this.required,
     this.at,
-    this.times,
+    required this.times,
     this.location,
-    this.instructors,
+    required this.instructors,
   });
 
-  String? code;
-  String? title;
-  String? className;
-  String? group;
-  String? units;
-  String? hours;
-  String? required;
-  String? at;
+  factory Course.fromJson(Map<String, dynamic> json) => _$CourseFromJson(json);
+
+  factory Course.fromRawJson(String str) => Course.fromJson(
+        json.decode(str) as Map<String, dynamic>,
+      );
+
+  final String code;
+  final String title;
+
+  //TODO nullable evaluation
+  final String? className;
+  final String? group;
+
+  //TODO nullable evaluation
+  final String? units;
+  final String? hours;
+  final String? required;
+  final String? at;
   @JsonKey(name: 'sectionTimes')
-  List<SectionTime>? times;
-  Location? location;
-  List<String>? instructors;
+  final List<SectionTime> times;
+  final Location? location;
+  final List<String> instructors;
+
+  Map<String, dynamic> toJson() => _$CourseToJson(this);
+
+  String toRawJson() => jsonEncode(toJson());
+
+  String getInstructors() {
+    ///Use https://dart-lang.github.io/linter/lints/use_string_buffers.html
+    final StringBuffer buffer = StringBuffer();
+    if (instructors.isNotEmpty) {
+      buffer.write(instructors[0]);
+      for (int i = 1; i < instructors.length; i++) {
+        buffer.write(',${instructors[i]}');
+      }
+    }
+    return buffer.toString();
+  }
+
+  String getTimesShortName(List<TimeCode>? timeCode) {
+    String text = '';
+    if (times.isEmpty) return text;
+    int startIndex = -1;
+    int repeat = 0;
+    final int len = times.length;
+    for (int i = 0; i < len; i++) {
+      final SectionTime time = times[i];
+      if (startIndex != -1 &&
+          time.index - 1 == times[i - 1].index &&
+          time.weekday == times[i - 1].weekday) {
+        repeat++;
+        if (i == len - 1 ||
+            times[i + 1].weekday != times[i].weekday ||
+            times[i + 1].index != times[i].index + 1) {
+          final SectionTime endTime = times[startIndex + repeat];
+          text += '-'
+              '${timeCode![endTime.index].title}';
+          repeat = 0;
+          startIndex = -1;
+        }
+      } else {
+        startIndex = i;
+        text += '${text.isEmpty ? '' : ' '}'
+            '(${ApLocalizations.current.weekdaysCourse[time.weekDayIndex]}) '
+            '${timeCode![time.index].title}';
+      }
+    }
+    return text;
+  }
 
   Course copyWith({
     String? code,
@@ -190,70 +252,28 @@ class Course {
         location: location ?? this.location,
         instructors: instructors ?? this.instructors,
       );
-
-  factory Course.fromJson(Map<String, dynamic> json) => _$CourseFromJson(json);
-
-  Map<String, dynamic> toJson() => _$CourseToJson(this);
-
-  factory Course.fromRawJson(String str) => Course.fromJson(
-        json.decode(str) as Map<String, dynamic>,
-      );
-
-  String toRawJson() => jsonEncode(toJson());
-
-  String getInstructors() {
-    ///Use https://dart-lang.github.io/linter/lints/use_string_buffers.html
-    final buffer = StringBuffer();
-    if (instructors!.isNotEmpty) {
-      buffer.write(instructors![0]);
-      for (var i = 1; i < instructors!.length; i++) {
-        buffer.write(',${instructors![i]}');
-      }
-    }
-    return buffer.toString();
-  }
-
-  String getTimesShortName(List<TimeCode>? timeCode) {
-    String text = '';
-    if ((times?.length ?? 0) == 0) return text;
-    int startIndex = -1;
-    int repeat = 0;
-    final len = times?.length ?? 0;
-    for (var i = 0; i < len; i++) {
-      final time = times![i];
-      if (startIndex != -1 &&
-          time.index! - 1 == times![i - 1].index &&
-          time.weekday == times![i - 1].weekday) {
-        repeat++;
-        if (i == len - 1 ||
-            times![i + 1].weekday != times![i].weekday ||
-            times![i + 1].index != times![i].index! + 1) {
-          final endTime = times![startIndex + repeat];
-          text += '-'
-              '${timeCode![endTime.index!].title}';
-          repeat = 0;
-          startIndex = -1;
-        }
-      } else {
-        startIndex = i;
-        text += '${text.isEmpty ? '' : ' '}'
-            '(${ApLocalizations.current.weekdaysCourse[time.weekDayIndex]}) '
-            '${timeCode![time.index!].title}';
-      }
-    }
-    return text;
-  }
 }
 
 @JsonSerializable()
 class Location {
   Location({
-    this.room,
-    this.building,
+    required this.room,
+    required this.building,
   });
 
-  String? room;
-  String? building;
+  factory Location.fromJson(Map<String, dynamic> json) =>
+      _$LocationFromJson(json);
+
+  factory Location.fromRawJson(String str) => Location.fromJson(
+        json.decode(str) as Map<String, dynamic>,
+      );
+
+  final String room;
+  final String building;
+
+  Map<String, dynamic> toJson() => _$LocationToJson(this);
+
+  String toRawJson() => jsonEncode(toJson());
 
   Location copyWith({
     String? room,
@@ -264,39 +284,39 @@ class Location {
         building: building ?? this.building,
       );
 
-  factory Location.fromJson(Map<String, dynamic> json) =>
-      _$LocationFromJson(json);
-
-  Map<String, dynamic> toJson() => _$LocationToJson(this);
-
-  factory Location.fromRawJson(String str) => Location.fromJson(
-        json.decode(str) as Map<String, dynamic>,
-      );
-
-  String toRawJson() => jsonEncode(toJson());
-
   @override
   String toString() {
-    return '${building ?? ''}${room ?? ''}';
+    return '$building$room';
   }
 }
 
 @JsonSerializable()
 class SectionTime {
   SectionTime({
-    this.weekday,
-    this.index,
+    required this.weekday,
+    required this.index,
   });
+
+  factory SectionTime.fromJson(Map<String, dynamic> json) =>
+      _$SectionTimeFromJson(json);
+
+  factory SectionTime.fromRawJson(String str) => SectionTime.fromJson(
+        json.decode(str) as Map<String, dynamic>,
+      );
 
   ///The day of the week [DateTime.monday]..[DateTime.sunday].
   ///In accordance with ISO 8601 a week starts with Monday,
   /// which has the value 1.
-  int? weekday;
+  final int weekday;
 
   /// index of [CourseData.timeCodes]
-  int? index;
+  final int index;
 
-  int get weekDayIndex => weekday! - 1;
+  int get weekDayIndex => weekday - 1;
+
+  Map<String, dynamic> toJson() => _$SectionTimeToJson(this);
+
+  String toRawJson() => jsonEncode(toJson());
 
   SectionTime copyWith({
     int? weekDay,
@@ -306,17 +326,6 @@ class SectionTime {
         weekday: weekDay ?? weekday,
         index: index ?? this.index,
       );
-
-  factory SectionTime.fromJson(Map<String, dynamic> json) =>
-      _$SectionTimeFromJson(json);
-
-  Map<String, dynamic> toJson() => _$SectionTimeToJson(this);
-
-  factory SectionTime.fromRawJson(String str) => SectionTime.fromJson(
-        json.decode(str) as Map<String, dynamic>,
-      );
-
-  String toRawJson() => jsonEncode(toJson());
 }
 
 @JsonSerializable()
@@ -327,9 +336,20 @@ class TimeCode {
     required this.endTime,
   });
 
-  String title;
-  String startTime;
-  String endTime;
+  factory TimeCode.fromJson(Map<String, dynamic> json) =>
+      _$TimeCodeFromJson(json);
+
+  factory TimeCode.fromRawJson(String str) => TimeCode.fromJson(
+        json.decode(str) as Map<String, dynamic>,
+      );
+
+  final String title;
+  final String startTime;
+  final String endTime;
+
+  Map<String, dynamic> toJson() => _$TimeCodeToJson(this);
+
+  String toRawJson() => jsonEncode(toJson());
 
   TimeCode copyWith({
     String? title,
@@ -341,17 +361,6 @@ class TimeCode {
         startTime: startTime ?? this.startTime,
         endTime: endTime ?? this.endTime,
       );
-
-  factory TimeCode.fromJson(Map<String, dynamic> json) =>
-      _$TimeCodeFromJson(json);
-
-  Map<String, dynamic> toJson() => _$TimeCodeToJson(this);
-
-  factory TimeCode.fromRawJson(String str) => TimeCode.fromJson(
-        json.decode(str) as Map<String, dynamic>,
-      );
-
-  String toRawJson() => jsonEncode(toJson());
 }
 
 extension TimeCodeExtension on List<TimeCode> {

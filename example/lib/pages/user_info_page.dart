@@ -6,18 +6,22 @@ import 'package:flutter/services.dart';
 import '../res/assets.dart';
 
 class UserInfoPage extends StatefulWidget {
-  static const String routerName = '/userInfo';
-  final UserInfo userInfo;
-
   const UserInfoPage({Key key, this.userInfo}) : super(key: key);
+
+  static const String routerName = '/userInfo';
+
+  final UserInfo userInfo;
 
   @override
   UserInfoPageState createState() => UserInfoPageState();
 }
 
 class UserInfoPageState extends State<UserInfoPage> {
+  UserInfo userInfo;
+
   @override
   void initState() {
+    userInfo = widget.userInfo;
     super.initState();
   }
 
@@ -29,17 +33,12 @@ class UserInfoPageState extends State<UserInfoPage> {
       onRefresh: () async {
         final String rawString =
             await rootBundle.loadString(FileAssets.userInfo);
-        final userInfo = UserInfo.fromRawJson(rawString);
+        final UserInfo userInfo = UserInfo.fromRawJson(rawString);
         if (userInfo != null) {
           setState(
-            () => widget.userInfo
-              ..name = userInfo.name
-              ..department = userInfo.department
-              ..className = userInfo.className
-              ..pictureUrl = userInfo.pictureUrl
-              ..educationSystem = userInfo.educationSystem
-              ..email = userInfo.email
-              ..id = userInfo.id,
+            () => this.userInfo = userInfo.copyWith(
+              pictureBytes: this.userInfo.pictureBytes,
+            ),
           );
         }
 //        FirebaseAnalyticsUtils.instance.logUserInfo(userInfo);

@@ -6,14 +6,6 @@ import 'package:cookie_jar/cookie_jar.dart';
 import 'package:dio_cookie_manager/dio_cookie_manager.dart';
 
 class GitHubHelper {
-  static const String basePath = 'https://gist.githubusercontent.com/';
-
-  static GitHubHelper? _instance;
-
-  late Dio dio;
-
-  late CookieJar cookieJar;
-
   GitHubHelper() {
     cookieJar = CookieJar();
     dio = Dio();
@@ -24,6 +16,14 @@ class GitHubHelper {
   static GitHubHelper? get instance {
     return _instance ??= GitHubHelper();
   }
+
+  static const String basePath = 'https://gist.githubusercontent.com/';
+
+  static GitHubHelper? _instance;
+
+  late Dio dio;
+
+  late CookieJar cookieJar;
 
   Future<Map<String, List<Announcement>>?> getAnnouncement({
     required String gitHubUsername,

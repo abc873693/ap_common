@@ -14,12 +14,12 @@ import 'package:flutter/material.dart';
 export 'package:package_info_plus/package_info_plus.dart';
 
 class SettingTitle extends StatelessWidget {
-  final String text;
-
   const SettingTitle({
     Key? key,
     required this.text,
   }) : super(key: key);
+
+  final String text;
 
   @override
   Widget build(BuildContext context) {
@@ -38,11 +38,6 @@ class SettingTitle extends StatelessWidget {
 }
 
 class SettingSwitch extends StatelessWidget {
-  final String text;
-  final String subText;
-  final bool value;
-  final void Function(bool) onChanged;
-
   const SettingSwitch({
     Key? key,
     required this.text,
@@ -50,6 +45,11 @@ class SettingSwitch extends StatelessWidget {
     required this.value,
     required this.onChanged,
   }) : super(key: key);
+
+  final String text;
+  final String subText;
+  final bool value;
+  final void Function(bool) onChanged;
 
   @override
   Widget build(BuildContext context) {
@@ -73,16 +73,16 @@ class SettingSwitch extends StatelessWidget {
 }
 
 class SettingItem extends StatelessWidget {
-  final String text;
-  final String subText;
-  final Function()? onTap;
-
   const SettingItem({
     Key? key,
     required this.text,
     required this.subText,
     this.onTap,
   }) : super(key: key);
+
+  final String text;
+  final String subText;
+  final Function()? onTap;
 
   @override
   Widget build(BuildContext context) {
@@ -101,13 +101,12 @@ class SettingItem extends StatelessWidget {
 }
 
 class CheckCourseNotifyItem extends StatelessWidget {
-  final String? tag;
-
   const CheckCourseNotifyItem({Key? key, this.tag}) : super(key: key);
+  final String? tag;
 
   @override
   Widget build(BuildContext context) {
-    final ap = ApLocalizations.of(context);
+    final ApLocalizations ap = ApLocalizations.of(context);
     return SettingItem(
       text: ap.courseNotify,
       subText: ap.courseNotifySubTitle,
@@ -121,13 +120,13 @@ class CheckCourseNotifyItem extends StatelessWidget {
               context: context,
               builder: (_) => SimpleOptionDialog(
                 title: ap.courseNotify,
-                items: [
-                  for (var notify in notifyData.data)
+                items: <String>[
+                  for (CourseNotify notify in notifyData.data)
                     '${ap.weekdaysCourse[notify.weekdayIndex]} '
                         '${notify.startTime} ${notify.title}',
                 ],
                 index: -1,
-                onSelected: (index) {
+                onSelected: (int index) {
                   NotificationUtils.cancelCourseNotify(
                     id: notifyData.data[index].id,
                   );
@@ -149,13 +148,13 @@ class CheckCourseNotifyItem extends StatelessWidget {
 }
 
 class ClearAllNotifyItem extends StatelessWidget {
-  final String? tag;
-
   const ClearAllNotifyItem({Key? key, this.tag}) : super(key: key);
+
+  final String? tag;
 
   @override
   Widget build(BuildContext context) {
-    final ap = ApLocalizations.of(context);
+    final ApLocalizations ap = ApLocalizations.of(context);
     return SettingItem(
       text: ap.cancelAllNotify,
       subText: ap.cancelAllNotifySubTitle,
@@ -177,29 +176,29 @@ class ClearAllNotifyItem extends StatelessWidget {
 }
 
 class ChangeLanguageItem extends StatelessWidget {
-  final Function(Locale locale) onChange;
-  final List<String>? textList;
-
   const ChangeLanguageItem({
     Key? key,
     required this.onChange,
     this.textList,
   }) : super(key: key);
 
+  final Function(Locale locale) onChange;
+  final List<String>? textList;
+
   @override
   Widget build(BuildContext context) {
-    final ap = ApLocalizations.of(context);
-    final languageTextList = textList ??
-        [
+    final ApLocalizations ap = ApLocalizations.of(context);
+    final List<String> languageTextList = textList ??
+        <String>[
           ApLocalizations.of(context).systemLanguage,
           ApLocalizations.of(context).traditionalChinese,
           ApLocalizations.of(context).english,
         ];
-    final code = Preferences.getString(
+    final String code = Preferences.getString(
       ApConstants.prefLanguageCode,
       ApSupportLanguageConstants.system,
     );
-    final languageIndex = ApSupportLanguageExtension.fromCode(code);
+    final int languageIndex = ApSupportLanguageExtension.fromCode(code);
     return SettingItem(
       text: ap.language,
       subText: languageTextList[languageIndex],
@@ -237,7 +236,7 @@ class ChangeLanguageItem extends StatelessWidget {
               Preferences.setString(ApConstants.prefLanguageCode, code);
               AnalyticsUtils.instance?.logEvent(
                 'change_language',
-                parameters: {'code': code},
+                parameters: <String, String>{'code': code},
               );
               AnalyticsUtils.instance?.setUserProperty(
                 AnalyticsConstants.language,
@@ -253,24 +252,24 @@ class ChangeLanguageItem extends StatelessWidget {
 }
 
 class ChangeThemeModeItem extends StatelessWidget {
-  final Function(ThemeMode themeMode) onChange;
-  final List<String>? textList;
-
   const ChangeThemeModeItem({
     Key? key,
     required this.onChange,
     this.textList,
   }) : super(key: key);
 
+  final Function(ThemeMode themeMode) onChange;
+  final List<String>? textList;
+
   @override
   Widget build(BuildContext context) {
-    final ap = ApLocalizations.of(context);
-    final themeTextList = [
+    final ApLocalizations ap = ApLocalizations.of(context);
+    final List<String> themeTextList = <String>[
       ApLocalizations.of(context).systemTheme,
       ApLocalizations.of(context).light,
       ApLocalizations.of(context).dark,
     ];
-    final themeModeIndex = ApTheme.of(context).themeMode.index;
+    final int themeModeIndex = ApTheme.of(context).themeMode.index;
     return SettingItem(
       text: ap.theme,
       subText: themeTextList[themeModeIndex],
@@ -282,12 +281,12 @@ class ChangeThemeModeItem extends StatelessWidget {
             items: themeTextList,
             index: themeModeIndex,
             onSelected: (int index) {
-              final mode = ThemeMode.values[index];
+              final ThemeMode mode = ThemeMode.values[index];
               onChange.call(mode);
               Preferences.setInt(ApConstants.prefThemeModeIndex, index);
               AnalyticsUtils.instance?.logEvent(
                 'change_theme',
-                parameters: {
+                parameters: <String, String>{
                   'code': mode.toString(),
                 },
               );
@@ -302,17 +301,17 @@ class ChangeThemeModeItem extends StatelessWidget {
 }
 
 class ChangeIconStyleItem extends StatelessWidget {
-  final Function(String code) onChange;
-
   const ChangeIconStyleItem({
     Key? key,
     required this.onChange,
   }) : super(key: key);
 
+  final Function(String code) onChange;
+
   @override
   Widget build(BuildContext context) {
-    final iconStyleIndex = ApIcon.index;
-    final ap = ApLocalizations.of(context);
+    final int iconStyleIndex = ApIcon.index;
+    final ApLocalizations ap = ApLocalizations.of(context);
     return SettingItem(
       text: ap.iconStyle,
       subText: ap.iconText,
@@ -321,19 +320,19 @@ class ChangeIconStyleItem extends StatelessWidget {
           context: context,
           builder: (_) => SimpleOptionDialog(
             title: ap.theme,
-            items: [
+            items: <String>[
               ap.outlined,
               ap.filled,
             ],
             index: iconStyleIndex,
             onSelected: (int index) {
-              final code = ApIcon.values[index];
+              final String code = ApIcon.values[index];
               ApIcon.code = code;
               Preferences.setString(ApConstants.prefIconStyleCode, code);
               onChange.call(code);
               AnalyticsUtils.instance?.logEvent(
                 'change_icon_style',
-                parameters: {'code': code},
+                parameters: <String, String>{'code': code},
               );
             },
           ),

@@ -8,13 +8,6 @@ import 'package:ap_common/utils/ap_localizations.dart';
 import 'package:flutter/material.dart';
 
 class ApDrawer extends StatefulWidget {
-  final UserInfo? userInfo;
-  final Function() onTapHeader;
-  final String? imageAsset;
-  final List<Widget> widgets;
-  final String imageHeroTag;
-  final bool displayPicture;
-
   const ApDrawer({
     Key? key,
     required this.onTapHeader,
@@ -24,6 +17,13 @@ class ApDrawer extends StatefulWidget {
     this.imageHeroTag = ApConstants.tagStudentPicture,
     this.displayPicture = false,
   }) : super(key: key);
+
+  final UserInfo? userInfo;
+  final Function() onTapHeader;
+  final String? imageAsset;
+  final List<Widget> widgets;
+  final String imageHeroTag;
+  final bool displayPicture;
 
   @override
   ApDrawerState createState() => ApDrawerState();
@@ -127,16 +127,16 @@ class ApDrawerState extends State<ApDrawer> {
 }
 
 class DrawerItem extends StatelessWidget {
-  final IconData icon;
-  final String title;
-  final Function() onTap;
-
   const DrawerItem({
     Key? key,
     required this.icon,
     required this.title,
     required this.onTap,
   }) : super(key: key);
+
+  final IconData icon;
+  final String title;
+  final Function() onTap;
 
   @override
   Widget build(BuildContext context) {
@@ -155,16 +155,16 @@ class DrawerItem extends StatelessWidget {
 }
 
 class DrawerSubItem extends StatelessWidget {
-  final IconData icon;
-  final String title;
-  final Function() onTap;
-
   const DrawerSubItem({
     Key? key,
     required this.icon,
     required this.title,
     required this.onTap,
   }) : super(key: key);
+
+  final IconData icon;
+  final String title;
+  final Function() onTap;
 
   @override
   Widget build(BuildContext context) {

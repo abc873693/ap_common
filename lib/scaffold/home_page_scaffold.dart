@@ -18,23 +18,6 @@ export 'package:ap_common/models/announcement_data.dart';
 enum HomeState { loading, finish, error, empty, offline }
 
 class HomePageScaffold extends StatefulWidget {
-  final HomeState state;
-  final String? title;
-  final List<Announcement> announcements;
-  final List<Widget>? actions;
-  final List<BottomNavigationBarItem>? bottomNavigationBarItems;
-
-  final Function(int index)? onTabTapped;
-  final Function(Announcement announcement)? onImageTapped;
-
-  final Widget? drawer;
-  final Widget? content;
-  final Widget? floatingActionButton;
-
-  final bool isLogin;
-  final bool autoPlay;
-  final Duration autoPlayDuration;
-
   const HomePageScaffold({
     Key? key,
     required this.state,
@@ -52,12 +35,30 @@ class HomePageScaffold extends StatefulWidget {
     this.autoPlayDuration = const Duration(milliseconds: 5000),
   }) : super(key: key);
 
+  final HomeState state;
+  final String? title;
+  final List<Announcement> announcements;
+  final List<Widget>? actions;
+  final List<BottomNavigationBarItem>? bottomNavigationBarItems;
+
+  final Function(int index)? onTabTapped;
+  final Function(Announcement announcement)? onImageTapped;
+
+  final Widget? drawer;
+  final Widget? content;
+  final Widget? floatingActionButton;
+
+  final bool isLogin;
+  final bool autoPlay;
+  final Duration autoPlayDuration;
+
   @override
   HomePageScaffoldState createState() => HomePageScaffoldState();
 }
 
 class HomePageScaffoldState extends State<HomePageScaffold> {
-  final _scaffoldMessengerKey = GlobalKey<ScaffoldMessengerState>();
+  final GlobalKey<ScaffoldMessengerState> _scaffoldMessengerKey =
+      GlobalKey<ScaffoldMessengerState>();
 
   ApLocalizations get app => ApLocalizations.of(context);
 
@@ -92,7 +93,7 @@ class HomePageScaffoldState extends State<HomePageScaffold> {
         return true;
       },
       child: Row(
-        children: [
+        children: <Widget>[
           if (isTablet) widget.drawer!,
           Expanded(
             child: (isTablet && widget.content != null)
@@ -108,7 +109,7 @@ class HomePageScaffoldState extends State<HomePageScaffold> {
                       drawer: isTablet ? null : widget.drawer,
                       floatingActionButton: widget.floatingActionButton,
                       body: OrientationBuilder(
-                        builder: (_, orientation) {
+                        builder: (_, Orientation orientation) {
                           return Container(
                             padding: EdgeInsets.symmetric(
                               vertical: orientation == Orientation.portrait
@@ -179,10 +180,10 @@ class HomePageScaffoldState extends State<HomePageScaffold> {
         widget.onImageTapped?.call(announcement);
         AnalyticsUtils.instance?.logEvent('announcement_image_click');
       },
-      onTapDown: (detail) {
+      onTapDown: (TapDownDetails detail) {
         _timer?.cancel();
       },
-      onTapUp: (detail) {
+      onTapUp: (TapUpDetails detail) {
         setTimer();
       },
       onTapCancel: () {
@@ -198,7 +199,7 @@ class HomePageScaffoldState extends State<HomePageScaffold> {
         child: Hero(
           tag: announcement.hashCode,
           child: ApNetworkImage(
-            url: announcement.imgUrl!,
+            url: announcement.imgUrl,
           ),
         ),
       ),
@@ -235,7 +236,7 @@ class HomePageScaffoldState extends State<HomePageScaffold> {
               child: Material(
                 color: Colors.transparent,
                 child: Text(
-                  widget.announcements[_currentNewsIndex].title!,
+                  widget.announcements[_currentNewsIndex].title,
                   textAlign: TextAlign.center,
                   style: TextStyle(
                     fontSize: 20.0,
@@ -253,7 +254,7 @@ class HomePageScaffoldState extends State<HomePageScaffold> {
               child: PageView.builder(
                 controller: pageController,
                 itemCount: widget.announcements.length,
-                itemBuilder: (context, int currentIndex) {
+                itemBuilder: (BuildContext context, int currentIndex) {
                   final bool active = currentIndex == _currentNewsIndex;
                   return _newsImage(
                     widget.announcements[currentIndex],
@@ -269,7 +270,7 @@ class HomePageScaffoldState extends State<HomePageScaffold> {
               text: TextSpan(
                 style:
                     TextStyle(color: ApTheme.of(context).grey, fontSize: 24.0),
-                children: [
+                children: <TextSpan>[
                   TextSpan(
                     text:
                         // ignore: lines_longer_than_80_chars

@@ -7,8 +7,8 @@ part of 'semester_data.dart';
 // **************************************************************************
 
 SemesterData _$SemesterDataFromJson(Map<String, dynamic> json) => SemesterData(
-      data: (json['data'] as List<dynamic>?)
-          ?.map((e) => Semester.fromJson(e as Map<String, dynamic>))
+      data: (json['data'] as List<dynamic>)
+          .map((e) => Semester.fromJson(e as Map<String, dynamic>))
           .toList(),
       defaultSemester: json['default'] == null
           ? null
@@ -18,15 +18,15 @@ SemesterData _$SemesterDataFromJson(Map<String, dynamic> json) => SemesterData(
 
 Map<String, dynamic> _$SemesterDataToJson(SemesterData instance) =>
     <String, dynamic>{
-      'data': instance.data?.map((e) => e.toJson()).toList(),
+      'data': instance.data.map((e) => e.toJson()).toList(),
       'default': instance.defaultSemester?.toJson(),
       'currentIndex': instance.currentIndex,
     };
 
 Semester _$SemesterFromJson(Map<String, dynamic> json) => Semester(
-      year: json['year'] as String?,
-      value: json['value'] as String?,
-      text: json['text'] as String?,
+      year: json['year'] as String,
+      value: json['value'] as String,
+      text: json['text'] as String,
     );
 
 Map<String, dynamic> _$SemesterToJson(Semester instance) => <String, dynamic>{

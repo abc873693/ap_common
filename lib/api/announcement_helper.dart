@@ -27,6 +27,21 @@ extension DioErrorExtension on DioError {
 }
 
 class AnnouncementHelper {
+  AnnouncementHelper() {
+    dio = Dio(
+      BaseOptions(
+        baseUrl: 'https://$host/$tag',
+        connectTimeout: 10000,
+        receiveTimeout: 10000,
+      ),
+    );
+  }
+
+  // ignore: prefer_constructors_over_static_methods
+  static AnnouncementHelper get instance {
+    return _instance ??= AnnouncementHelper();
+  }
+
   static const int useDataError = 1401;
   static const int tokenExpire = 401;
   static const int notPermission = 403;
@@ -54,21 +69,6 @@ class AnnouncementHelper {
 
   ///firebase cloud message token
   String? fcmToken;
-
-  AnnouncementHelper() {
-    dio = Dio(
-      BaseOptions(
-        baseUrl: 'https://$host/$tag',
-        connectTimeout: 10000,
-        receiveTimeout: 10000,
-      ),
-    );
-  }
-
-  // ignore: prefer_constructors_over_static_methods
-  static AnnouncementHelper get instance {
-    return _instance ??= AnnouncementHelper();
-  }
 
   static void reInstance({
     String? host,
@@ -234,8 +234,8 @@ class AnnouncementHelper {
       AnnouncementData data = AnnouncementData(data: <Announcement>[]);
       if (response.statusCode != 204) {
         data = AnnouncementData.fromJson(response.data!);
-        data.data?.sort((Announcement a, Announcement b) {
-          return b.weight!.compareTo(a.weight!);
+        data.data.sort((Announcement a, Announcement b) {
+          return b.weight.compareTo(a.weight);
         });
       }
       if (callback != null) {
@@ -399,8 +399,8 @@ class AnnouncementHelper {
       AnnouncementData data = AnnouncementData(data: <Announcement>[]);
       if (response.statusCode != 204) {
         data = AnnouncementData.fromJson(response.data!);
-        data.data?.sort((Announcement a, Announcement b) {
-          return b.weight!.compareTo(a.weight!);
+        data.data.sort((Announcement a, Announcement b) {
+          return b.weight.compareTo(a.weight);
         });
       }
       if (callback != null) {

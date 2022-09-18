@@ -10,12 +10,6 @@ import 'package:flutter/material.dart';
 enum BarCodeMode { code39, qrCode }
 
 class UserInfoScaffold extends StatefulWidget {
-  final UserInfo userInfo;
-  final String? heroTag;
-  final List<Widget>? actions;
-  final Future<UserInfo> Function()? onRefresh;
-  final bool enableBarCode;
-
   const UserInfoScaffold({
     Key? key,
     required this.userInfo,
@@ -24,6 +18,12 @@ class UserInfoScaffold extends StatefulWidget {
     this.onRefresh,
     this.enableBarCode = false,
   }) : super(key: key);
+
+  final UserInfo userInfo;
+  final String? heroTag;
+  final List<Widget>? actions;
+  final Future<UserInfo?> Function()? onRefresh;
+  final bool enableBarCode;
 
   @override
   UserInfoScaffoldState createState() => UserInfoScaffoldState();
@@ -60,8 +60,8 @@ class UserInfoScaffoldState extends State<UserInfoScaffold> {
       appBar: AppBar(
         title: Text(app.userInfo),
         backgroundColor: ApTheme.of(context).blue,
-        actions: [
-          ...widget.actions ?? [],
+        actions: <Widget>[
+          ...widget.actions ?? <Widget>[],
           if (widget.enableBarCode)
             IconButton(
               icon: Image.asset(
@@ -118,16 +118,16 @@ class UserInfoScaffoldState extends State<UserInfoScaffold> {
 }
 
 class UserInfoCard extends StatelessWidget {
-  final UserInfo? userInfo;
-  final BarCodeMode? codeMode;
-  final bool enableBarCode;
-
   const UserInfoCard({
     Key? key,
     this.userInfo,
     this.codeMode,
     this.enableBarCode = false,
   }) : super(key: key);
+
+  final UserInfo? userInfo;
+  final BarCodeMode? codeMode;
+  final bool enableBarCode;
 
   Barcode get barcode {
     switch (codeMode) {
@@ -169,7 +169,7 @@ class UserInfoCard extends StatelessWidget {
                 ),
                 child: BarcodeWidget(
                   barcode: barcode,
-                  data: userInfo!.id!,
+                  data: userInfo!.id,
                   color: ApTheme.of(context).barCode,
                   height: barcodeHeight,
                 ),
@@ -179,14 +179,14 @@ class UserInfoCard extends StatelessWidget {
               subtitle: Text(userInfo?.name ?? ''),
             ),
             const Divider(height: 1.0),
-            if (userInfo?.educationSystem != null) ...[
+            if (userInfo?.educationSystem != null) ...<Widget>[
               ListTile(
                 title: Text(ApLocalizations.of(context).educationSystem),
                 subtitle: Text(userInfo?.educationSystem ?? ''),
               ),
               const Divider(height: 1.0),
             ],
-            if (userInfo?.email != null) ...[
+            if (userInfo?.email != null) ...<Widget>[
               ListTile(
                 title: Text(ApLocalizations.of(context).email),
                 subtitle: Text(userInfo?.email ?? ''),
