@@ -564,17 +564,17 @@ class _AnnouncementEditPageState extends State<AnnouncementEditPage> {
   }
 
   void _mapData() {
-    _title.text = announcements.title ?? '';
-    _imgUrl.text = announcements.imgUrl ?? '';
-    if (announcements.imgUrl != null && announcements.imgUrl!.isNotEmpty) {
+    _title.text = announcements.title;
+    _imgUrl.text = announcements.imgUrl;
+    if (announcements.imgUrl.isNotEmpty) {
       imgurUploadState = _ImgurUploadState.done;
     }
     if (announcements.expireTime != null) {
       expireTime = formatter.parse(announcements.expireTime!);
     }
     _url.text = announcements.url ?? '';
-    _weight.text = announcements.weight?.toString() ?? '0';
-    _description.text = announcements.description ?? '';
+    _weight.text = announcements.weight.toString();
+    _description.text = announcements.description;
     tags = announcements.tags ?? <String>[];
   }
 

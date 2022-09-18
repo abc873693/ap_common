@@ -100,13 +100,13 @@ class AnnouncementContentPageState extends State<AnnouncementContentPage> {
           context,
           Scaffold(
             appBar: AppBar(
-              title: Text(widget.announcement.title!),
+              title: Text(widget.announcement.title),
               backgroundColor: ApTheme.of(context).blue,
             ),
             body: PhotoView(
               imageProvider: (ApUtils.isSupportCacheNetworkImage
-                      ? CachedNetworkImageProvider(widget.announcement.imgUrl!)
-                      : NetworkImage(widget.announcement.imgUrl!))
+                      ? CachedNetworkImageProvider(widget.announcement.imgUrl)
+                      : NetworkImage(widget.announcement.imgUrl))
                   as ImageProvider<Object>?,
             ),
           ),
@@ -118,7 +118,7 @@ class AnnouncementContentPageState extends State<AnnouncementContentPage> {
         child: Hero(
           tag: widget.announcement.hashCode,
           child: ApNetworkImage(
-            url: widget.announcement.imgUrl!,
+            url: widget.announcement.imgUrl,
           ),
         ),
       ),
@@ -129,7 +129,7 @@ class AnnouncementContentPageState extends State<AnnouncementContentPage> {
         child: Material(
           color: Colors.transparent,
           child: SelectableText(
-            widget.announcement.title!,
+            widget.announcement.title,
             textAlign: TextAlign.center,
             style: TextStyle(
               fontSize: 20.0,
@@ -148,7 +148,7 @@ class AnnouncementContentPageState extends State<AnnouncementContentPage> {
           horizontal: orientation == Orientation.portrait ? 16.0 : 0.0,
         ),
         child: SelectableLinkify(
-          text: widget.announcement.description ?? '',
+          text: widget.announcement.description,
           textAlign: TextAlign.center,
           style: TextStyle(
             fontSize: 16.0,

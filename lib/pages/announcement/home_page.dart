@@ -428,7 +428,7 @@ class _AnnouncementHomePageState extends State<AnnouncementHomePage> {
           title: Padding(
             padding: const EdgeInsets.only(top: 8.0),
             child: Text(
-              item.title!,
+              item.title,
               style: const TextStyle(fontSize: 18.0),
             ),
           ),
@@ -581,7 +581,7 @@ class _AnnouncementHomePageState extends State<AnnouncementHomePage> {
                       text: '${ap.weight}：',
                       style: const TextStyle(fontWeight: FontWeight.bold),
                     ),
-                    TextSpan(text: '${item.weight ?? 1}\n'),
+                    TextSpan(text: '${item.weight}\n'),
                   ],
                   TextSpan(
                     text: '${ap.imageUrl}：',
@@ -595,7 +595,7 @@ class _AnnouncementHomePageState extends State<AnnouncementHomePage> {
                     ),
                     recognizer: TapGestureRecognizer()
                       ..onTap = () {
-                        ApUtils.launchUrl(item.imgUrl!);
+                        ApUtils.launchUrl(item.imgUrl);
                       },
                   ),
                   TextSpan(

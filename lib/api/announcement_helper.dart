@@ -234,8 +234,8 @@ class AnnouncementHelper {
       AnnouncementData data = AnnouncementData(data: <Announcement>[]);
       if (response.statusCode != 204) {
         data = AnnouncementData.fromJson(response.data!);
-        data.data?.sort((Announcement a, Announcement b) {
-          return b.weight!.compareTo(a.weight!);
+        data.data.sort((Announcement a, Announcement b) {
+          return b.weight.compareTo(a.weight);
         });
       }
       if (callback != null) {
@@ -399,8 +399,8 @@ class AnnouncementHelper {
       AnnouncementData data = AnnouncementData(data: <Announcement>[]);
       if (response.statusCode != 204) {
         data = AnnouncementData.fromJson(response.data!);
-        data.data?.sort((Announcement a, Announcement b) {
-          return b.weight!.compareTo(a.weight!);
+        data.data.sort((Announcement a, Announcement b) {
+          return b.weight.compareTo(a.weight);
         });
       }
       if (callback != null) {

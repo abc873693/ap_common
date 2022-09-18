@@ -199,7 +199,7 @@ class HomePageScaffoldState extends State<HomePageScaffold> {
         child: Hero(
           tag: announcement.hashCode,
           child: ApNetworkImage(
-            url: announcement.imgUrl!,
+            url: announcement.imgUrl,
           ),
         ),
       ),
@@ -236,7 +236,7 @@ class HomePageScaffoldState extends State<HomePageScaffold> {
               child: Material(
                 color: Colors.transparent,
                 child: Text(
-                  widget.announcements[_currentNewsIndex].title!,
+                  widget.announcements[_currentNewsIndex].title,
                   textAlign: TextAlign.center,
                   style: TextStyle(
                     fontSize: 20.0,
