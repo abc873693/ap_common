@@ -169,7 +169,7 @@ class UserInfoCard extends StatelessWidget {
                 ),
                 child: BarcodeWidget(
                   barcode: barcode,
-                  data: userInfo!.id!,
+                  data: userInfo!.id,
                   color: ApTheme.of(context).barCode,
                   height: barcodeHeight,
                 ),
