@@ -8,25 +8,25 @@ part of 'announcement_data.dart';
 
 AnnouncementData _$AnnouncementDataFromJson(Map<String, dynamic> json) =>
     AnnouncementData(
-      data: (json['data'] as List<dynamic>?)
-          ?.map((e) => Announcement.fromJson(e as Map<String, dynamic>))
+      data: (json['data'] as List<dynamic>)
+          .map((e) => Announcement.fromJson(e as Map<String, dynamic>))
           .toList(),
     );
 
 Map<String, dynamic> _$AnnouncementDataToJson(AnnouncementData instance) =>
     <String, dynamic>{
-      'data': instance.data?.map((e) => e.toJson()).toList(),
+      'data': instance.data.map((e) => e.toJson()).toList(),
     };
 
 Announcement _$AnnouncementFromJson(Map<String, dynamic> json) => Announcement(
-      title: json['title'] as String?,
+      title: json['title'] as String,
       id: json['id'] as int?,
       nextId: json['nextId'] as int?,
       lastId: json['lastId'] as int?,
-      weight: json['weight'] as int?,
-      imgUrl: json['imgUrl'] as String?,
+      weight: json['weight'] as int,
+      imgUrl: json['imgUrl'] as String,
       url: json['url'] as String?,
-      description: json['description'] as String?,
+      description: json['description'] as String,
       publishedTime: json['publishedTime'] as String?,
       expireTime: json['expireTime'] as String?,
       applicant: json['applicant'] as String?,

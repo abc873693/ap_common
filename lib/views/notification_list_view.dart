@@ -68,13 +68,13 @@ class NotificationListViewState extends State<NotificationListView>
       onLongPress: () {
         final RenderBox? box = context.findRenderObject() as RenderBox?;
         ApUtils.shareTo(
-          '${notification.info!.title}\n${notification.link}',
+          '${notification.info.title}\n${notification.link}',
           sharePositionOrigin: box!.localToGlobal(Offset.zero) & box.size,
         );
         AnalyticsUtils.instance?.logEvent('share_long_click');
       },
       onTap: () {
-        ApUtils.launchUrl(notification.link!);
+        ApUtils.launchUrl(notification.link);
         AnalyticsUtils.instance?.logEvent('notification_link_click');
       },
       child: Container(
@@ -89,7 +89,7 @@ class NotificationListViewState extends State<NotificationListView>
           crossAxisAlignment: CrossAxisAlignment.start,
           children: <Widget>[
             Text(
-              notification.info!.title ?? '',
+              notification.info.title,
               style: _textStyle,
               textAlign: TextAlign.left,
             ),
@@ -98,14 +98,14 @@ class NotificationListViewState extends State<NotificationListView>
               children: <Widget>[
                 Expanded(
                   child: Text(
-                    notification.info!.department ?? '',
+                    notification.info.department,
                     style: _textGreyStyle,
                     textAlign: TextAlign.left,
                   ),
                 ),
                 Expanded(
                   child: Text(
-                    notification.info!.date ?? '',
+                    notification.info.date,
                     style: _textGreyStyle,
                     textAlign: TextAlign.right,
                   ),

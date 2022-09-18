@@ -128,7 +128,7 @@ class _AnnouncementEditPageState extends State<AnnouncementEditPage> {
         _fetchData();
       }
     } else {
-      announcements = Announcement();
+      announcements = Announcement.empty();
     }
     super.initState();
   }
@@ -613,7 +613,7 @@ class _AnnouncementEditPageState extends State<AnnouncementEditPage> {
       announcements.imgUrl = _imgUrl.text;
       announcements.url = _url.text;
       announcements.weight =
-          _weight.text.isNotEmpty ? int.tryParse(_weight.text) : 0;
+          _weight.text.isNotEmpty ? (int.tryParse(_weight.text) ?? 0) : 0;
       announcements.expireTime =
           (expireTime == null) ? null : expireTime!.parseToString();
       announcements.reviewDescription = _reviewDescription.text;
