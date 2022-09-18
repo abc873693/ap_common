@@ -4,6 +4,6 @@ class PhoneModel {
     this.number,
   );
 
-  String name;
-  String number;
+  final String name;
+  final String number;
 }
