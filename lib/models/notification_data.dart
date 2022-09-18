@@ -11,7 +11,7 @@ part 'notification_data.g.dart';
 @JsonSerializable()
 class NotificationsData {
   NotificationsData({
-    this.data,
+    required this.data,
   });
 
   factory NotificationsData.fromJson(Map<String, dynamic> json) =>
@@ -28,7 +28,7 @@ class NotificationsData {
     );
   }
 
-  Data? data;
+  final Data data;
 
   Map<String, dynamic> toJson() => _$NotificationsDataToJson(this);
 
@@ -39,7 +39,7 @@ class NotificationsData {
 class Data {
   Data({
     this.page,
-    this.notifications,
+    required this.notifications,
   });
 
   factory Data.fromJson(Map<String, dynamic> json) => _$DataFromJson(json);
@@ -50,7 +50,7 @@ class Data {
 
   int? page;
   @JsonKey(name: 'notification')
-  List<Notifications>? notifications;
+  List<Notifications> notifications;
 
   Map<String, dynamic> toJson() => _$DataToJson(this);
 
@@ -60,8 +60,8 @@ class Data {
 @JsonSerializable()
 class Notifications {
   Notifications({
-    this.link,
-    this.info,
+    required this.link,
+    required this.info,
   });
 
   factory Notifications.fromJson(Map<String, dynamic> json) =>
@@ -71,8 +71,8 @@ class Notifications {
         json.decode(str) as Map<String, dynamic>,
       );
 
-  String? link;
-  Info? info;
+  String link;
+  Info info;
 
   Map<String, dynamic> toJson() => _$NotificationsToJson(this);
 
@@ -82,10 +82,9 @@ class Notifications {
 @JsonSerializable()
 class Info {
   Info({
-    this.id,
-    this.title,
-    this.department,
-    this.date,
+    required this.title,
+    required this.department,
+    required this.date,
   });
 
   factory Info.fromJson(Map<String, dynamic> json) => _$InfoFromJson(json);
@@ -94,10 +93,9 @@ class Info {
         json.decode(str) as Map<String, dynamic>,
       );
 
-  int? id;
-  String? title;
-  String? department;
-  String? date;
+  String title;
+  String department;
+  String date;
 
   Map<String, dynamic> toJson() => _$InfoToJson(this);
 

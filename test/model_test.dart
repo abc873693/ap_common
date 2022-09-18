@@ -78,7 +78,6 @@ void main() {
       data.data!.notifications!.first.link,
       'http://acad.nkust.edu.tw/p/406-1004-35062,r232.php',
     );
-    expect(data.data!.notifications!.first.info!.id, 0);
     expect(
       data.data!.notifications!.first.info!.title,
       '109學年度五專及四技新生入學成績優異獎勵，請於109年9月9日前提出申請，請查照。',
