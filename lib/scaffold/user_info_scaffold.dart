@@ -22,7 +22,7 @@ class UserInfoScaffold extends StatefulWidget {
   final UserInfo userInfo;
   final String? heroTag;
   final List<Widget>? actions;
-  final Future<UserInfo> Function()? onRefresh;
+  final Future<UserInfo?> Function()? onRefresh;
   final bool enableBarCode;
 
   @override

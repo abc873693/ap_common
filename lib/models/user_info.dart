@@ -11,14 +11,20 @@ part 'user_info.g.dart';
 class UserInfo {
   UserInfo({
     this.educationSystem,
-    this.department,
+    required this.department,
     this.className,
-    this.id,
-    this.name,
+    required this.id,
+    required this.name,
     this.pictureUrl,
     this.pictureBytes,
     this.email,
   });
+
+  factory UserInfo.empty() => UserInfo(
+        id: '',
+        department: '',
+        name: '',
+      );
 
   factory UserInfo.fromJson(Map<String, dynamic> json) =>
       _$UserInfoFromJson(json);
@@ -40,13 +46,13 @@ class UserInfo {
     }
   }
 
-  String? educationSystem;
-  String? department;
-  String? className;
-  String? id;
-  String? name;
-  String? pictureUrl;
-  String? email;
+  final String? educationSystem;
+  final String department;
+  final String? className;
+  final String id;
+  final String name;
+  final String? pictureUrl;
+  final String? email;
 
   @JsonKey(ignore: true)
   Uint8List? pictureBytes;
@@ -60,6 +66,28 @@ class UserInfo {
       '${ApConstants.packageName}'
       '.user_info_$tag',
       toRawJson(),
+    );
+  }
+
+  UserInfo copyWith({
+    String? id,
+    String? educationSystem,
+    String? department,
+    String? className,
+    String? name,
+    String? pictureUrl,
+    String? email,
+    Uint8List? pictureBytes,
+  }) {
+    return UserInfo(
+      id: id ?? this.id,
+      educationSystem: educationSystem ?? this.educationSystem,
+      department: department ?? this.department,
+      className: className ?? this.className,
+      name: name ?? this.name,
+      pictureUrl: pictureUrl ?? this.pictureUrl,
+      email: email ?? this.email,
+      pictureBytes: pictureBytes ?? this.pictureBytes,
     );
   }
 }
