@@ -1,3 +1,8 @@
+## [0.22.0-dev.2] - 2022/09/18
+
+* 改善 model nullable 設計
+* 改善 json_serialization 版本限制
+
 ## [0.22.0-dev.1] - 2022/09/08
 
 * 修正最新消息 JSON Key 錯誤
