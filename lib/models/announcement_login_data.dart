@@ -12,7 +12,7 @@ enum PermissionLevel { user, editor, admin }
 @JsonSerializable()
 class AnnouncementLoginData {
   AnnouncementLoginData({
-    this.key,
+    required this.key,
   });
 
   factory AnnouncementLoginData.fromJson(Map<String, dynamic> json) =>
@@ -23,11 +23,11 @@ class AnnouncementLoginData {
         json.decode(str) as Map<String, dynamic>,
       );
 
-  String? key;
+  String key;
 
-  Map<String, dynamic> get decodedToken => JwtDecoder.decode(key!);
+  Map<String, dynamic> get decodedToken => JwtDecoder.decode(key);
 
-  bool get isExpired => JwtDecoder.isExpired(key!);
+  bool get isExpired => JwtDecoder.isExpired(key);
 
   PermissionLevel get level =>
       //ignore: avoid_dynamic_calls

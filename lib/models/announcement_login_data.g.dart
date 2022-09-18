@@ -9,7 +9,7 @@ part of 'announcement_login_data.dart';
 AnnouncementLoginData _$AnnouncementLoginDataFromJson(
         Map<String, dynamic> json) =>
     AnnouncementLoginData(
-      key: json['key'] as String?,
+      key: json['key'] as String,
     );
 
 Map<String, dynamic> _$AnnouncementLoginDataToJson(
