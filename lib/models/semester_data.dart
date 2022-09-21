@@ -10,7 +10,7 @@ part 'semester_data.g.dart';
 class SemesterData {
   SemesterData({
     required this.data,
-    this.defaultSemester,
+    required this.defaultSemester,
     this.currentIndex = 0,
   });
 
@@ -36,13 +36,12 @@ class SemesterData {
 
   List<Semester> data;
   @JsonKey(name: 'default')
-  Semester? defaultSemester;
+  Semester defaultSemester;
   int currentIndex = 0;
 
   int get defaultIndex {
-    if (defaultSemester == null) return 0;
     for (int i = 0; i < data.length; i++) {
-      if (defaultSemester!.text == data[i].text) return i;
+      if (defaultSemester.text == data[i].text) return i;
     }
     return 0;
   }
