@@ -47,10 +47,10 @@ class UserInfo {
   }
 
   final String? educationSystem;
-  final String department;
+  final String? department;
   final String? className;
   final String id;
-  final String name;
+  final String? name;
   final String? pictureUrl;
   final String? email;
 

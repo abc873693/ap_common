@@ -8,10 +8,10 @@ part of 'user_info.dart';
 
 UserInfo _$UserInfoFromJson(Map<String, dynamic> json) => UserInfo(
       educationSystem: json['educationSystem'] as String?,
-      department: json['department'] as String,
+      department: json['department'] as String?,
       className: json['className'] as String?,
       id: json['id'] as String,
-      name: json['name'] as String,
+      name: json['name'] as String?,
       pictureUrl: json['pictureUrl'] as String?,
       email: json['email'] as String?,
     );
