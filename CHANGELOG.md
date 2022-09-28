@@ -1,3 +1,7 @@
+## [0.22.0-dev.5] - 2022/09/28
+
+* 改善 user info model nullable 設計
+
 ## [0.22.0-dev.4] - 2022/09/27
 
 * 回復 json_serialization 版本限制
