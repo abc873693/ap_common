@@ -1,3 +1,7 @@
+## [0.22.0-dev.6] - 2022/09/07
+
+* 加入 `PlatformCalendarUtil` 工具
+
 ## [0.22.0-dev.5] - 2022/09/28
 
 * 改善 user info model nullable 設計
