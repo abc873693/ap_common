@@ -1,3 +1,3 @@
 ### 基於 Flutter v3.0.5 開發
 
-* 加入 `PlatformCalendarUtil` 工具
+* 最新消息審查系統加入黑名單功能

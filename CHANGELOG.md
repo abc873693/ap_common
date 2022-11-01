@@ -1,3 +1,7 @@
+## [0.22.0-dev.7] - 2022/11/01
+
+* 最新消息審查系統加入黑名單功能
+
 ## [0.22.0-dev.6] - 2022/09/07
 
 * 加入 `PlatformCalendarUtil` 工具
@@ -49,25 +53,31 @@
 * 修正 多國語言載入錯誤
 
 ## [0.21.0-dev.1] - 2022/06/16
+
 ### 基於 Flutter v3.0.2 開發
+
 ### [Bad Version]
 
 * 修正 `share` 在 iPad 錯誤
 * 改善多國語言無法多次呼叫 `initializeMessages` 的問題
 
 ## [0.21.0-dev.0] - 2022/05/24
+
 ### [Break Change]
+
 ### 基於 Flutter v3.0.0 開發
 
 * Flutter 3 支援更新
 * 修正 Image Picker 格式
 
 ## [0.20.1] - 2022/02/07
+
 ### 基於 Flutter v2.10.2 開發
 
 * 支援 ApTextField Widget Keys
 
 ## [0.20.0] - 2022/02/07
+
 ### 基於 Flutter v2.10.0 開發
 
 * 移除不支援 android embedding v2 的套件
@@ -77,21 +87,25 @@
 * 修正對話間距 UI
 
 ## [0.19.3] - 2021/12/27
+
 ### 基於 Flutter v2.8.1 開發
 
 * 修正 `LoginScaffold` UI
 
 ## [0.19.2] - 2021/12/20
+
 ### 基於 Flutter v2.8.1 開發
 
 * 更新套件至最新版本
 
 ## [0.19.1] - 2021/09/27
+
 ### 基於 Flutter v2.5.1 開發
 
 * 修正編輯最新消息時的型態錯誤
 
 ## [0.19.0] - 2021/09/13
+
 ### 基於 Flutter v2.5.0 開發
 
 * 更新大多數套件至最新版本
@@ -116,11 +130,13 @@
 * 使用 share_plus 取代 share 以支援全平台
 
 ## [0.17.0] - 2021/06/06
+
 ### [Break Change]
 
 * 加入 `CloudMessageListPage` 並使用 Hive 實作本地儲存雲端通知
 
 ## [0.17.0-dev.4] - 2021/05/24
+
 ### [Break Change]
 
 * `NotificationScaffold` 重新命名為 `NotificationListView`
@@ -130,6 +146,7 @@
 * 支援登入畫面與最新消息編輯可點擊其他區域關閉鍵盤
 
 ## [0.17.0-dev.3] - 2021/05/20
+
 ### [Break Change]
 
 * 移除 `OpenSourcePage`
@@ -137,12 +154,14 @@
 * 修正最新消息審查系統顯示最新消息錯誤
 
 ## [0.17.0-dev.2] - 2021/05/17
+
 ### [Break Change]
 
 * 加入 App Tracking 對話框
 * 改善多國語言英文文法
 
 ## [0.17.0-dev.1] - 2021/05/15
+
 ### [Break Change]
 
 * 使用 `linter` 套件改善專案
@@ -154,11 +173,13 @@
 * Null-Safety 版本發佈
 
 ## [0.16.0-nullsafety.5] - 2021/05/01
+
 ### [Break Change]
 
 * 更改讀取更新紀錄路徑
 
 ## [0.16.0-nullsafety.4] - 2021/04/29
+
 ### [Break Change]
 
 * 移除舊有 API
@@ -179,6 +200,7 @@
 ## [0.16.0-nullsafety.0] - 2021/04/09
 
 ### [Break Change]
+
 ### 基於 Flutter v2.0.3 開發
 
 * Null-Safety 遷移
@@ -190,7 +212,9 @@
 * 修正選擇相片錯誤
 
 ## [0.15.0] - 2021/03/06
+
 ### [Break Change]
+
 ### 基於 Flutter v2.0.1 開發
 
 * 加入選擇照片在 `ApUtils`
@@ -203,6 +227,7 @@
 * 支援最新消息審查系統 apple 登入設定 bundle id
 
 ## [0.14.2] - 2021/02/28
+
 ### 基於 Flutter v1.26.0-17.8.pre 開發
 
 * 最新消息審查系統支援標籤
@@ -257,36 +282,45 @@
 * 修復 `PdfScaffod` `AnalyticUtils` 空檢查
 
 ## [0.13.0] - 2021/02/16
+
 ### 基於 Flutter v1.26.0-17.5.pre 開發
 
 * 大部分元件加入抽象分析方法
 * `PdfScaffod` 支援列印與分享 pdf 檔案
 
 ## [0.13.0-dev.2] - 2021/02/15
+
 ### [Break Change]
+
 ### 基於 Flutter v1.26.0-17.5.pre 開發
 
 * 移除 `material_design_icons_flutter` 套件相依
 * 使用 `printing` 作為 `PdfScaffod` 的套件，移除 `native_pdf_view`
 
 ## [0.13.0-dev.1] - 2021/02/14
+
 ### [Break Change]
 
 * 遷移 `toast` package 至本專案(因原作者未上傳 pub.dev)
 
 ## [0.12.0] - 2021/02/13
+
 ### [Break Change]
 
 * 遷移 Flutter v1.25 按鈕
-* 移除 `PhoneScaffold` 及 `NotificationScaffold` 中 setCurrentScreen & logEvent 參數，改由內部呼叫 `AnalyticsUtils`
+* 移除 `PhoneScaffold` 及 `NotificationScaffold` 中 setCurrentScreen & logEvent
+  參數，改由內部呼叫 `AnalyticsUtils`
 
 ## [0.12.0-dev.2] - 2021/02/11
+
 ### [Break Change]
 
 * 移除 `AnnouncementHomePage` catchException 參數
 
 ## [0.12.0-dev.1] - 2021/02/11
+
 ### [Break Change]
+
 ### 基於 Flutter v1.26.0-17.2.pre 開發
 
 * 改善 `AnalyticsUtils` Interface
@@ -294,18 +328,24 @@
 * 頁面移除 AnalyticsUtils 相關參數
 
 ## [0.11.1] - 2021/02/08
+
 ### 基於 Flutter v1.26.0-17.2.pre 開發
 
 * 更新 `GeneralResponse` 參數
 
 ## [0.11.0] - 2021/01/30
+
 ### [Break Change]
+
 ### 基於 Flutter v1.26.0-17.1.pre 開發
 
-* 強制將ApTheme過場主題套用 [cupertino_back_gesture](https://pub.dev/packages/cupertino_back_gesture) 若不支援請將使用 `MaterialPageRoute`
+* 強制將ApTheme過場主題套用 [cupertino_back_gesture](https://pub.dev/packages/cupertino_back_gesture)
+  若不支援請將使用 `MaterialPageRoute`
 
 ## [0.11.0-dev.2] - 2021/01/30
+
 ### [Break Change]
+
 ### 基於 Flutter v1.26.0-12.0.pre 開發
 
 * 修正TimeCode範圍錯誤
@@ -313,25 +353,31 @@
 * 修正上課通知weekday錯誤
 
 ## [0.11.0-dev.1] - 2021/01/28
+
 ### [Break Change]
+
 ### 基於 Flutter v1.26.0-12.0.pre 開發
 
 * 課表(CourseData)格式更新
 * 支援課表(CourseTable)顯示時間、上課位置、老師
 
 ## [0.10.2] - 2021/01/23
+
 ### 基於 Flutter v1.25.0-8.3.pre 開發
 
 * 改善最新版本對話框context取得
 * 最新消息審查系統加入崩潰參數回傳
 
 ## [0.10.1] - 2021/01/08
+
 ### 基於 Flutter v1.25.0-8.2.pre 開發
 
 * 修正課表陣列無法新增
 
 ## [0.10.0] - 2021/01/08
+
 ### 基於 Flutter v1.25.0-8.2.pre 開發
+
 ### [Bad Version]
 
 * 新增匯出課表
@@ -340,29 +386,35 @@
 * 移除Flutter棄用函式庫
 
 ## [0.10.0-beta.1] - 2021/01/07
+
 ### 基於 Flutter v1.25.0-8.2.pre 開發
+
 ### [Bad Version]
 
 * 改善最新消息審查系統錯誤處理
 * 移除Flutter棄用函式庫
 
 ## [0.10.0-dev.4] - 2021/01/06
+
 ### 基於 Flutter v1.26開發
 
 * 最新消息審查系統圖片可上傳至Imgur(Web & 雙平台限定)
 
 ## [0.10.0-dev.3] - 2021/01/05
+
 ### 基於 Flutter v1.26開發
 
 * 改善多國語言架構
 * 改善第三方流程登入提示
 
 ## [0.10.0-dev.2] - 2021/01/03
+
 ### 基於 Flutter v1.26開發
 
 * 改善最新消息審查系統介面
 
 ## [0.10.0-dev.1] - 2021/01/03
+
 ### 基於 Flutter v1.26開發
 
 * 新增匯出課表
@@ -373,6 +425,7 @@
 * 更改學期成績相關文字
 
 ## [0.9.0] - 2020/10/23
+
 ### [Break Change]
 
 * 支援學期成績元件可點擊
@@ -388,6 +441,7 @@
 * 修正 icon 錯誤
 
 ## [0.8.0] - 2020/10/10
+
 ### [Break Change] 此版本之後基於Flutter v1.22開發
 
 * [API Break Change] 修正 PdfView 初始化錯誤
@@ -530,6 +584,7 @@
 * 整理多國語言本地化
 
 ## [0.2.0] - 2020/05/01
+
 ### [Break Change] 此版本之後基於Flutter v1.17開發
 
 * 配合高科大版本重構最新消息API
@@ -559,6 +614,7 @@
 ## [0.1.5] - 2020/04/25
 
 * 改善學期成績骨架
+
 ## [0.1.4] - 2020/04/24
 
 * 更新文字說明
