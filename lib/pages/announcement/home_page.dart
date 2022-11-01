@@ -3,6 +3,7 @@ import 'dart:io';
 import 'package:ap_common/api/announcement_helper.dart';
 import 'package:ap_common/config/ap_constants.dart';
 import 'package:ap_common/models/announcement_data.dart';
+import 'package:ap_common/pages/announcement/black_list_page.dart';
 import 'package:ap_common/pages/announcement/edit_page.dart';
 import 'package:ap_common/resources/ap_icon.dart';
 import 'package:ap_common/resources/ap_theme.dart';
@@ -144,6 +145,16 @@ class _AnnouncementHomePageState extends State<AnnouncementHomePage> {
                 ],
               ),
             ),
+          IconButton(
+            icon: const Icon(Icons.playlist_remove),
+            tooltip: ap.blackList,
+            onPressed: () async {
+              ApUtils.pushCupertinoStyle(
+                context,
+                const BlackListPage(),
+              );
+            },
+          ),
           if (Preferences.getBool(ApConstants.announcementIsLogin, false))
             IconButton(
               icon: const Icon(Icons.exit_to_app),

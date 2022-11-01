@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:convert';
 import 'dart:ui' show Locale;
 
 import 'package:ap_common/callback/general_callback.dart';
@@ -569,6 +570,73 @@ class AnnouncementHelper {
     return null;
   }
 
+  Future<void> getBlackList({
+    required GeneralCallback<List<String>> callback,
+  }) async {
+    try {
+      final Response<String> response = await dio.get<String>(
+        '/ban',
+      );
+      final List<dynamic> list = jsonDecode(response.data!) as List<dynamic>;
+      callback.onSuccess(list.map((dynamic e) => e as String).toList());
+    } on DioError catch (dioError) {
+      handleCrudError(dioError, callback);
+    } catch (e) {
+      callback.onError(GeneralResponse.unknownError());
+      rethrow;
+    }
+  }
+
+  Future<Response<dynamic>?> addBlackList({
+    required String username,
+    GeneralCallback<Response<dynamic>>? callback,
+  }) async {
+    try {
+      final Response<dynamic> response = await dio.put(
+        '/ban/',
+        data: <String, String>{
+          'username': username,
+        },
+      );
+      if (callback != null) {
+        callback.onSuccess(response);
+      }
+      return response;
+    } on DioError catch (dioError) {
+      if (callback == null) {
+        rethrow;
+      } else {
+        handleCrudError(dioError, callback);
+      }
+    }
+    return null;
+  }
+
+  Future<Response<dynamic>?> removeFromBlackList({
+    required String username,
+    GeneralCallback<Response<dynamic>>? callback,
+  }) async {
+    try {
+      final Response<dynamic> response = await dio.delete(
+        '/ban/',
+        data: <String, String>{
+          'username': username,
+        },
+      );
+      if (callback != null) {
+        callback.onSuccess(response);
+      }
+      return response;
+    } on DioError catch (dioError) {
+      if (callback == null) {
+        rethrow;
+      } else {
+        handleCrudError(dioError, callback);
+      }
+    }
+    return null;
+  }
+
   void setAuthorization(String? key) {
     dio.options.headers['Authorization'] = 'Bearer $key';
   }
@@ -580,7 +648,7 @@ class AnnouncementHelper {
 
   void handleCrudError(
     DioError dioError,
-    GeneralCallback<Response<dynamic>> callback,
+    GeneralCallback<dynamic> callback,
   ) {
     if (dioError.isNotPermission) {
       callback.onError(
