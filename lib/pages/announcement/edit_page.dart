@@ -524,6 +524,34 @@ class _AnnouncementEditPageState extends State<AnnouncementEditPage> {
                     ),
                   ),
                 ),
+                const SizedBox(height: 18),
+                FractionallySizedBox(
+                  widthFactor: 0.8,
+                  child: ElevatedButton(
+                    style: ElevatedButton.styleFrom(
+                      shape: const RoundedRectangleBorder(
+                        borderRadius: BorderRadius.all(
+                          Radius.circular(30.0),
+                        ),
+                      ),
+                      padding: const EdgeInsets.symmetric(
+                        horizontal: 8.0,
+                        vertical: 4.0,
+                      ),
+                      primary: ApTheme.of(context).red,
+                    ),
+                    onPressed: () {
+                      _announcementSubmit(isApproval: false);
+                    },
+                    child: Text(
+                      app.updateRejectAndBan,
+                      style: const TextStyle(
+                        color: Colors.white,
+                        fontSize: 18.0,
+                      ),
+                    ),
+                  ),
+                ),
               ],
               const SizedBox(height: 36),
             ],
@@ -606,7 +634,10 @@ class _AnnouncementEditPageState extends State<AnnouncementEditPage> {
     }
   }
 
-  Future<void> _announcementSubmit({bool? isApproval}) async {
+  Future<void> _announcementSubmit({
+    bool? isApproval,
+    bool? addBlackList,
+  }) async {
     if (_formKey.currentState!.validate()) {
       announcements.title = _title.text;
       announcements.description = _description.text;
@@ -654,6 +685,16 @@ class _AnnouncementEditPageState extends State<AnnouncementEditPage> {
                     ),
                   );
                 }
+              }
+              if (addBlackList ?? false) {
+                await AnnouncementHelper.instance.addBlackList(
+                  username: announcements.applicant!,
+                  //ignore: use_build_context_synchronously
+                  callback: GeneralCallback<Response<dynamic>>.simple(
+                    context,
+                    (_) => _,
+                  ),
+                );
               }
               break;
           }

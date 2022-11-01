@@ -84,6 +84,7 @@ class MessageLookup extends MessageLookupByLibrary {
             "This is a beta version. Please report any bugs when encountering an error!"),
         "birthDay": MessageLookupByLibrary.simpleMessage("Birth Day"),
         "birthMonth": MessageLookupByLibrary.simpleMessage("Birth Month"),
+        "blackList": MessageLookupByLibrary.simpleMessage("Black List"),
         "bus": MessageLookupByLibrary.simpleMessage("Campus Bus System"),
         "busEmpty": MessageLookupByLibrary.simpleMessage(
             "Oops! No any buses now~\nPlease choose another one."),
@@ -189,6 +190,7 @@ class MessageLookup extends MessageLookupByLibrary {
         "date": MessageLookupByLibrary.simpleMessage("Date"),
         "delayReason": MessageLookupByLibrary.simpleMessage(
             "Reason for Late  Absence Report"),
+        "delete": MessageLookupByLibrary.simpleMessage("Delete"),
         "deleteNewsContent": MessageLookupByLibrary.simpleMessage(
             "Are you sure you want to delete it?"),
         "deleteNewsTitle":
@@ -558,6 +560,8 @@ class MessageLookup extends MessageLookupByLibrary {
         "updateIosContent": MessageLookupByLibrary.simpleMessage(
             "An update is available for %s!"),
         "updateNoteTitle": MessageLookupByLibrary.simpleMessage("What\'s New"),
+        "updateRejectAndBan":
+            MessageLookupByLibrary.simpleMessage("Updated, Rejected and Ban"),
         "updateSuccess":
             MessageLookupByLibrary.simpleMessage("Update successful"),
         "updateTitle": MessageLookupByLibrary.simpleMessage("Updated"),

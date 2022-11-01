@@ -3400,6 +3400,36 @@ class ApLocalizations {
     );
   }
 
+  /// `更新駁回並加入黑名單`
+  String get updateRejectAndBan {
+    return Intl.message(
+      '更新駁回並加入黑名單',
+      name: 'updateRejectAndBan',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `黑名單`
+  String get blackList {
+    return Intl.message(
+      '黑名單',
+      name: 'blackList',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `刪除`
+  String get delete {
+    return Intl.message(
+      '刪除',
+      name: 'delete',
+      desc: '',
+      args: [],
+    );
+  }
+
   /// `審查申請`
   String get reviewApplication {
     return Intl.message(

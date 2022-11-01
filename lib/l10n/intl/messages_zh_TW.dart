@@ -76,6 +76,7 @@ class MessageLookup extends MessageLookupByLibrary {
             MessageLookupByLibrary.simpleMessage("此功能為測試版本，如有問題請立即回報！"),
         "birthDay": MessageLookupByLibrary.simpleMessage("出生日"),
         "birthMonth": MessageLookupByLibrary.simpleMessage("出生月"),
+        "blackList": MessageLookupByLibrary.simpleMessage("黑名單"),
         "bus": MessageLookupByLibrary.simpleMessage("校車系統"),
         "busEmpty":
             MessageLookupByLibrary.simpleMessage("Oops！目前校車沒上班喔～\n請選擇其他班次 😋"),
@@ -163,6 +164,7 @@ class MessageLookup extends MessageLookupByLibrary {
         "dark": MessageLookupByLibrary.simpleMessage("深色"),
         "date": MessageLookupByLibrary.simpleMessage("日期"),
         "delayReason": MessageLookupByLibrary.simpleMessage("請假延遲原因"),
+        "delete": MessageLookupByLibrary.simpleMessage("刪除"),
         "deleteNewsContent": MessageLookupByLibrary.simpleMessage("確定要刪除?"),
         "deleteNewsTitle": MessageLookupByLibrary.simpleMessage("刪除最新消息"),
         "deleteSuccess": MessageLookupByLibrary.simpleMessage("刪除成功"),
@@ -457,6 +459,8 @@ class MessageLookup extends MessageLookupByLibrary {
         "updateIosContent":
             MessageLookupByLibrary.simpleMessage("%s 在 Apple store 有新版本喲！"),
         "updateNoteTitle": MessageLookupByLibrary.simpleMessage("更新日誌"),
+        "updateRejectAndBan":
+            MessageLookupByLibrary.simpleMessage("更新駁回並加入黑名單"),
         "updateSuccess": MessageLookupByLibrary.simpleMessage("更新成功"),
         "updateTitle": MessageLookupByLibrary.simpleMessage("版本更新"),
         "uploading": MessageLookupByLibrary.simpleMessage("上傳中"),
