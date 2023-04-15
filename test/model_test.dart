@@ -40,7 +40,7 @@ void main() {
     expect(data.data.first.value, '3');
     expect(data.data.first.code, '1113');
     expect(data.data.first.text, '111學年度 暑假');
-    expect(data.defaultSemester!.text, '111學年度 上學期');
+    expect(data.defaultSemester.text, '111學年度 上學期');
     expect(data.defaultIndex, 2);
   });
   test('Course Data parser', () {
