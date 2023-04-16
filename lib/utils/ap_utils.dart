@@ -251,6 +251,8 @@ class ApUtils {
       PermissionState hasGrantPermission = PermissionState.notDetermined;
       if (!kIsWeb && (Platform.isAndroid || Platform.isIOS)) {
         hasGrantPermission = await PhotoManager.requestPermissionExtend();
+      } else {
+        hasGrantPermission = PermissionState.authorized;
       }
       if (hasGrantPermission == PermissionState.authorized) {
         final Uint8List pngBytes = byteData.buffer.asUint8List();

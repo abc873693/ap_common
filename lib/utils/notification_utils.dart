@@ -269,6 +269,11 @@ class NotificationUtils {
             badge: badge,
             sound: sound,
           );
+    } else if (!kIsWeb && Platform.isAndroid) {
+      return await FlutterLocalNotificationsPlugin()
+          .resolvePlatformSpecificImplementation<
+              AndroidFlutterLocalNotificationsPlugin>()
+          ?.requestPermission();
     } else {
       return null;
     }
