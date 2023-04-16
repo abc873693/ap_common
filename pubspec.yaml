@@ -53,7 +53,7 @@ dependencies:
   google_sign_in: ^5.3.2
   sign_in_with_apple: ^4.0.0
   image_picker: ^0.8.5+3
-  photo_manager: ^2.1.1
+  photo_manager: ^2.4.0
   app_tracking_transparency: ^2.0.2+4
 
 dev_dependencies:
