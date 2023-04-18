@@ -69,7 +69,7 @@ class ImgurHelper {
         return null;
       }
     } on DioError catch (dioError) {
-      if (dioError.type == DioErrorType.response &&
+      if (dioError.type == DioErrorType.badResponse &&
           dioError.response?.statusCode == 400) {
         callback?.onError(
           GeneralResponse(

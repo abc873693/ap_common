@@ -17,9 +17,11 @@ class PrivateCookieManager extends CookieManager {
     _saveCookies(response)
         .then((_) => handler.next(response))
         .catchError((dynamic e, dynamic stackTrace) {
-      final DioError err =
-          DioError(requestOptions: response.requestOptions, error: e);
-      err.stackTrace = stackTrace as StackTrace;
+      final DioError err = DioError(
+        requestOptions: response.requestOptions,
+        error: e,
+        stackTrace: stackTrace as StackTrace,
+      );
       handler.reject(err, true);
     });
   }
@@ -33,8 +35,8 @@ class PrivateCookieManager extends CookieManager {
         final DioError _err = DioError(
           requestOptions: err.response!.requestOptions,
           error: e,
+          stackTrace: stackTrace as StackTrace,
         );
-        _err.stackTrace = stackTrace as StackTrace;
         handler.next(_err);
       });
     } else {

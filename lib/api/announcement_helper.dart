@@ -18,13 +18,13 @@ enum AnnouncementLoginType {
 
 extension DioErrorExtension on DioError {
   bool get isUnauthorized =>
-      type == DioErrorType.response && response?.statusCode == 401;
+      type == DioErrorType.badResponse && response?.statusCode == 401;
 
   bool get isNotPermission =>
-      type == DioErrorType.response && response?.statusCode == 403;
+      type == DioErrorType.badResponse && response?.statusCode == 403;
 
   bool get isNotFoundAnnouncement =>
-      type == DioErrorType.response && response?.statusCode == 404;
+      type == DioErrorType.badResponse && response?.statusCode == 404;
 }
 
 class AnnouncementHelper {
@@ -32,8 +32,8 @@ class AnnouncementHelper {
     dio = Dio(
       BaseOptions(
         baseUrl: 'https://$host/$tag',
-        connectTimeout: 10000,
-        receiveTimeout: 10000,
+        connectTimeout: const Duration(seconds: 10),
+        receiveTimeout: const Duration(seconds: 10),
       ),
     );
   }
