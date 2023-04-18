@@ -61,27 +61,30 @@ extension ApExtension on ApLocalizations {
 extension DioErrorI18nExtension on DioError {
   String? get i18nMessage {
     switch (type) {
-      case DioErrorType.other:
-        return ApLocalizations.current.noInternet;
-      case DioErrorType.connectTimeout:
+      case DioErrorType.connectionTimeout:
       case DioErrorType.receiveTimeout:
       case DioErrorType.sendTimeout:
         return ApLocalizations.current.timeoutMessage;
-      case DioErrorType.response:
+      case DioErrorType.badCertificate:
+        return ApLocalizations.current.unknownError;
+      case DioErrorType.badResponse:
         if (response!.data is Map<String, dynamic>) {
           //ignore: avoid_dynamic_calls
           return (response!.data['description'] ?? message) as String;
         } else {
           return message;
         }
+      case DioErrorType.connectionError:
+        return ApLocalizations.current.noInternet;
+      case DioErrorType.unknown:
+        return ApLocalizations.current.unknownError;
       case DioErrorType.cancel:
-      default:
         return null;
     }
   }
 
   bool get isJsonResponse {
-    return type == DioErrorType.response &&
+    return type == DioErrorType.badResponse &&
         response!.data is Map<String, dynamic>;
   }
 
