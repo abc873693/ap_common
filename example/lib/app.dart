@@ -105,8 +105,8 @@ class MyAppState extends State<MyApp> with WidgetsBindingObserver {
           themeMode: themeMode,
           locale: locale,
           localizationsDelegates: const <LocalizationsDelegate<dynamic>>[
-            ApLocalizations.delegate,
-            AppLocalizationsDelegate(),
+            apLocalizationsDelegate,
+            appDelegate,
             GlobalMaterialLocalizations.delegate,
             GlobalWidgetsLocalizations.delegate,
             GlobalCupertinoLocalizations.delegate,
@@ -131,8 +131,8 @@ class MyAppState extends State<MyApp> with WidgetsBindingObserver {
     debugPrint('loadLocale $locale');
     setState(() {
       this.locale = locale;
-      const AppLocalizationsDelegate().load(locale);
-      ApLocalizations.delegate.load(locale);
+      appDelegate.load(locale);
+      ApLocalizations.load(locale);
     });
   }
 }

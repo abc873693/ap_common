@@ -5,6 +5,8 @@ analyzer:
     # l10n generated code
     - lib/l10n/intl/*.dart
     - lib/l10n/l10n.dart
+    - example/lib/l10n/intl/*.dart
+    - example/lib/l10n/l10n.dart
     # example
 #    - example/**
     # other generated files
