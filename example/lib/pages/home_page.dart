@@ -42,14 +42,14 @@ class HomePageState extends State<HomePage> {
 
   HomeState state = HomeState.loading;
 
-  AppLocalizations app;
-  ApLocalizations ap;
+  late AppLocalizations app;
+  late ApLocalizations ap;
 
-  Map<String, List<Announcement>> newsMap;
+  Map<String, List<Announcement>>? newsMap;
 
-  Widget content;
+  Widget? content;
 
-  List<Announcement> announcements;
+  List<Announcement>? announcements;
 
   bool isLogin = false;
   bool displayPicture = true;
@@ -57,7 +57,7 @@ class HomePageState extends State<HomePage> {
   bool isBusExpanded = false;
   bool isLeaveExpanded = false;
 
-  UserInfo userInfo;
+  UserInfo? userInfo;
 
   TextStyle get _defaultStyle => TextStyle(
         color: ApTheme.of(context).grey,
@@ -74,7 +74,7 @@ class HomePageState extends State<HomePage> {
     }
   }
 
-  static Widget aboutPage(BuildContext context, {String assetImage}) {
+  static Widget aboutPage(BuildContext context, {String? assetImage}) {
     return AboutUsPage(
       assetImage: assetImage ?? ImageAssets.kuasap2,
       githubName: 'NKUST-ITC',
@@ -110,7 +110,7 @@ class HomePageState extends State<HomePage> {
       title: app.appName,
       key: _homeKey,
       state: state,
-      announcements: announcements,
+      announcements: announcements!,
       isLogin: isLogin,
       actions: <Widget>[
         IconButton(
@@ -320,7 +320,7 @@ class HomePageState extends State<HomePage> {
         onSuccess: (List<Announcement> data) {
           announcements = data;
           setState(() {
-            if (announcements == null || announcements.isEmpty) {
+            if (announcements == null || announcements!.isEmpty) {
               state = HomeState.empty;
             } else {
               state = HomeState.finish;
@@ -346,11 +346,11 @@ class HomePageState extends State<HomePage> {
     try {
       if ((userInfo?.pictureUrl) == null) return;
       final http.Response response =
-          await http.get(Uri.parse(userInfo.pictureUrl));
+          await http.get(Uri.parse(userInfo!.pictureUrl!));
       if (!response.body.contains('html')) {
         if (mounted) {
           setState(() {
-            userInfo.pictureBytes = response.bodyBytes;
+            userInfo!.pictureBytes = response.bodyBytes;
           });
         }
 //        CacheUtils.savePictureData(response.bodyBytes);
@@ -372,11 +372,11 @@ class HomePageState extends State<HomePage> {
     if (state != HomeState.finish) {
       _getAnnouncements();
     }
-    _homeKey.currentState.showBasicHint(text: ap.loginSuccess);
+    _homeKey.currentState!.showBasicHint(text: ap.loginSuccess);
   }
 
   Future<void> openLoginPage() async {
-    final bool result = await Navigator.of(context).push(
+    final bool? result = await Navigator.of(context).push(
       MaterialPageRoute<bool>(
         builder: (_) => LoginPage(),
       ),
@@ -396,14 +396,14 @@ class HomePageState extends State<HomePage> {
   Future<void> checkLogin() async {
     await Future<void>.delayed(const Duration(microseconds: 30));
     if (isLogin) {
-      _homeKey.currentState.hideSnackBar();
+      _homeKey.currentState!.hideSnackBar();
     } else {
-      _homeKey.currentState
+      _homeKey.currentState!
           .showSnackBar(
             text: ApLocalizations.of(context).notLogin,
             actionText: ApLocalizations.of(context).login,
             onSnackBarTapped: openLoginPage,
-          )
+          )!
           .closed
           .then(
         (SnackBarClosedReason reason) {

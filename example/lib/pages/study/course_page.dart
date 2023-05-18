@@ -18,15 +18,15 @@ class CoursePage extends StatefulWidget {
 }
 
 class CoursePageState extends State<CoursePage> {
-  ApLocalizations ap;
+  late ApLocalizations ap;
 
   CourseState state = CourseState.loading;
 
-  SemesterData semesterData;
+  SemesterData? semesterData;
 
-  CourseData courseData;
+  CourseData? courseData;
 
-  CourseNotifyData notifyData;
+  CourseNotifyData? notifyData;
 
   bool isOffline = false;
 
@@ -53,7 +53,7 @@ class CoursePageState extends State<CoursePage> {
     ap = ApLocalizations.of(context);
     return CourseScaffold(
       state: state,
-      courseData: courseData,
+      courseData: courseData!,
       notifyData: notifyData,
       customHint: isOffline ? ap.offlineCourse : '',
       customStateHint: customStateHint,
@@ -62,7 +62,7 @@ class CoursePageState extends State<CoursePage> {
       enableCaptureCourseTable: true,
       semesterData: semesterData,
       onSelect: (int index) {
-        semesterData.currentIndex = index;
+        semesterData!.currentIndex = index;
         _getCourseTables();
       },
       onRefresh: () async {
@@ -75,11 +75,11 @@ class CoursePageState extends State<CoursePage> {
   Future<void> _getSemester() async {
     final String rawString = await rootBundle.loadString(FileAssets.semesters);
     semesterData = SemesterData.fromRawJson(rawString);
-    if (semesterData.defaultSemester != null) {
-      for (int i = 0; i < semesterData.data.length; i++) {
-        final Semester option = semesterData.data[i];
-        if (option.text == semesterData.defaultSemester.text) {
-          semesterData.currentIndex = i;
+    if (semesterData!.defaultSemester != null) {
+      for (int i = 0; i < semesterData!.data.length; i++) {
+        final Semester option = semesterData!.data[i];
+        if (option.text == semesterData!.defaultSemester.text) {
+          semesterData!.currentIndex = i;
         }
         i++;
       }
@@ -94,7 +94,7 @@ class CoursePageState extends State<CoursePage> {
       ApConstants.currentSemesterCode,
       ApConstants.semesterLatest,
     );
-    courseData.save(courseNotifyCacheKey);
+    courseData!.save(courseNotifyCacheKey);
     if (mounted && courseData != null) {
       setState(() {
         if (courseData?.courses == null) {

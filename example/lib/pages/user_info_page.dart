@@ -6,18 +6,18 @@ import 'package:flutter/services.dart';
 import '../res/assets.dart';
 
 class UserInfoPage extends StatefulWidget {
-  const UserInfoPage({Key key, this.userInfo}) : super(key: key);
+  const UserInfoPage({Key? key, this.userInfo}) : super(key: key);
 
   static const String routerName = '/userInfo';
 
-  final UserInfo userInfo;
+  final UserInfo? userInfo;
 
   @override
   UserInfoPageState createState() => UserInfoPageState();
 }
 
 class UserInfoPageState extends State<UserInfoPage> {
-  UserInfo userInfo;
+  UserInfo? userInfo;
 
   @override
   void initState() {
@@ -28,7 +28,7 @@ class UserInfoPageState extends State<UserInfoPage> {
   @override
   Widget build(BuildContext context) {
     return UserInfoScaffold(
-      userInfo: widget.userInfo,
+      userInfo: widget.userInfo!,
       enableBarCode: true,
       onRefresh: () async {
         final String rawString =
@@ -37,7 +37,7 @@ class UserInfoPageState extends State<UserInfoPage> {
         if (userInfo != null) {
           setState(
             () => this.userInfo = userInfo.copyWith(
-              pictureBytes: this.userInfo.pictureBytes,
+              pictureBytes: this.userInfo!.pictureBytes,
             ),
           );
         }

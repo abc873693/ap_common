@@ -14,7 +14,7 @@ class DialogUtilsTestPage extends StatefulWidget {
 }
 
 class _DialogUtilsTestPageState extends State<DialogUtilsTestPage> {
-  AppLocalizations app;
+  late AppLocalizations app;
 
   Day day = NotificationUtils.getDay(DateTime.now().weekday - 1);
   TimeOfDay time = TimeOfDay.now();

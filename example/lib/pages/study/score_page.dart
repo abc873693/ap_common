@@ -15,13 +15,13 @@ class ScorePage extends StatefulWidget {
 }
 
 class ScorePageState extends State<ScorePage> {
-  ApLocalizations ap;
+  late ApLocalizations ap;
 
   ScoreState state = ScoreState.loading;
 
-  SemesterData semesterData;
+  SemesterData? semesterData;
 
-  ScoreData scoreData;
+  ScoreData? scoreData;
 
   bool isOffline = false;
 
@@ -48,7 +48,7 @@ class ScorePageState extends State<ScorePage> {
       customStateHint: customStateHint,
       semesterData: semesterData,
       onSelect: (int index) {
-        semesterData.currentIndex = index;
+        semesterData!.currentIndex = index;
         _getSemesterScore();
       },
       onRefresh: () async {
@@ -59,10 +59,10 @@ class ScorePageState extends State<ScorePage> {
 //        key.currentState.pickSemester();
       },
       details: <String>[
-        '${ap.conductScore}：${scoreData?.detail?.conduct ?? ''}',
-        '${ap.average}：${scoreData?.detail?.average ?? ''}',
-        '${ap.classRank}：${scoreData?.detail?.classRank ?? ''}',
-        '${ap.departmentRank}：${scoreData?.detail?.departmentRank ?? ''}',
+        '${ap.conductScore}：${scoreData?.detail.conduct ?? ''}',
+        '${ap.average}：${scoreData?.detail.average ?? ''}',
+        '${ap.classRank}：${scoreData?.detail.classRank ?? ''}',
+        '${ap.departmentRank}：${scoreData?.detail.departmentRank ?? ''}',
       ],
     );
   }
@@ -70,10 +70,10 @@ class ScorePageState extends State<ScorePage> {
   Future<void> _getSemester() async {
     final String rawString = await rootBundle.loadString(FileAssets.semesters);
     semesterData = SemesterData.fromRawJson(rawString);
-    for (int i = 0; i < semesterData.data.length; i++) {
-      final Semester option = semesterData.data[i];
-      if (option.text == semesterData.defaultSemester.text) {
-        semesterData.currentIndex = i;
+    for (int i = 0; i < semesterData!.data.length; i++) {
+      final Semester option = semesterData!.data[i];
+      if (option.text == semesterData!.defaultSemester.text) {
+        semesterData!.currentIndex = i;
       }
       i++;
     }

@@ -16,7 +16,7 @@ class NotificationUtilsTestPage extends StatefulWidget {
 }
 
 class _NotificationUtilsTestPageState extends State<NotificationUtilsTestPage> {
-  AppLocalizations app;
+  late AppLocalizations app;
 
   Day day = NotificationUtils.getDay(DateTime.now().weekday - 1);
   TimeOfDay time = TimeOfDay.now();
@@ -103,7 +103,7 @@ class _NotificationUtilsTestPageState extends State<NotificationUtilsTestPage> {
           ),
           ListTile(
             onTap: () async {
-              final TimeOfDay dayOfTime = await showTimePicker(
+              final TimeOfDay? dayOfTime = await showTimePicker(
                 context: context,
                 initialTime: TimeOfDay(
                   hour: time.hour,
@@ -154,7 +154,7 @@ class _NotificationUtilsTestPageState extends State<NotificationUtilsTestPage> {
           ),
           ListTile(
             onTap: () async {
-              final bool result = await NotificationUtils.requestPermissions();
+              final bool? result = await NotificationUtils.requestPermissions();
               if (result != null) {
                 DialogUtils.showDefault(
                   context: context,

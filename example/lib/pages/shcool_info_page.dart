@@ -66,13 +66,13 @@ class SchoolInfoPageState extends State<SchoolInfoPage>
 
   PdfState pdfState = PdfState.loading;
 
-  ApLocalizations ap;
+  late ApLocalizations ap;
 
-  TabController controller;
+  TabController? controller;
 
   int _currentIndex = 0;
 
-  Uint8List data;
+  Uint8List? data;
 
   @override
   void initState() {
@@ -88,7 +88,7 @@ class SchoolInfoPageState extends State<SchoolInfoPage>
 
   @override
   void dispose() {
-    controller.dispose();
+    controller!.dispose();
     super.dispose();
   }
 
@@ -134,7 +134,7 @@ class SchoolInfoPageState extends State<SchoolInfoPage>
         onTap: (int index) {
           setState(() {
             _currentIndex = index;
-            controller.animateTo(_currentIndex);
+            controller!.animateTo(_currentIndex);
           });
         },
         fixedColor: ApTheme.of(context).yellow,

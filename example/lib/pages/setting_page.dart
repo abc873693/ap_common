@@ -21,9 +21,9 @@ class SettingPage extends StatefulWidget {
 class SettingPageState extends State<SettingPage> {
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
 
-  ApLocalizations ap;
+  late ApLocalizations ap;
 
-  String appVersion;
+  String? appVersion;
   bool busNotify = false, courseNotify = false, displayPicture = true;
   bool isOffline = false;
 
@@ -78,17 +78,17 @@ class SettingPageState extends State<SettingPage> {
             ),
             ChangeLanguageItem(
               onChange: (Locale locale) {
-                ShareDataWidget.of(context).data.loadLocale(locale);
+                ShareDataWidget.of(context)!.data!.loadLocale(locale);
               },
             ),
             ChangeThemeModeItem(
               onChange: (ThemeMode themeMode) {
-                ShareDataWidget.of(context).data.loadTheme(themeMode);
+                ShareDataWidget.of(context)!.data!.loadTheme(themeMode);
               },
             ),
             ChangeIconStyleItem(
               onChange: (String code) {
-                ShareDataWidget.of(context).data.update();
+                ShareDataWidget.of(context)!.data!.update();
               },
             ),
             const Divider(
@@ -111,7 +111,7 @@ class SettingPageState extends State<SettingPage> {
   }
 
   Future<void> _getPreference() async {
-    PackageInfo packageInfo;
+    PackageInfo? packageInfo;
     if (!kIsWeb && (Platform.isAndroid || Platform.isIOS || Platform.isMacOS)) {
       packageInfo = await PackageInfo.fromPlatform();
     }

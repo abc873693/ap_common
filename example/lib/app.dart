@@ -15,20 +15,20 @@ import 'utils/app_localizations.dart';
 import 'widgets/share_data_widget.dart';
 
 class MyApp extends StatefulWidget {
-  const MyApp({Key key}) : super(key: key);
+  const MyApp({Key? key}) : super(key: key);
 
   @override
   MyAppState createState() => MyAppState();
 }
 
 class MyAppState extends State<MyApp> with WidgetsBindingObserver {
-  ThemeData themeData;
-  Uint8List pictureBytes;
+  ThemeData? themeData;
+  Uint8List? pictureBytes;
   bool offlineLogin = false;
   bool hasBusViolationRecords = false;
 
   ThemeMode themeMode = ThemeMode.system;
-  Locale locale;
+  Locale? locale;
 
   void logout() {
     setState(() {
@@ -74,13 +74,13 @@ class MyAppState extends State<MyApp> with WidgetsBindingObserver {
         themeMode,
         child: MaterialApp(
           localeResolutionCallback:
-              (Locale locale, Iterable<Locale> supportedLocales) {
+              (Locale? locale, Iterable<Locale> supportedLocales) {
             final String languageCode = Preferences.getString(
               Constants.PREF_LANGUAGE_CODE,
               ApSupportLanguageConstants.system,
             );
             if (languageCode == ApSupportLanguageConstants.system) {
-              return this.locale = ApLocalizations.delegate.isSupported(locale)
+              return this.locale = ApLocalizations.delegate.isSupported(locale!)
                   ? locale
                   : const Locale('en');
             } else {
