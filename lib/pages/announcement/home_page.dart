@@ -111,7 +111,8 @@ class _AnnouncementHomePageState extends State<AnnouncementHomePage> {
         title: Text(ap.announcementReviewSystem),
         backgroundColor: ApTheme.of(context).blue,
         actions: <Widget>[
-          if (state == _State.done && loginData?.level != PermissionLevel.user)
+          if (state == _State.done &&
+              loginData?.level != PermissionLevel.user) ...<Widget>[
             TextButton(
               onPressed: () async {
                 setState(() {
@@ -145,16 +146,17 @@ class _AnnouncementHomePageState extends State<AnnouncementHomePage> {
                 ],
               ),
             ),
-          IconButton(
-            icon: const Icon(Icons.playlist_remove),
-            tooltip: ap.blackList,
-            onPressed: () async {
-              ApUtils.pushCupertinoStyle(
-                context,
-                const BlackListPage(),
-              );
-            },
-          ),
+            IconButton(
+              icon: const Icon(Icons.playlist_remove),
+              tooltip: ap.blackList,
+              onPressed: () async {
+                ApUtils.pushCupertinoStyle(
+                  context,
+                  const BlackListPage(),
+                );
+              },
+            ),
+          ],
           if (Preferences.getBool(ApConstants.announcementIsLogin, false))
             IconButton(
               icon: const Icon(Icons.exit_to_app),
