@@ -1,3 +1,4 @@
+import 'dart:developer';
 import 'dart:io';
 import 'dart:typed_data';
 
@@ -273,10 +274,17 @@ class ApUtils {
             'image/png',
           );
         } else if (Platform.isAndroid || Platform.isIOS) {
-          final AssetEntity? imageEntity = await PhotoManager.editor.saveImage(
-            pngBytes,
+          final String tempPath = path.join(
+            (await getApplicationDocumentsDirectory()).path,
+            filePath,
+          );
+          final File file = await File(tempPath).writeAsBytes(pngBytes);
+          final AssetEntity? imageEntity =
+              await PhotoManager.editor.saveImageWithPath(
+            file.path,
             title: fileName,
           );
+          file.delete();
           if (kDebugMode) debugPrint(imageEntity?.title);
           success = imageEntity != null;
         } else {
