@@ -447,8 +447,8 @@ class CourseScaffoldState extends State<CourseScaffold> {
       await ApUtils.saveImage(
         context,
         byteData: byteData,
-        successMessage: 'course_table_$formattedDate',
-        fileName: ApLocalizations.of(context).exportCourseTableSuccess,
+        fileName: 'course_table_$formattedDate',
+        successMessage: ApLocalizations.of(context).exportCourseTableSuccess,
         onSuccess: (GeneralResponse r) => Toast.show(
           r.message,
           context,
