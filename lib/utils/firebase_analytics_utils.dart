@@ -17,7 +17,7 @@ class FirebaseAnalyticsUtils extends AnalyticsUtils {
   static FirebaseAnalyticsUtils? _instance;
 
   static bool get isSupported =>
-      (kIsWeb || Platform.isAndroid || Platform.isIOS);
+      (kIsWeb || Platform.isAndroid || Platform.isIOS || Platform.isMacOS);
 
   static FirebaseAnalyticsUtils get instance {
     return _instance ??= FirebaseAnalyticsUtils();

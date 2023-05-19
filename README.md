@@ -14,7 +14,7 @@
 | `firebase_analytics`️ |    ✔️    |  ✔️  |   ✔️   |  ✔️  |
 | `firebase_crashlytics`️ |    ✔️    |  ✔️  |   ️   |    ️  |
 | `firebase_messaging`️ |    ✔️    |  ✔️  |   ✔️   |  ✔️  |
-| `firebase_remote_config`️ |    ✔️    |  ✔️  |   ✔️   |    |
+| `firebase_remote_config`️ |    ✔️    |  ✔️  |   ✔️   |  ✔️ |
 | `firebase_performance`️ |    ✔️    |  ✔️  |  ️   |  ✔️ |
 
 ## Getting Started

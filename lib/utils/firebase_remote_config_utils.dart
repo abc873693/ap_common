@@ -22,7 +22,7 @@ class FirebaseRemoteConfigUtils {
   FirebaseRemoteConfig? remoteConfig;
 
   static bool get isSupported =>
-      !kIsWeb && (Platform.isAndroid || Platform.isIOS || Platform.isMacOS);
+      (kIsWeb || Platform.isAndroid || Platform.isIOS || Platform.isMacOS);
 }
 
 extension RemoteConfigExtension on FirebaseRemoteConfig {
