@@ -49,7 +49,6 @@ class SettingSwitch extends StatelessWidget {
   final String text;
   final String subText;
   final bool value;
-  //ignore: avoid_positional_boolean_parameters
   final void Function(bool) onChanged;
 
   @override

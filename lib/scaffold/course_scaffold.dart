@@ -975,7 +975,6 @@ class CourseList extends StatelessWidget {
 
   final List<Course> courses;
   final List<String> invisibleCourseCodes;
-  //ignore: avoid_positional_boolean_parameters
   final void Function(Course, bool)? onVisibilityChanged;
   final List<TimeCode>? timeCodes;
 
@@ -1242,13 +1241,9 @@ class CourseScaffoldSettingDialog extends StatefulWidget {
   final bool? showInstructors;
   final bool? showClassroomLocation;
   final bool? showSearchButton;
-  //ignore: avoid_positional_boolean_parameters
   final Function(bool?)? showSectionTimeOnChanged;
-  //ignore: avoid_positional_boolean_parameters
   final Function(bool?)? showInstructorsOnChanged;
-  //ignore: avoid_positional_boolean_parameters
   final Function(bool?)? showClassroomLocationOnChanged;
-  //ignore: avoid_positional_boolean_parameters
   final Function(bool?)? showSearchButtonOnChanged;
 
   @override

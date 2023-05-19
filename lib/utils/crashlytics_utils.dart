@@ -11,7 +11,6 @@ abstract class CrashlyticsUtils {
     bool? printDetails,
   });
 
-  //ignore: avoid_positional_boolean_parameters
   Future<void> setCrashlyticsCollectionEnabled(bool enabled);
 
   Future<void> log(String message);
