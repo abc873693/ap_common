@@ -1,7 +1,6 @@
+import 'package:ap_common_example/app.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
-
-import '../app.dart';
 
 class ShareDataWidget extends InheritedWidget {
   const ShareDataWidget({this.data, required Widget child}) : super(child: child);

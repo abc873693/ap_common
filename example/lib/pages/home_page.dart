@@ -11,21 +11,20 @@ import 'package:ap_common/utils/ap_utils.dart';
 import 'package:ap_common/utils/notification_utils.dart';
 import 'package:ap_common/utils/preferences.dart';
 import 'package:ap_common/widgets/ap_drawer.dart';
+import 'package:ap_common_example/config/constants.dart';
 import 'package:ap_common_example/pages/diolog_utils_page.dart';
+import 'package:ap_common_example/pages/login_page.dart';
+import 'package:ap_common_example/pages/notification_utils_page.dart';
+import 'package:ap_common_example/pages/setting_page.dart';
+import 'package:ap_common_example/pages/shcool_info_page.dart';
+import 'package:ap_common_example/pages/study/course_page.dart';
+import 'package:ap_common_example/pages/study/score_page.dart';
+import 'package:ap_common_example/pages/user_info_page.dart';
+import 'package:ap_common_example/res/assets.dart';
+import 'package:ap_common_example/utils/app_localizations.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:http/http.dart' as http;
-
-import '../config/constants.dart';
-import '../res/assets.dart';
-import '../utils/app_localizations.dart';
-import 'login_page.dart';
-import 'notification_utils_page.dart';
-import 'setting_page.dart';
-import 'shcool_info_page.dart';
-import 'study/course_page.dart';
-import 'study/score_page.dart';
-import 'user_info_page.dart';
 
 class HomePage extends StatefulWidget {
   static const String routerName = '/home';

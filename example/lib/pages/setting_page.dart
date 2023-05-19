@@ -5,11 +5,10 @@ import 'package:ap_common/utils/ap_localizations.dart';
 import 'package:ap_common/utils/ap_utils.dart';
 import 'package:ap_common/utils/preferences.dart';
 import 'package:ap_common/widgets/setting_page_widgets.dart';
+import 'package:ap_common_example/config/constants.dart';
+import 'package:ap_common_example/widgets/share_data_widget.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-
-import '../config/constants.dart';
-import '../widgets/share_data_widget.dart';
 
 class SettingPage extends StatefulWidget {
   static const String routerName = '/setting';
@@ -73,7 +72,7 @@ class SettingPageState extends State<SettingPage> {
                   displayPicture = !displayPicture;
                 });
                 Preferences.setBool(
-                    Constants.PREF_DISPLAY_PICTURE, displayPicture);
+                    Constants.PREF_DISPLAY_PICTURE, displayPicture,);
               },
             ),
             ChangeLanguageItem(
@@ -101,9 +100,9 @@ class SettingPageState extends State<SettingPage> {
                 subText: ap.feedbackViaFacebook,
                 onTap: () {
                   ApUtils.launchFbFansPage(context, Constants.FANS_PAGE_ID);
-                }),
+                },),
             SettingItem(
-                text: ap.appVersion, subText: 'v$appVersion', onTap: () {}),
+                text: ap.appVersion, subText: 'v$appVersion', onTap: () {},),
           ],
         ),
       ),

@@ -1,18 +1,15 @@
-import 'dart:typed_data';
-
 import 'package:ap_common/pages/about_us_page.dart';
 import 'package:ap_common/pages/announcement/home_page.dart';
 import 'package:ap_common/resources/ap_theme.dart';
 import 'package:ap_common/utils/ap_localizations.dart';
 import 'package:ap_common/utils/preferences.dart';
+import 'package:ap_common_example/config/constants.dart';
+import 'package:ap_common_example/pages/home_page.dart';
+import 'package:ap_common_example/utils/app_localizations.dart';
+import 'package:ap_common_example/widgets/share_data_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
-
-import 'config/constants.dart';
-import 'pages/home_page.dart';
-import 'utils/app_localizations.dart';
-import 'widgets/share_data_widget.dart';
 
 class MyApp extends StatefulWidget {
   const MyApp({Key? key}) : super(key: key);
