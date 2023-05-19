@@ -183,7 +183,7 @@ class _NotificationUtilsTestPageState extends State<NotificationUtilsTestPage> {
                   title: app.getPendingNotificationList,
                   items: <String>[
                     for (PendingNotificationRequest item in list)
-                      'id = ${item.id}, '
+                      'id = ${item.id}, ' +
                           'title = ${item.title}\n body = ${item.body}'
                   ],
                   index: -1,

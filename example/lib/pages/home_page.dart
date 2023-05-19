@@ -344,7 +344,7 @@ class HomePageState extends State<HomePage> {
 
   Future<void> _getUserPicture() async {
     try {
-      if ((userInfo?.pictureUrl) == null) return;
+      if (userInfo?.pictureUrl == null) return;
       final http.Response response =
           await http.get(Uri.parse(userInfo!.pictureUrl!));
       if (!response.body.contains('html')) {

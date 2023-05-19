@@ -49,6 +49,7 @@ class SettingSwitch extends StatelessWidget {
   final String text;
   final String subText;
   final bool value;
+  //ignore: avoid_positional_boolean_parameters
   final void Function(bool) onChanged;
 
   @override
@@ -122,7 +123,7 @@ class CheckCourseNotifyItem extends StatelessWidget {
                 title: ap.courseNotify,
                 items: <String>[
                   for (CourseNotify notify in notifyData.data)
-                    '${ap.weekdaysCourse[notify.weekdayIndex]} '
+                    '${ap.weekdaysCourse[notify.weekdayIndex]} ' +
                         '${notify.startTime} ${notify.title}',
                 ],
                 index: -1,
@@ -215,7 +216,7 @@ class ChangeLanguageItem extends StatelessWidget {
               switch (index) {
                 case 0:
                   final List<Locale> locales =
-                      WidgetsBinding.instance.window.locales;
+                      WidgetsBinding.instance.platformDispatcher.locales;
                   if (locales.isEmpty) {
                     locale = const Locale('en');
                   } else {

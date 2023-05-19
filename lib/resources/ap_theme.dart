@@ -44,7 +44,7 @@ class ApTheme extends InheritedWidget {
   Brightness get brightness {
     switch (themeMode) {
       case ThemeMode.system:
-        return WidgetsBinding.instance.window.platformBrightness;
+        return WidgetsBinding.instance.platformDispatcher.platformBrightness;
       case ThemeMode.light:
         return Brightness.light;
       case ThemeMode.dark:

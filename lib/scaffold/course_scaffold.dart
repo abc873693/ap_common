@@ -474,12 +474,7 @@ class CourseScaffoldState extends State<CourseScaffold> {
     final int maxTimeCode = widget.courseData.maxTimeCodeIndex;
     final int minTimeCode = widget.courseData.minTimeCodeIndex;
     final bool hasHoliday = widget.courseData.hasHoliday;
-    final List<Column> columns = <Column>[
-      Column(
-        // ignore: prefer_const_literals_to_create_immutables
-        children: <Widget>[],
-      )
-    ];
+    final List<Column> columns = <Column>[const Column()];
     columns[0].children.add(
           _weekBorder(''),
         );
@@ -973,6 +968,7 @@ class CourseList extends StatelessWidget {
 
   final List<Course> courses;
   final List<String> invisibleCourseCodes;
+  //ignore: avoid_positional_boolean_parameters
   final void Function(Course, bool)? onVisibilityChanged;
   final List<TimeCode>? timeCodes;
 
@@ -1239,9 +1235,13 @@ class CourseScaffoldSettingDialog extends StatefulWidget {
   final bool? showInstructors;
   final bool? showClassroomLocation;
   final bool? showSearchButton;
+  //ignore: avoid_positional_boolean_parameters
   final Function(bool?)? showSectionTimeOnChanged;
+  //ignore: avoid_positional_boolean_parameters
   final Function(bool?)? showInstructorsOnChanged;
+  //ignore: avoid_positional_boolean_parameters
   final Function(bool?)? showClassroomLocationOnChanged;
+  //ignore: avoid_positional_boolean_parameters
   final Function(bool?)? showSearchButtonOnChanged;
 
   @override
