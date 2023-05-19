@@ -574,6 +574,8 @@ class _AnnouncementEditPageState extends State<AnnouncementEditPage> {
     );
     TimeOfDay? timeOfDay =
         TimeOfDay(hour: dateTime.hour, minute: dateTime.minute);
+    //ignore: use_build_context_synchronously
+    if (!context.mounted) return;
     timeOfDay = await showTimePicker(
       context: context,
       initialTime: timeOfDay,

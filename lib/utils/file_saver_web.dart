@@ -15,24 +15,24 @@ class FileSaverWeb {
     String name,
     String type,
   ) async {
-    bool _success = false;
+    bool success = false;
     try {
-      final String _url =
+      final String url =
           Url.createObjectUrlFromBlob(Blob(<Uint8List>[bytes], type));
       final HtmlDocument htmlDocument = document;
       final AnchorElement anchor =
           htmlDocument.createElement('a') as AnchorElement;
       //ignore: unsafe_html
-      anchor.href = _url;
+      anchor.href = url;
       anchor.style.display = name;
       anchor.download = name;
       document.body!.children.add(anchor);
       anchor.click();
       document.body!.children.remove(anchor);
-      _success = true;
+      success = true;
     } catch (e) {
       rethrow;
     }
-    return _success;
+    return success;
   }
 }

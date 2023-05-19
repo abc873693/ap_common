@@ -259,7 +259,7 @@ class _ScoreContentState extends State<ScoreContent> {
           children: <Widget>[
             Flexible(
               flex: isTablet ? 2 : 0,
-              child: Container(
+              child: DecoratedBox(
                 decoration: _boxDecoration,
                 child: Table(
                   columnWidths: const <int, TableColumnWidth>{
@@ -329,7 +329,7 @@ class _ScoreContentState extends State<ScoreContent> {
             if (widget.details != null && widget.details!.isNotEmpty)
               Flexible(
                 flex: isTablet ? 1 : 0,
-                child: Container(
+                child: DecoratedBox(
                   decoration: _boxDecoration,
                   child: Table(
                     columnWidths: const <int, TableColumnWidth>{

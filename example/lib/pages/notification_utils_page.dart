@@ -155,6 +155,8 @@ class _NotificationUtilsTestPageState extends State<NotificationUtilsTestPage> {
             onTap: () async {
               final bool? result = await NotificationUtils.requestPermissions();
               if (result != null) {
+                //ignore: use_build_context_synchronously
+                if (!context.mounted) return;
                 DialogUtils.showDefault(
                   context: context,
                   title: app.requestPermission,
@@ -166,12 +168,15 @@ class _NotificationUtilsTestPageState extends State<NotificationUtilsTestPage> {
             },
             title: Text(app.requestPermission),
             subtitle: const Text(
-                'NotificationUtils.requestPermissions (iOS & macOS limit)',),
+              'NotificationUtils.requestPermissions (iOS & macOS limit)',
+            ),
           ),
           ListTile(
             onTap: () async {
               final List<PendingNotificationRequest> list =
                   await NotificationUtils.getPendingNotificationList();
+              //ignore: use_build_context_synchronously
+              if (!context.mounted) return;
               showDialog(
                 context: context,
                 builder: (_) => SimpleOptionDialog(

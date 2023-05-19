@@ -23,7 +23,9 @@ class SettingPageState extends State<SettingPage> {
   late ApLocalizations ap;
 
   String? appVersion;
-  bool busNotify = false, courseNotify = false, displayPicture = true;
+  bool busNotify = false;
+  bool courseNotify = false;
+  bool displayPicture = true;
   bool isOffline = false;
 
   bool autoSendEvent = false;
@@ -72,7 +74,9 @@ class SettingPageState extends State<SettingPage> {
                   displayPicture = !displayPicture;
                 });
                 Preferences.setBool(
-                    Constants.PREF_DISPLAY_PICTURE, displayPicture,);
+                  Constants.PREF_DISPLAY_PICTURE,
+                  displayPicture,
+                );
               },
             ),
             ChangeLanguageItem(
@@ -96,13 +100,17 @@ class SettingPageState extends State<SettingPage> {
             ),
             SettingTitle(text: ap.otherInfo),
             SettingItem(
-                text: ap.feedback,
-                subText: ap.feedbackViaFacebook,
-                onTap: () {
-                  ApUtils.launchFbFansPage(context, Constants.FANS_PAGE_ID);
-                },),
+              text: ap.feedback,
+              subText: ap.feedbackViaFacebook,
+              onTap: () {
+                ApUtils.launchFbFansPage(context, Constants.FANS_PAGE_ID);
+              },
+            ),
             SettingItem(
-                text: ap.appVersion, subText: 'v$appVersion', onTap: () {},),
+              text: ap.appVersion,
+              subText: 'v$appVersion',
+              onTap: () {},
+            ),
           ],
         ),
       ),

@@ -109,7 +109,7 @@ class HomePageState extends State<HomePage> {
       title: app.appName,
       key: _homeKey,
       state: state,
-      announcements: announcements!,
+      announcements: announcements,
       isLogin: isLogin,
       actions: <Widget>[
         IconButton(
@@ -232,6 +232,7 @@ class HomePageState extends State<HomePage> {
                 isLogin = false;
                 userInfo = null;
                 content = null;
+                if (!mounted) return;
                 if (!isTablet) Navigator.of(context).pop();
                 checkLogin();
               },
@@ -319,7 +320,7 @@ class HomePageState extends State<HomePage> {
         onSuccess: (List<Announcement> data) {
           announcements = data;
           setState(() {
-            if (announcements == null || announcements!.isEmpty) {
+            if (announcements.isEmpty) {
               state = HomeState.empty;
             } else {
               state = HomeState.finish;
@@ -397,6 +398,8 @@ class HomePageState extends State<HomePage> {
     if (isLogin) {
       _homeKey.currentState!.hideSnackBar();
     } else {
+      //ignore: use_build_context_synchronously
+      if (!context.mounted) return;
       _homeKey.currentState!
           .showSnackBar(
             text: ApLocalizations.of(context).notLogin,
