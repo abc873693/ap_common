@@ -165,6 +165,8 @@ class DialogUtils {
     );
     if (versionDiff > 0) {
       if (versionInfo.isForceUpdate) {
+        //ignore: use_build_context_synchronously
+        if (!context.mounted) return;
         showDialog(
           context: context,
           barrierDismissible: false,
@@ -181,6 +183,8 @@ class DialogUtils {
           ),
         );
       } else {
+        //ignore: use_build_context_synchronously
+        if (!context.mounted) return;
         showDialog(
           context: context,
           builder: (BuildContext context) => YesNoDialog(

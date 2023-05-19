@@ -4,11 +4,10 @@ import 'package:ap_common/models/semester_data.dart';
 import 'package:ap_common/scaffold/course_scaffold.dart';
 import 'package:ap_common/utils/ap_localizations.dart';
 import 'package:ap_common/utils/preferences.dart';
+import 'package:ap_common_example/config/constants.dart';
+import 'package:ap_common_example/res/assets.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-
-import '../../config/constants.dart';
-import '../../res/assets.dart';
 
 class CoursePage extends StatefulWidget {
   static const String routerName = '/course';
@@ -18,15 +17,15 @@ class CoursePage extends StatefulWidget {
 }
 
 class CoursePageState extends State<CoursePage> {
-  ApLocalizations ap;
+  late ApLocalizations ap;
 
   CourseState state = CourseState.loading;
 
-  SemesterData semesterData;
+  SemesterData? semesterData;
 
-  CourseData courseData;
+  CourseData courseData = CourseData.empty();
 
-  CourseNotifyData notifyData;
+  CourseNotifyData? notifyData;
 
   bool isOffline = false;
 
@@ -62,7 +61,7 @@ class CoursePageState extends State<CoursePage> {
       enableCaptureCourseTable: true,
       semesterData: semesterData,
       onSelect: (int index) {
-        semesterData.currentIndex = index;
+        semesterData!.currentIndex = index;
         _getCourseTables();
       },
       onRefresh: () async {
@@ -75,14 +74,12 @@ class CoursePageState extends State<CoursePage> {
   Future<void> _getSemester() async {
     final String rawString = await rootBundle.loadString(FileAssets.semesters);
     semesterData = SemesterData.fromRawJson(rawString);
-    if (semesterData.defaultSemester != null) {
-      for (int i = 0; i < semesterData.data.length; i++) {
-        final Semester option = semesterData.data[i];
-        if (option.text == semesterData.defaultSemester.text) {
-          semesterData.currentIndex = i;
-        }
-        i++;
+    for (int i = 0; i < semesterData!.data.length; i++) {
+      final Semester option = semesterData!.data[i];
+      if (option.text == semesterData!.defaultSemester.text) {
+        semesterData!.currentIndex = i;
       }
+      i++;
     }
     _getCourseTables();
   }
@@ -95,9 +92,9 @@ class CoursePageState extends State<CoursePage> {
       ApConstants.semesterLatest,
     );
     courseData.save(courseNotifyCacheKey);
-    if (mounted && courseData != null) {
+    if (mounted) {
       setState(() {
-        if (courseData?.courses == null) {
+        if (courseData.courses.isEmpty) {
           state = CourseState.empty;
         } else {
           state = CourseState.finish;

@@ -1,6 +1,4 @@
-import 'dart:developer';
 import 'dart:io';
-import 'dart:typed_data';
 
 import 'package:ap_common/callback/general_callback.dart';
 import 'package:ap_common/resources/ap_theme.dart';
@@ -117,6 +115,8 @@ class ApUtils {
   ) async {
     await Future<void>.delayed(const Duration(seconds: 1));
     final ApLocalizations app = ApLocalizations.current;
+    //ignore: use_build_context_synchronously
+    if (!context.mounted) return;
     showDialog(
       context: context,
       builder: (BuildContext context) => YesNoDialog(

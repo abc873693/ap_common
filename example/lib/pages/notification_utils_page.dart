@@ -4,10 +4,9 @@ import 'package:ap_common/utils/ap_localizations.dart';
 import 'package:ap_common/utils/dialog_utils.dart';
 import 'package:ap_common/utils/notification_utils.dart';
 import 'package:ap_common/widgets/option_dialog.dart';
+import 'package:ap_common_example/utils/app_localizations.dart';
 import 'package:flutter/material.dart';
 import 'package:sprintf/sprintf.dart';
-
-import '../utils/app_localizations.dart';
 
 class NotificationUtilsTestPage extends StatefulWidget {
   @override
@@ -16,7 +15,7 @@ class NotificationUtilsTestPage extends StatefulWidget {
 }
 
 class _NotificationUtilsTestPageState extends State<NotificationUtilsTestPage> {
-  AppLocalizations app;
+  late AppLocalizations app;
 
   Day day = NotificationUtils.getDay(DateTime.now().weekday - 1);
   TimeOfDay time = TimeOfDay.now();
@@ -103,7 +102,7 @@ class _NotificationUtilsTestPageState extends State<NotificationUtilsTestPage> {
           ),
           ListTile(
             onTap: () async {
-              final TimeOfDay dayOfTime = await showTimePicker(
+              final TimeOfDay? dayOfTime = await showTimePicker(
                 context: context,
                 initialTime: TimeOfDay(
                   hour: time.hour,
@@ -154,8 +153,10 @@ class _NotificationUtilsTestPageState extends State<NotificationUtilsTestPage> {
           ),
           ListTile(
             onTap: () async {
-              final bool result = await NotificationUtils.requestPermissions();
+              final bool? result = await NotificationUtils.requestPermissions();
               if (result != null) {
+                //ignore: use_build_context_synchronously
+                if (!context.mounted) return;
                 DialogUtils.showDefault(
                   context: context,
                   title: app.requestPermission,
@@ -167,12 +168,15 @@ class _NotificationUtilsTestPageState extends State<NotificationUtilsTestPage> {
             },
             title: Text(app.requestPermission),
             subtitle: const Text(
-                'NotificationUtils.requestPermissions (iOS & macOS limit)'),
+              'NotificationUtils.requestPermissions (iOS & macOS limit)',
+            ),
           ),
           ListTile(
             onTap: () async {
               final List<PendingNotificationRequest> list =
                   await NotificationUtils.getPendingNotificationList();
+              //ignore: use_build_context_synchronously
+              if (!context.mounted) return;
               showDialog(
                 context: context,
                 builder: (_) => SimpleOptionDialog(

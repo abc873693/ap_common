@@ -254,7 +254,7 @@ class AnnouncementHelper {
   }
 
   Future<List<Announcement>?> getAnnouncements({
-    GeneralCallback<List<Announcement>?>? callback,
+    GeneralCallback<List<Announcement>>? callback,
     String? locale,
     List<String>? tags,
     bool sortAndRandom = true,

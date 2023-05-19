@@ -1,14 +1,16 @@
+import 'package:ap_common_example/app.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 
-import '../app.dart';
-
 class ShareDataWidget extends InheritedWidget {
-  const ShareDataWidget({this.data, Widget child}) : super(child: child);
+  const ShareDataWidget({this.data, required Widget child})
+      : super(
+          child: child,
+        );
 
-  final MyAppState data;
+  final MyAppState? data;
 
-  static ShareDataWidget of(BuildContext context) {
+  static ShareDataWidget? of(BuildContext context) {
     return context.dependOnInheritedWidgetOfExactType();
   }
 

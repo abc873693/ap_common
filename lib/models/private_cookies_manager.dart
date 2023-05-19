@@ -32,12 +32,12 @@ class PrivateCookieManager extends CookieManager {
       _saveCookies(err.response!)
           .then((_) => handler.next(err))
           .catchError((dynamic e, dynamic stackTrace) {
-        final DioError _err = DioError(
+        final DioError err0 = DioError(
           requestOptions: err.response!.requestOptions,
           error: e,
           stackTrace: stackTrace as StackTrace,
         );
-        handler.next(_err);
+        handler.next(err0);
       });
     } else {
       handler.next(err);

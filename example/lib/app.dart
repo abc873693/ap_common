@@ -1,34 +1,31 @@
-import 'dart:typed_data';
-
 import 'package:ap_common/pages/about_us_page.dart';
 import 'package:ap_common/pages/announcement/home_page.dart';
 import 'package:ap_common/resources/ap_theme.dart';
 import 'package:ap_common/utils/ap_localizations.dart';
 import 'package:ap_common/utils/preferences.dart';
+import 'package:ap_common_example/config/constants.dart';
+import 'package:ap_common_example/pages/home_page.dart';
+import 'package:ap_common_example/utils/app_localizations.dart';
+import 'package:ap_common_example/widgets/share_data_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 
-import 'config/constants.dart';
-import 'pages/home_page.dart';
-import 'utils/app_localizations.dart';
-import 'widgets/share_data_widget.dart';
-
 class MyApp extends StatefulWidget {
-  const MyApp({Key key}) : super(key: key);
+  const MyApp({Key? key}) : super(key: key);
 
   @override
   MyAppState createState() => MyAppState();
 }
 
 class MyAppState extends State<MyApp> with WidgetsBindingObserver {
-  ThemeData themeData;
-  Uint8List pictureBytes;
+  ThemeData? themeData;
+  Uint8List? pictureBytes;
   bool offlineLogin = false;
   bool hasBusViolationRecords = false;
 
   ThemeMode themeMode = ThemeMode.system;
-  Locale locale;
+  Locale? locale;
 
   void logout() {
     setState(() {
@@ -74,13 +71,13 @@ class MyAppState extends State<MyApp> with WidgetsBindingObserver {
         themeMode,
         child: MaterialApp(
           localeResolutionCallback:
-              (Locale locale, Iterable<Locale> supportedLocales) {
+              (Locale? locale, Iterable<Locale> supportedLocales) {
             final String languageCode = Preferences.getString(
               Constants.PREF_LANGUAGE_CODE,
               ApSupportLanguageConstants.system,
             );
             if (languageCode == ApSupportLanguageConstants.system) {
-              return this.locale = ApLocalizations.delegate.isSupported(locale)
+              return this.locale = ApLocalizations.delegate.isSupported(locale!)
                   ? locale
                   : const Locale('en');
             } else {
@@ -105,8 +102,8 @@ class MyAppState extends State<MyApp> with WidgetsBindingObserver {
           themeMode: themeMode,
           locale: locale,
           localizationsDelegates: const <LocalizationsDelegate<dynamic>>[
-            ApLocalizations.delegate,
-            AppLocalizationsDelegate(),
+            apLocalizationsDelegate,
+            appDelegate,
             GlobalMaterialLocalizations.delegate,
             GlobalWidgetsLocalizations.delegate,
             GlobalCupertinoLocalizations.delegate,
@@ -131,8 +128,8 @@ class MyAppState extends State<MyApp> with WidgetsBindingObserver {
     debugPrint('loadLocale $locale');
     setState(() {
       this.locale = locale;
-      const AppLocalizationsDelegate().load(locale);
-      ApLocalizations.delegate.load(locale);
+      appDelegate.load(locale);
+      ApLocalizations.load(locale);
     });
   }
 }

@@ -11,21 +11,20 @@ import 'package:ap_common/utils/ap_utils.dart';
 import 'package:ap_common/utils/notification_utils.dart';
 import 'package:ap_common/utils/preferences.dart';
 import 'package:ap_common/widgets/ap_drawer.dart';
+import 'package:ap_common_example/config/constants.dart';
 import 'package:ap_common_example/pages/diolog_utils_page.dart';
+import 'package:ap_common_example/pages/login_page.dart';
+import 'package:ap_common_example/pages/notification_utils_page.dart';
+import 'package:ap_common_example/pages/setting_page.dart';
+import 'package:ap_common_example/pages/shcool_info_page.dart';
+import 'package:ap_common_example/pages/study/course_page.dart';
+import 'package:ap_common_example/pages/study/score_page.dart';
+import 'package:ap_common_example/pages/user_info_page.dart';
+import 'package:ap_common_example/res/assets.dart';
+import 'package:ap_common_example/utils/app_localizations.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:http/http.dart' as http;
-
-import '../config/constants.dart';
-import '../res/assets.dart';
-import '../utils/app_localizations.dart';
-import 'login_page.dart';
-import 'notification_utils_page.dart';
-import 'setting_page.dart';
-import 'shcool_info_page.dart';
-import 'study/course_page.dart';
-import 'study/score_page.dart';
-import 'user_info_page.dart';
 
 class HomePage extends StatefulWidget {
   static const String routerName = '/home';
@@ -42,14 +41,14 @@ class HomePageState extends State<HomePage> {
 
   HomeState state = HomeState.loading;
 
-  AppLocalizations app;
-  ApLocalizations ap;
+  late AppLocalizations app;
+  late ApLocalizations ap;
 
-  Map<String, List<Announcement>> newsMap;
+  Map<String, List<Announcement>>? newsMap;
 
-  Widget content;
+  Widget? content;
 
-  List<Announcement> announcements;
+  List<Announcement> announcements = <Announcement>[];
 
   bool isLogin = false;
   bool displayPicture = true;
@@ -57,7 +56,7 @@ class HomePageState extends State<HomePage> {
   bool isBusExpanded = false;
   bool isLeaveExpanded = false;
 
-  UserInfo userInfo;
+  UserInfo? userInfo;
 
   TextStyle get _defaultStyle => TextStyle(
         color: ApTheme.of(context).grey,
@@ -74,7 +73,7 @@ class HomePageState extends State<HomePage> {
     }
   }
 
-  static Widget aboutPage(BuildContext context, {String assetImage}) {
+  static Widget aboutPage(BuildContext context, {String? assetImage}) {
     return AboutUsPage(
       assetImage: assetImage ?? ImageAssets.kuasap2,
       githubName: 'NKUST-ITC',
@@ -233,6 +232,7 @@ class HomePageState extends State<HomePage> {
                 isLogin = false;
                 userInfo = null;
                 content = null;
+                if (!mounted) return;
                 if (!isTablet) Navigator.of(context).pop();
                 checkLogin();
               },
@@ -320,7 +320,7 @@ class HomePageState extends State<HomePage> {
         onSuccess: (List<Announcement> data) {
           announcements = data;
           setState(() {
-            if (announcements == null || announcements.isEmpty) {
+            if (announcements.isEmpty) {
               state = HomeState.empty;
             } else {
               state = HomeState.finish;
@@ -346,11 +346,11 @@ class HomePageState extends State<HomePage> {
     try {
       if ((userInfo?.pictureUrl) == null) return;
       final http.Response response =
-          await http.get(Uri.parse(userInfo.pictureUrl));
+          await http.get(Uri.parse(userInfo!.pictureUrl!));
       if (!response.body.contains('html')) {
         if (mounted) {
           setState(() {
-            userInfo.pictureBytes = response.bodyBytes;
+            userInfo!.pictureBytes = response.bodyBytes;
           });
         }
 //        CacheUtils.savePictureData(response.bodyBytes);
@@ -372,11 +372,11 @@ class HomePageState extends State<HomePage> {
     if (state != HomeState.finish) {
       _getAnnouncements();
     }
-    _homeKey.currentState.showBasicHint(text: ap.loginSuccess);
+    _homeKey.currentState!.showBasicHint(text: ap.loginSuccess);
   }
 
   Future<void> openLoginPage() async {
-    final bool result = await Navigator.of(context).push(
+    final bool? result = await Navigator.of(context).push(
       MaterialPageRoute<bool>(
         builder: (_) => LoginPage(),
       ),
@@ -396,14 +396,16 @@ class HomePageState extends State<HomePage> {
   Future<void> checkLogin() async {
     await Future<void>.delayed(const Duration(microseconds: 30));
     if (isLogin) {
-      _homeKey.currentState.hideSnackBar();
+      _homeKey.currentState!.hideSnackBar();
     } else {
-      _homeKey.currentState
+      //ignore: use_build_context_synchronously
+      if (!context.mounted) return;
+      _homeKey.currentState!
           .showSnackBar(
             text: ApLocalizations.of(context).notLogin,
             actionText: ApLocalizations.of(context).login,
             onSnackBarTapped: openLoginPage,
-          )
+          )!
           .closed
           .then(
         (SnackBarClosedReason reason) {

@@ -5,11 +5,10 @@ import 'package:ap_common/utils/ap_localizations.dart';
 import 'package:ap_common/utils/ap_utils.dart';
 import 'package:ap_common/utils/preferences.dart';
 import 'package:ap_common/widgets/setting_page_widgets.dart';
+import 'package:ap_common_example/config/constants.dart';
+import 'package:ap_common_example/widgets/share_data_widget.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-
-import '../config/constants.dart';
-import '../widgets/share_data_widget.dart';
 
 class SettingPage extends StatefulWidget {
   static const String routerName = '/setting';
@@ -21,10 +20,12 @@ class SettingPage extends StatefulWidget {
 class SettingPageState extends State<SettingPage> {
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
 
-  ApLocalizations ap;
+  late ApLocalizations ap;
 
-  String appVersion;
-  bool busNotify = false, courseNotify = false, displayPicture = true;
+  String? appVersion;
+  bool busNotify = false;
+  bool courseNotify = false;
+  bool displayPicture = true;
   bool isOffline = false;
 
   bool autoSendEvent = false;
@@ -73,22 +74,24 @@ class SettingPageState extends State<SettingPage> {
                   displayPicture = !displayPicture;
                 });
                 Preferences.setBool(
-                    Constants.PREF_DISPLAY_PICTURE, displayPicture);
+                  Constants.PREF_DISPLAY_PICTURE,
+                  displayPicture,
+                );
               },
             ),
             ChangeLanguageItem(
               onChange: (Locale locale) {
-                ShareDataWidget.of(context).data.loadLocale(locale);
+                ShareDataWidget.of(context)!.data!.loadLocale(locale);
               },
             ),
             ChangeThemeModeItem(
               onChange: (ThemeMode themeMode) {
-                ShareDataWidget.of(context).data.loadTheme(themeMode);
+                ShareDataWidget.of(context)!.data!.loadTheme(themeMode);
               },
             ),
             ChangeIconStyleItem(
               onChange: (String code) {
-                ShareDataWidget.of(context).data.update();
+                ShareDataWidget.of(context)!.data!.update();
               },
             ),
             const Divider(
@@ -97,13 +100,17 @@ class SettingPageState extends State<SettingPage> {
             ),
             SettingTitle(text: ap.otherInfo),
             SettingItem(
-                text: ap.feedback,
-                subText: ap.feedbackViaFacebook,
-                onTap: () {
-                  ApUtils.launchFbFansPage(context, Constants.FANS_PAGE_ID);
-                }),
+              text: ap.feedback,
+              subText: ap.feedbackViaFacebook,
+              onTap: () {
+                ApUtils.launchFbFansPage(context, Constants.FANS_PAGE_ID);
+              },
+            ),
             SettingItem(
-                text: ap.appVersion, subText: 'v$appVersion', onTap: () {}),
+              text: ap.appVersion,
+              subText: 'v$appVersion',
+              onTap: () {},
+            ),
           ],
         ),
       ),
@@ -111,7 +118,7 @@ class SettingPageState extends State<SettingPage> {
   }
 
   Future<void> _getPreference() async {
-    PackageInfo packageInfo;
+    PackageInfo? packageInfo;
     if (!kIsWeb && (Platform.isAndroid || Platform.isIOS || Platform.isMacOS)) {
       packageInfo = await PackageInfo.fromPlatform();
     }

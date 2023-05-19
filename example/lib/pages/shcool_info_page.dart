@@ -1,5 +1,3 @@
-import 'dart:typed_data';
-
 import 'package:ap_common/callback/general_callback.dart';
 import 'package:ap_common/models/notification_data.dart';
 import 'package:ap_common/models/phone_model.dart';
@@ -10,10 +8,9 @@ import 'package:ap_common/utils/ap_localizations.dart';
 import 'package:ap_common/views/notification_list_view.dart';
 import 'package:ap_common/views/pdf_view.dart';
 import 'package:ap_common/views/phone_list_view.dart';
+import 'package:ap_common_example/res/assets.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-
-import '../res/assets.dart';
 
 class SchoolInfoPage extends StatefulWidget {
   static const String routerName = '/ShcoolInfo';
@@ -66,13 +63,13 @@ class SchoolInfoPageState extends State<SchoolInfoPage>
 
   PdfState pdfState = PdfState.loading;
 
-  ApLocalizations ap;
+  late ApLocalizations ap;
 
-  TabController controller;
+  TabController? controller;
 
   int _currentIndex = 0;
 
-  Uint8List data;
+  Uint8List? data;
 
   @override
   void initState() {
@@ -88,7 +85,7 @@ class SchoolInfoPageState extends State<SchoolInfoPage>
 
   @override
   void dispose() {
-    controller.dispose();
+    controller!.dispose();
     super.dispose();
   }
 
@@ -134,7 +131,7 @@ class SchoolInfoPageState extends State<SchoolInfoPage>
         onTap: (int index) {
           setState(() {
             _currentIndex = index;
-            controller.animateTo(_currentIndex);
+            controller!.animateTo(_currentIndex);
           });
         },
         fixedColor: ApTheme.of(context).yellow,
@@ -160,7 +157,7 @@ class SchoolInfoPageState extends State<SchoolInfoPage>
     final String rawString =
         await rootBundle.loadString(FileAssets.notifications);
     final NotificationsData data = NotificationsData.fromRawJson(rawString);
-    if (mounted && data != null) {
+    if (mounted) {
       setState(() {
         notificationList.addAll(data.data.notifications);
         notificationState = NotificationState.finish;
@@ -170,7 +167,7 @@ class SchoolInfoPageState extends State<SchoolInfoPage>
 
   Future<void> _getSchedules() async {
     downloadFdf(
-        'https://raw.githubusercontent.com/NKUST-ITC/NKUST-AP-Flutter/master/school_schedule.pdf');
+        'https://raw.githubusercontent.com/NKUST-ITC/NKUST-AP-Flutter/master/school_schedule.pdf',);
   }
 
   Future<void> downloadFdf(String url) async {

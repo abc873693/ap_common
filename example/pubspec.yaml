@@ -6,14 +6,13 @@ publish_to: 'none' # Remove this line if you wish to publish to pub.dev
 version: 1.0.1+10001
 
 environment:
-  sdk: ">=2.7.0 <3.0.0"
+  sdk: '>=2.12.0 <3.0.0'
 
 dependencies:
   flutter:
     sdk: flutter
   flutter_localizations:
     sdk: flutter
-  flutter_cupertino_localizations: 1.0.1
   google_sign_in_dartio:
     git:
       url: https://github.com/GroovinChip/firebase_dart_sdk
@@ -22,6 +21,11 @@ dependencies:
 
   ap_common:
       path: ../
+
+  encrypt: any
+  http: any
+  sprintf: any
+  multiple_localization: any
 
   ap_common_plugin: 0.3.1
 #    path: ../../../GitHub/ap_common_plugin
@@ -37,3 +41,11 @@ flutter:
   assets:
     - assets/images/
     - assets/
+
+flutter_intl:
+  enabled: true
+  class_name: AppLocalizations
+  main_locale: 'zh_TW'
+  arb_dir: lib/l10n
+  output_dir: lib/l10n
+  use_deferred_loading: true

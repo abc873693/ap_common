@@ -1,5 +1,4 @@
 import 'dart:io';
-import 'dart:typed_data';
 import 'dart:ui' as ui;
 
 import 'package:add_2_calendar/add_2_calendar.dart';
@@ -289,7 +288,7 @@ class CourseScaffoldState extends State<CourseScaffold> {
                 flex: 2,
                 child: Material(
                   elevation: 12.0,
-                  child: Container(
+                  child: ColoredBox(
                     color: ApTheme.of(context).courseListTabletBackground,
                     child: CourseList(
                       courses: widget.courseData.courses,
@@ -402,7 +401,7 @@ class CourseScaffoldState extends State<CourseScaffold> {
             ),
             child: RepaintBoundary(
               key: _repaintBoundaryGlobalKey,
-              child: Container(
+              child: ColoredBox(
                 color: Theme.of(context).scaffoldBackgroundColor,
                 child: Row(
                   crossAxisAlignment: CrossAxisAlignment.start,
@@ -726,9 +725,9 @@ class CourseContent extends StatefulWidget {
 class _CourseContentState extends State<CourseContent> {
   @override
   Widget build(BuildContext context) {
-    CourseNotifyState? _state;
+    CourseNotifyState? state;
     if (widget.enableNotifyControl && widget.notifyData != null) {
-      _state = widget.notifyData!.getByCode(
+      state = widget.notifyData!.getByCode(
                 widget.course.code,
                 widget.timeCode.startTime,
                 widget.weekday,
@@ -804,7 +803,7 @@ class _CourseContentState extends State<CourseContent> {
                   NotificationUtils.isSupport)
                 IconButton(
                   icon: Icon(
-                    _state == CourseNotifyState.schedule
+                    state == CourseNotifyState.schedule
                         ? Icons.alarm_on
                         : Icons.alarm_off,
                   ),
@@ -859,7 +858,7 @@ class _CourseContentState extends State<CourseContent> {
                       if (!mounted) return;
                       widget.onNotifyClick!(
                         courseNotify,
-                        CourseNotifyState.values[(_state!.index + 1) %
+                        CourseNotifyState.values[(state!.index + 1) %
                             (CourseNotifyState.values.length)],
                       );
                     }
@@ -1051,7 +1050,7 @@ class CourseList extends StatelessWidget {
                               style:
                                   const TextStyle(fontWeight: FontWeight.bold),
                             ),
-                            TextSpan(text: '${course.location.toString()}\n'),
+                            TextSpan(text: '${course.location}\n'),
                           ],
                           TextSpan(
                             text: '${app.courseDialogTime}：',

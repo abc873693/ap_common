@@ -163,8 +163,8 @@ class ApButton extends StatelessWidget {
               Radius.circular(30.0),
             ),
           ),
+          backgroundColor: Colors.white,
           padding: const EdgeInsets.all(14.0),
-          primary: Colors.white,
         ),
         onPressed: onPressed,
         child: Text(

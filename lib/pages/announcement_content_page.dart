@@ -168,11 +168,11 @@ class AnnouncementContentPageState extends State<AnnouncementContentPage> {
                 Radius.circular(30.0),
               ),
             ),
+            backgroundColor: ApTheme.of(context).yellow,
             padding: const EdgeInsets.symmetric(
               vertical: 16.0,
               horizontal: 30.0,
             ),
-            primary: ApTheme.of(context).yellow,
           ),
           onPressed: () {
             ApUtils.launchUrl(widget.announcement.url!);
