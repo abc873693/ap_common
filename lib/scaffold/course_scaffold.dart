@@ -474,7 +474,14 @@ class CourseScaffoldState extends State<CourseScaffold> {
     final int maxTimeCode = widget.courseData.maxTimeCodeIndex;
     final int minTimeCode = widget.courseData.minTimeCodeIndex;
     final bool hasHoliday = widget.courseData.hasHoliday;
-    final List<Column> columns = <Column>[const Column()];
+    final List<Column> columns = <Column>[
+      //TODO 可讀性改善
+      //ignore: prefer_const_constructors
+      Column(
+        //ignore: prefer_const_literals_to_create_immutables
+        children: <Widget>[],
+      )
+    ];
     columns[0].children.add(
           _weekBorder(''),
         );
