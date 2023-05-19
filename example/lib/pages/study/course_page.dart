@@ -23,7 +23,7 @@ class CoursePageState extends State<CoursePage> {
 
   SemesterData? semesterData;
 
-  CourseData? courseData;
+  CourseData courseData = CourseData.empty();
 
   CourseNotifyData? notifyData;
 
@@ -52,7 +52,7 @@ class CoursePageState extends State<CoursePage> {
     ap = ApLocalizations.of(context);
     return CourseScaffold(
       state: state,
-      courseData: courseData!,
+      courseData: courseData,
       notifyData: notifyData,
       customHint: isOffline ? ap.offlineCourse : '',
       customStateHint: customStateHint,
@@ -91,10 +91,10 @@ class CoursePageState extends State<CoursePage> {
       ApConstants.currentSemesterCode,
       ApConstants.semesterLatest,
     );
-    courseData!.save(courseNotifyCacheKey);
-    if (mounted && courseData != null) {
+    courseData.save(courseNotifyCacheKey);
+    if (mounted) {
       setState(() {
-        if (courseData?.courses == null) {
+        if (courseData.courses.isEmpty) {
           state = CourseState.empty;
         } else {
           state = CourseState.finish;

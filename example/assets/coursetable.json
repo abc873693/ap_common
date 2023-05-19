@@ -47,7 +47,8 @@
         }
       ],
       "location": {
-        "room": ""
+        "room": "",
+        "building": ""
       },
       "instructors": [
         "劉安球"
@@ -93,7 +94,8 @@
         }
       ],
       "location": {
-        "room": "MA212"
+        "room": "MA212",
+        "building": ""
       },
       "instructors": [
         "黃天受"
@@ -120,7 +122,8 @@
         }
       ],
       "location": {
-        "room": "MA218"
+        "room": "MA218",
+        "building": ""
       },
       "instructors": [
         "李仕雄"
@@ -150,7 +153,8 @@
         }
       ],
       "location": {
-        "room": "MA213"
+        "room": "MA213",
+        "building": ""
       },
       "instructors": [
         "徐淑芳"
@@ -167,7 +171,8 @@
       "at": "【學期】",
       "sectionTimes": [],
       "location": {
-        "room": "教室未定"
+        "room": "教室未定",
+        "building": ""
       },
       "instructors": [
         "侯易佑",
@@ -204,7 +209,8 @@
         }
       ],
       "location": {
-        "room": "MA212"
+        "room": "MA212",
+        "building": ""
       },
       "instructors": [
         "張俊陽"
@@ -234,7 +240,8 @@
         }
       ],
       "location": {
-        "room": "MA202"
+        "room": "MA202",
+        "building": ""
       },
       "instructors": [
         "林黃淑化"
@@ -264,7 +271,8 @@
         }
       ],
       "location": {
-        "room": "MA213"
+        "room": "MA213",
+        "building": ""
       },
       "instructors": [
         "張添香"

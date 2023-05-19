@@ -48,7 +48,7 @@ class HomePageState extends State<HomePage> {
 
   Widget? content;
 
-  List<Announcement>? announcements;
+  List<Announcement> announcements = <Announcement>[];
 
   bool isLogin = false;
   bool displayPicture = true;
