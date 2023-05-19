@@ -3,7 +3,7 @@
 基於應用校務通系列使用到 Firebase 的功能製作的函式庫
 
 ## 套件使用要求
- - Flutter `v1.20` 以上
+ - Flutter `v3.10` 以上
 
 
 ## Firebase 支援列表
