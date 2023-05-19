@@ -300,12 +300,8 @@ class ApTheme extends InheritedWidget {
           color: ApColors.blue500,
         ),
         indicatorColor: ApColors.blue500,
-        colorScheme: ColorScheme.fromSwatch(
-          accentColor: ApColors.blue500,
-        ),
         pageTransitionsTheme: _pageTransitionsTheme,
         unselectedWidgetColor: ApColors.grey500,
-        backgroundColor: Colors.black12,
         textSelectionTheme: const TextSelectionThemeData(
           selectionColor: ApColors.blue200,
         ),
@@ -316,6 +312,9 @@ class ApTheme extends InheritedWidget {
           ),
         ),
         visualDensity: VisualDensity.adaptivePlatformDensity,
+        colorScheme: ColorScheme.fromSwatch(
+          accentColor: ApColors.blue500,
+        ).copyWith(background: Colors.black12),
       );
 
   static ThemeData get dark => ThemeData(
@@ -325,14 +324,9 @@ class ApTheme extends InheritedWidget {
         appBarTheme: const AppBarTheme(
           color: ApColors.blueDark,
         ),
-        colorScheme: ColorScheme.fromSwatch(
-          brightness: Brightness.dark,
-          accentColor: ApColors.blue300,
-        ),
         indicatorColor: ApColors.blue300,
         scaffoldBackgroundColor: ApColors.onyx,
         unselectedWidgetColor: ApColors.grey200,
-        backgroundColor: Colors.black12,
         textSelectionTheme: const TextSelectionThemeData(
           selectionColor: ApColors.blue200,
         ),
@@ -343,6 +337,10 @@ class ApTheme extends InheritedWidget {
           ),
         ),
         visualDensity: VisualDensity.adaptivePlatformDensity,
+        colorScheme: ColorScheme.fromSwatch(
+          brightness: Brightness.dark,
+          accentColor: ApColors.blue300,
+        ).copyWith(background: Colors.black12),
       );
 }
 

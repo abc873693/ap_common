@@ -285,10 +285,10 @@ class _AnnouncementEditPageState extends State<AnnouncementEditPage> {
                         Radius.circular(30.0),
                       ),
                     ),
+                    backgroundColor: ApTheme.of(context).blueAccent,
                     padding: const EdgeInsets.symmetric(
                       horizontal: 8.0,
                     ),
-                    primary: ApTheme.of(context).blueAccent,
                   ),
                   onPressed: () async {
                     final XFile? image = await ApUtils.pickImage();
@@ -359,11 +359,11 @@ class _AnnouncementEditPageState extends State<AnnouncementEditPage> {
                         Radius.circular(30.0),
                       ),
                     ),
+                    backgroundColor: ApTheme.of(context).blueAccent,
                     padding: const EdgeInsets.symmetric(
                       horizontal: 8.0,
                       vertical: 4.0,
                     ),
-                    primary: ApTheme.of(context).blueAccent,
                   ),
                   onPressed: () async {
                     setState(() {
@@ -449,11 +449,11 @@ class _AnnouncementEditPageState extends State<AnnouncementEditPage> {
                         Radius.circular(30.0),
                       ),
                     ),
+                    backgroundColor: ApTheme.of(context).blueAccent,
                     padding: const EdgeInsets.symmetric(
                       horizontal: 8.0,
                       vertical: 4.0,
                     ),
-                    primary: ApTheme.of(context).blueAccent,
                   ),
                   onPressed: () {
                     _announcementSubmit();
@@ -478,11 +478,11 @@ class _AnnouncementEditPageState extends State<AnnouncementEditPage> {
                           Radius.circular(30.0),
                         ),
                       ),
+                      backgroundColor: ApTheme.of(context).yellow,
                       padding: const EdgeInsets.symmetric(
                         horizontal: 8.0,
                         vertical: 4.0,
                       ),
-                      primary: ApTheme.of(context).yellow,
                     ),
                     onPressed: () {
                       _announcementSubmit(isApproval: true);
@@ -506,11 +506,11 @@ class _AnnouncementEditPageState extends State<AnnouncementEditPage> {
                           Radius.circular(30.0),
                         ),
                       ),
+                      backgroundColor: ApTheme.of(context).red,
                       padding: const EdgeInsets.symmetric(
                         horizontal: 8.0,
                         vertical: 4.0,
                       ),
-                      primary: ApTheme.of(context).red,
                     ),
                     onPressed: () {
                       _announcementSubmit(isApproval: false);
@@ -534,11 +534,11 @@ class _AnnouncementEditPageState extends State<AnnouncementEditPage> {
                           Radius.circular(30.0),
                         ),
                       ),
+                      backgroundColor: ApTheme.of(context).red,
                       padding: const EdgeInsets.symmetric(
                         horizontal: 8.0,
                         vertical: 4.0,
                       ),
-                      primary: ApTheme.of(context).red,
                     ),
                     onPressed: () {
                       _announcementSubmit(isApproval: false);
