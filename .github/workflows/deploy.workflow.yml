@@ -3,15 +3,22 @@ name: Deploy to Pub Hub
 on:
   push:
     tags:
-      - 'v[0-9]+.[0-9]+.[0-9]+*'
+      - v*
 
 jobs:
 
   deploy:
     name: Deploy
+    runs-on: ubuntu-latest
     steps:
-      - name: 'Using dart-lang publish workflow'
-        uses: dart-lang/setup-dart/.github/workflows/publish.yml@v1
+      - name: 'Checkout'
+        uses: actions/checkout@v2 # required!
+
+      - name: '>> Dart package <<'
+        uses: k-paxian/dart-package-publisher@master
+        with:
+          accessToken: ${{ secrets.OAUTH_ACCESS_TOKEN }}
+          refreshToken: ${{ secrets.OAUTH_REFRESH_TOKEN }}
 
   github_release:
     name: Create GitHub Release
