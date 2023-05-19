@@ -116,7 +116,9 @@ class FirebaseMessagingUtils {
     if (customOnClickAction) {
       onClick?.call(message);
     } else if (data['type'] == "1") {
-      launch(data['url']);
+      launchUrl(
+        Uri.parse(data['url']),
+      );
     } else {
       onClick?.call(message);
     }
