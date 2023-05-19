@@ -9,9 +9,7 @@ jobs:
 
   deploy:
     name: Deploy
-    steps:
-      - name: 'Using dart-lang publish workflow'
-        uses: dart-lang/setup-dart/.github/workflows/publish.yml@v1
+    uses: dart-lang/setup-dart/.github/workflows/publish.yml@v1
 
   github_release:
     name: Create GitHub Release
