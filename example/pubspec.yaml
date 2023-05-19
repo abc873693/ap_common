@@ -30,6 +30,9 @@ dependencies:
   ap_common_plugin: 0.3.1
 #    path: ../../../GitHub/ap_common_plugin
 
+dependency_overrides:
+  intl: 0.18.0
+
 dev_dependencies:
   flutter_test:
     sdk: flutter

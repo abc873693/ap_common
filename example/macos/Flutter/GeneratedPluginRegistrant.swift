@@ -8,7 +8,7 @@ import Foundation
 import file_selector_macos
 import flutter_local_notifications
 import in_app_review
-import package_info_plus_macos
+import package_info_plus
 import path_provider_foundation
 import photo_manager
 import printing

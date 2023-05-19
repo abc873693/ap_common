@@ -82,12 +82,10 @@ class Preferences {
     return prefs?.getDouble(key) ?? defaultValue;
   }
 
-  // ignore: avoid_positional_boolean_parameters
   static Future<void> setBool(String key, bool data) async {
     await prefs?.setBool(key, data);
   }
 
-  // ignore: avoid_positional_boolean_parameters
   static bool getBool(String key, bool defaultValue) {
     return prefs?.getBool(key) ?? defaultValue;
   }
