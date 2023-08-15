@@ -15,7 +15,7 @@ dependencies:
   # Dart Packages
   sprintf: ^6.0.0
   intl: ">=0.16.0 <1.0.0"
-  multiple_localization: ^0.3.0
+  multiple_localization: ^0.4.0
   encrypt: ^5.0.1
   dio: ">=5.1.0 <6.0.0"
   dio_cookie_manager: ^3.0.0
