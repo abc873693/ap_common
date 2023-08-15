@@ -825,10 +825,10 @@ packages:
     dependency: "direct main"
     description:
       name: multiple_localization
-      sha256: "0178b9999878f52595493a957742034f0976fc4a399cd363f8f0a59dfb1e281f"
+      sha256: "65f6a555d909c0488e7313f62c8946dde05fe577212b0c3bc4b3f1f4cc334b05"
       url: "https://pub.dev"
     source: hosted
-    version: "0.3.0"
+    version: "0.4.0"
   octo_image:
     dependency: transitive
     description:
