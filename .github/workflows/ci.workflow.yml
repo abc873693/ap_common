@@ -25,6 +25,8 @@ jobs:
         with:
           flutter-version: '3.10.x'
           channel: 'stable'
+          cache: true
+          cache-key: 'flutter-:os:-:channel:-:version:-:arch:-:hash:'
       - run: flutter pub get
       - name: Model test
         run: flutter test test/model_test.dart
