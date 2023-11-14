@@ -84,6 +84,9 @@ class _Cookie implements Cookie {
   bool secure = false;
 
   @override
+  SameSite? sameSite;
+
+  @override
   String get name => _name;
 
   @override
