@@ -35,7 +35,7 @@ class HintContent extends StatelessWidget {
             content,
             textAlign: TextAlign.center,
             style: TextStyle(color: ApTheme.of(context).grey),
-          )
+          ),
         ],
       ),
     );

@@ -138,7 +138,7 @@ class PhoneListViewState extends State<PhoneListView>
               phone.number,
               style: _textGreyStyle,
               textAlign: TextAlign.left,
-            )
+            ),
           ],
         ),
       ),

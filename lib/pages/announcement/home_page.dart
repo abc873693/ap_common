@@ -287,10 +287,11 @@ class _AnnouncementHomePageState extends State<AnnouncementHomePage> {
                   const SizedBox(height: 16.0),
                   Text(ap.myApplications),
                   const SizedBox(height: 8.0),
-                  for (Announcement item in applications ?? <Announcement>[])
+                  for (final Announcement item
+                      in applications ?? <Announcement>[])
                     if ((onlyShowNotReview! && item.reviewStatus == null) ||
                         (!onlyShowNotReview!))
-                      _item(_DataType.application, item)
+                      _item(_DataType.application, item),
                 ],
               ),
             );
@@ -305,14 +306,16 @@ class _AnnouncementHomePageState extends State<AnnouncementHomePage> {
                     const SizedBox(height: 8.0, width: double.infinity),
                     Text(ap.allApplications),
                     const SizedBox(height: 8.0),
-                    for (Announcement item in applications ?? <Announcement>[])
+                    for (final Announcement item
+                        in applications ?? <Announcement>[])
                       if ((onlyShowNotReview! && item.reviewStatus == null) ||
                           (!onlyShowNotReview!))
                         _item(_DataType.application, item),
                     const SizedBox(height: 16.0),
                     Text(ap.allAnnouncements),
                     const SizedBox(height: 8.0),
-                    for (Announcement item in announcements ?? <Announcement>[])
+                    for (final Announcement item
+                        in announcements ?? <Announcement>[])
                       _item(_DataType.announcement, item),
                   ],
                 ),
@@ -573,13 +576,14 @@ class _AnnouncementHomePageState extends State<AnnouncementHomePage> {
               if (loginData!.level != PermissionLevel.user)
                 Wrap(
                   children: <Widget>[
-                    for (String? tag in item.tags ?? <String>[]) ...<Widget>[
+                    for (final String? tag
+                        in item.tags ?? <String>[]) ...<Widget>[
                       Chip(
                         label: Text(tag!),
                         backgroundColor: tag.color,
                       ),
                       const SizedBox(width: 8.0),
-                    ]
+                    ],
                   ],
                 ),
             ],
@@ -815,6 +819,7 @@ class _AnnouncementHomePageState extends State<AnnouncementHomePage> {
               Navigator.of(context, rootNavigator: true).pop();
             }
           } catch (e, s) {
+            if (!context.mounted) return;
             ApUtils.showToast(context, ap.thirdPartyLoginFail);
             CrashlyticsUtils.instance?.recordError(e, s);
             if (isNotLogin) Navigator.of(context, rootNavigator: true).pop();
@@ -826,13 +831,14 @@ class _AnnouncementHomePageState extends State<AnnouncementHomePage> {
             final AuthorizationCredentialAppleID credential =
                 await SignInWithApple.getAppleIDCredential(
               scopes: <AppleIDAuthorizationScopes>[
-                AppleIDAuthorizationScopes.email
+                AppleIDAuthorizationScopes.email,
               ],
             );
             idToken = credential.identityToken;
             AnnouncementHelper.instance
                 .appleLogin(idToken: idToken!, callback: callback);
           } catch (e, s) {
+            if (!context.mounted) return;
             ApUtils.showToast(context, ap.thirdPartyLoginFail);
             if (isNotLogin) Navigator.of(context, rootNavigator: true).pop();
             CrashlyticsUtils.instance?.recordError(e, s);

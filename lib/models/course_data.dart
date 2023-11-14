@@ -120,7 +120,7 @@ class CourseData {
       if (hasHoliday) ...<List<Course>>[
         <Course>[],
         <Course>[],
-      ]
+      ],
     ];
     for (final Course course in courses) {
       for (final SectionTime time in course.times) {

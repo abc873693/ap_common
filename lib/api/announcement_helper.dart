@@ -194,7 +194,7 @@ class AnnouncementHelper {
         data: <String, String?>{
           'token': idToken,
           'fcmToken': fcmToken,
-          'bundleId': appleBundleId
+          'bundleId': appleBundleId,
         },
       );
       final AnnouncementLoginData loginData =

@@ -100,7 +100,7 @@ class CourseNotifyData {
             if (courseNotify.location == null || courseNotify.location!.isEmpty)
               ap.courseNotifyUnknown
             else
-              courseNotify.location
+              courseNotify.location,
           ]);
         }
       }

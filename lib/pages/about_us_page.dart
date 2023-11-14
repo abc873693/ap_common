@@ -122,7 +122,7 @@ class AboutUsPageState extends State<AboutUsPage> {
                           fit: BoxFit.cover,
                         ),
                       ),
-                    )
+                    ),
                   ],
                 ),
                 Card(

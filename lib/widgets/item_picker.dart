@@ -59,7 +59,7 @@ class ItemPicker extends StatelessWidget {
             Icon(
               ApIcon.keyboardArrowDown,
               color: ApTheme.of(context).semesterText,
-            )
+            ),
           ],
         ),
       ),

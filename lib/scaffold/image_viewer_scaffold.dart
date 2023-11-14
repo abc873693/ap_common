@@ -58,10 +58,10 @@ class _ImageViewerScaffoldState extends State<ImageViewerScaffold>
             ? TabBar(
                 controller: _tabController,
                 tabs: <Tab>[
-                  for (ImageViewer image in widget.imageViewers)
+                  for (final ImageViewer image in widget.imageViewers)
                     Tab(
                       text: image.title,
-                    )
+                    ),
                 ],
               )
             : null,
@@ -69,10 +69,10 @@ class _ImageViewerScaffoldState extends State<ImageViewerScaffold>
       body: TabBarView(
         controller: _tabController,
         children: <Widget>[
-          for (ImageViewer image in widget.imageViewers)
+          for (final ImageViewer image in widget.imageViewers)
             PhotoView(
               imageProvider: AssetImage(image.assetName),
-            )
+            ),
         ],
       ),
     );

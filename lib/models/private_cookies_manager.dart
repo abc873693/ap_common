@@ -242,7 +242,7 @@ class _Cookie implements Cookie {
       '?',
       '=',
       '{',
-      '}'
+      '}',
     ];
     for (int i = 0; i < newName.length; i++) {
       final int codeUnit = newName.codeUnitAt(i);
@@ -317,7 +317,7 @@ class _Cookie implements Cookie {
       'sep',
       'oct',
       'nov',
-      'dec'
+      'dec',
     ];
 
     int position = 0;

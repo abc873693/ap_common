@@ -174,7 +174,7 @@ class _AnnouncementEditPageState extends State<AnnouncementEditPage> {
                 Text(app.tag),
                 Wrap(
                   children: <Widget>[
-                    for (String tag in tags) ...<Widget>[
+                    for (final String tag in tags) ...<Widget>[
                       Chip(
                         label: Text(tag),
                         backgroundColor: tag.color,

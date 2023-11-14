@@ -38,7 +38,7 @@ class DialogOption extends StatelessWidget {
             Icon(
               ApIcon.check,
               color: ApTheme.of(context).blueAccent,
-            )
+            ),
         ],
       ),
     );

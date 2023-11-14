@@ -84,7 +84,7 @@ class _CloudMessageContentPageState extends State<CloudMessageContentPage> {
                   fontSize: 16.0,
                 ),
               ),
-            )
+            ),
           ],
         ),
       ),

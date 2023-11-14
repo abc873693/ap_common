@@ -306,7 +306,7 @@ class CourseScaffoldState extends State<CourseScaffold> {
                   ),
                 ),
               ),
-            ]
+            ],
           ],
         ),
         floatingActionButtonLocation: FloatingActionButtonLocation.endDocked,
@@ -480,7 +480,7 @@ class CourseScaffoldState extends State<CourseScaffold> {
       Column(
         //ignore: prefer_const_literals_to_create_immutables
         children: <Widget>[],
-      )
+      ),
     ];
     columns[0].children.add(
           _weekBorder(''),
@@ -503,7 +503,7 @@ class CourseScaffoldState extends State<CourseScaffold> {
       if (hasHoliday) ...<List<CourseBorder>>[
         <CourseBorder>[],
         <CourseBorder>[],
-      ]
+      ],
     ];
     for (int i = 0; i < courseBorderCollection.length; i++) {
       for (int j = 0; j < maxTimeCode - minTimeCode + 1; j++) {
@@ -606,7 +606,7 @@ class CourseScaffoldState extends State<CourseScaffold> {
       for (int i = 1; i < columns.length; i++)
         Expanded(
           child: columns[i],
-        )
+        ),
     ];
   }
 
@@ -865,7 +865,7 @@ class _CourseContentState extends State<CourseContent> {
                       );
                     }
                   },
-                )
+                ),
             ],
           ),
           const SizedBox(height: 8.0),
@@ -1118,7 +1118,7 @@ class CourseList extends StatelessWidget {
                             ),
                         ],
                       ),
-                    )
+                    ),
                 ],
               ),
             ),

@@ -196,7 +196,7 @@ class ApUtils {
                 ),
               ),
             ],
-          )
+          ),
         ],
       ),
     );
@@ -307,6 +307,7 @@ class ApUtils {
         );
       }
     } catch (e, s) {
+      if (!context.mounted) return;
       ApUtils.showToast(context, ap.unknownError);
       if (CrashlyticsUtils.instance == null) {
         rethrow;

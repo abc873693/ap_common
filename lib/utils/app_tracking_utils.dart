@@ -102,8 +102,10 @@ class AppTrackingUtils {
                   //ignore: use_build_context_synchronously
                   Navigator.of(context).pop();
                 } on PlatformException {
+                  if (!context.mounted) return;
                   Navigator.of(context).pop();
                 } catch (e) {
+                  if (!context.mounted) return;
                   Navigator.of(context).pop();
                   rethrow;
                 }

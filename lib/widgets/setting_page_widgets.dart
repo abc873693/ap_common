@@ -121,7 +121,7 @@ class CheckCourseNotifyItem extends StatelessWidget {
               builder: (_) => SimpleOptionDialog(
                 title: ap.courseNotify,
                 items: <String>[
-                  for (CourseNotify notify in notifyData.data)
+                  for (final CourseNotify notify in notifyData.data)
                     '${ap.weekdaysCourse[notify.weekdayIndex]} ' +
                         '${notify.startTime} ${notify.title}',
                 ],

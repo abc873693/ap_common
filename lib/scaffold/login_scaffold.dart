@@ -135,7 +135,7 @@ class TextCheckBox extends StatelessWidget {
           Text(
             text,
             style: const TextStyle(color: Colors.white),
-          )
+          ),
         ],
       ),
     );

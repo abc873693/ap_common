@@ -315,9 +315,9 @@ class _ScoreContentState extends State<ScoreContent> {
                               style: _textStyle,
                             ),
                           if (widget.finalScoreBuilder != null)
-                            widget.finalScoreBuilder!(i)
+                            widget.finalScoreBuilder!(i),
                         ],
-                      )
+                      ),
                   ],
                 ),
               ),
@@ -338,7 +338,7 @@ class _ScoreContentState extends State<ScoreContent> {
                     defaultVerticalAlignment: TableCellVerticalAlignment.middle,
                     border: _tableBorder,
                     children: <TableRow>[
-                      for (String text in widget.details!)
+                      for (final String text in widget.details!)
                         TableRow(
                           children: <Widget>[
                             Container(

@@ -111,7 +111,7 @@ class NotificationListViewState extends State<NotificationListView>
                   ),
                 ),
               ],
-            )
+            ),
           ],
         ),
       ),
