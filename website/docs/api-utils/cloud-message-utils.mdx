@@ -5,20 +5,7 @@ sidebar_position: 8
 # CloudMessageUtils
 
 :::caution 注意
-使用時必須先完成 [相關設定](../installation/hive)，
+ 因考量 Flutter 背景儲存機制無法實現，Hive 儲存雲端訊息功能已在 0.24.0 移除
 :::
 
 提供雲端通知相關的工具
-
-## initBox
-
-初始化 [`Hive`](https://pub.dev/packages/hive) 設計的 `Box`
-若有使用到 `ApHiveUtils.intanse.init()` 則不需要另外呼叫
-
-:::info Hive 名稱佔用
-會基於 Hive 設計，使用到名稱為 `RemoteMessageList` 的空間
-:::
-
-## box
-
-取的 `CloudMessage` 的 Box 實例
