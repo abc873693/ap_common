@@ -85,7 +85,7 @@ class FirebaseAnalyticsUtils extends AnalyticsUtils {
         userInfo.className,
       );
     }
-    if (userInfo.id != null && userInfo.id!.isNotEmpty) {
+    if (userInfo.id.isNotEmpty) {
       await analytics?.setUserId(id: userInfo.id);
       FirebaseAnalyticsUtils.instance.setUserProperty(
         AnalyticsConstants.studentId,
