@@ -1,6 +1,6 @@
 name: ap_common_firebase
 description: ap_common for firebase instructure
-version: 0.16.0-dev.1
+version: 0.16.0-dev.2
 homepage: https://github.com/abc873693/ap_common_firebase
 
 environment:
