@@ -11,7 +11,7 @@ dependencies:
   flutter:
     sdk: flutter
 
-  ap_common: '>=0.19.2 <1.0.0'
+  ap_common: '>=0.24.0-dev.1 <2.0.0'
 #    path: ../../GitHub-NKUST-ITC/ap_common
   url_launcher: ^6.1.0
   #firebase must use particular version

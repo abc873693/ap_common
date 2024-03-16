@@ -1,7 +1,6 @@
 import 'dart:io';
 
 import 'package:ap_common/config/analytics_constants.dart';
-import 'package:ap_common/utils/cloud_message_utils.dart';
 import 'package:ap_common/utils/notification_utils.dart';
 import 'package:ap_common_firebase/utils/firebase_utils.dart';
 import 'package:flutter/foundation.dart';
@@ -63,7 +62,6 @@ class FirebaseMessagingUtils {
             );
           },
         );
-        message.save();
       }
     });
     FirebaseMessaging.onMessageOpenedApp.listen((RemoteMessage message) async {
@@ -81,7 +79,6 @@ class FirebaseMessagingUtils {
         onClick,
         customOnClickAction,
       );
-      message.save();
     });
     messaging
         ?.requestPermission(
@@ -121,36 +118,6 @@ class FirebaseMessagingUtils {
       );
     } else {
       onClick?.call(message);
-    }
-  }
-}
-
-extension RemoteMessageExtension on RemoteMessage {
-  CloudMessage get cloudMessage {
-    final notification = this.notification!;
-    String? imageUrl;
-    if (!kIsWeb && Platform.isAndroid) {
-      imageUrl = notification.android?.imageUrl;
-    } else if (!kIsWeb && (Platform.isIOS || Platform.isMacOS)) {
-      imageUrl = notification.apple?.imageUrl;
-    }
-    return CloudMessage(
-      title: notification.title ?? '',
-      dateTime: sentTime ?? DateTime.now(),
-      content: notification.body ?? '',
-      url: data['url'],
-      imageUrl: imageUrl,
-      data: data,
-    );
-  }
-
-  void save() {
-    try {
-      CloudMessageUtils.instance.box.add(cloudMessage);
-    } on HiveError catch (_) {
-      debugPrint(
-        'Not initial hive, please use ApHiveUtils.instance.init() in main()',
-      );
     }
   }
 }
