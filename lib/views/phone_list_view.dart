@@ -69,6 +69,17 @@ class PhoneListViewState extends State<PhoneListView>
   }
 
   Widget _body() {
+    final Map<PhoneModel?, List<PhoneModel>> phoneGroup =
+        <PhoneModel, List<PhoneModel>>{};
+    PhoneModel? lastHeader;
+    for (int i = 0; i < widget.phoneModelList.length; i++) {
+      if (widget.phoneModelList[i].number.isEmpty) {
+        phoneGroup[widget.phoneModelList[i]] = <PhoneModel>[];
+        lastHeader = widget.phoneModelList[i];
+      } else {
+        phoneGroup[lastHeader]?.add(widget.phoneModelList[i]);
+      }
+    }
     switch (widget.state) {
       case PhoneState.loading:
         return const Center(
@@ -80,25 +91,37 @@ class PhoneListViewState extends State<PhoneListView>
           content: ap.clickToRetry,
         );
       default:
-        return ListView.builder(
-          itemCount: widget.phoneModelList.length,
-          itemBuilder: (BuildContext context, int index) {
-            if (widget.phoneModelList[index].number.isEmpty) {
-              return Padding(
-                padding: const EdgeInsets.symmetric(
-                  vertical: 8.0,
-                  horizontal: 16.0,
-                ),
-                child: Text(
-                  widget.phoneModelList[index].name,
-                  style: _textBlueStyle,
-                  textAlign: TextAlign.left,
-                ),
-              );
-            } else {
-              return _phoneItem(widget.phoneModelList[index]);
-            }
-          },
+        return CustomScrollView(
+          slivers: <Widget>[
+            for (final MapEntry<PhoneModel?, List<PhoneModel>> entries
+                in phoneGroup.entries)
+              SliverMainAxisGroup(
+                slivers: <Widget>[
+                  if (entries.key != null)
+                    SliverPersistentHeader(
+                      pinned: true,
+                      delegate: HeaderDelegate(entries.key!.name),
+                    ),
+                  SliverPadding(
+                    padding: const EdgeInsets.all(8.0),
+                    sliver: DecoratedSliver(
+                      decoration: const BoxDecoration(
+                        color: Colors.transparent,
+                        borderRadius: BorderRadius.zero,
+                      ),
+                      sliver: SliverList.separated(
+                        itemBuilder: (_, int index) => _phoneItem(
+                          entries.value[index],
+                        ),
+                        separatorBuilder: (_, __) =>
+                            const Divider(indent: 8, endIndent: 8),
+                        itemCount: entries.value.length,
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+          ],
         );
     }
   }
@@ -144,4 +167,45 @@ class PhoneListViewState extends State<PhoneListView>
       ),
     );
   }
+}
+
+class HeaderDelegate extends SliverPersistentHeaderDelegate {
+  const HeaderDelegate(this.title);
+
+  final String title;
+
+  @override
+  Widget build(
+    BuildContext context,
+    double shrinkOffset,
+    bool overlapsContent,
+  ) {
+    return Container(
+      height: minExtent,
+      color: ApTheme.of(context).background,
+      padding: const EdgeInsets.symmetric(
+        vertical: 8.0,
+        horizontal: 16.0,
+      ),
+      child: Text(
+        title,
+        style: TextStyle(
+          color: ApTheme.of(context).blueText,
+          fontSize: 18.0,
+          fontWeight: FontWeight.bold,
+        ),
+        textAlign: TextAlign.left,
+      ),
+    );
+  }
+
+  @override
+  double get maxExtent => minExtent;
+
+  @override
+  double get minExtent => 52.0;
+
+  @override
+  bool shouldRebuild(covariant SliverPersistentHeaderDelegate oldDelegate) =>
+      false;
 }
