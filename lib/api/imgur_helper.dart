@@ -68,9 +68,9 @@ class ImgurHelper {
 
         return null;
       }
-    } on DioError catch (dioError) {
-      if (dioError.type == DioErrorType.badResponse &&
-          dioError.response?.statusCode == 400) {
+    } on DioException catch (dioException) {
+      if (dioException.type == DioExceptionType.badResponse &&
+          dioException.response?.statusCode == 400) {
         callback?.onError(
           GeneralResponse(
             statusCode: 201,
@@ -78,7 +78,7 @@ class ImgurHelper {
           ),
         );
       } else {
-        callback?.onFailure(dioError);
+        callback?.onFailure(dioException);
       }
       return null;
     }

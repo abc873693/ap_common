@@ -751,11 +751,11 @@ class _AnnouncementHomePageState extends State<AnnouncementHomePage> {
           if (isNotLogin) Navigator.of(context, rootNavigator: true).pop();
           ApUtils.showToast(context, response.message);
         },
-        onFailure: (DioError dioError) async {
+        onFailure: (DioException dioException) async {
           if (isNotLogin) Navigator.of(context, rootNavigator: true).pop();
-          ApUtils.showToast(context, dioError.i18nMessage);
-          if (dioError.type == DioErrorType.badResponse &&
-              dioError.response!.statusCode == 403) {
+          ApUtils.showToast(context, dioException.i18nMessage);
+          if (dioException.type == DioExceptionType.badResponse &&
+              dioException.response!.statusCode == 403) {
             if (loginType == AnnouncementLoginType.google) {
               await _googleSignIn.signOut();
             }
@@ -819,7 +819,7 @@ class _AnnouncementHomePageState extends State<AnnouncementHomePage> {
               Navigator.of(context, rootNavigator: true).pop();
             }
           } catch (e, s) {
-            if (!context.mounted) return;
+            if (!mounted) return;
             ApUtils.showToast(context, ap.thirdPartyLoginFail);
             CrashlyticsUtils.instance?.recordError(e, s);
             if (isNotLogin) Navigator.of(context, rootNavigator: true).pop();

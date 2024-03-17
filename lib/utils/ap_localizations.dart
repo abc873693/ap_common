@@ -58,33 +58,33 @@ extension ApExtension on ApLocalizations {
       ];
 }
 
-extension DioErrorI18nExtension on DioError {
+extension DioExceptionI18nExtension on DioException {
   String? get i18nMessage {
     switch (type) {
-      case DioErrorType.connectionTimeout:
-      case DioErrorType.receiveTimeout:
-      case DioErrorType.sendTimeout:
+      case DioExceptionType.connectionTimeout:
+      case DioExceptionType.receiveTimeout:
+      case DioExceptionType.sendTimeout:
         return ApLocalizations.current.timeoutMessage;
-      case DioErrorType.badCertificate:
+      case DioExceptionType.badCertificate:
         return ApLocalizations.current.unknownError;
-      case DioErrorType.badResponse:
+      case DioExceptionType.badResponse:
         if (response!.data is Map<String, dynamic>) {
           //ignore: avoid_dynamic_calls
           return (response!.data['description'] ?? message) as String;
         } else {
           return message;
         }
-      case DioErrorType.connectionError:
+      case DioExceptionType.connectionError:
         return ApLocalizations.current.noInternet;
-      case DioErrorType.unknown:
+      case DioExceptionType.unknown:
         return ApLocalizations.current.unknownError;
-      case DioErrorType.cancel:
+      case DioExceptionType.cancel:
         return null;
     }
   }
 
   bool get isJsonResponse {
-    return type == DioErrorType.badResponse &&
+    return type == DioExceptionType.badResponse &&
         response!.data is Map<String, dynamic>;
   }
 
