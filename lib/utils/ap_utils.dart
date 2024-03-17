@@ -7,7 +7,6 @@ import 'package:ap_common/utils/crashlytics_utils.dart';
 import 'package:ap_common/utils/file_saver_web.dart';
 import 'package:ap_common/utils/toast.dart';
 import 'package:ap_common/widgets/yes_no_dialog.dart';
-import 'package:file_selector/file_selector.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
@@ -220,23 +219,11 @@ class ApUtils {
     CameraDevice? preferredCameraDevice,
     List<String>? extensions,
   }) async {
-    XFile? image;
-    if (kIsWeb || Platform.isAndroid || Platform.isIOS) {
-      final ImagePicker imagePicker = ImagePicker();
-      image = await imagePicker.pickImage(
-        source: imageSource ?? ImageSource.gallery,
-        preferredCameraDevice: preferredCameraDevice ?? CameraDevice.rear,
-      );
-    } else {
-      final XTypeGroup typeGroup = XTypeGroup(
-        label: 'images',
-        extensions: extensions ?? <String>['jpg', 'jpeg'],
-      );
-      image = await openFile(
-        acceptedTypeGroups: <XTypeGroup>[typeGroup],
-      );
-    }
-    return image;
+    final ImagePicker imagePicker = ImagePicker();
+    return imagePicker.pickImage(
+      source: imageSource ?? ImageSource.gallery,
+      preferredCameraDevice: preferredCameraDevice ?? CameraDevice.rear,
+    );
   }
 
   static Future<void> saveImage(
