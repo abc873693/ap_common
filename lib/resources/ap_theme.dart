@@ -295,6 +295,7 @@ class ApTheme extends InheritedWidget {
 
   static ThemeData get light => ThemeData(
         //platform: TargetPlatform.iOS,
+        useMaterial3: false,
         brightness: Brightness.light,
         appBarTheme: const AppBarTheme(
           color: ApColors.blue500,
@@ -319,6 +320,7 @@ class ApTheme extends InheritedWidget {
 
   static ThemeData get dark => ThemeData(
         //platform: TargetPlatform.iOS,
+        useMaterial3: false,
         brightness: Brightness.dark,
         pageTransitionsTheme: _pageTransitionsTheme,
         appBarTheme: const AppBarTheme(

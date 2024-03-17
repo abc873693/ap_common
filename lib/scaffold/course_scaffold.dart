@@ -831,7 +831,7 @@ class _CourseContentState extends State<CourseContent> {
                         );
                         widget.notifyData!.lastId++;
                         widget.notifyData!.data.add(courseNotify);
-                        if (!mounted) return;
+                        if (!context.mounted) return;
                         ApUtils.showToast(
                           context,
                           ApLocalizations.of(context).courseNotifyHint,
@@ -846,7 +846,7 @@ class _CourseContentState extends State<CourseContent> {
                             .removeWhere((CourseNotify data) {
                           return data.id == courseNotify!.id;
                         });
-                        if (!mounted) return;
+                        if (!context.mounted) return;
                         ApUtils.showToast(
                           context,
                           ApLocalizations.of(context).cancelNotifySuccess,

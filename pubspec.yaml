@@ -39,7 +39,7 @@ dependencies:
   url_launcher: ^6.1.2
   share_plus: ^4.0.8
   package_info_plus: ^4.0.0
-  cached_network_image: ^3.2.1
+  cached_network_image: ^3.3.1
   flutter_keyboard_visibility: ^5.2.0
   add_2_calendar: ^2.2.5
   in_app_review: ^2.0.3
@@ -51,7 +51,7 @@ dependencies:
   google_sign_in: ^5.3.2
   sign_in_with_apple: ^4.0.0
   image_picker: ^0.8.5+3
-  photo_manager: ^2.4.0
+  photo_manager: ^3.0.0
   app_tracking_transparency: ^2.0.2+4
 
 dependency_overrides:
