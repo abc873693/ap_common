@@ -47,7 +47,7 @@ class GitHubHelper {
         });
       }
       return callback?.onSuccess(map) as Map<String, List<Announcement>>;
-    } on DioError catch (e) {
+    } on DioException catch (e) {
       if (callback != null) {
         callback.onFailure(e);
       } else {

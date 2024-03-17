@@ -299,8 +299,8 @@ class _AnnouncementEditPageState extends State<AnnouncementEditPage> {
                       ImgurHelper.instance!.uploadImageToImgur(
                         file: image,
                         callback: GeneralCallback<ImgurUploadData>(
-                          onFailure: (DioError dioError) {
-                            ApUtils.showToast(context, dioError.message);
+                          onFailure: (DioException dioException) {
+                            ApUtils.showToast(context, dioException.message);
                             setState(
                               () => imgurUploadState = _imgUrl.text.isEmpty
                                   ? _ImgurUploadState.noFile

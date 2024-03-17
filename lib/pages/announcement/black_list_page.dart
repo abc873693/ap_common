@@ -90,7 +90,7 @@ class _BlackListPageState extends State<BlackListPage> {
           blackList = data;
           setState(() => state = _State.done);
         },
-        onFailure: (DioError e) {
+        onFailure: (DioException e) {
           Toast.show(e.i18nMessage, context);
           setState(() => state = _State.error);
         },
@@ -114,7 +114,7 @@ class _BlackListPageState extends State<BlackListPage> {
           Toast.show(ApLocalizations.current.updateSuccess, context);
           setState(() => state = _State.done);
         },
-        onFailure: (DioError e) {
+        onFailure: (DioException e) {
           Toast.show(e.i18nMessage, context);
           setState(() => state = _State.done);
         },

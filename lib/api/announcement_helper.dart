@@ -16,15 +16,15 @@ enum AnnouncementLoginType {
   apple,
 }
 
-extension DioErrorExtension on DioError {
+extension DioExceptionExtension on DioException {
   bool get isUnauthorized =>
-      type == DioErrorType.badResponse && response?.statusCode == 401;
+      type == DioExceptionType.badResponse && response?.statusCode == 401;
 
   bool get isNotPermission =>
-      type == DioErrorType.badResponse && response?.statusCode == 403;
+      type == DioExceptionType.badResponse && response?.statusCode == 403;
 
   bool get isNotFoundAnnouncement =>
-      type == DioErrorType.badResponse && response?.statusCode == 404;
+      type == DioExceptionType.badResponse && response?.statusCode == 404;
 }
 
 class AnnouncementHelper {
@@ -125,11 +125,11 @@ class AnnouncementHelper {
         callback.onSuccess(loginData);
       }
       return loginData;
-    } on DioError catch (dioError) {
+    } on DioException catch (dioException) {
       if (callback == null) {
         rethrow;
       } else {
-        if (dioError.isUnauthorized) {
+        if (dioException.isUnauthorized) {
           callback.onError(
             GeneralResponse(
               statusCode: 401,
@@ -137,7 +137,7 @@ class AnnouncementHelper {
             ),
           );
         } else {
-          callback.onFailure(dioError);
+          callback.onFailure(dioException);
         }
       }
     }
@@ -165,20 +165,20 @@ class AnnouncementHelper {
         callback.onSuccess(loginData);
       }
       return loginData;
-    } on DioError catch (dioError) {
+    } on DioException catch (dioException) {
       if (callback == null) {
         rethrow;
       } else {
-        if (dioError.isUnauthorized) {
+        if (dioException.isUnauthorized) {
           callback.onError(
             GeneralResponse(
               statusCode: 401,
-              message: dioError.response?.data as String? ??
+              message: dioException.response?.data as String? ??
                   ApLocalizations.current.unknownError,
             ),
           );
         }
-        callback.onFailure(dioError);
+        callback.onFailure(dioException);
       }
     }
     return null;
@@ -206,20 +206,20 @@ class AnnouncementHelper {
         callback.onSuccess(loginData);
       }
       return loginData;
-    } on DioError catch (dioError) {
+    } on DioException catch (dioException) {
       if (callback == null) {
         rethrow;
       } else {
-        if (dioError.isUnauthorized) {
+        if (dioException.isUnauthorized) {
           callback.onError(
             GeneralResponse(
               statusCode: 401,
-              message: dioError.response?.data as String? ??
+              message: dioException.response?.data as String? ??
                   ApLocalizations.current.unknownError,
             ),
           );
         }
-        callback.onFailure(dioError);
+        callback.onFailure(dioException);
       }
     }
     return null;
@@ -243,11 +243,11 @@ class AnnouncementHelper {
         callback.onSuccess(data.data);
       }
       return data.data;
-    } on DioError catch (dioError) {
+    } on DioException catch (dioException) {
       if (callback == null) {
         rethrow;
       } else {
-        callback.onFailure(dioError);
+        callback.onFailure(dioException);
       }
     }
     return null;
@@ -276,11 +276,11 @@ class AnnouncementHelper {
         callback.onSuccess(data.data);
       }
       return data.data;
-    } on DioError catch (dioError) {
+    } on DioException catch (dioException) {
       if (callback == null) {
         rethrow;
       } else {
-        callback.onFailure(dioError);
+        callback.onFailure(dioException);
       }
     }
     return null;
@@ -302,11 +302,11 @@ class AnnouncementHelper {
         callback.onSuccess(data);
       }
       return data;
-    } on DioError catch (dioError) {
+    } on DioException catch (dioException) {
       if (callback == null) {
         rethrow;
       } else {
-        callback.onFailure(dioError);
+        callback.onFailure(dioException);
       }
     }
     return null;
@@ -333,11 +333,11 @@ class AnnouncementHelper {
         callback.onSuccess(response);
       }
       return response;
-    } on DioError catch (dioError) {
+    } on DioException catch (dioException) {
       if (callback == null) {
         rethrow;
       } else {
-        handleCrudError(dioError, callback);
+        handleCrudError(dioException, callback);
       }
     }
     return null;
@@ -356,11 +356,11 @@ class AnnouncementHelper {
         callback.onSuccess(response);
       }
       return response;
-    } on DioError catch (dioError) {
+    } on DioException catch (dioException) {
       if (callback == null) {
         rethrow;
       } else {
-        handleCrudError(dioError, callback);
+        handleCrudError(dioException, callback);
       }
     }
     return null;
@@ -379,11 +379,11 @@ class AnnouncementHelper {
         callback.onSuccess(response);
       }
       return response;
-    } on DioError catch (dioError) {
+    } on DioException catch (dioException) {
       if (callback == null) {
         rethrow;
       } else {
-        handleCrudError(dioError, callback);
+        handleCrudError(dioException, callback);
       }
     }
     return null;
@@ -408,11 +408,11 @@ class AnnouncementHelper {
         callback.onSuccess(data.data);
       }
       return data.data;
-    } on DioError catch (dioError) {
+    } on DioException catch (dioException) {
       if (callback == null) {
         rethrow;
       } else {
-        callback.onFailure(dioError);
+        callback.onFailure(dioException);
       }
     }
     return null;
@@ -432,11 +432,11 @@ class AnnouncementHelper {
         callback.onSuccess(data);
       }
       return data;
-    } on DioError catch (dioError) {
+    } on DioException catch (dioException) {
       if (callback == null) {
         rethrow;
       } else {
-        callback.onFailure(dioError);
+        callback.onFailure(dioException);
       }
     }
     return null;
@@ -463,11 +463,11 @@ class AnnouncementHelper {
         callback.onSuccess(response);
       }
       return response;
-    } on DioError catch (dioError) {
+    } on DioException catch (dioException) {
       if (callback == null) {
         rethrow;
       } else {
-        handleCrudError(dioError, callback);
+        handleCrudError(dioException, callback);
       }
     }
     return null;
@@ -489,11 +489,11 @@ class AnnouncementHelper {
         callback.onSuccess(response);
       }
       return response;
-    } on DioError catch (dioError) {
+    } on DioException catch (dioException) {
       if (callback == null) {
         rethrow;
       } else {
-        handleCrudError(dioError, callback);
+        handleCrudError(dioException, callback);
       }
     }
     return null;
@@ -515,11 +515,11 @@ class AnnouncementHelper {
         callback.onSuccess(response);
       }
       return response;
-    } on DioError catch (dioError) {
+    } on DioException catch (dioException) {
       if (callback == null) {
         rethrow;
       } else {
-        handleCrudError(dioError, callback);
+        handleCrudError(dioException, callback);
       }
     }
     return null;
@@ -537,11 +537,11 @@ class AnnouncementHelper {
         callback.onSuccess(response);
       }
       return response;
-    } on DioError catch (dioError) {
+    } on DioException catch (dioException) {
       if (callback == null) {
         rethrow;
       } else {
-        handleCrudError(dioError, callback);
+        handleCrudError(dioException, callback);
       }
     }
     return null;
@@ -560,11 +560,11 @@ class AnnouncementHelper {
         callback.onSuccess(response);
       }
       return response;
-    } on DioError catch (dioError) {
+    } on DioException catch (dioException) {
       if (callback == null) {
         rethrow;
       } else {
-        handleCrudError(dioError, callback);
+        handleCrudError(dioException, callback);
       }
     }
     return null;
@@ -579,8 +579,8 @@ class AnnouncementHelper {
       );
       final List<dynamic> list = jsonDecode(response.data!) as List<dynamic>;
       callback.onSuccess(list.map((dynamic e) => e as String).toList());
-    } on DioError catch (dioError) {
-      handleCrudError(dioError, callback);
+    } on DioException catch (dioException) {
+      handleCrudError(dioException, callback);
     } catch (e) {
       callback.onError(GeneralResponse.unknownError());
       rethrow;
@@ -602,11 +602,11 @@ class AnnouncementHelper {
         callback.onSuccess(response);
       }
       return response;
-    } on DioError catch (dioError) {
+    } on DioException catch (dioException) {
       if (callback == null) {
         rethrow;
       } else {
-        handleCrudError(dioError, callback);
+        handleCrudError(dioException, callback);
       }
     }
     return null;
@@ -627,11 +627,11 @@ class AnnouncementHelper {
         callback.onSuccess(response);
       }
       return response;
-    } on DioError catch (dioError) {
+    } on DioException catch (dioException) {
       if (callback == null) {
         rethrow;
       } else {
-        handleCrudError(dioError, callback);
+        handleCrudError(dioException, callback);
       }
     }
     return null;
@@ -647,17 +647,17 @@ class AnnouncementHelper {
   }
 
   void handleCrudError(
-    DioError dioError,
+    DioException dioException,
     GeneralCallback<dynamic> callback,
   ) {
-    if (dioError.isNotPermission) {
+    if (dioException.isNotPermission) {
       callback.onError(
         GeneralResponse(
           statusCode: notPermission,
           message: ApLocalizations.current.noPermissionHint,
         ),
       );
-    } else if (dioError.isNotFoundAnnouncement) {
+    } else if (dioException.isNotFoundAnnouncement) {
       callback.onError(
         GeneralResponse(
           statusCode: notPermission,
@@ -665,7 +665,7 @@ class AnnouncementHelper {
         ),
       );
     } else {
-      callback.onFailure(dioError);
+      callback.onFailure(dioException);
     }
   }
 }

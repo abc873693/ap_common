@@ -17,7 +17,7 @@ class PrivateCookieManager extends CookieManager {
     _saveCookies(response)
         .then((_) => handler.next(response))
         .catchError((dynamic e, dynamic stackTrace) {
-      final DioError err = DioError(
+      final DioException err = DioException(
         requestOptions: response.requestOptions,
         error: e,
         stackTrace: stackTrace as StackTrace,
@@ -27,12 +27,12 @@ class PrivateCookieManager extends CookieManager {
   }
 
   @override
-  void onError(DioError err, ErrorInterceptorHandler handler) {
+  void onError(DioException err, ErrorInterceptorHandler handler) {
     if (err.response != null) {
       _saveCookies(err.response!)
           .then((_) => handler.next(err))
           .catchError((dynamic e, dynamic stackTrace) {
-        final DioError err0 = DioError(
+        final DioException err0 = DioException(
           requestOptions: err.response!.requestOptions,
           error: e,
           stackTrace: stackTrace as StackTrace,

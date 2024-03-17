@@ -17,8 +17,8 @@ dependencies:
   intl: ">=0.16.0 <1.0.0"
   multiple_localization: ^0.4.0
   encrypt: ^5.0.1
-  dio: ">=5.1.0 <6.0.0"
-  dio_cookie_manager: ^3.0.0
+  dio: ">=5.4.1 <6.0.0"
+  dio_cookie_manager: ^3.1.1
   cookie_jar: ^4.0.0
   flutter_local_notifications: ^9.8.0+1
   timezone: ^0.8.0
