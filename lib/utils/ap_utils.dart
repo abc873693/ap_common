@@ -255,7 +255,8 @@ class ApUtils {
       } else {
         hasGrantPermission = PermissionState.authorized;
       }
-      if (hasGrantPermission == PermissionState.authorized) {
+      if (hasGrantPermission == PermissionState.authorized ||
+          hasGrantPermission == PermissionState.limited) {
         final Uint8List pngBytes = byteData.buffer.asUint8List();
         String downloadDir = '';
         if (kIsWeb) {
