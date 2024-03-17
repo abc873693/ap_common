@@ -838,7 +838,7 @@ class _AnnouncementHomePageState extends State<AnnouncementHomePage> {
             AnnouncementHelper.instance
                 .appleLogin(idToken: idToken!, callback: callback);
           } catch (e, s) {
-            if (!context.mounted) return;
+            if (!mounted) return;
             ApUtils.showToast(context, ap.thirdPartyLoginFail);
             if (isNotLogin) Navigator.of(context, rootNavigator: true).pop();
             CrashlyticsUtils.instance?.recordError(e, s);

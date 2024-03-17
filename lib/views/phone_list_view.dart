@@ -37,12 +37,6 @@ class PhoneListViewState extends State<PhoneListView>
         fontWeight: FontWeight.bold,
       );
 
-  TextStyle get _textBlueStyle => TextStyle(
-        color: ApTheme.of(context).blueText,
-        fontSize: 18.0,
-        fontWeight: FontWeight.bold,
-      );
-
   TextStyle get _textGreyStyle => TextStyle(
         color: ApTheme.of(context).grey,
         fontSize: 14.0,
