@@ -4,9 +4,9 @@ import 'package:ap_common/callback/general_callback.dart';
 import 'package:ap_common/resources/ap_theme.dart';
 import 'package:ap_common/utils/ap_localizations.dart';
 import 'package:ap_common/utils/crashlytics_utils.dart';
-import 'package:ap_common/utils/file_saver_web.dart';
 import 'package:ap_common/utils/toast.dart';
 import 'package:ap_common/widgets/yes_no_dialog.dart';
+import 'package:file_saver/file_saver.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
@@ -245,23 +245,9 @@ class ApUtils {
       if (hasGrantPermission == PermissionState.authorized ||
           hasGrantPermission == PermissionState.limited) {
         final Uint8List pngBytes = byteData.buffer.asUint8List();
-        String downloadDir = '';
-        if (kIsWeb) {
-          downloadDir = '';
-        } else if (Platform.isMacOS || Platform.isWindows || Platform.isLinux) {
-          downloadDir = (await getDownloadsDirectory())!.path;
-        } else {
-          downloadDir = '';
-        }
-        final String filePath = path.join(downloadDir, '$fileName.png');
         bool success = true;
-        if (kIsWeb) {
-          await FileSaverWeb().downloadFile(
-            pngBytes,
-            fileName,
-            'image/png',
-          );
-        } else if (Platform.isAndroid || Platform.isIOS) {
+        String filePath = '$fileName.png';
+        if (!kIsWeb && (Platform.isAndroid || Platform.isIOS)) {
           final String tempPath = path.join(
             (await getApplicationDocumentsDirectory()).path,
             filePath,
@@ -276,7 +262,10 @@ class ApUtils {
           if (kDebugMode) debugPrint(imageEntity?.title);
           success = imageEntity != null;
         } else {
-          await File(filePath).writeAsBytes(pngBytes);
+          filePath = await FileSaver.instance.saveFile(
+            name: '$fileName.png',
+            bytes: pngBytes,
+          );
         }
         onSuccess?.call(
           success
