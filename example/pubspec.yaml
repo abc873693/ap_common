@@ -13,11 +13,7 @@ dependencies:
     sdk: flutter
   flutter_localizations:
     sdk: flutter
-  google_sign_in_dartio:
-    git:
-      url: https://github.com/GroovinChip/firebase_dart_sdk
-      path: google_sign_in_dart
-      ref: null_safety
+  google_sign_in_dartio: 0.3.0
 
   ap_common:
       path: ../

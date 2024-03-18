@@ -33,18 +33,18 @@ dependencies:
   flutter_linkify: ^5.0.2
   cupertino_back_gesture: ^0.1.0
   # Native UI Plugin
-  shared_preferences: ^2.0.15
-  url_launcher: ^6.1.2
-  share_plus: ^4.0.8
-  package_info_plus: ^4.0.0
+  shared_preferences: ^2.2.2
+  url_launcher: ^6.2.5
+  share_plus: ^7.2.2
+  package_info_plus: ^5.0.1
   cached_network_image: ^3.3.1
   flutter_keyboard_visibility: ^5.2.0
   add_2_calendar: ^2.2.5
   in_app_review: ^2.0.3
   printing: ^5.10.4
   path: ^1.7.0
-  path_provider: ^2.0.10
-  google_sign_in: ^5.3.2
+  path_provider: ^2.1.2
+  google_sign_in: ^6.2.1
   sign_in_with_apple: ^4.0.0
   image_picker: ^1.0.7
   photo_manager: ^3.0.0
