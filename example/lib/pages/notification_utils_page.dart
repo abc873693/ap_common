@@ -89,9 +89,9 @@ class _NotificationUtilsTestPageState extends State<NotificationUtilsTestPage> {
                 builder: (_) => SimpleOptionDialog(
                   title: app.setWeekDay,
                   items: ApLocalizations.of(context).weekdays,
-                  index: day.value - 1,
+                  index: day.value,
                   onSelected: (int index) {
-                    setState(() => day = Day(index + 1));
+                    setState(() => day = Day.values[index]);
                   },
                 ),
               );
@@ -129,7 +129,10 @@ class _NotificationUtilsTestPageState extends State<NotificationUtilsTestPage> {
                   ],
                 ),
                 day: day,
-                time: Time(time.hour, time.minute),
+                time: TimeOfDay(
+                  hour: time.hour,
+                  minute: time.minute,
+                ),
               );
             },
             title: Text(
@@ -182,9 +185,9 @@ class _NotificationUtilsTestPageState extends State<NotificationUtilsTestPage> {
                 builder: (_) => SimpleOptionDialog(
                   title: app.getPendingNotificationList,
                   items: <String>[
-                    for (PendingNotificationRequest item in list)
+                    for (final PendingNotificationRequest item in list)
                       'id = ${item.id}, ' +
-                          'title = ${item.title}\n body = ${item.body}'
+                          'title = ${item.title}\n body = ${item.body}',
                   ],
                   index: -1,
                   onSelected: (int index) {

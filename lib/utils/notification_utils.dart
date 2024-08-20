@@ -2,8 +2,8 @@ import 'dart:io';
 
 import 'package:ap_common/models/course_notify_data.dart';
 import 'package:ap_common/utils/ap_localizations.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:sprintf/sprintf.dart';
 import 'package:timezone/data/latest.dart' as tz;
@@ -25,10 +25,10 @@ class NotificationUtils {
   static InitializationSettings get settings {
     const AndroidInitializationSettings initializationSettingsAndroid =
         AndroidInitializationSettings(androidResourceName);
-    const IOSInitializationSettings initializationSettingsIOS =
-        IOSInitializationSettings();
-    const MacOSInitializationSettings initializationSettingsMacOS =
-        MacOSInitializationSettings();
+    const DarwinInitializationSettings initializationSettingsIOS =
+        DarwinInitializationSettings();
+    const DarwinInitializationSettings initializationSettingsMacOS =
+        DarwinInitializationSettings();
     return const InitializationSettings(
       android: initializationSettingsAndroid,
       iOS: initializationSettingsIOS,
@@ -41,19 +41,22 @@ class NotificationUtils {
     if (weekIndex == 6) {
       return Day.sunday;
     } else {
-      return Day(weekIndex + 2);
+      return Day.values[weekIndex - 1];
     }
   }
 
-  static Time parseTime(String text, {int beforeMinutes = 0}) {
+  static TimeOfDay parseTime(String text, {int beforeMinutes = 0}) {
     final DateFormat formatter = DateFormat('HH:mm', 'zh');
     final DateTime dateTime = formatter.parse(text).add(
           Duration(minutes: -beforeMinutes),
         );
-    return Time(dateTime.hour, dateTime.minute);
+    return TimeOfDay(
+      hour: dateTime.hour,
+      minute: dateTime.minute,
+    );
   }
 
-  static DateTime getNextWeekdayDateTime(Day day, Time time) {
+  static DateTime getNextWeekdayDateTime(Day day, TimeOfDay time) {
     final DateTime now = DateTime.now();
     final DateTime dateTime = DateTime(
       now.year,
@@ -61,7 +64,6 @@ class NotificationUtils {
       now.day,
       time.hour,
       time.minute,
-      time.second,
     );
     int diffDay = 7 - (now.weekday - day.value + 1);
     if (now.weekday + 1 == day.value && now.isBefore(dateTime)) diffDay = 0;
@@ -93,13 +95,13 @@ class NotificationUtils {
         enableVibration: enableVibration,
         styleInformation: BigTextStyleInformation(content),
       ),
-      iOS: const IOSNotificationDetails(presentAlert: true),
-      macOS: const MacOSNotificationDetails(presentAlert: true),
+      iOS: const DarwinNotificationDetails(presentAlert: true),
+      macOS: const DarwinNotificationDetails(presentAlert: true),
     );
     flutterLocalNotificationsPlugin.initialize(
       settings ?? NotificationUtils.settings,
-      onSelectNotification: (String? text) async =>
-          onSelectNotification?.call(),
+      // onSelectNotification: (String? text) async =>
+      //     onSelectNotification?.call(),
     );
     await flutterLocalNotificationsPlugin.show(
       id,
@@ -131,7 +133,7 @@ class NotificationUtils {
           courseNotify.location,
       ],
     );
-    final Time time =
+    final TimeOfDay time =
         parseTime(courseNotify.startTime, beforeMinutes: beforeMinutes);
     await scheduleWeeklyNotify(
       id: courseNotify.id,
@@ -151,7 +153,7 @@ class NotificationUtils {
     required String androidChannelId,
     required String androidChannelDescription,
     required Day day,
-    required Time time,
+    required TimeOfDay time,
     required String title,
     required String content,
     String androidResourceIcon = androidResourceName,
@@ -170,8 +172,8 @@ class NotificationUtils {
         enableVibration: false,
         styleInformation: BigTextStyleInformation(content),
       ),
-      iOS: const IOSNotificationDetails(presentAlert: true),
-      macOS: const MacOSNotificationDetails(presentAlert: true),
+      iOS: const DarwinNotificationDetails(presentAlert: true),
+      macOS: const DarwinNotificationDetails(presentAlert: true),
     );
     tz.initializeTimeZones();
     final tz.TZDateTime scheduleDateTime = tz.TZDateTime.from(
@@ -180,8 +182,8 @@ class NotificationUtils {
     );
     flutterLocalNotificationsPlugin.initialize(
       settings ?? NotificationUtils.settings,
-      onSelectNotification: (String? text) async =>
-          onSelectNotification?.call(),
+      // onSelectNotification: (String? text) async =>
+      //     onSelectNotification?.call(),
     );
     await flutterLocalNotificationsPlugin.zonedSchedule(
       id,
@@ -191,7 +193,7 @@ class NotificationUtils {
       platformChannelSpecifics,
       payload: content,
       matchDateTimeComponents: DateTimeComponents.dayOfWeekAndTime,
-      androidAllowWhileIdle: true,
+      androidScheduleMode: AndroidScheduleMode.exactAllowWhileIdle,
       uiLocalNotificationDateInterpretation:
           UILocalNotificationDateInterpretation.absoluteTime,
     );
@@ -220,8 +222,8 @@ class NotificationUtils {
         enableVibration: false,
         styleInformation: BigTextStyleInformation(content),
       ),
-      iOS: const IOSNotificationDetails(presentAlert: true),
-      macOS: const MacOSNotificationDetails(presentAlert: true),
+      iOS: const DarwinNotificationDetails(presentAlert: true),
+      macOS: const DarwinNotificationDetails(presentAlert: true),
     );
     tz.initializeTimeZones();
     final tz.TZDateTime scheduleDateTime = tz.TZDateTime.from(
@@ -230,8 +232,8 @@ class NotificationUtils {
     );
     flutterLocalNotificationsPlugin.initialize(
       settings ?? NotificationUtils.settings,
-      onSelectNotification: (String? text) async =>
-          onSelectNotification?.call(),
+      // onSelectNotification: (String? text) async =>
+      //     onSelectNotification?.call(),
     );
     await flutterLocalNotificationsPlugin.zonedSchedule(
       id,
@@ -240,7 +242,7 @@ class NotificationUtils {
       scheduleDateTime,
       platformChannelSpecifics,
       payload: content,
-      androidAllowWhileIdle: true,
+      androidScheduleMode: AndroidScheduleMode.exactAllowWhileIdle,
       uiLocalNotificationDateInterpretation:
           UILocalNotificationDateInterpretation.absoluteTime,
     );
@@ -273,7 +275,7 @@ class NotificationUtils {
       return await FlutterLocalNotificationsPlugin()
           .resolvePlatformSpecificImplementation<
               AndroidFlutterLocalNotificationsPlugin>()
-          ?.requestPermission();
+          ?.requestNotificationsPermission();
     } else {
       return null;
     }
