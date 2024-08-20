@@ -237,8 +237,8 @@ class _ScoreContentState extends State<ScoreContent> {
         border: Border.all(color: Colors.grey, width: 1.5),
       );
 
-  TableBorder get _tableBorder => TableBorder.symmetric(
-        inside: const BorderSide(
+  TableBorder get _tableBorder => const TableBorder.symmetric(
+        inside: BorderSide(
           color: Colors.grey,
           width: 0.5,
         ),

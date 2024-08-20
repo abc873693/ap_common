@@ -182,6 +182,7 @@ class AboutUsPageState extends State<AboutUsPage> {
                                     ApUtils.launchUrl(widget.fbFanPageUrl)
                                         .catchError(
                                       (dynamic onError) {
+                                        if (!context.mounted) return;
                                         ApUtils.showToast(
                                           context,
                                           app.platformError,
@@ -213,6 +214,7 @@ class AboutUsPageState extends State<AboutUsPage> {
                                     ApUtils.launchUrl(widget.githubUrl)
                                         .catchError(
                                       (dynamic onError) {
+                                        if (!context.mounted) return;
                                         ApUtils.showToast(
                                           context,
                                           app.platformError,
@@ -231,6 +233,7 @@ class AboutUsPageState extends State<AboutUsPage> {
                                   ApUtils.launchUrl('mailto:${widget.email}')
                                       .catchError(
                                     (dynamic onError) {
+                                      if (!context.mounted) return;
                                       ApUtils.showToast(
                                         context,
                                         app.platformError,

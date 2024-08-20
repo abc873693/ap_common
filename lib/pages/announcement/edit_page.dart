@@ -674,7 +674,7 @@ class _AnnouncementEditPageState extends State<AnnouncementEditPage> {
                     reviewDescription: announcements.reviewDescription,
                     callback: GeneralCallback<Response<dynamic>>.simple(
                       context,
-                      (_) => _,
+                      (_) {},
                     ),
                   );
                 } else {
@@ -683,7 +683,7 @@ class _AnnouncementEditPageState extends State<AnnouncementEditPage> {
                     reviewDescription: announcements.reviewDescription,
                     callback: GeneralCallback<Response<dynamic>>.simple(
                       context,
-                      (_) => _,
+                      (_) => <dynamic>{},
                     ),
                   );
                 }
@@ -695,7 +695,7 @@ class _AnnouncementEditPageState extends State<AnnouncementEditPage> {
                   //ignore: use_build_context_synchronously
                   callback: GeneralCallback<Response<dynamic>>.simple(
                     context,
-                    (_) => _,
+                    (_) => <dynamic>{},
                   ),
                 );
               }

@@ -54,7 +54,7 @@ class UserInfo {
   final String? pictureUrl;
   final String? email;
 
-  @JsonKey(ignore: true)
+  @JsonKey(includeToJson: false, includeFromJson: false)
   Uint8List? pictureBytes;
 
   Map<String, dynamic> toJson() => _$UserInfoToJson(this);

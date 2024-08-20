@@ -100,10 +100,13 @@ class ApUtils {
       );
     } else {
       ApUtils.launchUrl(fansPageUrl).catchError(
-        (dynamic onError) => ApUtils.showToast(
-          context,
-          ApLocalizations.of(context).platformError,
-        ),
+        (dynamic onError) {
+          if (!context.mounted) return;
+          ApUtils.showToast(
+            context,
+            ApLocalizations.of(context).platformError,
+          );
+        },
       );
     }
   }

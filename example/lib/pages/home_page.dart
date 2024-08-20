@@ -232,7 +232,7 @@ class HomePageState extends State<HomePage> {
                 isLogin = false;
                 userInfo = null;
                 content = null;
-                if (!mounted) return;
+                if (!context.mounted) return;
                 if (!isTablet) Navigator.of(context).pop();
                 checkLogin();
               },
@@ -399,7 +399,7 @@ class HomePageState extends State<HomePage> {
       _homeKey.currentState!.hideSnackBar();
     } else {
       //ignore: use_build_context_synchronously
-      if (!context.mounted) return;
+      if (!mounted) return;
       _homeKey.currentState!
           .showSnackBar(
             text: ApLocalizations.of(context).notLogin,

@@ -90,7 +90,7 @@ class Announcement {
   String? reviewDescription;
   @JsonKey(name: 'tag')
   List<String>? tags;
-  @JsonKey(ignore: true)
+  @JsonKey(includeToJson: false, includeFromJson: false)
   late int randomWeight;
 
   Map<String, dynamic> toJson() => _$AnnouncementToJson(this);
