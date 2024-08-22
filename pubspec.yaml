@@ -51,8 +51,7 @@ dependencies:
   file_saver: ^0.2.12
   app_tracking_transparency: ^2.0.2+4
 
-dependency_overrides:
-  intl: 0.18.0
+#dependency_overrides:
 
 dev_dependencies:
   flutter_test:
