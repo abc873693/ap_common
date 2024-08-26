@@ -4,7 +4,7 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 
 class ApNetworkImage extends StatelessWidget {
-  const ApNetworkImage({Key? key, required this.url}) : super(key: key);
+  const ApNetworkImage({super.key, required this.url});
   final String url;
 
   @override

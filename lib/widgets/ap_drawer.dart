@@ -9,14 +9,14 @@ import 'package:flutter/material.dart';
 
 class ApDrawer extends StatefulWidget {
   const ApDrawer({
-    Key? key,
+    super.key,
     required this.onTapHeader,
     required this.widgets,
     this.userInfo,
     this.imageAsset,
     this.imageHeroTag = ApConstants.tagStudentPicture,
     this.displayPicture = false,
-  }) : super(key: key);
+  });
 
   final UserInfo? userInfo;
   final Function() onTapHeader;
@@ -128,11 +128,11 @@ class ApDrawerState extends State<ApDrawer> {
 
 class DrawerItem extends StatelessWidget {
   const DrawerItem({
-    Key? key,
+    super.key,
     required this.icon,
     required this.title,
     required this.onTap,
-  }) : super(key: key);
+  });
 
   final IconData icon;
   final String title;
@@ -156,11 +156,11 @@ class DrawerItem extends StatelessWidget {
 
 class DrawerSubItem extends StatelessWidget {
   const DrawerSubItem({
-    Key? key,
+    super.key,
     required this.icon,
     required this.title,
     required this.onTap,
-  }) : super(key: key);
+  });
 
   final IconData icon;
   final String title;

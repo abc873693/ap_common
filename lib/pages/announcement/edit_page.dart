@@ -26,11 +26,11 @@ extension ParseDateTimes on DateTime {
 
 class AnnouncementEditPage extends StatefulWidget {
   const AnnouncementEditPage({
-    Key? key,
+    super.key,
     required this.mode,
     this.announcement,
     this.needFetch = false,
-  }) : super(key: key);
+  });
 
   static const String routerName = '/news/edit';
 
@@ -658,13 +658,10 @@ class _AnnouncementEditPageState extends State<AnnouncementEditPage> {
           switch (widget.mode) {
             case Mode.add:
               ApUtils.showToast(context, app.addSuccess);
-              break;
             case Mode.edit:
               ApUtils.showToast(context, app.updateSuccess);
-              break;
             case Mode.application:
               ApUtils.showToast(context, app.applicationSubmitSuccess);
-              break;
             case Mode.editApplication:
               ApUtils.showToast(context, app.updateSuccess);
               if (isApproval != null) {
@@ -699,7 +696,6 @@ class _AnnouncementEditPageState extends State<AnnouncementEditPage> {
                   ),
                 );
               }
-              break;
           }
           if (!mounted) return;
           Navigator.of(context).pop(true);
@@ -711,25 +707,21 @@ class _AnnouncementEditPageState extends State<AnnouncementEditPage> {
             data: announcements,
             callback: callback,
           );
-          break;
         case Mode.edit:
           AnnouncementHelper.instance.updateAnnouncement(
             data: announcements,
             callback: callback,
           );
-          break;
         case Mode.application:
           AnnouncementHelper.instance.addApplication(
             data: announcements,
             callback: callback,
           );
-          break;
         case Mode.editApplication:
           AnnouncementHelper.instance.updateApplication(
             data: announcements,
             callback: callback,
           );
-          break;
       }
     }
   }

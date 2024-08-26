@@ -1,13 +1,12 @@
 import 'dart:io';
 
 // import 'package:cookie_jar/cookie_jar.dart';
-import 'package:cookie_jar/cookie_jar.dart';
 import 'package:dio/dio.dart';
 import 'package:dio_cookie_manager/dio_cookie_manager.dart';
 
 /// Don't use this class in Browser environment
 class PrivateCookieManager extends CookieManager {
-  PrivateCookieManager(CookieJar cookieJar) : super(cookieJar);
+  PrivateCookieManager(super.cookieJar);
 
   @override
   void onResponse(

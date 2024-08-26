@@ -12,12 +12,12 @@ enum NotificationState { loading, finish, loadingMore, error, empty, offline }
 
 class NotificationListView extends StatefulWidget {
   const NotificationListView({
-    Key? key,
+    super.key,
     required this.state,
     required this.notificationList,
     required this.onRefresh,
     this.onLoadingMore,
-  }) : super(key: key);
+  });
 
   final NotificationState state;
   final List<Notifications> notificationList;

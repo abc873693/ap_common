@@ -16,9 +16,9 @@ enum _Status { loading, finish, error, empty }
 
 class AnnouncementContentPage extends StatefulWidget {
   const AnnouncementContentPage({
-    Key? key,
+    super.key,
     required this.announcement,
-  }) : super(key: key);
+  });
 
   final Announcement announcement;
 

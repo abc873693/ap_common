@@ -101,10 +101,10 @@ class ToastView {
 
 class ToastWidget extends StatelessWidget {
   const ToastWidget({
-    Key? key,
+    super.key,
     required this.widget,
     required this.gravity,
-  }) : super(key: key);
+  });
 
   final Widget widget;
   final int gravity;

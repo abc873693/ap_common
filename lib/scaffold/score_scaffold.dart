@@ -13,7 +13,7 @@ enum ScoreState { loading, finish, error, empty, offlineEmpty, custom }
 
 class ScoreScaffold extends StatefulWidget {
   const ScoreScaffold({
-    Key? key,
+    super.key,
     required this.state,
     required this.scoreData,
     required this.onRefresh,
@@ -32,7 +32,7 @@ class ScoreScaffold extends StatefulWidget {
     this.details,
     this.bottom,
     this.customStateHint,
-  }) : super(key: key);
+  });
   static const String routerName = '/score';
 
   final ScoreState state;
@@ -198,7 +198,7 @@ class ScoreScaffoldState extends State<ScoreScaffold> {
 
 class ScoreContent extends StatefulWidget {
   const ScoreContent({
-    Key? key,
+    super.key,
     required this.scoreData,
     this.onRefresh,
     this.middleTitle,
@@ -207,7 +207,7 @@ class ScoreContent extends StatefulWidget {
     this.middleScoreBuilder,
     this.finalScoreBuilder,
     this.details,
-  }) : super(key: key);
+  });
 
   final ScoreData? scoreData;
   final Function()? onRefresh;
@@ -366,11 +366,11 @@ class _ScoreContentState extends State<ScoreContent> {
 
 class ScoreTextBorder extends StatelessWidget {
   const ScoreTextBorder({
-    Key? key,
+    super.key,
     required this.text,
     required this.style,
     this.onTap,
-  }) : super(key: key);
+  });
   final String? text;
   final TextStyle style;
 

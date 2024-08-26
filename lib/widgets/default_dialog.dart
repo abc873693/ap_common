@@ -3,13 +3,13 @@ import 'package:flutter/material.dart';
 
 class DefaultDialog extends StatelessWidget {
   const DefaultDialog({
-    Key? key,
+    super.key,
     required this.title,
     required this.contentWidget,
     required this.actionText,
     required this.actionFunction,
     this.contentPadding,
-  }) : super(key: key);
+  });
 
   final String title;
   final Widget contentWidget;

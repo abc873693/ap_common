@@ -15,9 +15,9 @@ export 'package:package_info_plus/package_info_plus.dart';
 
 class SettingTitle extends StatelessWidget {
   const SettingTitle({
-    Key? key,
+    super.key,
     required this.text,
-  }) : super(key: key);
+  });
 
   final String text;
 
@@ -39,12 +39,12 @@ class SettingTitle extends StatelessWidget {
 
 class SettingSwitch extends StatelessWidget {
   const SettingSwitch({
-    Key? key,
+    super.key,
     required this.text,
     required this.subText,
     required this.value,
     required this.onChanged,
-  }) : super(key: key);
+  });
 
   final String text;
   final String subText;
@@ -74,11 +74,11 @@ class SettingSwitch extends StatelessWidget {
 
 class SettingItem extends StatelessWidget {
   const SettingItem({
-    Key? key,
+    super.key,
     required this.text,
     required this.subText,
     this.onTap,
-  }) : super(key: key);
+  });
 
   final String text;
   final String subText;
@@ -101,7 +101,7 @@ class SettingItem extends StatelessWidget {
 }
 
 class CheckCourseNotifyItem extends StatelessWidget {
-  const CheckCourseNotifyItem({Key? key, this.tag}) : super(key: key);
+  const CheckCourseNotifyItem({super.key, this.tag});
   final String? tag;
 
   @override
@@ -148,7 +148,7 @@ class CheckCourseNotifyItem extends StatelessWidget {
 }
 
 class ClearAllNotifyItem extends StatelessWidget {
-  const ClearAllNotifyItem({Key? key, this.tag}) : super(key: key);
+  const ClearAllNotifyItem({super.key, this.tag});
 
   final String? tag;
 
@@ -177,10 +177,10 @@ class ClearAllNotifyItem extends StatelessWidget {
 
 class ChangeLanguageItem extends StatelessWidget {
   const ChangeLanguageItem({
-    Key? key,
+    super.key,
     required this.onChange,
     this.textList,
-  }) : super(key: key);
+  });
 
   final Function(Locale locale) onChange;
   final List<String>? textList;
@@ -224,7 +224,6 @@ class ChangeLanguageItem extends StatelessWidget {
                   locale = ApLocalizations.delegate.isSupported(locale)
                       ? locale
                       : const Locale('en');
-                  break;
                 default:
                   locale = Locale(
                     code,
@@ -253,10 +252,10 @@ class ChangeLanguageItem extends StatelessWidget {
 
 class ChangeThemeModeItem extends StatelessWidget {
   const ChangeThemeModeItem({
-    Key? key,
+    super.key,
     required this.onChange,
     this.textList,
-  }) : super(key: key);
+  });
 
   final Function(ThemeMode themeMode) onChange;
   final List<String>? textList;
@@ -302,9 +301,9 @@ class ChangeThemeModeItem extends StatelessWidget {
 
 class ChangeIconStyleItem extends StatelessWidget {
   const ChangeIconStyleItem({
-    Key? key,
+    super.key,
     required this.onChange,
-  }) : super(key: key);
+  });
 
   final Function(String code) onChange;
 

@@ -12,12 +12,12 @@ enum PdfState { loading, finish, error }
 
 class PdfView extends StatefulWidget {
   const PdfView({
-    Key? key,
+    super.key,
     required this.state,
     this.onRefresh,
     this.data,
     this.fileName,
-  }) : super(key: key);
+  });
 
   final PdfState state;
   final Function()? onRefresh;

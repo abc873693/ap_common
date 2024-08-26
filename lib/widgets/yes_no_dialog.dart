@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 
 class YesNoDialog extends StatelessWidget {
   const YesNoDialog({
-    Key? key,
+    super.key,
     this.title,
     this.contentWidget,
     this.contentWidgetPadding,
@@ -12,7 +12,7 @@ class YesNoDialog extends StatelessWidget {
     this.rightActionText,
     this.leftActionFunction,
     this.rightActionFunction,
-  }) : super(key: key);
+  });
 
   final String? title;
   final Widget? contentWidget;

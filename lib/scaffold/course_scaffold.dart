@@ -48,8 +48,8 @@ class CourseConfig extends InheritedWidget {
     this.showSectionTime,
     this.showInstructors,
     this.showClassroomLocation,
-    required Widget child,
-  }) : super(child: child);
+    required super.child,
+  });
 
   final bool? showSectionTime;
   final bool? showInstructors;
@@ -67,7 +67,7 @@ class CourseConfig extends InheritedWidget {
 
 class CourseScaffold extends StatefulWidget {
   const CourseScaffold({
-    Key? key,
+    super.key,
     required this.state,
     required this.courseData,
     this.title,
@@ -91,7 +91,7 @@ class CourseScaffold extends StatefulWidget {
     this.showInstructors,
     this.showClassroomLocation,
     this.showSearchButton,
-  }) : super(key: key);
+  });
 
   /// 必要欄位，總共有
   /// `loading` `finish` `error` `empty` `offlineEmpty` `custom` 的狀態，
@@ -692,7 +692,7 @@ class CourseScaffoldState extends State<CourseScaffold> {
 
 class CourseContent extends StatefulWidget {
   const CourseContent({
-    Key? key,
+    super.key,
     required this.enableNotifyControl,
     required this.course,
     required this.timeCode,
@@ -705,7 +705,7 @@ class CourseContent extends StatefulWidget {
     this.androidResourceIcon,
     this.invisibleCourseCodes = const <String>[],
     this.onVisibilityChanged,
-  }) : super(key: key);
+  });
 
   final bool enableNotifyControl;
   final Course course;
@@ -915,10 +915,10 @@ class _CourseContentState extends State<CourseContent> {
 
 class TimeCodeBorder extends StatelessWidget {
   const TimeCodeBorder({
-    Key? key,
+    super.key,
     required this.timeCode,
     required this.hasHoliday,
-  }) : super(key: key);
+  });
 
   final TimeCode timeCode;
   final bool hasHoliday;
@@ -966,12 +966,12 @@ class TimeCodeBorder extends StatelessWidget {
 
 class CourseList extends StatelessWidget {
   const CourseList({
-    Key? key,
+    super.key,
     required this.courses,
     this.invisibleCourseCodes = const <String>[],
     this.onVisibilityChanged,
     this.timeCodes,
-  }) : super(key: key);
+  });
 
   final List<Course> courses;
   final List<String> invisibleCourseCodes;
@@ -1132,7 +1132,7 @@ class CourseList extends StatelessWidget {
 
 class CourseBorder extends StatelessWidget {
   const CourseBorder({
-    Key? key,
+    super.key,
     this.course,
     this.sectionTime,
     this.timeCode,
@@ -1141,7 +1141,7 @@ class CourseBorder extends StatelessWidget {
     this.width = double.maxFinite,
     this.border,
     this.color,
-  }) : super(key: key);
+  });
 
   final Course? course;
   final SectionTime? sectionTime;
@@ -1226,7 +1226,7 @@ class CourseBorder extends StatelessWidget {
 
 class CourseScaffoldSettingDialog extends StatefulWidget {
   const CourseScaffoldSettingDialog({
-    Key? key,
+    super.key,
     required this.showSectionTime,
     required this.showInstructors,
     required this.showClassroomLocation,
@@ -1235,7 +1235,7 @@ class CourseScaffoldSettingDialog extends StatefulWidget {
     this.showInstructorsOnChanged,
     this.showClassroomLocationOnChanged,
     this.showSearchButtonOnChanged,
-  }) : super(key: key);
+  });
 
   final bool? showSectionTime;
   final bool? showInstructors;

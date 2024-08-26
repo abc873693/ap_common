@@ -3,12 +3,12 @@ import 'package:flutter/material.dart';
 
 class SimpleOptionDialog extends StatelessWidget {
   const SimpleOptionDialog({
-    Key? key,
+    super.key,
     required this.title,
     required this.items,
     required this.onSelected,
     this.index = 0,
-  }) : super(key: key);
+  });
 
   final String title;
   final List<String> items;

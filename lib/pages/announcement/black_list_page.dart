@@ -9,7 +9,7 @@ import 'package:flutter/material.dart';
 enum _State { loading, done, error }
 
 class BlackListPage extends StatefulWidget {
-  const BlackListPage({Key? key}) : super(key: key);
+  const BlackListPage({super.key});
 
   @override
   State<BlackListPage> createState() => _BlackListPageState();

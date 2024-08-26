@@ -11,10 +11,10 @@ enum PhoneState { loading, finish, error }
 
 class PhoneListView extends StatefulWidget {
   const PhoneListView({
-    Key? key,
+    super.key,
     required this.state,
     required this.phoneModelList,
-  }) : super(key: key);
+  });
 
   final PhoneState state;
   final List<PhoneModel> phoneModelList;

@@ -6,13 +6,13 @@ import 'package:flutter/material.dart';
 
 class ItemPicker extends StatelessWidget {
   const ItemPicker({
-    Key? key,
+    super.key,
     required this.items,
     required this.currentIndex,
     required this.dialogTitle,
     required this.onSelected,
     this.featureTag,
-  }) : super(key: key);
+  });
 
   final List<String> items;
   final int currentIndex;

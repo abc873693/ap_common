@@ -14,11 +14,11 @@ class ImageViewer {
 
 class ImageViewerScaffold extends StatefulWidget {
   const ImageViewerScaffold({
-    Key? key,
+    super.key,
     this.title,
     required this.imageViewers,
     this.actions,
-  }) : super(key: key);
+  });
 
   final String? title;
   final List<ImageViewer> imageViewers;

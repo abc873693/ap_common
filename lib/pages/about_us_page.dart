@@ -12,7 +12,7 @@ import 'package:flutter_linkify/flutter_linkify.dart';
 
 class AboutUsPage extends StatefulWidget {
   const AboutUsPage({
-    Key? key,
+    super.key,
     required this.assetImage,
     required this.fbFanPageUrl,
     required this.fbFanPageId,
@@ -25,7 +25,7 @@ class AboutUsPage extends StatefulWidget {
     this.applicationVersion,
     this.applicationIcon,
     this.applicationLegalese,
-  }) : super(key: key);
+  });
 
   /// /about
   static const String routerName = '/about';

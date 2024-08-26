@@ -9,11 +9,11 @@ enum LogoMode { text, image }
 
 class LoginScaffold extends StatefulWidget {
   const LoginScaffold({
-    Key? key,
+    super.key,
     required this.logoSource,
     required this.forms,
     this.logoMode = LogoMode.text,
-  }) : super(key: key);
+  });
 
   final LogoMode logoMode;
   final String logoSource;
@@ -105,11 +105,11 @@ class LoginScaffoldState extends State<LoginScaffold> {
 
 class TextCheckBox extends StatelessWidget {
   const TextCheckBox({
-    Key? key,
+    super.key,
     required this.value,
     required this.text,
     required this.onChanged,
-  }) : super(key: key);
+  });
 
   final bool value;
   final String text;
@@ -145,10 +145,10 @@ class TextCheckBox extends StatelessWidget {
 
 class ApButton extends StatelessWidget {
   const ApButton({
-    Key? key,
+    super.key,
     required this.text,
     this.onPressed,
-  }) : super(key: key);
+  });
 
   final String text;
   final Function()? onPressed;
@@ -179,10 +179,10 @@ class ApButton extends StatelessWidget {
 
 class ApFlatButton extends StatelessWidget {
   const ApFlatButton({
-    Key? key,
+    super.key,
     this.onPressed,
     this.text,
-  }) : super(key: key);
+  });
 
   final Function()? onPressed;
   final String? text;
@@ -206,9 +206,9 @@ class ApFlatButton extends StatelessWidget {
 
 class TextLogo extends StatelessWidget {
   const TextLogo({
-    Key? key,
+    super.key,
     required this.text,
-  }) : super(key: key);
+  });
   final String text;
 
   @override
@@ -226,7 +226,7 @@ class TextLogo extends StatelessWidget {
 
 class ApTextField extends StatelessWidget {
   const ApTextField({
-    Key? key,
+    super.key,
     required this.controller,
     required this.focusNode,
     this.nextFocusNode,
@@ -238,7 +238,7 @@ class ApTextField extends StatelessWidget {
     this.maxLength,
     this.onChanged,
     this.autofillHints,
-  }) : super(key: key);
+  });
 
   final TextEditingController controller;
   final FocusNode? focusNode;

@@ -11,13 +11,13 @@ enum BarCodeMode { code39, qrCode }
 
 class UserInfoScaffold extends StatefulWidget {
   const UserInfoScaffold({
-    Key? key,
+    super.key,
     required this.userInfo,
     this.heroTag,
     this.actions,
     this.onRefresh,
     this.enableBarCode = false,
-  }) : super(key: key);
+  });
 
   final UserInfo userInfo;
   final String? heroTag;
@@ -119,11 +119,11 @@ class UserInfoScaffoldState extends State<UserInfoScaffold> {
 
 class UserInfoCard extends StatelessWidget {
   const UserInfoCard({
-    Key? key,
+    super.key,
     this.userInfo,
     this.codeMode,
     this.enableBarCode = false,
-  }) : super(key: key);
+  });
 
   final UserInfo? userInfo;
   final BarCodeMode? codeMode;

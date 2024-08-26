@@ -28,12 +28,12 @@ enum _DataType { announcement, application }
 
 class AnnouncementHomePage extends StatefulWidget {
   const AnnouncementHomePage({
-    Key? key,
+    super.key,
     this.loginDescriptionWidget,
     this.reviewDescriptionWidget,
     this.organizationDomain,
     this.enableNormalLogin = false,
-  }) : super(key: key);
+  });
 
   final Widget? loginDescriptionWidget;
   final Widget? reviewDescriptionWidget;
@@ -801,7 +801,6 @@ class _AnnouncementHomePageState extends State<AnnouncementHomePage> {
             password: _password.text,
             callback: callback,
           );
-          break;
         case AnnouncementLoginType.google:
           try {
             final bool isSignIn = await _googleSignIn.isSignedIn();
@@ -825,7 +824,6 @@ class _AnnouncementHomePageState extends State<AnnouncementHomePage> {
             if (isNotLogin) Navigator.of(context, rootNavigator: true).pop();
             if (CrashlyticsUtils.instance != null) rethrow;
           }
-          break;
         case AnnouncementLoginType.apple:
           try {
             final AuthorizationCredentialAppleID credential =
@@ -843,7 +841,6 @@ class _AnnouncementHomePageState extends State<AnnouncementHomePage> {
             if (isNotLogin) Navigator.of(context, rootNavigator: true).pop();
             CrashlyticsUtils.instance?.recordError(e, s);
           }
-          break;
       }
     }
   }

@@ -4,11 +4,11 @@ import 'package:flutter/material.dart';
 
 class DialogOption extends StatelessWidget {
   const DialogOption({
-    Key? key,
+    super.key,
     required this.text,
     required this.check,
     required this.onPressed,
-  }) : super(key: key);
+  });
 
   final String text;
   final bool check;

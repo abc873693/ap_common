@@ -19,7 +19,7 @@ enum HomeState { loading, finish, error, empty, offline }
 
 class HomePageScaffold extends StatefulWidget {
   const HomePageScaffold({
-    Key? key,
+    super.key,
     required this.state,
     required this.announcements,
     required this.isLogin,
@@ -33,7 +33,7 @@ class HomePageScaffold extends StatefulWidget {
     this.onImageTapped,
     this.autoPlay = true,
     this.autoPlayDuration = const Duration(milliseconds: 5000),
-  }) : super(key: key);
+  });
 
   final HomeState state;
   final String? title;
