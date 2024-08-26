@@ -17,7 +17,7 @@ class NotificationUtilsTestPage extends StatefulWidget {
 class _NotificationUtilsTestPageState extends State<NotificationUtilsTestPage> {
   late AppLocalizations app;
 
-  Day day = NotificationUtils.getDay(DateTime.now().weekday - 1);
+  Day day = NotificationUtils.getDay(DateTime.now().weekday);
   TimeOfDay time = TimeOfDay.now();
 
   @override
@@ -89,7 +89,7 @@ class _NotificationUtilsTestPageState extends State<NotificationUtilsTestPage> {
                 builder: (_) => SimpleOptionDialog(
                   title: app.setWeekDay,
                   items: ApLocalizations.of(context).weekdays,
-                  index: day.value,
+                  index: day.value - 1,
                   onSelected: (int index) {
                     setState(() => day = Day.values[index]);
                   },

@@ -37,11 +37,15 @@ class NotificationUtils {
   }
 
   //For taiwan week order
-  static Day getDay(int weekIndex) {
-    if (weekIndex == 6) {
+  /// [weekday] The day of the week [monday]..[sunday].
+  ///
+  /// In accordance with ISO 8601
+  /// a week starts with Monday, which has the value 1.
+  static Day getDay(int weekday) {
+    if (weekday == 7) {
       return Day.sunday;
     } else {
-      return Day.values[weekIndex - 1];
+      return Day.values[weekday];
     }
   }
 
