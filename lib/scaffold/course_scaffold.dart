@@ -1276,6 +1276,7 @@ class _CourseScaffoldSettingDialogState
       actionFunction: () => Navigator.of(context, rootNavigator: true).pop(),
       contentPadding: EdgeInsets.zero,
       contentWidget: Column(
+        mainAxisSize: MainAxisSize.min,
         children: <Widget>[
           CheckboxListTile(
             title: Text(ap.showSectionTime),
