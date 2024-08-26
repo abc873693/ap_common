@@ -330,7 +330,7 @@ class ApTheme extends InheritedWidget {
         scaffoldBackgroundColor: ApColors.onyx,
         unselectedWidgetColor: ApColors.grey200,
         textSelectionTheme: const TextSelectionThemeData(
-          selectionColor: ApColors.blue200,
+          selectionColor: Colors.white,
         ),
         inputDecorationTheme: const InputDecorationTheme(
           labelStyle: TextStyle(color: Colors.white),

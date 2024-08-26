@@ -1,3 +1,4 @@
+import 'package:ap_common/resources/ap_colors.dart';
 import 'package:ap_common/resources/ap_theme.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_keyboard_visibility/flutter_keyboard_visibility.dart';
@@ -253,32 +254,39 @@ class ApTextField extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return TextField(
-      key: key,
-      obscureText: obscureText,
-      controller: controller,
-      focusNode: focusNode,
-      maxLength: maxLength,
-      onChanged: onChanged,
-      keyboardType: keyboardType,
-      textInputAction: textInputAction,
-      onSubmitted: (String text) {
-        focusNode?.unfocus();
-        if (nextFocusNode != null) {
-          FocusScope.of(context).requestFocus(nextFocusNode);
-        }
-        onSubmitted?.call(text);
-      },
-      decoration: InputDecoration(
-        labelText: labelText,
-        counterText: '',
+    return Theme(
+      data: Theme.of(context).copyWith(
+        textSelectionTheme: const TextSelectionThemeData(
+          selectionColor: ApColors.blue200,
+        ),
       ),
-      style: const TextStyle(
-        color: Colors.white,
-        fontSize: 18.0,
-        decorationColor: Colors.white,
+      child: TextField(
+        key: key,
+        obscureText: obscureText,
+        controller: controller,
+        focusNode: focusNode,
+        maxLength: maxLength,
+        onChanged: onChanged,
+        keyboardType: keyboardType,
+        textInputAction: textInputAction,
+        onSubmitted: (String text) {
+          focusNode?.unfocus();
+          if (nextFocusNode != null) {
+            FocusScope.of(context).requestFocus(nextFocusNode);
+          }
+          onSubmitted?.call(text);
+        },
+        decoration: InputDecoration(
+          labelText: labelText,
+          counterText: '',
+        ),
+        style: const TextStyle(
+          color: Colors.white,
+          fontSize: 18.0,
+          decorationColor: Colors.white,
+        ),
+        autofillHints: autofillHints,
       ),
-      autofillHints: autofillHints,
     );
   }
 }
