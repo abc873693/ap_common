@@ -28,8 +28,8 @@ class SimpleOptionDialog extends StatelessWidget {
             contentPadding: EdgeInsets.zero,
             content: SizedBox(
               width: MediaQuery.of(context).size.width * 0.8,
-              height: MediaQuery.of(context).size.height * 0.8,
               child: ListView.separated(
+                shrinkWrap: true,
                 controller: ScrollController(initialScrollOffset: index * 48.0),
                 itemCount: items.length,
                 separatorBuilder: (BuildContext context, int index) {
