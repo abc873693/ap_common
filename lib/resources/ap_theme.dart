@@ -315,7 +315,7 @@ class ApTheme extends InheritedWidget {
         visualDensity: VisualDensity.adaptivePlatformDensity,
         colorScheme: ColorScheme.fromSwatch(
           accentColor: ApColors.blue500,
-        ).copyWith(surface: Colors.black12),
+        ),
       );
 
   static ThemeData get dark => ThemeData(
@@ -342,7 +342,7 @@ class ApTheme extends InheritedWidget {
         colorScheme: ColorScheme.fromSwatch(
           brightness: Brightness.dark,
           accentColor: ApColors.blue300,
-        ).copyWith(surface: Colors.black12),
+        ),
       );
 }
 
