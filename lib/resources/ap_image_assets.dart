@@ -12,6 +12,8 @@ class ApImageAssets {
   static const String nkutstItc =
       'packages/ap_common/assets/images/nkutst_itc.webp';
   static const String fb = 'packages/ap_common/assets/images/fb.webp';
+  static const String instagram =
+      'packages/ap_common/assets/images/instagram.png';
   static const String dashLineDark =
       'packages/ap_common/assets/images/dash_line_dark.webp';
   static const String dashLineLight =

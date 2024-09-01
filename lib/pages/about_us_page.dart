@@ -16,6 +16,7 @@ class AboutUsPage extends StatefulWidget {
     required this.assetImage,
     required this.fbFanPageUrl,
     required this.fbFanPageId,
+    this.instagramUsername,
     required this.githubUrl,
     required this.githubName,
     required this.email,
@@ -32,6 +33,7 @@ class AboutUsPage extends StatefulWidget {
   final String assetImage;
   final String fbFanPageUrl;
   final String fbFanPageId;
+  final String? instagramUsername;
   final String githubUrl;
   final String githubName;
   final String email;
@@ -194,6 +196,19 @@ class AboutUsPageState extends State<AboutUsPage> {
                                 },
                                 iconSize: 48.0,
                               ),
+                              if (widget.instagramUsername
+                                  case final String username?)
+                                IconButton(
+                                  icon: Image.asset(ApImageAssets.instagram),
+                                  onPressed: () {
+                                    ApUtils.launchUrl(
+                                      'https://ig.me/m/$username',
+                                    );
+                                    AnalyticsUtils.instance
+                                        ?.logEvent('instagram_click');
+                                  },
+                                  iconSize: 48.0,
+                                ),
                               IconButton(
                                 icon: Image.asset(ApImageAssets.github),
                                 onPressed: () {
