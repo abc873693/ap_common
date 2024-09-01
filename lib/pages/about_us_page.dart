@@ -1,12 +1,9 @@
-import 'dart:io';
-
 import 'package:ap_common/resources/ap_icon.dart';
 import 'package:ap_common/resources/ap_theme.dart';
 import 'package:ap_common/resources/resources.dart';
 import 'package:ap_common/utils/analytics_utils.dart';
 import 'package:ap_common/utils/ap_localizations.dart';
 import 'package:ap_common/utils/ap_utils.dart';
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_linkify/flutter_linkify.dart';
 
@@ -184,36 +181,9 @@ class AboutUsPageState extends State<AboutUsPage> {
                               IconButton(
                                 icon: Image.asset(ApImageAssets.fb),
                                 onPressed: () {
-                                  if (kIsWeb) {
-                                    ApUtils.launchUrl(widget.fbFanPageUrl);
-                                  } else if (Platform.isAndroid) {
-                                    ApUtils.launchUrl(
-                                      'fb://page/${widget.fbFanPageId}',
-                                    ).catchError(
-                                      (dynamic onError) => ApUtils.launchUrl(
-                                        widget.fbFanPageUrl,
-                                      ),
-                                    );
-                                  } else if (Platform.isIOS) {
-                                    ApUtils.launchUrl(
-                                      'fb://profile/${widget.fbFanPageId}',
-                                    ).catchError(
-                                      (dynamic onError) => ApUtils.launchUrl(
-                                        widget.fbFanPageUrl,
-                                      ),
-                                    );
-                                  } else {
-                                    ApUtils.launchUrl(widget.fbFanPageUrl)
-                                        .catchError(
-                                      (dynamic onError) {
-                                        if (!context.mounted) return;
-                                        ApUtils.showToast(
-                                          context,
-                                          app.platformError,
-                                        );
-                                      },
-                                    );
-                                  }
+                                  ApUtils.launchUrl(
+                                    'https://m.me/${widget.fbFanPageId}',
+                                  );
                                   AnalyticsUtils.instance?.logEvent('fb_click');
                                 },
                                 iconSize: 48.0,
@@ -234,31 +204,16 @@ class AboutUsPageState extends State<AboutUsPage> {
                               IconButton(
                                 icon: Image.asset(ApImageAssets.github),
                                 onPressed: () {
-                                  if (kIsWeb) {
-                                    ApUtils.launchUrl(widget.githubUrl);
-                                  } else if (Platform.isAndroid) {
-                                    ApUtils.launchUrl(
-                                      'github://organization/${widget.githubName}',
-                                    )
-                                        // ignore: always_specify_types
-                                        .catchError(
-                                      (dynamic onError) =>
-                                          ApUtils.launchUrl(widget.githubUrl),
-                                    );
-                                  } else if (Platform.isIOS) {
-                                    ApUtils.launchUrl(widget.githubUrl);
-                                  } else {
-                                    ApUtils.launchUrl(widget.githubUrl)
-                                        .catchError(
-                                      (dynamic onError) {
-                                        if (!context.mounted) return;
-                                        ApUtils.showToast(
-                                          context,
-                                          app.platformError,
-                                        );
-                                      },
-                                    );
-                                  }
+                                  ApUtils.launchUrl(widget.githubUrl)
+                                      .catchError(
+                                    (dynamic onError) {
+                                      if (!context.mounted) return;
+                                      ApUtils.showToast(
+                                        context,
+                                        app.platformError,
+                                      );
+                                    },
+                                  );
                                   AnalyticsUtils.instance
                                       ?.logEvent('github_click');
                                 },
