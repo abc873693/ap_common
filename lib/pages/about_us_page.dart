@@ -127,6 +127,28 @@ class AboutUsPageState extends State<AboutUsPage> {
                     ),
                   ],
                 ),
+                Stack(
+                  children: <Widget>[
+                    _item(
+                      app.aboutNsysuCodeClubTitle,
+                      app.aboutNsysuCodeClubContent,
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.symmetric(
+                        vertical: 20.0,
+                        horizontal: 26.0,
+                      ),
+                      child: Align(
+                        alignment: Alignment.topRight,
+                        child: Image.asset(
+                          ApImageAssets.nsysuGdsc,
+                          width: 64.0,
+                          fit: BoxFit.cover,
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
                 Card(
                   margin: const EdgeInsets.symmetric(
                     vertical: 8.0,
@@ -293,9 +315,12 @@ class AboutUsPageState extends State<AboutUsPage> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: <Widget>[
-              SelectableLinkify(
-                text: text,
-                style: const TextStyle(fontSize: 18.0),
+              Padding(
+                padding: const EdgeInsets.only(right: 52.0),
+                child: SelectableLinkify(
+                  text: text,
+                  style: const TextStyle(fontSize: 18.0),
+                ),
               ),
               const SizedBox(
                 height: 8.0,

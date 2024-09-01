@@ -1370,6 +1370,26 @@ class ApLocalizations {
     );
   }
 
+  /// `中山大學 GDG on Campus x 程式研習社`
+  String get aboutNsysuCodeClubTitle {
+    return Intl.message(
+      '中山大學 GDG on Campus x 程式研習社',
+      name: 'aboutNsysuCodeClubTitle',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `我們是一群對於科技、程式嚮往的有志之士，期望可以以新穎的技術為大家帶來更便利、更精彩的生活\n\n如果對校務通、Python 、web 有興趣的朋友，可以加入我們來一起學習、一起開發。\n另外，我們也非常歡迎其他社團或組織來洽談合作!!無論是簡單的行政合作或活動籌辦合作我們都可以以我們的社群資源提供協助!`
+  String get aboutNsysuCodeClubContent {
+    return Intl.message(
+      '我們是一群對於科技、程式嚮往的有志之士，期望可以以新穎的技術為大家帶來更便利、更精彩的生活\n\n如果對校務通、Python 、web 有興趣的朋友，可以加入我們來一起學習、一起開發。\n另外，我們也非常歡迎其他社團或組織來洽談合作!!無論是簡單的行政合作或活動籌辦合作我們都可以以我們的社群資源提供協助!',
+      name: 'aboutNsysuCodeClubContent',
+      desc: '',
+      args: [],
+    );
+  }
+
   /// `聯繫我們`
   String get aboutContactUsTitle {
     return Intl.message(
@@ -3400,6 +3420,26 @@ class ApLocalizations {
     );
   }
 
+  /// `審查申請`
+  String get reviewApplication {
+    return Intl.message(
+      '審查申請',
+      name: 'reviewApplication',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `找不到此資料`
+  String get notFoundData {
+    return Intl.message(
+      '找不到此資料',
+      name: 'notFoundData',
+      desc: '',
+      args: [],
+    );
+  }
+
   /// `更新駁回並加入黑名單`
   String get updateRejectAndBan {
     return Intl.message(
@@ -3425,26 +3465,6 @@ class ApLocalizations {
     return Intl.message(
       '刪除',
       name: 'delete',
-      desc: '',
-      args: [],
-    );
-  }
-
-  /// `審查申請`
-  String get reviewApplication {
-    return Intl.message(
-      '審查申請',
-      name: 'reviewApplication',
-      desc: '',
-      args: [],
-    );
-  }
-
-  /// `找不到此資料`
-  String get notFoundData {
-    return Intl.message(
-      '找不到此資料',
-      name: 'notFoundData',
       desc: '',
       args: [],
     );

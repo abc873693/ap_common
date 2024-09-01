@@ -31,6 +31,10 @@ class MessageLookup extends MessageLookupByLibrary {
         "aboutItcContent": MessageLookupByLibrary.simpleMessage(
             "In year 2014,\nwe founded KUAS Information Technology Club!\n\nIf you\'re enthusiastic or drawn to our projects, join our classes and talks or come by to chat!"),
         "aboutItcTitle": MessageLookupByLibrary.simpleMessage("NKUST IT Club"),
+        "aboutNsysuCodeClubContent": MessageLookupByLibrary.simpleMessage(
+            "We\'re a community of tech-savvy individuals eager to use our skills to create a better world.\n\nIf you\'re curious about NSYSU AP, Python, or web development, we\'d love to have you join our community. Let\'s learn, grow, and build together. We\'re also open to collaborating with other groups on projects big or small. Let\'s connect and make something awesome!"),
+        "aboutNsysuCodeClubTitle": MessageLookupByLibrary.simpleMessage(
+            "NSYSU GDG on Campus x Code Club"),
         "aboutOpenSourceTitle":
             MessageLookupByLibrary.simpleMessage("Open Source License"),
         "aboutRecruitContent": MessageLookupByLibrary.simpleMessage(

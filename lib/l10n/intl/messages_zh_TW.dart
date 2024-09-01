@@ -30,6 +30,10 @@ class MessageLookup extends MessageLookupByLibrary {
         "aboutItcContent": MessageLookupByLibrary.simpleMessage(
             "在103學年度，\n我們也成立了高應大資訊研習社！\n\n如果你對資訊有熱誠或是對我們作品有興趣，歡迎來社課或是講座，也可以來找我們聊聊天。"),
         "aboutItcTitle": MessageLookupByLibrary.simpleMessage("高科資研社"),
+        "aboutNsysuCodeClubContent": MessageLookupByLibrary.simpleMessage(
+            "我們是一群對於科技、程式嚮往的有志之士，期望可以以新穎的技術為大家帶來更便利、更精彩的生活\n\n如果對校務通、Python 、web 有興趣的朋友，可以加入我們來一起學習、一起開發。\n另外，我們也非常歡迎其他社團或組織來洽談合作!!無論是簡單的行政合作或活動籌辦合作我們都可以以我們的社群資源提供協助!"),
+        "aboutNsysuCodeClubTitle":
+            MessageLookupByLibrary.simpleMessage("中山大學 GDG on Campus x 程式研習社"),
         "aboutOpenSourceTitle": MessageLookupByLibrary.simpleMessage("開放原始碼授權"),
         "aboutRecruitContent": MessageLookupByLibrary.simpleMessage(
             "如果你是 Objective-C、Swift 高手，或是 Java、Kotlin、Dart 神手，又或是對 Coding充滿著熱誠！\n\n歡迎私訊我們粉絲專頁！\n你的程式碼將有機會出現在周遭同學的手中～"),
