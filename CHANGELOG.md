@@ -1,3 +1,10 @@
+## [0.25.0-dev.2] - 2024/09/01
+### 基於 Flutter v3.24 開發
+
+* 支援 NSYSU GDSC 相關訊息
+* `AboutUsPage` 支援 Instagram 欄位
+* 改善 `AboutUsPage` 連結行為
+
 ## [0.25.0-dev.1] - 2024/08/29
 ### 基於 Flutter v3.24 開發
 
