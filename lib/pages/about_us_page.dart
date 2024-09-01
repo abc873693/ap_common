@@ -150,7 +150,7 @@ class AboutUsPageState extends State<AboutUsPage> {
                           style: const TextStyle(fontSize: 18.0),
                         ),
                         const SizedBox(
-                          height: 4.0,
+                          height: 8.0,
                         ),
                         Padding(
                           padding: const EdgeInsets.symmetric(horizontal: 16.0),
@@ -283,7 +283,7 @@ class AboutUsPageState extends State<AboutUsPage> {
                 style: const TextStyle(fontSize: 18.0),
               ),
               const SizedBox(
-                height: 4.0,
+                height: 8.0,
               ),
               SelectableLinkify(
                 text: subText,
