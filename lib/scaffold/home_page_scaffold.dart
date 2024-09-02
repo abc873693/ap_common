@@ -84,13 +84,14 @@ class HomePageScaffoldState extends State<HomePageScaffold> {
 
   @override
   Widget build(BuildContext context) {
-    return WillPopScope(
-      onWillPop: () async {
+    return PopScope(
+      canPop: false,
+      onPopInvokedWithResult: (bool didPop, _) {
         if (Platform.isAndroid) {
           _showLogoutDialog();
-          return false;
+        } else {
+          SystemNavigator.pop();
         }
-        return true;
       },
       child: Row(
         children: <Widget>[

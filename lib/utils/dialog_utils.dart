@@ -170,10 +170,8 @@ class DialogUtils {
         showDialog(
           context: context,
           barrierDismissible: false,
-          builder: (BuildContext context) => WillPopScope(
-            onWillPop: () async {
-              return false;
-            },
+          builder: (BuildContext context) => PopScope(
+            canPop: false,
             child: DefaultDialog(
               title: app.updateTitle,
               actionText: app.update,

@@ -162,10 +162,8 @@ class LoginPageState extends State<LoginPage> {
   void asyncLogin() {
     showDialog(
       context: context,
-      builder: (BuildContext context) => WillPopScope(
-        onWillPop: () async {
-          return false;
-        },
+      builder: (BuildContext context) => PopScope(
+        canPop: false,
         child: ProgressDialog(ap.logining),
       ),
       barrierDismissible: false,

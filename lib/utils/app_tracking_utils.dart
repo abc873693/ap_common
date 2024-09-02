@@ -32,10 +32,8 @@ class AppTrackingUtils {
     showDialog(
       context: context,
       barrierDismissible: false,
-      builder: (BuildContext context) => WillPopScope(
-        onWillPop: () async {
-          return false;
-        },
+      builder: (BuildContext context) => PopScope(
+        canPop: false,
         child: DefaultDialog(
           title: ap.appTrackingDialogTitle,
           contentWidget: SingleChildScrollView(
