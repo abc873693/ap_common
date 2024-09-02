@@ -1,3 +1,8 @@
+## [0.25.0-dev.3] - 2024/09/02
+### 基於 Flutter v3.24 開發
+
+* 支援 Android predictive back
+
 ## [0.25.0-dev.2] - 2024/09/01
 ### 基於 Flutter v3.24 開發
 
