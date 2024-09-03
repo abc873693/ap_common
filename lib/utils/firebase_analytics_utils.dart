@@ -33,9 +33,9 @@ class FirebaseAnalyticsUtils extends AnalyticsUtils {
     String screenName,
     String screenClassOverride,
   ) async {
-    await analytics?.setCurrentScreen(
+    await analytics?.logScreenView(
       screenName: screenName,
-      screenClassOverride: screenClassOverride,
+      screenClass: screenClassOverride,
     );
   }
 
