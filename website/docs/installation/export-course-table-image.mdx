@@ -13,39 +13,32 @@ sidebar_position: 6
 
 :::
 
-## 限制
-
-此功能只支援，默認相關功能會不顯示
-
-- Android
-- iOS
-- macOS
-- Winodws([有路徑問題](https://github.com/abc873693/ap_common/issues/66))
-- Linux([有路徑問題](https://github.com/abc873693/ap_common/issues/66))
-
-Web 版本可參考 [`issues`](https://github.com/abc873693/ap_common/issues/48)
-
 ## 設定
 
 ### Android
 
-因 Android 10 (Q API 29) 以後使用新的 API 存取檔案系統，至 `android/app/src/main/AndroidManifest.xml` 增加 `android:requestLegacyExternalStorage="true"`
+至 `android/app/src/main/AndroidManifest.xml` 增加相關權限設定
 
 ```xml title='AndroidManifest.xml'
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.examlpe.ap_common">
 
+    <!-- Permissions options for the `storage` group -->
+    <uses-permission android:name="android.permission.READ_MEDIA_IMAGES" />
+    <uses-permission android:name="android.permission.READ_MEDIA_VIDEO" />
+    <uses-permission android:name="android.permission.READ_MEDIA_AUDIO" />
+    <uses-permission android:name="android.permission.READ_MEDIA_VISUAL_USER_SELECTED" />
+
     <application
         android:name="io.flutter.app.FlutterApplication"
         android:label="ap_common_example"
-        android:requestLegacyExternalStorage="true"
         android:icon="@mipmap/ic_launcher">
     </application>
 </manifest>
 ```
 
 :::caution 注意
-因為後續版本(Android 11) 會使 `requestLegacyExternalStorage` 無效，但仍建議加入使舊系統版本裝置支援
+因為目前 Play Store 自 2024/08/31 以後 不接受目標版本 `33` 以前的，故舊版必須遷移
 :::
 
 ### iOS

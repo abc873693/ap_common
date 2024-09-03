@@ -24,7 +24,18 @@ sidebar_position: 5
 
 ### Android
 
-無須設定
+從 Android 11 (API 級別 30) 開始，Android 系統要求應用程式在 `AndroidManifest.xml` 設定。
+
+至 `android/app/src/main/AndroidManifest.xml` 增加相關權限設定
+
+```xml title='AndroidManifest.xml'
+<queries>
+  <intent>
+    <action android:name="android.intent.action.INSERT" />
+    <data android:mimeType="vnd.android.cursor.item/event" />
+  </intent>
+</queries>
+```
 
 ### iOS
 
@@ -32,7 +43,7 @@ sidebar_position: 5
 
 ```xml title='Info.plist'
   <key>NSCalendarsUsageDescription</key>
-	<string>Feature calendar would be add schedule to calendar app</string>
+  <string>Feature calendar would be add schedule to calendar app</string>
 ```
 
 字串中的說明為取得權限時會出現的文字說明，可根據你的 App 語言做修改

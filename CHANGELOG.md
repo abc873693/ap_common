@@ -1,27 +1,15 @@
-## [0.25.0-dev.3] - 2024/09/02
+## [0.25.0] - 2024/09/03
 ### 基於 Flutter v3.24 開發
 
+* 升級 Flutter `3.24` API 變動所影響套件，並升級 Dart 版本至 `3.0`
 * 支援 Android predictive back
-
-## [0.25.0-dev.2] - 2024/09/01
-### 基於 Flutter v3.24 開發
-
 * 支援 NSYSU GDSC 相關訊息
 * `AboutUsPage` 支援 Instagram 欄位
 * 改善 `AboutUsPage` 連結行為
-
-## [0.25.0-dev.1] - 2024/08/29
-### 基於 Flutter v3.24 開發
-
 * 修正課表對話框 `CourseScaffoldSettingDialog` 高度錯誤
 * 修正 `OptionDialog` 高度錯誤
 * 範例補上 Android `desugaring` 所需設定 
 * 修正深色主題文字選取時的顏色
-
-## [0.25.0-dev.0] - 2024/08/22
-### 基於 Flutter v3.24 開發
-
-* 升級 Flutter `3.24` API 變動所影響套件，並升級 Dart 版本至 `3.0`
 * 修正課表下載權限檢查
 * 修改桌面版檔案儲存實作為 `file_saver`
 * 支援 Android target version `34` 相關
