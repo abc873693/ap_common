@@ -15,7 +15,7 @@ packages:
       path: ".."
       relative: true
     source: path
-    version: "0.25.0"
+    version: "0.25.1"
   ap_common_plugin:
     dependency: "direct main"
     description:
