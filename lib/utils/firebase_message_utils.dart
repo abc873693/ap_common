@@ -80,28 +80,27 @@ class FirebaseMessagingUtils {
         customOnClickAction,
       );
     });
-    messaging
-        ?.requestPermission(
-          alert: true,
-          announcement: false,
-          badge: true,
-          carPlay: false,
-          criticalAlert: false,
-          provisional: false,
-          sound: true,
-        )
-        .then(
-          (value) => FirebaseAnalyticsUtils.instance.setUserProperty(
-            AnalyticsConstants.hasEnableNotification,
-            (value.authorizationStatus == AuthorizationStatus.authorized)
-                .toString(),
-          ),
-        );
-    messaging?.getToken(vapidKey: vapidKey).then((String? token) {
-      if (token != null && kDebugMode) {
-        print("Push Messaging token: $token");
-      }
-    });
+    final value = await messaging?.requestPermission(
+      alert: true,
+      announcement: false,
+      badge: true,
+      carPlay: false,
+      criticalAlert: false,
+      provisional: false,
+      sound: true,
+    );
+    if (value?.authorizationStatus == AuthorizationStatus.authorized) {
+      messaging?.getToken(vapidKey: vapidKey).then((String? token) {
+        if (token != null && kDebugMode) {
+          print("Push Messaging token: $token");
+        }
+      });
+      FirebaseAnalyticsUtils.instance.setUserProperty(
+        AnalyticsConstants.hasEnableNotification,
+        (value?.authorizationStatus == AuthorizationStatus.authorized)
+            .toString(),
+      );
+    }
   }
 
   Future<void> navigateToItemDetail(
