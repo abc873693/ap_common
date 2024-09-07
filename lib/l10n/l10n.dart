@@ -1350,21 +1350,21 @@ class ApLocalizations {
     );
   }
 
-  /// `在103學年度，\n我們也成立了高應大資訊研習社！\n\n如果你對資訊有熱誠或是對我們作品有興趣，歡迎來社課或是講座，也可以來找我們聊聊天。`
-  String get aboutItcContent {
+  /// `GDG on Campus NKUST X ITC`
+  String get aboutItcTitle {
     return Intl.message(
-      '在103學年度，\n我們也成立了高應大資訊研習社！\n\n如果你對資訊有熱誠或是對我們作品有興趣，歡迎來社課或是講座，也可以來找我們聊聊天。',
-      name: 'aboutItcContent',
+      'GDG on Campus NKUST X ITC',
+      name: 'aboutItcTitle',
       desc: '',
       args: [],
     );
   }
 
-  /// `高科資研社`
-  String get aboutItcTitle {
+  /// `在103學年度，\n我們也成立了高應大資訊研習社！\n\n我們是一群對資訊科技有熱忱的人組成的社群，期許可以透過所學知識對社會有小小貢獻，搭建每個人的夢想藍圖！\n如果您對 NKUST AP、雲端技術、Python 或 Web 技術有興趣的人們，我們很歡迎您加入我們的社群，與我們一同學習、成長搭建妳自己的藍圖。我們也極度願意與其他組織、社團進行不論大小的合作計畫。讓我們建立起聯繫方式，來創造一些天馬行空的點子吧！`
+  String get aboutItcContent {
     return Intl.message(
-      '高科資研社',
-      name: 'aboutItcTitle',
+      '在103學年度，\n我們也成立了高應大資訊研習社！\n\n我們是一群對資訊科技有熱忱的人組成的社群，期許可以透過所學知識對社會有小小貢獻，搭建每個人的夢想藍圖！\n如果您對 NKUST AP、雲端技術、Python 或 Web 技術有興趣的人們，我們很歡迎您加入我們的社群，與我們一同學習、成長搭建妳自己的藍圖。我們也極度願意與其他組織、社團進行不論大小的合作計畫。讓我們建立起聯繫方式，來創造一些天馬行空的點子吧！',
+      name: 'aboutItcContent',
       desc: '',
       args: [],
     );

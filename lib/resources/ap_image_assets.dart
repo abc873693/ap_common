@@ -11,6 +11,8 @@ class ApImageAssets {
       'packages/ap_common/assets/images/drawer_background_dark.webp';
   static const String nkutstItc =
       'packages/ap_common/assets/images/nkutst_itc.webp';
+  static const String gdgOnCampusNkustItc =
+      'packages/ap_common/assets/images/gdg_on_campus_nkust_itc.jpg';
   static const String nsysuGdsc =
       'packages/ap_common/assets/images/nsysu_gdsc.png';
   static const String fb = 'packages/ap_common/assets/images/fb.webp';

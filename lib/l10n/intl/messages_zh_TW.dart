@@ -28,8 +28,9 @@ class MessageLookup extends MessageLookupByLibrary {
         "aboutAuthorTitle": MessageLookupByLibrary.simpleMessage("作者群"),
         "aboutContactUsTitle": MessageLookupByLibrary.simpleMessage("聯繫我們"),
         "aboutItcContent": MessageLookupByLibrary.simpleMessage(
-            "在103學年度，\n我們也成立了高應大資訊研習社！\n\n如果你對資訊有熱誠或是對我們作品有興趣，歡迎來社課或是講座，也可以來找我們聊聊天。"),
-        "aboutItcTitle": MessageLookupByLibrary.simpleMessage("高科資研社"),
+            "在103學年度，\n我們也成立了高應大資訊研習社！\n\n我們是一群對資訊科技有熱忱的人組成的社群，期許可以透過所學知識對社會有小小貢獻，搭建每個人的夢想藍圖！\n如果您對 NKUST AP、雲端技術、Python 或 Web 技術有興趣的人們，我們很歡迎您加入我們的社群，與我們一同學習、成長搭建妳自己的藍圖。我們也極度願意與其他組織、社團進行不論大小的合作計畫。讓我們建立起聯繫方式，來創造一些天馬行空的點子吧！"),
+        "aboutItcTitle":
+            MessageLookupByLibrary.simpleMessage("GDG on Campus NKUST X ITC"),
         "aboutNsysuCodeClubContent": MessageLookupByLibrary.simpleMessage(
             "我們是一群對於科技、程式嚮往的有志之士，期望可以以新穎的技術為大家帶來更便利、更精彩的生活\n\n如果對校務通、Python 、web 有興趣的朋友，可以加入我們來一起學習、一起開發。\n另外，我們也非常歡迎其他社團或組織來洽談合作!!無論是簡單的行政合作或活動籌辦合作我們都可以以我們的社群資源提供協助!"),
         "aboutNsysuCodeClubTitle":

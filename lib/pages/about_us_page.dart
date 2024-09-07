@@ -116,7 +116,7 @@ class AboutUsPageState extends State<AboutUsPage> {
                       child: Align(
                         alignment: Alignment.topRight,
                         child: Image.asset(
-                          ApImageAssets.nkutstItc,
+                          ApImageAssets.gdgOnCampusNkustItc,
                           width: 64.0,
                           fit: BoxFit.cover,
                         ),
