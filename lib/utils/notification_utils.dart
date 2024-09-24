@@ -143,7 +143,7 @@ class NotificationUtils {
       id: courseNotify.id,
       title: ap.courseNotify,
       content: content,
-      day: getDay(courseNotify.weekdayIndex),
+      day: day,
       time: time,
       androidChannelId: '$course',
       androidChannelDescription: ap.courseNotify,
