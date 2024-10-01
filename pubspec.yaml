@@ -1,0 +1,7 @@
+name: ap_common
+
+environment:
+  sdk: '>=3.2.0 <4.0.0'
+
+dev_dependencies:
+  melos: ^6.1.0
