@@ -1,0 +1,81 @@
+name: ap_common
+description: The school affairs(AP) series shares the engineering kit, rapid development of the school affairs series(AP) app
+version: 0.25.3
+homepage: https://github.com/abc873693/ap_common
+repository: https://github.com/abc873693/ap_common/tree/master/packages/ap_common
+
+environment:
+  sdk: '>=3.0.0 <4.0.0'
+
+dependencies:
+  flutter:
+    sdk: flutter
+  flutter_localizations:
+    sdk: flutter
+
+  # Dart Packages
+  sprintf: ^7.0.0
+  intl: ">=0.16.0 <1.0.0"
+  multiple_localization: ^0.5.0
+  encrypt: ^5.0.1
+  dio: ">=5.4.1 <6.0.0"
+  dio_cookie_manager: ^3.1.1
+  cookie_jar: ^4.0.0
+  flutter_local_notifications: ^17.2.2
+  timezone: ^0.9.4
+  jwt_decoder: ^2.0.1
+  json_annotation: ^4.6.0
+  # Flutter UI Package
+  photo_view: ^0.15.0
+  barcode_widget: ^2.0.1
+  barcode: ^2.2.1
+  pdf: ^3.8.1
+  auto_size_text_pk: ^3.0.0
+  flutter_linkify: ^6.0.0
+  cupertino_back_gesture: ^0.1.0
+  # Native UI Plugin
+  shared_preferences: ^2.2.2
+  url_launcher: ^6.2.5
+  share_plus: ">=9.0.0 <=10.0.0"
+  package_info_plus: ^8.0.2
+  cached_network_image: ^3.3.1
+  flutter_keyboard_visibility: ^6.0.0
+  add_2_calendar: ^3.0.1
+  in_app_review: ^2.0.3
+  printing: ^5.10.4
+  path: ^1.7.0
+  path_provider: ^2.1.2
+  google_sign_in: ^6.2.1
+  sign_in_with_apple: ^6.1.1
+  image_picker: ^1.0.7
+  photo_manager: ^3.0.0
+  file_saver: ^0.2.12
+  app_tracking_transparency: ^2.0.2+4
+
+#dependency_overrides:
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+  lint: ^2.1.2
+  build_runner: ^2.0.3
+  json_serializable: ^6.3.0
+  spider: ^4.2.2
+
+flutter:
+  assets:
+    - assets/images/
+    - assets/icons/
+
+false_secrets:
+  - /example/lib/main.dart
+  - /example/web/index.html
+  - /website/node_modules/selfsigned/README.md
+
+flutter_intl:
+  enabled: true
+  class_name: ApLocalizations
+  main_locale: 'zh_TW'
+  arb_dir: lib/l10n
+  output_dir: lib/l10n
+  use_deferred_loading: true

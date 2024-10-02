@@ -1,0 +1,8 @@
+<resources>
+    <string name="course_hint">上課提醒</string>
+    <string name="today_no_course">太好了今天沒有任何課</string>
+    <string name="not_load_course_table">尚無課程資料</string>
+    <string name="course_hint_content_format">下一節課是%s\n在 %s 的 %s</string>
+	<string name="today_no_course_already">太好了今天已經沒有任何課</string>
+    <string name="please_enter_app_reload">請進入App重新載入課表</string>
+</resources>

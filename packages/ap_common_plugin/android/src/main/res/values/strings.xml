@@ -1,0 +1,8 @@
+<resources>
+    <string name="course_hint">Course Hint</string>
+    <string name="today_no_course">Good! No course today</string>
+    <string name="not_load_course_table">No course data yet</string>
+    <string name="course_hint_content_format">The next class will be %s\n%s in %s</string>
+    <string name="today_no_course_already">Good! No course today already</string>
+    <string name="please_enter_app_reload">Please enter app reload Course Data</string>
+</resources>

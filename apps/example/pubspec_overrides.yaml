@@ -1,0 +1,7 @@
+# melos_managed_dependency_overrides: ap_common,ap_common_plugin,intl
+dependency_overrides:
+  ap_common:
+    path: ../../packages/ap_common
+  ap_common_plugin:
+    path: ../../packages/ap_common_plugin
+  intl: 0.18.0
