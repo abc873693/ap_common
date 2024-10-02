@@ -1,4 +1,5 @@
 name: ap_common
+repository: https://github.com/abc873693/ap_common
 
 packages:
   - apps/**

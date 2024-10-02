@@ -6,6 +6,13 @@
 !.vscode/tasks.json
 !.vscode/settings.json
 
+.packages
+.pub/
+.dart_tool/
+pubspec.lock
+pubspec_overrides.yaml
+flutter_export_environment.sh
+
 # Dependencies
 /node_modules
 
@@ -29,3 +36,6 @@ firebase-debug.log*
 
 # Firebase cache
 .firebase/
+
+# FVM Version Cache
+.fvm/

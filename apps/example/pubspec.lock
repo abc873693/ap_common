@@ -12,17 +12,16 @@ packages:
   ap_common:
     dependency: "direct main"
     description:
-      path: "../packages/ap_common"
+      path: "../../packages/ap_common"
       relative: true
     source: path
     version: "0.25.3"
   ap_common_plugin:
     dependency: "direct main"
     description:
-      name: ap_common_plugin
-      sha256: "6285861bcd480ab28f3d8a8b58928c3e7c8fc3c699a788c1331565267eeff99f"
-      url: "https://pub.dev"
-    source: hosted
+      path: "../../packages/ap_common_plugin"
+      relative: true
+    source: path
     version: "0.4.1"
   app_tracking_transparency:
     dependency: transitive
@@ -1165,10 +1164,10 @@ packages:
     dependency: transitive
     description:
       name: vm_service
-      sha256: f652077d0bdf60abe4c1f6377448e8655008eef28f128bc023f7b5e8dfeb48fc
+      sha256: "5c5f338a667b4c644744b661f309fb8080bb94b18a7e91ef1dbd343bed00ed6d"
       url: "https://pub.dev"
     source: hosted
-    version: "14.2.4"
+    version: "14.2.5"
   web:
     dependency: transitive
     description:
