@@ -42,4 +42,4 @@ jobs:
         working-directory: ./apps/example
 #      - name: Run Flutter Driver tests
 #        run: flutter drive
-#        working-directory: ./example
+#        working-directory: ./apps/example
