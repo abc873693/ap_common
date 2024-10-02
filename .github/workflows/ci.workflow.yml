@@ -32,7 +32,7 @@ jobs:
           run-bootstrap: false
           melos-version: '6.1.0'
       - name: 'Bootstrap package'
-        run: melos bootstrap --scope tests
+        run: melos bootstrap
       - name: Run Test
         run: melos run test --no-select
       - name: Analyze files
