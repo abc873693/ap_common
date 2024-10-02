@@ -27,11 +27,12 @@ jobs:
           channel: 'stable'
           cache: true
           cache-key: 'flutter-:os:-:channel:-:version:-:arch:-:hash:'
-      - run: flutter pub get
-      - name: Model test
-        run: flutter test test/model_test.dart
+      - name: 'Bootstrap package'
+        run: melos bootstrap --scope tests
+      - name: Run Test
+        run: melos run test --no-select
       - name: Analyze files
-        run: flutter analyze .
+        run: melos run analyze-ci
       - name: Build Web
         run: flutter build web
         working-directory: ./example
