@@ -16,7 +16,7 @@ dependencies:
   google_sign_in_dartio: 0.3.0
 
   ap_common:
-      path: ../packages/ap_common/
+      path: ../../packages/ap_common
 
   encrypt: any
   http: any
