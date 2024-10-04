@@ -1,7 +1,6 @@
 import 'dart:io';
 
-import 'package:ap_common/config/analytics_constants.dart';
-import 'package:ap_common/utils/notification_utils.dart';
+import 'package:ap_common_core/ap_common_core.dart';
 import 'package:ap_common_firebase/utils/firebase_utils.dart';
 import 'package:flutter/foundation.dart';
 import 'package:url_launcher/url_launcher.dart';
@@ -48,7 +47,7 @@ class FirebaseMessagingUtils {
     FirebaseMessaging.onMessage.listen((RemoteMessage message) async {
       if (message.notification != null) {
         debugPrint("onMessage: $message");
-        NotificationUtils.show(
+        NotificationUtil.instance.show(
           id: NOTIFY_ID,
           androidChannelId: NOTIFY_ANDROID_CHANNEL_ID,
           androidChannelDescription: androidChannelDescription,

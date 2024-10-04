@@ -1,10 +1,8 @@
 import 'dart:async';
 import 'dart:io';
 
-import 'package:ap_common/config/analytics_constants.dart';
-import 'package:ap_common/models/user_info.dart';
 import 'package:ap_common/resources/ap_theme.dart';
-import 'package:ap_common/utils/analytics_utils.dart';
+import 'package:ap_common_core/ap_common_core.dart';
 import 'package:firebase_analytics/firebase_analytics.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
