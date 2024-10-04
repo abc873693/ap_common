@@ -13,6 +13,8 @@ dependencies:
   flutter_localizations:
     sdk: flutter
 
+  ap_common_core: ^0.0.1
+
   # Dart Packages
   sprintf: ^7.0.0
   intl: ">=0.16.0 <1.0.0"

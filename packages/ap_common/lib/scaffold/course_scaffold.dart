@@ -2,16 +2,10 @@ import 'dart:io';
 import 'dart:ui' as ui;
 
 import 'package:add_2_calendar/add_2_calendar.dart';
-import 'package:ap_common/config/ap_constants.dart';
-import 'package:ap_common/models/course_data.dart';
-import 'package:ap_common/models/course_notify_data.dart';
-import 'package:ap_common/models/general_response.dart';
-import 'package:ap_common/models/semester_data.dart';
 import 'package:ap_common/resources/ap_colors.dart';
 import 'package:ap_common/resources/ap_icon.dart';
 import 'package:ap_common/resources/ap_theme.dart';
 import 'package:ap_common/resources/resources.dart';
-import 'package:ap_common/utils/analytics_utils.dart';
 import 'package:ap_common/utils/ap_localizations.dart';
 import 'package:ap_common/utils/ap_utils.dart';
 import 'package:ap_common/utils/notification_utils.dart';
@@ -20,12 +14,13 @@ import 'package:ap_common/widgets/default_dialog.dart';
 import 'package:ap_common/widgets/hint_content.dart';
 import 'package:ap_common/widgets/item_picker.dart';
 import 'package:ap_common/widgets/option_dialog.dart';
+import 'package:ap_common_core/ap_common_core.dart';
 import 'package:auto_size_text_pk/auto_size_text_pk.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 
-export 'package:ap_common/models/course_data.dart';
+export 'package:ap_common_core/ap_common_core.dart';
 
 typedef CourseNotifyCallback = Function(
   CourseNotify? courseNotify,
@@ -1342,5 +1337,38 @@ extension DateTimeExtension on DateTime {
         days: weekday - now.weekday,
       ),
     );
+  }
+}
+
+extension _CourseExtension on Course {
+  String getTimesShortName(List<TimeCode>? timeCode) {
+    String text = '';
+    if (times.isEmpty) return text;
+    int startIndex = -1;
+    int repeat = 0;
+    final int len = times.length;
+    for (int i = 0; i < len; i++) {
+      final SectionTime time = times[i];
+      if (startIndex != -1 &&
+          time.index - 1 == times[i - 1].index &&
+          time.weekday == times[i - 1].weekday) {
+        repeat++;
+        if (i == len - 1 ||
+            times[i + 1].weekday != times[i].weekday ||
+            times[i + 1].index != times[i].index + 1) {
+          final SectionTime endTime = times[startIndex + repeat];
+          text += '-'
+              '${timeCode![endTime.index].title}';
+          repeat = 0;
+          startIndex = -1;
+        }
+      } else {
+        startIndex = i;
+        text += '${text.isEmpty ? '' : ' '}'
+            '(${ApLocalizations.current.weekdaysCourse[time.weekDayIndex]}) '
+            '${timeCode![time.index].title}';
+      }
+    }
+    return text;
   }
 }

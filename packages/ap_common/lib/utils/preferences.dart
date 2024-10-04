@@ -1,7 +1,7 @@
 import 'dart:io';
 
-import 'package:ap_common/config/ap_constants.dart';
 import 'package:ap_common/resources/ap_icon.dart';
+import 'package:ap_common_core/ap_common_core.dart';
 import 'package:encrypt/encrypt.dart' as encrypt;
 import 'package:flutter/foundation.dart';
 import 'package:shared_preferences/shared_preferences.dart';

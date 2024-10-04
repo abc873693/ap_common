@@ -1,9 +1,8 @@
-import 'package:ap_common/models/general_response.dart';
 import 'package:ap_common/utils/ap_localizations.dart';
 import 'package:ap_common/utils/ap_utils.dart';
+import 'package:ap_common_core/ap_common_core.dart';
 import 'package:flutter/widgets.dart';
 
-export 'package:ap_common/models/general_response.dart';
 export 'package:dio/dio.dart';
 
 typedef DioExceptionCallback = Function(DioException);

@@ -1,14 +1,11 @@
-import 'package:ap_common/config/analytics_constants.dart';
-import 'package:ap_common/config/ap_constants.dart';
-import 'package:ap_common/models/course_notify_data.dart';
 import 'package:ap_common/resources/ap_icon.dart';
 import 'package:ap_common/resources/ap_theme.dart';
-import 'package:ap_common/utils/analytics_utils.dart';
 import 'package:ap_common/utils/ap_localizations.dart';
 import 'package:ap_common/utils/ap_utils.dart';
 import 'package:ap_common/utils/notification_utils.dart';
 import 'package:ap_common/utils/preferences.dart';
 import 'package:ap_common/widgets/option_dialog.dart';
+import 'package:ap_common_core/ap_common_core.dart';
 import 'package:flutter/material.dart';
 
 export 'package:package_info_plus/package_info_plus.dart';
@@ -289,7 +286,7 @@ class ChangeThemeModeItem extends StatelessWidget {
                   'code': mode.toString(),
                 },
               );
-              AnalyticsUtils.instance?.logThemeEvent(mode);
+              // AnalyticsUtils.instance?.logThemeEvent(mode);
             },
           ),
         );
