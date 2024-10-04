@@ -41,11 +41,10 @@ packages:
   ap_common_core:
     dependency: "direct main"
     description:
-      name: ap_common_core
-      sha256: "7fc149e4ae7899cd60d2c35523dc83e1593e4d91906176dae29a53a6684ea36c"
-      url: "https://pub.dev"
-    source: hosted
-    version: "0.0.1"
+      path: "../ap_common_core"
+      relative: true
+    source: path
+    version: "0.0.2"
   app_tracking_transparency:
     dependency: "direct main"
     description:
