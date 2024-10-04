@@ -1,7 +1,7 @@
 import 'dart:convert';
 
-import 'package:ap_common/config/ap_constants.dart';
-import 'package:ap_common/utils/preferences.dart';
+import 'package:ap_common_core/src/config/ap_constants.dart';
+import 'package:ap_common_core/src/utilities/preference_util.dart';
 import 'package:json_annotation/json_annotation.dart';
 
 part 'semester_data.g.dart';
@@ -22,7 +22,7 @@ class SemesterData {
       );
 
   static SemesterData? load() {
-    final String rawString = Preferences.getString(
+    final String rawString = PreferenceUtil.instance.getString(
       '${ApConstants.packageName}'
           'semester_data',
       '',
@@ -63,7 +63,7 @@ class SemesterData {
   String toRawJson() => jsonEncode(toJson());
 
   void save() {
-    Preferences.setString(
+    PreferenceUtil.instance.setString(
       '${ApConstants.packageName}'
       'semester_data',
       toRawJson(),

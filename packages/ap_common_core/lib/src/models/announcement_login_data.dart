@@ -1,7 +1,7 @@
 import 'dart:convert';
 
-import 'package:ap_common/config/ap_constants.dart';
-import 'package:ap_common/utils/preferences.dart';
+import 'package:ap_common_core/src/config/ap_constants.dart';
+import 'package:ap_common_core/src/utilities/preference_util.dart';
 import 'package:json_annotation/json_annotation.dart';
 import 'package:jwt_decoder/jwt_decoder.dart';
 
@@ -51,7 +51,7 @@ class AnnouncementLoginData {
       );
 
   void save() {
-    Preferences.setStringSecurity(
+    PreferenceUtil.instance.setStringSecurity(
       '${ApConstants.packageName}'
       '.announcement_login_data',
       toRawJson(),
@@ -59,7 +59,7 @@ class AnnouncementLoginData {
   }
 
   static AnnouncementLoginData? load() {
-    final String rawString = Preferences.getStringSecurity(
+    final String rawString = PreferenceUtil.instance.getStringSecurity(
       '${ApConstants.packageName}'
           '.announcement_login_data',
       '',

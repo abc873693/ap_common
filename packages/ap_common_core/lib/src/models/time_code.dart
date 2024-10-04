@@ -4,7 +4,7 @@
 
 import 'dart:convert';
 
-import 'package:ap_common/models/course_data.dart' show TimeCode;
+import 'package:ap_common_core/src/models/course_data.dart' show TimeCode;
 import 'package:json_annotation/json_annotation.dart';
 
 part 'time_code.g.dart';

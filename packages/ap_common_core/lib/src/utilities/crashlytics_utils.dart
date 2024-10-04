@@ -1,5 +1,3 @@
-import 'package:flutter/material.dart';
-
 abstract class CrashlyticsUtils {
   static CrashlyticsUtils? instance;
 
@@ -7,7 +5,7 @@ abstract class CrashlyticsUtils {
     dynamic exception,
     StackTrace stack, {
     dynamic reason,
-    Iterable<DiagnosticsNode>? information,
+    Iterable<Object>? information,
     bool? printDetails,
   });
 

@@ -1,9 +1,8 @@
 import 'dart:convert';
+import 'dart:developer';
 
-import 'package:ap_common/config/ap_constants.dart';
-import 'package:ap_common/utils/ap_localizations.dart';
-import 'package:ap_common/utils/preferences.dart';
-import 'package:flutter/material.dart';
+import 'package:ap_common_core/src/config/ap_constants.dart';
+import 'package:ap_common_core/src/utilities/preference_util.dart';
 import 'package:json_annotation/json_annotation.dart';
 
 part 'course_data.g.dart';
@@ -28,7 +27,7 @@ class CourseData {
       );
 
   static CourseData? load(String tag) {
-    final String rawString = Preferences.getString(
+    final String rawString = PreferenceUtil.instance.getString(
       '${ApConstants.packageName}'
           '.course_data_$tag',
       '',
@@ -94,7 +93,7 @@ class CourseData {
   String toRawJson() => jsonEncode(toJson());
 
   void save(String tag) {
-    Preferences.setString(
+    PreferenceUtil.instance.setString(
       '${ApConstants.packageName}'
       '.course_data_$tag',
       toRawJson(),
@@ -102,10 +101,10 @@ class CourseData {
   }
 
   static Future<void> migrateFrom0_10() async {
-    Preferences.prefs?.getKeys().forEach((String key) {
+    PreferenceUtil.instance.getKeys().forEach((String key) {
       if (key.contains('course_data')) {
-        debugPrint(key);
-        Preferences.remove(key);
+        log(key);
+        PreferenceUtil.instance.remove(key);
       }
     });
   }
@@ -195,36 +194,37 @@ class Course {
     return buffer.toString();
   }
 
-  String getTimesShortName(List<TimeCode>? timeCode) {
-    String text = '';
-    if (times.isEmpty) return text;
-    int startIndex = -1;
-    int repeat = 0;
-    final int len = times.length;
-    for (int i = 0; i < len; i++) {
-      final SectionTime time = times[i];
-      if (startIndex != -1 &&
-          time.index - 1 == times[i - 1].index &&
-          time.weekday == times[i - 1].weekday) {
-        repeat++;
-        if (i == len - 1 ||
-            times[i + 1].weekday != times[i].weekday ||
-            times[i + 1].index != times[i].index + 1) {
-          final SectionTime endTime = times[startIndex + repeat];
-          text += '-'
-              '${timeCode![endTime.index].title}';
-          repeat = 0;
-          startIndex = -1;
-        }
-      } else {
-        startIndex = i;
-        text += '${text.isEmpty ? '' : ' '}'
-            '(${ApLocalizations.current.weekdaysCourse[time.weekDayIndex]}) '
-            '${timeCode![time.index].title}';
-      }
-    }
-    return text;
-  }
+  //TODO: revert for i18n implement
+  // String getTimesShortName(List<TimeCode>? timeCode) {
+  //   String text = '';
+  //   if (times.isEmpty) return text;
+  //   int startIndex = -1;
+  //   int repeat = 0;
+  //   final int len = times.length;
+  //   for (int i = 0; i < len; i++) {
+  //     final SectionTime time = times[i];
+  //     if (startIndex != -1 &&
+  //         time.index - 1 == times[i - 1].index &&
+  //         time.weekday == times[i - 1].weekday) {
+  //       repeat++;
+  //       if (i == len - 1 ||
+  //           times[i + 1].weekday != times[i].weekday ||
+  //           times[i + 1].index != times[i].index + 1) {
+  //         final SectionTime endTime = times[startIndex + repeat];
+  //         text += '-'
+  //             '${timeCode![endTime.index].title}';
+  //         repeat = 0;
+  //         startIndex = -1;
+  //       }
+  //     } else {
+  //       startIndex = i;
+  //       text += '${text.isEmpty ? '' : ' '}'
+  //           '(${ApLocalizations.current.weekdaysCourse[time.weekDayIndex]}) '
+  //           '${timeCode![time.index].title}';
+  //     }
+  //   }
+  //   return text;
+  // }
 
   Course copyWith({
     String? code,

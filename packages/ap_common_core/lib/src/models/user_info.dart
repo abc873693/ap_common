@@ -1,8 +1,8 @@
 import 'dart:convert';
 import 'dart:typed_data';
 
-import 'package:ap_common/config/ap_constants.dart';
-import 'package:ap_common/utils/preferences.dart';
+import 'package:ap_common_core/src/config/ap_constants.dart';
+import 'package:ap_common_core/src/utilities/preference_util.dart';
 import 'package:json_annotation/json_annotation.dart';
 
 part 'user_info.g.dart';
@@ -34,7 +34,7 @@ class UserInfo {
       );
 
   static UserInfo? load(String tag) {
-    final String rawString = Preferences.getString(
+    final String rawString = PreferenceUtil.instance.getString(
       '${ApConstants.packageName}'
           '.user_info_$tag',
       '',
@@ -62,7 +62,7 @@ class UserInfo {
   String toRawJson() => jsonEncode(toJson());
 
   void save(String tag) {
-    Preferences.setString(
+    PreferenceUtil.instance.setString(
       '${ApConstants.packageName}'
       '.user_info_$tag',
       toRawJson(),
