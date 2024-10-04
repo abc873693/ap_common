@@ -1,7 +1,7 @@
 import 'package:ap_common_core/src/models/user_info.dart';
 
-abstract class AnalyticsUtils {
-  static AnalyticsUtils? instance;
+abstract class AnalyticsUtil {
+  static AnalyticsUtil? instance;
 
   Future<void> setCurrentScreen(String screenName, String screenClassOverride);
 

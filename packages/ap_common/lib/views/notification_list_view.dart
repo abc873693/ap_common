@@ -47,7 +47,7 @@ class NotificationListViewState extends State<NotificationListView>
 
   @override
   void initState() {
-    AnalyticsUtils.instance?.setCurrentScreen(
+    AnalyticsUtil.instance?.setCurrentScreen(
       'NotificationListView',
       'notification_list_view.dart',
     );
@@ -69,11 +69,11 @@ class NotificationListViewState extends State<NotificationListView>
           '${notification.info.title}\n${notification.link}',
           sharePositionOrigin: box!.localToGlobal(Offset.zero) & box.size,
         );
-        AnalyticsUtils.instance?.logEvent('share_long_click');
+        AnalyticsUtil.instance?.logEvent('share_long_click');
       },
       onTap: () {
         ApUtils.launchUrl(notification.link);
-        AnalyticsUtils.instance?.logEvent('notification_link_click');
+        AnalyticsUtil.instance?.logEvent('notification_link_click');
       },
       child: Container(
         width: double.infinity,
@@ -134,7 +134,7 @@ class NotificationListViewState extends State<NotificationListView>
         return InkWell(
           onTap: () {
             widget.onRefresh.call();
-            AnalyticsUtils.instance?.logEvent(AnalyticsConstants.refresh);
+            AnalyticsUtil.instance?.logEvent(AnalyticsConstants.refresh);
           },
           child: HintContent(
             icon: ApIcon.assignment,
@@ -166,7 +166,7 @@ class NotificationListViewState extends State<NotificationListView>
     if (controller!.position.extentAfter < 500) {
       if (widget.state == NotificationState.finish) {
         widget.onLoadingMore?.call();
-        AnalyticsUtils.instance?.logEvent('notification_load_more');
+        AnalyticsUtil.instance?.logEvent('notification_load_more');
       }
     }
   }

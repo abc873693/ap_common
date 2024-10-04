@@ -824,9 +824,9 @@ class _AnnouncementHomePageState extends State<AnnouncementHomePage> {
           } catch (e, s) {
             if (!mounted) return;
             ApUtils.showToast(context, ap.thirdPartyLoginFail);
-            CrashlyticsUtils.instance?.recordError(e, s);
+            CrashlyticsUtil.instance?.recordError(e, s);
             if (isNotLogin) Navigator.of(context, rootNavigator: true).pop();
-            if (CrashlyticsUtils.instance != null) rethrow;
+            if (CrashlyticsUtil.instance != null) rethrow;
           }
         case AnnouncementLoginType.apple:
           try {
@@ -843,7 +843,7 @@ class _AnnouncementHomePageState extends State<AnnouncementHomePage> {
             if (!mounted) return;
             ApUtils.showToast(context, ap.thirdPartyLoginFail);
             if (isNotLogin) Navigator.of(context, rootNavigator: true).pop();
-            CrashlyticsUtils.instance?.recordError(e, s);
+            CrashlyticsUtil.instance?.recordError(e, s);
           }
       }
     }

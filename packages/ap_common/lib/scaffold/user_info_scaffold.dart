@@ -72,7 +72,7 @@ class UserInfoScaffoldState extends State<UserInfoScaffold> {
                   () => codeMode = BarCodeMode
                       .values[(codeMode.index + 1) % BarCodeMode.values.length],
                 );
-                AnalyticsUtils.instance?.logEvent('user_info_barcode_switch');
+                AnalyticsUtil.instance?.logEvent('user_info_barcode_switch');
               },
             ),
         ],
@@ -80,7 +80,7 @@ class UserInfoScaffoldState extends State<UserInfoScaffold> {
       body: RefreshIndicator(
         onRefresh: () async {
           if (widget.onRefresh != null) await widget.onRefresh!();
-          AnalyticsUtils.instance?.logEvent('user_info_refresh');
+          AnalyticsUtil.instance?.logEvent('user_info_refresh');
           return;
         },
         child: ListView(

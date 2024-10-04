@@ -289,10 +289,10 @@ class ApUtils {
     } catch (e, s) {
       if (!context.mounted) return;
       ApUtils.showToast(context, ap.unknownError);
-      if (CrashlyticsUtils.instance == null) {
+      if (CrashlyticsUtil.instance == null) {
         rethrow;
       } else {
-        CrashlyticsUtils.instance?.recordError(e, s);
+        CrashlyticsUtil.instance?.recordError(e, s);
       }
     }
   }
