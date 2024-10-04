@@ -27,7 +27,7 @@ abstract class NotificationUtil {
   //   required int id,
   //   required String androidChannelId,
   //   required String androidChannelDescription,
-  //   required Day day,
+  //   required int weekday,
   //   required TimeOfDay time,
   //   required String title,
   //   required String content,

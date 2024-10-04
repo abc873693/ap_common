@@ -29,7 +29,7 @@ abstract class PreferenceUtil {
 
   List<String> getStringList(String key, List<String> defaultValue);
 
-  List<String> getKeys();
+  Set<String> getKeys();
 
   Future<bool>? remove(String key);
 }
