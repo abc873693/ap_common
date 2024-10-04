@@ -55,6 +55,8 @@ dependencies:
   app_tracking_transparency: ^2.0.2+4
 
 #dependency_overrides:
+#  ap_common_core:
+#    path: ../ap_common_core/
 
 dev_dependencies:
   flutter_test:
