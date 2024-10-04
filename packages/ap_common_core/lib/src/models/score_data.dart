@@ -1,7 +1,7 @@
 import 'dart:convert';
 
-import 'package:ap_common/config/ap_constants.dart';
-import 'package:ap_common/utils/preferences.dart';
+import 'package:ap_common_core/src/config/ap_constants.dart';
+import 'package:ap_common_core/src/utilities/preference_util.dart';
 import 'package:json_annotation/json_annotation.dart';
 
 part 'score_data.g.dart';
@@ -26,7 +26,7 @@ class ScoreData {
       );
 
   static ScoreData? load(String tag) {
-    final String rawString = Preferences.getString(
+    final String rawString = PreferenceUtil.instance.getString(
       '${ApConstants.packageName}'
           '.score_data_$tag',
       '',
@@ -46,7 +46,7 @@ class ScoreData {
   String toRawJson() => jsonEncode(toJson());
 
   void save(String tag) {
-    Preferences.setString(
+    PreferenceUtil.instance.setString(
       '${ApConstants.packageName}'
       '.score_data_$tag',
       toRawJson(),

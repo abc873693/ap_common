@@ -1,5 +1,4 @@
-import 'package:ap_common/models/user_info.dart';
-import 'package:flutter/material.dart';
+import 'package:ap_common_core/src/models/user_info.dart';
 
 abstract class AnalyticsUtils {
   static AnalyticsUtils? instance;
@@ -18,5 +17,6 @@ abstract class AnalyticsUtils {
 
   Future<void> logTimeEvent(String name, double seconds);
 
-  Future<void> logThemeEvent(ThemeMode themeMode);
+  //TODO: migration to implement level
+  // Future<void> logThemeEvent(ThemeMode themeMode);
 }

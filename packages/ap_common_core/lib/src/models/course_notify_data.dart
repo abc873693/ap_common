@@ -1,13 +1,11 @@
 import 'dart:convert';
+import 'dart:developer';
 
-import 'package:ap_common/config/ap_constants.dart';
-import 'package:ap_common/models/course_data.dart';
-import 'package:ap_common/utils/ap_localizations.dart';
-import 'package:ap_common/utils/notification_utils.dart';
-import 'package:ap_common/utils/preferences.dart';
-import 'package:flutter/cupertino.dart';
+import 'package:ap_common_core/src/config/ap_constants.dart';
+import 'package:ap_common_core/src/models/course_data.dart';
+import 'package:ap_common_core/src/utilities/notification_util.dart';
+import 'package:ap_common_core/src/utilities/preference_util.dart';
 import 'package:json_annotation/json_annotation.dart';
-import 'package:sprintf/sprintf.dart';
 
 part 'course_notify_data.g.dart';
 
@@ -27,7 +25,7 @@ class CourseNotifyData {
       );
 
   factory CourseNotifyData.load(String? tag) {
-    final String rawString = Preferences.getString(
+    final String rawString = PreferenceUtil.instance.getString(
       '${ApConstants.packageName}.'
           'course_notify_data_$tag',
       '',
@@ -40,16 +38,16 @@ class CourseNotifyData {
   }
 
   factory CourseNotifyData.loadCurrent() {
-    final String semester = Preferences.getString(
+    final String semester = PreferenceUtil.instance.getString(
       ApConstants.currentSemesterCode,
       ApConstants.semesterLatest,
     );
-    final String rawString = Preferences.getString(
+    final String rawString = PreferenceUtil.instance.getString(
       '${ApConstants.packageName}.'
           'course_notify_data_$semester',
       '',
     );
-    debugPrint(rawString);
+    log('loadCurrent $rawString', name: 'ap_common');
     if (rawString == '') {
       return CourseNotifyData(data: <CourseNotify>[])..tag = semester;
     } else {
@@ -81,57 +79,59 @@ class CourseNotifyData {
   }
 
   void save() {
-    Preferences.setString(
+    PreferenceUtil.instance.setString(
       '${ApConstants.packageName}'
       '.course_notify_data_$tag',
       toRawJson(),
     );
   }
 
-  void update(BuildContext context, String tag, CourseData courseData) {
-    final String key = '${ApConstants.packageName}.course_notify_data_$tag';
-    final ApLocalizations ap = ApLocalizations.of(context);
-    final CourseNotifyData cache = CourseNotifyData.load(key);
-    for (final CourseNotify courseNotify in cache.data) {
-      for (final Course courseDetail in courseData.courses) {
-        if (courseDetail.code == courseNotify.code) {
-          courseNotify.title = sprintf(ap.courseNotifyContent, <String?>[
-            courseNotify.title,
-            if (courseNotify.location == null || courseNotify.location!.isEmpty)
-              ap.courseNotifyUnknown
-            else
-              courseNotify.location,
-          ]);
-        }
-      }
-    }
-    Preferences.setString(
-      key,
-      toRawJson(),
-    );
-  }
+  //TODO: revert for i18n implement
+  // void update(BuildContext context, String tag, CourseData courseData) {
+  //   final String key = '${ApConstants.packageName}.course_notify_data_$tag';
+  //   final ApLocalizations ap = ApLocalizations.of(context);
+  //   final CourseNotifyData cache = CourseNotifyData.load(key);
+  //   for (final CourseNotify courseNotify in cache.data) {
+  //     for (final Course courseDetail in courseData.courses) {
+  //       if (courseDetail.code == courseNotify.code) {
+  //         courseNotify.title = sprintf(ap.courseNotifyContent, <String?>[
+  //           courseNotify.title,
+  //           if (courseNotify.location == null || courseNotify.location!.isEmpty)
+  //             ap.courseNotifyUnknown
+  //           else
+  //             courseNotify.location,
+  //         ]);
+  //       }
+  //     }
+  //   }
+  //   PreferenceUtil.instance.setString(
+  //     key,
+  //     toRawJson(),
+  //   );
+  // }
 
   static void clearOldVersionNotification({
     required String tag,
     required String newTag,
   }) {
-    final String rawString = Preferences.getString(
+    final String rawString = PreferenceUtil.instance.getString(
       '${ApConstants.packageName}.'
           'course_notify_data_$tag',
       '',
     );
-    debugPrint(rawString);
+    log('clearOldVersionNotification $rawString', name: 'ap_common');
     if (rawString.isNotEmpty) {
       final CourseNotifyData courseNotifyData =
           CourseNotifyData.fromRawJson(rawString);
       for (final CourseNotify element in courseNotifyData.data) {
-        NotificationUtils.cancelCourseNotify(id: element.id);
+        NotificationUtil.instance.cancelNotify(id: element.id);
       }
       courseNotifyData.data.clear();
       courseNotifyData.tag = newTag;
       courseNotifyData.save();
     }
-    Preferences.remove('${ApConstants.packageName}.course_notify_data_$tag');
+    PreferenceUtil.instance
+        .remove('${ApConstants.packageName}.course_notify_data_$tag');
   }
 }
 
