@@ -6,7 +6,7 @@ import 'package:encrypt/encrypt.dart' as encrypt;
 import 'package:flutter/foundation.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-class Preferences {
+class ApPreferenceUtil extends PreferenceUtil {
   static SharedPreferences? prefs;
 
   static late encrypt.Encrypter encrypter;
@@ -21,14 +21,14 @@ class Preferences {
       Platform.isLinux ||
       Platform.isWindows;
 
-  static Future<void> init({
+  Future<void> init({
     required encrypt.Key key,
     required encrypt.IV iv,
     bool initialApIcon = true,
   }) async {
     if (isSupport) {
       prefs = await SharedPreferences.getInstance();
-      ApIcon.code = Preferences.getString(
+      ApIcon.code = getString(
         ApConstants.prefIconStyleCode,
         ApIcon.outlined,
       );
@@ -38,26 +38,30 @@ class Preferences {
           mode: encrypt.AESMode.cbc,
         ),
       );
-      Preferences.iv = iv;
+      ApPreferenceUtil.iv = iv;
     }
   }
 
-  static Future<void> setString(String key, String data) async {
+  @override
+  Future<void> setString(String key, String data) async {
     await prefs?.setString(key, data);
   }
 
-  static String getString(String key, String defaultValue) {
+  @override
+  String getString(String key, String defaultValue) {
     return prefs?.getString(key) ?? defaultValue;
   }
 
-  static Future<void> setStringSecurity(String key, String data) async {
+  @override
+  Future<void> setStringSecurity(String key, String data) async {
     await prefs?.setString(
       key,
       encrypter.encrypt(data, iv: iv).base64,
     );
   }
 
-  static String getStringSecurity(String key, String defaultValue) {
+  @override
+  String getStringSecurity(String key, String defaultValue) {
     final String data = prefs?.getString(key) ?? '';
     if (data == '') {
       return defaultValue;
@@ -66,39 +70,53 @@ class Preferences {
     }
   }
 
-  static Future<void> setInt(String key, int data) async {
+  @override
+  Future<void> setInt(String key, int data) async {
     await prefs?.setInt(key, data);
   }
 
-  static int getInt(String key, int defaultValue) {
+  @override
+  int getInt(String key, int defaultValue) {
     return prefs?.getInt(key) ?? defaultValue;
   }
 
-  static Future<void> setDouble(String key, double data) async {
+  @override
+  Future<void> setDouble(String key, double data) async {
     await prefs?.setDouble(key, data);
   }
 
-  static double getDouble(String key, double defaultValue) {
+  @override
+  double getDouble(String key, double defaultValue) {
     return prefs?.getDouble(key) ?? defaultValue;
   }
 
-  static Future<void> setBool(String key, bool data) async {
+  @override
+  Future<void> setBool(String key, bool data) async {
     await prefs?.setBool(key, data);
   }
 
-  static bool getBool(String key, bool defaultValue) {
+  @override
+  bool getBool(String key, bool defaultValue) {
     return prefs?.getBool(key) ?? defaultValue;
   }
 
-  static Future<void> setStringList(String key, List<String> data) async {
+  @override
+  Future<void> setStringList(String key, List<String> data) async {
     await prefs?.setStringList(key, data);
   }
 
-  static List<String> getStringList(String key, List<String> defaultValue) {
+  @override
+  List<String> getStringList(String key, List<String> defaultValue) {
     return prefs?.getStringList(key) ?? defaultValue;
   }
 
-  static Future<bool>? remove(String key) {
+  @override
+  Set<String> getKeys() {
+    return prefs!.getKeys();
+  }
+
+  @override
+  Future<bool>? remove(String key) {
     return prefs?.remove(key);
   }
 }

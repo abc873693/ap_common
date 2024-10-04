@@ -8,7 +8,6 @@ import 'package:ap_common/resources/ap_theme.dart';
 import 'package:ap_common/scaffold/login_scaffold.dart';
 import 'package:ap_common/utils/ap_localizations.dart';
 import 'package:ap_common/utils/ap_utils.dart';
-import 'package:ap_common/utils/preferences.dart';
 import 'package:ap_common/widgets/hint_content.dart';
 import 'package:ap_common/widgets/progress_dialog.dart';
 import 'package:ap_common/widgets/yes_no_dialog.dart';
@@ -115,7 +114,7 @@ class _AnnouncementHomePageState extends State<AnnouncementHomePage> {
                 setState(() {
                   onlyShowNotReview = !onlyShowNotReview!;
                 });
-                Preferences.setBool(
+                PreferenceUtil.instance.setBool(
                   ApConstants.announcementOnlyNotReview,
                   onlyShowNotReview!,
                 );
@@ -128,7 +127,7 @@ class _AnnouncementHomePageState extends State<AnnouncementHomePage> {
                       setState(() {
                         onlyShowNotReview = value;
                       });
-                      Preferences.setBool(
+                      PreferenceUtil.instance.setBool(
                         ApConstants.announcementOnlyNotReview,
                         onlyShowNotReview!,
                       );
@@ -154,7 +153,8 @@ class _AnnouncementHomePageState extends State<AnnouncementHomePage> {
               },
             ),
           ],
-          if (Preferences.getBool(ApConstants.announcementIsLogin, false))
+          if (PreferenceUtil.instance
+              .getBool(ApConstants.announcementIsLogin, false))
             IconButton(
               icon: const Icon(Icons.exit_to_app),
               tooltip: ap.logout,
@@ -162,7 +162,10 @@ class _AnnouncementHomePageState extends State<AnnouncementHomePage> {
                 if (AnnouncementHelper.instance.loginType ==
                     AnnouncementLoginType.google) await _googleSignIn.signOut();
                 setState(() {
-                  Preferences.setBool(ApConstants.announcementIsLogin, false);
+                  PreferenceUtil.instance.setBool(
+                    ApConstants.announcementIsLogin,
+                    false,
+                  );
                   state = _State.notLogin;
                   loginData = null;
                 });
@@ -680,13 +683,15 @@ class _AnnouncementHomePageState extends State<AnnouncementHomePage> {
 
   Future<void> _getPreference() async {
     final bool isLogin =
-        Preferences.getBool(ApConstants.announcementIsLogin, false);
-    onlyShowNotReview =
-        Preferences.getBool(ApConstants.announcementOnlyNotReview, false);
+        PreferenceUtil.instance.getBool(ApConstants.announcementIsLogin, false);
+    onlyShowNotReview = PreferenceUtil.instance
+        .getBool(ApConstants.announcementOnlyNotReview, false);
     _username.text =
-        Preferences.getString(ApConstants.announcementUsername, '');
-    _password.text =
-        Preferences.getStringSecurity(ApConstants.announcementPassword, '');
+        PreferenceUtil.instance.getString(ApConstants.announcementUsername, '');
+    _password.text = PreferenceUtil.instance.getStringSecurity(
+      ApConstants.announcementPassword,
+      '',
+    );
     if (isLogin) {
       setState(() => state = _State.done);
       loginData = AnnouncementLoginData.load();
@@ -699,8 +704,8 @@ class _AnnouncementHomePageState extends State<AnnouncementHomePage> {
         );
       }
       if (loginData?.isExpired ?? true) {
-        final int index =
-            Preferences.getInt(ApConstants.announcementLoginType, 0);
+        final int index = PreferenceUtil.instance
+            .getInt(ApConstants.announcementLoginType, 0);
         _login(AnnouncementLoginType.values[index]);
       } else {
         AnnouncementHelper.instance.setAuthorization(loginData!.key);
@@ -721,8 +726,8 @@ class _AnnouncementHomePageState extends State<AnnouncementHomePage> {
         (_username.text.isEmpty || _password.text.isEmpty)) {
       ApUtils.showToast(context, ap.doNotEmpty);
     } else {
-      final bool isNotLogin =
-          !Preferences.getBool(ApConstants.announcementIsLogin, false);
+      final bool isNotLogin = !PreferenceUtil.instance
+          .getBool(ApConstants.announcementIsLogin, false);
       if (isNotLogin) {
         showDialog(
           context: context,
@@ -733,11 +738,14 @@ class _AnnouncementHomePageState extends State<AnnouncementHomePage> {
           barrierDismissible: false,
         );
       }
-      String? idToken = Preferences.getBool(
+      String? idToken = PreferenceUtil.instance.getBool(
         ApConstants.announcementIsLogin,
         false,
       )
-          ? Preferences.getStringSecurity(ApConstants.announcementIdToken, '')
+          ? PreferenceUtil.instance.getStringSecurity(
+              ApConstants.announcementIdToken,
+              '',
+            )
           : '';
 
       final GeneralCallback<AnnouncementLoginData> callback =
@@ -762,19 +770,20 @@ class _AnnouncementHomePageState extends State<AnnouncementHomePage> {
           if (kDebugMode) debugPrint(loginData.key);
           if (isNotLogin) Navigator.of(context, rootNavigator: true).pop();
           if (loginType == AnnouncementLoginType.normal) {
-            Preferences.setStringSecurity(
+            PreferenceUtil.instance.setStringSecurity(
               ApConstants.announcementPassword,
               _password.text,
             );
           } else {
-            Preferences.setStringSecurity(
+            PreferenceUtil.instance.setStringSecurity(
               ApConstants.announcementIdToken,
               idToken!,
             );
           }
           ApUtils.showToast(context, ap.loginSuccess);
-          Preferences.setBool(ApConstants.announcementIsLogin, true);
-          Preferences.setInt(
+          PreferenceUtil.instance
+              .setBool(ApConstants.announcementIsLogin, true);
+          PreferenceUtil.instance.setInt(
             ApConstants.announcementLoginType,
             loginType.index,
           );
@@ -787,7 +796,7 @@ class _AnnouncementHomePageState extends State<AnnouncementHomePage> {
       debugPrint('$loginType');
       switch (loginType) {
         case AnnouncementLoginType.normal:
-          Preferences.setString(
+          PreferenceUtil.instance.setString(
             ApConstants.announcementUsername,
             _username.text,
           );

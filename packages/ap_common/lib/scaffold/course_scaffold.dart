@@ -9,7 +9,6 @@ import 'package:ap_common/resources/resources.dart';
 import 'package:ap_common/utils/ap_localizations.dart';
 import 'package:ap_common/utils/ap_utils.dart';
 import 'package:ap_common/utils/notification_utils.dart';
-import 'package:ap_common/utils/preferences.dart';
 import 'package:ap_common/widgets/default_dialog.dart';
 import 'package:ap_common/widgets/hint_content.dart';
 import 'package:ap_common/widgets/item_picker.dart';
@@ -140,13 +139,15 @@ class CourseScaffoldState extends State<CourseScaffold> {
   @override
   void initState() {
     showSectionTime = widget.showSectionTime ??
-        Preferences.getBool(ApConstants.showSectionTime, true);
+        PreferenceUtil.instance.getBool(ApConstants.showSectionTime, true);
     showInstructors = widget.showInstructors ??
-        Preferences.getBool(ApConstants.showInstructors, true);
+        PreferenceUtil.instance.getBool(ApConstants.showInstructors, true);
     showClassroomLocation = widget.showClassroomLocation ??
-        Preferences.getBool(ApConstants.showClassroomLocation, true);
+        PreferenceUtil.instance
+            .getBool(ApConstants.showClassroomLocation, true);
     showSearchButton = widget.showSearchButton ??
-        Preferences.getBool(ApConstants.showCourseSearchButton, true);
+        PreferenceUtil.instance
+            .getBool(ApConstants.showCourseSearchButton, true);
     fetchInvisibleCourseCodes();
     super.initState();
   }
@@ -191,28 +192,28 @@ class CourseScaffoldState extends State<CourseScaffold> {
                     showSearchButton: showSearchButton,
                     showSectionTimeOnChanged: (bool? value) {
                       setState(() => showSectionTime = value);
-                      Preferences.setBool(
+                      PreferenceUtil.instance.setBool(
                         ApConstants.showSectionTime,
                         showSectionTime!,
                       );
                     },
                     showInstructorsOnChanged: (bool? value) {
                       setState(() => showInstructors = value);
-                      Preferences.setBool(
+                      PreferenceUtil.instance.setBool(
                         ApConstants.showInstructors,
                         showInstructors!,
                       );
                     },
                     showClassroomLocationOnChanged: (bool? value) {
                       setState(() => showClassroomLocation = value);
-                      Preferences.setBool(
+                      PreferenceUtil.instance.setBool(
                         ApConstants.showClassroomLocation,
                         showClassroomLocation!,
                       );
                     },
                     showSearchButtonOnChanged: (bool? value) {
                       setState(() => showSearchButton = value);
-                      Preferences.setBool(
+                      PreferenceUtil.instance.setBool(
                         ApConstants.showCourseSearchButton,
                         showSearchButton!,
                       );
@@ -669,7 +670,7 @@ class CourseScaffoldState extends State<CourseScaffold> {
     } else {
       invisibleCourseCodes.add(course.code);
     }
-    Preferences.setStringList(
+    PreferenceUtil.instance.setStringList(
       '$_kCourseInvisibleKey${widget.courseNotifySaveKey}',
       invisibleCourseCodes,
     );
@@ -677,7 +678,7 @@ class CourseScaffoldState extends State<CourseScaffold> {
   }
 
   void fetchInvisibleCourseCodes() {
-    invisibleCourseCodes = Preferences.getStringList(
+    invisibleCourseCodes = PreferenceUtil.instance.getStringList(
       '$_kCourseInvisibleKey${widget.courseNotifySaveKey}',
       <String>[],
     );
@@ -797,7 +798,7 @@ class _CourseContentState extends State<CourseContent> {
               ),
               if (widget.enableNotifyControl &&
                   widget.notifyData != null &&
-                  NotificationUtils.isSupport)
+                  ApNotificationUtil.isSupport)
                 IconButton(
                   icon: Icon(
                     state == CourseNotifyState.schedule
@@ -818,10 +819,10 @@ class _CourseContentState extends State<CourseContent> {
                           weekday: widget.weekday,
                           timeCode: widget.timeCode,
                         );
-                        await NotificationUtils.scheduleCourseNotify(
+                        await ApNotificationUtil.instance.scheduleCourseNotify(
                           context: context,
                           courseNotify: courseNotify,
-                          day: NotificationUtils.getDay(widget.weekday),
+                          weekday: widget.weekday,
                           androidResourceIcon: widget.androidResourceIcon,
                         );
                         widget.notifyData!.lastId++;
@@ -834,7 +835,7 @@ class _CourseContentState extends State<CourseContent> {
                         AnalyticsUtils.instance
                             ?.logEvent('course_notify_schedule');
                       } else {
-                        await NotificationUtils.cancelCourseNotify(
+                        await NotificationUtil.instance.cancelNotify(
                           id: courseNotify.id,
                         );
                         widget.notifyData!.data

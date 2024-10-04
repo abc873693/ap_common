@@ -3,7 +3,6 @@ import 'package:ap_common/resources/ap_theme.dart';
 import 'package:ap_common/utils/ap_localizations.dart';
 import 'package:ap_common/utils/ap_utils.dart';
 import 'package:ap_common/utils/notification_utils.dart';
-import 'package:ap_common/utils/preferences.dart';
 import 'package:ap_common/widgets/option_dialog.dart';
 import 'package:ap_common_core/ap_common_core.dart';
 import 'package:flutter/material.dart';
@@ -99,6 +98,7 @@ class SettingItem extends StatelessWidget {
 
 class CheckCourseNotifyItem extends StatelessWidget {
   const CheckCourseNotifyItem({super.key, this.tag});
+
   final String? tag;
 
   @override
@@ -111,7 +111,7 @@ class CheckCourseNotifyItem extends StatelessWidget {
         final CourseNotifyData notifyData = tag == null
             ? CourseNotifyData.loadCurrent()
             : CourseNotifyData.load(tag);
-        if (NotificationUtils.isSupport) {
+        if (ApNotificationUtil.isSupport) {
           if (notifyData.data.isNotEmpty) {
             showDialog(
               context: context,
@@ -124,7 +124,7 @@ class CheckCourseNotifyItem extends StatelessWidget {
                 ],
                 index: -1,
                 onSelected: (int index) {
-                  NotificationUtils.cancelCourseNotify(
+                  NotificationUtil.instance.cancelNotify(
                     id: notifyData.data[index].id,
                   );
                   notifyData.data.removeAt(index);
@@ -156,8 +156,8 @@ class ClearAllNotifyItem extends StatelessWidget {
       text: ap.cancelAllNotify,
       subText: ap.cancelAllNotifySubTitle,
       onTap: () {
-        if (NotificationUtils.isSupport) {
-          NotificationUtils.cancelAll();
+        if (ApNotificationUtil.isSupport) {
+          NotificationUtil.instance.cancelAll();
           final CourseNotifyData notifyData = tag == null
               ? CourseNotifyData.loadCurrent()
               : CourseNotifyData.load(tag);
@@ -191,7 +191,7 @@ class ChangeLanguageItem extends StatelessWidget {
           ApLocalizations.of(context).traditionalChinese,
           ApLocalizations.of(context).english,
         ];
-    final String code = Preferences.getString(
+    final String code = PreferenceUtil.instance.getString(
       ApConstants.prefLanguageCode,
       ApSupportLanguageConstants.system,
     );
@@ -229,7 +229,8 @@ class ChangeLanguageItem extends StatelessWidget {
                   break;
               }
               onChange.call(locale);
-              Preferences.setString(ApConstants.prefLanguageCode, code);
+              PreferenceUtil.instance
+                  .setString(ApConstants.prefLanguageCode, code);
               AnalyticsUtils.instance?.logEvent(
                 'change_language',
                 parameters: <String, String>{'code': code},
@@ -279,7 +280,8 @@ class ChangeThemeModeItem extends StatelessWidget {
             onSelected: (int index) {
               final ThemeMode mode = ThemeMode.values[index];
               onChange.call(mode);
-              Preferences.setInt(ApConstants.prefThemeModeIndex, index);
+              PreferenceUtil.instance
+                  .setInt(ApConstants.prefThemeModeIndex, index);
               AnalyticsUtils.instance?.logEvent(
                 'change_theme',
                 parameters: <String, String>{
@@ -324,7 +326,8 @@ class ChangeIconStyleItem extends StatelessWidget {
             onSelected: (int index) {
               final String code = ApIcon.values[index];
               ApIcon.code = code;
-              Preferences.setString(ApConstants.prefIconStyleCode, code);
+              PreferenceUtil.instance
+                  .setString(ApConstants.prefIconStyleCode, code);
               onChange.call(code);
               AnalyticsUtils.instance?.logEvent(
                 'change_icon_style',

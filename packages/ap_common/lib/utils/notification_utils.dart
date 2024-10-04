@@ -11,7 +11,7 @@ import 'package:timezone/timezone.dart' as tz;
 
 export 'package:flutter_local_notifications/flutter_local_notifications.dart';
 
-class NotificationUtils {
+class ApNotificationUtil extends NotificationUtil {
   static const String androidResourceName = '@drawable/ic_stat_name';
 
   // Notification ID
@@ -22,7 +22,10 @@ class NotificationUtils {
   static bool get isSupport =>
       !kIsWeb && (Platform.isAndroid || Platform.isIOS || Platform.isMacOS);
 
-  static InitializationSettings get settings {
+  static ApNotificationUtil get instance =>
+      NotificationUtil.instance as ApNotificationUtil;
+
+  InitializationSettings get settings {
     const AndroidInitializationSettings initializationSettingsAndroid =
         AndroidInitializationSettings(androidResourceName);
     const DarwinInitializationSettings initializationSettingsIOS =
@@ -41,7 +44,7 @@ class NotificationUtils {
   ///
   /// In accordance with ISO 8601
   /// a week starts with Monday, which has the value 1.
-  static Day getDay(int weekday) {
+  Day getDay(int weekday) {
     if (weekday == 7) {
       return Day.sunday;
     } else {
@@ -49,7 +52,7 @@ class NotificationUtils {
     }
   }
 
-  static TimeOfDay parseTime(String text, {int beforeMinutes = 0}) {
+  TimeOfDay parseTime(String text, {int beforeMinutes = 0}) {
     final DateFormat formatter = DateFormat('HH:mm', 'zh');
     final DateTime dateTime = formatter.parse(text).add(
           Duration(minutes: -beforeMinutes),
@@ -60,7 +63,7 @@ class NotificationUtils {
     );
   }
 
-  static DateTime getNextWeekdayDateTime(Day day, TimeOfDay time) {
+  DateTime getNextWeekdayDateTime(Day day, TimeOfDay time) {
     final DateTime now = DateTime.now();
     final DateTime dateTime = DateTime(
       now.year,
@@ -76,7 +79,8 @@ class NotificationUtils {
     );
   }
 
-  static Future<void> show({
+  @override
+  Future<void> show({
     required int id,
     required String androidChannelId,
     required String androidChannelDescription,
@@ -103,7 +107,7 @@ class NotificationUtils {
       macOS: const DarwinNotificationDetails(presentAlert: true),
     );
     flutterLocalNotificationsPlugin.initialize(
-      settings ?? NotificationUtils.settings,
+      settings ?? this.settings,
       // onSelectNotification: (String? text) async =>
       //     onSelectNotification?.call(),
     );
@@ -116,10 +120,10 @@ class NotificationUtils {
     );
   }
 
-  static Future<void> scheduleCourseNotify({
+  Future<void> scheduleCourseNotify({
     required BuildContext context,
     required CourseNotify courseNotify,
-    required Day day,
+    required int weekday,
     bool enableVibration = true,
     int beforeMinutes = 10,
     String? androidResourceIcon = androidResourceName,
@@ -143,7 +147,7 @@ class NotificationUtils {
       id: courseNotify.id,
       title: ap.courseNotify,
       content: content,
-      day: day,
+      weekday: weekday,
       time: time,
       androidChannelId: '$course',
       androidChannelDescription: ap.courseNotify,
@@ -152,11 +156,12 @@ class NotificationUtils {
     );
   }
 
-  static Future<void> scheduleWeeklyNotify({
+  //TODO: use interface
+  Future<void> scheduleWeeklyNotify({
     required int id,
     required String androidChannelId,
     required String androidChannelDescription,
-    required Day day,
+    required int weekday,
     required TimeOfDay time,
     required String title,
     required String content,
@@ -181,11 +186,11 @@ class NotificationUtils {
     );
     tz.initializeTimeZones();
     final tz.TZDateTime scheduleDateTime = tz.TZDateTime.from(
-      getNextWeekdayDateTime(day, time),
+      getNextWeekdayDateTime(getDay(weekday), time),
       tz.local,
     );
     flutterLocalNotificationsPlugin.initialize(
-      settings ?? NotificationUtils.settings,
+      settings ?? this.settings,
       // onSelectNotification: (String? text) async =>
       //     onSelectNotification?.call(),
     );
@@ -203,7 +208,8 @@ class NotificationUtils {
     );
   }
 
-  static Future<void> schedule({
+  @override
+  Future<void> schedule({
     required int id,
     required String androidChannelId,
     required String androidChannelDescription,
@@ -235,7 +241,7 @@ class NotificationUtils {
       tz.local,
     );
     flutterLocalNotificationsPlugin.initialize(
-      settings ?? NotificationUtils.settings,
+      settings ?? this.settings,
       // onSelectNotification: (String? text) async =>
       //     onSelectNotification?.call(),
     );
@@ -252,7 +258,8 @@ class NotificationUtils {
     );
   }
 
-  static Future<bool?> requestPermissions({
+  @override
+  Future<bool?> requestPermissions({
     bool sound = true,
     bool alert = true,
     bool badge = true,
@@ -285,20 +292,19 @@ class NotificationUtils {
     }
   }
 
-  static Future<void> cancelCourseNotify({
-    required int id,
-  }) async {
+  @override
+  Future<void> cancelNotify({required int id}) async {
     final FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
         FlutterLocalNotificationsPlugin();
     await flutterLocalNotificationsPlugin.cancel(id);
   }
 
-  static Future<List<PendingNotificationRequest>>
-      getPendingNotificationList() async {
+  Future<List<PendingNotificationRequest>> getPendingNotificationList() async {
     return FlutterLocalNotificationsPlugin().pendingNotificationRequests();
   }
 
-  static Future<void> cancelAll() async {
+  @override
+  Future<void> cancelAll() async {
     await FlutterLocalNotificationsPlugin().cancelAll();
   }
 }
