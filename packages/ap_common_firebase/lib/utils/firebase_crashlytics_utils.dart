@@ -1,7 +1,7 @@
 import 'dart:async';
 import 'dart:io';
 
-import 'package:ap_common/utils/crashlytics_utils.dart';
+import 'package:ap_common_core/ap_common_core.dart';
 import 'package:ap_common_firebase/utils/firebase_utils.dart';
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:flutter/foundation.dart';
@@ -34,7 +34,7 @@ class FirebaseCrashlyticsUtils extends CrashlyticsUtils {
     exception,
     StackTrace stack, {
     reason,
-    Iterable<DiagnosticsNode>? information,
+    Iterable<Object>? information,
     bool? printDetails,
   }) async {
     information ??= const [];
