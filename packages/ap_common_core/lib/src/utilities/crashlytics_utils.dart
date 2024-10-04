@@ -1,5 +1,5 @@
-abstract class CrashlyticsUtils {
-  static CrashlyticsUtils? instance;
+abstract class CrashlyticsUtil {
+  static CrashlyticsUtil? instance;
 
   Future<void> recordError(
     dynamic exception,

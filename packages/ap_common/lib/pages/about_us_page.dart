@@ -50,7 +50,7 @@ class AboutUsPageState extends State<AboutUsPage> {
 
   @override
   void initState() {
-    AnalyticsUtils.instance?.setCurrentScreen(
+    AnalyticsUtil.instance?.setCurrentScreen(
       'AboutUsPage',
       'about_us_page.dart',
     );
@@ -87,7 +87,7 @@ class AboutUsPageState extends State<AboutUsPage> {
                       ),
                     ),
                   );
-                  AnalyticsUtils.instance?.logEvent('license_page_click');
+                  AnalyticsUtil.instance?.logEvent('license_page_click');
                 },
               ),
             ],
@@ -184,7 +184,7 @@ class AboutUsPageState extends State<AboutUsPage> {
                                   ApUtils.launchUrl(
                                     'https://m.me/${widget.fbFanPageId}',
                                   );
-                                  AnalyticsUtils.instance?.logEvent('fb_click');
+                                  AnalyticsUtil.instance?.logEvent('fb_click');
                                 },
                                 iconSize: 48.0,
                               ),
@@ -196,7 +196,7 @@ class AboutUsPageState extends State<AboutUsPage> {
                                     ApUtils.launchUrl(
                                       'https://ig.me/m/$username',
                                     );
-                                    AnalyticsUtils.instance
+                                    AnalyticsUtil.instance
                                         ?.logEvent('instagram_click');
                                   },
                                   iconSize: 48.0,
@@ -214,7 +214,7 @@ class AboutUsPageState extends State<AboutUsPage> {
                                       );
                                     },
                                   );
-                                  AnalyticsUtils.instance
+                                  AnalyticsUtil.instance
                                       ?.logEvent('github_click');
                                 },
                                 iconSize: 48.0,
@@ -232,7 +232,7 @@ class AboutUsPageState extends State<AboutUsPage> {
                                       );
                                     },
                                   );
-                                  AnalyticsUtils.instance
+                                  AnalyticsUtil.instance
                                       ?.logEvent('email_click');
                                 },
                                 iconSize: 48.0,

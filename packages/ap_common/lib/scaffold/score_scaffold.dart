@@ -84,7 +84,7 @@ class ScoreScaffoldState extends State<ScoreScaffold> {
           ? FloatingActionButton(
               onPressed: () {
                 _pickSemester();
-                AnalyticsUtils.instance?.logEvent('score_search_button_click');
+                AnalyticsUtil.instance?.logEvent('score_search_button_click');
               },
               child: const Icon(Icons.search),
             )
@@ -114,7 +114,7 @@ class ScoreScaffoldState extends State<ScoreScaffold> {
             child: RefreshIndicator(
               onRefresh: () async {
                 await widget.onRefresh?.call();
-                AnalyticsUtils.instance?.logEvent('score_refresh');
+                AnalyticsUtil.instance?.logEvent('score_refresh');
                 return;
               },
               child: _body(),
@@ -295,7 +295,7 @@ class _ScoreContentState extends State<ScoreContent> {
                             onTap: (widget.onScoreSelect != null)
                                 ? () {
                                     widget.onScoreSelect!(i);
-                                    AnalyticsUtils.instance
+                                    AnalyticsUtil.instance
                                         ?.logEvent('score_title_click');
                                   }
                                 : null,
