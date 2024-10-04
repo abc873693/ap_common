@@ -15,9 +15,9 @@ export 'package:firebase_messaging/firebase_messaging.dart';
 class FirebaseUtils {
   static FirebaseAnalytics? init() {
     if (FirebaseCrashlyticsUtils.isSupported)
-      CrashlyticsUtils.instance = FirebaseCrashlyticsUtils.instance;
+      CrashlyticsUtil.instance = FirebaseCrashlyticsUtils.instance;
     if (FirebaseAnalyticsUtils.isSupported) {
-      AnalyticsUtils.instance = FirebaseAnalyticsUtils.instance;
+      AnalyticsUtil.instance = FirebaseAnalyticsUtils.instance;
       return FirebaseAnalyticsUtils.instance.analytics;
     }
     FirebasePerformancesUtils.instance.init();

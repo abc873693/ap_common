@@ -8,7 +8,7 @@ import 'package:flutter/foundation.dart';
 
 export 'package:firebase_crashlytics/firebase_crashlytics.dart';
 
-class FirebaseCrashlyticsUtils extends CrashlyticsUtils {
+class FirebaseCrashlyticsUtils extends CrashlyticsUtil {
   static FirebaseCrashlyticsUtils? _instance;
 
   static FirebaseCrashlyticsUtils get instance {

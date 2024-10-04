@@ -7,7 +7,6 @@ import 'package:url_launcher/url_launcher.dart';
 
 import 'firebase_analytics_utils.dart';
 
-export 'package:ap_common/utils/cloud_message_utils.dart';
 export 'package:firebase_messaging/firebase_messaging.dart';
 
 const NOTIFY_ID = 9919;

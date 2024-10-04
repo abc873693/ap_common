@@ -11,7 +11,7 @@ import 'firebase_utils.dart';
 
 export 'package:firebase_analytics/firebase_analytics.dart';
 
-class FirebaseAnalyticsUtils extends AnalyticsUtils {
+class FirebaseAnalyticsUtils extends AnalyticsUtil {
   static FirebaseAnalyticsUtils? _instance;
 
   static bool get isSupported =>
