@@ -1,11 +1,9 @@
-import 'package:ap_common/config/analytics_constants.dart';
-import 'package:ap_common/models/notification_data.dart';
 import 'package:ap_common/resources/ap_icon.dart';
 import 'package:ap_common/resources/ap_theme.dart';
-import 'package:ap_common/utils/analytics_utils.dart';
 import 'package:ap_common/utils/ap_localizations.dart';
 import 'package:ap_common/utils/ap_utils.dart';
 import 'package:ap_common/widgets/hint_content.dart';
+import 'package:ap_common_core/ap_common_core.dart';
 import 'package:flutter/material.dart';
 
 enum NotificationState { loading, finish, loadingMore, error, empty, offline }

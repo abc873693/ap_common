@@ -1,5 +1,3 @@
-library ap_common_core;
-
 export 'src/config/analytics_constants.dart';
 export 'src/config/ap_constants.dart';
 export 'src/models/announcement_data.dart';

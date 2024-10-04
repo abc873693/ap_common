@@ -1,8 +1,6 @@
 import 'dart:io';
 
 import 'package:ap_common/api/announcement_helper.dart';
-import 'package:ap_common/config/ap_constants.dart';
-import 'package:ap_common/models/announcement_data.dart';
 import 'package:ap_common/pages/announcement/black_list_page.dart';
 import 'package:ap_common/pages/announcement/edit_page.dart';
 import 'package:ap_common/resources/ap_icon.dart';
@@ -10,7 +8,6 @@ import 'package:ap_common/resources/ap_theme.dart';
 import 'package:ap_common/scaffold/login_scaffold.dart';
 import 'package:ap_common/utils/ap_localizations.dart';
 import 'package:ap_common/utils/ap_utils.dart';
-import 'package:ap_common/utils/crashlytics_utils.dart';
 import 'package:ap_common/utils/preferences.dart';
 import 'package:ap_common/widgets/hint_content.dart';
 import 'package:ap_common/widgets/progress_dialog.dart';

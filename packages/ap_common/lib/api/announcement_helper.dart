@@ -4,11 +4,10 @@ import 'dart:ui' show Locale;
 
 import 'package:ap_common/callback/general_callback.dart';
 import 'package:ap_common/l10n/l10n.dart';
-import 'package:ap_common/models/announcement_data.dart';
-import 'package:ap_common/models/announcement_login_data.dart';
+import 'package:ap_common_core/ap_common_core.dart';
 
 export 'package:ap_common/callback/general_callback.dart';
-export 'package:ap_common/models/announcement_login_data.dart';
+export 'package:ap_common_core/ap_common_core.dart';
 
 enum AnnouncementLoginType {
   normal,

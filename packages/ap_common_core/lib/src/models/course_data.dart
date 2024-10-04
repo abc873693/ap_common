@@ -194,38 +194,6 @@ class Course {
     return buffer.toString();
   }
 
-  //TODO: revert for i18n implement
-  // String getTimesShortName(List<TimeCode>? timeCode) {
-  //   String text = '';
-  //   if (times.isEmpty) return text;
-  //   int startIndex = -1;
-  //   int repeat = 0;
-  //   final int len = times.length;
-  //   for (int i = 0; i < len; i++) {
-  //     final SectionTime time = times[i];
-  //     if (startIndex != -1 &&
-  //         time.index - 1 == times[i - 1].index &&
-  //         time.weekday == times[i - 1].weekday) {
-  //       repeat++;
-  //       if (i == len - 1 ||
-  //           times[i + 1].weekday != times[i].weekday ||
-  //           times[i + 1].index != times[i].index + 1) {
-  //         final SectionTime endTime = times[startIndex + repeat];
-  //         text += '-'
-  //             '${timeCode![endTime.index].title}';
-  //         repeat = 0;
-  //         startIndex = -1;
-  //       }
-  //     } else {
-  //       startIndex = i;
-  //       text += '${text.isEmpty ? '' : ' '}'
-  //           '(${ApLocalizations.current.weekdaysCourse[time.weekDayIndex]}) '
-  //           '${timeCode![time.index].title}';
-  //     }
-  //   }
-  //   return text;
-  // }
-
   Course copyWith({
     String? code,
     String? title,
