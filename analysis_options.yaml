@@ -2,9 +2,15 @@ include: package:lint/strict.yaml
 
 analyzer:
   exclude:
-    # generated files
-    - lib/src/models/*.g.dart
-    - lib/src/**/*.g.dart
+    # l10n generated code
+    - packages/ap_common/lib/l10n/intl/*.dart
+    - packages/ap_common/lib/l10n/l10n.dart
+    - apps/example/lib/l10n/intl/*.dart
+    - apps/example/lib/l10n/l10n.dart
+    # example
+#    - example/**
+    # other generated files
+    - '**/*.g.dart'
 
 linter:
   rules:

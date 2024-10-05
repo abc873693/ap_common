@@ -6,20 +6,19 @@ import 'package:flutter/foundation.dart';
 export 'package:firebase_performance/firebase_performance.dart';
 
 class FirebasePerformancesUtils {
-  static FirebasePerformancesUtils? _instance;
-
-  static FirebasePerformancesUtils get instance {
-    return _instance ??= FirebasePerformancesUtils();
-  }
-
-  static bool get isSupported =>
-      kIsWeb || Platform.isAndroid || Platform.isIOS;
-
   FirebasePerformancesUtils() {
     if (isSupported) {
       performance = FirebasePerformance.instance;
     }
   }
+  static FirebasePerformancesUtils? _instance;
+
+  //ignore: prefer_constructors_over_static_methods
+  static FirebasePerformancesUtils get instance {
+    return _instance ??= FirebasePerformancesUtils();
+  }
+
+  static bool get isSupported => kIsWeb || Platform.isAndroid || Platform.isIOS;
 
   FirebasePerformance? performance;
 

@@ -20,6 +20,5 @@ dependencies:
   injector: ^4.0.0
 
 dev_dependencies:
-  lint: ^2.1.2
   build_runner: ^2.0.3
   json_serializable: ^6.3.0
