@@ -2,8 +2,8 @@ import 'dart:developer';
 import 'dart:io';
 
 import 'package:ap_common_core/ap_common_core.dart';
-import 'package:ap_common_firebase/utils/firebase_analytics_utils.dart';
-import 'package:ap_common_firebase/utils/firebase_utils.dart';
+import 'package:ap_common_firebase/src/utils/firebase_analytics_utils.dart';
+import 'package:ap_common_firebase/src/utils/firebase_utils.dart';
 import 'package:flutter/foundation.dart';
 import 'package:url_launcher/url_launcher.dart';
 
