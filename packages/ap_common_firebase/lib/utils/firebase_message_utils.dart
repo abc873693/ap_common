@@ -1,36 +1,37 @@
+import 'dart:developer';
 import 'dart:io';
 
 import 'package:ap_common_core/ap_common_core.dart';
+import 'package:ap_common_firebase/utils/firebase_analytics_utils.dart';
 import 'package:ap_common_firebase/utils/firebase_utils.dart';
 import 'package:flutter/foundation.dart';
 import 'package:url_launcher/url_launcher.dart';
 
-import 'firebase_analytics_utils.dart';
-
 export 'package:firebase_messaging/firebase_messaging.dart';
 
-const NOTIFY_ID = 9919;
-const NOTIFY_ANDROID_CHANNEL_ID = '1000';
-const androidChannelDescription = 'FCM';
+const int notifyId = 9919;
+const String notifyAndroidChannelId = '1000';
+const String androidChannelDescription = 'FCM';
 
 class FirebaseMessagingUtils {
+  FirebaseMessagingUtils() {
+    if (isSupported) {
+      messaging = FirebaseMessaging.instance;
+    }
+  }
+
   static FirebaseMessagingUtils? _instance;
 
+  //ignore: prefer_constructors_over_static_methods
   static FirebaseMessagingUtils get instance {
     return _instance ??= FirebaseMessagingUtils();
   }
 
   static bool get isSupported =>
-      (kIsWeb || Platform.isAndroid || Platform.isIOS || Platform.isMacOS);
+      kIsWeb || Platform.isAndroid || Platform.isIOS || Platform.isMacOS;
 
   Future<bool> isBrowserSupported() async {
     return FirebaseMessaging.instance.isSupported();
-  }
-
-  FirebaseMessagingUtils() {
-    if (isSupported) {
-      messaging = FirebaseMessaging.instance;
-    }
   }
 
   FirebaseMessaging? messaging;
@@ -45,10 +46,10 @@ class FirebaseMessagingUtils {
     }
     FirebaseMessaging.onMessage.listen((RemoteMessage message) async {
       if (message.notification != null) {
-        debugPrint("onMessage: $message");
+        debugPrint('onMessage: $message');
         NotificationUtil.instance.show(
-          id: NOTIFY_ID,
-          androidChannelId: NOTIFY_ANDROID_CHANNEL_ID,
+          id: notifyId,
+          androidChannelId: notifyAndroidChannelId,
           androidChannelDescription: androidChannelDescription,
           title: message.notification!.title ?? '',
           content: message.notification!.body ?? '',
@@ -63,7 +64,7 @@ class FirebaseMessagingUtils {
       }
     });
     FirebaseMessaging.onMessageOpenedApp.listen((RemoteMessage message) async {
-      debugPrint("onMessageOpenedApp: $message");
+      debugPrint('onMessageOpenedApp: $message');
       await navigateToItemDetail(
         message,
         onClick,
@@ -71,26 +72,18 @@ class FirebaseMessagingUtils {
       );
     });
     FirebaseMessaging.onBackgroundMessage((RemoteMessage message) async {
-      debugPrint("onBackgroundMessage: $message");
+      debugPrint('onBackgroundMessage: $message');
       await navigateToItemDetail(
         message,
         onClick,
         customOnClickAction,
       );
     });
-    final value = await messaging?.requestPermission(
-      alert: true,
-      announcement: false,
-      badge: true,
-      carPlay: false,
-      criticalAlert: false,
-      provisional: false,
-      sound: true,
-    );
+    final NotificationSettings? value = await messaging?.requestPermission();
     if (value?.authorizationStatus == AuthorizationStatus.authorized) {
       messaging?.getToken(vapidKey: vapidKey).then((String? token) {
         if (token != null && kDebugMode) {
-          print("Push Messaging token: $token");
+          log('Push Messaging token: $token', name: 'firebase');
         }
       });
       FirebaseAnalyticsUtils.instance.setUserProperty(
@@ -106,12 +99,12 @@ class FirebaseMessagingUtils {
     Function(RemoteMessage)? onClick,
     bool customOnClickAction,
   ) async {
-    final data = message.data;
+    final Map<String, dynamic> data = message.data;
     if (customOnClickAction) {
       onClick?.call(message);
-    } else if (data['type'] == "1") {
+    } else if (data['type'] == '1') {
       launchUrl(
-        Uri.parse(data['url']),
+        Uri.parse(data['url'] as String),
       );
     } else {
       onClick?.call(message);

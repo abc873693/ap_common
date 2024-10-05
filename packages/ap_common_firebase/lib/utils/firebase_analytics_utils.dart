@@ -3,30 +3,31 @@ import 'dart:io';
 
 import 'package:ap_common/resources/ap_theme.dart';
 import 'package:ap_common_core/ap_common_core.dart';
+import 'package:ap_common_firebase/utils/firebase_utils.dart';
 import 'package:firebase_analytics/firebase_analytics.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
-import 'firebase_utils.dart';
-
 export 'package:firebase_analytics/firebase_analytics.dart';
 
 class FirebaseAnalyticsUtils extends AnalyticsUtil {
-  static FirebaseAnalyticsUtils? _instance;
-
-  static bool get isSupported =>
-      (kIsWeb || Platform.isAndroid || Platform.isIOS || Platform.isMacOS);
-
-  static FirebaseAnalyticsUtils get instance {
-    return _instance ??= FirebaseAnalyticsUtils();
-  }
-
   FirebaseAnalyticsUtils() {
     if (isSupported) analytics = FirebaseAnalytics.instance;
   }
 
+  static FirebaseAnalyticsUtils? _instance;
+
+  static bool get isSupported =>
+      kIsWeb || Platform.isAndroid || Platform.isIOS || Platform.isMacOS;
+
+  //ignore: prefer_constructors_over_static_methods
+  static FirebaseAnalyticsUtils get instance {
+    return _instance ??= FirebaseAnalyticsUtils();
+  }
+
   FirebaseAnalytics? analytics;
 
+  @override
   Future<void> setCurrentScreen(
     String screenName,
     String screenClassOverride,
@@ -37,11 +38,13 @@ class FirebaseAnalyticsUtils extends AnalyticsUtil {
     );
   }
 
+  @override
   Future<void> setUserId(String id) async {
     await analytics?.setUserId(id: id);
     debugPrint('setUserId succeeded');
   }
 
+  @override
   Future<void> setUserProperty(
     String name,
     String? value,
@@ -53,6 +56,7 @@ class FirebaseAnalyticsUtils extends AnalyticsUtil {
     debugPrint('setUserProperty $name succeeded');
   }
 
+  @override
   Future<void> logEvent(
     String name, {
     Map<String, dynamic>? parameters,
@@ -63,6 +67,7 @@ class FirebaseAnalyticsUtils extends AnalyticsUtil {
     );
   }
 
+  @override
   Future<void> logUserInfo(UserInfo? userInfo) async {
     if (userInfo == null) return;
     if (userInfo.department != null && userInfo.department!.isNotEmpty) {
@@ -93,8 +98,12 @@ class FirebaseAnalyticsUtils extends AnalyticsUtil {
     debugPrint('logUserInfo succeeded');
   }
 
-  Future<void> logApiEvent(String type, int status,
-      {String message = ''}) async {
+  @override
+  Future<void> logApiEvent(
+    String type,
+    int status, {
+    String message = '',
+  }) async {
     await analytics?.logEvent(
       name: 'ap_api',
       parameters: <String, dynamic>{
@@ -116,6 +125,7 @@ class FirebaseAnalyticsUtils extends AnalyticsUtil {
     debugPrint('log CalculateUnits succeeded');
   }
 
+  @override
   Future<void> logTimeEvent(String name, double seconds) async {
     await analytics?.logEvent(
       name: name,

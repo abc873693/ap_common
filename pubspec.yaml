@@ -6,3 +6,4 @@ environment:
 
 dev_dependencies:
   melos: ^6.1.0
+  lint: ^2.1.2

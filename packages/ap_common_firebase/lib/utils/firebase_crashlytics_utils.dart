@@ -9,18 +9,19 @@ import 'package:flutter/foundation.dart';
 export 'package:firebase_crashlytics/firebase_crashlytics.dart';
 
 class FirebaseCrashlyticsUtils extends CrashlyticsUtil {
+  FirebaseCrashlyticsUtils() {
+    if (isSupported) crashlytics = FirebaseCrashlytics.instance;
+  }
+
   static FirebaseCrashlyticsUtils? _instance;
 
+  //ignore: prefer_constructors_over_static_methods
   static FirebaseCrashlyticsUtils get instance {
     return _instance ??= FirebaseCrashlyticsUtils();
   }
 
   static bool get isSupported =>
       !kIsWeb && (Platform.isAndroid || Platform.isIOS || Platform.isMacOS);
-
-  FirebaseCrashlyticsUtils() {
-    if (isSupported) crashlytics = FirebaseCrashlytics.instance;
-  }
 
   FirebaseCrashlytics? crashlytics;
 
@@ -31,13 +32,13 @@ class FirebaseCrashlyticsUtils extends CrashlyticsUtil {
 
   @override
   Future<void> recordError(
-    exception,
+    dynamic exception,
     StackTrace stack, {
-    reason,
+    dynamic reason,
     Iterable<Object>? information,
     bool? printDetails,
   }) async {
-    information ??= const [];
+    information ??= const <Object>[];
     await crashlytics?.recordError(
       exception,
       stack,
