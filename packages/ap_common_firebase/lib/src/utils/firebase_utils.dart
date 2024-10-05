@@ -1,9 +1,9 @@
 import 'dart:io';
 
 import 'package:ap_common_core/ap_common_core.dart';
-import 'package:ap_common_firebase/utils/firebase_analytics_utils.dart';
-import 'package:ap_common_firebase/utils/firebase_crashlytics_utils.dart';
-import 'package:ap_common_firebase/utils/firebase_performance_utils.dart';
+import 'package:ap_common_firebase/src/utils/firebase_analytics_utils.dart';
+import 'package:ap_common_firebase/src/utils/firebase_crashlytics_utils.dart';
+import 'package:ap_common_firebase/src/utils/firebase_performance_utils.dart';
 import 'package:flutter/foundation.dart';
 
 export 'package:firebase_analytics/firebase_analytics.dart';
