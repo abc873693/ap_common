@@ -1,12 +1,11 @@
 import 'package:ap_common/api/announcement_helper.dart';
 import 'package:ap_common/api/imgur_helper.dart';
 import 'package:ap_common/pages/announcement/home_page.dart' show TagColors;
-import 'package:ap_common/resources/ap_icon.dart';
 import 'package:ap_common/resources/ap_theme.dart';
-import 'package:ap_common/utils/ap_localizations.dart';
 import 'package:ap_common/utils/ap_utils.dart';
 import 'package:ap_common/widgets/ap_network_image.dart';
 import 'package:ap_common/widgets/default_dialog.dart';
+import 'package:ap_common_flutter_core/ap_common_flutter_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_keyboard_visibility/flutter_keyboard_visibility.dart';
 
@@ -199,7 +198,8 @@ class _AnnouncementEditPageState extends State<AnnouncementEditPage> {
                             actionText: ApLocalizations.of(context).confirm,
                             actionFunction: () {
                               if (_newTag.text.isEmpty) {
-                                ApUtils.showToast(context, app.doNotEmpty);
+                                UiUtil.instance
+                                    .showToast(context, app.doNotEmpty);
                               } else {
                                 final String newTag = _newTag.text;
                                 final int index = tags.indexOf(newTag);
@@ -208,7 +208,8 @@ class _AnnouncementEditPageState extends State<AnnouncementEditPage> {
                                   Navigator.of(context, rootNavigator: true)
                                       .pop();
                                 } else {
-                                  ApUtils.showToast(context, app.tagRepeatHint);
+                                  UiUtil.instance
+                                      .showToast(context, app.tagRepeatHint);
                                 }
                               }
                             },
@@ -289,7 +290,7 @@ class _AnnouncementEditPageState extends State<AnnouncementEditPage> {
                     ),
                   ),
                   onPressed: () async {
-                    final XFile? image = await ApUtils.pickImage();
+                    final XFile? image = await MediaUtil.instance.pickImage();
                     if (image != null) {
                       setState(
                         () => imgurUploadState = _ImgurUploadState.uploading,
@@ -298,7 +299,10 @@ class _AnnouncementEditPageState extends State<AnnouncementEditPage> {
                         file: image,
                         callback: GeneralCallback<ImgurUploadData>(
                           onFailure: (DioException dioException) {
-                            ApUtils.showToast(context, dioException.message);
+                            if (dioException.message
+                                case final String message?) {
+                              UiUtil.instance.showToast(context, message);
+                            }
                             setState(
                               () => imgurUploadState = _imgUrl.text.isEmpty
                                   ? _ImgurUploadState.noFile
@@ -306,7 +310,8 @@ class _AnnouncementEditPageState extends State<AnnouncementEditPage> {
                             );
                           },
                           onError: (GeneralResponse generalResponse) {
-                            ApUtils.showToast(context, generalResponse.message);
+                            UiUtil.instance
+                                .showToast(context, generalResponse.message);
                             setState(
                               () => imgurUploadState = _imgUrl.text.isEmpty
                                   ? _ImgurUploadState.noFile
@@ -655,13 +660,13 @@ class _AnnouncementEditPageState extends State<AnnouncementEditPage> {
         (_) async {
           switch (widget.mode) {
             case Mode.add:
-              ApUtils.showToast(context, app.addSuccess);
+              UiUtil.instance.showToast(context, app.addSuccess);
             case Mode.edit:
-              ApUtils.showToast(context, app.updateSuccess);
+              UiUtil.instance.showToast(context, app.updateSuccess);
             case Mode.application:
-              ApUtils.showToast(context, app.applicationSubmitSuccess);
+              UiUtil.instance.showToast(context, app.applicationSubmitSuccess);
             case Mode.editApplication:
-              ApUtils.showToast(context, app.updateSuccess);
+              UiUtil.instance.showToast(context, app.updateSuccess);
               if (isApproval != null) {
                 if (isApproval) {
                   await AnnouncementHelper.instance.approveApplication(

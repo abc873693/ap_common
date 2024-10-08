@@ -1216,6 +1216,12 @@
       <excludeFolder url="file://$MODULE_DIR$/packages/ap_common_plugin/.dart_tool" />
       <excludeFolder url="file://$MODULE_DIR$/packages/ap_common_plugin/.pub" />
       <excludeFolder url="file://$MODULE_DIR$/packages/ap_common_plugin/build" />
+      <excludeFolder url="file://$MODULE_DIR$/packages/ap_common_core_flutter/.dart_tool" />
+      <excludeFolder url="file://$MODULE_DIR$/packages/ap_common_core_flutter/.pub" />
+      <excludeFolder url="file://$MODULE_DIR$/packages/ap_common_core_flutter/build" />
+      <excludeFolder url="file://$MODULE_DIR$/packages/ap_common_flutter_core/.dart_tool" />
+      <excludeFolder url="file://$MODULE_DIR$/packages/ap_common_flutter_core/.pub" />
+      <excludeFolder url="file://$MODULE_DIR$/packages/ap_common_flutter_core/build" />
     </content>
     <orderEntry type="sourceFolder" forTests="false" />
     <orderEntry type="library" name="Dart SDK" level="project" />

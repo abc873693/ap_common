@@ -1,7 +1,7 @@
 import 'dart:io';
 
-import 'package:ap_common/utils/ap_localizations.dart';
 import 'package:ap_common_core/ap_common_core.dart';
+import 'package:ap_common_flutter_core/ap_common_flutter_core.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';

@@ -1,9 +1,8 @@
-import 'package:ap_common/resources/ap_icon.dart';
 import 'package:ap_common/resources/ap_theme.dart';
-import 'package:ap_common/utils/ap_localizations.dart';
 import 'package:ap_common/utils/ap_utils.dart';
 import 'package:ap_common/widgets/hint_content.dart';
 import 'package:ap_common_core/ap_common_core.dart';
+import 'package:ap_common_flutter_core/ap_common_flutter_core.dart';
 import 'package:flutter/material.dart';
 
 enum PhoneState { loading, finish, error }

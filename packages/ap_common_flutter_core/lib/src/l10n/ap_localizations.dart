@@ -1,12 +1,12 @@
-import 'package:ap_common/l10n/intl/messages_all.dart';
-import 'package:ap_common/l10n/l10n.dart';
-import 'package:ap_common/resources/ap_icon.dart';
+import 'package:ap_common_flutter_core/src/l10n/intl/messages_all.dart';
+import 'package:ap_common_flutter_core/src/l10n/l10n.dart';
+import 'package:ap_common_flutter_core/src/ui/ap_icon.dart';
 import 'package:dio/dio.dart';
-import 'package:flutter/widgets.dart';
+import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:multiple_localization/multiple_localization.dart';
 
-export 'package:ap_common/l10n/l10n.dart';
+export 'package:ap_common_flutter_core/src/l10n/l10n.dart';
 export 'package:intl/intl.dart';
 
 extension ApExtension on ApLocalizations {

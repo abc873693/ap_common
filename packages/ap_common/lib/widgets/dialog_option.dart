@@ -1,5 +1,5 @@
-import 'package:ap_common/resources/ap_icon.dart';
 import 'package:ap_common/resources/ap_theme.dart';
+import 'package:ap_common_flutter_core/ap_common_flutter_core.dart';
 import 'package:flutter/material.dart';
 
 class DialogOption extends StatelessWidget {
