@@ -2,12 +2,12 @@ import 'dart:convert';
 import 'dart:io';
 
 import 'package:ap_common/resources/ap_theme.dart';
-import 'package:ap_common/utils/ap_utils.dart';
 import 'package:ap_common/widgets/default_dialog.dart';
 import 'package:ap_common/widgets/yes_no_dialog.dart';
 import 'package:ap_common_core/ap_common_core.dart';
 import 'package:ap_common_flutter_core/ap_common_flutter_core.dart';
 import 'package:flutter/material.dart';
+import 'package:package_info_plus/package_info_plus.dart';
 import 'package:sprintf/sprintf.dart';
 
 class DialogUtils {
@@ -176,7 +176,7 @@ class DialogUtils {
               title: app.updateTitle,
               actionText: app.update,
               contentWidget: contentWidget,
-              actionFunction: () => ApUtils.launchUrl(url),
+              actionFunction: () => PlatformUtil.instance.launchUrl(url),
             ),
           ),
         );
@@ -190,7 +190,7 @@ class DialogUtils {
             contentWidget: contentWidget,
             leftActionText: app.skip,
             rightActionText: app.update,
-            rightActionFunction: () => ApUtils.launchUrl(url),
+            rightActionFunction: () => PlatformUtil.instance.launchUrl(url),
           ),
         );
       }

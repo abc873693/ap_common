@@ -1,6 +1,5 @@
 import 'package:ap_common/resources/ap_theme.dart';
 import 'package:ap_common/resources/resources.dart';
-import 'package:ap_common/utils/ap_utils.dart';
 import 'package:ap_common_core/ap_common_core.dart';
 import 'package:ap_common_flutter_core/ap_common_flutter_core.dart';
 import 'package:flutter/material.dart';
@@ -180,7 +179,7 @@ class AboutUsPageState extends State<AboutUsPage> {
                               IconButton(
                                 icon: Image.asset(ApImageAssets.fb),
                                 onPressed: () {
-                                  ApUtils.launchUrl(
+                                  PlatformUtil.instance.launchUrl(
                                     'https://m.me/${widget.fbFanPageId}',
                                   );
                                   AnalyticsUtil.instance?.logEvent('fb_click');
@@ -192,7 +191,7 @@ class AboutUsPageState extends State<AboutUsPage> {
                                 IconButton(
                                   icon: Image.asset(ApImageAssets.instagram),
                                   onPressed: () {
-                                    ApUtils.launchUrl(
+                                    PlatformUtil.instance.launchUrl(
                                       'https://ig.me/m/$username',
                                     );
                                     AnalyticsUtil.instance
@@ -203,7 +202,8 @@ class AboutUsPageState extends State<AboutUsPage> {
                               IconButton(
                                 icon: Image.asset(ApImageAssets.github),
                                 onPressed: () {
-                                  ApUtils.launchUrl(widget.githubUrl)
+                                  PlatformUtil.instance
+                                      .launchUrl(widget.githubUrl)
                                       .catchError(
                                     (dynamic onError) {
                                       if (!context.mounted) return;
@@ -221,7 +221,8 @@ class AboutUsPageState extends State<AboutUsPage> {
                               IconButton(
                                 icon: Image.asset(ApImageAssets.email),
                                 onPressed: () {
-                                  ApUtils.launchUrl('mailto:${widget.email}')
+                                  PlatformUtil.instance
+                                      .launchUrl('mailto:${widget.email}')
                                       .catchError(
                                     (dynamic onError) {
                                       if (!context.mounted) return;
@@ -287,7 +288,7 @@ class AboutUsPageState extends State<AboutUsPage> {
                 ),
                 options: const LinkifyOptions(humanize: false),
                 onOpen: (LinkableElement link) async =>
-                    ApUtils.launchUrl(link.url),
+                    PlatformUtil.instance.launchUrl(link.url),
               ),
             ],
           ),

@@ -1,12 +1,13 @@
 import 'dart:io';
 
 import 'package:ap_common/api/announcement_helper.dart';
-import 'package:ap_common/utils/ap_utils.dart';
 import 'package:ap_common_flutter_core/ap_common_flutter_core.dart';
 import 'package:file_saver/file_saver.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/widgets.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:path/path.dart' as path;
+import 'package:path_provider/path_provider.dart';
 import 'package:photo_manager/photo_manager.dart';
 
 class ApMediaUtil extends MediaUtil {

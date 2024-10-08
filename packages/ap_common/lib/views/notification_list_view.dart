@@ -64,14 +64,14 @@ class NotificationListViewState extends State<NotificationListView>
     return InkWell(
       onLongPress: () {
         final RenderBox? box = context.findRenderObject() as RenderBox?;
-        ApUtils.shareTo(
+        PlatformUtil.instance.shareTo(
           '${notification.info.title}\n${notification.link}',
           sharePositionOrigin: box!.localToGlobal(Offset.zero) & box.size,
         );
         AnalyticsUtil.instance?.logEvent('share_long_click');
       },
       onTap: () {
-        ApUtils.launchUrl(notification.link);
+        PlatformUtil.instance.launchUrl(notification.link);
         AnalyticsUtil.instance?.logEvent('notification_link_click');
       },
       child: Container(

@@ -123,7 +123,7 @@ class PhoneListViewState extends State<PhoneListView>
       onTap: () {
         AnalyticsUtil.instance?.logEvent('call_phone_click');
         try {
-          ApUtils.callPhone(phone.number);
+          PlatformUtil.instance.callPhone(phone.number);
           AnalyticsUtil.instance?.logEvent('call_phone_success');
         } catch (e) {
           AnalyticsUtil.instance?.logEvent('call_phone_error');
