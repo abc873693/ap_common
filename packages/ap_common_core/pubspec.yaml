@@ -10,11 +10,9 @@ environment:
 dependencies:
   sprintf: ^7.0.0
   intl: ">=0.16.0 <1.0.0"
-  encrypt: ^5.0.1
   dio: ">=5.4.1 <6.0.0"
   dio_cookie_manager: ^3.1.1
   cookie_jar: ^4.0.0
-  timezone: ^0.9.4
   jwt_decoder: ^2.0.1
   json_annotation: ^4.6.0
   injector: ^4.0.0

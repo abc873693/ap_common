@@ -1,7 +1,4 @@
-import 'package:ap_common/models/score_data.dart';
-import 'package:ap_common/models/semester_data.dart';
-import 'package:ap_common/scaffold/score_scaffold.dart';
-import 'package:ap_common/utils/ap_localizations.dart';
+import 'package:ap_common/ap_common.dart';
 import 'package:ap_common_example/res/assets.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';

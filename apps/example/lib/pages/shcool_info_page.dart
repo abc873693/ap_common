@@ -1,13 +1,4 @@
-import 'package:ap_common/callback/general_callback.dart';
-import 'package:ap_common/models/notification_data.dart';
-import 'package:ap_common/models/phone_model.dart';
-import 'package:ap_common/resources/ap_icon.dart';
-import 'package:ap_common/resources/ap_theme.dart';
-import 'package:ap_common/utils/analytics_utils.dart';
-import 'package:ap_common/utils/ap_localizations.dart';
-import 'package:ap_common/views/notification_list_view.dart';
-import 'package:ap_common/views/pdf_view.dart';
-import 'package:ap_common/views/phone_list_view.dart';
+import 'package:ap_common/ap_common.dart';
 import 'package:ap_common_example/res/assets.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -73,7 +64,7 @@ class SchoolInfoPageState extends State<SchoolInfoPage>
 
   @override
   void initState() {
-    AnalyticsUtils.instance?.setCurrentScreen(
+    AnalyticsUtil.instance?.setCurrentScreen(
       'SchoolInfoPage',
       'school_info_page.dart',
     );
@@ -167,7 +158,8 @@ class SchoolInfoPageState extends State<SchoolInfoPage>
 
   Future<void> _getSchedules() async {
     downloadFdf(
-        'https://raw.githubusercontent.com/NKUST-ITC/NKUST-AP-Flutter/master/school_schedule.pdf',);
+      'https://raw.githubusercontent.com/NKUST-ITC/NKUST-AP-Flutter/master/school_schedule.pdf',
+    );
   }
 
   Future<void> downloadFdf(String url) async {

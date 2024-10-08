@@ -1,9 +1,6 @@
 import 'dart:math';
 
-import 'package:ap_common/utils/ap_localizations.dart';
-import 'package:ap_common/utils/dialog_utils.dart';
-import 'package:ap_common/utils/notification_utils.dart';
-import 'package:ap_common/widgets/option_dialog.dart';
+import 'package:ap_common/ap_common.dart';
 import 'package:ap_common_example/utils/app_localizations.dart';
 import 'package:flutter/material.dart';
 import 'package:sprintf/sprintf.dart';
@@ -17,7 +14,7 @@ class NotificationUtilsTestPage extends StatefulWidget {
 class _NotificationUtilsTestPageState extends State<NotificationUtilsTestPage> {
   late AppLocalizations app;
 
-  Day day = NotificationUtils.getDay(DateTime.now().weekday);
+  int weekday = DateTime.now().weekday;
   TimeOfDay time = TimeOfDay.now();
 
   @override
@@ -39,7 +36,7 @@ class _NotificationUtilsTestPageState extends State<NotificationUtilsTestPage> {
           const Divider(height: 0.0),
           ListTile(
             onTap: () {
-              NotificationUtils.show(
+              NotificationUtil.instance.show(
                 id: 1,
                 androidChannelId: '1',
                 androidChannelDescription: 'Test',
@@ -48,7 +45,7 @@ class _NotificationUtilsTestPageState extends State<NotificationUtilsTestPage> {
               );
             },
             title: Text(app.showNow),
-            subtitle: const Text('NotificationUtils.show'),
+            subtitle: const Text('NotificationUtil.instance.show'),
           ),
           const Divider(height: 0.0),
           const Padding(
@@ -60,7 +57,7 @@ class _NotificationUtilsTestPageState extends State<NotificationUtilsTestPage> {
           ),
           ListTile(
             onTap: () {
-              NotificationUtils.schedule(
+              NotificationUtil.instance.schedule(
                 id: 2,
                 androidChannelId: '1',
                 androidChannelDescription: 'Test',
@@ -72,7 +69,7 @@ class _NotificationUtilsTestPageState extends State<NotificationUtilsTestPage> {
               );
             },
             title: Text(app.showInFiveSeconds),
-            subtitle: const Text('NotificationUtils.schedule'),
+            subtitle: const Text('NotificationUtil.instance.schedule'),
           ),
           const Divider(height: 0.0),
           const Padding(
@@ -89,9 +86,9 @@ class _NotificationUtilsTestPageState extends State<NotificationUtilsTestPage> {
                 builder: (_) => SimpleOptionDialog(
                   title: app.setWeekDay,
                   items: ApLocalizations.of(context).weekdays,
-                  index: day.value - 1,
+                  index: weekday - 1,
                   onSelected: (int index) {
-                    setState(() => day = Day.values[index]);
+                    setState(() => weekday = index + 1);
                   },
                 ),
               );
@@ -116,7 +113,7 @@ class _NotificationUtilsTestPageState extends State<NotificationUtilsTestPage> {
           ListTile(
             onTap: () {
               final int id = Random().nextInt(10000);
-              NotificationUtils.scheduleWeeklyNotify(
+              NotificationUtil.instance.scheduleWeeklyNotify(
                 id: id,
                 androidChannelId: '1',
                 androidChannelDescription: 'Schedule Weekly Notify',
@@ -124,11 +121,11 @@ class _NotificationUtilsTestPageState extends State<NotificationUtilsTestPage> {
                 content: sprintf(
                   app.scheduleWeeklyNotifyContent,
                   <String>[
-                    ApLocalizations.of(context).weekdays[day.value - 1],
+                    ApLocalizations.of(context).weekdaysCourse[weekday - 1],
                     time.format(context),
                   ],
                 ),
-                day: day,
+                weekday: weekday,
                 time: TimeOfDay(
                   hour: time.hour,
                   minute: time.minute,
@@ -139,12 +136,13 @@ class _NotificationUtilsTestPageState extends State<NotificationUtilsTestPage> {
               sprintf(
                 app.scheduleWeeklyNotifyContent,
                 <String>[
-                  ApLocalizations.of(context).weekdays[day.value - 1],
+                  ApLocalizations.of(context).weekdaysCourse[weekday - 1],
                   time.format(context),
                 ],
               ),
             ),
-            subtitle: const Text('NotificationUtils.scheduleWeeklyNotify'),
+            subtitle:
+                const Text('NotificationUtil.instance.scheduleWeeklyNotify'),
           ),
           const Divider(height: 0.0),
           const Padding(
@@ -156,7 +154,8 @@ class _NotificationUtilsTestPageState extends State<NotificationUtilsTestPage> {
           ),
           ListTile(
             onTap: () async {
-              final bool? result = await NotificationUtils.requestPermissions();
+              final bool? result =
+                  await NotificationUtil.instance.requestPermissions();
               if (result != null) {
                 //ignore: use_build_context_synchronously
                 if (!context.mounted) return;
@@ -171,42 +170,43 @@ class _NotificationUtilsTestPageState extends State<NotificationUtilsTestPage> {
             },
             title: Text(app.requestPermission),
             subtitle: const Text(
-              'NotificationUtils.requestPermissions (iOS & macOS limit)',
+              'NotificationUtil.instance.requestPermissions (iOS & macOS limit)',
             ),
           ),
-          ListTile(
-            onTap: () async {
-              final List<PendingNotificationRequest> list =
-                  await NotificationUtils.getPendingNotificationList();
-              //ignore: use_build_context_synchronously
-              if (!context.mounted) return;
-              showDialog(
-                context: context,
-                builder: (_) => SimpleOptionDialog(
-                  title: app.getPendingNotificationList,
-                  items: <String>[
-                    for (final PendingNotificationRequest item in list)
-                      'id = ${item.id}, ' +
-                          'title = ${item.title}\n body = ${item.body}',
-                  ],
-                  index: -1,
-                  onSelected: (int index) {
-                    NotificationUtils.cancelCourseNotify(id: list[index].id);
-                  },
-                ),
-              );
-            },
-            title: Text(app.getPendingNotificationList),
-            subtitle:
-                const Text('NotificationUtils.getPendingNotificationList'),
-          ),
+          // ListTile(
+          //   onTap: () async {
+          //     final List<PendingNotificationRequest> list =
+          //         await NotificationUtil.instance.getPendingNotificationList();
+          //     //ignore: use_build_context_synchronously
+          //     if (!context.mounted) return;
+          //     showDialog(
+          //       context: context,
+          //       builder: (_) => SimpleOptionDialog(
+          //         title: app.getPendingNotificationList,
+          //         items: <String>[
+          //           for (final PendingNotificationRequest item in list)
+          //             'id = ${item.id}, ' +
+          //                 'title = ${item.title}\n body = ${item.body}',
+          //         ],
+          //         index: -1,
+          //         onSelected: (int index) {
+          //           NotificationUtil.instance
+          //               .cancelCourseNotify(id: list[index].id);
+          //         },
+          //       ),
+          //     );
+          //   },
+          //   title: Text(app.getPendingNotificationList),
+          //   subtitle: const Text(
+          //       'NotificationUtil.instance.getPendingNotificationList'),
+          // ),
           const Divider(height: 0.0),
           ListTile(
             onTap: () {
-              NotificationUtils.cancelAll();
+              NotificationUtil.instance.cancelAll();
             },
             title: Text(app.cancelAll),
-            subtitle: const Text('NotificationUtils.cancelAll'),
+            subtitle: const Text('NotificationUtil.instance.cancelAll'),
           ),
         ],
       ),

@@ -1,7 +1,6 @@
 import 'dart:async';
 import 'dart:io';
 
-import 'package:ap_common/resources/ap_theme.dart';
 import 'package:ap_common_core/ap_common_core.dart';
 import 'package:ap_common_firebase/src/utils/firebase_utils.dart';
 import 'package:firebase_analytics/firebase_analytics.dart';
@@ -182,7 +181,7 @@ class FirebaseAnalyticsUtils extends AnalyticsUtil {
     }
     setUserProperty(
       AnalyticsConstants.theme,
-      brightness == Brightness.light ? ApTheme.LIGHT : ApTheme.DARK,
+      brightness == Brightness.light ? 'light' : 'dart',
     );
   }
 }
