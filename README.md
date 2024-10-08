@@ -29,6 +29,37 @@
 | `ap_common_plugin`                  | [![ap_common pub.dev badge](https://img.shields.io/pub/v/ap_common_plugin.svg?style=flat-square)](https://pub.dev/packages/ap_common_plugin/)                     | 課表小工具                |
 | `ap_common_firebase`                | [![ap_common pub.dev badge](https://img.shields.io/pub/v/ap_common_firebase.svg?style=flat-square)](https://pub.dev/packages/ap_common_firebase/)                 | 服務 `Firebase` 的整合實作  |
 
+## 套件架構
+
+### v0.26 以後
+
+```mermaid
+flowchart TD
+    ap_common[ap_common] --- ap_common_flutter_ui[ap_common_flutter_ui] --- ap_common_flutter_core
+
+    ap_common --- ap_common_flutter_platform[ap_common_flutter_platform] --- ap_common_flutter_core
+
+    ap_common --- ap_common_announcement_ui[ap_common_announcement_ui]  --- ap_common_flutter_core
+
+    ap_common_firebase  --- ap_common_flutter_core
+
+    ap_common_plugin  --- ap_common_flutter_core
+
+    ap_common_flutter_core -- Dart Level --> ap_common_core
+  
+```
+
+### v0.25 前
+
+```mermaid
+flowchart TD
+
+    ap_common_firebase  --- ap_common
+
+    ap_common_plugin  --- ap_common
+  
+```
+
 ## 套件使用要求
 
 - Flutter `v3.22` 以上
