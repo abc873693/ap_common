@@ -1222,6 +1222,9 @@
       <excludeFolder url="file://$MODULE_DIR$/packages/ap_common_flutter_core/.dart_tool" />
       <excludeFolder url="file://$MODULE_DIR$/packages/ap_common_flutter_core/.pub" />
       <excludeFolder url="file://$MODULE_DIR$/packages/ap_common_flutter_core/build" />
+      <excludeFolder url="file://$MODULE_DIR$/packages/ap_common_flutter_platform/.dart_tool" />
+      <excludeFolder url="file://$MODULE_DIR$/packages/ap_common_flutter_platform/.pub" />
+      <excludeFolder url="file://$MODULE_DIR$/packages/ap_common_flutter_platform/build" />
     </content>
     <orderEntry type="sourceFolder" forTests="false" />
     <orderEntry type="library" name="Dart SDK" level="project" />

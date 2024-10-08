@@ -5,7 +5,6 @@ import 'package:ap_common/resources/ap_colors.dart';
 import 'package:ap_common/resources/ap_theme.dart';
 import 'package:ap_common/resources/resources.dart';
 import 'package:ap_common/utils/ap_utils.dart';
-import 'package:ap_common/utils/notification_utils.dart';
 import 'package:ap_common/widgets/default_dialog.dart';
 import 'package:ap_common/widgets/hint_content.dart';
 import 'package:ap_common/widgets/item_picker.dart';
@@ -795,7 +794,7 @@ class _CourseContentState extends State<CourseContent> {
               ),
               if (widget.enableNotifyControl &&
                   widget.notifyData != null &&
-                  ApNotificationUtil.isSupport)
+                  NotificationUtil.instance.isSupport)
                 IconButton(
                   icon: Icon(
                     state == CourseNotifyState.schedule
@@ -816,7 +815,7 @@ class _CourseContentState extends State<CourseContent> {
                           weekday: widget.weekday,
                           timeCode: widget.timeCode,
                         );
-                        await ApNotificationUtil.instance.scheduleCourseNotify(
+                        await NotificationUtil.instance.scheduleCourseNotify(
                           context: context,
                           courseNotify: courseNotify,
                           weekday: widget.weekday,

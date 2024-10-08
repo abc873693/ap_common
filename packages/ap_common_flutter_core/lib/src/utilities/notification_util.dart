@@ -1,9 +1,11 @@
+import 'package:ap_common_core/ap_common_core.dart';
 import 'package:ap_common_core/injector.dart';
+import 'package:flutter/material.dart';
 
 abstract class NotificationUtil {
   static NotificationUtil get instance => injector.get<NotificationUtil>();
 
-  static bool get isSupport => true;
+  bool get isSupport;
 
   static const String androidResourceName = '@drawable/ic_stat_name';
 
@@ -23,19 +25,17 @@ abstract class NotificationUtil {
     void Function()? onSelectNotification,
   }) async {}
 
-  // Future<void> scheduleWeeklyNotify({
-  //   required int id,
-  //   required String androidChannelId,
-  //   required String androidChannelDescription,
-  //   required int weekday,
-  //   required TimeOfDay time,
-  //   required String title,
-  //   required String content,
-  //   String androidResourceIcon = androidResourceName,
-  //   void Function()? onSelectNotification,
-  // }) async {
-  //
-  // }
+  Future<void> scheduleWeeklyNotify({
+    required int id,
+    required String androidChannelId,
+    required String androidChannelDescription,
+    required int weekday,
+    required TimeOfDay time,
+    required String title,
+    required String content,
+    String androidResourceIcon = androidResourceName,
+    void Function()? onSelectNotification,
+  });
 
   Future<void> schedule({
     required int id,
@@ -59,4 +59,16 @@ abstract class NotificationUtil {
   });
 
   Future<void> cancelAll();
+
+  ///Additional for ap_common
+
+  Future<void> scheduleCourseNotify({
+    required BuildContext context,
+    required CourseNotify courseNotify,
+    required int weekday,
+    bool enableVibration = true,
+    int beforeMinutes = 10,
+    String? androidResourceIcon = androidResourceName,
+    VoidCallback? onSelectNotification,
+  });
 }

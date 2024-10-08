@@ -3,7 +3,6 @@ import 'dart:developer';
 
 import 'package:ap_common_core/src/config/ap_constants.dart';
 import 'package:ap_common_core/src/models/course_data.dart';
-import 'package:ap_common_core/src/utilities/notification_util.dart';
 import 'package:ap_common_core/src/utilities/preference_util.dart';
 import 'package:json_annotation/json_annotation.dart';
 
@@ -109,30 +108,6 @@ class CourseNotifyData {
   //     toRawJson(),
   //   );
   // }
-
-  static void clearOldVersionNotification({
-    required String tag,
-    required String newTag,
-  }) {
-    final String rawString = PreferenceUtil.instance.getString(
-      '${ApConstants.packageName}.'
-          'course_notify_data_$tag',
-      '',
-    );
-    log('clearOldVersionNotification $rawString', name: 'ap_common');
-    if (rawString.isNotEmpty) {
-      final CourseNotifyData courseNotifyData =
-          CourseNotifyData.fromRawJson(rawString);
-      for (final CourseNotify element in courseNotifyData.data) {
-        NotificationUtil.instance.cancelNotify(id: element.id);
-      }
-      courseNotifyData.data.clear();
-      courseNotifyData.tag = newTag;
-      courseNotifyData.save();
-    }
-    PreferenceUtil.instance
-        .remove('${ApConstants.packageName}.course_notify_data_$tag');
-  }
 }
 
 @JsonSerializable()
