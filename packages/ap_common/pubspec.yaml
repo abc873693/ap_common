@@ -14,6 +14,7 @@ dependencies:
     sdk: flutter
 
   ap_common_core: ^0.0.1
+  ap_common_flutter_core: ^0.0.1
 
   # Dart Packages
   sprintf: ^7.0.0
@@ -57,6 +58,8 @@ dependencies:
 #dependency_overrides:
 #  ap_common_core:
 #    path: ../ap_common_core/
+#  ap_common_flutter_core:
+#    path: ../ap_common_flutter_core/
 
 dev_dependencies:
   flutter_test:
@@ -74,11 +77,3 @@ false_secrets:
   - /example/lib/main.dart
   - /example/web/index.html
   - /website/node_modules/selfsigned/README.md
-
-flutter_intl:
-  enabled: true
-  class_name: ApLocalizations
-  main_locale: 'zh_TW'
-  arb_dir: lib/l10n
-  output_dir: lib/l10n
-  use_deferred_loading: true

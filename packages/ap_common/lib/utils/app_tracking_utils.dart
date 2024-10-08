@@ -1,8 +1,8 @@
 import 'dart:io';
 
-import 'package:ap_common/l10n/l10n.dart';
 import 'package:ap_common/resources/ap_theme.dart';
 import 'package:ap_common/widgets/default_dialog.dart';
+import 'package:ap_common_flutter_core/ap_common_flutter_core.dart';
 import 'package:app_tracking_transparency/app_tracking_transparency.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';

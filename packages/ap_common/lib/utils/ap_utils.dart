@@ -1,20 +1,12 @@
 import 'dart:io';
 
-import 'package:ap_common/callback/general_callback.dart';
 import 'package:ap_common/resources/ap_theme.dart';
-import 'package:ap_common/utils/ap_localizations.dart';
-import 'package:ap_common/utils/toast.dart';
 import 'package:ap_common/widgets/yes_no_dialog.dart';
-import 'package:ap_common_core/ap_common_core.dart';
-import 'package:file_saver/file_saver.dart';
+import 'package:ap_common_flutter_core/ap_common_flutter_core.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:image_picker/image_picker.dart';
 import 'package:in_app_review/in_app_review.dart';
 import 'package:package_info_plus/package_info_plus.dart';
-import 'package:path/path.dart' as path;
-import 'package:path_provider/path_provider.dart';
-import 'package:photo_manager/photo_manager.dart';
 import 'package:share_plus/share_plus.dart';
 import 'package:url_launcher/url_launcher.dart' as url_launcher;
 
@@ -28,23 +20,6 @@ export 'toast.dart';
 class ApUtils {
   static bool get isSupportCacheNetworkImage =>
       kIsWeb || Platform.isAndroid || Platform.isIOS || Platform.isMacOS;
-
-  static void showToast(
-    BuildContext context,
-    String? message, {
-    int? gravity,
-  }) {
-    Toast.show(
-      message,
-      context,
-      duration: Toast.lengthLong,
-      gravity: gravity ?? Toast.bottom,
-      textStyle: TextStyle(
-        color: ApTheme.of(context).toastText,
-      ),
-      backgroundColor: ApTheme.of(context).toastBackground,
-    );
-  }
 
   static void pushCupertinoStyle(
     BuildContext context,
@@ -102,7 +77,7 @@ class ApUtils {
       ApUtils.launchUrl(fansPageUrl).catchError(
         (dynamic onError) {
           if (!context.mounted) return;
-          ApUtils.showToast(
+          UiUtil.instance.showToast(
             context,
             ApLocalizations.of(context).platformError,
           );
@@ -214,86 +189,6 @@ class ApUtils {
       inAppReview.requestReview();
     } else {
       launchUrl(defaultUrl);
-    }
-  }
-
-  static Future<XFile?> pickImage({
-    ImageSource? imageSource,
-    CameraDevice? preferredCameraDevice,
-    List<String>? extensions,
-  }) async {
-    final ImagePicker imagePicker = ImagePicker();
-    return imagePicker.pickImage(
-      source: imageSource ?? ImageSource.gallery,
-      preferredCameraDevice: preferredCameraDevice ?? CameraDevice.rear,
-    );
-  }
-
-  static Future<void> saveImage(
-    BuildContext context, {
-    required ByteData byteData,
-    required String fileName,
-    required String successMessage,
-    GeneralResponseCallback? onSuccess,
-    GeneralResponseCallback? onError,
-  }) async {
-    final ApLocalizations ap = ApLocalizations.of(context);
-    try {
-      PermissionState hasGrantPermission = PermissionState.notDetermined;
-      if (!kIsWeb && (Platform.isAndroid || Platform.isIOS)) {
-        hasGrantPermission = await PhotoManager.requestPermissionExtend();
-      } else {
-        hasGrantPermission = PermissionState.authorized;
-      }
-      if (hasGrantPermission == PermissionState.authorized ||
-          hasGrantPermission == PermissionState.limited) {
-        final Uint8List pngBytes = byteData.buffer.asUint8List();
-        bool success = true;
-        String filePath = '$fileName.png';
-        if (!kIsWeb && (Platform.isAndroid || Platform.isIOS)) {
-          final String tempPath = path.join(
-            (await getApplicationDocumentsDirectory()).path,
-            filePath,
-          );
-          final File file = await File(tempPath).writeAsBytes(pngBytes);
-          final AssetEntity? imageEntity =
-              await PhotoManager.editor.saveImageWithPath(
-            file.path,
-            title: fileName,
-          );
-          file.delete();
-          if (kDebugMode) debugPrint(imageEntity?.title);
-          success = imageEntity != null;
-        } else {
-          filePath = await FileSaver.instance.saveFile(
-            name: '$fileName.png',
-            bytes: pngBytes,
-          );
-        }
-        onSuccess?.call(
-          success
-              ? GeneralResponse(
-                  statusCode: 200,
-                  message: '$successMessage\n$filePath',
-                )
-              : GeneralResponse.unknownError(),
-        );
-      } else {
-        onSuccess?.call(
-          GeneralResponse(
-            statusCode: 401,
-            message: ap.grandPermissionFail,
-          ),
-        );
-      }
-    } catch (e, s) {
-      if (!context.mounted) return;
-      ApUtils.showToast(context, ap.unknownError);
-      if (CrashlyticsUtil.instance == null) {
-        rethrow;
-      } else {
-        CrashlyticsUtil.instance?.recordError(e, s);
-      }
     }
   }
 }

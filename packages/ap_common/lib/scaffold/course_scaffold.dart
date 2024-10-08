@@ -1,12 +1,9 @@
 import 'dart:io';
 import 'dart:ui' as ui;
 
-import 'package:add_2_calendar/add_2_calendar.dart';
 import 'package:ap_common/resources/ap_colors.dart';
-import 'package:ap_common/resources/ap_icon.dart';
 import 'package:ap_common/resources/ap_theme.dart';
 import 'package:ap_common/resources/resources.dart';
-import 'package:ap_common/utils/ap_localizations.dart';
 import 'package:ap_common/utils/ap_utils.dart';
 import 'package:ap_common/utils/notification_utils.dart';
 import 'package:ap_common/widgets/default_dialog.dart';
@@ -14,6 +11,7 @@ import 'package:ap_common/widgets/hint_content.dart';
 import 'package:ap_common/widgets/item_picker.dart';
 import 'package:ap_common/widgets/option_dialog.dart';
 import 'package:ap_common_core/ap_common_core.dart';
+import 'package:ap_common_flutter_core/ap_common_flutter_core.dart';
 import 'package:auto_size_text_pk/auto_size_text_pk.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
@@ -429,7 +427,7 @@ class CourseScaffoldState extends State<CourseScaffold> {
         _repaintBoundaryGlobalKey.currentContext!.findRenderObject()
             as RenderRepaintBoundary?;
     if (boundary == null) {
-      ApUtils.showToast(context, app.unknownError);
+      UiUtil.instance.showToast(context, app.unknownError);
       return;
     }
     final ui.Image image = await boundary.toImage(pixelRatio: 3.0);
@@ -439,7 +437,7 @@ class CourseScaffoldState extends State<CourseScaffold> {
     final String formattedDate = DateFormat('yyyyMMdd_hhmmss').format(now);
     if (byteData != null) {
       if (!mounted) return;
-      await ApUtils.saveImage(
+      await MediaUtil.instance.saveImage(
         context,
         byteData: byteData,
         fileName: 'course_table_$formattedDate',
@@ -456,7 +454,7 @@ class CourseScaffoldState extends State<CourseScaffold> {
       AnalyticsUtil.instance?.logEvent('export_course_table_image_success');
     } else {
       if (!mounted) return;
-      ApUtils.showToast(context, app.unknownError);
+      UiUtil.instance.showToast(context, app.unknownError);
     }
   }
 
@@ -772,14 +770,13 @@ class _CourseContentState extends State<CourseContent> {
                         format.parse(widget.timeCode.startTime);
                     final DateTime endTime =
                         format.parse(widget.timeCode.endTime);
-                    final Event event = Event(
+                    PlatformCalendarUtil.instance.addToApp(
                       title: widget.course.title,
                       location: widget.course.location?.toString() ?? '',
                       startDate: startTime.weekTime(widget.weekday),
                       endDate: endTime.weekTime(widget.weekday),
                       timeZone: 'GMT+8',
                     );
-                    Add2Calendar.addEvent2Cal(event);
                     AnalyticsUtil.instance
                         ?.logEvent('course_export_to_calendar');
                   },
@@ -828,7 +825,7 @@ class _CourseContentState extends State<CourseContent> {
                         widget.notifyData!.lastId++;
                         widget.notifyData!.data.add(courseNotify);
                         if (!context.mounted) return;
-                        ApUtils.showToast(
+                        UiUtil.instance.showToast(
                           context,
                           ApLocalizations.of(context).courseNotifyHint,
                         );
@@ -843,7 +840,7 @@ class _CourseContentState extends State<CourseContent> {
                           return data.id == courseNotify!.id;
                         });
                         if (!context.mounted) return;
-                        ApUtils.showToast(
+                        UiUtil.instance.showToast(
                           context,
                           ApLocalizations.of(context).cancelNotifySuccess,
                         );

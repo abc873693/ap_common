@@ -3,8 +3,8 @@ include: package:lint/strict.yaml
 analyzer:
   exclude:
     # l10n generated code
-    - packages/ap_common/lib/l10n/intl/*.dart
-    - packages/ap_common/lib/l10n/l10n.dart
+    - packages/ap_common_flutter_core/lib/src/l10n/intl/*.dart
+    - packages/ap_common_flutter_core/lib/src/l10n/l10n.dart
     - apps/example/lib/l10n/intl/*.dart
     - apps/example/lib/l10n/l10n.dart
     # example

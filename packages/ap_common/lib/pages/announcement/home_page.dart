@@ -3,14 +3,13 @@ import 'dart:io';
 import 'package:ap_common/api/announcement_helper.dart';
 import 'package:ap_common/pages/announcement/black_list_page.dart';
 import 'package:ap_common/pages/announcement/edit_page.dart';
-import 'package:ap_common/resources/ap_icon.dart';
 import 'package:ap_common/resources/ap_theme.dart';
 import 'package:ap_common/scaffold/login_scaffold.dart';
-import 'package:ap_common/utils/ap_localizations.dart';
 import 'package:ap_common/utils/ap_utils.dart';
 import 'package:ap_common/widgets/hint_content.dart';
 import 'package:ap_common/widgets/progress_dialog.dart';
 import 'package:ap_common/widgets/yes_no_dialog.dart';
+import 'package:ap_common_flutter_core/ap_common_flutter_core.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
@@ -481,7 +480,7 @@ class _AnnouncementHomePageState extends State<AnnouncementHomePage> {
                                   callback: GeneralCallback.simple(
                                     context,
                                     (_) {
-                                      ApUtils.showToast(
+                                      UiUtil.instance.showToast(
                                         context,
                                         ap.updateSuccess,
                                       );
@@ -516,7 +515,7 @@ class _AnnouncementHomePageState extends State<AnnouncementHomePage> {
                                   callback: GeneralCallback.simple(
                                     context,
                                     (_) {
-                                      ApUtils.showToast(
+                                      UiUtil.instance.showToast(
                                         context,
                                         ap.updateSuccess,
                                       );
@@ -535,7 +534,7 @@ class _AnnouncementHomePageState extends State<AnnouncementHomePage> {
                                   callback: GeneralCallback.simple(
                                     context,
                                     (_) {
-                                      ApUtils.showToast(
+                                      UiUtil.instance.showToast(
                                         context,
                                         ap.updateSuccess,
                                       );
@@ -724,7 +723,7 @@ class _AnnouncementHomePageState extends State<AnnouncementHomePage> {
   Future<void> _login(AnnouncementLoginType loginType) async {
     if (loginType == AnnouncementLoginType.normal &&
         (_username.text.isEmpty || _password.text.isEmpty)) {
-      ApUtils.showToast(context, ap.doNotEmpty);
+      UiUtil.instance.showToast(context, ap.doNotEmpty);
     } else {
       final bool isNotLogin = !PreferenceUtil.instance
           .getBool(ApConstants.announcementIsLogin, false);
@@ -752,11 +751,13 @@ class _AnnouncementHomePageState extends State<AnnouncementHomePage> {
           GeneralCallback<AnnouncementLoginData>(
         onError: (GeneralResponse response) {
           if (isNotLogin) Navigator.of(context, rootNavigator: true).pop();
-          ApUtils.showToast(context, response.message);
+          UiUtil.instance.showToast(context, response.message);
         },
         onFailure: (DioException dioException) async {
           if (isNotLogin) Navigator.of(context, rootNavigator: true).pop();
-          ApUtils.showToast(context, dioException.i18nMessage);
+          if (dioException.i18nMessage case final String message?) {
+            UiUtil.instance.showToast(context, message);
+          }
           if (dioException.type == DioExceptionType.badResponse &&
               dioException.response!.statusCode == 403) {
             if (loginType == AnnouncementLoginType.google) {
@@ -780,7 +781,7 @@ class _AnnouncementHomePageState extends State<AnnouncementHomePage> {
               idToken!,
             );
           }
-          ApUtils.showToast(context, ap.loginSuccess);
+          UiUtil.instance.showToast(context, ap.loginSuccess);
           PreferenceUtil.instance
               .setBool(ApConstants.announcementIsLogin, true);
           PreferenceUtil.instance.setInt(
@@ -823,7 +824,7 @@ class _AnnouncementHomePageState extends State<AnnouncementHomePage> {
             }
           } catch (e, s) {
             if (!mounted) return;
-            ApUtils.showToast(context, ap.thirdPartyLoginFail);
+            UiUtil.instance.showToast(context, ap.thirdPartyLoginFail);
             CrashlyticsUtil.instance?.recordError(e, s);
             if (isNotLogin) Navigator.of(context, rootNavigator: true).pop();
             if (CrashlyticsUtil.instance != null) rethrow;
@@ -841,7 +842,7 @@ class _AnnouncementHomePageState extends State<AnnouncementHomePage> {
                 .appleLogin(idToken: idToken!, callback: callback);
           } catch (e, s) {
             if (!mounted) return;
-            ApUtils.showToast(context, ap.thirdPartyLoginFail);
+            UiUtil.instance.showToast(context, ap.thirdPartyLoginFail);
             if (isNotLogin) Navigator.of(context, rootNavigator: true).pop();
             CrashlyticsUtil.instance?.recordError(e, s);
           }

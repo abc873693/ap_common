@@ -1,7 +1,7 @@
 import 'dart:io';
 
-import 'package:ap_common/resources/ap_icon.dart';
 import 'package:ap_common_core/ap_common_core.dart';
+import 'package:ap_common_flutter_core/ap_common_flutter_core.dart';
 import 'package:encrypt/encrypt.dart' as encrypt;
 import 'package:flutter/foundation.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -28,6 +28,7 @@ class ApPreferenceUtil extends PreferenceUtil {
   }) async {
     if (isSupport) {
       prefs = await SharedPreferences.getInstance();
+      //TODO logic move to other place
       ApIcon.code = getString(
         ApConstants.prefIconStyleCode,
         ApIcon.outlined,

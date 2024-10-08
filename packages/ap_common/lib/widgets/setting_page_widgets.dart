@@ -1,10 +1,9 @@
-import 'package:ap_common/resources/ap_icon.dart';
 import 'package:ap_common/resources/ap_theme.dart';
-import 'package:ap_common/utils/ap_localizations.dart';
 import 'package:ap_common/utils/ap_utils.dart';
 import 'package:ap_common/utils/notification_utils.dart';
 import 'package:ap_common/widgets/option_dialog.dart';
 import 'package:ap_common_core/ap_common_core.dart';
+import 'package:ap_common_flutter_core/ap_common_flutter_core.dart';
 import 'package:flutter/material.dart';
 
 export 'package:package_info_plus/package_info_plus.dart';
@@ -129,15 +128,15 @@ class CheckCourseNotifyItem extends StatelessWidget {
                   );
                   notifyData.data.removeAt(index);
                   notifyData.save();
-                  ApUtils.showToast(context, ap.cancelNotifySuccess);
+                  UiUtil.instance.showToast(context, ap.cancelNotifySuccess);
                 },
               ),
             );
           } else {
-            ApUtils.showToast(context, ap.courseNotifyEmpty);
+            UiUtil.instance.showToast(context, ap.courseNotifyEmpty);
           }
         } else {
-          ApUtils.showToast(context, ap.platformError);
+          UiUtil.instance.showToast(context, ap.platformError);
         }
       },
     );
@@ -163,9 +162,9 @@ class ClearAllNotifyItem extends StatelessWidget {
               : CourseNotifyData.load(tag);
           notifyData.data.clear();
           notifyData.save();
-          ApUtils.showToast(context, ap.cancelNotifySuccess);
+          UiUtil.instance.showToast(context, ap.cancelNotifySuccess);
         } else {
-          ApUtils.showToast(context, ap.platformError);
+          UiUtil.instance.showToast(context, ap.platformError);
         }
       },
     );
