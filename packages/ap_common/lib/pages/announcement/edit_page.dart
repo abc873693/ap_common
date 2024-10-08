@@ -2,7 +2,6 @@ import 'package:ap_common/api/announcement_helper.dart';
 import 'package:ap_common/api/imgur_helper.dart';
 import 'package:ap_common/pages/announcement/home_page.dart' show TagColors;
 import 'package:ap_common/resources/ap_theme.dart';
-import 'package:ap_common/utils/ap_utils.dart';
 import 'package:ap_common/widgets/ap_network_image.dart';
 import 'package:ap_common/widgets/default_dialog.dart';
 import 'package:ap_common_flutter_core/ap_common_flutter_core.dart';

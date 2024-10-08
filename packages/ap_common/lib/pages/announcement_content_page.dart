@@ -152,7 +152,8 @@ class AnnouncementContentPageState extends State<AnnouncementContentPage> {
             color: ApTheme.of(context).greyText,
           ),
           options: const LinkifyOptions(humanize: false),
-          onOpen: (LinkableElement link) async => ApUtils.launchUrl(link.url),
+          onOpen: (LinkableElement link) async =>
+              PlatformUtil.instance.launchUrl(link.url),
         ),
       ),
       if (widget.announcement.url != null &&
@@ -172,7 +173,7 @@ class AnnouncementContentPageState extends State<AnnouncementContentPage> {
             ),
           ),
           onPressed: () {
-            ApUtils.launchUrl(widget.announcement.url!);
+            PlatformUtil.instance.launchUrl(widget.announcement.url!);
             AnalyticsUtil.instance?.logEvent('announcement_link_click');
           },
           child: Icon(

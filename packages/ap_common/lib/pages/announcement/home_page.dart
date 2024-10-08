@@ -611,7 +611,7 @@ class _AnnouncementHomePageState extends State<AnnouncementHomePage> {
                     ),
                     recognizer: TapGestureRecognizer()
                       ..onTap = () {
-                        ApUtils.launchUrl(item.imgUrl);
+                        PlatformUtil.instance.launchUrl(item.imgUrl);
                       },
                   ),
                   TextSpan(
@@ -626,7 +626,7 @@ class _AnnouncementHomePageState extends State<AnnouncementHomePage> {
                     ),
                     recognizer: TapGestureRecognizer()
                       ..onTap = () {
-                        ApUtils.launchUrl(item.url!);
+                        PlatformUtil.instance.launchUrl(item.url!);
                       },
                   ),
                   TextSpan(
