@@ -19,7 +19,8 @@ class ApNotificationUtil extends NotificationUtil {
   static const int course = 101;
   static const int fcm = 200;
 
-  static bool get isSupport =>
+  @override
+  bool get isSupport =>
       !kIsWeb && (Platform.isAndroid || Platform.isIOS || Platform.isMacOS);
 
   static ApNotificationUtil get instance =>
@@ -120,6 +121,7 @@ class ApNotificationUtil extends NotificationUtil {
     );
   }
 
+  @override
   Future<void> scheduleCourseNotify({
     required BuildContext context,
     required CourseNotify courseNotify,
@@ -127,7 +129,6 @@ class ApNotificationUtil extends NotificationUtil {
     bool enableVibration = true,
     int beforeMinutes = 10,
     String? androidResourceIcon = androidResourceName,
-    InitializationSettings? settings,
     VoidCallback? onSelectNotification,
   }) async {
     final ApLocalizations ap = ApLocalizations.of(context);
@@ -156,7 +157,7 @@ class ApNotificationUtil extends NotificationUtil {
     );
   }
 
-  //TODO: use interface
+  @override
   Future<void> scheduleWeeklyNotify({
     required int id,
     required String androidChannelId,

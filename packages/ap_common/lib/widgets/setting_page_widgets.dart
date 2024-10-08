@@ -1,12 +1,8 @@
 import 'package:ap_common/resources/ap_theme.dart';
-import 'package:ap_common/utils/ap_utils.dart';
-import 'package:ap_common/utils/notification_utils.dart';
 import 'package:ap_common/widgets/option_dialog.dart';
 import 'package:ap_common_core/ap_common_core.dart';
 import 'package:ap_common_flutter_core/ap_common_flutter_core.dart';
 import 'package:flutter/material.dart';
-
-export 'package:package_info_plus/package_info_plus.dart';
 
 class SettingTitle extends StatelessWidget {
   const SettingTitle({
@@ -110,7 +106,7 @@ class CheckCourseNotifyItem extends StatelessWidget {
         final CourseNotifyData notifyData = tag == null
             ? CourseNotifyData.loadCurrent()
             : CourseNotifyData.load(tag);
-        if (ApNotificationUtil.isSupport) {
+        if (NotificationUtil.instance.isSupport) {
           if (notifyData.data.isNotEmpty) {
             showDialog(
               context: context,
@@ -155,7 +151,7 @@ class ClearAllNotifyItem extends StatelessWidget {
       text: ap.cancelAllNotify,
       subText: ap.cancelAllNotifySubTitle,
       onTap: () {
-        if (ApNotificationUtil.isSupport) {
+        if (NotificationUtil.instance.isSupport) {
           NotificationUtil.instance.cancelAll();
           final CourseNotifyData notifyData = tag == null
               ? CourseNotifyData.loadCurrent()

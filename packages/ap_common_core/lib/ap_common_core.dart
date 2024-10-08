@@ -17,5 +17,4 @@ export 'src/models/user_info.dart';
 export 'src/models/version_info.dart';
 export 'src/utilities/analytics_utils.dart';
 export 'src/utilities/crashlytics_utils.dart';
-export 'src/utilities/notification_util.dart';
 export 'src/utilities/preference_util.dart';

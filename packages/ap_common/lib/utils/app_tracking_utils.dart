@@ -1,29 +1,10 @@
-import 'dart:io';
-
 import 'package:ap_common/resources/ap_theme.dart';
 import 'package:ap_common/widgets/default_dialog.dart';
 import 'package:ap_common_flutter_core/ap_common_flutter_core.dart';
-import 'package:app_tracking_transparency/app_tracking_transparency.dart';
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
-export 'package:app_tracking_transparency/app_tracking_transparency.dart';
-
 class AppTrackingUtils {
-  static Future<bool> get isSupportAppTrackingApi async {
-    if (!kIsWeb && Platform.isIOS) {
-      return await AppTrackingTransparency.trackingAuthorizationStatus ==
-          TrackingStatus.notSupported;
-    } else {
-      return false;
-    }
-  }
-
-  static Future<TrackingStatus> get trackingAuthorizationStatus async {
-    return AppTrackingTransparency.trackingAuthorizationStatus;
-  }
-
   static void show({
     required BuildContext context,
     VoidCallback? onTap,
@@ -91,11 +72,9 @@ class AppTrackingUtils {
           actionFunction: onTap ??
               () async {
                 try {
-                  if (await AppTrackingTransparency
-                          .trackingAuthorizationStatus ==
-                      TrackingStatus.notDetermined) {
-                    await AppTrackingTransparency
-                        .requestTrackingAuthorization();
+                  if (await AppStoreUtil.instance.trackingAuthorizationStatus ==
+                      GeneralPermissionStatus.notDetermined) {
+                    await AppStoreUtil.instance.requestTrackingAuthorization();
                   }
                   //ignore: use_build_context_synchronously
                   Navigator.of(context).pop();
