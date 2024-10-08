@@ -1,4 +1,4 @@
-import 'package:ap_common_core/ap_common_core.dart';
+import 'package:ap_common_flutter_ui/ap_common_flutter_ui.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 //ignore_for_file: lines_longer_than_80_chars

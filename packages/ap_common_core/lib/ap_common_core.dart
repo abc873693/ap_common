@@ -1,3 +1,6 @@
+import 'package:ap_common_core/ap_common_core.dart';
+import 'package:ap_common_core/injector.dart';
+
 export 'src/config/analytics_constants.dart';
 export 'src/config/ap_constants.dart';
 export 'src/models/announcement_data.dart';
@@ -18,3 +21,18 @@ export 'src/models/version_info.dart';
 export 'src/utilities/analytics_utils.dart';
 export 'src/utilities/crashlytics_utils.dart';
 export 'src/utilities/preference_util.dart';
+
+void registerApCommonService({
+  required AnalyticsUtil analytics,
+  required CrashlyticsUtil crashlytics,
+}) {
+  injector
+    ..registerSingleton<AnalyticsUtil>(() => analytics)
+    ..registerSingleton<CrashlyticsUtil>(() => crashlytics);
+}
+
+void registerApCommonCore({
+  required PreferenceUtil preference,
+}) {
+  injector.registerSingleton<PreferenceUtil>(() => preference);
+}

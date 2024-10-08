@@ -6,7 +6,7 @@ repository: https://github.com/abc873693/ap_common/tree/master/packages/ap_commo
 
 
 environment:
-  sdk: ^3.5.3
+  sdk: ^3.4.0
   flutter: ">=3.22.0"
 
 dependencies:
