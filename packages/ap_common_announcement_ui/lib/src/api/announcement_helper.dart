@@ -2,10 +2,7 @@ import 'dart:async';
 import 'dart:convert';
 import 'dart:ui' show Locale;
 
-import 'package:ap_common_core/ap_common_core.dart';
 import 'package:ap_common_flutter_core/ap_common_flutter_core.dart';
-
-export 'package:ap_common_core/ap_common_core.dart';
 
 enum AnnouncementLoginType {
   normal,
