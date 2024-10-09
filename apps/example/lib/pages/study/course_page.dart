@@ -1,9 +1,4 @@
-import 'package:ap_common/config/ap_constants.dart';
-import 'package:ap_common/models/course_notify_data.dart';
-import 'package:ap_common/models/semester_data.dart';
-import 'package:ap_common/scaffold/course_scaffold.dart';
-import 'package:ap_common/utils/ap_localizations.dart';
-import 'package:ap_common/utils/preferences.dart';
+import 'package:ap_common/ap_common.dart';
 import 'package:ap_common_example/config/constants.dart';
 import 'package:ap_common_example/res/assets.dart';
 import 'package:flutter/material.dart';
@@ -31,7 +26,7 @@ class CoursePageState extends State<CoursePage> {
 
   String customStateHint = '';
 
-  String get courseNotifyCacheKey => Preferences.getString(
+  String get courseNotifyCacheKey => PreferenceUtil.instance.getString(
         ApConstants.currentSemesterCode,
         ApConstants.semesterLatest,
       );
@@ -87,7 +82,7 @@ class CoursePageState extends State<CoursePage> {
   Future<void> _getCourseTables() async {
     final String rawString = await rootBundle.loadString(FileAssets.courses);
     courseData = CourseData.fromRawJson(rawString);
-    Preferences.setString(
+    PreferenceUtil.instance.setString(
       ApConstants.currentSemesterCode,
       ApConstants.semesterLatest,
     );

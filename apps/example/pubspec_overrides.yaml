@@ -1,7 +1,17 @@
-# melos_managed_dependency_overrides: ap_common,ap_common_plugin,intl
+# melos_managed_dependency_overrides: ap_common,ap_common_announcement_ui,ap_common_core,ap_common_flutter_core,ap_common_flutter_platform,ap_common_flutter_ui,ap_common_plugin,intl
 dependency_overrides:
   ap_common:
     path: ../../packages/ap_common
+  ap_common_announcement_ui:
+    path: ../../packages/ap_common_announcement_ui
+  ap_common_core:
+    path: ../../packages/ap_common_core
+  ap_common_flutter_core:
+    path: ../../packages/ap_common_flutter_core
+  ap_common_flutter_platform:
+    path: ../../packages/ap_common_flutter_platform
+  ap_common_flutter_ui:
+    path: ../../packages/ap_common_flutter_ui
   ap_common_plugin:
     path: ../../packages/ap_common_plugin
   intl: 0.18.0

@@ -1,8 +1,4 @@
-import 'package:ap_common/pages/about_us_page.dart';
-import 'package:ap_common/pages/announcement/home_page.dart';
-import 'package:ap_common/resources/ap_theme.dart';
-import 'package:ap_common/utils/ap_localizations.dart';
-import 'package:ap_common/utils/preferences.dart';
+import 'package:ap_common/ap_common.dart';
 import 'package:ap_common_example/config/constants.dart';
 import 'package:ap_common_example/pages/home_page.dart';
 import 'package:ap_common_example/utils/app_localizations.dart';
@@ -36,8 +32,8 @@ class MyAppState extends State<MyApp> with WidgetsBindingObserver {
 
   @override
   void initState() {
-    themeMode = ThemeMode
-        .values[Preferences.getInt(Constants.PREF_THEME_MODE_INDEX, 0)];
+    themeMode = ThemeMode.values[
+        PreferenceUtil.instance.getInt(Constants.PREF_THEME_MODE_INDEX, 0)];
     WidgetsBinding.instance.addObserver(this);
     Future<void>.microtask(() async {
       SystemChrome.setEnabledSystemUIMode(SystemUiMode.edgeToEdge);
@@ -72,7 +68,7 @@ class MyAppState extends State<MyApp> with WidgetsBindingObserver {
         child: MaterialApp(
           localeResolutionCallback:
               (Locale? locale, Iterable<Locale> supportedLocales) {
-            final String languageCode = Preferences.getString(
+            final String languageCode = PreferenceUtil.instance.getString(
               Constants.PREF_LANGUAGE_CODE,
               ApSupportLanguageConstants.system,
             );

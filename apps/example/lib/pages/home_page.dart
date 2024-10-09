@@ -1,16 +1,4 @@
-import 'package:ap_common/api/announcement_helper.dart';
-import 'package:ap_common/models/user_info.dart';
-import 'package:ap_common/pages/about_us_page.dart';
-import 'package:ap_common/pages/announcement/home_page.dart';
-import 'package:ap_common/pages/announcement_content_page.dart';
-import 'package:ap_common/resources/ap_icon.dart';
-import 'package:ap_common/resources/ap_theme.dart';
-import 'package:ap_common/scaffold/home_page_scaffold.dart';
-import 'package:ap_common/utils/ap_localizations.dart';
-import 'package:ap_common/utils/ap_utils.dart';
-import 'package:ap_common/utils/notification_utils.dart';
-import 'package:ap_common/utils/preferences.dart';
-import 'package:ap_common/widgets/ap_drawer.dart';
+import 'package:ap_common/ap_common.dart';
 import 'package:ap_common_example/config/constants.dart';
 import 'package:ap_common_example/pages/diolog_utils_page.dart';
 import 'package:ap_common_example/pages/login_page.dart';
@@ -88,7 +76,7 @@ class HomePageState extends State<HomePage> {
   @override
   void initState() {
     _getAnnouncements();
-    if (Preferences.getBool(Constants.PREF_AUTO_LOGIN, false)) {
+    if (PreferenceUtil.instance.getBool(Constants.PREF_AUTO_LOGIN, false)) {
       _login();
     } else {
       checkLogin();
@@ -126,8 +114,8 @@ class HomePageState extends State<HomePage> {
       content: content,
       drawer: ApDrawer(
         userInfo: userInfo,
-        displayPicture:
-            Preferences.getBool(Constants.PREF_DISPLAY_PICTURE, true),
+        displayPicture: PreferenceUtil.instance
+            .getBool(Constants.PREF_DISPLAY_PICTURE, true),
         imageAsset: drawerIcon,
         onTapHeader: () {
           if (isLogin) {
@@ -194,7 +182,7 @@ class HomePageState extends State<HomePage> {
               SchoolInfoPage(),
             ),
           ),
-          if (NotificationUtils.isSupport)
+          if (NotificationUtil.instance.isSupport)
             DrawerItem(
               icon: ApIcon.dateRange,
               title: app.localNotificationTest,
@@ -228,7 +216,8 @@ class HomePageState extends State<HomePage> {
               icon: ApIcon.powerSettingsNew,
               title: ap.logout,
               onTap: () async {
-                await Preferences.setBool(Constants.PREF_AUTO_LOGIN, false);
+                await PreferenceUtil.instance
+                    .setBool(Constants.PREF_AUTO_LOGIN, false);
                 isLogin = false;
                 userInfo = null;
                 content = null;
@@ -283,7 +272,7 @@ class HomePageState extends State<HomePage> {
           break;
       }
     } else {
-      ApUtils.showToast(context, ap.notLogin);
+      UiUtil.instance.showToast(context, ap.notLogin);
     }
   }
 
@@ -337,7 +326,7 @@ class HomePageState extends State<HomePage> {
     setState(() {
       this.userInfo = userInfo;
     });
-    if (Preferences.getBool(Constants.PREF_DISPLAY_PICTURE, true)) {
+    if (PreferenceUtil.instance.getBool(Constants.PREF_DISPLAY_PICTURE, true)) {
       _getUserPicture();
     }
   }
@@ -362,12 +351,12 @@ class HomePageState extends State<HomePage> {
 
   Future<void> _login() async {
     await Future<void>.delayed(const Duration(microseconds: 30));
-    // var username = Preferences.getString(Constants.PREF_USERNAME, '');
+    // var username = PreferenceUtil.instance.getString(Constants.PREF_USERNAME, '');
     // ignore: lines_longer_than_80_chars
-    // var password = Preferences.getStringSecurity(Constants.PREF_PASSWORD, '');
+    // var password = PreferenceUtil.instance.getStringSecurity(Constants.PREF_PASSWORD, '');
     //to login
     isLogin = true;
-    Preferences.setBool(Constants.PREF_IS_OFFLINE_LOGIN, false);
+    PreferenceUtil.instance.setBool(Constants.PREF_IS_OFFLINE_LOGIN, false);
     _getUserInfo();
     if (state != HomeState.finish) {
       _getAnnouncements();
@@ -418,7 +407,7 @@ class HomePageState extends State<HomePage> {
   void _openPage(Widget page, {bool needLogin = false}) {
     if (!isTablet) Navigator.of(context).pop();
     if (needLogin && !isLogin) {
-      ApUtils.showToast(
+      UiUtil.instance.showToast(
         context,
         ApLocalizations.of(context).notLoginHint,
       );

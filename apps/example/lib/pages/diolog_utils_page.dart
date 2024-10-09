@@ -1,8 +1,4 @@
-import 'package:ap_common/models/version_info.dart';
-import 'package:ap_common/utils/ap_utils.dart';
-import 'package:ap_common/utils/app_tracking_utils.dart';
-import 'package:ap_common/utils/dialog_utils.dart';
-import 'package:ap_common/utils/notification_utils.dart';
+import 'package:ap_common/ap_common.dart';
 import 'package:ap_common_example/config/constants.dart';
 import 'package:ap_common_example/utils/app_localizations.dart';
 import 'package:flutter/material.dart';
@@ -15,7 +11,6 @@ class DialogUtilsTestPage extends StatefulWidget {
 class _DialogUtilsTestPageState extends State<DialogUtilsTestPage> {
   late AppLocalizations app;
 
-  Day day = NotificationUtils.getDay(DateTime.now().weekday);
   TimeOfDay time = TimeOfDay.now();
 
   @override

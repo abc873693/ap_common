@@ -18,12 +18,48 @@
 
 ## 套件
 
-| Name                 | pub.dev                                                                                                                                           | 說明                  |
-|----------------------|---------------------------------------------------------------------------------------------------------------------------------------------------|---------------------|
-| `ap_common`          | [![ap_common pub.dev badge](https://img.shields.io/pub/v/ap_common.svg?style=flat-square)](https://pub.dev/packages/ap_common/)                   | 函式庫與相關介面共用          |
-| `ap_common_plugin`   | [![ap_common pub.dev badge](https://img.shields.io/pub/v/ap_common_plugin.svg?style=flat-square)](https://pub.dev/packages/ap_common_plugin/)     | 課表小工具               |
-| `ap_common_firebase` | [![ap_common pub.dev badge](https://img.shields.io/pub/v/ap_common_firebase.svg?style=flat-square)](https://pub.dev/packages/ap_common_firebase/) | 服務 `Firebase` 的整合實作 |
+| Name                                | pub.dev                                                                                                                                                           | 說明                   |
+|-------------------------------------|-------------------------------------------------------------------------------------------------------------------------------------------------------------------|----------------------|
+| `ap_common`                         | [![ap_common pub.dev badge](https://img.shields.io/pub/v/ap_common.svg?style=flat-square)](https://pub.dev/packages/ap_common/)                                   | 函式庫與相關介面共用           |
+| `ap_common_core`                    | [![ap_common pub.dev badge](https://img.shields.io/pub/v/ap_common.svg?style=flat-square)](https://pub.dev/packages/ap_common_core/)                              | 純 Dart 的基本類別         |
+| `ap_common_flutter_core`            | [![ap_common pub.dev badge](https://img.shields.io/pub/v/ap_common_flutter_core.svg?style=flat-square)](https://pub.dev/packages/ap_common_flutter_core/)         | 基於 Flutter 框架的核心基本類別 |
+| `ap_common_flutter_platform`        | [![ap_common pub.dev badge](https://img.shields.io/pub/v/ap_common_flutter_platform.svg?style=flat-square)](https://pub.dev/packages/ap_common_flutter_platform/) | 原生功能實作               |
+| `ap_common_flutter_ui`              | [![ap_common pub.dev badge](https://img.shields.io/pub/v/ap_common_flutter_ui.svg?style=flat-square)](https://pub.dev/packages/ap_common_flutter_ui/)             | UI 實作但不包含原生功能整合      |
+| `ap_common_flutter_announcement_ui` | [![ap_common pub.dev badge](https://img.shields.io/pub/v/ap_common_announcement_ui.svg?style=flat-square)](https://pub.dev/packages/ap_common_announcement_ui/)   | 最新消息服務相關的介面實作        |
+| `ap_common_plugin`                  | [![ap_common pub.dev badge](https://img.shields.io/pub/v/ap_common_plugin.svg?style=flat-square)](https://pub.dev/packages/ap_common_plugin/)                     | 課表小工具                |
+| `ap_common_firebase`                | [![ap_common pub.dev badge](https://img.shields.io/pub/v/ap_common_firebase.svg?style=flat-square)](https://pub.dev/packages/ap_common_firebase/)                 | 服務 `Firebase` 的整合實作  |
+
+## 套件架構
+
+### v0.26 以後
+
+```mermaid
+flowchart TD
+    ap_common[ap_common] --- ap_common_flutter_ui[ap_common_flutter_ui] --- ap_common_flutter_core
+
+    ap_common --- ap_common_flutter_platform[ap_common_flutter_platform] --- ap_common_flutter_core
+
+    ap_common --- ap_common_announcement_ui[ap_common_announcement_ui]  --- ap_common_flutter_core
+
+    ap_common_firebase  --- ap_common_flutter_core
+
+    ap_common_plugin  --- ap_common_flutter_core
+
+    ap_common_flutter_core -- Dart Level --> ap_common_core
+  
+```
+
+### v0.25 前
+
+```mermaid
+flowchart TD
+
+    ap_common_firebase  --- ap_common
+
+    ap_common_plugin  --- ap_common
+  
+```
 
 ## 套件使用要求
 
-- Flutter `v1.20` 以上
+- Flutter `v3.22` 以上

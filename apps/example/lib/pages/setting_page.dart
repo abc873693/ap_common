@@ -1,13 +1,6 @@
-import 'dart:io';
-
-import 'package:ap_common/resources/ap_theme.dart';
-import 'package:ap_common/utils/ap_localizations.dart';
-import 'package:ap_common/utils/ap_utils.dart';
-import 'package:ap_common/utils/preferences.dart';
-import 'package:ap_common/widgets/setting_page_widgets.dart';
+import 'package:ap_common/ap_common.dart';
 import 'package:ap_common_example/config/constants.dart';
 import 'package:ap_common_example/widgets/share_data_widget.dart';
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
 class SettingPage extends StatefulWidget {
@@ -73,7 +66,7 @@ class SettingPageState extends State<SettingPage> {
                 setState(() {
                   displayPicture = !displayPicture;
                 });
-                Preferences.setBool(
+                PreferenceUtil.instance.setBool(
                   Constants.PREF_DISPLAY_PICTURE,
                   displayPicture,
                 );
@@ -118,17 +111,20 @@ class SettingPageState extends State<SettingPage> {
   }
 
   Future<void> _getPreference() async {
-    PackageInfo? packageInfo;
-    if (!kIsWeb && (Platform.isAndroid || Platform.isIOS || Platform.isMacOS)) {
-      packageInfo = await PackageInfo.fromPlatform();
-    }
+    // PackageInfo? packageInfo;
+    // if (!kIsWeb && (Platform.isAndroid || Platform.isIOS || Platform.isMacOS)) {
+    //   packageInfo = await PackageInfo.fromPlatform();
+    // }
     setState(() {
-      isOffline = Preferences.getBool(Constants.PREF_IS_OFFLINE_LOGIN, false);
-      appVersion = packageInfo?.version ?? '3.4.2';
-      courseNotify = Preferences.getBool(Constants.PREF_COURSE_NOTIFY, false);
+      isOffline = PreferenceUtil.instance
+          .getBool(Constants.PREF_IS_OFFLINE_LOGIN, false);
+      appVersion = '3.4.2';
+      courseNotify =
+          PreferenceUtil.instance.getBool(Constants.PREF_COURSE_NOTIFY, false);
       displayPicture =
-          Preferences.getBool(Constants.PREF_DISPLAY_PICTURE, true);
-      busNotify = Preferences.getBool(Constants.PREF_BUS_NOTIFY, false);
+          PreferenceUtil.instance.getBool(Constants.PREF_DISPLAY_PICTURE, true);
+      busNotify =
+          PreferenceUtil.instance.getBool(Constants.PREF_BUS_NOTIFY, false);
     });
   }
 }

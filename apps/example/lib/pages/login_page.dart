@@ -1,8 +1,4 @@
-import 'package:ap_common/scaffold/login_scaffold.dart';
-import 'package:ap_common/utils/ap_localizations.dart';
-import 'package:ap_common/utils/ap_utils.dart';
-import 'package:ap_common/utils/preferences.dart';
-import 'package:ap_common/widgets/progress_dialog.dart';
+import 'package:ap_common/ap_common.dart';
 import 'package:ap_common_example/config/constants.dart';
 import 'package:ap_common_example/res/assets.dart';
 import 'package:flutter/material.dart';
@@ -107,7 +103,7 @@ class LoginPageState extends State<LoginPage> {
 //              setState(() {
 //                _username.text = username;
 //              });
-//              ApUtils.showToast(context, ap.firstLoginHint);
+//              UiUtil.instance.showToast(context, ap.firstLoginHint);
 //            }
 //          },
 //        )
@@ -119,8 +115,8 @@ class LoginPageState extends State<LoginPage> {
     setState(() {
       isRememberPassword = value;
       if (!isRememberPassword!) isAutoLogin = false;
-      Preferences.setBool(Constants.PREF_AUTO_LOGIN, isAutoLogin!);
-      Preferences.setBool(
+      PreferenceUtil.instance.setBool(Constants.PREF_AUTO_LOGIN, isAutoLogin!);
+      PreferenceUtil.instance.setBool(
         Constants.PREF_REMEMBER_PASSWORD,
         isRememberPassword!,
       );
@@ -131,8 +127,8 @@ class LoginPageState extends State<LoginPage> {
     setState(() {
       isAutoLogin = value;
       isRememberPassword = isAutoLogin;
-      Preferences.setBool(Constants.PREF_AUTO_LOGIN, isAutoLogin!);
-      Preferences.setBool(
+      PreferenceUtil.instance.setBool(Constants.PREF_AUTO_LOGIN, isAutoLogin!);
+      PreferenceUtil.instance.setBool(
         Constants.PREF_REMEMBER_PASSWORD,
         isRememberPassword!,
       );
@@ -141,19 +137,22 @@ class LoginPageState extends State<LoginPage> {
 
   Future<void> _getPreference() async {
     isRememberPassword =
-        Preferences.getBool(Constants.PREF_REMEMBER_PASSWORD, true);
-    isAutoLogin = Preferences.getBool(Constants.PREF_AUTO_LOGIN, false);
+        PreferenceUtil.instance.getBool(Constants.PREF_REMEMBER_PASSWORD, true);
+    isAutoLogin =
+        PreferenceUtil.instance.getBool(Constants.PREF_AUTO_LOGIN, false);
     setState(() {
-      _username.text = Preferences.getString(Constants.PREF_USERNAME, '');
+      _username.text =
+          PreferenceUtil.instance.getString(Constants.PREF_USERNAME, '');
       _password.text = isRememberPassword!
-          ? Preferences.getStringSecurity(Constants.PREF_PASSWORD, '')
+          ? PreferenceUtil.instance
+              .getStringSecurity(Constants.PREF_PASSWORD, '')
           : '';
     });
   }
 
   Future<void> _login() async {
     if (_username.text.isEmpty || _password.text.isEmpty) {
-      ApUtils.showToast(context, ap.doNotEmpty, gravity: gravity);
+      UiUtil.instance.showToast(context, ap.doNotEmpty, gravity: gravity);
     } else {
       asyncLogin();
     }
@@ -168,36 +167,38 @@ class LoginPageState extends State<LoginPage> {
       ),
       barrierDismissible: false,
     );
-    Preferences.setString(Constants.PREF_USERNAME, _username.text);
+    PreferenceUtil.instance.setString(Constants.PREF_USERNAME, _username.text);
     Navigator.of(context, rootNavigator: true).pop();
-    Preferences.setString(Constants.PREF_USERNAME, _username.text);
+    PreferenceUtil.instance.setString(Constants.PREF_USERNAME, _username.text);
     if (isRememberPassword!) {
-      Preferences.setStringSecurity(Constants.PREF_PASSWORD, _password.text);
+      PreferenceUtil.instance
+          .setStringSecurity(Constants.PREF_PASSWORD, _password.text);
     }
-    Preferences.setBool(Constants.PREF_IS_OFFLINE_LOGIN, false);
+    PreferenceUtil.instance.setBool(Constants.PREF_IS_OFFLINE_LOGIN, false);
     TextInput.finishAutofillContext();
     Navigator.of(context).pop(true);
   }
 
   Future<void> _offlineLogin() async {
-    final String username = Preferences.getString(Constants.PREF_USERNAME, '');
+    final String username =
+        PreferenceUtil.instance.getString(Constants.PREF_USERNAME, '');
     final String password =
-        Preferences.getStringSecurity(Constants.PREF_PASSWORD, '');
+        PreferenceUtil.instance.getStringSecurity(Constants.PREF_PASSWORD, '');
     if (username.isEmpty || password.isEmpty) {
-      ApUtils.showToast(context, ap.noOfflineLoginData);
+      UiUtil.instance.showToast(context, ap.noOfflineLoginData);
     } else {
       if (username != _username.text || password != _password.text) {
-        ApUtils.showToast(context, ap.offlineLoginPasswordError);
+        UiUtil.instance.showToast(context, ap.offlineLoginPasswordError);
       } else {
-        Preferences.setBool(Constants.PREF_IS_OFFLINE_LOGIN, true);
-        ApUtils.showToast(context, ap.loadOfflineData);
+        PreferenceUtil.instance.setBool(Constants.PREF_IS_OFFLINE_LOGIN, true);
+        UiUtil.instance.showToast(context, ap.loadOfflineData);
         Navigator.of(context).pop(true);
       }
     }
   }
 
   Future<void> clearSetting() async {
-    Preferences.setBool(Constants.PREF_AUTO_LOGIN, false);
+    PreferenceUtil.instance.setBool(Constants.PREF_AUTO_LOGIN, false);
     setState(() {
       isAutoLogin = false;
     });

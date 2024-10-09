@@ -1,4 +1,0 @@
-# melos_managed_dependency_overrides: ap_common
-dependency_overrides:
-  ap_common:
-    path: ../ap_common
