@@ -1,14 +1,11 @@
 import 'dart:io';
 
-import 'package:ap_common_core/injector.dart';
 import 'package:ap_common_flutter_core/ap_common_flutter_core.dart';
 import 'package:app_tracking_transparency/app_tracking_transparency.dart';
 import 'package:flutter/foundation.dart';
 import 'package:in_app_review/in_app_review.dart';
 
 class ApAppStoreUtil extends AppStoreUtil {
-  static ApAppStoreUtil get instance => injector.get<ApAppStoreUtil>();
-
   @override
   Future<void> openAppReview({
     String defaultUrl = '',

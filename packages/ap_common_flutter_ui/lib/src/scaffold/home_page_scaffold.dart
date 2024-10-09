@@ -5,8 +5,6 @@ import 'package:ap_common_flutter_ui/ap_common_flutter_ui.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
-export 'package:ap_common_core/ap_common_core.dart';
-
 enum HomeState { loading, finish, error, empty, offline }
 
 class HomePageScaffold extends StatefulWidget {
