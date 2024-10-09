@@ -1,6 +1,6 @@
 import 'dart:io';
 
-import 'package:ap_common_core/ap_common_core.dart';
+import 'package:ap_common_flutter_core/ap_common_flutter_core.dart';
 import 'package:firebase_remote_config/firebase_remote_config.dart';
 import 'package:flutter/foundation.dart';
 

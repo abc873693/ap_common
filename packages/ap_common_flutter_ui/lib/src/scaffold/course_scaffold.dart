@@ -7,8 +7,6 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 
-export 'package:ap_common_core/ap_common_core.dart';
-
 typedef CourseNotifyCallback = Function(
   CourseNotify? courseNotify,
   CourseNotifyState state,

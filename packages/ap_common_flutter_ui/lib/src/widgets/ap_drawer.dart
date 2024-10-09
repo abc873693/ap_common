@@ -1,6 +1,5 @@
 import 'dart:typed_data';
 
-import 'package:ap_common_core/ap_common_core.dart';
 import 'package:ap_common_flutter_core/ap_common_flutter_core.dart';
 import 'package:ap_common_flutter_ui/src/resources/ap_theme.dart';
 import 'package:flutter/material.dart';
