@@ -39,3 +39,7 @@ scripts:
     packageFilters:
       dirExists:
         - test
+  pub-check:
+    run: |
+      melos exec -c 1 --no-private --ignore="*example*" -- \
+                  dart pub publish --dry-run
