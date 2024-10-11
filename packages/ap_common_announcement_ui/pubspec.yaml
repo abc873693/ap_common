@@ -12,8 +12,8 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
-  ap_common_flutter_core: ^0.0.2 <1.0.0'
-  ap_common_flutter_ui: ^0.0.2 <1.0.0'
+  ap_common_flutter_core: ^0.0.2
+  ap_common_flutter_ui: ^0.0.2
   # Dart Packages
   path: ^1.9.0
   dio_cookie_manager: ^3.1.1
