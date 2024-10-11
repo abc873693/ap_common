@@ -1,2 +1,3 @@
 example/
 build/
+pubspec_overrides.yaml

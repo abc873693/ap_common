@@ -27,3 +27,8 @@ migrate_working_dir/
 **/doc/api/
 .dart_tool/
 build/
+
+android/gradlew
+android/gradlew.bat
+melos_ap_common_plugin.iml
+pubspec.lock
