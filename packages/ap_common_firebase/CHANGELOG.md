@@ -1,3 +1,7 @@
+## 0.17.0-dev.1
+
+ - Update a dependency to the latest release.
+
 ## 0.17.0-dev.0
 
  - **FIX**: `ap_common_firebase` dependency usage. ([d5098b42](https://github.com/abc873693/ap_common/commit/d5098b426c00de39c0736a8ca535a76be0722331))

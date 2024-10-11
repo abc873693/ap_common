@@ -1,3 +1,16 @@
+## 0.26.0-dev.1
+
+ - **FEAT**: move UI implement to `ap_common_flutter_ui`. ([304b60fa](https://github.com/abc873693/ap_common/commit/304b60fa245dbd0b1d4d3ae649b5468e9ee46f71))
+ - **FEAT**: move native platform util implement to `ap_common_flutter_platform`. ([8cb047f1](https://github.com/abc873693/ap_common/commit/8cb047f167d6f10eaab063449a88646092faff10))
+ - **FEAT**: `AppStoreUtil` and `PlatformUtil` for `ap_common_flutter_core`. ([d87dc711](https://github.com/abc873693/ap_common/commit/d87dc7117a040b31b42abd2d1122a891fd04988e))
+ - **FEAT**: migrate `util` `l10n`  to new `ap_common_flutter_core`. ([e91e9b4c](https://github.com/abc873693/ap_common/commit/e91e9b4cdf3cb7d4e2dde1dd8ec5f66556d38461))
+ - **FEAT**: centralized package lint rule. ([08db9e1f](https://github.com/abc873693/ap_common/commit/08db9e1f00118f11ef389b194585626d7c51c3ab))
+ - **FEAT**: migrate `NotificationUtil` and `Preference` to injection version. ([ac50e177](https://github.com/abc873693/ap_common/commit/ac50e177cb276937b2411397959a845f98fa297a))
+ - **FEAT**: `ap_common` import `ap_common_core`. ([a6aa801f](https://github.com/abc873693/ap_common/commit/a6aa801f2165281be61afbe33f4072827e5979bc))
+ - **FEAT**: migrate `model`  `util` `config` to new `ap_common_core`. ([90f16bc9](https://github.com/abc873693/ap_common/commit/90f16bc9e38eb10f2d8f3b633f4c46a0a9e2ff95))
+ - **FEAT**: update example path. ([4d7390c9](https://github.com/abc873693/ap_common/commit/4d7390c9212631e1233c37c901a4454610783926))
+ - **FEAT**: move main package to directory `packages` for melos prepare. ([8af51340](https://github.com/abc873693/ap_common/commit/8af51340576e8236b261a21188cc8feaa0776785))
+
 ## [0.26.0-dev.0] - 2024/10/09
 ### 基於 Flutter v3.24 開發
 

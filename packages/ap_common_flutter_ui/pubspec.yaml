@@ -1,6 +1,6 @@
 name: ap_common_flutter_ui
 description: "The school affairs(AP) series shares the engineering kit, rapid development of the school affairs series(AP) app"
-version: 0.0.1
+version: 0.0.2
 homepage: https://github.com/abc873693/ap_common
 repository: https://github.com/abc873693/ap_common/tree/master/packages/ap_common_flutter_ui
 
@@ -11,7 +11,7 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
-  ap_common_flutter_core: '>=0.0.1 <1.0.0'
+  ap_common_flutter_core: ^0.0.2 <1.0.0'
   # Dart Package
   sprintf: ^7.0.0
   # Flutter UI Package
