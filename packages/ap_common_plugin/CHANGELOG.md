@@ -1,3 +1,8 @@
+## 0.5.0-dev.1
+
+ - **FIX**: pub publish requirement. ([839ad892](https://github.com/abc873693/ap_common/commit/839ad892cb67fb04d8c1f877129faa2847c76f77))
+ - **FIX**: packages version constraint. ([783781bd](https://github.com/abc873693/ap_common/commit/783781bdb314a93b89415f8de9fb6acdcd38a222))
+
 ## 0.5.0-dev.0
 
  - **FEAT**: centralized package lint rule. ([08db9e1f](https://github.com/abc873693/ap_common/commit/08db9e1f00118f11ef389b194585626d7c51c3ab))

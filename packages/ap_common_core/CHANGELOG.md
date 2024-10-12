@@ -1,3 +1,8 @@
+## 0.0.4
+
+ - **FIX**: pub publish requirement. ([839ad892](https://github.com/abc873693/ap_common/commit/839ad892cb67fb04d8c1f877129faa2847c76f77))
+ - **FEAT**: `AnalyticsUtil` and `CrashlyticsUtil` migrate to injection version. ([f633fae8](https://github.com/abc873693/ap_common/commit/f633fae8d102d32624e23acad2c00c06c27b4dde))
+
 ## 0.0.3
 
  - **FIX**: `ap_common_core` separate static error. ([629ba29d](https://github.com/abc873693/ap_common/commit/629ba29d7d0aa59270eec1da45e49daebe3bf8b5))

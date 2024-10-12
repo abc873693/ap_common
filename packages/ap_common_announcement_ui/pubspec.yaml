@@ -1,6 +1,6 @@
 name: ap_common_announcement_ui
 description: "The school affairs(AP) series shares the engineering kit, rapid development of the school affairs series(AP) app"
-version: 0.0.2
+version: 0.0.2+1
 homepage: https://github.com/abc873693/ap_common
 repository: https://github.com/abc873693/ap_common/tree/master/packages/ap_common_announcement_ui
 
@@ -12,8 +12,8 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
-  ap_common_flutter_core: ^0.0.2
-  ap_common_flutter_ui: ^0.0.2
+  ap_common_flutter_core: ^0.0.2+1
+  ap_common_flutter_ui: ^0.0.2+1
   # Dart Packages
   path: ^1.9.0
   dio_cookie_manager: ^3.1.1

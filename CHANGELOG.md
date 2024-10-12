@@ -3,6 +3,73 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## 2024-10-12
+
+### Changes
+
+---
+
+Packages with breaking changes:
+
+ - There are no breaking changes in this release.
+
+Packages with other changes:
+
+ - [`ap_common_announcement_ui` - `v0.0.2+1`](#ap_common_announcement_ui---v0021)
+ - [`ap_common_core` - `v0.0.4`](#ap_common_core---v004)
+ - [`ap_common_firebase` - `v0.17.0-dev.2`](#ap_common_firebase---v0170-dev2)
+ - [`ap_common_flutter_core` - `v0.0.2+1`](#ap_common_flutter_core---v0021)
+ - [`ap_common_flutter_platform` - `v0.0.2+1`](#ap_common_flutter_platform---v0021)
+ - [`ap_common_flutter_ui` - `v0.0.2+1`](#ap_common_flutter_ui---v0021)
+ - [`ap_common_plugin` - `v0.5.0-dev.1`](#ap_common_plugin---v050-dev1)
+ - [`ap_common` - `v0.26.0-dev.2`](#ap_common---v0260-dev2)
+
+Packages with dependency updates only:
+
+> Packages listed below depend on other packages in this workspace that have had changes. Their versions have been incremented to bump the minimum dependency versions of the packages they depend upon in this project.
+
+ - `ap_common` - `v0.26.0-dev.2`
+
+---
+
+#### `ap_common_announcement_ui` - `v0.0.2+1`
+
+ - **FIX**: pub publish requirement. ([839ad892](https://github.com/abc873693/ap_common/commit/839ad892cb67fb04d8c1f877129faa2847c76f77))
+ - **FIX**: packages version constraint. ([783781bd](https://github.com/abc873693/ap_common/commit/783781bdb314a93b89415f8de9fb6acdcd38a222))
+
+#### `ap_common_core` - `v0.0.4`
+
+ - **FIX**: pub publish requirement. ([839ad892](https://github.com/abc873693/ap_common/commit/839ad892cb67fb04d8c1f877129faa2847c76f77))
+ - **FEAT**: `AnalyticsUtil` and `CrashlyticsUtil` migrate to injection version. ([f633fae8](https://github.com/abc873693/ap_common/commit/f633fae8d102d32624e23acad2c00c06c27b4dde))
+
+#### `ap_common_firebase` - `v0.17.0-dev.2`
+
+ - **FIX**: pub publish requirement. ([839ad892](https://github.com/abc873693/ap_common/commit/839ad892cb67fb04d8c1f877129faa2847c76f77))
+ - **FIX**: packages version constraint. ([783781bd](https://github.com/abc873693/ap_common/commit/783781bdb314a93b89415f8de9fb6acdcd38a222))
+ - **FEAT**: `AnalyticsUtil` and `CrashlyticsUtil` migrate to injection version. ([f633fae8](https://github.com/abc873693/ap_common/commit/f633fae8d102d32624e23acad2c00c06c27b4dde))
+
+#### `ap_common_flutter_core` - `v0.0.2+1`
+
+ - **FIX**: pub publish requirement. ([839ad892](https://github.com/abc873693/ap_common/commit/839ad892cb67fb04d8c1f877129faa2847c76f77))
+ - **FIX**: packages version constraint. ([783781bd](https://github.com/abc873693/ap_common/commit/783781bdb314a93b89415f8de9fb6acdcd38a222))
+
+#### `ap_common_flutter_platform` - `v0.0.2+1`
+
+ - **FIX**: pub publish requirement. ([839ad892](https://github.com/abc873693/ap_common/commit/839ad892cb67fb04d8c1f877129faa2847c76f77))
+ - **FIX**: packages version constraint. ([783781bd](https://github.com/abc873693/ap_common/commit/783781bdb314a93b89415f8de9fb6acdcd38a222))
+
+#### `ap_common_flutter_ui` - `v0.0.2+1`
+
+ - **FIX**: `ApAssets` path error. ([c70fdd2d](https://github.com/abc873693/ap_common/commit/c70fdd2dd9b470215f3d28d79197fc1b427397ef))
+ - **FIX**: pub publish requirement. ([839ad892](https://github.com/abc873693/ap_common/commit/839ad892cb67fb04d8c1f877129faa2847c76f77))
+ - **FIX**: packages version constraint. ([783781bd](https://github.com/abc873693/ap_common/commit/783781bdb314a93b89415f8de9fb6acdcd38a222))
+
+#### `ap_common_plugin` - `v0.5.0-dev.1`
+
+ - **FIX**: pub publish requirement. ([839ad892](https://github.com/abc873693/ap_common/commit/839ad892cb67fb04d8c1f877129faa2847c76f77))
+ - **FIX**: packages version constraint. ([783781bd](https://github.com/abc873693/ap_common/commit/783781bdb314a93b89415f8de9fb6acdcd38a222))
+
+
 ## 2024-10-11
 
 ### Changes
