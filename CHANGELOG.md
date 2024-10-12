@@ -15,6 +15,27 @@ Packages with breaking changes:
 
 Packages with other changes:
 
+ - [`ap_common_firebase` - `v0.17.0-dev.3`](#ap_common_firebase---v0170-dev3)
+
+---
+
+#### `ap_common_firebase` - `v0.17.0-dev.3`
+
+ - **FIX**: remove useless implement instance. ([3ec164dd](https://github.com/abc873693/ap_common/commit/3ec164dd62590e684855128da1052cae34705bbb))
+
+
+## 2024-10-12
+
+### Changes
+
+---
+
+Packages with breaking changes:
+
+ - There are no breaking changes in this release.
+
+Packages with other changes:
+
  - [`ap_common_announcement_ui` - `v0.0.2+1`](#ap_common_announcement_ui---v0021)
  - [`ap_common_core` - `v0.0.4`](#ap_common_core---v004)
  - [`ap_common_firebase` - `v0.17.0-dev.2`](#ap_common_firebase---v0170-dev2)
