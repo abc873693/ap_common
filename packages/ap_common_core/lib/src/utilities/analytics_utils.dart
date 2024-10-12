@@ -1,7 +1,10 @@
+import 'package:ap_common_core/injector.dart';
 import 'package:ap_common_core/src/models/user_info.dart';
 
 abstract class AnalyticsUtil {
-  static AnalyticsUtil? instance;
+  const AnalyticsUtil();
+
+  static AnalyticsUtil get instance => injector.get<AnalyticsUtil>();
 
   Future<void> setCurrentScreen(String screenName, String screenClassOverride);
 

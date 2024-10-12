@@ -1,5 +1,9 @@
+import 'package:ap_common_core/injector.dart';
+
 abstract class CrashlyticsUtil {
-  static CrashlyticsUtil? instance;
+  const CrashlyticsUtil();
+
+  static CrashlyticsUtil get instance => injector.get<CrashlyticsUtil>();
 
   Future<void> recordError(
     dynamic exception,

@@ -1,5 +1,6 @@
 import 'package:ap_common_core/ap_common_core.dart';
 import 'package:ap_common_core/injector.dart';
+import 'package:ap_common_core/src/mock_util.dart';
 
 export 'src/config/analytics_constants.dart';
 export 'src/config/ap_constants.dart';
@@ -23,8 +24,8 @@ export 'src/utilities/crashlytics_utils.dart';
 export 'src/utilities/preference_util.dart';
 
 void registerApCommonService({
-  required AnalyticsUtil analytics,
-  required CrashlyticsUtil crashlytics,
+  AnalyticsUtil analytics = const MockAnalyticsUtil(),
+  CrashlyticsUtil crashlytics = const MockCrashlyticsUtil(),
 }) {
   injector
     ..registerSingleton<AnalyticsUtil>(() => analytics)

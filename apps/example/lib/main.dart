@@ -12,6 +12,7 @@ import 'package:google_sign_in_dartio/google_sign_in_dartio.dart';
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
   registerOneForAll();
+  registerApCommonService();
   await (PreferenceUtil.instance as ApPreferenceUtil)
       .init(key: Constants.key, iv: Constants.iv);
   if (!kIsWeb && (Platform.isMacOS || Platform.isWindows || Platform.isLinux)) {

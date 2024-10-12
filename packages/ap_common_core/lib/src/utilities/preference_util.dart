@@ -3,7 +3,7 @@ import 'package:ap_common_core/injector.dart';
 abstract class PreferenceUtil {
   static PreferenceUtil get instance => injector.get<PreferenceUtil>();
 
-  static bool get isSupport => true;
+  bool get isSupport => true;
 
   Future<void> setString(String key, String data);
 
