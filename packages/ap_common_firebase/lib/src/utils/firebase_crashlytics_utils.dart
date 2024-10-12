@@ -13,13 +13,6 @@ class FirebaseCrashlyticsUtils extends CrashlyticsUtil {
     if (isSupported) crashlytics = FirebaseCrashlytics.instance;
   }
 
-  static FirebaseCrashlyticsUtils? _instance;
-
-  //ignore: prefer_constructors_over_static_methods
-  static FirebaseCrashlyticsUtils get instance {
-    return _instance ??= FirebaseCrashlyticsUtils();
-  }
-
   static bool get isSupported =>
       !kIsWeb && (Platform.isAndroid || Platform.isIOS || Platform.isMacOS);
 

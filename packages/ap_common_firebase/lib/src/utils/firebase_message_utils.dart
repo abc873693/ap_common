@@ -1,7 +1,6 @@
 import 'dart:developer';
 import 'dart:io';
 
-import 'package:ap_common_firebase/src/utils/firebase_analytics_utils.dart';
 import 'package:ap_common_firebase/src/utils/firebase_utils.dart';
 import 'package:ap_common_flutter_core/ap_common_flutter_core.dart';
 import 'package:flutter/foundation.dart';
@@ -86,7 +85,7 @@ class FirebaseMessagingUtils {
           log('Push Messaging token: $token', name: 'firebase');
         }
       });
-      FirebaseAnalyticsUtils.instance.setUserProperty(
+      AnalyticsUtil.instance.setUserProperty(
         AnalyticsConstants.hasEnableNotification,
         (value?.authorizationStatus == AuthorizationStatus.authorized)
             .toString(),

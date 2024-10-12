@@ -14,15 +14,8 @@ class FirebaseAnalyticsUtils extends AnalyticsUtil {
     if (isSupported) analytics = FirebaseAnalytics.instance;
   }
 
-  static FirebaseAnalyticsUtils? _instance;
-
   static bool get isSupported =>
       kIsWeb || Platform.isAndroid || Platform.isIOS || Platform.isMacOS;
-
-  //ignore: prefer_constructors_over_static_methods
-  static FirebaseAnalyticsUtils get instance {
-    return _instance ??= FirebaseAnalyticsUtils();
-  }
 
   FirebaseAnalytics? analytics;
 
@@ -76,20 +69,20 @@ class FirebaseAnalyticsUtils extends AnalyticsUtil {
           AnalyticsConstants.department: userInfo.department,
         },
       );
-      FirebaseAnalyticsUtils.instance.setUserProperty(
+      AnalyticsUtil.instance.setUserProperty(
         AnalyticsConstants.department,
-        userInfo.department,
+        userInfo.department!,
       );
     }
     if (userInfo.className != null && userInfo.className!.isNotEmpty) {
-      FirebaseAnalyticsUtils.instance.setUserProperty(
+      AnalyticsUtil.instance.setUserProperty(
         AnalyticsConstants.className,
-        userInfo.className,
+        userInfo.className!,
       );
     }
     if (userInfo.id.isNotEmpty) {
       await analytics?.setUserId(id: userInfo.id);
-      FirebaseAnalyticsUtils.instance.setUserProperty(
+      AnalyticsUtil.instance.setUserProperty(
         AnalyticsConstants.studentId,
         userInfo.id,
       );
