@@ -12,7 +12,8 @@ class ApPreferenceUtil extends PreferenceUtil {
 
   static encrypt.IV? iv;
 
-  static bool get isSupport =>
+  @override
+  bool get isSupport =>
       kIsWeb ||
       Platform.isIOS ||
       Platform.isAndroid ||
