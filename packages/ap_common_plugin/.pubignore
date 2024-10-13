@@ -1,1 +1,6 @@
 example/
+android/gradlew
+android/gradlew.bat
+melos_ap_common_plugin.iml
+pubspec.lock
+pubspec_overrides.yaml

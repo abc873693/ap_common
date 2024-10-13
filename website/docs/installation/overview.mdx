@@ -8,24 +8,82 @@ sidebar_position: 1
 
 ## 事前準備
 
- - [Flutter v3.13 以後](https://flutter.dev/docs/get-started/install) 並建立專案
+ - [Flutter v3.22 以後](https://flutter.dev/docs/get-started/install) 並建立專案
 
-## 安裝流程 
+## 安裝流程
 
-在 `pubspec.yaml` 中加入 package
+### 確認你需要的範圍
 
-```yaml title="pubspec.yaml"
-    # 官方多國語套件
-dependencies:
-    flutter_localizations:
+在 `v0.26` 以後套件依據程式語言 Dart、框架 Flutter 及作業系統原生套件整合將套件拆成以下圖
+
+ <img src="../../img/package-architecture.png" alt="drawing" width="800"/>
+
+可能會有哪些使用情境
+
+1. 使用套件所有功能
+
+   可直接使用 `ap_common`，在 `pubspec.yaml` 中加入 package
+   
+   ```yml title="pubspec.yaml"
+     # 官方多國語套件
+   dependencies:
+     flutter_localizations:
+         sdk: flutter
+     ap_common: ^0.26.0
+   ```
+   
+   在檔案中加入 main.dart `registerOneForAll();`
+   
+   ```dart title="main.dart"
+   void main() {
+     WidgetsFlutterBinding.ensureInitialized();
+     /// Register all ap_common injection util
+     registerOneForAll();
+   
+     runApp(MyApp());
+   }
+   ```
+
+2. 如果你只需要此只需要 UI，不希望整合過多原生作業系統套件，則
+
+   在 `pubspec.yaml` 中加入 package
+    
+   ```yaml title="pubspec.yaml"
+   dependencies:
+     # 官方多國語套件
+     flutter_localizations:
         sdk: flutter
-    ap_common: ^0.25.0
-```
+     ap_common_flutter_core: ^0.1.0
+     ap_common_flutter_ui: ^0.1.0
+   ```
+   
+   因沒使用套件 `ap_common_flutter_platorm`，每個此用到的介面會有特定 Util 類別需要實作，以 `CourseScaffold` 來說，就需要實作 `NotificationUtil` 及 `PlatformCalendarUtil`，並在 `main.dart` 註冊你使用的實作：
+
+   ```dart title="main.dart"
+   void main() {
+     WidgetsFlutterBinding.ensureInitialized();
+   
+     registerApCommonFlutter({
+       ui: YourUiUtil(),
+       platform: YourPlatformUtil(),
+       media: YourMediaUtil(),
+       platformCalendar: YourPlatformCalendarUtil(),
+       notification: YourNotificationUtil(),
+       appStore: YourAppStoreUtil(),
+   });
+   
+   registerApCommonCore(
+     preference: YourPreferenceUtil(),
+   );
+   
+   runApp(MyApp());
+   }
+   ```
 
 執行取得套件
 
 ```bash
-    flutter package get
+  flutter package get
 ```
 
 ## 執行範例專案(可選)
@@ -39,10 +97,10 @@ dependencies:
   git clone https://github.com/abc873693/ap_common/
 ```
 
-切換目錄至 [`exmaple`](https://github.com/abc873693/ap_common/example)
+切換目錄至 [`exmaple`](https://github.com/abc873693/ap_common/apps/example)
 
 ```bash
-  cd example 
+  cd apps/example/ 
 ```
 
 並執行 

@@ -1,5 +1,4 @@
-import 'package:ap_common/models/user_info.dart';
-import 'package:ap_common/scaffold/user_info_scaffold.dart';
+import 'package:ap_common/ap_common.dart';
 import 'package:ap_common_example/res/assets.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';

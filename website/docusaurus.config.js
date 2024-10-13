@@ -1,5 +1,5 @@
 /** @type {import('@docusaurus/types').DocusaurusConfig} */
-module.exports = {
+export default {
   title: '校務通系列共用工程',
   tagline: '史上最強大校務系統 App',
   url: 'https://ap-common.web.app',
@@ -9,7 +9,28 @@ module.exports = {
   favicon: 'img/favicon.ico',
   organizationName: 'AP-Common', // Usually your GitHub org/user name.
   projectName: 'AP-Common', // Usually your repo name.
+  markdown: {
+    format: 'mdx',
+    mermaid: true,
+    preprocessor: ({filePath, fileContent}) => {
+      return fileContent.replaceAll('{{MY_VAR}}', 'MY_VALUE');
+    },
+    mdx1Compat: {
+      comments: true,
+      admonitions: true,
+      headingIds: true,
+    },
+    anchors: {
+      maintainCase: true,
+    },
+  },
+  themes: ['@docusaurus/theme-mermaid'],
   themeConfig: {
+    colorMode: {
+        defaultMode: 'dark',
+        disableSwitch: true,
+        respectPrefersColorScheme: false,
+    },
     prism: {
       additionalLanguages: [
         'dart',
@@ -106,9 +127,6 @@ module.exports = {
           // TODO Please change this to your repo.
           editUrl:
             'https://github.com/abc873693/ap_common/edit/master/website/blog/',
-        },
-        theme: {
-          customCss: require.resolve('./src/css/custom.css'),
         },
       },
     ],

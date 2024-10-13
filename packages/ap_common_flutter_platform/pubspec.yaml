@@ -1,0 +1,37 @@
+name: ap_common_flutter_platform
+description: "The school affairs(AP) series shares the engineering kit, rapid development of the school affairs series(AP) app"
+version: 0.0.3
+homepage: https://github.com/abc873693/ap_common
+repository: https://github.com/abc873693/ap_common/tree/master/packages/ap_common_flutter_platform
+
+environment:
+  sdk: ^3.5.3
+  flutter: ">=1.17.0"
+
+dependencies:
+  flutter:
+    sdk: flutter
+  ap_common_flutter_core: ^0.0.3
+
+  # Dart Package
+  encrypt: ^5.0.1
+  timezone: ^0.9.4
+  sprintf: ^7.0.0
+  # Flutter Native Plugin
+  app_tracking_transparency: ^2.0.2+4
+  flutter_local_notifications: ^17.2.2
+  shared_preferences: ^2.2.2
+  url_launcher: ^6.2.5
+  share_plus: ">=9.0.0 <=10.0.0"
+  package_info_plus: ^8.0.2
+  add_2_calendar: ^3.0.1
+  in_app_review: ^2.0.3
+  path: ^1.7.0
+  path_provider: ^2.1.2
+  image_picker: ^1.0.7
+  photo_manager: ^3.0.0
+  file_saver: ^0.2.12
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter

@@ -4,15 +4,9 @@ sidebar_position: 1
 
 # 共用函式
 
-## showToast
-
-顯示 Android 風格的 toast 提示字
-
-| 參數名稱                         | 型態                             | 描述                             |
-| ------------------------------- | ------------------------------- | ------------------------------- |
-| context | `BuildContext` | Flutter Widget context |
-| message | `String` | 想要顯示的文字 |
-| gravity | `int` | 顯示位置，預設為 `Toast.bottom` |
+:::note
+注意此區塊 API 正在遷移至其他抽象版本，部分功能可能無法使用
+:::
 
 ## pushCupertinoStyle
 
@@ -22,120 +16,36 @@ sidebar_position: 1
 目前已在 `ApTheme` 加入全域的設定，實作採用 `MaterialPageRoute`，未來可能棄用
 :::
 
-| 參數名稱                         | 型態                             | 描述                             |
-| ------------------------------- | ------------------------------- | ------------------------------- |
+| 參數名稱    | 型態             | 描述                     |
+|---------|----------------|------------------------|
 | context | `BuildContext` | Flutter Widget context |
-| page | `Widget` | 開啟頁面 |
-
-
-## launchUrl
-
-開啟 URL，以 [url_launcher](https://pub.dev/packages/url_launcher) 實作
-
-:::caution 注意
-Android 11 以後已不支援 `canLaunch` 故不會進行例外處理
-:::
-
-| 參數名稱                         | 型態                             | 描述                             |
-| ------------------------------- | ------------------------------- | ------------------------------- |
-| url | `String` | URL |
-
-## callPhone
-
-播打電話，會將 `#xxx(yyy)` 格式更改成 `tel:xxx,yyy`，以 [url_launcher](https://pub.dev/packages/url_launcher) 實作
-
-:::caution 注意
-Android 11 以後已不支援 `canLaunch` 故不會進行例外處理
-:::
-
-| 參數名稱                         | 型態                             | 描述                             |
-| ------------------------------- | ------------------------------- | ------------------------------- |
-| url | `String` | URL |
-
-## shareTo
-
-呼叫原生分享功能，以 [share_plus](https://pub.dev/packages/share_plus) 實作
-
-分享格式
-
-```s
-${分享內容}\n\nSend from ${App名稱} ${作業系統名稱}
-```
-
-| 參數名稱                         | 型態                             | 描述                             |
-| ------------------------------- | ------------------------------- | ------------------------------- |
-| content | `String` | 分享內容 |
-
-:::caution 注意
-因為在 iPad 使用者會有圖層錯誤，需要另外加上此程式碼，詳細[可參考](https://github.com/fluttercommunity/plus_plugins/tree/main/packages/share_plus/share_plus#ipad)
-```dart
-final box = context.findRenderObject() as RenderBox?;
-
-final box = context.findRenderObject() as RenderBox?;
-ApUtils.shareTo(
-'Sharing Content',
-sharePositionOrigin: box!.localToGlobal(Offset.zero) & box.size,
-);
-```
-:::
+| page    | `Widget`       | 開啟頁面                   |
 
 
 ## launchFbFansPage
 
-開啟 Facebook 粉絲專頁，會先以 app link 方式開啟，失敗才會以瀏覽器開啟，以 [url_launcher](https://pub.dev/packages/url_launcher) 實作
+開啟 Facebook 粉絲專頁，會先以 app link
+方式開啟，失敗才會以瀏覽器開啟，以 [url_launcher](https://pub.dev/packages/url_launcher) 實作
 
-| 參數名稱                         | 型態                             | 描述                             |
-| ------------------------------- | ------------------------------- | ------------------------------- |
-| context | `BuildContext` | Flutter Widget context |
-| fansPageId | `String` | 粉絲專頁 id |
+| 參數名稱       | 型態             | 描述                     |
+|------------|----------------|------------------------|
+| context    | `BuildContext` | Flutter Widget context |
+| fansPageId | `String`       | 粉絲專頁 id                |
 
 ## showAppReviewDialog
 
 以 `Dialog` 樣式是否為App評分，同意並呼叫 [`openAppReview`](#openappreview)
 
-| 參數名稱                         | 型態                             | 描述                             |
-| ------------------------------- | ------------------------------- | ------------------------------- |
-| context | `BuildContext` | Flutter Widget context |
-| defaultUrl | `String` | 無原生API則開啟網址 |
+| 參數名稱       | 型態             | 描述                     |
+|------------|----------------|------------------------|
+| context    | `BuildContext` | Flutter Widget context |
+| defaultUrl | `String`       | 無原生API則開啟網址            |
 
 ## showAppReviewSheet
 
 以 `BottomSheet` 樣式是否為App評分，同意並呼叫 [`openAppReview`](#openappreview)
 
-| 參數名稱                         | 型態                             | 描述                             |
-| ------------------------------- | ------------------------------- | ------------------------------- |
-| context | `BuildContext` | Flutter Widget context |
-| defaultUrl | `String` | 無原生API則開啟網址 |
-
-## openAppReview
-
-開啟原生評分功能，若無原生API則開啟 `defaultUrl`，以 [in_app_review](https://pub.dev/packages/in_app_review) 呼叫原生評分 API，支援 `Android`、`iOS` 及 `macOS`，其他平台以 [url_launcher](https://pub.dev/packages/url_launcher) 開啟連結
-
-| 參數名稱                         | 型態                             | 描述                             |
-| ------------------------------- | ------------------------------- | ------------------------------- |
-| defaultUrl | `String` | 無原生API則開啟網址 |
-
-## pickImage
-
-挑選照片/圖片，`Android`/`iOS`/`Web` 使用 [image_picker](https://pub.dev/packages/image_picker) 實作，`macOS`/`Windows`/`Linux` 使用 [file_selector](https://pub.dev/packages/file_selector) 實作，
-
-| 參數名稱                         | 型態                             | 描述                             |
-| ------------------------------- | ------------------------------- | ------------------------------- |
-| imageSource | `ImageSource` | 圖片來源，平台為 `Android`/`iOS`/`Web` 有效，`ImageSource.gallery` 代表使用相簿取得，`ImageSource.camera` 代表使用鏡頭拍攝 |
-| preferredCameraDevice | `CameraDevice` | 鏡頭來源，需 `imageSource` 設定 `ImageSource.camera`才有效，平台為 `Android`/`iOS`/`Web` 有效，`CameraDevice.front` 代表前鏡頭，`CameraDevice.rear` 代表後鏡頭，預設值為 `CameraDevice.front` |
-| extensions | `List<String>?` | 限制副檔名，平台為 `macOS`/`Windows`/`Linux` 有效，預設值為 `['jpg', 'jpeg']` |
-
-## saveImage
-
-`Android` 與 `iOS` 使用 [`photo_manager`](https://pub.dev/packages/photo_manager) 實作
-
-`macOS`/`Windows`/`Linux` 使用 [`path_provider`](https://pub.dev/packages/photo_manager)
-
-實作細節可參考原專案
-
-| 參數名稱                         | 型態                             | 描述                             |
-| ------------------------------- | ------------------------------- | ------------------------------- |
-| context | `BuildContext` | Flutter Widget context |
-| byteData | `ByteData` | 影像的位元資料 |
-| fileName | `String` | 檔案名稱 |
-| successMessage | `String` | 儲存成功訊息 |
+| 參數名稱       | 型態             | 描述                     |
+|------------|----------------|------------------------|
+| context    | `BuildContext` | Flutter Widget context |
+| defaultUrl | `String`       | 無原生API則開啟網址            |
