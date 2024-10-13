@@ -2,28 +2,18 @@
 sidebar_position: 4
 ---
 
-# Preferences 工具
+# PreferenceUtil
 
-封裝 Flutter 官方維護的 [shared_preferences](https://pub.dev/packages/shared_preferences)，支援所有平台，另外支援使用 [encrypt](https://pub.dev/packages/encrypt) 加密字串(AES cbc 模式)的功能
+:::info 實作類別
+目前可使用的實作類別有 `ApPreferenceUtil`
 
-:::caution 注意
+必需透過套件 [`ap_common_flutter_platform`](https://pub.dev/packages/ap_common_flutter_platform)，為套件
+封裝 Flutter 官方維護的 [shared_preferences](https://pub.dev/packages/shared_preferences)
+，支援所有平台，另外支援使用 [encrypt](https://pub.dev/packages/encrypt) 加密字串(AES cbc 模式)的功能。
+
 使用時必須先完成 [相關設定](../installation/shared-preferences)
 :::
 
-支援 
+本地偏好設定儲存，以 key-value 一對的類型為主
 
- - `String`
- - 加密 `String`
- - `int`
- - `double`
- - `String List`
-
-## init
-
-初始化，`ApIcon` 目前的也透過此階段設定
-
-| 參數名稱                         | 型態                             | 描述                             |
-| ------------------------------- | ------------------------------- | ------------------------------- |
-| key | `Key` | AES 加密演算法中的 key |
-| iv | `IV` | AES 加密演算法中的 iv key |
-| initialApIcon | `bool` | 是否此階段初始化 ApIcons |
+需透過 `registerApCommonCore()` 指定成實例

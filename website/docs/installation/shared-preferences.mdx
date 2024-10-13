@@ -4,29 +4,41 @@ sidebar_position: 7
 
 # SharedPreference
 
-使用 [API 說明](../api-utils/preference-utils)
+使用官方套件 `shared_preference` 實作，整合的功能可查看 [API 說明](../api-utils/preference-utils)
 
 :::caution 注意
 若未設定此頁面會影響以下功能
 
-- [Preference](../api-utils/preference-utils) 的功能
+- [PreferenceUtil](../api-utils/preference-utils) 的功能
 - [課表骨架](../api-scaffolds/course-scaffold) 中的上課提醒
 - 課表小工具
 :::
 
 ## 設定
 
-在 `main()` 執行 `runApp` 前執行 `Preferences.init()` 一定要加 `await`
+使用前需要先初始化加密設定，在 `main()` 執行 `runApp` 前執行 `(PreferenceUtil.instance as ApPreferenceUtil).init()` 一定要加 `await`
 
-```dart title='main.dart'
-import 'package:ap_common/utils/preferences.dart';
+```dart
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  await Preferences.init(key: Constants.key, iv: Constants.iv);
+  registerOneForAll();
+  await (PreferenceUtil.instance as ApPreferenceUtil).init(
+    key: Constants.key,
+    iv: Constants.iv,
+  );
   runApp(const MyApp());
 }
-``
+
+
+```
+
+參數說明可見
+
+| 參數名稱          | 型態     | 描述                 |
+|---------------|--------|--------------------|
+| key           | `Key`  | AES 加密演算法中的 key    |
+| iv            | `IV`   | AES 加密演算法中的 iv key |
 
 金鑰的部分可以另外使用獨立靜態變數儲存
 

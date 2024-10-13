@@ -1,0 +1,40 @@
+---
+sidebar_position: 9
+---
+
+# MediaUtil
+
+:::info 實作類別
+目前可使用的實作類別有 `ApMediaUtil`
+
+必需透過套件 [`ap_common_flutter_platform`](https://pub.dev/packages/ap_common_flutter_platform)
+使用
+:::
+
+需透過 `registerApCommonFlutter()` 指定成實例，並透過 `MediaUtil.instance` 使用
+
+## pickImage
+
+挑選照片/圖片，`Android`/`iOS`/`Web` 使用 [image_picker](https://pub.dev/packages/image_picker)
+實作，`macOS`/`Windows`/`Linux` 使用 [file_selector](https://pub.dev/packages/file_selector) 實作，
+
+| 參數名稱                  | 型態              | 描述                                                                                                                                                          |
+|-----------------------|-----------------|-------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| imageSource           | `ImageSource`   | 圖片來源，平台為 `Android`/`iOS`/`Web` 有效，`ImageSource.gallery` 代表使用相簿取得，`ImageSource.camera` 代表使用鏡頭拍攝                                                              |
+| preferredCameraDevice | `CameraDevice`  | 鏡頭來源，需 `imageSource` 設定 `ImageSource.camera`才有效，平台為 `Android`/`iOS`/`Web` 有效，`CameraDevice.front` 代表前鏡頭，`CameraDevice.rear` 代表後鏡頭，預設值為 `CameraDevice.front` |
+| extensions            | `List<String>?` | 限制副檔名，平台為 `macOS`/`Windows`/`Linux` 有效，預設值為 `['jpg', 'jpeg']`                                                                                               |
+
+## saveImage
+
+`Android` 與 `iOS` 使用 [`photo_manager`](https://pub.dev/packages/photo_manager) 實作
+
+`macOS`/`Windows`/`Linux` 使用 [`path_provider`](https://pub.dev/packages/photo_manager)
+
+實作細節可參考原專案
+
+| 參數名稱           | 型態             | 描述                     |
+|----------------|----------------|------------------------|
+| context        | `BuildContext` | Flutter Widget context |
+| byteData       | `ByteData`     | 影像的位元組資料               |
+| fileName       | `String`       | 檔案名稱                   |
+| successMessage | `String`       | 儲存成功訊息                 |

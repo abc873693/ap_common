@@ -2,44 +2,35 @@
 sidebar_position: 7
 ---
 
-# CrashlyticsUtils
+# CrashlyticsUtil
+
+:::info 實作類別
+目前可使用的實作類別有 `FirebaseCrashlyticsUtil`
+
+必需透過套件 [`ap_common_firebase`](https://github.com/abc873693/ap_common_firebase/blob/master/lib/utils/firebase_analytics_utils.dart)
+使用
+:::
 
 部分元件的崩潰或是發生錯誤會透過此類別紀錄
 
-抽象類別，由套件實現功能實作，必須繼承此類別將類別的單例(single instance)設定給  `CrashlyticsUtils.instance`
-
-可參考套件 [`ap_common_firebase`](https://github.com/abc873693/ap_common_firebase/blob/master/lib/utils/firebase_crashlytics_utils.dart) 實作
-
-```dart title='firebase_analytics_utils.dart'
-class FirebaseCrashlyticsUtils extends CrashlyticsUtils {
-  static FirebaseCrashlyticsUtils? _instance;
-
-  static FirebaseCrashlyticsUtils get instance {
-    return _instance ??= FirebaseCrashlyticsUtils();
-  }
-
-  FirebaseCrashlyticsUtils() {
-    CrashlyticsUtils.instance = _instance;
-  }
-}  
-```
+需透過 `registerApCommonService()` 指定成實例
 
 ## recordError
 
 紀錄錯誤
 
-| 參數名稱                         | 型態                             | 描述                             |
-| ------------------------------- | ------------------------------- | ------------------------------- |
-| exception | `dynamic` | 例外事件物件 |
-| stack | `StackTrace` | 函式堆疊紀錄 |
-| reason | `dynamic` | 原因 |
-| information | `Iterable<DiagnosticsNode>` | 資訊 |
-| printDetails | `bool` | 是否列印細節 |
+| 參數名稱         | 型態                          | 描述     |
+|--------------|-----------------------------|--------|
+| exception    | `dynamic`                   | 例外事件物件 |
+| stack        | `StackTrace`                | 函式堆疊紀錄 |
+| reason       | `dynamic`                   | 原因     |
+| information  | `Iterable<DiagnosticsNode>` | 資訊     |
+| printDetails | `bool`                      | 是否列印細節 |
 
 ## log
 
 事件紀錄
 
-| 參數名稱                         | 型態                             | 描述                             |
-| ------------------------------- | ------------------------------- | ------------------------------- |
+| 參數名稱 | 型態       | 描述 |
+|------|----------|----|
 | name | `String` | 名稱 |

@@ -2,94 +2,85 @@
 sidebar_position: 6
 ---
 
-# AnalyticsUtils
+# AnalyticsUtil
 
-部份元件會使用此紀錄一些事件
+:::info 實作類別
+目前可使用的實作類別有 `FirebaseAnalyticsUtil`
 
-抽象類別，由套件實現功能實作，必須繼承此類別將類別的單例(single instance)設定給  `AnalyticsUtils.instance`
+必需透過套件 [`ap_common_firebase`](https://github.com/abc873693/ap_common_firebase/blob/master/lib/utils/firebase_analytics_utils.dart)
+使用
+:::
 
-可參考套件 [`ap_common_firebase`](https://github.com/abc873693/ap_common_firebase/blob/master/lib/utils/firebase_analytics_utils.dart) 實作
+需透過 `registerApCommonService()` 指定成實例
 
-```dart title='firebase_analytics_utils.dart'
-class FirebaseAnalyticsUtils extends AnalyticsUtils {
-  static FirebaseAnalyticsUtils? _instance;
-
-  static FirebaseAnalyticsUtils get instance {
-    return _instance ??= FirebaseAnalyticsUtils();
-  }
-
-  FirebaseAnalyticsUtils() {
-    AnalyticsUtils.instance = _instance;
-  }
-}  
-```
+部份 `ap_common_flutter_ui` 元件會透過此自動紀錄一些事件，並透過 `AnalyticsUtil.instance` 使用
 
 ## setCurrentScreen
 
-設定目前畫面
+紀錄目前畫面
 
-| 參數名稱                         | 型態                             | 描述                             |
-| ------------------------------- | ------------------------------- | ------------------------------- |
-| screenName | `String` | 畫面名稱 |
+| 參數名稱                | 型態       | 描述     |
+|---------------------|----------|--------|
+| screenName          | `String` | 畫面名稱   |
 | screenClassOverride | `String` | 畫面所屬類別 |
 
 ## setUserId
 
 設定使用者編號
 
-| 參數名稱                         | 型態                             | 描述                             |
-| ------------------------------- | ------------------------------- | ------------------------------- |
-| id | `String` | 使用者唯一編號 |
+| 參數名稱 | 型態       | 描述      |
+|------|----------|---------|
+| id   | `String` | 使用者唯一編號 |
 
 ## setUserProperty
 
 設定使用者的屬性
 
-| 參數名稱                         | 型態                             | 描述                             |
-| ------------------------------- | ------------------------------- | ------------------------------- |
-| name | `String` | 屬性名稱 |
+| 參數名稱  | 型態       | 描述   |
+|-------|----------|------|
+| name  | `String` | 屬性名稱 |
 | value | `String` | 屬性內容 |
 
 ## logUserInfo
 
 紀錄使用者資訊
 
-| 參數名稱                         | 型態                             | 描述                             |
-| ------------------------------- | ------------------------------- | ------------------------------- |
+| 參數名稱     | 型態                                    | 描述    |
+|----------|---------------------------------------|-------|
 | UserInfo | [`UserInfo`](../api-models/user-info) | 使用者資訊 |
 
 ## logEvent
 
 紀錄事件
 
-| 參數名稱                         | 型態                             | 描述                             |
-| ------------------------------- | ------------------------------- | ------------------------------- |
-| name | `String` | 事件名稱 |
+| 參數名稱       | 型態                     | 描述   |
+|------------|------------------------|------|
+| name       | `String`               | 事件名稱 |
 | parameters | `Map<String, dynamic>` | 相關參數 |
 
 ## logApiEvent
 
 紀錄 API 事件
 
-| 參數名稱                         | 型態                             | 描述                             |
-| ------------------------------- | ------------------------------- | ------------------------------- |
-| type | `String` | 類型 |
-| status | `int` | 狀態碼，一般為 HTTP Status Code |
-| message | `String` | 訊息 |
+| 參數名稱    | 型態       | 描述                       |
+|---------|----------|--------------------------|
+| type    | `String` | 類型                       |
+| status  | `int`    | 狀態碼，一般為 HTTP Status Code |
+| message | `String` | 訊息                       |
 
 ## logTimeEvent
 
 紀錄時間事件
 
-| 參數名稱                         | 型態                             | 描述                             |
-| ------------------------------- | ------------------------------- | ------------------------------- |
-| name | `String` | 事件名稱 |
-| seconds | `double` | 秒數 |
+| 參數名稱    | 型態       | 描述   |
+|---------|----------|------|
+| name    | `String` | 事件名稱 |
+| seconds | `double` | 秒數   |
 
 ## logThemeEvent
 
 紀錄事件
 
-| 參數名稱                         | 型態                             | 描述                             |
-| ------------------------------- | ------------------------------- | ------------------------------- |
+| 參數名稱      | 型態          | 描述                         |
+|-----------|-------------|----------------------------|
 | themeMode | `ThemeMode` | 主題使用 Flutter 的 `ThemeMode` |

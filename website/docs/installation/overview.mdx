@@ -16,21 +16,7 @@ sidebar_position: 1
 
 在 `v0.26` 以後套件依據程式語言 Dart、框架 Flutter 及作業系統原生套件整合將套件拆成以下圖
 
-```mermaid
-flowchart TD
-    ap_common[ap_common] --- ap_common_flutter_ui[ap_common_flutter_ui] --- ap_common_flutter_core
-
-    ap_common --- ap_common_flutter_platform[ap_common_flutter_platform] --- ap_common_flutter_core
-
-    ap_common --- ap_common_announcement_ui[ap_common_announcement_ui]  --- ap_common_flutter_core
-
-    ap_common_firebase  --- ap_common_flutter_core
-
-    ap_common_plugin  --- ap_common_flutter_core
-
-    ap_common_flutter_core -- Dart Level --> ap_common_core
-  
-```
+ <img src="../../img/package-architecture.png" alt="drawing" width="800"/>
 
 可能會有哪些使用情境
 
@@ -38,7 +24,7 @@ flowchart TD
 
    可直接使用 `ap_common`，在 `pubspec.yaml` 中加入 package
    
-   ```yaml title="pubspec.yaml"
+   ```yml title="pubspec.yaml"
      # 官方多國語套件
    dependencies:
      flutter_localizations:
@@ -49,7 +35,7 @@ flowchart TD
    在檔案中加入 main.dart `registerOneForAll();`
    
    ```dart title="main.dart"
-   void main() async {
+   void main() {
      WidgetsFlutterBinding.ensureInitialized();
      /// Register all ap_common injection util
      registerOneForAll();
@@ -60,44 +46,44 @@ flowchart TD
 
 2. 如果你只需要此只需要 UI，不希望整合過多原生作業系統套件，則
 
-    在 `pubspec.yaml` 中加入 package
+   在 `pubspec.yaml` 中加入 package
     
-    ```yaml title="pubspec.yaml"
-        # 官方多國語套件
-    dependencies:
-        flutter_localizations:
-            sdk: flutter
-        ap_common_flutter_core: ^0.1.0
-        ap_common_flutter_ui: ^0.1.0
-    ```
+   ```yaml title="pubspec.yaml"
+   dependencies:
+     # 官方多國語套件
+     flutter_localizations:
+        sdk: flutter
+     ap_common_flutter_core: ^0.1.0
+     ap_common_flutter_ui: ^0.1.0
+   ```
    
-    因沒使用套件 `ap_common_flutter_platorm`，每個此用到的介面會有特定 Util 類別需要實作，以 `CourseScaffold` 來說，就需要實作 `NotificationUtil` 及 `PlatformCalendarUtil`，並在 `main.dart` 註冊你使用的實作：
+   因沒使用套件 `ap_common_flutter_platorm`，每個此用到的介面會有特定 Util 類別需要實作，以 `CourseScaffold` 來說，就需要實作 `NotificationUtil` 及 `PlatformCalendarUtil`，並在 `main.dart` 註冊你使用的實作：
 
-    ```dart title="main.dart"
-    void main() async {
-        WidgetsFlutterBinding.ensureInitialized();
-
-        registerApCommonFlutter({
-            ui: YourUiUtil(),
-            platform: YourPlatformUtil(),
-            media: YourMediaUtil(),
-            platformCalendar: YourPlatformCalendarUtil(),
-            notification: YourNotificationUtil(),
-            appStore: YourAppStoreUtil(),
-        });
-      
-        registerApCommonCore(
-            preference: YourPreferenceUtil(),
-        );
+   ```dart title="main.dart"
+   void main() {
+     WidgetsFlutterBinding.ensureInitialized();
    
-        runApp(MyApp());
-    }
-    ```
+     registerApCommonFlutter({
+       ui: YourUiUtil(),
+       platform: YourPlatformUtil(),
+       media: YourMediaUtil(),
+       platformCalendar: YourPlatformCalendarUtil(),
+       notification: YourNotificationUtil(),
+       appStore: YourAppStoreUtil(),
+   });
+   
+   registerApCommonCore(
+     preference: YourPreferenceUtil(),
+   );
+   
+   runApp(MyApp());
+   }
+   ```
 
 執行取得套件
 
 ```bash
-    flutter package get
+  flutter package get
 ```
 
 ## 執行範例專案(可選)
