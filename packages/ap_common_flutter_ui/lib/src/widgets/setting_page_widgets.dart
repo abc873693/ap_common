@@ -223,18 +223,18 @@ class ChangeLanguageItem extends StatelessWidget {
               onChange.call(locale);
               PreferenceUtil.instance
                   .setString(ApConstants.prefLanguageCode, code);
-              AnalyticsUtil.instance?.logEvent(
+              AnalyticsUtil.instance.logEvent(
                 'change_language',
                 parameters: <String, String>{'code': code},
               );
-              AnalyticsUtil.instance?.setUserProperty(
+              AnalyticsUtil.instance.setUserProperty(
                 AnalyticsConstants.language,
                 locale.toLanguageTag(),
               );
             },
           ),
         );
-        AnalyticsUtil.instance?.logEvent('language_setting_click');
+        AnalyticsUtil.instance.logEvent('language_setting_click');
       },
     );
   }
@@ -274,7 +274,7 @@ class ChangeThemeModeItem extends StatelessWidget {
               onChange.call(mode);
               PreferenceUtil.instance
                   .setInt(ApConstants.prefThemeModeIndex, index);
-              AnalyticsUtil.instance?.logEvent(
+              AnalyticsUtil.instance.logEvent(
                 'change_theme',
                 parameters: <String, String>{
                   'code': mode.toString(),
@@ -284,7 +284,7 @@ class ChangeThemeModeItem extends StatelessWidget {
             },
           ),
         );
-        AnalyticsUtil.instance?.logEvent('theme_mode_setting_click');
+        AnalyticsUtil.instance.logEvent('theme_mode_setting_click');
       },
     );
   }
@@ -321,14 +321,14 @@ class ChangeIconStyleItem extends StatelessWidget {
               PreferenceUtil.instance
                   .setString(ApConstants.prefIconStyleCode, code);
               onChange.call(code);
-              AnalyticsUtil.instance?.logEvent(
+              AnalyticsUtil.instance.logEvent(
                 'change_icon_style',
                 parameters: <String, String>{'code': code},
               );
             },
           ),
         );
-        AnalyticsUtil.instance?.logEvent('icon_style_setting_click');
+        AnalyticsUtil.instance.logEvent('icon_style_setting_click');
       },
     );
   }

@@ -169,7 +169,7 @@ class HomePageScaffoldState extends State<HomePageScaffold> {
     return GestureDetector(
       onTap: () {
         widget.onImageTapped?.call(announcement);
-        AnalyticsUtil.instance?.logEvent('announcement_image_click');
+        AnalyticsUtil.instance.logEvent('announcement_image_click');
       },
       onTapDown: (TapDownDetails detail) {
         _timer?.cancel();
@@ -308,12 +308,12 @@ class HomePageScaffoldState extends State<HomePageScaffold> {
         leftActionText: app.cancel,
         rightActionText: app.confirm,
         rightActionFunction: () {
-          AnalyticsUtil.instance?.logEvent('logout_dialog_confirm');
+          AnalyticsUtil.instance.logEvent('logout_dialog_confirm');
           SystemNavigator.pop();
         },
       ),
     );
-    AnalyticsUtil.instance?.logEvent('logout_dialog_open');
+    AnalyticsUtil.instance.logEvent('logout_dialog_open');
   }
 
   void hideSnackBar() {

@@ -79,11 +79,7 @@ class ApMediaUtil extends MediaUtil {
     } catch (e, s) {
       if (!context.mounted) return;
       UiUtil.instance.showToast(context, ap.unknownError);
-      if (CrashlyticsUtil.instance == null) {
-        rethrow;
-      } else {
-        CrashlyticsUtil.instance?.recordError(e, s);
-      }
+      CrashlyticsUtil.instance.recordError(e, s);
     }
   }
 }

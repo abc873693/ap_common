@@ -28,7 +28,7 @@ class PdfView extends StatefulWidget {
 class _PdfViewState extends State<PdfView> {
   @override
   void initState() {
-    AnalyticsUtil.instance?.setCurrentScreen(
+    AnalyticsUtil.instance.setCurrentScreen(
       'PdfView',
       'pdf_view.dart',
     );
@@ -57,7 +57,7 @@ class _PdfViewState extends State<PdfView> {
             children: <Widget>[
               FloatingActionButton(
                 onPressed: () async {
-                  AnalyticsUtil.instance?.logEvent('export_by_share');
+                  AnalyticsUtil.instance.logEvent('export_by_share');
                   await Printing.sharePdf(
                     bytes: widget.data!,
                     filename: '${widget.fileName ?? 'export'}.pdf',
@@ -68,7 +68,7 @@ class _PdfViewState extends State<PdfView> {
               const SizedBox(height: 16.0),
               FloatingActionButton(
                 onPressed: () async {
-                  AnalyticsUtil.instance?.logEvent('export_by_printing');
+                  AnalyticsUtil.instance.logEvent('export_by_printing');
                   await Printing.layoutPdf(
                     name: widget.fileName ?? 'export',
                     onLayout: (PdfPageFormat format) => widget.data!,

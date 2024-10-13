@@ -25,7 +25,7 @@ class AnnouncementContentPageState extends State<AnnouncementContentPage> {
 
   @override
   void initState() {
-    AnalyticsUtil.instance?.setCurrentScreen(
+    AnalyticsUtil.instance.setCurrentScreen(
       'AnnouncementContentPage',
       'announcement_content_page.dart',
     );
@@ -103,7 +103,7 @@ class AnnouncementContentPageState extends State<AnnouncementContentPage> {
             ),
           ),
         );
-        AnalyticsUtil.instance?.logEvent('announcement_content_image_click');
+        AnalyticsUtil.instance.logEvent('announcement_content_image_click');
       },
       child: AspectRatio(
         aspectRatio: orientation == Orientation.portrait ? 4 / 3 : 9 / 16,
@@ -169,7 +169,7 @@ class AnnouncementContentPageState extends State<AnnouncementContentPage> {
           ),
           onPressed: () {
             PlatformUtil.instance.launchUrl(widget.announcement.url!);
-            AnalyticsUtil.instance?.logEvent('announcement_link_click');
+            AnalyticsUtil.instance.logEvent('announcement_link_click');
           },
           child: Icon(
             ApIcon.exitToApp,

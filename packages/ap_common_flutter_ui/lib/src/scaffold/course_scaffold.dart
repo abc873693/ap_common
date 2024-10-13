@@ -206,7 +206,7 @@ class CourseScaffoldState extends State<CourseScaffold> {
                     },
                   ),
                 );
-                AnalyticsUtil.instance?.logEvent('course_setting_click');
+                AnalyticsUtil.instance.logEvent('course_setting_click');
               },
               tooltip: ApLocalizations.of(context).courseScaffoldSetting,
             ),
@@ -255,7 +255,7 @@ class CourseScaffoldState extends State<CourseScaffold> {
                     child: RefreshIndicator(
                       onRefresh: () async {
                         await widget.onRefresh!();
-                        AnalyticsUtil.instance?.logEvent('course_refresh');
+                        AnalyticsUtil.instance.logEvent('course_refresh');
                         return;
                       },
                       child: _body(),
@@ -296,7 +296,7 @@ class CourseScaffoldState extends State<CourseScaffold> {
             ? FloatingActionButton(
                 onPressed: () {
                   AnalyticsUtil.instance
-                      ?.logEvent('course_search_button_click');
+                      .logEvent('course_search_button_click');
                   _pickSemester();
                 },
                 child: const Icon(Icons.search),
@@ -439,7 +439,7 @@ class CourseScaffoldState extends State<CourseScaffold> {
           context,
         ),
       );
-      AnalyticsUtil.instance?.logEvent('export_course_table_image_success');
+      AnalyticsUtil.instance.logEvent('export_course_table_image_success');
     } else {
       if (!mounted) return;
       UiUtil.instance.showToast(context, app.unknownError);
@@ -766,7 +766,7 @@ class _CourseContentState extends State<CourseContent> {
                       timeZone: 'GMT+8',
                     );
                     AnalyticsUtil.instance
-                        ?.logEvent('course_export_to_calendar');
+                        .logEvent('course_export_to_calendar');
                   },
                 ),
               IconButton(
@@ -818,7 +818,7 @@ class _CourseContentState extends State<CourseContent> {
                           ApLocalizations.of(context).courseNotifyHint,
                         );
                         AnalyticsUtil.instance
-                            ?.logEvent('course_notify_schedule');
+                            .logEvent('course_notify_schedule');
                       } else {
                         await NotificationUtil.instance.cancelNotify(
                           id: courseNotify.id,
@@ -835,7 +835,7 @@ class _CourseContentState extends State<CourseContent> {
                       }
                       widget.notifyData!.save();
                       setState(() {});
-                      AnalyticsUtil.instance?.logEvent('course_notify_cancel');
+                      AnalyticsUtil.instance.logEvent('course_notify_cancel');
                     }
                     if (widget.onNotifyClick != null) {
                       if (!mounted) return;
@@ -1163,7 +1163,7 @@ class CourseBorder extends StatelessWidget {
             : InkWell(
                 onTap: () {
                   onPressed?.call(sectionTime!.weekday, timeCode!, course!);
-                  AnalyticsUtil.instance?.logEvent('course_border_click');
+                  AnalyticsUtil.instance.logEvent('course_border_click');
                 },
                 radius: 6.0,
                 child: Padding(

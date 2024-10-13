@@ -38,7 +38,7 @@ class PhoneListViewState extends State<PhoneListView>
 
   @override
   void initState() {
-    AnalyticsUtil.instance?.setCurrentScreen(
+    AnalyticsUtil.instance.setCurrentScreen(
       'PhoneListView',
       'phone_list_view.dart',
     );
@@ -117,12 +117,12 @@ class PhoneListViewState extends State<PhoneListView>
   Widget _phoneItem(PhoneModel phone) {
     return InkWell(
       onTap: () {
-        AnalyticsUtil.instance?.logEvent('call_phone_click');
+        AnalyticsUtil.instance.logEvent('call_phone_click');
         try {
           PlatformUtil.instance.callPhone(phone.number);
-          AnalyticsUtil.instance?.logEvent('call_phone_success');
+          AnalyticsUtil.instance.logEvent('call_phone_success');
         } catch (e) {
-          AnalyticsUtil.instance?.logEvent('call_phone_error');
+          AnalyticsUtil.instance.logEvent('call_phone_error');
         }
       },
       child: Container(

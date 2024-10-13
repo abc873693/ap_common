@@ -31,7 +31,7 @@ class ItemPicker extends StatelessWidget {
           ),
         );
         if (featureTag != null) {
-          AnalyticsUtil.instance?.logEvent('${featureTag}_item_picker_click');
+          AnalyticsUtil.instance.logEvent('${featureTag}_item_picker_click');
         }
       },
       child: Padding(

@@ -64,7 +64,7 @@ class SchoolInfoPageState extends State<SchoolInfoPage>
 
   @override
   void initState() {
-    AnalyticsUtil.instance?.setCurrentScreen(
+    AnalyticsUtil.instance.setCurrentScreen(
       'SchoolInfoPage',
       'school_info_page.dart',
     );

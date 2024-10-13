@@ -15,49 +15,49 @@ packages:
       path: "../../packages/ap_common"
       relative: true
     source: path
-    version: "0.26.0-dev.1"
+    version: "0.26.0-dev.2"
   ap_common_announcement_ui:
     dependency: "direct overridden"
     description:
       path: "../../packages/ap_common_announcement_ui"
       relative: true
     source: path
-    version: "0.0.2"
+    version: "0.0.2+1"
   ap_common_core:
     dependency: "direct overridden"
     description:
       path: "../../packages/ap_common_core"
       relative: true
     source: path
-    version: "0.0.3"
+    version: "0.0.4"
   ap_common_flutter_core:
     dependency: "direct overridden"
     description:
       path: "../../packages/ap_common_flutter_core"
       relative: true
     source: path
-    version: "0.0.2"
+    version: "0.0.2+1"
   ap_common_flutter_platform:
     dependency: "direct overridden"
     description:
       path: "../../packages/ap_common_flutter_platform"
       relative: true
     source: path
-    version: "0.0.2"
+    version: "0.0.2+1"
   ap_common_flutter_ui:
     dependency: "direct overridden"
     description:
       path: "../../packages/ap_common_flutter_ui"
       relative: true
     source: path
-    version: "0.0.2"
+    version: "0.0.2+1"
   ap_common_plugin:
     dependency: "direct main"
     description:
       path: "../../packages/ap_common_plugin"
       relative: true
     source: path
-    version: "0.5.0-dev.0"
+    version: "0.5.0-dev.1"
   app_tracking_transparency:
     dependency: transitive
     description:
