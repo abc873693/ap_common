@@ -27,8 +27,8 @@ export default {
   themes: ['@docusaurus/theme-mermaid'],
   themeConfig: {
     colorMode: {
-        defaultMode: 'light',
-        disableSwitch: false,
+        defaultMode: 'dark',
+        disableSwitch: true,
         respectPrefersColorScheme: false,
     },
     prism: {
