@@ -1,3 +1,26 @@
+## 0.17.0-dev.4
+
+ - **FIX**: remove useless implement instance. ([a7ffaeb0](https://github.com/abc873693/ap_common/commit/a7ffaeb07914c1d1fbe32919cce95c5708843230))
+ - **FIX**: pub publish requirement. ([1dc81f7d](https://github.com/abc873693/ap_common/commit/1dc81f7dcf5a1445aa14b66b6d2004b7d94ad6b2))
+ - **FIX**: packages version constraint. ([8231a423](https://github.com/abc873693/ap_common/commit/8231a423b237d6f38b3531ec4fc2b06e713a6c51))
+ - **FIX**: `ap_common_firebase` dependency usage. ([0c0b9e51](https://github.com/abc873693/ap_common/commit/0c0b9e510345c5482f69b4ea5fdcebdf217c565c))
+ - **FIX**: `ap_common_firebase` separate static error. ([65b8a273](https://github.com/abc873693/ap_common/commit/65b8a2738092e0e261cd4088c778d54784e44b05))
+ - **FIX**: remove useless implement instance. ([3ec164dd](https://github.com/abc873693/ap_common/commit/3ec164dd62590e684855128da1052cae34705bbb))
+ - **FIX**: pub publish requirement. ([839ad892](https://github.com/abc873693/ap_common/commit/839ad892cb67fb04d8c1f877129faa2847c76f77))
+ - **FIX**: packages version constraint. ([783781bd](https://github.com/abc873693/ap_common/commit/783781bdb314a93b89415f8de9fb6acdcd38a222))
+ - **FIX**: `ap_common_firebase` dependency usage. ([d5098b42](https://github.com/abc873693/ap_common/commit/d5098b426c00de39c0736a8ca535a76be0722331))
+ - **FIX**: `ap_common_firebase` separate static error. ([1c8da8ea](https://github.com/abc873693/ap_common/commit/1c8da8ea57c7e3e48d3e53a824e76968d56a97b5))
+ - **FEAT**: `AnalyticsUtil` and `CrashlyticsUtil` migrate to injection version. ([0e8a9aab](https://github.com/abc873693/ap_common/commit/0e8a9aab76b2a6994dbcfdf4814e6f7104e4b312))
+ - **FEAT**: move UI implement to `ap_common_flutter_ui`. ([803b2dcb](https://github.com/abc873693/ap_common/commit/803b2dcbb37d970de803670c7a76404356c4a651))
+ - **FEAT**: move native platform util implement to `ap_common_flutter_platform`. ([55b2fa00](https://github.com/abc873693/ap_common/commit/55b2fa00ea5fa4dafb15fc19e19b33dd9d72ef92))
+ - **FEAT**: improve `ap_common_firebase` package import usage. ([7d021992](https://github.com/abc873693/ap_common/commit/7d0219927e3b4a7c2a924cdce86dd471f7564e19))
+ - **FEAT**: centralized package lint rule. ([c2b8ad80](https://github.com/abc873693/ap_common/commit/c2b8ad8000bb19d0d5fccdaf63f0411329e6dcfa))
+ - **FEAT**: `AnalyticsUtil` and `CrashlyticsUtil` migrate to injection version. ([f633fae8](https://github.com/abc873693/ap_common/commit/f633fae8d102d32624e23acad2c00c06c27b4dde))
+ - **FEAT**: move UI implement to `ap_common_flutter_ui`. ([304b60fa](https://github.com/abc873693/ap_common/commit/304b60fa245dbd0b1d4d3ae649b5468e9ee46f71))
+ - **FEAT**: move native platform util implement to `ap_common_flutter_platform`. ([8cb047f1](https://github.com/abc873693/ap_common/commit/8cb047f167d6f10eaab063449a88646092faff10))
+ - **FEAT**: improve `ap_common_firebase` package import usage. ([aa6462c4](https://github.com/abc873693/ap_common/commit/aa6462c407b074b6fa95969765e28c85dc187de5))
+ - **FEAT**: centralized package lint rule. ([08db9e1f](https://github.com/abc873693/ap_common/commit/08db9e1f00118f11ef389b194585626d7c51c3ab))
+
 ## 0.17.0-dev.3
 
  - **FIX**: remove useless implement instance. ([3ec164dd](https://github.com/abc873693/ap_common/commit/3ec164dd62590e684855128da1052cae34705bbb))

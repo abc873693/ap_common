@@ -23,7 +23,7 @@ dependencies:
   sprintf: any
   multiple_localization: any
 
-  ap_common_plugin: 0.5.0-dev.1
+  ap_common_plugin: 0.5.0-dev.2
 #    path: ../../../GitHub/ap_common_plugin
 
 dependency_overrides:
