@@ -51,3 +51,6 @@ build/
 **/.fvm
 
 .melos_tool/
+
+# FVM Version Cache
+.fvm/
