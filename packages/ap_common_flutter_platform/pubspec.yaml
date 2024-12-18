@@ -15,14 +15,14 @@ dependencies:
 
   # Dart Package
   encrypt: ^5.0.1
-  timezone: ^0.9.4
+  timezone: ">=0.9.0 <1.0.0"
   sprintf: ^7.0.0
   # Flutter Native Plugin
   app_tracking_transparency: ^2.0.2+4
   flutter_local_notifications: ^17.2.2
   shared_preferences: ^2.2.2
   url_launcher: ^6.2.5
-  share_plus: ">=9.0.0 <=10.0.0"
+  share_plus: ">=10.0.0 <=11.0.0"
   package_info_plus: ^8.0.2
   add_2_calendar: ^3.0.1
   in_app_review: ^2.0.3
