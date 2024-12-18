@@ -1,3 +1,7 @@
+## 0.26.0-dev.4
+
+ - Update a dependency to the latest release.
+
 ## 0.26.0-dev.3
 
  - **FEAT**: move UI implement to `ap_common_flutter_ui`. ([803b2dcb](https://github.com/abc873693/ap_common/commit/803b2dcbb37d970de803670c7a76404356c4a651))

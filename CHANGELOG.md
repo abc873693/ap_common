@@ -15,6 +15,34 @@ Packages with breaking changes:
 
 Packages with other changes:
 
+ - [`ap_common_flutter_platform` - `v0.0.4`](#ap_common_flutter_platform---v004)
+ - [`ap_common` - `v0.26.0-dev.4`](#ap_common---v0260-dev4)
+
+Packages with dependency updates only:
+
+> Packages listed below depend on other packages in this workspace that have had changes. Their versions have been incremented to bump the minimum dependency versions of the packages they depend upon in this project.
+
+ - `ap_common` - `v0.26.0-dev.4`
+
+---
+
+#### `ap_common_flutter_platform` - `v0.0.4`
+
+ - **FEAT**: upgrade package for package `web` 1.0.0. ([c0ac3e33](https://github.com/abc873693/ap_common/commit/c0ac3e331b64a436e909a8ec7ab2983974ae37a4))
+
+
+## 2024-12-18
+
+### Changes
+
+---
+
+Packages with breaking changes:
+
+ - There are no breaking changes in this release.
+
+Packages with other changes:
+
  - [`ap_common_plugin` - `v0.5.0-dev.3`](#ap_common_plugin---v050-dev3)
 
 ---
