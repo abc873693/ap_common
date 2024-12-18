@@ -3,6 +3,28 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## 2024-12-18
+
+### Changes
+
+---
+
+Packages with breaking changes:
+
+ - There are no breaking changes in this release.
+
+Packages with other changes:
+
+ - [`ap_common_plugin` - `v0.5.0-dev.3`](#ap_common_plugin---v050-dev3)
+
+---
+
+#### `ap_common_plugin` - `v0.5.0-dev.3`
+
+ - **FEAT**(ap_common_plugin): update iOS setting for flutter 3.27 create. ([e65572db](https://github.com/abc873693/ap_common/commit/e65572dbd5f92b22612b4e7b4295aeca6b3bf42e))
+ - **FEAT**(ap_common_plugin): upgrade gradle 8 setting for android 15. ([862d08af](https://github.com/abc873693/ap_common/commit/862d08af7006fa55ad42b23f9395cf95aed07916))
+
+
 ## 2024-10-13
 
 ### Changes
