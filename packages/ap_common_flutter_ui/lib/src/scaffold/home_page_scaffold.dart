@@ -29,7 +29,7 @@ class HomePageScaffold extends StatefulWidget {
   final String? title;
   final List<Announcement> announcements;
   final List<Widget>? actions;
-  final List<BottomNavigationBarItem>? bottomNavigationBarItems;
+  final List<Widget>? bottomNavigationBarItems;
 
   final Function(int index)? onTabTapped;
   final Function(Announcement announcement)? onImageTapped;
@@ -112,22 +112,25 @@ class HomePageScaffoldState extends State<HomePageScaffold> {
                           );
                         },
                       ),
-                      bottomNavigationBar:
-                          (widget.bottomNavigationBarItems == null || isTablet)
-                              ? null
-                              : BottomNavigationBar(
-                                  elevation: 12.0,
-                                  fixedColor: ApTheme.of(context)
-                                      .bottomNavigationSelect,
-                                  unselectedItemColor: ApTheme.of(context)
-                                      .bottomNavigationSelect,
-                                  type: BottomNavigationBarType.fixed,
-                                  selectedFontSize: 12.0,
-                                  selectedIconTheme:
-                                      const IconThemeData(size: 24.0),
-                                  onTap: widget.onTabTapped,
-                                  items: widget.bottomNavigationBarItems!,
-                                ),
+                      bottomNavigationBar: (widget.bottomNavigationBarItems ==
+                                  null ||
+                              isTablet)
+                          ? null
+                          : NavigationBar(
+                              elevation: 12.0,
+                              indicatorColor: Colors.transparent,
+
+                              // fixedColor:
+                              //     ApTheme.of(context).bottomNavigationSelect,
+                              // unselectedItemColor:
+                              //     ApTheme.of(context).bottomNavigationSelect,
+                              // type: BottomNavigationBarType.fixed,
+                              // selectedFontSize: 12.0,
+                              // selectedIconTheme:
+                              //     const IconThemeData(size: 24.0),
+                              onDestinationSelected: widget.onTabTapped,
+                              destinations: widget.bottomNavigationBarItems!,
+                            ),
                     ),
                   ),
           ),

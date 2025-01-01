@@ -235,16 +235,16 @@ class HomePageState extends State<HomePage> {
         );
       },
       onTabTapped: onTabTapped,
-      bottomNavigationBarItems: <BottomNavigationBarItem>[
-        BottomNavigationBarItem(
+      bottomNavigationBarItems: <Widget>[
+        NavigationDestination(
           icon: Icon(ApIcon.face),
           label: ap.about,
         ),
-        BottomNavigationBarItem(
+        NavigationDestination(
           icon: Icon(ApIcon.classIcon),
           label: ap.course,
         ),
-        BottomNavigationBarItem(
+        NavigationDestination(
           icon: Icon(ApIcon.assignment),
           label: ap.score,
         ),
