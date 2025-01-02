@@ -8,10 +8,10 @@ class ApColors {
   static const Color grayChateau = Color(0xffa5a5a5);
 
   static const Color blue200 = Color(0xffa7c7ff);
-  static const Color blue300 = Color(0xff7cabff);
-  static const Color blue400 = Color(0xff508fff);
-  static const Color blue500 = Color(0xff2574ff);
-  static const Color blue800 = Color(0xff0e2e66);
+  static const Color blue300 = Color(0xff91B6F9);
+  static const Color blue400 = Color(0xff7AA5F2);
+  static const Color blue500 = Color(0xff779FE4);
+  static const Color blue800 = Color(0xff1F4484);
 
   static const Color grey100 = Color(0xffd7d7d7);
   static const Color grey150 = Color(0xffcacaca);
