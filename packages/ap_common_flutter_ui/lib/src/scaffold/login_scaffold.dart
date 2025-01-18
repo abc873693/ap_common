@@ -66,7 +66,6 @@ class LoginScaffoldState extends State<LoginScaffold> {
           height: 120.0,
         );
       case LogoMode.text:
-      default:
         return TextLogo(
           text: widget.logoSource,
         );
