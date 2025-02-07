@@ -52,7 +52,7 @@ class _ImageViewerScaffoldState extends State<ImageViewerScaffold>
     return Scaffold(
       appBar: AppBar(
         title: Text(widget.title ?? ''),
-        backgroundColor: ApTheme.of(context).blue,
+        // backgroundColor: ApTheme.of(context).blue,
         actions: widget.actions,
         bottom: (widget.imageViewers.length > 1)
             ? TabBar(

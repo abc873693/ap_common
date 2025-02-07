@@ -30,6 +30,11 @@ class ApColors {
   static const Color red500 = Color(0xffff4a5a);
   static const Color red800 = Color(0xff661d24);
 
+  //matrial design 3 color palette
+
+  static const Color primary = Color(0xff2574ff);
+  static const Color secondary = Color(0xff555f71);
+
   static const List<MaterialColor> colors = <MaterialColor>[
     Colors.red,
     Colors.pink,
