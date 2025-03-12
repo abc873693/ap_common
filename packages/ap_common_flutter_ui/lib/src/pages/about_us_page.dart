@@ -86,7 +86,6 @@ class AboutUsPageState extends State<AboutUsPage> {
                 },
               ),
             ],
-            backgroundColor: ApTheme.of(context).blue,
             flexibleSpace: FlexibleSpaceBar(
               background: Image.asset(
                 widget.assetImage,

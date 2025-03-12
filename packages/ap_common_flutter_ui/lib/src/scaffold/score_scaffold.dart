@@ -20,7 +20,7 @@ class ScoreScaffold extends StatefulWidget {
     this.middleScoreBuilder,
     this.finalScoreBuilder,
     this.customHint,
-    this.isShowSearchButton = true,
+    this.isShowSearchButton = false,
     this.details,
     this.bottom,
     this.customStateHint,
@@ -71,7 +71,6 @@ class ScoreScaffoldState extends State<ScoreScaffold> {
     return Scaffold(
       appBar: AppBar(
         title: Text(widget.title ?? app.score),
-        // backgroundColor: ApTheme.of(context).blue,
         bottom: widget.bottom as PreferredSizeWidget?,
       ),
       floatingActionButton: widget.isShowSearchButton
@@ -386,6 +385,7 @@ class ScoreTextBorder extends StatelessWidget {
   }
 }
 
+/*
 class ScoreCardContent extends StatefulWidget {
   const ScoreCardContent({
     super.key,
@@ -412,27 +412,16 @@ class ScoreCardContent extends StatefulWidget {
   _ScoreCardContentState createState() => _ScoreCardContentState();
 }
 
-class _ScoreCardContentState extends State<ScoreContent> {
-  TextStyle get _textBlueStyle =>
-      TextStyle(color: ApTheme.of(context).blueText, fontSize: 16.0);
+class _ScoreCardContentState extends State<ScoreCardContent> {
+  TextStyle get _textPrimaryStyle => TextStyle(
+      color: ApTheme.of(context).blueText,
+      fontSize: 16.0,
+      fontWeight: FontWeight.w600);
+
+  TextStyle get _textSecondaryStyle =>
+      const TextStyle(color: ApColors.secondary, fontSize: 16.0);
 
   TextStyle get _textStyle => const TextStyle(fontSize: 15.0);
-
-  BoxDecoration get _boxDecoration => BoxDecoration(
-        borderRadius: const BorderRadius.all(
-          Radius.circular(
-            10.0,
-          ),
-        ),
-        border: Border.all(color: Colors.grey, width: 1.5),
-      );
-
-  TableBorder get _tableBorder => const TableBorder.symmetric(
-        inside: BorderSide(
-          color: Colors.grey,
-          width: 0.5,
-        ),
-      );
 
   bool get isTablet =>
       MediaQuery.of(context).size.shortestSide >= 680 ||
@@ -440,116 +429,69 @@ class _ScoreCardContentState extends State<ScoreContent> {
 
   @override
   Widget build(BuildContext context) {
-    return SingleChildScrollView(
-      physics: const AlwaysScrollableScrollPhysics(),
-      child: Container(
-        padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8),
-        child: Flex(
-          direction: isTablet ? Axis.horizontal : Axis.vertical,
-          children: <Widget>[
-            Flexible(
-              flex: isTablet ? 2 : 0,
-              child: DecoratedBox(
-                decoration: _boxDecoration,
-                child: Table(
-                  columnWidths: const <int, TableColumnWidth>{
-                    0: FlexColumnWidth(2.5),
-                    1: FlexColumnWidth(),
-                    2: FlexColumnWidth(),
-                  },
-                  defaultVerticalAlignment: TableCellVerticalAlignment.middle,
-                  border: _tableBorder,
-                  children: <TableRow>[
-                    TableRow(
-                      children: <Widget>[
-                        ScoreTextBorder(
-                          text: ApLocalizations.of(context).subject,
-                          style: _textBlueStyle,
-                        ),
-                        ScoreTextBorder(
-                          text: widget.middleTitle ??
-                              ApLocalizations.of(context).midtermScoreTitle,
-                          style: _textBlueStyle,
-                        ),
-                        ScoreTextBorder(
-                          text: widget.finalTitle ??
-                              ApLocalizations.of(context).semesterScoreTitle,
-                          style: _textBlueStyle,
-                        ),
-                      ],
-                    ),
-                    for (int i = 0; i < widget.scoreData!.scores.length; i++)
-                      TableRow(
+    return ListView.builder(
+      itemCount: widget.scoreData!.scores.length,
+      itemBuilder: (_, int index) {
+        return Card(
+          //elevation: 4.0,
+          margin: const EdgeInsets.all(8.0),
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(12.0),
+          ),
+          child: ListTile(
+            contentPadding: const EdgeInsets.symmetric(
+              vertical: 8.0,
+              horizontal: 24.0,
+            ),
+            title: Row(
+              children: <Widget>[
+                Flexible(
+                  flex: 2,
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: <Widget>[
+                      Text(
+                        widget.scoreData!.scores[index].title,
+                        style: _textPrimaryStyle,
+                      ),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: <Widget>[
-                          ScoreTextBorder(
-                            text: widget.scoreData!.scores[i].title,
-                            style: _textStyle,
-                            onTap: (widget.onScoreSelect != null)
-                                ? () {
-                                    widget.onScoreSelect!(i);
-                                    AnalyticsUtil.instance
-                                        .logEvent('score_title_click');
-                                  }
-                                : null,
+                          Text(
+                            (widget.middleTitle ??
+                                    ApLocalizations.of(context)
+                                        .midtermScoreTitle) +
+                                (widget.middleScoreBuilder != null
+                                    ? ''
+                                    : ' : ${widget.scoreData!.scores[index].middleScore ?? ''}'),
+                            style: _textSecondaryStyle,
                           ),
-                          if (widget.middleScoreBuilder == null)
-                            ScoreTextBorder(
-                              text: widget.scoreData!.scores[i].middleScore,
-                              style: _textStyle,
-                            ),
                           if (widget.middleScoreBuilder != null)
-                            widget.middleScoreBuilder!(i),
-                          if (widget.finalScoreBuilder == null)
-                            ScoreTextBorder(
-                              text: widget.scoreData!.scores[i].semesterScore,
-                              style: _textStyle,
-                            ),
-                          if (widget.finalScoreBuilder != null)
-                            widget.finalScoreBuilder!(i),
+                            widget.middleScoreBuilder!(index),
                         ],
                       ),
-                  ],
-                ),
-              ),
-            ),
-            SizedBox(
-              height: isTablet ? 0.0 : 20.0,
-              width: isTablet ? 20 : 0.0,
-            ),
-            if (widget.details != null && widget.details!.isNotEmpty)
-              Flexible(
-                flex: isTablet ? 1 : 0,
-                child: DecoratedBox(
-                  decoration: _boxDecoration,
-                  child: Table(
-                    columnWidths: const <int, TableColumnWidth>{
-                      0: FlexColumnWidth(),
-                    },
-                    defaultVerticalAlignment: TableCellVerticalAlignment.middle,
-                    border: _tableBorder,
-                    children: <TableRow>[
-                      for (final String text in widget.details!)
-                        TableRow(
-                          children: <Widget>[
-                            Container(
-                              width: double.infinity,
-                              padding: const EdgeInsets.all(2.0),
-                              alignment: Alignment.center,
-                              child: SelectableText(
-                                text,
-                                textAlign: TextAlign.center,
-                                style: _textBlueStyle,
-                              ),
-                            ),
-                          ],
-                        ),
                     ],
                   ),
                 ),
-              ),
-          ],
-        ),
-      ),
+                Expanded(
+                  child: Column(
+                    children: <Widget>[
+                      if (widget.finalScoreBuilder == null)
+                        Text(
+                          widget.scoreData!.scores[index].semesterScore ?? '',
+                          style: _textStyle,
+                        ),
+                      if (widget.finalScoreBuilder != null)
+                        widget.finalScoreBuilder!(index),
+                    ],
+                  ),
+                ),
+              ],
+            ),
+          ),
+        );
+      },
     );
   }
 }
+*/

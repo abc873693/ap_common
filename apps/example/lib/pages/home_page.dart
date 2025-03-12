@@ -101,7 +101,7 @@ class HomePageState extends State<HomePage> {
       isLogin: isLogin,
       actions: <Widget>[
         IconButton(
-          icon: const Icon(Icons.fiber_new_rounded),
+          icon: const Icon(Icons.post_add),
           tooltip: ap.announcementReviewSystem,
           onPressed: () {
             ApUtils.pushCupertinoStyle(

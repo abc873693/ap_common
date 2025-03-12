@@ -53,7 +53,6 @@ class UserInfoScaffoldState extends State<UserInfoScaffold> {
     return Scaffold(
       appBar: AppBar(
         title: Text(app.userInfo),
-        // backgroundColor: ApTheme.of(context).blue,
         actions: <Widget>[
           ...widget.actions ?? <Widget>[],
           if (widget.enableBarCode)

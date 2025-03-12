@@ -94,7 +94,6 @@ class HomePageScaffoldState extends State<HomePageScaffold> {
                     child: Scaffold(
                       appBar: AppBar(
                         title: Text(widget.title ?? ''),
-                        backgroundColor: ApTheme.of(context).blue,
                         actions: widget.actions,
                       ),
                       drawer: isTablet ? null : widget.drawer,
@@ -112,25 +111,25 @@ class HomePageScaffoldState extends State<HomePageScaffold> {
                           );
                         },
                       ),
-                      bottomNavigationBar: (widget.bottomNavigationBarItems ==
-                                  null ||
-                              isTablet)
-                          ? null
-                          : NavigationBar(
-                              elevation: 12.0,
-                              indicatorColor: Colors.transparent,
-
-                              // fixedColor:
-                              //     ApTheme.of(context).bottomNavigationSelect,
-                              // unselectedItemColor:
-                              //     ApTheme.of(context).bottomNavigationSelect,
-                              // type: BottomNavigationBarType.fixed,
-                              // selectedFontSize: 12.0,
-                              // selectedIconTheme:
-                              //     const IconThemeData(size: 24.0),
-                              onDestinationSelected: widget.onTabTapped,
-                              destinations: widget.bottomNavigationBarItems!,
-                            ),
+                      bottomNavigationBar:
+                          (widget.bottomNavigationBarItems == null || isTablet)
+                              ? null
+                              : NavigationBar(
+                                  elevation: 12.0,
+                                  height: 56,
+                                  indicatorColor: Colors.transparent,
+                                  // fixedColor:
+                                  //     ApTheme.of(context).bottomNavigationSelect,
+                                  // unselectedItemColor:
+                                  //     ApTheme.of(context).bottomNavigationSelect,
+                                  // type: BottomNavigationBarType.fixed,
+                                  // selectedFontSize: 12.0,
+                                  // selectedIconTheme:
+                                  //     const IconThemeData(size: 24.0),
+                                  onDestinationSelected: widget.onTabTapped,
+                                  destinations:
+                                      widget.bottomNavigationBarItems!,
+                                ),
                     ),
                   ),
           ),
@@ -290,7 +289,6 @@ class HomePageScaffoldState extends State<HomePageScaffold> {
           content: app.announcementEmpty,
         );
       case HomeState.error:
-      default:
         return HintContent(
           icon: ApIcon.offlineBolt,
           content: app.somethingError,

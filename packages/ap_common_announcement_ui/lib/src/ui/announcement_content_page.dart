@@ -42,7 +42,6 @@ class AnnouncementContentPageState extends State<AnnouncementContentPage> {
     return Scaffold(
       appBar: AppBar(
         title: Text(app.announcements),
-        backgroundColor: ApTheme.of(context).blue,
       ),
       body: _homebody(),
     );

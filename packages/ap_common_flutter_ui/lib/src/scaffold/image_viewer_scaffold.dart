@@ -1,4 +1,3 @@
-import 'package:ap_common_flutter_ui/src/resources/ap_theme.dart';
 import 'package:flutter/material.dart';
 import 'package:photo_view/photo_view.dart';
 
@@ -52,7 +51,6 @@ class _ImageViewerScaffoldState extends State<ImageViewerScaffold>
     return Scaffold(
       appBar: AppBar(
         title: Text(widget.title ?? ''),
-        // backgroundColor: ApTheme.of(context).blue,
         actions: widget.actions,
         bottom: (widget.imageViewers.length > 1)
             ? TabBar(
