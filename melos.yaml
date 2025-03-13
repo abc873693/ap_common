@@ -1,5 +1,6 @@
 name: ap_common
 repository: https://github.com/abc873693/ap_common
+sdkPath: .fvm/flutter_sdk
 
 packages:
   - apps/**
