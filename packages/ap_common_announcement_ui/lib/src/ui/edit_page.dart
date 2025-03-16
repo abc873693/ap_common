@@ -134,7 +134,6 @@ class _AnnouncementEditPageState extends State<AnnouncementEditPage> {
     return Scaffold(
       appBar: AppBar(
         title: Text(title),
-        backgroundColor: ApTheme.of(context).blue,
       ),
       body: KeyboardDismissOnTap(
         child: Form(

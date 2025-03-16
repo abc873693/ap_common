@@ -92,7 +92,6 @@ class AnnouncementContentPageState extends State<AnnouncementContentPage> {
           Scaffold(
             appBar: AppBar(
               title: Text(widget.announcement.title),
-              backgroundColor: ApTheme.of(context).blue,
             ),
             body: PhotoView(
               imageProvider: (ApUtils.isSupportCacheNetworkImage
