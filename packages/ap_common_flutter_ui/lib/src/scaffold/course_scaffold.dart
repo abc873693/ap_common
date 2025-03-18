@@ -158,7 +158,8 @@ class CourseScaffoldState extends State<CourseScaffold> {
       child: Scaffold(
         appBar: AppBar(
           title: Text(widget.title ?? app.course),
-          centerTitle: Platform.isIOS ? true : null,
+          centerTitle:
+              Theme.of(context).platform == TargetPlatform.iOS ? true : null,
           actions: <Widget>[
             ...widget.actions ?? <Widget>[],
             if (widget.enableCaptureCourseTable)
