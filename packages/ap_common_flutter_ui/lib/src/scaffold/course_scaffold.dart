@@ -116,9 +116,9 @@ class CourseScaffoldState extends State<CourseScaffold> {
   bool? showClassroomLocation;
   bool? showSearchButton;
 
-  // bool get isTablet =>
-  //     MediaQuery.of(context).size.shortestSide >= 680 ||
-  //     MediaQuery.of(context).orientation == Orientation.landscape;
+  bool get isLandscape =>
+      // MediaQuery.of(context).size.shortestSide >= 680 ||
+      MediaQuery.of(context).orientation == Orientation.landscape;
 
   List<String> invisibleCourseCodes = <String>[];
 
@@ -261,10 +261,35 @@ class CourseScaffoldState extends State<CourseScaffold> {
                 ],
               ),
             ),
+            if (widget.state == CourseState.finish && isLandscape) ...<Widget>[
+              const SizedBox(width: 16.0),
+              Expanded(
+                flex: 2,
+                child: Material(
+                  elevation: 12.0,
+                  child: ColoredBox(
+                    color: ApTheme.of(context).courseListTabletBackground,
+                    child: CourseList(
+                      courses: widget.courseData.courses,
+                      timeCodes: widget.courseData.timeCodes,
+                      invisibleCourseCodes: invisibleCourseCodes,
+                      onVisibilityChanged: (
+                        Course course,
+                        bool visibility,
+                      ) =>
+                          saveInvisibleCourseCodes(
+                        course: course,
+                        visibility: visibility,
+                      ),
+                    ),
+                  ),
+                ),
+              ),
+            ],
           ],
         ),
         floatingActionButtonLocation: FloatingActionButtonLocation.endContained,
-        floatingActionButton: showSearchButton!
+        floatingActionButton: !isLandscape!
             ? FloatingActionButton(
                 onPressed: () {
                   setState(
@@ -319,7 +344,7 @@ class CourseScaffoldState extends State<CourseScaffold> {
           ),
         );
       default:
-        if (_contentStyle == _ContentStyle.table) {
+        if (isLandscape || _contentStyle == _ContentStyle.table) {
           return SingleChildScrollView(
             physics: const AlwaysScrollableScrollPhysics(),
             padding: const EdgeInsets.only(
