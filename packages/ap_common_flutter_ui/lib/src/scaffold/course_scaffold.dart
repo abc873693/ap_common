@@ -116,8 +116,8 @@ class CourseScaffoldState extends State<CourseScaffold> {
   bool? showClassroomLocation;
   bool? showSearchButton;
 
-  bool get isTablet =>
-      MediaQuery.of(context).size.shortestSide >= 680 ||
+  bool get isLandscape =>
+      // MediaQuery.of(context).size.shortestSide >= 680 ||
       MediaQuery.of(context).orientation == Orientation.landscape;
 
   List<String> invisibleCourseCodes = <String>[];
@@ -158,6 +158,8 @@ class CourseScaffoldState extends State<CourseScaffold> {
       child: Scaffold(
         appBar: AppBar(
           title: Text(widget.title ?? app.course),
+          centerTitle:
+              Theme.of(context).platform == TargetPlatform.iOS ? true : null,
           actions: <Widget>[
             ...widget.actions ?? <Widget>[],
             if (widget.enableCaptureCourseTable)
@@ -225,11 +227,6 @@ class CourseScaffoldState extends State<CourseScaffold> {
                     Row(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: <Widget>[
-//              ItemPicker(
-//                onSelected: (int index) {},
-//                items: widget.years,
-//                currentIndex: widget.yearIndex,
-//              ),
                         if (widget.semesterData != null &&
                             widget.itemPicker == null)
                           Expanded(
@@ -264,7 +261,7 @@ class CourseScaffoldState extends State<CourseScaffold> {
                 ],
               ),
             ),
-            if (widget.state == CourseState.finish && isTablet) ...<Widget>[
+            if (widget.state == CourseState.finish && isLandscape) ...<Widget>[
               const SizedBox(width: 16.0),
               Expanded(
                 flex: 2,
@@ -291,47 +288,19 @@ class CourseScaffoldState extends State<CourseScaffold> {
             ],
           ],
         ),
-        floatingActionButtonLocation: FloatingActionButtonLocation.endDocked,
-        floatingActionButton: showSearchButton!
+        floatingActionButtonLocation: FloatingActionButtonLocation.endContained,
+        floatingActionButton: !isLandscape!
             ? FloatingActionButton(
                 onPressed: () {
-                  AnalyticsUtil.instance
-                      .logEvent('course_search_button_click');
-                  _pickSemester();
+                  setState(
+                    () => _contentStyle = (_contentStyle == _ContentStyle.table)
+                        ? _ContentStyle.list
+                        : _ContentStyle.table,
+                  );
                 },
-                child: const Icon(Icons.search),
+                child: const Icon(Icons.sync_alt),
               )
             : null,
-        bottomNavigationBar: isTablet
-            ? null
-            : BottomAppBar(
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                  children: <Widget>[
-                    IconButton(
-                      iconSize: _contentStyle == _ContentStyle.table ? 24 : 20,
-                      color: _contentStyle == _ContentStyle.table
-                          ? ApTheme.of(context).yellow
-                          : ApTheme.of(context).grey,
-                      icon: const Icon(Icons.grid_on),
-                      onPressed: () {
-                        setState(() => _contentStyle = _ContentStyle.table);
-                      },
-                    ),
-                    IconButton(
-                      iconSize: _contentStyle == _ContentStyle.list ? 24 : 20,
-                      color: _contentStyle == _ContentStyle.list
-                          ? ApTheme.of(context).yellow
-                          : ApTheme.of(context).grey,
-                      icon: const Icon(Icons.format_list_bulleted),
-                      onPressed: () {
-                        setState(() => _contentStyle = _ContentStyle.list);
-                      },
-                    ),
-                    if (showSearchButton!) Container(height: 0),
-                  ],
-                ),
-              ),
       ),
     );
   }
@@ -375,11 +344,12 @@ class CourseScaffoldState extends State<CourseScaffold> {
           ),
         );
       default:
-        if (isTablet || _contentStyle == _ContentStyle.table) {
+        if (isLandscape || _contentStyle == _ContentStyle.table) {
           return SingleChildScrollView(
             physics: const AlwaysScrollableScrollPhysics(),
-            padding: const EdgeInsets.symmetric(
-              vertical: 8.0,
+            padding: const EdgeInsets.only(
+              top: 8.0,
+              bottom: 80.0,
             ),
             child: RepaintBoundary(
               key: _repaintBoundaryGlobalKey,
@@ -923,7 +893,7 @@ class TimeCodeBorder extends StatelessWidget {
         TextSpan(
           style: TextStyle(
             color: ApTheme.of(context).greyText,
-            fontSize: 14.0,
+            fontSize: 10.0,
           ),
           children: <TextSpan>[
             if (showSectionTime) TextSpan(text: '${timeCode.startTime}\n'),
@@ -933,7 +903,7 @@ class TimeCodeBorder extends StatelessWidget {
                 fontWeight:
                     showSectionTime ? FontWeight.bold : FontWeight.normal,
                 color: ApTheme.of(context).blueText,
-                fontSize: showSectionTime ? 16.0 : 14.0,
+                fontSize: !showSectionTime ? 18.0 : 15.0,
               ),
             ),
             if (showSectionTime) TextSpan(text: timeCode.endTime),
@@ -963,6 +933,7 @@ class CourseList extends StatelessWidget {
   Widget build(BuildContext context) {
     final ApLocalizations app = ApLocalizations.of(context);
     return ListView.builder(
+      padding: const EdgeInsets.only(bottom: 80.0),
       itemBuilder: (_, int index) {
         final Course course = courses[index];
         final bool visibility = !invisibleCourseCodes.contains(course.code);
@@ -1288,17 +1259,6 @@ class _CourseScaffoldSettingDialogState
             onChanged: (bool? value) {
               setState(() => showClassroomLocation = value);
               widget.showClassroomLocationOnChanged?.call(value);
-            },
-            checkColor: ApTheme.of(context).background,
-            activeColor: ApTheme.of(context).yellow,
-          ),
-          CheckboxListTile(
-            title: Text(ap.showSearchButton),
-            secondary: Icon(ApIcon.search),
-            value: showSearchButton,
-            onChanged: (bool? value) {
-              setState(() => showSearchButton = value);
-              widget.showSearchButtonOnChanged?.call(value);
             },
             checkColor: ApTheme.of(context).background,
             activeColor: ApTheme.of(context).yellow,

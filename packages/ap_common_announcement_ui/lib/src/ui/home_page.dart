@@ -98,7 +98,6 @@ class _AnnouncementHomePageState extends State<AnnouncementHomePage> {
     return Scaffold(
       appBar: AppBar(
         title: Text(ap.announcementReviewSystem),
-        backgroundColor: ApTheme.of(context).blue,
         actions: <Widget>[
           if (state == _State.done &&
               loginData?.level != PermissionLevel.user) ...<Widget>[

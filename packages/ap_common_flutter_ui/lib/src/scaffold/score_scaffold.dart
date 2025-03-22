@@ -20,7 +20,7 @@ class ScoreScaffold extends StatefulWidget {
     this.middleScoreBuilder,
     this.finalScoreBuilder,
     this.customHint,
-    this.isShowSearchButton = true,
+    this.isShowSearchButton = false,
     this.details,
     this.bottom,
     this.customStateHint,
@@ -71,7 +71,6 @@ class ScoreScaffoldState extends State<ScoreScaffold> {
     return Scaffold(
       appBar: AppBar(
         title: Text(widget.title ?? app.score),
-        backgroundColor: ApTheme.of(context).blue,
         bottom: widget.bottom as PreferredSizeWidget?,
       ),
       floatingActionButton: widget.isShowSearchButton
@@ -385,3 +384,114 @@ class ScoreTextBorder extends StatelessWidget {
     );
   }
 }
+
+/*
+class ScoreCardContent extends StatefulWidget {
+  const ScoreCardContent({
+    super.key,
+    required this.scoreData,
+    this.onRefresh,
+    this.middleTitle,
+    this.finalTitle,
+    this.onScoreSelect,
+    this.middleScoreBuilder,
+    this.finalScoreBuilder,
+    this.details,
+  });
+
+  final ScoreData? scoreData;
+  final Function()? onRefresh;
+  final String? middleTitle;
+  final String? finalTitle;
+  final Function(int index)? onScoreSelect;
+  final Widget Function(int index)? middleScoreBuilder;
+  final Widget Function(int index)? finalScoreBuilder;
+  final List<String>? details;
+
+  @override
+  _ScoreCardContentState createState() => _ScoreCardContentState();
+}
+
+class _ScoreCardContentState extends State<ScoreCardContent> {
+  TextStyle get _textPrimaryStyle => TextStyle(
+      color: ApTheme.of(context).blueText,
+      fontSize: 16.0,
+      fontWeight: FontWeight.w600);
+
+  TextStyle get _textSecondaryStyle =>
+      const TextStyle(color: ApColors.secondary, fontSize: 16.0);
+
+  TextStyle get _textStyle => const TextStyle(fontSize: 15.0);
+
+  bool get isTablet =>
+      MediaQuery.of(context).size.shortestSide >= 680 ||
+      MediaQuery.of(context).orientation == Orientation.landscape;
+
+  @override
+  Widget build(BuildContext context) {
+    return ListView.builder(
+      itemCount: widget.scoreData!.scores.length,
+      itemBuilder: (_, int index) {
+        return Card(
+          //elevation: 4.0,
+          margin: const EdgeInsets.all(8.0),
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(12.0),
+          ),
+          child: ListTile(
+            contentPadding: const EdgeInsets.symmetric(
+              vertical: 8.0,
+              horizontal: 24.0,
+            ),
+            title: Row(
+              children: <Widget>[
+                Flexible(
+                  flex: 2,
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: <Widget>[
+                      Text(
+                        widget.scoreData!.scores[index].title,
+                        style: _textPrimaryStyle,
+                      ),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: <Widget>[
+                          Text(
+                            (widget.middleTitle ??
+                                    ApLocalizations.of(context)
+                                        .midtermScoreTitle) +
+                                (widget.middleScoreBuilder != null
+                                    ? ''
+                                    : ' : ${widget.scoreData!.scores[index].middleScore ?? ''}'),
+                            style: _textSecondaryStyle,
+                          ),
+                          if (widget.middleScoreBuilder != null)
+                            widget.middleScoreBuilder!(index),
+                        ],
+                      ),
+                    ],
+                  ),
+                ),
+                Expanded(
+                  child: Column(
+                    children: <Widget>[
+                      if (widget.finalScoreBuilder == null)
+                        Text(
+                          widget.scoreData!.scores[index].semesterScore ?? '',
+                          style: _textStyle,
+                        ),
+                      if (widget.finalScoreBuilder != null)
+                        widget.finalScoreBuilder!(index),
+                    ],
+                  ),
+                ),
+              ],
+            ),
+          ),
+        );
+      },
+    );
+  }
+}
+*/

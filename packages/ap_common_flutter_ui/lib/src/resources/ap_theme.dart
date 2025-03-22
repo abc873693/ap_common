@@ -48,7 +48,6 @@ class ApTheme extends InheritedWidget {
       case ThemeMode.light:
         return Brightness.light;
       case ThemeMode.dark:
-      default:
         return Brightness.dark;
     }
   }
@@ -58,7 +57,6 @@ class ApTheme extends InheritedWidget {
       case Brightness.light:
         return ApColors.blue500;
       case Brightness.dark:
-      default:
         return ApColors.blueDark;
     }
   }
@@ -68,7 +66,6 @@ class ApTheme extends InheritedWidget {
       case Brightness.dark:
         return ApColors.grey100;
       case Brightness.light:
-      default:
         return ApColors.blue500;
     }
   }
@@ -78,7 +75,6 @@ class ApTheme extends InheritedWidget {
       case Brightness.dark:
         return ApColors.blue300;
       case Brightness.light:
-      default:
         return ApColors.blue500;
     }
   }
@@ -88,7 +84,6 @@ class ApTheme extends InheritedWidget {
       case Brightness.dark:
         return const Color(0xffffffff);
       case Brightness.light:
-      default:
         return ApColors.blue500;
     }
   }
@@ -98,7 +93,6 @@ class ApTheme extends InheritedWidget {
       case Brightness.dark:
         return ApColors.grey200;
       case Brightness.light:
-      default:
         return ApColors.grey500;
     }
   }
@@ -108,7 +102,6 @@ class ApTheme extends InheritedWidget {
       case Brightness.dark:
         return ApColors.grey200;
       case Brightness.light:
-      default:
         return ApColors.grey500;
     }
   }
@@ -118,7 +111,6 @@ class ApTheme extends InheritedWidget {
       case Brightness.dark:
         return const Color(0xFF424242);
       case Brightness.light:
-      default:
         return const Color(0xFFBDBDBD);
     }
   }
@@ -128,7 +120,6 @@ class ApTheme extends InheritedWidget {
       case Brightness.dark:
         return const Color(0xff000000);
       case Brightness.light:
-      default:
         return const Color(0xffffffff);
     }
   }
@@ -138,7 +129,6 @@ class ApTheme extends InheritedWidget {
       case Brightness.dark:
         return ApColors.yellow200;
       case Brightness.light:
-      default:
         return ApColors.yellow500;
     }
   }
@@ -148,7 +138,6 @@ class ApTheme extends InheritedWidget {
       case Brightness.dark:
         return ApColors.red200;
       case Brightness.light:
-      default:
         return ApColors.red500;
     }
   }
@@ -158,7 +147,6 @@ class ApTheme extends InheritedWidget {
       case Brightness.light:
         return Colors.green;
       case Brightness.dark:
-      default:
         return Colors.green[300]!;
     }
   }
@@ -168,7 +156,6 @@ class ApTheme extends InheritedWidget {
       case Brightness.dark:
         return ApColors.grey100;
       case Brightness.light:
-      default:
         return const Color(0xff737373);
     }
   }
@@ -178,7 +165,6 @@ class ApTheme extends InheritedWidget {
       case Brightness.dark:
         return ApColors.onyx;
       case Brightness.light:
-      default:
         return const Color(0xffffffff);
     }
   }
@@ -188,7 +174,6 @@ class ApTheme extends InheritedWidget {
       case Brightness.dark:
         return ApColors.yellow500;
       case Brightness.light:
-      default:
         return ApColors.yellow500;
     }
   }
@@ -198,7 +183,6 @@ class ApTheme extends InheritedWidget {
       case Brightness.light:
         return const Color(0xAA000000);
       case Brightness.dark:
-      default:
         return const Color(0xAAFFFFFF);
     }
   }
@@ -208,7 +192,6 @@ class ApTheme extends InheritedWidget {
       case Brightness.light:
         return Colors.white;
       case Brightness.dark:
-      default:
         return Colors.black;
     }
   }
@@ -218,7 +201,6 @@ class ApTheme extends InheritedWidget {
       case Brightness.dark:
         return 0.75;
       case Brightness.light:
-      default:
         return 1.0;
     }
   }
@@ -228,7 +210,6 @@ class ApTheme extends InheritedWidget {
       case Brightness.light:
         return ApImageAssets.dashLineLight;
       case Brightness.dark:
-      default:
         return ApImageAssets.dashLineDark;
     }
   }
@@ -238,7 +219,6 @@ class ApTheme extends InheritedWidget {
       case Brightness.light:
         return ApImageAssets.drawerBackgroundLight;
       case Brightness.dark:
-      default:
         return ApImageAssets.drawerBackgroundDark;
     }
   }
@@ -248,7 +228,6 @@ class ApTheme extends InheritedWidget {
       case Brightness.dark:
         return ApColors.charade;
       case Brightness.light:
-      default:
         return ApColors.solitude;
     }
   }
@@ -258,7 +237,6 @@ class ApTheme extends InheritedWidget {
       case Brightness.dark:
         return Colors.black87;
       case Brightness.light:
-      default:
         return Colors.white;
     }
   }
@@ -268,7 +246,6 @@ class ApTheme extends InheritedWidget {
       case Brightness.dark:
         return Colors.black12;
       case Brightness.light:
-      default:
         return Colors.white;
     }
   }
@@ -278,7 +255,6 @@ class ApTheme extends InheritedWidget {
       case Brightness.dark:
         return Colors.white;
       case Brightness.light:
-      default:
         return Colors.black;
     }
   }
@@ -288,18 +264,17 @@ class ApTheme extends InheritedWidget {
       case Brightness.dark:
         return const Color(0xff121212);
       case Brightness.light:
-      default:
         return Colors.white;
     }
   }
 
   static ThemeData get light => ThemeData(
         //platform: TargetPlatform.iOS,
-        useMaterial3: false,
+        useMaterial3: true,
         brightness: Brightness.light,
-        appBarTheme: const AppBarTheme(
-          color: ApColors.blue500,
-        ),
+        // appBarTheme: const AppBarTheme(
+        //   color: ApColors.blue500,
+        // ),
         indicatorColor: ApColors.blue500,
         pageTransitionsTheme: _pageTransitionsTheme,
         unselectedWidgetColor: ApColors.grey500,
@@ -313,19 +288,19 @@ class ApTheme extends InheritedWidget {
           ),
         ),
         visualDensity: VisualDensity.adaptivePlatformDensity,
-        colorScheme: ColorScheme.fromSwatch(
-          accentColor: ApColors.blue500,
+        colorScheme: ColorScheme.fromSeed(
+          seedColor: ApColors.primary,
         ),
       );
 
   static ThemeData get dark => ThemeData(
         //platform: TargetPlatform.iOS,
-        useMaterial3: false,
+        useMaterial3: true,
         brightness: Brightness.dark,
         pageTransitionsTheme: _pageTransitionsTheme,
-        appBarTheme: const AppBarTheme(
-          color: ApColors.blueDark,
-        ),
+        // appBarTheme: const AppBarTheme(
+        //   color: ApColors.blueDark,
+        // ),
         indicatorColor: ApColors.blue300,
         scaffoldBackgroundColor: ApColors.onyx,
         unselectedWidgetColor: ApColors.grey200,
@@ -339,9 +314,9 @@ class ApTheme extends InheritedWidget {
           ),
         ),
         visualDensity: VisualDensity.adaptivePlatformDensity,
-        colorScheme: ColorScheme.fromSwatch(
+        colorScheme: ColorScheme.fromSeed(
           brightness: Brightness.dark,
-          accentColor: ApColors.blue300,
+          seedColor: ApColors.blue300,
         ),
       );
 }

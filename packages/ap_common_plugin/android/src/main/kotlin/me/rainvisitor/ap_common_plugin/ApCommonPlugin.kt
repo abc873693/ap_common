@@ -13,7 +13,6 @@ public class ApCommonPlugin: FlutterPlugin, MethodCallHandler {
     val channel = MethodChannel(flutterPluginBinding.getFlutterEngine().getDartExecutor(), "ap_common_plugin")
     channel.setMethodCallHandler(ApCommonPlugin());
   }
-
   override fun onMethodCall(@NonNull call: MethodCall, @NonNull result: Result) {
     if (call.method == "getPlatformVersion") {
       result.success("Android ${android.os.Build.VERSION.RELEASE}")

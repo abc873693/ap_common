@@ -101,7 +101,7 @@ class HomePageState extends State<HomePage> {
       isLogin: isLogin,
       actions: <Widget>[
         IconButton(
-          icon: const Icon(Icons.fiber_new_rounded),
+          icon: const Icon(Icons.post_add),
           tooltip: ap.announcementReviewSystem,
           onPressed: () {
             ApUtils.pushCupertinoStyle(
@@ -235,16 +235,16 @@ class HomePageState extends State<HomePage> {
         );
       },
       onTabTapped: onTabTapped,
-      bottomNavigationBarItems: <BottomNavigationBarItem>[
-        BottomNavigationBarItem(
+      bottomNavigationBarItems: <Widget>[
+        NavigationDestination(
           icon: Icon(ApIcon.face),
           label: ap.about,
         ),
-        BottomNavigationBarItem(
+        NavigationDestination(
           icon: Icon(ApIcon.classIcon),
           label: ap.course,
         ),
-        BottomNavigationBarItem(
+        NavigationDestination(
           icon: Icon(ApIcon.assignment),
           label: ap.score,
         ),

@@ -40,6 +40,7 @@ class ApDrawerState extends State<ApDrawer> {
   @override
   Widget build(BuildContext context) {
     return Drawer(
+      shape: const RoundedRectangleBorder(),
       child: SingleChildScrollView(
         child: Column(
           children: <Widget>[

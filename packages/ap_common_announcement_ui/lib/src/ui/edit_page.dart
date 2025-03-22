@@ -103,7 +103,6 @@ class _AnnouncementEditPageState extends State<AnnouncementEditPage> {
           const SizedBox(height: 8.0),
         ];
       case _ImgurUploadState.noFile:
-      default:
         return <Widget>[
           Text(app.imgurUploadDescription),
           const SizedBox(height: 8.0),
@@ -135,7 +134,6 @@ class _AnnouncementEditPageState extends State<AnnouncementEditPage> {
     return Scaffold(
       appBar: AppBar(
         title: Text(title),
-        backgroundColor: ApTheme.of(context).blue,
       ),
       body: KeyboardDismissOnTap(
         child: Form(
