@@ -3,6 +3,40 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## 2025-09-30
+
+### Changes
+
+---
+
+Packages with breaking changes:
+
+ - There are no breaking changes in this release.
+
+Packages with other changes:
+
+ - [`ap_common_announcement_ui` - `v0.0.4`](#ap_common_announcement_ui---v004)
+ - [`ap_common_flutter_ui` - `v0.0.6`](#ap_common_flutter_ui---v006)
+ - [`ap_common` - `v0.26.0+3`](#ap_common---v02603)
+
+Packages with dependency updates only:
+
+> Packages listed below depend on other packages in this workspace that have had changes. Their versions have been incremented to bump the minimum dependency versions of the packages they depend upon in this project.
+
+ - `ap_common` - `v0.26.0+3`
+
+---
+
+#### `ap_common_announcement_ui` - `v0.0.4`
+
+ - **FEAT**: align image upload naming. ([ab2f2492](https://github.com/abc873693/ap_common/commit/ab2f2492f05117a2474357cbd7373498b40df878))
+ - **FEAT**: revert imgur implement. ([30bbf5ea](https://github.com/abc873693/ap_common/commit/30bbf5eadc1b05d08f5c269169e9bfe715c5bbb0))
+
+#### `ap_common_flutter_ui` - `v0.0.6`
+
+ - **FEAT**: change to material design 3. ([04a13b5d](https://github.com/abc873693/ap_common/commit/04a13b5da516b9cbbc3a56eb29ab670c34653e55))
+
+
 ## 2025-09-21
 
 ### Changes

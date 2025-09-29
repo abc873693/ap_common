@@ -1,3 +1,8 @@
+## 0.0.4
+
+ - **FEAT**: align image upload naming. ([ab2f2492](https://github.com/abc873693/ap_common/commit/ab2f2492f05117a2474357cbd7373498b40df878))
+ - **FEAT**: revert imgur implement. ([30bbf5ea](https://github.com/abc873693/ap_common/commit/30bbf5eadc1b05d08f5c269169e9bfe715c5bbb0))
+
 ## 0.0.3+2
 
  - Update a dependency to the latest release.
