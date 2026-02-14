@@ -35,6 +35,18 @@ scripts:
         dart fix --apply
     description: |
       Run `dart fix --apply` in all packages.
+  format:
+    run: |
+      melos exec -c 1 -- \
+        dart format .
+    description: |
+      Run `dart format` in all packages.
+  format-check:
+    run: |
+      melos exec -c 1 -- \
+        dart format . --set-exit-if-changed --output=none
+    description: |
+      Run `dart format` check in all packages.
   analyze-ci:
     run: |
       melos exec -c 1 -- \
