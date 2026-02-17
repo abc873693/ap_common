@@ -5,15 +5,18 @@
 import 'dart:convert';
 
 import 'package:ap_common_core/src/models/course_data.dart' show TimeCode;
-import 'package:json_annotation/json_annotation.dart';
+import 'package:freezed_annotation/freezed_annotation.dart';
 
+part 'time_code.freezed.dart';
 part 'time_code.g.dart';
 
-@JsonSerializable()
-class TimeCodeConfig {
-  TimeCodeConfig({
-    required this.timeCodes,
-  });
+@freezed
+abstract class TimeCodeConfig with _$TimeCodeConfig {
+  const TimeCodeConfig._();
+
+  const factory TimeCodeConfig({
+    required List<TimeCode> timeCodes,
+  }) = _TimeCodeConfig;
 
   factory TimeCodeConfig.fromJson(Map<String, dynamic> json) =>
       _$TimeCodeConfigFromJson(json);
@@ -21,10 +24,6 @@ class TimeCodeConfig {
   factory TimeCodeConfig.fromRawJson(String str) => TimeCodeConfig.fromJson(
         json.decode(str) as Map<String, dynamic>,
       );
-
-  List<TimeCode> timeCodes;
-
-  Map<String, dynamic> toJson() => _$TimeCodeConfigToJson(this);
 
   String toRawJson() => jsonEncode(toJson());
 

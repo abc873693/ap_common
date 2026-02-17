@@ -132,7 +132,9 @@ class DialogUtils {
       );
       final dynamic json = jsonDecode(response.data as String);
       //ignore: avoid_dynamic_calls
-      versionInfo.content = json['${versionInfo.code}'][app.locale] as String;
+      versionInfo = versionInfo.copyWith(
+        content: json['${versionInfo.code}'][app.locale] as String,
+      );
     }
     final String versionContent = '${'\n$versionName\n'}${versionInfo.content}';
     final String updateContent = sprintf(

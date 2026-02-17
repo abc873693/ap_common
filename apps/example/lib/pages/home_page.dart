@@ -339,7 +339,7 @@ class HomePageState extends State<HomePage> {
       if (!response.body.contains('html')) {
         if (mounted) {
           setState(() {
-            userInfo!.pictureBytes = response.bodyBytes;
+            userInfo = userInfo!.copyWith(pictureBytes: response.bodyBytes);
           });
         }
 //        CacheUtils.savePictureData(response.bodyBytes);

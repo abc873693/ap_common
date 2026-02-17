@@ -44,7 +44,7 @@ class ScorePageState extends State<ScorePage> {
       customStateHint: customStateHint,
       semesterData: semesterData,
       onSelect: (int index) {
-        semesterData!.currentIndex = index;
+        semesterData = semesterData!.copyWith(currentIndex: index);
         _getSemesterScore();
       },
       onRefresh: () async {
@@ -69,7 +69,7 @@ class ScorePageState extends State<ScorePage> {
     for (int i = 0; i < semesterData!.data.length; i++) {
       final Semester option = semesterData!.data[i];
       if (option.text == semesterData!.defaultSemester.text) {
-        semesterData!.currentIndex = i;
+        semesterData = semesterData!.copyWith(currentIndex: i);
       }
       i++;
     }
@@ -77,16 +77,25 @@ class ScorePageState extends State<ScorePage> {
   }
 
   Future<void> _getSemesterScore() async {
-    final String rawString = await rootBundle.loadString(FileAssets.scores);
-    scoreData = ScoreData.fromRawJson(rawString);
-    if (mounted) {
-      setState(() {
-        if (scoreData == null) {
-          state = ScoreState.empty;
-        } else {
-          state = ScoreState.finish;
-        }
-      });
+    try {
+      final String rawString = await rootBundle.loadString(FileAssets.scores);
+      scoreData = ScoreData.fromRawJson(rawString);
+      if (mounted) {
+        setState(() {
+          if (scoreData == null) {
+            state = ScoreState.empty;
+          } else {
+            state = ScoreState.finish;
+          }
+        });
+      }
+    } catch (e) {
+      if (mounted) {
+        setState(() {
+          state = ScoreState.error;
+        });
+      }
+      rethrow;
     }
   }
 

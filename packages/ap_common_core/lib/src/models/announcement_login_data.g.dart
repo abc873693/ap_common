@@ -6,14 +6,14 @@ part of 'announcement_login_data.dart';
 // JsonSerializableGenerator
 // **************************************************************************
 
-AnnouncementLoginData _$AnnouncementLoginDataFromJson(
+_AnnouncementLoginData _$AnnouncementLoginDataFromJson(
         Map<String, dynamic> json) =>
-    AnnouncementLoginData(
+    _AnnouncementLoginData(
       key: json['key'] as String,
     );
 
 Map<String, dynamic> _$AnnouncementLoginDataToJson(
-        AnnouncementLoginData instance) =>
+        _AnnouncementLoginData instance) =>
     <String, dynamic>{
       'key': instance.key,
     };

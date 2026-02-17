@@ -2,20 +2,23 @@ import 'dart:convert';
 
 import 'package:ap_common_core/src/config/ap_constants.dart';
 import 'package:ap_common_core/src/utilities/preference_util.dart';
-import 'package:json_annotation/json_annotation.dart';
+import 'package:freezed_annotation/freezed_annotation.dart';
 
+part 'score_data.freezed.dart';
 part 'score_data.g.dart';
 
-@JsonSerializable()
-class ScoreData {
-  ScoreData({
-    required this.scores,
-    required this.detail,
-  });
+@freezed
+abstract class ScoreData with _$ScoreData {
+  const ScoreData._();
+
+  const factory ScoreData({
+    required List<Score> scores,
+    required Detail detail,
+  }) = _ScoreData;
 
   factory ScoreData.empty() => ScoreData(
         scores: <Score>[],
-        detail: Detail(),
+        detail: Detail.empty(),
       );
 
   factory ScoreData.fromJson(Map<String, dynamic> json) =>
@@ -38,11 +41,6 @@ class ScoreData {
     }
   }
 
-  final List<Score> scores;
-  final Detail detail;
-
-  Map<String, dynamic> toJson() => _$ScoreDataToJson(this);
-
   String toRawJson() => jsonEncode(toJson());
 
   void save(String tag) {
@@ -54,17 +52,27 @@ class ScoreData {
   }
 }
 
-@JsonSerializable()
-class Detail {
-  Detail({
-    this.creditTaken,
-    this.creditEarned,
-    this.conduct,
-    this.average,
-    this.classRank,
-    this.departmentRank,
-    this.classPercentage,
-  });
+@freezed
+abstract class Detail with _$Detail {
+  const Detail._();
+
+  const factory Detail({
+    double? creditTaken,
+    double? creditEarned,
+    double? average,
+    String? classRank,
+    String? departmentRank,
+    double? classPercentage,
+    double? conduct,
+  }) = _Detail;
+
+  factory Detail.empty() => const Detail(
+        creditTaken: 0.0,
+        creditEarned: 0.0,
+        average: 0.0,
+        classRank: '',
+        departmentRank: '',
+      );
 
   factory Detail.fromJson(Map<String, dynamic> json) => _$DetailFromJson(json);
 
@@ -72,37 +80,27 @@ class Detail {
         json.decode(str) as Map<String, dynamic>,
       );
 
-  final double? creditTaken;
-  final double? creditEarned;
-  final double? conduct;
-  final double? average;
-  final String? classRank;
-  final String? departmentRank;
-  final double? classPercentage;
-
-  bool get isCreditEmpty => creditTaken == null && creditEarned == null;
-
-  Map<String, dynamic> toJson() => _$DetailToJson(this);
-
   String toRawJson() => jsonEncode(toJson());
 }
 
-@JsonSerializable()
-class Score {
-  Score({
-    required this.courseNumber,
-    this.isPreScore = false,
-    required this.title,
-    required this.units,
-    this.hours,
-    this.required,
-    this.at,
-    this.middleScore,
-    this.generalScore,
-    this.finalScore,
-    this.semesterScore,
-    this.remark,
-  });
+@freezed
+abstract class Score with _$Score {
+  const Score._();
+
+  const factory Score({
+    required String? courseNumber,
+    @Default(false) bool isPreScore,
+    required String title,
+    required String units,
+    required String? hours,
+    required String? required,
+    required String? at,
+    required String? middleScore,
+    required String? generalScore,
+    required String? finalScore,
+    required String? semesterScore,
+    required String? remark,
+  }) = _Score;
 
   factory Score.fromJson(Map<String, dynamic> json) => _$ScoreFromJson(json);
 
@@ -110,50 +108,5 @@ class Score {
         json.decode(str) as Map<String, dynamic>,
       );
 
-  final String? courseNumber;
-  final bool isPreScore;
-  final String title;
-  final String units;
-  final String? hours;
-  final String? required;
-  final String? at;
-  final String? middleScore;
-  final String? generalScore;
-  final String? finalScore;
-  final String? semesterScore;
-  final String? remark;
-
-  Map<String, dynamic> toJson() => _$ScoreToJson(this);
-
   String toRawJson() => jsonEncode(toJson());
-
-  Score copyWith({
-    String? courseNumber,
-    bool? isPreScore,
-    String? title,
-    String? units,
-    String? hours,
-    String? required,
-    String? at,
-    String? middleScore,
-    String? generalScore,
-    String? finalScore,
-    String? semesterScore,
-    String? remark,
-  }) {
-    return Score(
-      courseNumber: courseNumber ?? this.courseNumber,
-      isPreScore: isPreScore ?? this.isPreScore,
-      title: title ?? this.title,
-      units: units ?? this.units,
-      hours: hours ?? this.hours,
-      required: required ?? this.required,
-      at: at ?? this.at,
-      middleScore: middleScore ?? this.middleScore,
-      generalScore: generalScore ?? this.generalScore,
-      finalScore: finalScore ?? this.finalScore,
-      semesterScore: semesterScore ?? this.semesterScore,
-      remark: units ?? this.remark,
-    );
-  }
 }

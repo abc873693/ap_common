@@ -1,17 +1,20 @@
 import 'dart:convert';
 import 'dart:math';
 
-import 'package:json_annotation/json_annotation.dart';
+import 'package:ap_common_core/src/config/ap_constants.dart';
+import 'package:ap_common_core/src/utilities/preference_util.dart';
+import 'package:freezed_annotation/freezed_annotation.dart';
 
+part 'announcement_data.freezed.dart';
 part 'announcement_data.g.dart';
 
-final Random random = Random();
+@freezed
+abstract class AnnouncementData with _$AnnouncementData {
+  const AnnouncementData._();
 
-@JsonSerializable()
-class AnnouncementData {
-  AnnouncementData({
-    required this.data,
-  });
+  const factory AnnouncementData({
+    required List<Announcement> data,
+  }) = _AnnouncementData;
 
   factory AnnouncementData.fromJson(Map<String, dynamic> json) =>
       _$AnnouncementDataFromJson(json);
@@ -20,50 +23,69 @@ class AnnouncementData {
         json.decode(str) as Map<String, dynamic>,
       );
 
-  List<Announcement> data;
+  static AnnouncementData? load(String tag) {
+    final String rawString = PreferenceUtil.instance.getString(
+      '${ApConstants.packageName}'
+          '.announcement_data_$tag',
+      '',
+    );
+    if (rawString == '') {
+      return null;
+    } else {
+      return AnnouncementData.fromRawJson(rawString);
+    }
+  }
 
-  Map<String, dynamic> toJson() => _$AnnouncementDataToJson(this);
+  void save(String tag) {
+    PreferenceUtil.instance.setString(
+      '${ApConstants.packageName}'
+      '.announcement_data_$tag',
+      toRawJson(),
+    );
+  }
 
   String toRawJson() => jsonEncode(toJson());
 
-  void sortAndRandom() {
-    data.sort((Announcement a, Announcement b) {
-      final int compare = b.weight.compareTo(a.weight);
-      final int compareRandom = b.randomWeight.compareTo(a.randomWeight);
-      return compare == 0 ? compareRandom : compare;
+  List<Announcement> get sortedData {
+    // Sort logic moved to a getter or method as Freezed classes are immutable
+    final List<Announcement> sortedData = List<Announcement>.from(data);
+    sortedData.sort((Announcement a, Announcement b) {
+      return b.weight.compareTo(a.weight);
     });
+    return sortedData;
   }
 }
 
-@JsonSerializable()
-class Announcement {
-  Announcement({
-    required this.title,
-    required this.id,
-    this.nextId,
-    this.lastId,
-    required this.weight,
-    required this.imgUrl,
-    this.url,
-    required this.description,
-    this.publishedTime,
-    this.expireTime,
-    this.applicant,
-    this.applicationId,
-    this.reviewStatus,
-    this.reviewDescription,
-    this.tags,
-    int? randomWeight,
-  }) {
-    this.randomWeight = randomWeight ?? random.nextInt(1000);
-  }
+@freezed
+abstract class Announcement with _$Announcement {
+  const Announcement._();
 
-  factory Announcement.empty() => Announcement(
-        id: 0,
-        weight: 0,
-        description: '',
+  const factory Announcement({
+    required String title,
+    int? id,
+    int? nextId,
+    int? lastId,
+    required int weight,
+    required String imgUrl,
+    String? url,
+    required String description,
+    String? publishedTime,
+    String? expireTime,
+    String? applicant,
+    @JsonKey(name: 'application_id') String? applicationId,
+    bool? reviewStatus,
+    String? reviewDescription,
+    @JsonKey(name: 'tag') List<String>? tags,
+    @JsonKey(includeToJson: false, includeFromJson: false)
+    @Default(0)
+    int randomWeight,
+  }) = _Announcement;
+
+  factory Announcement.empty() => const Announcement(
         title: '',
+        weight: 0,
         imgUrl: '',
+        description: '',
       );
 
   factory Announcement.fromJson(Map<String, dynamic> json) =>
@@ -72,28 +94,6 @@ class Announcement {
   factory Announcement.fromRawJson(String str) => Announcement.fromJson(
         json.decode(str) as Map<String, dynamic>,
       );
-
-  String title;
-  int? id;
-  int? nextId;
-  int? lastId;
-  int weight;
-  String imgUrl;
-  String? url;
-  String description;
-  String? publishedTime;
-  String? expireTime;
-  String? applicant;
-  @JsonKey(name: 'application_id')
-  String? applicationId;
-  bool? reviewStatus;
-  String? reviewDescription;
-  @JsonKey(name: 'tag')
-  List<String>? tags;
-  @JsonKey(includeToJson: false, includeFromJson: false)
-  late int randomWeight;
-
-  Map<String, dynamic> toJson() => _$AnnouncementToJson(this);
 
   String toRawJson() => jsonEncode(toJson());
 

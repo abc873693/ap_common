@@ -426,25 +426,23 @@ class CourseScaffoldState extends State<CourseScaffold> {
     final int maxTimeCode = widget.courseData.maxTimeCodeIndex;
     final int minTimeCode = widget.courseData.minTimeCodeIndex;
     final bool hasHoliday = widget.courseData.hasHoliday;
+    final List<Widget> firstColumnChildren = <Widget>[
+      _weekBorder(''),
+    ];
+    for (int i = minTimeCode; i < maxTimeCode + 1; i++) {
+      firstColumnChildren.add(
+        TimeCodeBorder(
+          timeCode: timeCodes[i],
+          hasHoliday: hasHoliday,
+        ),
+      );
+    }
+
     final List<Column> columns = <Column>[
-      //TODO 可讀性改善
-      //ignore: prefer_const_constructors
       Column(
-        //ignore: prefer_const_literals_to_create_immutables
-        children: <Widget>[],
+        children: firstColumnChildren,
       ),
     ];
-    columns[0].children.add(
-          _weekBorder(''),
-        );
-    for (int i = minTimeCode; i < maxTimeCode + 1; i++) {
-      columns[0].children.add(
-            TimeCodeBorder(
-              timeCode: timeCodes[i],
-              hasHoliday: hasHoliday,
-            ),
-          );
-    }
     final List<List<CourseBorder>> courseBorderCollection =
         <List<CourseBorder>>[
       <CourseBorder>[],
@@ -677,6 +675,22 @@ class CourseContent extends StatefulWidget {
 }
 
 class _CourseContentState extends State<CourseContent> {
+  CourseNotifyData? _notifyData;
+
+  @override
+  void initState() {
+    _notifyData = widget.notifyData;
+    super.initState();
+  }
+
+  @override
+  void didUpdateWidget(covariant CourseContent oldWidget) {
+    if (widget.notifyData != oldWidget.notifyData) {
+      _notifyData = widget.notifyData;
+    }
+    super.didUpdateWidget(oldWidget);
+  }
+
   @override
   Widget build(BuildContext context) {
     CourseNotifyState? state;
@@ -752,7 +766,7 @@ class _CourseContentState extends State<CourseContent> {
                 },
               ),
               if (widget.enableNotifyControl &&
-                  widget.notifyData != null &&
+                  _notifyData != null &&
                   NotificationUtil.instance.isSupport)
                 IconButton(
                   icon: Icon(
@@ -761,7 +775,7 @@ class _CourseContentState extends State<CourseContent> {
                         : Icons.alarm_off,
                   ),
                   onPressed: () async {
-                    CourseNotify? courseNotify = widget.notifyData!.getByCode(
+                    CourseNotify? courseNotify = _notifyData!.getByCode(
                       widget.course.code,
                       widget.timeCode.startTime,
                       widget.weekday,
@@ -769,7 +783,7 @@ class _CourseContentState extends State<CourseContent> {
                     if (widget.autoNotifySave) {
                       if (courseNotify == null) {
                         courseNotify = CourseNotify.fromCourse(
-                          id: widget.notifyData!.lastId + 1,
+                          id: _notifyData!.lastId + 1,
                           course: widget.course,
                           weekday: widget.weekday,
                           timeCode: widget.timeCode,
@@ -780,8 +794,14 @@ class _CourseContentState extends State<CourseContent> {
                           weekday: widget.weekday,
                           androidResourceIcon: widget.androidResourceIcon,
                         );
-                        widget.notifyData!.lastId++;
-                        widget.notifyData!.data.add(courseNotify);
+                        _notifyData = _notifyData!.copyWith(
+                          lastId: _notifyData!.lastId + 1,
+                          data: <CourseNotify>[
+                            ..._notifyData!.data,
+                            courseNotify,
+                          ],
+                        );
+                        _notifyData!.save(widget.courseNotifySaveKey);
                         if (!context.mounted) return;
                         UiUtil.instance.showToast(
                           context,
@@ -793,23 +813,28 @@ class _CourseContentState extends State<CourseContent> {
                         await NotificationUtil.instance.cancelNotify(
                           id: courseNotify.id,
                         );
-                        widget.notifyData!.data
-                            .removeWhere((CourseNotify data) {
+                        final List<CourseNotify> newData = <CourseNotify>[
+                          ..._notifyData!.data,
+                        ];
+                        newData.removeWhere((CourseNotify data) {
                           return data.id == courseNotify!.id;
                         });
+                        _notifyData = _notifyData!.copyWith(
+                          data: newData,
+                        );
+                        _notifyData!.save(widget.courseNotifySaveKey);
                         if (!context.mounted) return;
                         UiUtil.instance.showToast(
                           context,
                           ApLocalizations.of(context).cancelNotifySuccess,
                         );
                       }
-                      widget.notifyData!.save();
                       setState(() {});
                       AnalyticsUtil.instance.logEvent('course_notify_cancel');
                     }
                     if (widget.onNotifyClick != null) {
                       if (!mounted) return;
-                      widget.onNotifyClick!(
+                      widget.onNotifyClick?.call(
                         courseNotify,
                         CourseNotifyState.values[(state!.index + 1) %
                             (CourseNotifyState.values.length)],
@@ -1015,62 +1040,58 @@ class CourseList extends StatelessWidget {
                       ),
                     ),
                   ),
-                  if (course.required != null ||
-                      course.units != null ||
-                      course.hours != null)
-                    Expanded(
-                      child: Column(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: <Widget>[
-                          if (course.required != null)
-                            Text(
-                              course.required!,
+                  Expanded(
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: <Widget>[
+                        if (course.required != null)
+                          Text(
+                            course.required!,
+                            style: TextStyle(
+                              color: ApTheme.of(context).blueAccent,
+                              fontSize: 18.0,
+                            ),
+                            textAlign: TextAlign.center,
+                          ),
+                        const SizedBox(height: 16.0),
+                        SelectableText.rich(
+                          TextSpan(
+                            style: TextStyle(
+                              color: ApTheme.of(context).grey,
+                              fontSize: 16.0,
+                            ),
+                            children: <TextSpan>[
+                              TextSpan(
+                                text: '${app.units}：',
+                                style: const TextStyle(
+                                  fontWeight: FontWeight.bold,
+                                ),
+                              ),
+                              TextSpan(text: course.units),
+                            ],
+                          ),
+                        ),
+                        if (course.hours != null)
+                          SelectableText.rich(
+                            TextSpan(
                               style: TextStyle(
-                                color: ApTheme.of(context).blueAccent,
-                                fontSize: 18.0,
+                                color: ApTheme.of(context).grey,
+                                fontSize: 16.0,
                               ),
-                              textAlign: TextAlign.center,
-                            ),
-                          const SizedBox(height: 16.0),
-                          if (course.units != null)
-                            SelectableText.rich(
-                              TextSpan(
-                                style: TextStyle(
-                                  color: ApTheme.of(context).grey,
-                                  fontSize: 16.0,
-                                ),
-                                children: <TextSpan>[
-                                  TextSpan(
-                                    text: '${app.units}：',
-                                    style: const TextStyle(
-                                      fontWeight: FontWeight.bold,
-                                    ),
+                              children: <TextSpan>[
+                                TextSpan(
+                                  text: '${app.courseHours}：',
+                                  style: const TextStyle(
+                                    fontWeight: FontWeight.bold,
                                   ),
-                                  TextSpan(text: course.units),
-                                ],
-                              ),
-                            ),
-                          if (course.hours != null)
-                            SelectableText.rich(
-                              TextSpan(
-                                style: TextStyle(
-                                  color: ApTheme.of(context).grey,
-                                  fontSize: 16.0,
                                 ),
-                                children: <TextSpan>[
-                                  TextSpan(
-                                    text: '${app.courseHours}：',
-                                    style: const TextStyle(
-                                      fontWeight: FontWeight.bold,
-                                    ),
-                                  ),
-                                  TextSpan(text: course.hours),
-                                ],
-                              ),
+                                TextSpan(text: course.hours),
+                              ],
                             ),
-                        ],
-                      ),
+                          ),
+                      ],
                     ),
+                  ),
                 ],
               ),
             ),

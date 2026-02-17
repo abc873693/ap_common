@@ -3,24 +3,28 @@ import 'dart:typed_data';
 
 import 'package:ap_common_core/src/config/ap_constants.dart';
 import 'package:ap_common_core/src/utilities/preference_util.dart';
-import 'package:json_annotation/json_annotation.dart';
+import 'package:freezed_annotation/freezed_annotation.dart';
 
+part 'user_info.freezed.dart';
 part 'user_info.g.dart';
 
-@JsonSerializable()
-class UserInfo {
-  UserInfo({
-    this.educationSystem,
-    required this.department,
-    this.className,
-    required this.id,
-    required this.name,
-    this.pictureUrl,
-    this.pictureBytes,
-    this.email,
-  });
+@freezed
+abstract class UserInfo with _$UserInfo {
+  const UserInfo._();
 
-  factory UserInfo.empty() => UserInfo(
+  const factory UserInfo({
+    String? educationSystem,
+    required String? department,
+    String? className,
+    required String id,
+    required String? name,
+    String? pictureUrl,
+    String? email,
+    @JsonKey(includeToJson: false, includeFromJson: false)
+    Uint8List? pictureBytes,
+  }) = _UserInfo;
+
+  factory UserInfo.empty() => const UserInfo(
         id: '',
         department: '',
         name: '',
@@ -46,19 +50,6 @@ class UserInfo {
     }
   }
 
-  final String? educationSystem;
-  final String? department;
-  final String? className;
-  final String id;
-  final String? name;
-  final String? pictureUrl;
-  final String? email;
-
-  @JsonKey(includeToJson: false, includeFromJson: false)
-  Uint8List? pictureBytes;
-
-  Map<String, dynamic> toJson() => _$UserInfoToJson(this);
-
   String toRawJson() => jsonEncode(toJson());
 
   void save(String tag) {
@@ -66,28 +57,6 @@ class UserInfo {
       '${ApConstants.packageName}'
       '.user_info_$tag',
       toRawJson(),
-    );
-  }
-
-  UserInfo copyWith({
-    String? id,
-    String? educationSystem,
-    String? department,
-    String? className,
-    String? name,
-    String? pictureUrl,
-    String? email,
-    Uint8List? pictureBytes,
-  }) {
-    return UserInfo(
-      id: id ?? this.id,
-      educationSystem: educationSystem ?? this.educationSystem,
-      department: department ?? this.department,
-      className: className ?? this.className,
-      name: name ?? this.name,
-      pictureUrl: pictureUrl ?? this.pictureUrl,
-      email: email ?? this.email,
-      pictureBytes: pictureBytes ?? this.pictureBytes,
     );
   }
 }

@@ -3,18 +3,23 @@ import 'dart:developer';
 
 import 'package:ap_common_core/src/config/ap_constants.dart';
 import 'package:ap_common_core/src/models/course_data.dart';
-import 'package:ap_common_core/src/utilities/preference_util.dart';
-import 'package:json_annotation/json_annotation.dart';
 
+import 'package:ap_common_core/src/utilities/preference_util.dart';
+import 'package:freezed_annotation/freezed_annotation.dart';
+
+part 'course_notify_data.freezed.dart';
 part 'course_notify_data.g.dart';
 
-@JsonSerializable()
-class CourseNotifyData {
-  CourseNotifyData({
-    this.version = 2,
-    this.lastId = 1,
-    this.data = const <CourseNotify>[],
-  });
+@freezed
+abstract class CourseNotifyData with _$CourseNotifyData {
+  const CourseNotifyData._();
+
+  const factory CourseNotifyData({
+    @Default(2) int version,
+    @Default(1) int lastId,
+    @Default(<CourseNotify>[]) List<CourseNotify> data,
+    @JsonKey(includeToJson: false, includeFromJson: false) String? tag,
+  }) = _CourseNotifyData;
 
   factory CourseNotifyData.fromJson(Map<String, dynamic> json) =>
       _$CourseNotifyDataFromJson(json);
@@ -30,9 +35,9 @@ class CourseNotifyData {
       '',
     );
     if (rawString == '') {
-      return CourseNotifyData(data: <CourseNotify>[])..tag = tag;
+      return CourseNotifyData(data: <CourseNotify>[], tag: tag);
     } else {
-      return CourseNotifyData.fromRawJson(rawString)..tag = tag;
+      return CourseNotifyData.fromRawJson(rawString).copyWith(tag: tag);
     }
   }
 
@@ -48,23 +53,15 @@ class CourseNotifyData {
     );
     log('loadCurrent $rawString', name: 'ap_common');
     if (rawString == '') {
-      return CourseNotifyData(data: <CourseNotify>[])..tag = semester;
+      return CourseNotifyData(data: <CourseNotify>[], tag: semester);
     } else {
-      return CourseNotifyData.fromRawJson(rawString)..tag = semester;
+      return CourseNotifyData.fromRawJson(rawString).copyWith(tag: semester);
     }
   }
 
   // ignore: constant_identifier_names
   static const int VERSION = 2;
   static const int initialId = 1;
-
-  int version;
-  int lastId;
-  List<CourseNotify> data;
-
-  String? tag;
-
-  Map<String, dynamic> toJson() => _$CourseNotifyDataToJson(this);
 
   String toRawJson() => jsonEncode(toJson());
 
@@ -79,10 +76,11 @@ class CourseNotifyData {
     return null;
   }
 
-  void save() {
+  void save([String? tag]) {
+    final String? finalTag = tag ?? this.tag;
     PreferenceUtil.instance.setString(
       '${ApConstants.packageName}'
-      '.course_notify_data_$tag',
+      '.course_notify_data_$finalTag',
       toRawJson(),
     );
   }
@@ -112,16 +110,22 @@ class CourseNotifyData {
   // }
 }
 
-@JsonSerializable()
-class CourseNotify {
-  CourseNotify({
-    required this.id,
-    required this.weekday,
-    required this.startTime,
-    this.title,
-    this.location,
-    this.code,
-  });
+@freezed
+abstract class CourseNotify with _$CourseNotify {
+  const CourseNotify._();
+
+  const factory CourseNotify({
+    required int id,
+
+    ///The day of the week [DateTime.monday]..[DateTime.sunday].
+    ///In accordance with ISO 8601 a week starts with Monday,
+    /// which has the value 1.
+    required int weekday,
+    required String startTime,
+    String? title,
+    String? location,
+    String? code,
+  }) = _CourseNotify;
 
   factory CourseNotify.fromCourse({
     required int id,
@@ -146,21 +150,7 @@ class CourseNotify {
         json.decode(str) as Map<String, dynamic>,
       );
 
-  int id;
-  String? title;
-  String? location;
-  String? code;
-
-  ///The day of the week [DateTime.monday]..[DateTime.sunday].
-  ///In accordance with ISO 8601 a week starts with Monday,
-  /// which has the value 1.
-  int weekday;
-
-  String startTime;
-
   int get weekdayIndex => weekday - 1;
-
-  Map<String, dynamic> toJson() => _$CourseNotifyToJson(this);
 
   String toRawJson() => jsonEncode(toJson());
 }

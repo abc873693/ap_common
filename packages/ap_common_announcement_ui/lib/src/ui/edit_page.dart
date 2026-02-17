@@ -638,16 +638,16 @@ class _AnnouncementEditPageState extends State<AnnouncementEditPage> {
     bool? addBlackList,
   }) async {
     if (_formKey.currentState!.validate()) {
-      announcements.title = _title.text;
-      announcements.description = _description.text;
-      announcements.imgUrl = _imgUrl.text;
-      announcements.url = _url.text;
-      announcements.weight =
-          _weight.text.isNotEmpty ? (int.tryParse(_weight.text) ?? 0) : 0;
-      announcements.expireTime =
-          (expireTime == null) ? null : expireTime!.parseToString();
-      announcements.reviewDescription = _reviewDescription.text;
-      announcements.tags = tags;
+      announcements = announcements.copyWith(
+        title: _title.text,
+        description: _description.text,
+        imgUrl: _imgUrl.text,
+        url: _url.text,
+        weight: _weight.text.isNotEmpty ? (int.tryParse(_weight.text) ?? 0) : 0,
+        expireTime: (expireTime == null) ? null : expireTime!.parseToString(),
+        reviewDescription: _reviewDescription.text,
+        tags: tags,
+      );
       final GeneralCallback<Response<dynamic>> callback =
           GeneralCallback<Response<dynamic>>.simple(
         context,

@@ -56,7 +56,7 @@ class CoursePageState extends State<CoursePage> {
       enableCaptureCourseTable: true,
       semesterData: semesterData,
       onSelect: (int index) {
-        semesterData!.currentIndex = index;
+        semesterData = semesterData!.copyWith(currentIndex: index);
         _getCourseTables();
       },
       onRefresh: () async {
@@ -72,7 +72,7 @@ class CoursePageState extends State<CoursePage> {
     for (int i = 0; i < semesterData!.data.length; i++) {
       final Semester option = semesterData!.data[i];
       if (option.text == semesterData!.defaultSemester.text) {
-        semesterData!.currentIndex = i;
+        semesterData = semesterData!.copyWith(currentIndex: i);
       }
       i++;
     }
@@ -81,21 +81,30 @@ class CoursePageState extends State<CoursePage> {
 
   Future<void> _getCourseTables() async {
     final String rawString = await rootBundle.loadString(FileAssets.courses);
-    courseData = CourseData.fromRawJson(rawString);
-    PreferenceUtil.instance.setString(
-      ApConstants.currentSemesterCode,
-      ApConstants.semesterLatest,
-    );
-    courseData.save(courseNotifyCacheKey);
-    if (mounted) {
-      setState(() {
-        if (courseData.courses.isEmpty) {
-          state = CourseState.empty;
-        } else {
-          state = CourseState.finish;
-          notifyData = CourseNotifyData.load(courseNotifyCacheKey);
-        }
-      });
+    try {
+      courseData = CourseData.fromRawJson(rawString);
+      PreferenceUtil.instance.setString(
+        ApConstants.currentSemesterCode,
+        ApConstants.semesterLatest,
+      );
+      courseData.save(courseNotifyCacheKey);
+      if (mounted) {
+        setState(() {
+          if (courseData.courses.isEmpty) {
+            state = CourseState.empty;
+          } else {
+            state = CourseState.finish;
+            notifyData = CourseNotifyData.load(courseNotifyCacheKey);
+          }
+        });
+      }
+    } catch (e) {
+      if (mounted) {
+        setState(() {
+          state = CourseState.error;
+        });
+      }
+      rethrow;
     }
   }
 }

@@ -251,7 +251,7 @@ class AnnouncementHelper {
     GeneralCallback<List<Announcement>>? callback,
     String? locale,
     List<String>? tags,
-    bool sortAndRandom = true,
+    bool sorted = true,
   }) async {
     try {
       final Response<Map<String, dynamic>> response = await dio.post(
@@ -264,7 +264,7 @@ class AnnouncementHelper {
       AnnouncementData data = AnnouncementData(data: <Announcement>[]);
       if (response.statusCode != 204) {
         data = AnnouncementData.fromJson(response.data!);
-        if (sortAndRandom) data.sortAndRandom();
+        if (sorted) data = data.copyWith(data: data.sortedData);
       }
       if (callback != null) {
         callback.onSuccess(data.data);
@@ -312,16 +312,17 @@ class AnnouncementHelper {
     String? languageCode,
   }) async {
     try {
-      data.tags ??= <String>[];
-      data.tags!.addAll(
+      final List<String> currentTags = (data.tags ?? <String>[]).toList();
+      currentTags.addAll(
         <String>[
           languageCode ?? 'zh',
           if (organization != null) organization!,
         ],
       );
+      final Announcement dataToSend = data.copyWith(tags: currentTags);
       final Response<dynamic> response = await dio.post(
         '/announcements/add',
-        data: data.toUpdateJson(),
+        data: dataToSend.toUpdateJson(),
       );
       if (callback != null) {
         callback.onSuccess(response);
@@ -442,16 +443,17 @@ class AnnouncementHelper {
     String? languageCode,
   }) async {
     try {
-      data.tags ??= <String>[];
-      data.tags?.addAll(
+      final List<String> currentTags = (data.tags ?? <String>[]).toList();
+      currentTags.addAll(
         <String>[
           languageCode ?? 'zh',
           if (organization != null) organization!,
         ],
       );
+      final Announcement dataToSend = data.copyWith(tags: currentTags);
       final Response<dynamic> response = await dio.post(
         '/application',
-        data: data.toUpdateJson(),
+        data: dataToSend.toUpdateJson(),
       );
       if (callback != null) {
         callback.onSuccess(response);
