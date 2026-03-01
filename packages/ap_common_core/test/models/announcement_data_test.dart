@@ -27,7 +27,7 @@ void main() {
     });
 
     test('toJson should return a valid JSON map', () {
-      final announcement = Announcement(
+      const announcement = Announcement(
         title: 'Test Title',
         id: 1,
         weight: 10,
@@ -46,42 +46,36 @@ void main() {
       expect(json['data'][0]['description'], 'Test Description');
     });
 
-    test(
-        'sortAndRandom should sort announcements by weight and then randomWeight',
+    test('sortedData should return announcements sorted by weight descending',
         () {
-      final a1 = Announcement(
+      const a1 = Announcement(
         title: 'A1',
         id: 1,
         weight: 10,
         imgUrl: '',
         description: '',
-        randomWeight: 100,
       );
-      final a2 = Announcement(
+      const a2 = Announcement(
         title: 'A2',
         id: 2,
         weight: 20,
         imgUrl: '',
         description: '',
-        randomWeight: 50,
       );
-      final a3 = Announcement(
+      const a3 = Announcement(
         title: 'A3',
         id: 3,
-        weight: 10,
+        weight: 5,
         imgUrl: '',
         description: '',
-        randomWeight: 200,
       );
 
       final announcementData = AnnouncementData(data: [a1, a2, a3]);
-      announcementData.sortAndRandom();
+      final sorted = announcementData.sortedData;
 
-      expect(announcementData.data[0].title, 'A2'); // Highest weight
-      expect(announcementData.data[1].title,
-          'A3'); // Same weight, higher randomWeight
-      expect(announcementData.data[2].title,
-          'A1'); // Same weight, lower randomWeight
+      expect(sorted[0].title, 'A2'); // Highest weight
+      expect(sorted[1].title, 'A1');
+      expect(sorted[2].title, 'A3'); // Lowest weight
     });
   });
 
@@ -90,14 +84,13 @@ void main() {
       final announcement = Announcement.empty();
 
       expect(announcement.title, '');
-      expect(announcement.id, 0);
       expect(announcement.weight, 0);
       expect(announcement.imgUrl, '');
       expect(announcement.description, '');
     });
 
     test('toUpdateJson should return a map with update fields', () {
-      final announcement = Announcement(
+      const announcement = Announcement(
         title: 'Test Title',
         id: 1,
         weight: 10,

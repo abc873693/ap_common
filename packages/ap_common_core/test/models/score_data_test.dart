@@ -10,7 +10,14 @@ void main() {
             'courseNumber': 'CS101',
             'title': 'Intro to CS',
             'units': '3.0',
+            'hours': null,
+            'required': null,
+            'at': null,
+            'middleScore': null,
+            'generalScore': null,
+            'finalScore': null,
             'semesterScore': '90',
+            'remark': null,
           }
         ],
         'detail': {
@@ -33,9 +40,16 @@ void main() {
         courseNumber: 'CS101',
         title: 'Intro to CS',
         units: '3.0',
+        hours: null,
+        required: null,
+        at: null,
+        middleScore: null,
+        generalScore: null,
+        finalScore: null,
         semesterScore: '90',
+        remark: null,
       );
-      final data = ScoreData(scores: [score], detail: Detail());
+      final data = ScoreData(scores: [score], detail: const Detail());
 
       final json = data.toJson();
 
@@ -47,19 +61,21 @@ void main() {
       final data = ScoreData.empty();
 
       expect(data.scores, isEmpty);
-      expect(data.detail.average, isNull);
+      expect(data.detail.average, 0.0);
     });
   });
 
   group('Detail', () {
-    test('isCreditEmpty should return true when credits are null', () {
-      final detail = Detail();
-      expect(detail.isCreditEmpty, isTrue);
+    test('Detail() should have all nullable fields as null', () {
+      const detail = Detail();
+      expect(detail.creditTaken, isNull);
+      expect(detail.average, isNull);
     });
 
-    test('isCreditEmpty should return false when creditTaken is set', () {
-      final detail = Detail(creditTaken: 15.0);
-      expect(detail.isCreditEmpty, isFalse);
+    test('Detail.empty() should have default zero values', () {
+      final detail = Detail.empty();
+      expect(detail.creditTaken, 0.0);
+      expect(detail.average, 0.0);
     });
   });
 }
