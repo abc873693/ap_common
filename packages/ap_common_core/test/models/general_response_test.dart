@@ -4,21 +4,22 @@ import 'package:test/test.dart';
 void main() {
   group('GeneralResponse', () {
     test('fromJson should return a valid GeneralResponse object', () {
-      final json = {
+      final Map<String, Object> json = <String, Object>{
         'code': 200,
         'description': 'Success',
       };
 
-      final data = GeneralResponse.fromJson(json);
+      final GeneralResponse data = GeneralResponse.fromJson(json);
 
       expect(data.statusCode, 200);
       expect(data.message, 'Success');
     });
 
     test('toJson should return a valid JSON map', () {
-      final data = GeneralResponse(statusCode: 200, message: 'Success');
+      final GeneralResponse data =
+          GeneralResponse(statusCode: 200, message: 'Success');
 
-      final json = data.toJson();
+      final Map<String, dynamic> json = data.toJson();
 
       expect(json['code'], 200);
       expect(json['description'], 'Success');

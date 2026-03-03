@@ -1,6 +1,8 @@
 include: package:lint/strict.yaml
 
 analyzer:
+  errors:
+    invalid_annotation_target: ignore
   exclude:
     # l10n generated code
     - packages/ap_common_flutter_core/lib/src/l10n/intl/*.dart

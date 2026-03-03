@@ -95,7 +95,8 @@ abstract class CourseNotifyData with _$CourseNotifyData {
   //       if (courseDetail.code == courseNotify.code) {
   //         courseNotify.title = sprintf(ap.courseNotifyContent, <String?>[
   //           courseNotify.title,
-  //           if (courseNotify.location == null || courseNotify.location!.isEmpty)
+  //           if (courseNotify.location == null ||
+  //               courseNotify.location!.isEmpty)
   //             ap.courseNotifyUnknown
   //           else
   //             courseNotify.location,

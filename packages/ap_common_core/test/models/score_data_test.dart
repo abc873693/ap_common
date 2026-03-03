@@ -4,9 +4,9 @@ import 'package:test/test.dart';
 void main() {
   group('ScoreData', () {
     test('fromJson should return a valid ScoreData object', () {
-      final json = {
-        'scores': [
-          {
+      final Map<String, Object> json = <String, Object>{
+        'scores': <Map<String, String?>>[
+          <String, String?>{
             'courseNumber': 'CS101',
             'title': 'Intro to CS',
             'units': '3.0',
@@ -20,7 +20,7 @@ void main() {
             'remark': null,
           }
         ],
-        'detail': {
+        'detail': <String, Object>{
           'average': 85.5,
           'conduct': 90.0,
           'classRank': '5/50',
@@ -28,7 +28,7 @@ void main() {
         },
       };
 
-      final data = ScoreData.fromJson(json);
+      final ScoreData data = ScoreData.fromJson(json);
 
       expect(data.scores.length, 1);
       expect(data.scores[0].title, 'Intro to CS');
@@ -36,7 +36,7 @@ void main() {
     });
 
     test('toJson should return a valid JSON map', () {
-      final score = Score(
+      final Score score = Score(
         courseNumber: 'CS101',
         title: 'Intro to CS',
         units: '3.0',
@@ -49,16 +49,17 @@ void main() {
         semesterScore: '90',
         remark: null,
       );
-      final data = ScoreData(scores: [score], detail: const Detail());
+      final ScoreData data =
+          ScoreData(scores: <Score>[score], detail: const Detail());
 
-      final json = data.toJson();
+      final Map<String, dynamic> json = data.toJson();
 
-      expect(json['scores'], isA<List>());
+      expect(json['scores'], isA<List<dynamic>>());
       expect(json['scores'][0]['title'], 'Intro to CS');
     });
 
     test('ScoreData.empty() should return empty ScoreData', () {
-      final data = ScoreData.empty();
+      final ScoreData data = ScoreData.empty();
 
       expect(data.scores, isEmpty);
       expect(data.detail.average, 0.0);
@@ -67,13 +68,13 @@ void main() {
 
   group('Detail', () {
     test('Detail() should have all nullable fields as null', () {
-      const detail = Detail();
+      const Detail detail = Detail();
       expect(detail.creditTaken, isNull);
       expect(detail.average, isNull);
     });
 
     test('Detail.empty() should have default zero values', () {
-      final detail = Detail.empty();
+      final Detail detail = Detail.empty();
       expect(detail.creditTaken, 0.0);
       expect(detail.average, 0.0);
     });

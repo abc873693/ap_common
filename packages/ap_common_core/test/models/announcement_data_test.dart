@@ -4,9 +4,10 @@ import 'package:test/test.dart';
 void main() {
   group('AnnouncementData', () {
     test('fromJson should return a valid AnnouncementData object', () {
-      final json = {
-        'data': [
-          {
+      final Map<String, List<Map<String, Object>>> json =
+          <String, List<Map<String, Object>>>{
+        'data': <Map<String, Object>>[
+          <String, Object>{
             'title': 'Test Title',
             'id': 1,
             'weight': 10,
@@ -16,7 +17,7 @@ void main() {
         ],
       };
 
-      final announcementData = AnnouncementData.fromJson(json);
+      final AnnouncementData announcementData = AnnouncementData.fromJson(json);
 
       expect(announcementData.data.length, 1);
       expect(announcementData.data[0].title, 'Test Title');
@@ -27,18 +28,19 @@ void main() {
     });
 
     test('toJson should return a valid JSON map', () {
-      const announcement = Announcement(
+      const Announcement announcement = Announcement(
         title: 'Test Title',
         id: 1,
         weight: 10,
         imgUrl: 'https://example.com/image.png',
         description: 'Test Description',
       );
-      final announcementData = AnnouncementData(data: [announcement]);
+      final AnnouncementData announcementData =
+          AnnouncementData(data: <Announcement>[announcement]);
 
-      final json = announcementData.toJson();
+      final Map<String, dynamic> json = announcementData.toJson();
 
-      expect(json['data'], isA<List>());
+      expect(json['data'], isA<List<dynamic>>());
       expect(json['data'][0]['title'], 'Test Title');
       expect(json['data'][0]['id'], 1);
       expect(json['data'][0]['weight'], 10);
@@ -48,21 +50,21 @@ void main() {
 
     test('sortedData should return announcements sorted by weight descending',
         () {
-      const a1 = Announcement(
+      const Announcement a1 = Announcement(
         title: 'A1',
         id: 1,
         weight: 10,
         imgUrl: '',
         description: '',
       );
-      const a2 = Announcement(
+      const Announcement a2 = Announcement(
         title: 'A2',
         id: 2,
         weight: 20,
         imgUrl: '',
         description: '',
       );
-      const a3 = Announcement(
+      const Announcement a3 = Announcement(
         title: 'A3',
         id: 3,
         weight: 5,
@@ -70,8 +72,9 @@ void main() {
         description: '',
       );
 
-      final announcementData = AnnouncementData(data: [a1, a2, a3]);
-      final sorted = announcementData.sortedData;
+      final AnnouncementData announcementData =
+          AnnouncementData(data: <Announcement>[a1, a2, a3]);
+      final List<Announcement> sorted = announcementData.sortedData;
 
       expect(sorted[0].title, 'A2'); // Highest weight
       expect(sorted[1].title, 'A1');
@@ -81,7 +84,7 @@ void main() {
 
   group('Announcement', () {
     test('empty factory should return an empty Announcement', () {
-      final announcement = Announcement.empty();
+      final Announcement announcement = Announcement.empty();
 
       expect(announcement.title, '');
       expect(announcement.weight, 0);
@@ -90,21 +93,21 @@ void main() {
     });
 
     test('toUpdateJson should return a map with update fields', () {
-      const announcement = Announcement(
+      const Announcement announcement = Announcement(
         title: 'Test Title',
         id: 1,
         weight: 10,
         imgUrl: 'https://example.com/image.png',
         description: 'Test Description',
-        tags: ['tag1', 'tag2'],
+        tags: <String>['tag1', 'tag2'],
       );
 
-      final updateJson = announcement.toUpdateJson();
+      final Map<String, dynamic> updateJson = announcement.toUpdateJson();
 
       expect(updateJson['title'], 'Test Title');
       expect(updateJson['weight'], 10);
       expect(updateJson['imgUrl'], 'https://example.com/image.png');
-      expect(updateJson['tag'], ['tag1', 'tag2']);
+      expect(updateJson['tag'], <String>['tag1', 'tag2']);
     });
   });
 }

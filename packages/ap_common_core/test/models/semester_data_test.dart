@@ -4,22 +4,22 @@ import 'package:test/test.dart';
 void main() {
   group('SemesterData', () {
     test('fromJson should return a valid SemesterData object', () {
-      final json = {
-        'data': [
-          {
+      final Map<String, Object> json = <String, Object>{
+        'data': <Map<String, String>>[
+          <String, String>{
             'year': '112',
             'value': '1',
             'text': '112-1',
           }
         ],
-        'default': {
+        'default': <String, String>{
           'year': '112',
           'value': '1',
           'text': '112-1',
         },
       };
 
-      final data = SemesterData.fromJson(json);
+      final SemesterData data = SemesterData.fromJson(json);
 
       expect(data.data.length, 1);
       expect(data.data[0].year, '112');
@@ -27,15 +27,16 @@ void main() {
     });
 
     test('toJson should return a valid JSON map', () {
-      final semester = Semester(year: '112', value: '1', text: '112-1');
-      final data = SemesterData(
-        data: [semester],
+      final Semester semester =
+          Semester(year: '112', value: '1', text: '112-1');
+      final SemesterData data = SemesterData(
+        data: <Semester>[semester],
         defaultSemester: Semester(year: '112', value: '1', text: '112-1'),
       );
 
-      final json = data.toJson();
+      final Map<String, dynamic> json = data.toJson();
 
-      expect(json['data'], isA<List>());
+      expect(json['data'], isA<List<dynamic>>());
       expect(json['data'][0]['year'], '112');
     });
   });
