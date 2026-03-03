@@ -1,6 +1,8 @@
 include: package:lint/strict.yaml
 
 analyzer:
+  errors:
+    invalid_annotation_target: ignore
   exclude:
     # l10n generated code
     - packages/ap_common_flutter_core/lib/src/l10n/intl/*.dart
@@ -46,6 +48,6 @@ linter:
     always_specify_types: true
 
     # Back to the 80s
-    lines_longer_than_80_chars: false
+    lines_longer_than_80_chars: true
 
     sort_pub_dependencies: false

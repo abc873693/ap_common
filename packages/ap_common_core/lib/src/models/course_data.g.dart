@@ -6,7 +6,7 @@ part of 'course_data.dart';
 // JsonSerializableGenerator
 // **************************************************************************
 
-CourseData _$CourseDataFromJson(Map<String, dynamic> json) => CourseData(
+_CourseData _$CourseDataFromJson(Map<String, dynamic> json) => _CourseData(
       courses: (json['courses'] as List<dynamic>)
           .map((e) => Course.fromJson(e as Map<String, dynamic>))
           .toList(),
@@ -15,13 +15,13 @@ CourseData _$CourseDataFromJson(Map<String, dynamic> json) => CourseData(
           .toList(),
     );
 
-Map<String, dynamic> _$CourseDataToJson(CourseData instance) =>
+Map<String, dynamic> _$CourseDataToJson(_CourseData instance) =>
     <String, dynamic>{
       'courses': instance.courses.map((e) => e.toJson()).toList(),
       'timeCodes': instance.timeCodes.map((e) => e.toJson()).toList(),
     };
 
-Course _$CourseFromJson(Map<String, dynamic> json) => Course(
+_Course _$CourseFromJson(Map<String, dynamic> json) => _Course(
       code: json['code'] as String,
       title: json['title'] as String,
       className: json['className'] as String?,
@@ -41,7 +41,7 @@ Course _$CourseFromJson(Map<String, dynamic> json) => Course(
           .toList(),
     );
 
-Map<String, dynamic> _$CourseToJson(Course instance) => <String, dynamic>{
+Map<String, dynamic> _$CourseToJson(_Course instance) => <String, dynamic>{
       'code': instance.code,
       'title': instance.title,
       'className': instance.className,
@@ -55,34 +55,34 @@ Map<String, dynamic> _$CourseToJson(Course instance) => <String, dynamic>{
       'instructors': instance.instructors,
     };
 
-Location _$LocationFromJson(Map<String, dynamic> json) => Location(
+_Location _$LocationFromJson(Map<String, dynamic> json) => _Location(
       room: json['room'] as String,
       building: json['building'] as String,
     );
 
-Map<String, dynamic> _$LocationToJson(Location instance) => <String, dynamic>{
+Map<String, dynamic> _$LocationToJson(_Location instance) => <String, dynamic>{
       'room': instance.room,
       'building': instance.building,
     };
 
-SectionTime _$SectionTimeFromJson(Map<String, dynamic> json) => SectionTime(
-      weekday: json['weekday'] as int,
-      index: json['index'] as int,
+_SectionTime _$SectionTimeFromJson(Map<String, dynamic> json) => _SectionTime(
+      weekday: (json['weekday'] as num).toInt(),
+      index: (json['index'] as num).toInt(),
     );
 
-Map<String, dynamic> _$SectionTimeToJson(SectionTime instance) =>
+Map<String, dynamic> _$SectionTimeToJson(_SectionTime instance) =>
     <String, dynamic>{
       'weekday': instance.weekday,
       'index': instance.index,
     };
 
-TimeCode _$TimeCodeFromJson(Map<String, dynamic> json) => TimeCode(
+_TimeCode _$TimeCodeFromJson(Map<String, dynamic> json) => _TimeCode(
       title: json['title'] as String,
       startTime: json['startTime'] as String,
       endTime: json['endTime'] as String,
     );
 
-Map<String, dynamic> _$TimeCodeToJson(TimeCode instance) => <String, dynamic>{
+Map<String, dynamic> _$TimeCodeToJson(_TimeCode instance) => <String, dynamic>{
       'title': instance.title,
       'startTime': instance.startTime,
       'endTime': instance.endTime,

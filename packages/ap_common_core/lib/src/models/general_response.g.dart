@@ -6,13 +6,13 @@ part of 'general_response.dart';
 // JsonSerializableGenerator
 // **************************************************************************
 
-GeneralResponse _$GeneralResponseFromJson(Map<String, dynamic> json) =>
-    GeneralResponse(
-      statusCode: json['code'] as int,
+_GeneralResponse _$GeneralResponseFromJson(Map<String, dynamic> json) =>
+    _GeneralResponse(
+      statusCode: (json['code'] as num).toInt(),
       message: json['description'] as String,
     );
 
-Map<String, dynamic> _$GeneralResponseToJson(GeneralResponse instance) =>
+Map<String, dynamic> _$GeneralResponseToJson(_GeneralResponse instance) =>
     <String, dynamic>{
       'code': instance.statusCode,
       'description': instance.message,

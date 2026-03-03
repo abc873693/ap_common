@@ -2,17 +2,20 @@ import 'dart:convert';
 
 import 'package:ap_common_core/src/config/ap_constants.dart';
 import 'package:ap_common_core/src/utilities/preference_util.dart';
-import 'package:json_annotation/json_annotation.dart';
+import 'package:freezed_annotation/freezed_annotation.dart';
 
+part 'semester_data.freezed.dart';
 part 'semester_data.g.dart';
 
-@JsonSerializable()
-class SemesterData {
-  SemesterData({
-    required this.data,
-    required this.defaultSemester,
-    this.currentIndex = 0,
-  });
+@freezed
+abstract class SemesterData with _$SemesterData {
+  const SemesterData._();
+
+  const factory SemesterData({
+    required List<Semester> data,
+    @JsonKey(name: 'default') required Semester defaultSemester,
+    @Default(0) int currentIndex,
+  }) = _SemesterData;
 
   factory SemesterData.fromJson(Map<String, dynamic> json) =>
       _$SemesterDataFromJson(json);
@@ -34,11 +37,6 @@ class SemesterData {
     }
   }
 
-  List<Semester> data;
-  @JsonKey(name: 'default')
-  Semester defaultSemester;
-  int currentIndex = 0;
-
   int get defaultIndex {
     for (int i = 0; i < data.length; i++) {
       if (defaultSemester.text == data[i].text) return i;
@@ -47,7 +45,11 @@ class SemesterData {
   }
 
   Semester get currentSemester {
-    return data[currentIndex];
+    try {
+      return data[currentIndex];
+    } catch (e) {
+      return defaultSemester;
+    }
   }
 
   List<String> get semesters {
@@ -57,8 +59,6 @@ class SemesterData {
     }
     return texts;
   }
-
-  Map<String, dynamic> toJson() => _$SemesterDataToJson(this);
 
   String toRawJson() => jsonEncode(toJson());
 
@@ -71,13 +71,15 @@ class SemesterData {
   }
 }
 
-@JsonSerializable()
-class Semester {
-  Semester({
-    required this.year,
-    required this.value,
-    required this.text,
-  });
+@freezed
+abstract class Semester with _$Semester {
+  const Semester._();
+
+  const factory Semester({
+    required String year,
+    required String value,
+    required String text,
+  }) = _Semester;
 
   factory Semester.fromJson(Map<String, dynamic> json) =>
       _$SemesterFromJson(json);
@@ -86,17 +88,7 @@ class Semester {
         json.decode(str) as Map<String, dynamic>,
       );
 
-  final String year;
-  final String value;
-
-  //TODO update to immutable
-  String text;
-
   String get code => '$year$value';
-
-//  String get cacheSaveTag => '${Helper.username}_$code';
-
-  Map<String, dynamic> toJson() => _$SemesterToJson(this);
 
   String toRawJson() => jsonEncode(toJson());
 }

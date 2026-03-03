@@ -4,15 +4,18 @@
 
 import 'dart:convert';
 
-import 'package:json_annotation/json_annotation.dart';
+import 'package:freezed_annotation/freezed_annotation.dart';
 
+part 'notification_data.freezed.dart';
 part 'notification_data.g.dart';
 
-@JsonSerializable()
-class NotificationsData {
-  NotificationsData({
-    required this.data,
-  });
+@freezed
+abstract class NotificationsData with _$NotificationsData {
+  const NotificationsData._();
+
+  const factory NotificationsData({
+    required Data data,
+  }) = _NotificationsData;
 
   factory NotificationsData.fromJson(Map<String, dynamic> json) =>
       _$NotificationsDataFromJson(json);
@@ -28,19 +31,17 @@ class NotificationsData {
     );
   }
 
-  final Data data;
-
-  Map<String, dynamic> toJson() => _$NotificationsDataToJson(this);
-
   String toRawJson() => jsonEncode(toJson());
 }
 
-@JsonSerializable()
-class Data {
-  Data({
-    this.page,
-    required this.notifications,
-  });
+@freezed
+abstract class Data with _$Data {
+  const Data._();
+
+  const factory Data({
+    int? page,
+    @JsonKey(name: 'notification') required List<Notifications> notifications,
+  }) = _Data;
 
   factory Data.fromJson(Map<String, dynamic> json) => _$DataFromJson(json);
 
@@ -48,21 +49,17 @@ class Data {
         json.decode(str) as Map<String, dynamic>,
       );
 
-  int? page;
-  @JsonKey(name: 'notification')
-  List<Notifications> notifications;
-
-  Map<String, dynamic> toJson() => _$DataToJson(this);
-
   String toRawJson() => jsonEncode(toJson());
 }
 
-@JsonSerializable()
-class Notifications {
-  Notifications({
-    required this.link,
-    required this.info,
-  });
+@freezed
+abstract class Notifications with _$Notifications {
+  const Notifications._();
+
+  const factory Notifications({
+    required String link,
+    required Info info,
+  }) = _Notifications;
 
   factory Notifications.fromJson(Map<String, dynamic> json) =>
       _$NotificationsFromJson(json);
@@ -71,33 +68,24 @@ class Notifications {
         json.decode(str) as Map<String, dynamic>,
       );
 
-  String link;
-  Info info;
-
-  Map<String, dynamic> toJson() => _$NotificationsToJson(this);
-
   String toRawJson() => jsonEncode(toJson());
 }
 
-@JsonSerializable()
-class Info {
-  Info({
-    required this.title,
-    required this.department,
-    required this.date,
-  });
+@freezed
+abstract class Info with _$Info {
+  const Info._();
+
+  const factory Info({
+    required String title,
+    required String department,
+    required String date,
+  }) = _Info;
 
   factory Info.fromJson(Map<String, dynamic> json) => _$InfoFromJson(json);
 
   factory Info.fromRawJson(String str) => Info.fromJson(
         json.decode(str) as Map<String, dynamic>,
       );
-
-  String title;
-  String department;
-  String date;
-
-  Map<String, dynamic> toJson() => _$InfoToJson(this);
 
   String toRawJson() => jsonEncode(toJson());
 }

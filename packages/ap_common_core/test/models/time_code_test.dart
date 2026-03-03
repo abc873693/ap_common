@@ -5,9 +5,10 @@ import 'package:test/test.dart';
 void main() {
   group('TimeCodeConfig', () {
     test('fromJson should return a valid TimeCodeConfig object', () {
-      final json = {
-        'timeCodes': [
-          {
+      final Map<String, List<Map<String, String>>> json =
+          <String, List<Map<String, String>>>{
+        'timeCodes': <Map<String, String>>[
+          <String, String>{
             'title': '1',
             'startTime': '08:00',
             'endTime': '08:50',
@@ -15,39 +16,39 @@ void main() {
         ],
       };
 
-      final data = TimeCodeConfig.fromJson(json);
+      final TimeCodeConfig data = TimeCodeConfig.fromJson(json);
 
       expect(data.timeCodes.length, 1);
       expect(data.timeCodes[0].title, '1');
     });
 
     test('toJson should return a valid JSON map', () {
-      final config = TimeCodeConfig(
-        timeCodes: [
+      final TimeCodeConfig config = TimeCodeConfig(
+        timeCodes: <TimeCode>[
           TimeCode(title: '1', startTime: '08:00', endTime: '08:50'),
         ],
       );
 
-      final json = config.toJson();
+      final Map<String, dynamic> json = config.toJson();
 
-      expect(json['timeCodes'], isA<List>());
+      expect(json['timeCodes'], isA<List<dynamic>>());
       expect(json['timeCodes'][0]['title'], '1');
     });
 
     test('textList should return list of titles', () {
-      final config = TimeCodeConfig(
-        timeCodes: [
+      final TimeCodeConfig config = TimeCodeConfig(
+        timeCodes: <TimeCode>[
           TimeCode(title: '1', startTime: '08:00', endTime: '08:50'),
           TimeCode(title: '2', startTime: '09:00', endTime: '09:50'),
         ],
       );
 
-      expect(config.textList, ['1', '2']);
+      expect(config.textList, <String>['1', '2']);
     });
 
     test('indexOf should return correct index', () {
-      final config = TimeCodeConfig(
-        timeCodes: [
+      final TimeCodeConfig config = TimeCodeConfig(
+        timeCodes: <TimeCode>[
           TimeCode(title: '1', startTime: '08:00', endTime: '08:50'),
           TimeCode(title: '2', startTime: '09:00', endTime: '09:50'),
         ],

@@ -4,7 +4,7 @@ import 'package:test/test.dart';
 void main() {
   group('UserInfo', () {
     test('fromJson should return a valid UserInfo object', () {
-      final json = {
+      final Map<String, String> json = <String, String>{
         'id': '123',
         'name': 'Test User',
         'department': 'CS',
@@ -14,7 +14,7 @@ void main() {
         'pictureUrl': 'https://example.com/profile.png',
       };
 
-      final userInfo = UserInfo.fromJson(json);
+      final UserInfo userInfo = UserInfo.fromJson(json);
 
       expect(userInfo.id, '123');
       expect(userInfo.name, 'Test User');
@@ -26,7 +26,7 @@ void main() {
     });
 
     test('toJson should return a valid JSON map', () {
-      final userInfo = UserInfo(
+      final UserInfo userInfo = UserInfo(
         id: '123',
         name: 'Test User',
         department: 'CS',
@@ -36,7 +36,7 @@ void main() {
         pictureUrl: 'https://example.com/profile.png',
       );
 
-      final json = userInfo.toJson();
+      final Map<String, dynamic> json = userInfo.toJson();
 
       expect(json['id'], '123');
       expect(json['name'], 'Test User');
@@ -48,7 +48,7 @@ void main() {
     });
 
     test('empty factory should return an empty UserInfo', () {
-      final userInfo = UserInfo.empty();
+      final UserInfo userInfo = UserInfo.empty();
 
       expect(userInfo.id, '');
       expect(userInfo.name, '');
@@ -56,13 +56,13 @@ void main() {
     });
 
     test('copyWith should return a new object with updated fields', () {
-      final userInfo = UserInfo(
+      final UserInfo userInfo = UserInfo(
         id: '123',
         name: 'Test User',
         department: 'CS',
       );
 
-      final updatedUserInfo = userInfo.copyWith(name: 'New Name');
+      final UserInfo updatedUserInfo = userInfo.copyWith(name: 'New Name');
 
       expect(updatedUserInfo.id, '123');
       expect(updatedUserInfo.name, 'New Name');

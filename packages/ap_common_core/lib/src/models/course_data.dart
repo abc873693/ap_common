@@ -3,18 +3,21 @@ import 'dart:developer';
 
 import 'package:ap_common_core/src/config/ap_constants.dart';
 import 'package:ap_common_core/src/utilities/preference_util.dart';
-import 'package:json_annotation/json_annotation.dart';
+import 'package:freezed_annotation/freezed_annotation.dart';
 
+part 'course_data.freezed.dart';
 part 'course_data.g.dart';
 
-@JsonSerializable()
-class CourseData {
-  CourseData({
-    required this.courses,
-    required this.timeCodes,
-  });
+@freezed
+abstract class CourseData with _$CourseData {
+  const CourseData._();
 
-  factory CourseData.empty() => CourseData(
+  const factory CourseData({
+    required List<Course> courses,
+    required List<TimeCode> timeCodes,
+  }) = _CourseData;
+
+  factory CourseData.empty() => const CourseData(
         courses: <Course>[],
         timeCodes: <TimeCode>[],
       );
@@ -38,9 +41,6 @@ class CourseData {
       return CourseData.fromRawJson(rawString);
     }
   }
-
-  final List<Course> courses;
-  final List<TimeCode> timeCodes;
 
   bool get hasHoliday {
     for (final Course course in courses) {
@@ -80,17 +80,6 @@ class CourseData {
     }
     return index < 10 ? 0 : index;
   }
-
-  CourseData copyWith({
-    List<Course>? courses,
-    List<TimeCode>? timeCodes,
-  }) =>
-      CourseData(
-        courses: courses ?? this.courses,
-        timeCodes: timeCodes ?? this.timeCodes,
-      );
-
-  Map<String, dynamic> toJson() => _$CourseDataToJson(this);
 
   String toRawJson() => jsonEncode(toJson());
 
@@ -141,46 +130,29 @@ class CourseData {
   }
 }
 
-@JsonSerializable()
-class Course {
-  Course({
-    required this.code,
-    required this.title,
-    this.className,
-    this.group,
-    required this.units,
-    this.hours,
-    this.required,
-    this.at,
-    required this.times,
-    this.location,
-    required this.instructors,
-  });
+@freezed
+abstract class Course with _$Course {
+  const Course._();
+
+  const factory Course({
+    required String code,
+    required String title,
+    String? className,
+    String? group,
+    String? units,
+    String? hours,
+    String? required,
+    String? at,
+    @JsonKey(name: 'sectionTimes') required List<SectionTime> times,
+    Location? location,
+    required List<String> instructors,
+  }) = _Course;
 
   factory Course.fromJson(Map<String, dynamic> json) => _$CourseFromJson(json);
 
   factory Course.fromRawJson(String str) => Course.fromJson(
         json.decode(str) as Map<String, dynamic>,
       );
-
-  final String code;
-  final String title;
-
-  //TODO nullable evaluation
-  final String? className;
-  final String? group;
-
-  //TODO nullable evaluation
-  final String? units;
-  final String? hours;
-  final String? required;
-  final String? at;
-  @JsonKey(name: 'sectionTimes')
-  final List<SectionTime> times;
-  final Location? location;
-  final List<String> instructors;
-
-  Map<String, dynamic> toJson() => _$CourseToJson(this);
 
   String toRawJson() => jsonEncode(toJson());
 
@@ -195,41 +167,16 @@ class Course {
     }
     return buffer.toString();
   }
-
-  Course copyWith({
-    String? code,
-    String? title,
-    String? className,
-    String? group,
-    String? units,
-    String? hours,
-    String? required,
-    String? at,
-    List<SectionTime>? times,
-    Location? location,
-    List<String>? instructors,
-  }) =>
-      Course(
-        code: code ?? this.code,
-        title: title ?? this.title,
-        className: className ?? this.className,
-        group: group ?? this.group,
-        units: units ?? this.units,
-        hours: hours ?? this.hours,
-        required: required ?? this.required,
-        at: at ?? this.at,
-        times: times ?? this.times,
-        location: location ?? this.location,
-        instructors: instructors ?? this.instructors,
-      );
 }
 
-@JsonSerializable()
-class Location {
-  Location({
-    required this.room,
-    required this.building,
-  });
+@freezed
+abstract class Location with _$Location {
+  const Location._();
+
+  const factory Location({
+    required String room,
+    required String building,
+  }) = _Location;
 
   factory Location.fromJson(Map<String, dynamic> json) =>
       _$LocationFromJson(json);
@@ -238,21 +185,7 @@ class Location {
         json.decode(str) as Map<String, dynamic>,
       );
 
-  final String room;
-  final String building;
-
-  Map<String, dynamic> toJson() => _$LocationToJson(this);
-
   String toRawJson() => jsonEncode(toJson());
-
-  Location copyWith({
-    String? room,
-    String? building,
-  }) =>
-      Location(
-        room: room ?? this.room,
-        building: building ?? this.building,
-      );
 
   @override
   String toString() {
@@ -260,12 +193,19 @@ class Location {
   }
 }
 
-@JsonSerializable()
-class SectionTime {
-  SectionTime({
-    required this.weekday,
-    required this.index,
-  });
+@freezed
+abstract class SectionTime with _$SectionTime {
+  const SectionTime._();
+
+  const factory SectionTime({
+    ///The day of the week [DateTime.monday]..[DateTime.sunday].
+    ///In accordance with ISO 8601 a week starts with Monday,
+    /// which has the value 1.
+    required int weekday,
+
+    /// index of [CourseData.timeCodes]
+    required int index,
+  }) = _SectionTime;
 
   factory SectionTime.fromJson(Map<String, dynamic> json) =>
       _$SectionTimeFromJson(json);
@@ -274,37 +214,20 @@ class SectionTime {
         json.decode(str) as Map<String, dynamic>,
       );
 
-  ///The day of the week [DateTime.monday]..[DateTime.sunday].
-  ///In accordance with ISO 8601 a week starts with Monday,
-  /// which has the value 1.
-  final int weekday;
-
-  /// index of [CourseData.timeCodes]
-  final int index;
-
   int get weekDayIndex => weekday - 1;
 
-  Map<String, dynamic> toJson() => _$SectionTimeToJson(this);
-
   String toRawJson() => jsonEncode(toJson());
-
-  SectionTime copyWith({
-    int? weekDay,
-    int? index,
-  }) =>
-      SectionTime(
-        weekday: weekDay ?? weekday,
-        index: index ?? this.index,
-      );
 }
 
-@JsonSerializable()
-class TimeCode {
-  TimeCode({
-    required this.title,
-    required this.startTime,
-    required this.endTime,
-  });
+@freezed
+abstract class TimeCode with _$TimeCode {
+  const TimeCode._();
+
+  const factory TimeCode({
+    required String title,
+    required String startTime,
+    required String endTime,
+  }) = _TimeCode;
 
   factory TimeCode.fromJson(Map<String, dynamic> json) =>
       _$TimeCodeFromJson(json);
@@ -313,24 +236,7 @@ class TimeCode {
         json.decode(str) as Map<String, dynamic>,
       );
 
-  final String title;
-  final String startTime;
-  final String endTime;
-
-  Map<String, dynamic> toJson() => _$TimeCodeToJson(this);
-
   String toRawJson() => jsonEncode(toJson());
-
-  TimeCode copyWith({
-    String? title,
-    String? startTime,
-    String? endTime,
-  }) =>
-      TimeCode(
-        title: title ?? this.title,
-        startTime: startTime ?? this.startTime,
-        endTime: endTime ?? this.endTime,
-      );
 }
 
 extension TimeCodeExtension on List<TimeCode> {

@@ -1,27 +1,30 @@
 import 'dart:convert';
 
-import 'package:json_annotation/json_annotation.dart';
+import 'package:freezed_annotation/freezed_annotation.dart';
 
+part 'general_response.freezed.dart';
 part 'general_response.g.dart';
 
-@JsonSerializable()
-class GeneralResponse {
-  GeneralResponse({
-    required this.statusCode,
-    required this.message,
-  });
+@freezed
+abstract class GeneralResponse with _$GeneralResponse {
+  const GeneralResponse._();
 
-  factory GeneralResponse.success() => GeneralResponse(
+  const factory GeneralResponse({
+    @JsonKey(name: 'code') required int statusCode,
+    @JsonKey(name: 'description') required String message,
+  }) = _GeneralResponse;
+
+  factory GeneralResponse.success() => const GeneralResponse(
         statusCode: successCode,
         message: '',
       );
 
-  factory GeneralResponse.unknownError() => GeneralResponse(
+  factory GeneralResponse.unknownError() => const GeneralResponse(
         statusCode: unknownErrorCode,
         message: '',
       );
 
-  factory GeneralResponse.platformNotSupport() => GeneralResponse(
+  factory GeneralResponse.platformNotSupport() => const GeneralResponse(
         statusCode: platformNotSupportCode,
         message: 'platform not support',
       );
@@ -33,17 +36,9 @@ class GeneralResponse {
         json.decode(str) as Map<String, dynamic>,
       );
 
-  @JsonKey(name: 'code')
-  final int statusCode;
-
-  @JsonKey(name: 'description')
-  final String message;
-
   static const int successCode = 200;
   static const int unknownErrorCode = 1000;
   static const int platformNotSupportCode = 1001;
-
-  Map<String, dynamic> toJson() => _$GeneralResponseToJson(this);
 
   String toRawJson() => jsonEncode(toJson());
 }

@@ -2,18 +2,21 @@ import 'dart:convert';
 
 import 'package:ap_common_core/src/config/ap_constants.dart';
 import 'package:ap_common_core/src/utilities/preference_util.dart';
-import 'package:json_annotation/json_annotation.dart';
+import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:jwt_decoder/jwt_decoder.dart';
 
+part 'announcement_login_data.freezed.dart';
 part 'announcement_login_data.g.dart';
 
 enum PermissionLevel { user, editor, admin }
 
-@JsonSerializable()
-class AnnouncementLoginData {
-  AnnouncementLoginData({
-    required this.key,
-  });
+@freezed
+abstract class AnnouncementLoginData with _$AnnouncementLoginData {
+  const AnnouncementLoginData._();
+
+  const factory AnnouncementLoginData({
+    required String key,
+  }) = _AnnouncementLoginData;
 
   factory AnnouncementLoginData.fromJson(Map<String, dynamic> json) =>
       _$AnnouncementLoginDataFromJson(json);
@@ -22,8 +25,6 @@ class AnnouncementLoginData {
       AnnouncementLoginData.fromJson(
         json.decode(str) as Map<String, dynamic>,
       );
-
-  String key;
 
   Map<String, dynamic> get decodedToken => JwtDecoder.decode(key);
 
@@ -39,16 +40,7 @@ class AnnouncementLoginData {
   //ignore: avoid_dynamic_calls
   String? get username => decodedToken['user']['username'] as String;
 
-  Map<String, dynamic> toJson() => _$AnnouncementLoginDataToJson(this);
-
   String toRawJson() => jsonEncode(toJson());
-
-  AnnouncementLoginData copyWith({
-    String? key,
-  }) =>
-      AnnouncementLoginData(
-        key: key ?? this.key,
-      );
 
   void save() {
     PreferenceUtil.instance.setStringSecurity(

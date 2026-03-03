@@ -2,6 +2,7 @@ targets:
   $default:
     sources:
       - lib/**
+      - $package$
     builders:
       json_serializable:
         options:

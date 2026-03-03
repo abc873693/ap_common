@@ -6,39 +6,39 @@ part of 'course_notify_data.dart';
 // JsonSerializableGenerator
 // **************************************************************************
 
-CourseNotifyData _$CourseNotifyDataFromJson(Map<String, dynamic> json) =>
-    CourseNotifyData(
-      version: json['version'] as int? ?? 2,
-      lastId: json['lastId'] as int? ?? 1,
+_CourseNotifyData _$CourseNotifyDataFromJson(Map<String, dynamic> json) =>
+    _CourseNotifyData(
+      version: (json['version'] as num?)?.toInt() ?? 2,
+      lastId: (json['lastId'] as num?)?.toInt() ?? 1,
       data: (json['data'] as List<dynamic>?)
               ?.map((e) => CourseNotify.fromJson(e as Map<String, dynamic>))
               .toList() ??
           const <CourseNotify>[],
-    )..tag = json['tag'] as String?;
+    );
 
-Map<String, dynamic> _$CourseNotifyDataToJson(CourseNotifyData instance) =>
+Map<String, dynamic> _$CourseNotifyDataToJson(_CourseNotifyData instance) =>
     <String, dynamic>{
       'version': instance.version,
       'lastId': instance.lastId,
       'data': instance.data.map((e) => e.toJson()).toList(),
-      'tag': instance.tag,
     };
 
-CourseNotify _$CourseNotifyFromJson(Map<String, dynamic> json) => CourseNotify(
-      id: json['id'] as int,
-      weekday: json['weekday'] as int,
+_CourseNotify _$CourseNotifyFromJson(Map<String, dynamic> json) =>
+    _CourseNotify(
+      id: (json['id'] as num).toInt(),
+      weekday: (json['weekday'] as num).toInt(),
       startTime: json['startTime'] as String,
       title: json['title'] as String?,
       location: json['location'] as String?,
       code: json['code'] as String?,
     );
 
-Map<String, dynamic> _$CourseNotifyToJson(CourseNotify instance) =>
+Map<String, dynamic> _$CourseNotifyToJson(_CourseNotify instance) =>
     <String, dynamic>{
       'id': instance.id,
+      'weekday': instance.weekday,
+      'startTime': instance.startTime,
       'title': instance.title,
       'location': instance.location,
       'code': instance.code,
-      'weekday': instance.weekday,
-      'startTime': instance.startTime,
     };

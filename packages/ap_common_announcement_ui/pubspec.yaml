@@ -16,7 +16,7 @@ dependencies:
   ap_common_flutter_ui: ^0.0.6
   # Dart Packages
   path: ^1.9.0
-  dio_cookie_manager: ^3.1.1
+  dio_cookie_manager: ">=3.1.1 <3.2.0"
   cookie_jar: ^4.0.0
   sprintf: ^7.0.0
   # UI Package

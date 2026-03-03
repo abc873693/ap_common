@@ -4,16 +4,23 @@ import 'package:test/test.dart';
 void main() {
   group('ScoreData', () {
     test('fromJson should return a valid ScoreData object', () {
-      final json = {
-        'scores': [
-          {
+      final Map<String, Object> json = <String, Object>{
+        'scores': <Map<String, String?>>[
+          <String, String?>{
             'courseNumber': 'CS101',
             'title': 'Intro to CS',
             'units': '3.0',
+            'hours': null,
+            'required': null,
+            'at': null,
+            'middleScore': null,
+            'generalScore': null,
+            'finalScore': null,
             'semesterScore': '90',
+            'remark': null,
           }
         ],
-        'detail': {
+        'detail': <String, Object>{
           'average': 85.5,
           'conduct': 90.0,
           'classRank': '5/50',
@@ -21,7 +28,7 @@ void main() {
         },
       };
 
-      final data = ScoreData.fromJson(json);
+      final ScoreData data = ScoreData.fromJson(json);
 
       expect(data.scores.length, 1);
       expect(data.scores[0].title, 'Intro to CS');
@@ -29,37 +36,47 @@ void main() {
     });
 
     test('toJson should return a valid JSON map', () {
-      final score = Score(
+      final Score score = Score(
         courseNumber: 'CS101',
         title: 'Intro to CS',
         units: '3.0',
+        hours: null,
+        required: null,
+        at: null,
+        middleScore: null,
+        generalScore: null,
+        finalScore: null,
         semesterScore: '90',
+        remark: null,
       );
-      final data = ScoreData(scores: [score], detail: Detail());
+      final ScoreData data =
+          ScoreData(scores: <Score>[score], detail: const Detail());
 
-      final json = data.toJson();
+      final Map<String, dynamic> json = data.toJson();
 
-      expect(json['scores'], isA<List>());
+      expect(json['scores'], isA<List<dynamic>>());
       expect(json['scores'][0]['title'], 'Intro to CS');
     });
 
     test('ScoreData.empty() should return empty ScoreData', () {
-      final data = ScoreData.empty();
+      final ScoreData data = ScoreData.empty();
 
       expect(data.scores, isEmpty);
-      expect(data.detail.average, isNull);
+      expect(data.detail.average, 0.0);
     });
   });
 
   group('Detail', () {
-    test('isCreditEmpty should return true when credits are null', () {
-      final detail = Detail();
-      expect(detail.isCreditEmpty, isTrue);
+    test('Detail() should have all nullable fields as null', () {
+      const Detail detail = Detail();
+      expect(detail.creditTaken, isNull);
+      expect(detail.average, isNull);
     });
 
-    test('isCreditEmpty should return false when creditTaken is set', () {
-      final detail = Detail(creditTaken: 15.0);
-      expect(detail.isCreditEmpty, isFalse);
+    test('Detail.empty() should have default zero values', () {
+      final Detail detail = Detail.empty();
+      expect(detail.creditTaken, 0.0);
+      expect(detail.average, 0.0);
     });
   });
 }
