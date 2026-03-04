@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:ap_common_flutter_ui/ap_common_flutter_ui.dart';
 import 'package:flutter/material.dart';
 
@@ -56,6 +58,8 @@ class ScoreScaffold extends StatefulWidget {
 class ScoreScaffoldState extends State<ScoreScaffold> {
   ApLocalizations get app => ApLocalizations.of(context);
 
+  bool _isAnalysisView = false;
+
   @override
   void initState() {
     super.initState();
@@ -68,10 +72,54 @@ class ScoreScaffoldState extends State<ScoreScaffold> {
 
   @override
   Widget build(BuildContext context) {
+    final ColorScheme colorScheme = Theme.of(context).colorScheme;
+
     return Scaffold(
+      backgroundColor: colorScheme.surface,
       appBar: AppBar(
-        title: Text(widget.title ?? app.score),
+        titleSpacing: 0,
+        title: Row(
+          children: <Widget>[
+            Flexible(
+              child: Text(
+                widget.title ?? app.score,
+                overflow: TextOverflow.ellipsis,
+              ),
+            ),
+            if (widget.itemPicker != null) ...<Widget>[
+              const SizedBox(width: 12),
+              widget.itemPicker!,
+            ],
+            if (widget.semesterData != null &&
+                widget.itemPicker == null) ...<Widget>[
+              const SizedBox(width: 12),
+              SemesterPicker(
+                semesterData: widget.semesterData!,
+                currentIndex: widget.semesterData!.currentIndex,
+                onSelect: (Semester semester, int index) {
+                  widget.onSelect?.call(index);
+                },
+                featureTag: 'score',
+              ),
+            ],
+          ],
+        ),
         bottom: widget.bottom as PreferredSizeWidget?,
+        actions: <Widget>[
+          if (widget.state == ScoreState.finish &&
+              widget.scoreData != null &&
+              widget.scoreData!.scores.isNotEmpty)
+            IconButton(
+              icon: Icon(
+                _isAnalysisView
+                    ? Icons.list_alt_rounded
+                    : Icons.analytics_outlined,
+              ),
+              onPressed: () {
+                setState(() => _isAnalysisView = !_isAnalysisView);
+              },
+            ),
+        ],
       ),
       floatingActionButton: widget.isShowSearchButton
           ? FloatingActionButton(
@@ -82,38 +130,44 @@ class ScoreScaffoldState extends State<ScoreScaffold> {
               child: const Icon(Icons.search),
             )
           : null,
-      body: Flex(
-        direction: Axis.vertical,
-        mainAxisSize: MainAxisSize.min,
-        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+      body: Column(
         children: <Widget>[
-          const SizedBox(height: 8.0),
-          if (widget.semesterData != null && widget.itemPicker == null)
-            ItemPicker(
-              dialogTitle: app.pickSemester,
-              onSelected: widget.onSelect,
-              items: widget.semesterData!.semesters,
-              currentIndex: widget.semesterData!.currentIndex,
-              featureTag: 'score',
-            ),
-          if (widget.itemPicker != null) widget.itemPicker!,
           if (widget.customHint != null && widget.customHint!.isNotEmpty)
-            Text(
-              widget.customHint!,
-              style: TextStyle(color: ApTheme.of(context).grey),
-              textAlign: TextAlign.center,
-            ),
-          Expanded(
-            child: RefreshIndicator(
-              onRefresh: () async {
-                await widget.onRefresh?.call();
-                AnalyticsUtil.instance.logEvent('score_refresh');
-                return;
-              },
-              child: _body(),
-            ),
-          ),
+            _buildHintBanner(colorScheme),
+          Expanded(child: _buildContent(context, colorScheme, app)),
         ],
+      ),
+    );
+  }
+
+  Widget _buildHintBanner(ColorScheme colorScheme) {
+    return Container(
+      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+      child: Container(
+        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
+        decoration: BoxDecoration(
+          color: colorScheme.tertiaryContainer.withAlpha(128),
+          borderRadius: BorderRadius.circular(12),
+        ),
+        child: Row(
+          children: <Widget>[
+            Icon(
+              Icons.info_outline_rounded,
+              size: 18,
+              color: colorScheme.onTertiaryContainer,
+            ),
+            const SizedBox(width: 8),
+            Expanded(
+              child: Text(
+                widget.customHint!,
+                style: TextStyle(
+                  fontSize: 13,
+                  color: colorScheme.onTertiaryContainer,
+                ),
+              ),
+            ),
+          ],
+        ),
       ),
     );
   }
@@ -133,31 +187,39 @@ class ScoreScaffoldState extends State<ScoreScaffold> {
     }
   }
 
-  Widget _body() {
+  Widget _buildContent(
+    BuildContext context,
+    ColorScheme colorScheme,
+    ApLocalizations ap,
+  ) {
     switch (widget.state) {
       case ScoreState.loading:
-        return Container(
-          alignment: Alignment.center,
-          child: const CircularProgressIndicator(),
-        );
+        return _buildLoadingState(colorScheme);
       case ScoreState.error:
-      case ScoreState.empty:
-      case ScoreState.custom:
-      case ScoreState.offlineEmpty:
-        return InkWell(
-          onTap: () {
-            if (widget.state == ScoreState.empty) {
-              _pickSemester();
-            } else {
-              widget.onRefresh?.call();
-            }
-          },
-          child: HintContent(
-            icon: ApIcon.assignment,
-            content: hintContent,
-          ),
+        return _buildErrorState(
+          colorScheme,
+          ap.clickToRetry,
+          Icons.error_outline_rounded,
         );
-      default:
+      case ScoreState.empty:
+        return _buildErrorState(
+          colorScheme,
+          ap.scoreEmpty,
+          Icons.assignment_outlined,
+        );
+      case ScoreState.offlineEmpty:
+        return _buildErrorState(
+          colorScheme,
+          ap.noOfflineData,
+          Icons.cloud_off_rounded,
+        );
+      case ScoreState.custom:
+        return _buildErrorState(
+          colorScheme,
+          widget.customStateHint ?? ap.somethingError,
+          Icons.warning_amber_rounded,
+        );
+      case ScoreState.finish:
         return ScoreContent(
           scoreData: widget.scoreData,
           onRefresh: widget.onRefresh,
@@ -167,8 +229,80 @@ class ScoreScaffoldState extends State<ScoreScaffold> {
           middleScoreBuilder: widget.middleScoreBuilder,
           finalScoreBuilder: widget.finalScoreBuilder,
           details: widget.details,
+          isAnalysisView: _isAnalysisView,
         );
     }
+  }
+
+  Widget _buildLoadingState(ColorScheme colorScheme) {
+    return Center(
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        children: <Widget>[
+          SizedBox(
+            width: 48,
+            height: 48,
+            child: CircularProgressIndicator(
+              strokeWidth: 3,
+              color: colorScheme.primary,
+            ),
+          ),
+          const SizedBox(height: 16),
+          Text(
+            app.loading,
+            style: TextStyle(fontSize: 16, color: colorScheme.onSurfaceVariant),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildErrorState(
+    ColorScheme colorScheme,
+    String message,
+    IconData icon,
+  ) {
+    return InkWell(
+      onTap: () {
+        if (widget.state == ScoreState.empty) {
+          _pickSemester();
+        } else {
+          widget.onRefresh?.call();
+        }
+      },
+      child: Center(
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: <Widget>[
+            Container(
+              width: 80,
+              height: 80,
+              decoration: BoxDecoration(
+                color: colorScheme.primaryContainer.withAlpha(77),
+                borderRadius: BorderRadius.circular(20),
+              ),
+              child: Icon(icon, size: 40, color: colorScheme.primary),
+            ),
+            const SizedBox(height: 16),
+            Text(
+              message,
+              style: TextStyle(
+                fontSize: 16,
+                color: colorScheme.onSurfaceVariant,
+              ),
+              textAlign: TextAlign.center,
+            ),
+            if (widget.state != ScoreState.empty) ...<Widget>[
+              const SizedBox(height: 8),
+              Text(
+                app.clickToRetry,
+                style: TextStyle(fontSize: 14, color: colorScheme.primary),
+              ),
+            ],
+          ],
+        ),
+      ),
+    );
   }
 
   void _pickSemester() {
@@ -198,6 +332,7 @@ class ScoreContent extends StatefulWidget {
     this.middleScoreBuilder,
     this.finalScoreBuilder,
     this.details,
+    required this.isAnalysisView,
   });
 
   final ScoreData? scoreData;
@@ -208,187 +343,39 @@ class ScoreContent extends StatefulWidget {
   final Widget Function(int index)? middleScoreBuilder;
   final Widget Function(int index)? finalScoreBuilder;
   final List<String>? details;
+  final bool isAnalysisView;
 
   @override
   _ScoreContentState createState() => _ScoreContentState();
 }
 
 class _ScoreContentState extends State<ScoreContent> {
-  TextStyle get _textBlueStyle =>
-      TextStyle(color: ApTheme.of(context).blueText, fontSize: 16.0);
-
-  TextStyle get _textStyle => const TextStyle(fontSize: 15.0);
-
-  BoxDecoration get _boxDecoration => BoxDecoration(
-        borderRadius: const BorderRadius.all(
-          Radius.circular(
-            10.0,
-          ),
-        ),
-        border: Border.all(color: Colors.grey, width: 1.5),
-      );
-
-  TableBorder get _tableBorder => const TableBorder.symmetric(
-        inside: BorderSide(
-          color: Colors.grey,
-          width: 0.5,
-        ),
-      );
-
-  bool get isTablet =>
-      MediaQuery.of(context).size.shortestSide >= 680 ||
-      MediaQuery.of(context).orientation == Orientation.landscape;
-
   @override
   Widget build(BuildContext context) {
-    return SingleChildScrollView(
-      physics: const AlwaysScrollableScrollPhysics(),
-      child: Container(
-        padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8),
-        child: Flex(
-          direction: isTablet ? Axis.horizontal : Axis.vertical,
-          children: <Widget>[
-            Flexible(
-              flex: isTablet ? 2 : 0,
-              child: DecoratedBox(
-                decoration: _boxDecoration,
-                child: Table(
-                  columnWidths: const <int, TableColumnWidth>{
-                    0: FlexColumnWidth(2.5),
-                    1: FlexColumnWidth(),
-                    2: FlexColumnWidth(),
-                  },
-                  defaultVerticalAlignment: TableCellVerticalAlignment.middle,
-                  border: _tableBorder,
-                  children: <TableRow>[
-                    TableRow(
-                      children: <Widget>[
-                        ScoreTextBorder(
-                          text: ApLocalizations.of(context).subject,
-                          style: _textBlueStyle,
-                        ),
-                        ScoreTextBorder(
-                          text: widget.middleTitle ??
-                              ApLocalizations.of(context).midtermScoreTitle,
-                          style: _textBlueStyle,
-                        ),
-                        ScoreTextBorder(
-                          text: widget.finalTitle ??
-                              ApLocalizations.of(context).semesterScoreTitle,
-                          style: _textBlueStyle,
-                        ),
-                      ],
-                    ),
-                    for (int i = 0; i < widget.scoreData!.scores.length; i++)
-                      TableRow(
-                        children: <Widget>[
-                          ScoreTextBorder(
-                            text: widget.scoreData!.scores[i].title,
-                            style: _textStyle,
-                            onTap: (widget.onScoreSelect != null)
-                                ? () {
-                                    widget.onScoreSelect!(i);
-                                    AnalyticsUtil.instance
-                                        .logEvent('score_title_click');
-                                  }
-                                : null,
-                          ),
-                          if (widget.middleScoreBuilder == null)
-                            ScoreTextBorder(
-                              text: widget.scoreData!.scores[i].middleScore,
-                              style: _textStyle,
-                            ),
-                          if (widget.middleScoreBuilder != null)
-                            widget.middleScoreBuilder!(i),
-                          if (widget.finalScoreBuilder == null)
-                            ScoreTextBorder(
-                              text: widget.scoreData!.scores[i].semesterScore,
-                              style: _textStyle,
-                            ),
-                          if (widget.finalScoreBuilder != null)
-                            widget.finalScoreBuilder!(i),
-                        ],
-                      ),
-                  ],
-                ),
-              ),
-            ),
-            SizedBox(
-              height: isTablet ? 0.0 : 20.0,
-              width: isTablet ? 20 : 0.0,
-            ),
-            if (widget.details != null && widget.details!.isNotEmpty)
-              Flexible(
-                flex: isTablet ? 1 : 0,
-                child: DecoratedBox(
-                  decoration: _boxDecoration,
-                  child: Table(
-                    columnWidths: const <int, TableColumnWidth>{
-                      0: FlexColumnWidth(),
-                    },
-                    defaultVerticalAlignment: TableCellVerticalAlignment.middle,
-                    border: _tableBorder,
-                    children: <TableRow>[
-                      for (final String text in widget.details!)
-                        TableRow(
-                          children: <Widget>[
-                            Container(
-                              width: double.infinity,
-                              padding: const EdgeInsets.all(2.0),
-                              alignment: Alignment.center,
-                              child: SelectableText(
-                                text,
-                                textAlign: TextAlign.center,
-                                style: _textBlueStyle,
-                              ),
-                            ),
-                          ],
-                        ),
-                    ],
-                  ),
-                ),
-              ),
-          ],
-        ),
-      ),
-    );
+    if (widget.scoreData == null) return const SizedBox.shrink();
+
+    if (widget.isAnalysisView) {
+      return _ScoreAnalysisTab(
+        scoreData: widget.scoreData!,
+        onRefresh: widget.onRefresh,
+      );
+    } else {
+      return _ScoreListTab(
+        scoreData: widget.scoreData!,
+        onRefresh: widget.onRefresh,
+        middleTitle: widget.middleTitle,
+        finalTitle: widget.finalTitle,
+        onScoreSelect: widget.onScoreSelect,
+        middleScoreBuilder: widget.middleScoreBuilder,
+        finalScoreBuilder: widget.finalScoreBuilder,
+        details: widget.details,
+      );
+    }
   }
 }
 
-class ScoreTextBorder extends StatelessWidget {
-  const ScoreTextBorder({
-    super.key,
-    required this.text,
-    required this.style,
-    this.onTap,
-  });
-  final String? text;
-  final TextStyle style;
-
-  final Function()? onTap;
-
-  @override
-  Widget build(BuildContext context) {
-    return InkWell(
-      onTap: onTap,
-      child: Container(
-        width: double.maxFinite,
-        padding: const EdgeInsets.symmetric(vertical: 2.0, horizontal: 4.0),
-        alignment: Alignment.center,
-        child: SelectableText(
-          text ?? '',
-          textAlign: TextAlign.center,
-          style: style,
-        ),
-      ),
-    );
-  }
-}
-
-/*
-class ScoreCardContent extends StatefulWidget {
-  const ScoreCardContent({
-    super.key,
+class _ScoreListTab extends StatelessWidget {
+  const _ScoreListTab({
     required this.scoreData,
     this.onRefresh,
     this.middleTitle,
@@ -399,8 +386,8 @@ class ScoreCardContent extends StatefulWidget {
     this.details,
   });
 
-  final ScoreData? scoreData;
-  final Function()? onRefresh;
+  final ScoreData scoreData;
+  final VoidCallback? onRefresh;
   final String? middleTitle;
   final String? finalTitle;
   final Function(int index)? onScoreSelect;
@@ -409,89 +396,982 @@ class ScoreCardContent extends StatefulWidget {
   final List<String>? details;
 
   @override
-  _ScoreCardContentState createState() => _ScoreCardContentState();
+  Widget build(BuildContext context) {
+    final ColorScheme colorScheme = Theme.of(context).colorScheme;
+
+    return RefreshIndicator(
+      onRefresh: () async => onRefresh?.call(),
+      child: ListView.builder(
+        physics: const AlwaysScrollableScrollPhysics(),
+        padding: const EdgeInsets.all(16),
+        itemCount: scoreData.scores.length +
+            ((details != null && details!.isNotEmpty) ? 1 : 0),
+        itemBuilder: (BuildContext context, int index) {
+          if (index < scoreData.scores.length) {
+            return _buildScoreItem(colorScheme, scoreData.scores[index], index);
+          } else {
+            return _buildDetailsCard(colorScheme);
+          }
+        },
+      ),
+    );
+  }
+
+  Widget _buildDetailsCard(ColorScheme colorScheme) {
+    if (details == null || details!.isEmpty) return const SizedBox.shrink();
+    return Container(
+      margin: const EdgeInsets.only(bottom: 8, top: 8),
+      decoration: BoxDecoration(
+        color: colorScheme.surfaceContainerLowest,
+        borderRadius: BorderRadius.circular(16),
+        border: Border.all(color: colorScheme.outlineVariant.withAlpha(77)),
+      ),
+      child: Padding(
+        padding: const EdgeInsets.all(16),
+        child: Column(
+          children: <Widget>[
+            for (final String text in details!)
+              Padding(
+                padding: const EdgeInsets.symmetric(vertical: 4.0),
+                child: SelectableText(
+                  text,
+                  textAlign: TextAlign.center,
+                  style: TextStyle(
+                    fontSize: 14,
+                    color: colorScheme.onSurfaceVariant,
+                  ),
+                ),
+              ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  Widget _buildScoreItem(ColorScheme colorScheme, Score score, int index) {
+    final String scoreStr = score.semesterScore ?? '';
+    final double? scoreValue = double.tryParse(scoreStr);
+    final bool isPassed = scoreValue != null && scoreValue >= 60;
+    final Color scoreColor = scoreValue == null
+        ? colorScheme.onSurfaceVariant
+        : isPassed
+            ? _getScoreColor(scoreValue)
+            : colorScheme.error;
+
+    return GestureDetector(
+      onTap: onScoreSelect == null
+          ? null
+          : () {
+              onScoreSelect!(index);
+              AnalyticsUtil.instance.logEvent('score_title_click');
+            },
+      child: Container(
+        margin: const EdgeInsets.only(bottom: 8),
+        decoration: BoxDecoration(
+          color: colorScheme.surfaceContainerLowest,
+          borderRadius: BorderRadius.circular(16),
+          border: Border.all(color: colorScheme.outlineVariant.withAlpha(77)),
+        ),
+        child: Padding(
+          padding: const EdgeInsets.all(16),
+          child: Row(
+            children: <Widget>[
+              Container(
+                width: 4,
+                height: 50,
+                decoration: BoxDecoration(
+                  color: scoreColor,
+                  borderRadius: BorderRadius.circular(2),
+                ),
+              ),
+              const SizedBox(width: 16),
+              Expanded(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: <Widget>[
+                    Text(
+                      score.title,
+                      style: TextStyle(
+                        fontSize: 15,
+                        fontWeight: FontWeight.w600,
+                        color: colorScheme.onSurface,
+                      ),
+                    ),
+                    const SizedBox(height: 4),
+                    Row(
+                      children: <Widget>[
+                        _buildTag(
+                          colorScheme,
+                          score.required ?? '',
+                          colorScheme.tertiary,
+                        ),
+                        const SizedBox(width: 8),
+                        Text(
+                          '${score.units} 學分',
+                          style: TextStyle(
+                            fontSize: 12,
+                            color: colorScheme.onSurfaceVariant,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ],
+                ),
+              ),
+              Column(
+                crossAxisAlignment: CrossAxisAlignment.end,
+                children: <Widget>[
+                  if (finalScoreBuilder == null)
+                    Text(
+                      score.semesterScore ?? '-',
+                      style: TextStyle(
+                        fontSize: 24,
+                        fontWeight: FontWeight.bold,
+                        color: scoreColor,
+                      ),
+                    ),
+                  if (finalScoreBuilder != null) finalScoreBuilder!(index),
+                  const SizedBox(height: 4),
+                  if (middleScoreBuilder == null &&
+                      score.middleScore != null &&
+                      score.middleScore!.isNotEmpty)
+                    Text(
+                      '期中: ${score.middleScore}',
+                      style: TextStyle(
+                        fontSize: 11,
+                        color: colorScheme.onSurfaceVariant,
+                      ),
+                    ),
+                  if (middleScoreBuilder != null) middleScoreBuilder!(index),
+                ],
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+
+  Color _getScoreColor(double score) {
+    if (score >= 90) return const Color(0xFF4CAF50);
+    if (score >= 80) return const Color(0xFF8BC34A);
+    if (score >= 70) return const Color(0xFF2196F3);
+    if (score >= 60) return const Color(0xFFFF9800);
+    return const Color(0xFFF44336);
+  }
+
+  Widget _buildTag(ColorScheme colorScheme, String text, Color color) {
+    if (text.isEmpty) return const SizedBox.shrink();
+
+    return Container(
+      padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 2),
+      decoration: BoxDecoration(
+        color: color.withAlpha(26),
+        borderRadius: BorderRadius.circular(4),
+      ),
+      child: Text(
+        text.replaceAll('【', '').replaceAll('】', ''),
+        style: TextStyle(
+          fontSize: 11,
+          fontWeight: FontWeight.w600,
+          color: color,
+        ),
+      ),
+    );
+  }
 }
 
-class _ScoreCardContentState extends State<ScoreCardContent> {
-  TextStyle get _textPrimaryStyle => TextStyle(
-      color: ApTheme.of(context).blueText,
-      fontSize: 16.0,
-      fontWeight: FontWeight.w600);
+class _ScoreAnalysisTab extends StatelessWidget {
+  const _ScoreAnalysisTab({required this.scoreData, this.onRefresh});
 
-  TextStyle get _textSecondaryStyle =>
-      const TextStyle(color: ApColors.secondary, fontSize: 16.0);
-
-  TextStyle get _textStyle => const TextStyle(fontSize: 15.0);
-
-  bool get isTablet =>
-      MediaQuery.of(context).size.shortestSide >= 680 ||
-      MediaQuery.of(context).orientation == Orientation.landscape;
+  final ScoreData scoreData;
+  final VoidCallback? onRefresh;
 
   @override
   Widget build(BuildContext context) {
-    return ListView.builder(
-      itemCount: widget.scoreData!.scores.length,
-      itemBuilder: (_, int index) {
-        return Card(
-          //elevation: 4.0,
-          margin: const EdgeInsets.all(8.0),
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(12.0),
+    final ColorScheme colorScheme = Theme.of(context).colorScheme;
+    final ApLocalizations ap = ApLocalizations.of(context);
+    final ScoreAnalysis analysis = ScoreAnalysis(scoreData);
+
+    return RefreshIndicator(
+      onRefresh: () async => onRefresh?.call(),
+      child: SingleChildScrollView(
+        physics: const AlwaysScrollableScrollPhysics(),
+        padding: const EdgeInsets.all(16),
+        child: Column(
+          children: <Widget>[
+            _buildMainSummaryCard(colorScheme, ap, analysis),
+            const SizedBox(height: 16),
+            _buildPRCard(colorScheme, analysis),
+            const SizedBox(height: 16),
+            _buildStatisticsCard(colorScheme, analysis),
+            const SizedBox(height: 16),
+            _buildDistributionCard(colorScheme, analysis),
+            const SizedBox(height: 16),
+            _buildCreditSummaryCard(colorScheme, analysis),
+            const SizedBox(height: 32),
+          ],
+        ),
+      ),
+    );
+  }
+
+  Widget _buildMainSummaryCard(
+    ColorScheme colorScheme,
+    ApLocalizations ap,
+    ScoreAnalysis analysis,
+  ) {
+    final Detail detail = scoreData.detail;
+
+    return Container(
+      decoration: BoxDecoration(
+        gradient: LinearGradient(
+          begin: Alignment.topLeft,
+          end: Alignment.bottomRight,
+          colors: <Color>[
+            colorScheme.primaryContainer,
+            colorScheme.secondaryContainer,
+          ],
+        ),
+        borderRadius: BorderRadius.circular(20),
+        boxShadow: <BoxShadow>[
+          BoxShadow(
+            color: colorScheme.primary.withAlpha(38),
+            blurRadius: 16,
+            offset: const Offset(0, 8),
           ),
-          child: ListTile(
-            contentPadding: const EdgeInsets.symmetric(
-              vertical: 8.0,
-              horizontal: 24.0,
-            ),
-            title: Row(
+        ],
+      ),
+      child: Column(
+        children: <Widget>[
+          Padding(
+            padding: const EdgeInsets.all(20),
+            child: Row(
               children: <Widget>[
-                Flexible(
-                  flex: 2,
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: <Widget>[
-                      Text(
-                        widget.scoreData!.scores[index].title,
-                        style: _textPrimaryStyle,
-                      ),
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: <Widget>[
-                          Text(
-                            (widget.middleTitle ??
-                                    ApLocalizations.of(context)
-                                        .midtermScoreTitle) +
-                                (widget.middleScoreBuilder != null
-                                    ? ''
-                                    : ' : ${widget.scoreData!.scores[index].middleScore ?? ''}'),
-                            style: _textSecondaryStyle,
-                          ),
-                          if (widget.middleScoreBuilder != null)
-                            widget.middleScoreBuilder!(index),
-                        ],
-                      ),
-                    ],
+                Expanded(
+                  child: _buildMainItem(
+                    colorScheme,
+                    Icons.star_rounded,
+                    ap.average,
+                    detail.average?.toStringAsFixed(2) ?? '-',
                   ),
                 ),
+                Container(
+                  width: 1,
+                  height: 60,
+                  color: colorScheme.onPrimaryContainer.withAlpha(51),
+                ),
                 Expanded(
-                  child: Column(
-                    children: <Widget>[
-                      if (widget.finalScoreBuilder == null)
-                        Text(
-                          widget.scoreData!.scores[index].semesterScore ?? '',
-                          style: _textStyle,
-                        ),
-                      if (widget.finalScoreBuilder != null)
-                        widget.finalScoreBuilder!(index),
-                    ],
+                  child: _buildMainItem(
+                    colorScheme,
+                    Icons.school_rounded,
+                    ap.conductScore,
+                    detail.conduct?.toStringAsFixed(0) ?? '-',
                   ),
                 ),
               ],
             ),
           ),
-        );
-      },
+          Container(
+            padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 16),
+            decoration: BoxDecoration(
+              color: colorScheme.surface.withAlpha(179),
+              borderRadius: const BorderRadius.vertical(
+                bottom: Radius.circular(20),
+              ),
+            ),
+            child: Row(
+              children: <Widget>[
+                Expanded(
+                  child: _buildRankItem(
+                    colorScheme,
+                    ap.classRank,
+                    detail.classRank ?? '-',
+                  ),
+                ),
+                Container(
+                  width: 1,
+                  height: 40,
+                  color: colorScheme.outlineVariant.withAlpha(128),
+                ),
+                Expanded(
+                  child: _buildRankItem(
+                    colorScheme,
+                    ap.departmentRank,
+                    detail.departmentRank ?? '-',
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildMainItem(
+    ColorScheme colorScheme,
+    IconData icon,
+    String label,
+    String value,
+  ) {
+    return Column(
+      children: <Widget>[
+        Icon(icon, size: 28, color: colorScheme.primary),
+        const SizedBox(height: 8),
+        Text(
+          value,
+          style: TextStyle(
+            fontSize: 28,
+            fontWeight: FontWeight.bold,
+            color: colorScheme.onPrimaryContainer,
+          ),
+        ),
+        const SizedBox(height: 4),
+        Text(
+          label,
+          style: TextStyle(
+            fontSize: 13,
+            color: colorScheme.onPrimaryContainer.withAlpha(179),
+          ),
+        ),
+      ],
+    );
+  }
+
+  Widget _buildRankItem(ColorScheme colorScheme, String label, String value) {
+    return Column(
+      children: <Widget>[
+        Text(
+          value,
+          style: TextStyle(
+            fontSize: 18,
+            fontWeight: FontWeight.bold,
+            color: colorScheme.onSurface,
+          ),
+        ),
+        const SizedBox(height: 2),
+        Text(
+          label,
+          style: TextStyle(fontSize: 12, color: colorScheme.onSurfaceVariant),
+        ),
+      ],
+    );
+  }
+
+  Widget _buildPRCard(ColorScheme colorScheme, ScoreAnalysis analysis) {
+    final int pr = analysis.estimatedPR;
+    final Color prColor = _getPRColor(colorScheme, pr);
+
+    return Container(
+      decoration: BoxDecoration(
+        color: colorScheme.surfaceContainerLowest,
+        borderRadius: BorderRadius.circular(20),
+        border: Border.all(color: colorScheme.outlineVariant.withAlpha(77)),
+      ),
+      child: Column(
+        children: <Widget>[
+          Padding(
+            padding: const EdgeInsets.all(20),
+            child: Row(
+              children: <Widget>[
+                Container(
+                  width: 56,
+                  height: 56,
+                  decoration: BoxDecoration(
+                    color: prColor.withAlpha(26),
+                    borderRadius: BorderRadius.circular(16),
+                  ),
+                  child: Icon(
+                    Icons.trending_up_rounded,
+                    size: 28,
+                    color: prColor,
+                  ),
+                ),
+                const SizedBox(width: 16),
+                Expanded(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: <Widget>[
+                      Text(
+                        '估計 PR 值',
+                        style: TextStyle(
+                          fontSize: 14,
+                          color: colorScheme.onSurfaceVariant,
+                        ),
+                      ),
+                      const SizedBox(height: 4),
+                      Text(
+                        'PR $pr',
+                        style: TextStyle(
+                          fontSize: 32,
+                          fontWeight: FontWeight.bold,
+                          color: prColor,
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+                Container(
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 12,
+                    vertical: 6,
+                  ),
+                  decoration: BoxDecoration(
+                    color: prColor.withAlpha(26),
+                    borderRadius: BorderRadius.circular(20),
+                  ),
+                  child: Text(
+                    analysis.prLevel,
+                    style: TextStyle(
+                      fontSize: 14,
+                      fontWeight: FontWeight.w600,
+                      color: prColor,
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          ),
+          Container(
+            margin: const EdgeInsets.fromLTRB(16, 0, 16, 16),
+            height: 8,
+            decoration: BoxDecoration(
+              color: colorScheme.surfaceContainerHighest,
+              borderRadius: BorderRadius.circular(4),
+            ),
+            child: FractionallySizedBox(
+              alignment: Alignment.centerLeft,
+              widthFactor: pr / 100,
+              child: Container(
+                decoration: BoxDecoration(
+                  gradient: LinearGradient(
+                    colors: <Color>[prColor.withAlpha(179), prColor],
+                  ),
+                  borderRadius: BorderRadius.circular(4),
+                ),
+              ),
+            ),
+          ),
+          Padding(
+            padding: const EdgeInsets.fromLTRB(16, 0, 16, 16),
+            child: Text(
+              '※ PR 值為根據平均成績估算，僅供參考',
+              style: TextStyle(
+                fontSize: 12,
+                color: colorScheme.onSurfaceVariant.withAlpha(179),
+              ),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Color _getPRColor(ColorScheme colorScheme, int pr) {
+    if (pr >= 90) return const Color(0xFF4CAF50);
+    if (pr >= 75) return const Color(0xFF8BC34A);
+    if (pr >= 50) return colorScheme.primary;
+    if (pr >= 25) return const Color(0xFFFF9800);
+    return colorScheme.error;
+  }
+
+  Widget _buildStatisticsCard(ColorScheme colorScheme, ScoreAnalysis analysis) {
+    return Container(
+      decoration: BoxDecoration(
+        color: colorScheme.surfaceContainerLowest,
+        borderRadius: BorderRadius.circular(20),
+        border: Border.all(color: colorScheme.outlineVariant.withAlpha(77)),
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: <Widget>[
+          Padding(
+            padding: const EdgeInsets.all(16),
+            child: Row(
+              children: <Widget>[
+                Icon(
+                  Icons.bar_chart_rounded,
+                  size: 20,
+                  color: colorScheme.primary,
+                ),
+                const SizedBox(width: 8),
+                Text(
+                  '成績統計',
+                  style: TextStyle(
+                    fontSize: 16,
+                    fontWeight: FontWeight.w600,
+                    color: colorScheme.onSurface,
+                  ),
+                ),
+              ],
+            ),
+          ),
+          Divider(height: 1, color: colorScheme.outlineVariant.withAlpha(77)),
+          Padding(
+            padding: const EdgeInsets.all(16),
+            child: Column(
+              children: <Widget>[
+                Row(
+                  children: <Widget>[
+                    Expanded(
+                      child: _buildStatItem(
+                        colorScheme,
+                        '最高分',
+                        analysis.maxScore.toStringAsFixed(0),
+                        Icons.arrow_upward_rounded,
+                        const Color(0xFF4CAF50),
+                      ),
+                    ),
+                    const SizedBox(width: 12),
+                    Expanded(
+                      child: _buildStatItem(
+                        colorScheme,
+                        '最低分',
+                        analysis.minScore.toStringAsFixed(0),
+                        Icons.arrow_downward_rounded,
+                        colorScheme.error,
+                      ),
+                    ),
+                  ],
+                ),
+                const SizedBox(height: 12),
+                Row(
+                  children: <Widget>[
+                    Expanded(
+                      child: _buildStatItem(
+                        colorScheme,
+                        '標準差',
+                        analysis.standardDeviation.toStringAsFixed(2),
+                        Icons.analytics_outlined,
+                        colorScheme.tertiary,
+                      ),
+                    ),
+                    const SizedBox(width: 12),
+                    Expanded(
+                      child: _buildStatItem(
+                        colorScheme,
+                        '科目數',
+                        analysis.totalSubjects.toString(),
+                        Icons.menu_book_rounded,
+                        colorScheme.secondary,
+                      ),
+                    ),
+                  ],
+                ),
+              ],
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildStatItem(
+    ColorScheme colorScheme,
+    String label,
+    String value,
+    IconData icon,
+    Color color,
+  ) {
+    return Container(
+      padding: const EdgeInsets.all(14),
+      decoration: BoxDecoration(
+        color: color.withAlpha(13),
+        borderRadius: BorderRadius.circular(12),
+      ),
+      child: Row(
+        children: <Widget>[
+          Container(
+            width: 36,
+            height: 36,
+            decoration: BoxDecoration(
+              color: color.withAlpha(26),
+              borderRadius: BorderRadius.circular(10),
+            ),
+            child: Icon(icon, size: 18, color: color),
+          ),
+          const SizedBox(width: 12),
+          Expanded(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: <Widget>[
+                Text(
+                  label,
+                  style: TextStyle(
+                    fontSize: 12,
+                    color: colorScheme.onSurfaceVariant,
+                  ),
+                ),
+                Text(
+                  value,
+                  style: TextStyle(
+                    fontSize: 18,
+                    fontWeight: FontWeight.bold,
+                    color: colorScheme.onSurface,
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildDistributionCard(
+    ColorScheme colorScheme,
+    ScoreAnalysis analysis,
+  ) {
+    return Container(
+      decoration: BoxDecoration(
+        color: colorScheme.surfaceContainerLowest,
+        borderRadius: BorderRadius.circular(20),
+        border: Border.all(color: colorScheme.outlineVariant.withAlpha(77)),
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: <Widget>[
+          Padding(
+            padding: const EdgeInsets.all(16),
+            child: Row(
+              children: <Widget>[
+                Icon(
+                  Icons.pie_chart_rounded,
+                  size: 20,
+                  color: colorScheme.primary,
+                ),
+                const SizedBox(width: 8),
+                Text(
+                  '成績分佈',
+                  style: TextStyle(
+                    fontSize: 16,
+                    fontWeight: FontWeight.w600,
+                    color: colorScheme.onSurface,
+                  ),
+                ),
+              ],
+            ),
+          ),
+          Divider(height: 1, color: colorScheme.outlineVariant.withAlpha(77)),
+          Padding(
+            padding: const EdgeInsets.all(16),
+            child: Column(
+              children: <Widget>[
+                _buildDistributionBar(
+                  colorScheme,
+                  '90-100 (優秀)',
+                  analysis.distribution['90-100'] ?? 0,
+                  analysis.totalSubjects,
+                  const Color(0xFF4CAF50),
+                ),
+                const SizedBox(height: 10),
+                _buildDistributionBar(
+                  colorScheme,
+                  '80-89 (良好)',
+                  analysis.distribution['80-89'] ?? 0,
+                  analysis.totalSubjects,
+                  const Color(0xFF8BC34A),
+                ),
+                const SizedBox(height: 10),
+                _buildDistributionBar(
+                  colorScheme,
+                  '70-79 (普通)',
+                  analysis.distribution['70-79'] ?? 0,
+                  analysis.totalSubjects,
+                  colorScheme.primary,
+                ),
+                const SizedBox(height: 10),
+                _buildDistributionBar(
+                  colorScheme,
+                  '60-69 (及格)',
+                  analysis.distribution['60-69'] ?? 0,
+                  analysis.totalSubjects,
+                  const Color(0xFFFF9800),
+                ),
+                const SizedBox(height: 10),
+                _buildDistributionBar(
+                  colorScheme,
+                  '0-59 (不及格)',
+                  analysis.distribution['0-59'] ?? 0,
+                  analysis.totalSubjects,
+                  colorScheme.error,
+                ),
+              ],
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildDistributionBar(
+    ColorScheme colorScheme,
+    String label,
+    int count,
+    int total,
+    Color color,
+  ) {
+    final double percentage = total > 0 ? count / total : 0;
+
+    return Row(
+      children: <Widget>[
+        SizedBox(
+          width: 100,
+          child: Text(
+            label,
+            style: TextStyle(fontSize: 12, color: colorScheme.onSurfaceVariant),
+          ),
+        ),
+        Expanded(
+          child: Container(
+            height: 20,
+            decoration: BoxDecoration(
+              color: colorScheme.surfaceContainerHighest,
+              borderRadius: BorderRadius.circular(10),
+            ),
+            child: FractionallySizedBox(
+              alignment: Alignment.centerLeft,
+              widthFactor: percentage,
+              child: Container(
+                decoration: BoxDecoration(
+                  color: color,
+                  borderRadius: BorderRadius.circular(10),
+                ),
+              ),
+            ),
+          ),
+        ),
+        const SizedBox(width: 8),
+        SizedBox(
+          width: 40,
+          child: Text(
+            '$count 科',
+            style: TextStyle(
+              fontSize: 12,
+              fontWeight: FontWeight.w500,
+              color: colorScheme.onSurface,
+            ),
+            textAlign: TextAlign.end,
+          ),
+        ),
+      ],
+    );
+  }
+
+  Widget _buildCreditSummaryCard(
+    ColorScheme colorScheme,
+    ScoreAnalysis analysis,
+  ) {
+    return Container(
+      decoration: BoxDecoration(
+        color: colorScheme.surfaceContainerLowest,
+        borderRadius: BorderRadius.circular(20),
+        border: Border.all(color: colorScheme.outlineVariant.withAlpha(77)),
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: <Widget>[
+          Padding(
+            padding: const EdgeInsets.all(16),
+            child: Row(
+              children: <Widget>[
+                Icon(
+                  Icons.account_balance_rounded,
+                  size: 20,
+                  color: colorScheme.primary,
+                ),
+                const SizedBox(width: 8),
+                Text(
+                  '學分統計',
+                  style: TextStyle(
+                    fontSize: 16,
+                    fontWeight: FontWeight.w600,
+                    color: colorScheme.onSurface,
+                  ),
+                ),
+              ],
+            ),
+          ),
+          Divider(height: 1, color: colorScheme.outlineVariant.withAlpha(77)),
+          Padding(
+            padding: const EdgeInsets.all(16),
+            child: Row(
+              children: <Widget>[
+                Expanded(
+                  child: _buildCreditItem(
+                    colorScheme,
+                    '修習學分',
+                    analysis.totalCredits.toStringAsFixed(1),
+                    colorScheme.primary,
+                  ),
+                ),
+                Expanded(
+                  child: _buildCreditItem(
+                    colorScheme,
+                    '及格學分',
+                    analysis.passedCredits.toStringAsFixed(1),
+                    const Color(0xFF4CAF50),
+                  ),
+                ),
+                Expanded(
+                  child: _buildCreditItem(
+                    colorScheme,
+                    '不及格學分',
+                    analysis.failedCredits.toStringAsFixed(1),
+                    colorScheme.error,
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildCreditItem(
+    ColorScheme colorScheme,
+    String label,
+    String value,
+    Color color,
+  ) {
+    return Column(
+      children: <Widget>[
+        Text(
+          value,
+          style: TextStyle(
+            fontSize: 24,
+            fontWeight: FontWeight.bold,
+            color: color,
+          ),
+        ),
+        const SizedBox(height: 4),
+        Text(
+          label,
+          style: TextStyle(fontSize: 12, color: colorScheme.onSurfaceVariant),
+        ),
+      ],
     );
   }
 }
-*/
+
+class ScoreAnalysis {
+  ScoreAnalysis(this.scoreData) {
+    _scores = <double>[];
+    for (final Score score in scoreData.scores) {
+      final double? value = double.tryParse(score.semesterScore ?? '');
+      if (value != null) {
+        _scores.add(value);
+      }
+    }
+    _totalSubjects = _scores.length;
+  }
+
+  final ScoreData scoreData;
+  late List<double> _scores;
+  late int _totalSubjects;
+
+  int get totalSubjects => _totalSubjects;
+
+  double get maxScore => _scores.isEmpty ? 0 : _scores.reduce(max);
+
+  double get minScore => _scores.isEmpty ? 0 : _scores.reduce(min);
+
+  double get average {
+    if (_scores.isEmpty) return 0;
+    return _scores.reduce((double a, double b) => a + b) / _scores.length;
+  }
+
+  double get standardDeviation {
+    if (_scores.isEmpty) return 0;
+    final double avg = average;
+    final double sumSquares = _scores.fold<double>(
+      0,
+      (double sum, double score) => sum + (score - avg) * (score - avg),
+    );
+    return sqrt(sumSquares / _scores.length);
+  }
+
+  int get estimatedPR {
+    final double avg = scoreData.detail.average ?? average;
+    if (avg >= 95) return 99;
+    if (avg >= 90) return 95;
+    if (avg >= 85) return 88;
+    if (avg >= 80) return 78;
+    if (avg >= 75) return 65;
+    if (avg >= 70) return 50;
+    if (avg >= 65) return 35;
+    if (avg >= 60) return 22;
+    if (avg >= 55) return 12;
+    return 5;
+  }
+
+  String get prLevel {
+    final int pr = estimatedPR;
+    if (pr >= 90) return '頂尖';
+    if (pr >= 75) return '優秀';
+    if (pr >= 50) return '中等';
+    if (pr >= 25) return '待加強';
+    return '需努力';
+  }
+
+  Map<String, int> get distribution {
+    final Map<String, int> dist = <String, int>{
+      '90-100': 0,
+      '80-89': 0,
+      '70-79': 0,
+      '60-69': 0,
+      '0-59': 0,
+    };
+
+    for (final double score in _scores) {
+      if (score >= 90) {
+        dist['90-100'] = dist['90-100']! + 1;
+      } else if (score >= 80) {
+        dist['80-89'] = dist['80-89']! + 1;
+      } else if (score >= 70) {
+        dist['70-79'] = dist['70-79']! + 1;
+      } else if (score >= 60) {
+        dist['60-69'] = dist['60-69']! + 1;
+      } else {
+        dist['0-59'] = dist['0-59']! + 1;
+      }
+    }
+
+    return dist;
+  }
+
+  double get totalCredits {
+    double credits = 0;
+    for (final Score score in scoreData.scores) {
+      final double? unit = double.tryParse(score.units);
+      if (unit != null) credits += unit;
+    }
+    return credits;
+  }
+
+  double get passedCredits {
+    double credits = 0;
+    for (final Score score in scoreData.scores) {
+      final double? scoreValue = double.tryParse(score.semesterScore ?? '');
+      final double? unit = double.tryParse(score.units);
+      if (scoreValue != null && scoreValue >= 60 && unit != null) {
+        credits += unit;
+      }
+    }
+    return credits;
+  }
+
+  double get failedCredits {
+    double credits = 0;
+    for (final Score score in scoreData.scores) {
+      final double? scoreValue = double.tryParse(score.semesterScore ?? '');
+      final double? unit = double.tryParse(score.units);
+      if (scoreValue != null && scoreValue < 60 && unit != null) {
+        credits += unit;
+      }
+    }
+    return credits;
+  }
+}
