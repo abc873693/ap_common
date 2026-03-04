@@ -27,5 +27,6 @@ export 'src/widgets/hint_content.dart';
 export 'src/widgets/item_picker.dart';
 export 'src/widgets/option_dialog.dart';
 export 'src/widgets/progress_dialog.dart';
+export 'src/widgets/semester_picker.dart';
 export 'src/widgets/setting_page_widgets.dart';
 export 'src/widgets/yes_no_dialog.dart';
