@@ -1,12 +1,11 @@
-name: Deploy to Firebase Hosting on PR
+name: Document Preview
 on:
   pull_request:
     paths:
       - "docs/**"
       - "website/**"
-      - "apps/example/**"
 jobs:
-  website_preview:
+  document_preview:
     if: '${{ github.event.pull_request.head.repo.full_name == github.repository }}'
     runs-on: ubuntu-latest
     steps:
@@ -22,28 +21,5 @@ jobs:
           firebaseServiceAccount: '${{ secrets.FIREBASE_SERVICE_ACCOUNT_AP_COMMON }}'
           projectId: ap-common
           entryPoint: "website"
-          expires: 7d
-  example_preview:
-    if: '${{ github.event.pull_request.head.repo.full_name == github.repository }}'
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v2
-      - name: Setup Flutter
-        uses: subosito/flutter-action@v2
-        with:
-          flutter-version: '3.29.x'
-          channel: 'stable'
-          cache: true
-          cache-key: 'flutter-:os:-:channel:-:version:-:arch:-:hash:'
-      - name: Run Build
-        working-directory: ./apps/example
-        run: |
-          flutter pub get
-          flutter build web --release
-      - uses: FirebaseExtended/action-hosting-deploy@v0
-        with:
-          repoToken: '${{ secrets.GITHUB_TOKEN }}'
-          firebaseServiceAccount: '${{ secrets.FIREBASE_SERVICE_ACCOUNT_AP_COMMON }}'
-          projectId: ap-common
-          entryPoint: "example"
+          channelId: "document-preview"
           expires: 7d
