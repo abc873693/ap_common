@@ -7,6 +7,7 @@ sidebar_position: 2
 校務通主題目前提供：
   - 淺色主題
   - 深色主題
+  - 動態自訂主題色 (Custom Theme Colors)
 
 ## 如何設定
 
@@ -18,8 +19,7 @@ sidebar_position: 2
 :::
 
 在 `MaterialApp` 的參數 `theme` 設定 `ApTheme.light`，參數 `darkTheme` 設定 `ApTheme.dark`，
-
-並設定與 `ApTheme` 設定相同的 `themeMode`，`ApTheme` 會根據 `themeMode` 切換主題顏色
+並設定與 `ApTheme` 設定相同的 `themeMode`，`ApTheme` 會根據 `themeMode` 切換主題顏色。如果想支援動態主題色（預設或是使用者自訂），從 v2 版本開始可以使用 `ApTheme.colorScheme` 來產生包含自訂強調色的主題設定。
 
 ```dart title="app.dart"
     ThemeMode themeMode = ThemeMode.system;

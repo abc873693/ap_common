@@ -105,6 +105,22 @@ sidebar_position: 9
 | onChange | `Function(ThemeMode)` | 當修改成功時會回傳 `ThemeMode` |
 | textList | `List<String>` | 主題列表預設使用 `ApLocalizations` 定義的 |
 
+### ChangeThemeColorItem
+
+:::caution 使用時必須先完成
+ - [Preference 設定 ](../installation/shared-preferences)
+:::
+
+選擇目前的主題色彩，此元件會開啟 `ColorPickerDialog`，讓使用者可以選擇預設好的色彩或是使用調色盤自由選擇 `HSVColor`，並透過 `Preferences` 儲存到 `ApConstants.prefThemeColorIndex` (針對預設色彩索引) 與 `ApConstants.prefCustomThemeColor` (針對自訂色彩)。
+
+支援設定：
+- 預設色彩：從 `ApTheme.themeColors` 中讀取並作為快速選擇面板。
+- 自訂色彩：透過 Hue, Saturation, Value 滑桿調色，支援即時預覽十六進位色碼。
+
+| 參數名稱                         | 型態                             | 描述                             |
+| ------------------------------- | ------------------------------- | ------------------------------- |
+| onChange | `Function(Color)` | 當修改成功時會回傳選取的 `Color` |
+
 ### ChangeIconStyleItem
 
 :::caution 使用時必須先完成
