@@ -5,7 +5,7 @@ on:
       - "docs/**"
       - "website/**"
 jobs:
-  build_and_preview:
+  website_preview:
     if: '${{ github.event.pull_request.head.repo.full_name == github.repository }}'
     runs-on: ubuntu-latest
     steps:
@@ -21,4 +21,28 @@ jobs:
           firebaseServiceAccount: '${{ secrets.FIREBASE_SERVICE_ACCOUNT_AP_COMMON }}'
           projectId: ap-common
           entryPoint: "website"
+          expires: 7d
+  example_preview:
+    if: '${{ github.event.pull_request.head.repo.full_name == github.repository }}'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - name: Setup Flutter
+        uses: subosito/flutter-action@v2
+        with:
+          flutter-version: '3.29.x'
+          channel: 'stable'
+          cache: true
+          cache-key: 'flutter-:os:-:channel:-:version:-:arch:-:hash:'
+      - name: Run Build
+        working-directory: ./apps/example
+        run: |
+          flutter pub get
+          flutter build web --release
+      - uses: FirebaseExtended/action-hosting-deploy@v0
+        with:
+          repoToken: '${{ secrets.GITHUB_TOKEN }}'
+          firebaseServiceAccount: '${{ secrets.FIREBASE_SERVICE_ACCOUNT_AP_COMMON }}'
+          projectId: ap-common
+          entryPoint: "example"
           expires: 7d
