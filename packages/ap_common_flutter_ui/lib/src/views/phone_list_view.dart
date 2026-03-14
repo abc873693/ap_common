@@ -32,7 +32,7 @@ class PhoneListViewState extends State<PhoneListView>
       );
 
   TextStyle get _textGreyStyle => TextStyle(
-        color: ApTheme.of(context).grey,
+        color: Theme.of(context).colorScheme.onSurfaceVariant,
         fontSize: 14.0,
       );
 
@@ -128,10 +128,10 @@ class PhoneListViewState extends State<PhoneListView>
       child: Container(
         padding: const EdgeInsets.all(16.0),
         width: double.infinity,
-        decoration: const BoxDecoration(
+        decoration: BoxDecoration(
           border: Border(
             bottom: BorderSide(
-              color: Colors.grey,
+              color: Theme.of(context).colorScheme.outlineVariant,
               width: 0.5,
             ),
           ),
@@ -168,9 +168,11 @@ class HeaderDelegate extends SliverPersistentHeaderDelegate {
     double shrinkOffset,
     bool overlapsContent,
   ) {
+    final ColorScheme colorScheme = Theme.of(context).colorScheme;
+
     return Container(
       height: minExtent,
-      color: ApTheme.of(context).background,
+      color: colorScheme.surface,
       padding: const EdgeInsets.symmetric(
         vertical: 8.0,
         horizontal: 16.0,
@@ -178,7 +180,7 @@ class HeaderDelegate extends SliverPersistentHeaderDelegate {
       child: Text(
         title,
         style: TextStyle(
-          color: ApTheme.of(context).blueText,
+          color: colorScheme.primary,
           fontSize: 18.0,
           fontWeight: FontWeight.bold,
         ),

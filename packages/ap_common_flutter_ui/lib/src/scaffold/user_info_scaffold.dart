@@ -309,7 +309,7 @@ class UserInfoScaffoldState extends State<UserInfoScaffold> {
                       ? Barcode.code39()
                       : Barcode.qrCode(),
                   data: widget.userInfo.id,
-                  color: ApTheme.of(context).barCode,
+                  color: colorScheme.onSurface,
                   height: codeMode == BarCodeMode.code39 ? 80 : 160,
                   width: codeMode == BarCodeMode.code39 ? double.infinity : 160,
                 ),

@@ -1551,8 +1551,6 @@ class _CourseScaffoldSettingDialogState
               setState(() => showSectionTime = value);
               widget.showSectionTimeOnChanged?.call(value);
             },
-            checkColor: ApTheme.of(context).background,
-            activeColor: ApTheme.of(context).yellow,
           ),
           CheckboxListTile(
             title: Text(ap.showInstructors),
@@ -1562,8 +1560,6 @@ class _CourseScaffoldSettingDialogState
               setState(() => showInstructors = value);
               widget.showInstructorsOnChanged?.call(value);
             },
-            checkColor: ApTheme.of(context).background,
-            activeColor: ApTheme.of(context).yellow,
           ),
           CheckboxListTile(
             title: Text(ap.showClassroomLocation),
@@ -1573,8 +1569,6 @@ class _CourseScaffoldSettingDialogState
               setState(() => showClassroomLocation = value);
               widget.showClassroomLocationOnChanged?.call(value);
             },
-            checkColor: ApTheme.of(context).background,
-            activeColor: ApTheme.of(context).yellow,
           ),
           CheckboxListTile(
             title: const Text('連在一起'),
@@ -1584,8 +1578,6 @@ class _CourseScaffoldSettingDialogState
               setState(() => mergeCourse = value);
               widget.mergeCourseOnChanged?.call(value);
             },
-            checkColor: ApTheme.of(context).background,
-            activeColor: ApTheme.of(context).yellow,
           ),
         ],
       ),

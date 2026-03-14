@@ -145,18 +145,13 @@ class AboutUsPageState extends State<AboutUsPage> {
                     vertical: 8.0,
                     horizontal: 16.0,
                   ),
-                  elevation: 4.0,
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(12.0),
-                  ),
-                  child: Container(
+                  child: Padding(
                     padding: const EdgeInsets.only(
                       top: 24.0,
                       left: 16.0,
                       bottom: 16.0,
                       right: 16.0,
                     ),
-                    width: double.infinity,
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: <Widget>[
@@ -249,19 +244,19 @@ class AboutUsPageState extends State<AboutUsPage> {
     );
   }
 
-  Widget _item(String text, String subText) => Card(
-        margin: const EdgeInsets.symmetric(vertical: 8.0, horizontal: 16.0),
-        elevation: 4.0,
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(12.0),
+  Widget _item(String text, String subText) {
+    final ColorScheme colorScheme = Theme.of(context).colorScheme;
+
+    return Card(
+      margin: const EdgeInsets.symmetric(vertical: 8.0, horizontal: 16.0),
+      child: Padding(
+        padding: const EdgeInsets.only(
+          top: 24.0,
+          left: 16.0,
+          bottom: 16.0,
+          right: 16.0,
         ),
-        child: Container(
-          padding: const EdgeInsets.only(
-            top: 24.0,
-            left: 16.0,
-            bottom: 16.0,
-            right: 16.0,
-          ),
+        child: SizedBox(
           width: double.infinity,
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
@@ -280,7 +275,7 @@ class AboutUsPageState extends State<AboutUsPage> {
                 text: subText,
                 style: TextStyle(
                   fontSize: 14.0,
-                  color: ApTheme.of(context).grey,
+                  color: colorScheme.onSurfaceVariant,
                 ),
                 options: const LinkifyOptions(humanize: false),
                 onOpen: (LinkableElement link) =>
@@ -289,5 +284,7 @@ class AboutUsPageState extends State<AboutUsPage> {
             ],
           ),
         ),
-      );
+      ),
+    );
+  }
 }

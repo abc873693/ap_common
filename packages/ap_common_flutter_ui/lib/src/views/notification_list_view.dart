@@ -36,7 +36,7 @@ class NotificationListViewState extends State<NotificationListView>
       );
 
   TextStyle get _textGreyStyle => TextStyle(
-        color: ApTheme.of(context).grey,
+        color: Theme.of(context).colorScheme.onSurfaceVariant,
         fontSize: 14.0,
       );
 
@@ -73,9 +73,12 @@ class NotificationListViewState extends State<NotificationListView>
       child: Container(
         width: double.infinity,
         padding: const EdgeInsets.all(16.0),
-        decoration: const BoxDecoration(
+        decoration: BoxDecoration(
           border: Border(
-            top: BorderSide(color: Colors.grey, width: 0.5),
+            top: BorderSide(
+              color: Theme.of(context).colorScheme.outlineVariant,
+              width: 0.5,
+            ),
           ),
         ),
         child: Column(
