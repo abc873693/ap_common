@@ -17,7 +17,7 @@ enum CourseNotifyState { schedule, cancel }
 
 enum _ContentStyle { list, table }
 
-const double _courseHeight = 55.0;
+const double _courseHeight = 64.0;
 
 const String _kCourseInvisibleKey =
     '${ApConstants.packageName}.course_invisible_';
@@ -129,6 +129,7 @@ class CourseScaffoldState extends State<CourseScaffold> {
   bool? showInstructors;
   bool? showClassroomLocation;
   bool? showSearchButton;
+  bool? mergeCourse;
 
   bool get isLandscape =>
       // MediaQuery.of(context).size.shortestSide >= 680 ||
@@ -160,6 +161,10 @@ class CourseScaffoldState extends State<CourseScaffold> {
     showSearchButton = widget.showSearchButton ??
         PreferenceUtil.instance
             .getBool(ApConstants.showCourseSearchButton, true);
+    mergeCourse = PreferenceUtil.instance.getBool(
+      '${ApConstants.packageName}.merge_course',
+      true,
+    );
     fetchInvisibleCourseCodes();
     super.initState();
   }
@@ -228,6 +233,7 @@ class CourseScaffoldState extends State<CourseScaffold> {
                     showInstructors: showInstructors,
                     showClassroomLocation: showClassroomLocation,
                     showSearchButton: showSearchButton,
+                    mergeCourse: mergeCourse,
                     showSectionTimeOnChanged: (bool? value) {
                       setState(() => showSectionTime = value);
                       PreferenceUtil.instance.setBool(
@@ -254,6 +260,13 @@ class CourseScaffoldState extends State<CourseScaffold> {
                       PreferenceUtil.instance.setBool(
                         ApConstants.showCourseSearchButton,
                         showSearchButton!,
+                      );
+                    },
+                    mergeCourseOnChanged: (bool? value) {
+                      setState(() => mergeCourse = value);
+                      PreferenceUtil.instance.setBool(
+                        '${ApConstants.packageName}.merge_course',
+                        mergeCourse!,
                       );
                     },
                   ),
@@ -608,58 +621,89 @@ class CourseScaffoldState extends State<CourseScaffold> {
     final int minIndex = widget.courseData.minTimeCodeIndex;
     final int maxIndex = widget.courseData.maxTimeCodeIndex;
 
-    return Column(
+    return Row(
+      crossAxisAlignment: CrossAxisAlignment.start,
       children: <Widget>[
-        for (int timeIndex = minIndex; timeIndex <= maxIndex; timeIndex++)
-          _buildTimeRow(
-            colorScheme,
-            weekdayCount,
-            timeCodes,
-            timeIndex,
-            timeIndex == maxIndex,
+        _buildTimeColumn(colorScheme, timeCodes, minIndex, maxIndex),
+        for (int weekday = 1; weekday <= weekdayCount; weekday++)
+          Expanded(
+            child: _buildWeekdayColumn(
+              colorScheme,
+              weekday,
+              weekdayCount,
+              minIndex,
+              maxIndex,
+            ),
           ),
       ],
     );
   }
 
-  Widget _buildTimeRow(
+  Widget _buildTimeColumn(
     ColorScheme colorScheme,
-    int weekdayCount,
     List<TimeCode> timeCodes,
-    int timeIndex,
-    bool isLast,
+    int minIndex,
+    int maxIndex,
   ) {
-    final TimeCode? timeCode =
-        timeIndex < timeCodes.length ? timeCodes[timeIndex] : null;
+    return Column(
+      children: <Widget>[
+        for (int i = minIndex; i <= maxIndex; i++)
+          _buildTimeSlot(
+            colorScheme,
+            i < timeCodes.length ? timeCodes[i] : null,
+            i,
+            i == maxIndex,
+          ),
+      ],
+    );
+  }
 
-    return Container(
-      decoration: BoxDecoration(
-        border: Border(
-          bottom: isLast
-              ? BorderSide.none
-              : BorderSide(
-                  color: colorScheme.outlineVariant.withAlpha(77),
-                  width: 0.5,
-                ),
-        ),
-      ),
-      child: IntrinsicHeight(
-        child: Row(
-          crossAxisAlignment: CrossAxisAlignment.stretch,
-          children: <Widget>[
-            _buildTimeSlot(colorScheme, timeCode, timeIndex),
-            for (int weekday = 1; weekday <= weekdayCount; weekday++)
-              Expanded(
-                child: _buildCourseCell(
-                  colorScheme,
-                  weekday,
-                  timeIndex,
-                  weekday < weekdayCount,
-                ),
-              ),
-          ],
-        ),
-      ),
+  Widget _buildWeekdayColumn(
+    ColorScheme colorScheme,
+    int weekday,
+    int weekdayCount,
+    int minIndex,
+    int maxIndex,
+  ) {
+    final List<Widget> children = <Widget>[];
+    for (int i = minIndex; i <= maxIndex; i++) {
+      final Course? course = _getCourseAt(weekday, i);
+      final bool isInvisible =
+          course != null && invisibleCourseCodes.contains(course.code);
+
+      if (course == null || isInvisible) {
+        children.add(
+          _buildEmptyCell(
+            colorScheme,
+            weekday < weekdayCount,
+            i == maxIndex,
+          ),
+        );
+      } else {
+        int span = 1;
+        if (mergeCourse ?? true) {
+          while (i + span <= maxIndex &&
+              _getCourseAt(weekday, i + span) == course) {
+            span++;
+          }
+        }
+        children.add(
+          _buildCourseCell(
+            colorScheme,
+            weekday,
+            i,
+            course,
+            span,
+            weekday < weekdayCount,
+            i + span - 1 == maxIndex,
+          ),
+        );
+        i += span - 1;
+      }
+    }
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.stretch,
+      children: children,
     );
   }
 
@@ -667,9 +711,11 @@ class CourseScaffoldState extends State<CourseScaffold> {
     ColorScheme colorScheme,
     TimeCode? timeCode,
     int timeIndex,
+    bool isLast,
   ) {
     return Container(
       width: 48,
+      height: _courseHeight,
       padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 4),
       decoration: BoxDecoration(
         color: colorScheme.surfaceContainerHighest.withAlpha(77),
@@ -677,6 +723,12 @@ class CourseScaffoldState extends State<CourseScaffold> {
           right: BorderSide(
             color: colorScheme.outlineVariant.withAlpha(128),
           ),
+          bottom: isLast
+              ? BorderSide.none
+              : BorderSide(
+                  color: colorScheme.outlineVariant.withAlpha(77),
+                  width: 0.5,
+                ),
         ),
       ),
       child: Column(
@@ -705,45 +757,60 @@ class CourseScaffoldState extends State<CourseScaffold> {
     );
   }
 
+  Widget _buildEmptyCell(
+    ColorScheme colorScheme,
+    bool showRightBorder,
+    bool isLast,
+  ) {
+    return Container(
+      height: _courseHeight,
+      decoration: BoxDecoration(
+        border: Border(
+          right: showRightBorder
+              ? BorderSide(
+                  color: colorScheme.outlineVariant.withAlpha(51),
+                  width: 0.5,
+                )
+              : BorderSide.none,
+          bottom: isLast
+              ? BorderSide.none
+              : BorderSide(
+                  color: colorScheme.outlineVariant.withAlpha(77),
+                  width: 0.5,
+                ),
+        ),
+      ),
+    );
+  }
+
   Widget _buildCourseCell(
     ColorScheme colorScheme,
     int weekday,
     int timeIndex,
-    bool showBorder,
+    Course course,
+    int span,
+    bool showRightBorder,
+    bool isLast,
   ) {
-    final Course? course = _getCourseAt(weekday, timeIndex);
-
-    if (course != null && invisibleCourseCodes.contains(course.code)) {
-      return Container(
-        constraints: BoxConstraints(minHeight: _courseHeight),
-        decoration: BoxDecoration(
-          border: showBorder
-              ? Border(
-                  right: BorderSide(
-                    color: colorScheme.outlineVariant.withAlpha(51),
-                    width: 0.5,
-                  ),
-                )
-              : null,
-        ),
-      );
-    }
-
     return Container(
-      constraints: BoxConstraints(minHeight: _courseHeight),
+      height: _courseHeight * span,
       decoration: BoxDecoration(
-        border: showBorder
-            ? Border(
-                right: BorderSide(
+        border: Border(
+          right: showRightBorder
+              ? BorderSide(
                   color: colorScheme.outlineVariant.withAlpha(51),
                   width: 0.5,
+                )
+              : BorderSide.none,
+          bottom: isLast
+              ? BorderSide.none
+              : BorderSide(
+                  color: colorScheme.outlineVariant.withAlpha(77),
+                  width: 0.5,
                 ),
-              )
-            : null,
+        ),
       ),
-      child: course != null
-          ? _buildCourseCard(colorScheme, weekday, timeIndex, course)
-          : const SizedBox.shrink(),
+      child: _buildCourseCard(colorScheme, weekday, timeIndex, course, span),
     );
   }
 
@@ -763,6 +830,7 @@ class CourseScaffoldState extends State<CourseScaffold> {
     int weekday,
     int timeIndex,
     Course course,
+    int span,
   ) {
     final Color courseColor = _getCourseColor(course.code);
     final String locationInfo =
@@ -780,6 +848,8 @@ class CourseScaffoldState extends State<CourseScaffold> {
         _onPressed(weekday, timeCode, course);
       },
       child: Container(
+        width: double.infinity,
+        height: double.infinity,
         margin: const EdgeInsets.all(2),
         padding: const EdgeInsets.symmetric(horizontal: 4, vertical: 6),
         decoration: BoxDecoration(
@@ -799,26 +869,27 @@ class CourseScaffoldState extends State<CourseScaffold> {
             Text(
               course.title,
               textAlign: TextAlign.center,
-              maxLines: 2,
+              maxLines: span > 1 ? 4 : 2,
               overflow: TextOverflow.ellipsis,
-              style: const TextStyle(
-                fontSize: 11,
+              style: TextStyle(
+                fontSize: span > 1 ? 14 : 9.5,
                 fontWeight: FontWeight.w600,
                 color: Colors.white,
-                height: 1.2,
+                height: 1.1,
               ),
             ),
             if (instructorInfo.isNotEmpty ||
                 locationInfo.isNotEmpty) ...<Widget>[
-              const SizedBox(height: 2),
+              SizedBox(height: span > 1 ? 4 : 2),
               Text(
                 '${instructorInfo.isNotEmpty ? instructorInfo : ''}${instructorInfo.isNotEmpty && locationInfo.isNotEmpty ? '\n' : ''}${locationInfo.isNotEmpty ? locationInfo : ''}',
                 textAlign: TextAlign.center,
-                maxLines: 2,
+                maxLines: span > 1 ? 4 : 2,
                 overflow: TextOverflow.ellipsis,
                 style: TextStyle(
-                  fontSize: 10,
+                  fontSize: span > 1 ? 12 : 8.5,
                   color: Colors.white.withAlpha(217),
+                  height: 1.0,
                 ),
               ),
             ],
@@ -1419,20 +1490,24 @@ class CourseScaffoldSettingDialog extends StatefulWidget {
     required this.showInstructors,
     required this.showClassroomLocation,
     required this.showSearchButton,
+    required this.mergeCourse,
     this.showSectionTimeOnChanged,
     this.showInstructorsOnChanged,
     this.showClassroomLocationOnChanged,
     this.showSearchButtonOnChanged,
+    this.mergeCourseOnChanged,
   });
 
   final bool? showSectionTime;
   final bool? showInstructors;
   final bool? showClassroomLocation;
   final bool? showSearchButton;
+  final bool? mergeCourse;
   final Function(bool?)? showSectionTimeOnChanged;
   final Function(bool?)? showInstructorsOnChanged;
   final Function(bool?)? showClassroomLocationOnChanged;
   final Function(bool?)? showSearchButtonOnChanged;
+  final Function(bool?)? mergeCourseOnChanged;
 
   @override
   _CourseScaffoldSettingDialogState createState() =>
@@ -1445,6 +1520,7 @@ class _CourseScaffoldSettingDialogState
   bool? showInstructors;
   bool? showClassroomLocation;
   bool? showSearchButton;
+  bool? mergeCourse;
 
   @override
   void initState() {
@@ -1452,6 +1528,7 @@ class _CourseScaffoldSettingDialogState
     showInstructors = widget.showInstructors;
     showClassroomLocation = widget.showClassroomLocation;
     showSearchButton = widget.showSearchButton;
+    mergeCourse = widget.mergeCourse;
     super.initState();
   }
 
@@ -1495,6 +1572,17 @@ class _CourseScaffoldSettingDialogState
             onChanged: (bool? value) {
               setState(() => showClassroomLocation = value);
               widget.showClassroomLocationOnChanged?.call(value);
+            },
+            checkColor: ApTheme.of(context).background,
+            activeColor: ApTheme.of(context).yellow,
+          ),
+          CheckboxListTile(
+            title: const Text('連在一起'),
+            secondary: const Icon(Icons.merge_type_rounded),
+            value: mergeCourse,
+            onChanged: (bool? value) {
+              setState(() => mergeCourse = value);
+              widget.mergeCourseOnChanged?.call(value);
             },
             checkColor: ApTheme.of(context).background,
             activeColor: ApTheme.of(context).yellow,
