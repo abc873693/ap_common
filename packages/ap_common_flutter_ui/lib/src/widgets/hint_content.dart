@@ -12,6 +12,8 @@ class HintContent extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final ColorScheme colorScheme = Theme.of(context).colorScheme;
+
     return Center(
       child: Flex(
         mainAxisAlignment: MainAxisAlignment.center,
@@ -27,14 +29,14 @@ class HintContent extends StatelessWidget {
             child: Icon(
               icon,
               size: 50.0,
-              color: ApTheme.of(context).blueAccent,
+              color: colorScheme.primary,
             ),
           ),
           const SizedBox(height: 20.0),
           Text(
             content,
             textAlign: TextAlign.center,
-            style: TextStyle(color: ApTheme.of(context).grey),
+            style: TextStyle(color: colorScheme.onSurfaceVariant),
           ),
         ],
       ),

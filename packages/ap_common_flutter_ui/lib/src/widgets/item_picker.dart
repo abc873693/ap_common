@@ -19,6 +19,8 @@ class ItemPicker extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final ColorScheme colorScheme = Theme.of(context).colorScheme;
+
     return InkWell(
       onTap: () {
         showDialog(
@@ -46,7 +48,7 @@ class ItemPicker extends StatelessWidget {
               child: Text(
                 items.isEmpty ? '' : items[currentIndex],
                 style: TextStyle(
-                  color: ApTheme.of(context).semesterText,
+                  color: colorScheme.primary,
                   fontSize: 18.0,
                 ),
                 textAlign: TextAlign.center,
@@ -55,7 +57,7 @@ class ItemPicker extends StatelessWidget {
             const SizedBox(width: 8.0),
             Icon(
               ApIcon.keyboardArrowDown,
-              color: ApTheme.of(context).semesterText,
+              color: colorScheme.primary,
             ),
           ],
         ),

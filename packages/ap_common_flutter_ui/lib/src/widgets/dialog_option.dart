@@ -15,6 +15,8 @@ class DialogOption extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final ColorScheme colorScheme = Theme.of(context).colorScheme;
+
     return SimpleDialogOption(
       onPressed: onPressed,
       child: Row(
@@ -27,7 +29,7 @@ class DialogOption extends StatelessWidget {
                 text,
                 style: TextStyle(
                   fontSize: 16.0,
-                  color: check ? ApTheme.of(context).blueAccent : null,
+                  color: check ? colorScheme.primary : null,
                 ),
                 overflow: TextOverflow.clip,
               ),
@@ -36,7 +38,7 @@ class DialogOption extends StatelessWidget {
           if (check)
             Icon(
               ApIcon.check,
-              color: ApTheme.of(context).blueAccent,
+              color: colorScheme.primary,
             ),
         ],
       ),
