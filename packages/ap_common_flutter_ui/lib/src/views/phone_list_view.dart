@@ -84,7 +84,7 @@ class PhoneListViewState extends State<PhoneListView>
                     padding: const EdgeInsets.all(8.0),
                     sliver: DecoratedSliver(
                       decoration: const BoxDecoration(
-                        color: Colors.transparent,
+                        color: Color(0x00000000),
                         borderRadius: BorderRadius.zero,
                       ),
                       sliver: SliverList.separated(

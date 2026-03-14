@@ -186,9 +186,9 @@ class ApTheme extends InheritedWidget {
   Color get green {
     switch (brightness) {
       case Brightness.light:
-        return Colors.green;
+        return const Color(0xFF4CAF50);
       case Brightness.dark:
-        return Colors.green[300]!;
+        return const Color(0xFF81C784);
     }
   }
 
@@ -226,9 +226,9 @@ class ApTheme extends InheritedWidget {
   Color get toastText {
     switch (brightness) {
       case Brightness.light:
-        return Colors.white;
+        return const Color(0xFFFFFFFF);
       case Brightness.dark:
-        return Colors.black;
+        return const Color(0xFF000000);
     }
   }
 
@@ -271,36 +271,36 @@ class ApTheme extends InheritedWidget {
   Color get courseText {
     switch (brightness) {
       case Brightness.dark:
-        return Colors.black87;
+        return const Color(0xDD000000);
       case Brightness.light:
-        return Colors.white;
+        return const Color(0xFFFFFFFF);
     }
   }
 
   Color get courseListTabletBackground {
     switch (brightness) {
       case Brightness.dark:
-        return Colors.black12;
+        return const Color(0x1F000000);
       case Brightness.light:
-        return Colors.white;
+        return const Color(0xFFFFFFFF);
     }
   }
 
   Color get barCode {
     switch (brightness) {
       case Brightness.dark:
-        return Colors.white;
+        return const Color(0xFFFFFFFF);
       case Brightness.light:
-        return Colors.black;
+        return const Color(0xFF000000);
     }
   }
 
   Color get background {
     switch (brightness) {
       case Brightness.dark:
-        return const Color(0xff121212);
+        return const Color(0xFF121212);
       case Brightness.light:
-        return Colors.white;
+        return const Color(0xFFFFFFFF);
     }
   }
 
@@ -620,7 +620,7 @@ class ApTheme extends InheritedWidget {
             : colorScheme.onSurfaceVariant,
         indicatorColor: isLight ? colorScheme.onPrimary : colorScheme.primary,
         indicatorSize: TabBarIndicatorSize.tab,
-        dividerColor: Colors.transparent,
+        dividerColor: const Color(0x00000000),
         labelStyle: const TextStyle(
           fontWeight: FontWeight.w600,
           fontSize: 14,

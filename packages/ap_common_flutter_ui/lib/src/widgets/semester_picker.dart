@@ -264,7 +264,7 @@ class SemesterPickerState extends State<SemesterPicker> {
 
     showModalBottomSheet<void>(
       context: context,
-      backgroundColor: Colors.transparent,
+      backgroundColor: const Color(0x00000000),
       isScrollControlled: true,
       builder: (BuildContext sheetContext) {
         _sheetContext = sheetContext;

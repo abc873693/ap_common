@@ -90,7 +90,7 @@ class ApUtils {
     final ApLocalizations app = ApLocalizations.of(context);
     showModalBottomSheet<void>(
       context: context,
-      backgroundColor: Colors.transparent,
+      backgroundColor: const Color(0x00000000),
       isScrollControlled: true,
       builder: (BuildContext context) => Container(
         padding: const EdgeInsets.all(16),

@@ -636,8 +636,8 @@ class _ColorPickerDialogState extends State<ColorPickerDialog> {
                   '#${currentColor.value.toRadixString(16).substring(2).toUpperCase()}',
                   style: TextStyle(
                     color: _hsvColor.value > 0.5 && _hsvColor.saturation < 0.5
-                        ? Colors.black87
-                        : Colors.white,
+                        ? const Color(0xDD000000)
+                        : const Color(0xFFFFFFFF),
                     fontWeight: FontWeight.bold,
                     fontSize: 16,
                   ),
@@ -667,7 +667,7 @@ class _ColorPickerDialogState extends State<ColorPickerDialog> {
             ColorSlider(
               label: '飽和度',
               gradientColors: <Color>[
-                Colors.white,
+                const Color(0xFFFFFFFF),
                 HSVColor.fromAHSV(1, _hsvColor.hue, 1, 1).toColor(),
               ],
               value: _hsvColor.saturation,
@@ -679,7 +679,7 @@ class _ColorPickerDialogState extends State<ColorPickerDialog> {
             ColorSlider(
               label: '亮度',
               gradientColors: <Color>[
-                Colors.black,
+                const Color(0xFF000000),
                 HSVColor.fromAHSV(1, _hsvColor.hue, _hsvColor.saturation, 1)
                     .toColor(),
               ],

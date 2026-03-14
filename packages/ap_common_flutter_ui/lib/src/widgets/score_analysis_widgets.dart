@@ -24,7 +24,7 @@ class ScorePRCard extends StatelessWidget {
     final int pr = analysis.estimatedPR;
     final Color prColor = _getPRColor(colorScheme, pr);
 
-    return Container(
+    return DecoratedBox(
       decoration: BoxDecoration(
         color: colorScheme.surfaceContainerLowest,
         borderRadius: BorderRadius.circular(20),
@@ -104,7 +104,7 @@ class ScorePRCard extends StatelessWidget {
             child: FractionallySizedBox(
               alignment: Alignment.centerLeft,
               widthFactor: pr / 100,
-              child: Container(
+              child: DecoratedBox(
                 decoration: BoxDecoration(
                   gradient: LinearGradient(
                     colors: <Color>[prColor.withAlpha(179), prColor],
@@ -143,7 +143,7 @@ class ScoreStatisticsCard extends StatelessWidget {
   Widget build(BuildContext context) {
     final ColorScheme colorScheme = Theme.of(context).colorScheme;
 
-    return Container(
+    return DecoratedBox(
       decoration: BoxDecoration(
         color: colorScheme.surfaceContainerLowest,
         borderRadius: BorderRadius.circular(20),
@@ -306,7 +306,7 @@ class ScoreDistributionCard extends StatelessWidget {
   Widget build(BuildContext context) {
     final ColorScheme colorScheme = Theme.of(context).colorScheme;
 
-    return Container(
+    return DecoratedBox(
       decoration: BoxDecoration(
         color: colorScheme.surfaceContainerLowest,
         borderRadius: BorderRadius.circular(20),
@@ -421,7 +421,7 @@ class _DistributionBar extends StatelessWidget {
             child: FractionallySizedBox(
               alignment: Alignment.centerLeft,
               widthFactor: percentage,
-              child: Container(
+              child: DecoratedBox(
                 decoration: BoxDecoration(
                   color: color,
                   borderRadius: BorderRadius.circular(10),
@@ -461,7 +461,7 @@ class ScoreCreditSummaryCard extends StatelessWidget {
   Widget build(BuildContext context) {
     final ColorScheme colorScheme = Theme.of(context).colorScheme;
 
-    return Container(
+    return DecoratedBox(
       decoration: BoxDecoration(
         color: colorScheme.surfaceContainerLowest,
         borderRadius: BorderRadius.circular(20),

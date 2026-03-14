@@ -41,11 +41,11 @@ class ColorSlider extends StatelessWidget {
               trackHeight: 24,
               thumbShape: RoundSliderThumbShape(enabledThumbRadius: 12),
               overlayShape: RoundSliderOverlayShape(overlayRadius: 16),
-              thumbColor: Colors.white,
-              overlayColor: Colors.white24,
+              thumbColor: Color(0xFFFFFFFF),
+              overlayColor: Color(0x3DFFFFFF),
               trackShape: RoundedRectSliderTrackShape(),
-              activeTrackColor: Colors.transparent,
-              inactiveTrackColor: Colors.transparent,
+              activeTrackColor: Color(0x00000000),
+              inactiveTrackColor: Color(0x00000000),
             ),
             child: Slider(
               value: value,
@@ -84,7 +84,7 @@ class PresetColorGrid extends StatelessWidget {
               color: themeColor.color,
               shape: BoxShape.circle,
               border: Border.all(
-                color: Colors.white,
+                color: const Color(0xFFFFFFFF),
                 width: 2,
               ),
               boxShadow: <BoxShadow>[

@@ -122,15 +122,7 @@ class HomePageScaffoldState extends State<HomePageScaffold> {
                   : NavigationBar(
                       elevation: 12.0,
                       height: 56,
-                      indicatorColor: Colors.transparent,
-                      // fixedColor:
-                      //     ApTheme.of(context).bottomNavigationSelect,
-                      // unselectedItemColor:
-                      //     ApTheme.of(context).bottomNavigationSelect,
-                      // type: BottomNavigationBarType.fixed,
-                      // selectedFontSize: 12.0,
-                      // selectedIconTheme:
-                      //     const IconThemeData(size: 24.0),
+                      indicatorColor: const Color(0x00000000),
                       onDestinationSelected: widget.onTabTapped,
                       destinations: widget.bottomNavigationBarItems!,
                     ),
@@ -228,7 +220,7 @@ class HomePageScaffoldState extends State<HomePageScaffold> {
             Hero(
               tag: ApConstants.tagAnnouncementTitle,
               child: Material(
-                color: Colors.transparent,
+                color: const Color(0x00000000),
                 child: Text(
                   widget.announcements[_currentNewsIndex].title,
                   textAlign: TextAlign.center,

@@ -55,9 +55,8 @@ class NotificationListViewState extends State<NotificationListView>
   Widget _body() {
     switch (widget.state) {
       case NotificationState.loading:
-        return Container(
-          alignment: Alignment.center,
-          child: const CircularProgressIndicator(),
+        return const Center(
+          child: CircularProgressIndicator(),
         );
       case NotificationState.error:
       case NotificationState.empty:

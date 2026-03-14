@@ -846,7 +846,7 @@ class CourseScaffoldState extends State<CourseScaffold> {
               style: TextStyle(
                 fontSize: span > 1 ? 14 : 9.5,
                 fontWeight: FontWeight.w600,
-                color: Colors.white,
+                color: Color(0xFFFFFFFF),
                 height: 1.1,
               ),
             ),
@@ -860,7 +860,7 @@ class CourseScaffoldState extends State<CourseScaffold> {
                 overflow: TextOverflow.ellipsis,
                 style: TextStyle(
                   fontSize: span > 1 ? 12 : 8.5,
-                  color: Colors.white.withAlpha(217),
+                  color: Color(0xFFFFFFFF).withAlpha(217),
                   height: 1.0,
                 ),
               ),
@@ -874,7 +874,7 @@ class CourseScaffoldState extends State<CourseScaffold> {
   void _onPressed(int weekday, TimeCode timeCode, Course course) {
     showModalBottomSheet<void>(
       context: context,
-      backgroundColor: Colors.transparent,
+      backgroundColor: Color(0x00000000),
       isScrollControlled: true,
       builder: (BuildContext builder) {
         return CourseContent(
@@ -1038,7 +1038,7 @@ class _CourseContentState extends State<CourseContent> {
                         tooltip: ApLocalizations.of(context).addToCalendar,
                         icon: Image.asset(
                           ApImageIcons.calendarImport,
-                          color: Colors.white,
+                          color: Color(0xFFFFFFFF),
                           height: 24.0,
                           width: 24.0,
                         ),
@@ -1064,7 +1064,7 @@ class _CourseContentState extends State<CourseContent> {
                         visibility
                             ? Icons.visibility_outlined
                             : Icons.visibility_off_outlined,
-                        color: Colors.white,
+                        color: Color(0xFFFFFFFF),
                       ),
                       onPressed: () {
                         setState(() {
@@ -1080,7 +1080,7 @@ class _CourseContentState extends State<CourseContent> {
                           state == CourseNotifyState.schedule
                               ? Icons.alarm_on
                               : Icons.alarm_off,
-                          color: Colors.white,
+                          color: Color(0xFFFFFFFF),
                         ),
                         onPressed: () async {
                           CourseNotify? courseNotify = _notifyData!.getByCode(
@@ -1162,7 +1162,7 @@ class _CourseContentState extends State<CourseContent> {
                         style: const TextStyle(
                           fontSize: 20,
                           fontWeight: FontWeight.bold,
-                          color: Colors.white,
+                          color: Color(0xFFFFFFFF),
                         ),
                       ),
                     ),
@@ -1174,14 +1174,14 @@ class _CourseContentState extends State<CourseContent> {
                           vertical: 4,
                         ),
                         decoration: BoxDecoration(
-                          color: Colors.white.withAlpha(51),
+                          color: Color(0xFFFFFFFF).withAlpha(51),
                           borderRadius: BorderRadius.circular(12),
                         ),
                         child: Text(
                           widget.course.required!,
                           style: const TextStyle(
                             fontSize: 12,
-                            color: Colors.white,
+                            color: Color(0xFFFFFFFF),
                           ),
                         ),
                       ),
@@ -1192,7 +1192,7 @@ class _CourseContentState extends State<CourseContent> {
                   widget.course.code,
                   style: TextStyle(
                     fontSize: 14,
-                    color: Colors.white.withAlpha(204),
+                    color: Color(0xFFFFFFFF).withAlpha(204),
                   ),
                 ),
               ],
@@ -1347,7 +1347,7 @@ class CourseList extends StatelessWidget {
             onTap: () {
               showModalBottomSheet<void>(
                 context: context,
-                backgroundColor: Colors.transparent,
+                backgroundColor: Color(0x00000000),
                 isScrollControlled: true,
                 builder: (BuildContext context) => CourseContent(
                   course: course,

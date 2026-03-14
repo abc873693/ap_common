@@ -34,7 +34,7 @@ class LoginScaffoldState extends State<LoginScaffold> {
 
     return Scaffold(
       resizeToAvoidBottomInset: orientation == Orientation.portrait,
-      body: Container(
+      body: DecoratedBox(
         decoration: BoxDecoration(
           gradient: LinearGradient(
             begin: Alignment.topCenter,

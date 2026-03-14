@@ -62,7 +62,7 @@ class UserInfoScaffoldState extends State<UserInfoScaffold> {
             expandedHeight: 200,
             pinned: true,
             flexibleSpace: FlexibleSpaceBar(
-              background: Container(
+              background: DecoratedBox(
                 decoration: BoxDecoration(
                   gradient: LinearGradient(
                     begin: Alignment.topCenter,
@@ -165,7 +165,7 @@ class UserInfoScaffoldState extends State<UserInfoScaffold> {
   Widget _buildAvatar(ColorScheme colorScheme, bool isDark) {
     final bool hasImage = widget.userInfo.pictureBytes != null &&
         widget.userInfo.pictureBytes!.isNotEmpty;
-    return Container(
+    return DecoratedBox(
       decoration: BoxDecoration(
         shape: BoxShape.circle,
         border: Border.all(
@@ -201,7 +201,7 @@ class UserInfoScaffoldState extends State<UserInfoScaffold> {
   }
 
   Widget _buildInfoCard(ColorScheme colorScheme) {
-    return Container(
+    return DecoratedBox(
       decoration: BoxDecoration(
         color: colorScheme.surfaceContainerLowest,
         borderRadius: BorderRadius.circular(16),

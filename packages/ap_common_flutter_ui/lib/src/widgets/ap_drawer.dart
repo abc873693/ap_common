@@ -26,7 +26,7 @@ class ApDrawer extends StatelessWidget {
     final bool isDark = Theme.of(context).brightness == Brightness.dark;
 
     return Drawer(
-      backgroundColor: Colors.transparent,
+      backgroundColor: Color(0x00000000),
       elevation: 0,
       shape: const RoundedRectangleBorder(
         borderRadius: BorderRadius.horizontal(right: Radius.circular(20)),
@@ -326,7 +326,7 @@ class DrawerMenuSection extends StatelessWidget {
       return Padding(
         padding: const EdgeInsets.symmetric(vertical: 2),
         child: Material(
-          color: Colors.transparent,
+          color: Color(0x00000000),
           borderRadius: BorderRadius.circular(12),
           child: Padding(
             padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 18),
@@ -360,7 +360,7 @@ class DrawerMenuSection extends StatelessWidget {
       padding: const EdgeInsets.symmetric(vertical: 2),
       child: Theme(
         data: Theme.of(context).copyWith(
-          dividerColor: Colors.transparent,
+          dividerColor: Color(0x00000000),
           splashColor: colorScheme.primary.withAlpha(26),
         ),
         child: ExpansionTile(
