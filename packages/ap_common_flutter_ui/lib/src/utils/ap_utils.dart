@@ -1,7 +1,6 @@
 import 'dart:io';
 
 import 'package:ap_common_flutter_core/ap_common_flutter_core.dart';
-import 'package:ap_common_flutter_ui/src/resources/ap_theme.dart';
 import 'package:ap_common_flutter_ui/src/widgets/yes_no_dialog.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
@@ -107,7 +106,9 @@ class ApUtils {
                 child: Text(
                   app.ratingDialogTitle,
                   style: TextStyle(
-                      color: Theme.of(context).colorScheme.primary, fontSize: 20.0),
+                    color: Theme.of(context).colorScheme.primary,
+                    fontSize: 20.0,
+                  ),
                 ),
               ),
             ),

@@ -95,12 +95,21 @@ class AboutUsPageState extends State<AboutUsPage> {
           SliverList(
             delegate: SliverChildListDelegate(
               <Widget>[
-                AboutInfoCard(title: app.aboutAuthorTitle, content: app.aboutAuthorContent),
+                AboutInfoCard(
+                  title: app.aboutAuthorTitle,
+                  content: app.aboutAuthorContent,
+                ),
                 AboutInfoCard(title: app.about, content: app.aboutUsContent),
-                AboutInfoCard(title: app.aboutRecruitTitle, content: app.aboutRecruitContent),
+                AboutInfoCard(
+                  title: app.aboutRecruitTitle,
+                  content: app.aboutRecruitContent,
+                ),
                 Stack(
                   children: <Widget>[
-                    AboutInfoCard(title: app.aboutItcTitle, content: app.aboutItcContent),
+                    AboutInfoCard(
+                      title: app.aboutItcTitle,
+                      content: app.aboutItcContent,
+                    ),
                     Padding(
                       padding: const EdgeInsets.symmetric(
                         vertical: 20.0,
@@ -234,7 +243,10 @@ class AboutUsPageState extends State<AboutUsPage> {
                     ),
                   ),
                 ),
-                AboutInfoCard(title: app.aboutOpenSourceTitle, content: widget.appLicense),
+                AboutInfoCard(
+                  title: app.aboutOpenSourceTitle,
+                  content: widget.appLicense,
+                ),
               ],
             ),
           ),

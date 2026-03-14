@@ -15,7 +15,10 @@ class Toast {
     int duration = 1,
     int gravity = 0,
     Color backgroundColor = const Color(0xAA000000),
-    TextStyle textStyle = const TextStyle(fontSize: 15, color: Color(0xFFFFFFFF)),
+    TextStyle textStyle = const TextStyle(
+      fontSize: 15,
+      color: Color(0xFFFFFFFF),
+    ),
     double backgroundRadius = 20,
     bool rootNavigator = false,
     Border? border,

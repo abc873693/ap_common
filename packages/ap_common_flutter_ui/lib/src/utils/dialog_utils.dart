@@ -43,7 +43,10 @@ class DialogUtils {
         title: ap.newsRuleTitle,
         contentWidget: SelectableText.rich(
           TextSpan(
-            style: TextStyle(color: Theme.of(context).colorScheme.onSurfaceVariant, fontSize: 16.0),
+            style: TextStyle(
+              color: Theme.of(context).colorScheme.onSurfaceVariant,
+              fontSize: 16.0,
+            ),
             children: <TextSpan>[
               TextSpan(
                 text: ap.newsRuleDescription1,
@@ -76,7 +79,9 @@ class DialogUtils {
           contentWidget: Text(
             content,
             textAlign: TextAlign.center,
-            style: TextStyle(color: Theme.of(context).colorScheme.onSurfaceVariant),
+            style: TextStyle(
+              color: Theme.of(context).colorScheme.onSurfaceVariant,
+            ),
           ),
           actionText: ApLocalizations.of(context).iKnow,
           actionFunction: () => Navigator.of(context).pop(),

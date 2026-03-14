@@ -95,7 +95,7 @@ class HomePageScaffoldState extends State<HomePageScaffold> {
           drawer: isTablet ? null : widget.drawer,
           floatingActionButton: widget.floatingActionButton,
           body: Row(
-            children: [
+            children: <Widget>[
               if (isTablet) widget.drawer!,
               Expanded(
                 child: (isTablet && widget.content != null)

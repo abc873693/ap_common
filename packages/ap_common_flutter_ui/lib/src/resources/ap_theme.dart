@@ -305,7 +305,7 @@ class ApTheme extends InheritedWidget {
   }
 
   static ThemeData get light {
-    final colorScheme = ColorScheme.fromSeed(
+    final ColorScheme colorScheme = ColorScheme.fromSeed(
       seedColor: seedColor,
       brightness: Brightness.light,
     );
@@ -313,7 +313,7 @@ class ApTheme extends InheritedWidget {
   }
 
   static ThemeData get dark {
-    final colorScheme = ColorScheme.fromSeed(
+    final ColorScheme colorScheme = ColorScheme.fromSeed(
       seedColor: seedColor,
       brightness: Brightness.dark,
     );
@@ -321,7 +321,7 @@ class ApTheme extends InheritedWidget {
   }
 
   static ThemeData _buildTheme(ColorScheme colorScheme) {
-    final isLight = colorScheme.brightness == Brightness.light;
+    final bool isLight = colorScheme.brightness == Brightness.light;
 
     return ThemeData(
       useMaterial3: true,
@@ -476,13 +476,14 @@ class ApTheme extends InheritedWidget {
         indicatorColor: colorScheme.secondaryContainer,
         labelBehavior: NavigationDestinationLabelBehavior.alwaysShow,
         surfaceTintColor: colorScheme.surfaceTint,
-        iconTheme: WidgetStateProperty.resolveWith((states) {
+        iconTheme: WidgetStateProperty.resolveWith((Set<WidgetState> states) {
           if (states.contains(WidgetState.selected)) {
             return IconThemeData(color: colorScheme.onSecondaryContainer);
           }
           return IconThemeData(color: colorScheme.onSurfaceVariant);
         }),
-        labelTextStyle: WidgetStateProperty.resolveWith((states) {
+        labelTextStyle: WidgetStateProperty.resolveWith(
+          (Set<WidgetState> states) {
           if (states.contains(WidgetState.selected)) {
             return TextStyle(
               fontSize: 12,
@@ -576,7 +577,7 @@ class ApTheme extends InheritedWidget {
         side: BorderSide(color: colorScheme.outline, width: 0.5),
       ),
       checkboxTheme: CheckboxThemeData(
-        fillColor: WidgetStateProperty.resolveWith((states) {
+        fillColor: WidgetStateProperty.resolveWith((Set<WidgetState> states) {
           if (states.contains(WidgetState.selected)) {
             return colorScheme.primary;
           }
@@ -589,19 +590,20 @@ class ApTheme extends InheritedWidget {
         side: BorderSide(color: colorScheme.outline, width: 2),
       ),
       switchTheme: SwitchThemeData(
-        thumbColor: WidgetStateProperty.resolveWith((states) {
+        thumbColor: WidgetStateProperty.resolveWith((Set<WidgetState> states) {
           if (states.contains(WidgetState.selected)) {
             return colorScheme.onPrimary;
           }
           return colorScheme.outline;
         }),
-        trackColor: WidgetStateProperty.resolveWith((states) {
+        trackColor: WidgetStateProperty.resolveWith((Set<WidgetState> states) {
           if (states.contains(WidgetState.selected)) {
             return colorScheme.primary;
           }
           return colorScheme.surfaceContainerHighest;
         }),
-        trackOutlineColor: WidgetStateProperty.resolveWith((states) {
+        trackOutlineColor: WidgetStateProperty.resolveWith(
+          (Set<WidgetState> states) {
           if (states.contains(WidgetState.selected)) {
             return colorScheme.primary;
           }

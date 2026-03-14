@@ -812,6 +812,11 @@ class CourseScaffoldState extends State<CourseScaffold> {
     final String instructorInfo =
         (showInstructors ?? true) ? course.getInstructors() : '';
 
+    final String displayInfo = <String>[
+      if (instructorInfo.isNotEmpty) instructorInfo,
+      if (locationInfo.isNotEmpty) locationInfo,
+    ].join('\n');
+
     return GestureDetector(
       onTap: () {
         final TimeCode timeCode = timeIndex < widget.courseData.timeCodes.length
@@ -850,11 +855,10 @@ class CourseScaffoldState extends State<CourseScaffold> {
                 height: 1.1,
               ),
             ),
-            if (instructorInfo.isNotEmpty ||
-                locationInfo.isNotEmpty) ...<Widget>[
+            if (displayInfo.isNotEmpty) ...<Widget>[
               SizedBox(height: span > 1 ? 4 : 2),
               Text(
-                '${instructorInfo.isNotEmpty ? instructorInfo : ''}${instructorInfo.isNotEmpty && locationInfo.isNotEmpty ? '\n' : ''}${locationInfo.isNotEmpty ? locationInfo : ''}',
+                displayInfo,
                 textAlign: TextAlign.center,
                 maxLines: span > 1 ? 4 : 2,
                 overflow: TextOverflow.ellipsis,
@@ -1396,9 +1400,16 @@ class CourseList extends StatelessWidget {
                         ),
                         const SizedBox(height: 4),
                         Text(
-                          '${instructors.isNotEmpty ? instructors : app.unknown}'
-                          ' · '
-                          '${course.location != null ? course.location.toString() : "-"}',
+                          instructors.isNotEmpty
+                              ? instructors
+                              : app.unknown,
+                          style: TextStyle(
+                            fontSize: 13,
+                            color: colorScheme.onSurfaceVariant,
+                          ),
+                        ),
+                        Text(
+                          course.location?.toString() ?? '-',
                           style: TextStyle(
                             fontSize: 13,
                             color: colorScheme.onSurfaceVariant,

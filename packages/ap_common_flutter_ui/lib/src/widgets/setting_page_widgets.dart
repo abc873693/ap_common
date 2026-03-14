@@ -608,6 +608,11 @@ class _ColorPickerDialogState extends State<ColorPickerDialog> {
   @override
   Widget build(BuildContext context) {
     final Color currentColor = _hsvColor.toColor();
+    final String hexCode = currentColor
+        .toARGB32()
+        .toRadixString(16)
+        .substring(2)
+        .toUpperCase();
 
     return AlertDialog(
       title: const Text('選擇主題色'),
@@ -632,7 +637,7 @@ class _ColorPickerDialogState extends State<ColorPickerDialog> {
               ),
               child: Center(
                 child: Text(
-                  '#${currentColor.toARGB32().toRadixString(16).substring(2).toUpperCase()}',
+                  '#$hexCode',
                   style: TextStyle(
                     color: _hsvColor.value > 0.5 && _hsvColor.saturation < 0.5
                         ? const Color(0xDD000000)
