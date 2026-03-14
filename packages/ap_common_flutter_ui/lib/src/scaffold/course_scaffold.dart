@@ -288,7 +288,7 @@ class CourseScaffoldState extends State<CourseScaffold> {
                 children: <Widget>[
                   if (widget.customHint != null &&
                       widget.customHint!.isNotEmpty)
-                    _buildHintBanner(Theme.of(context).colorScheme),
+                    _buildHintBanner(),
                   Expanded(
                     child: RefreshIndicator(
                       onRefresh: () async {
@@ -412,36 +412,8 @@ class CourseScaffoldState extends State<CourseScaffold> {
     );
   }
 
-  Widget _buildHintBanner(ColorScheme colorScheme) {
-    return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-      child: Container(
-        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
-        decoration: BoxDecoration(
-          color: colorScheme.tertiaryContainer.withAlpha(128),
-          borderRadius: BorderRadius.circular(12),
-        ),
-        child: Row(
-          children: <Widget>[
-            Icon(
-              Icons.info_outline_rounded,
-              size: 18,
-              color: colorScheme.onTertiaryContainer,
-            ),
-            const SizedBox(width: 8),
-            Expanded(
-              child: Text(
-                widget.customHint!,
-                style: TextStyle(
-                  fontSize: 13,
-                  color: colorScheme.onTertiaryContainer,
-                ),
-              ),
-            ),
-          ],
-        ),
-      ),
-    );
+  Widget _buildHintBanner() {
+    return HintBanner(text: widget.customHint!);
   }
 
   Widget _body() {

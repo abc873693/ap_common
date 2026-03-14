@@ -211,43 +211,38 @@ class UserInfoScaffoldState extends State<UserInfoScaffold> {
       ),
       child: Column(
         children: <Widget>[
-          _buildInfoRow(
+          InfoRow(
             icon: Icons.badge_outlined,
             title: app.studentId,
             value: widget.userInfo.id,
-            colorScheme: colorScheme,
           ),
           _buildDivider(colorScheme),
           if (widget.userInfo.educationSystem != null) ...<Widget>[
-            _buildInfoRow(
+            InfoRow(
               icon: Icons.school_outlined,
               title: app.educationSystem,
               value: widget.userInfo.educationSystem!,
-              colorScheme: colorScheme,
             ),
             _buildDivider(colorScheme),
           ],
           if (widget.userInfo.email != null) ...<Widget>[
-            _buildInfoRow(
+            InfoRow(
               icon: Icons.email_outlined,
               title: app.email,
               value: widget.userInfo.email!,
-              colorScheme: colorScheme,
             ),
             _buildDivider(colorScheme),
           ],
-          _buildInfoRow(
+          InfoRow(
             icon: Icons.domain_outlined,
             title: app.department,
             value: widget.userInfo.department ?? '',
-            colorScheme: colorScheme,
           ),
           _buildDivider(colorScheme),
-          _buildInfoRow(
+          InfoRow(
             icon: Icons.class_outlined,
             title: app.studentClass,
             value: widget.userInfo.className ?? '',
-            colorScheme: colorScheme,
           ),
         ],
       ),
@@ -319,58 +314,6 @@ class UserInfoScaffoldState extends State<UserInfoScaffold> {
                   style: TextStyle(
                     fontSize: 12,
                     color: colorScheme.onSurfaceVariant,
-                  ),
-                ),
-              ],
-            ),
-          ),
-        ],
-      ),
-    );
-  }
-
-  Widget _buildInfoRow({
-    required IconData icon,
-    required String title,
-    required String value,
-    required ColorScheme colorScheme,
-  }) {
-    return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
-      child: Row(
-        children: <Widget>[
-          Container(
-            width: 40,
-            height: 40,
-            decoration: BoxDecoration(
-              color: colorScheme.primaryContainer.withAlpha(128),
-              borderRadius: BorderRadius.circular(10),
-            ),
-            child: Icon(
-              icon,
-              size: 20,
-              color: colorScheme.primary,
-            ),
-          ),
-          const SizedBox(width: 16),
-          Expanded(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: <Widget>[
-                Text(
-                  title,
-                  style: TextStyle(
-                    fontSize: 13,
-                    color: colorScheme.onSurfaceVariant,
-                  ),
-                ),
-                const SizedBox(height: 2),
-                SelectableText(
-                  value,
-                  style: TextStyle(
-                    fontSize: 16,
-                    fontWeight: FontWeight.w500,
-                    color: colorScheme.onSurface,
                   ),
                 ),
               ],
