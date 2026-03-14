@@ -98,7 +98,8 @@ class SettingPageState extends State<SettingPage> {
                 ChangeThemeColorItem(
                   onChanged: (Color color) {
                     final int index = ApTheme.themeColors.indexWhere(
-                      (ThemeColor tc) => tc.color.value == color.value,
+                      (ThemeColor tc) =>
+                          tc.color.toARGB32() == color.toARGB32(),
                     );
                     setState(() {
                       if (index != -1) {
@@ -116,7 +117,7 @@ class SettingPageState extends State<SettingPage> {
                     if (ApTheme.customColor != null) {
                       PreferenceUtil.instance.setInt(
                         Constants.PREF_CUSTOM_THEME_COLOR,
-                        ApTheme.customColor!.value,
+                        ApTheme.customColor!.toARGB32(),
                       );
                     }
                     ShareDataWidget.of(context)!.data!.update();
@@ -155,7 +156,8 @@ class SettingPageState extends State<SettingPage> {
 
   Future<void> _getPreference() async {
     // PackageInfo? packageInfo;
-    // if (!kIsWeb && (Platform.isAndroid || Platform.isIOS || Platform.isMacOS)) {
+    // if (!kIsWeb &&
+    //     (Platform.isAndroid || Platform.isIOS || Platform.isMacOS)) {
     //   packageInfo = await PackageInfo.fromPlatform();
     // }
     setState(() {
