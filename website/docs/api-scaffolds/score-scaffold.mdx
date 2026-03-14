@@ -4,7 +4,7 @@ sidebar_position: 3
 
 # 成績骨架 ScoreScaffold
 
-提供顯示成績(Score)骨架，顯示 `ScoreData` 中的成績列表`List<Score>`資訊。自 v2 版本起，更新了外觀與操作體驗，並與 `SemesterPicker` 有更好的整合。
+提供顯示成績(Score)骨架，顯示 `ScoreData` 中的成績列表`List<Score>`資訊。自 v2 版本起，更新了外觀與操作體驗，並與 `SemesterPicker` 有更好的整合。v3 全面改用 Material Design 3 的 `colorScheme` 取得主題色彩，並將成績分析 UI 提取為獨立元件。
  - 支援響應式介面
    - longestSide >= 880 顯示平板模式
    - 平板模式時，列表於詳細資訊會水平顯示
@@ -38,3 +38,16 @@ sidebar_position: 3
 | finalScoreBuilder | Widget Function(int index) | 成績列表第二列Builder，`Null`時預設顯示為 `Score` 參數中的 `finalScore` |
 | details | `List<String>` | 第二區塊，列表顯示其中的資訊 |
 | bottom | `Widget` | `AppBar` 底下的區域，為Flutter 原生 API `Scaffold` 的參數 |
+
+## 成績分析元件
+
+自 v3 起，成績分析的相關 UI 已從 `ScoreScaffold` 內部提取為獨立元件，可在其他頁面重複使用：
+
+| 元件名稱                         | 描述                             |
+| ------------------------------- | ------------------------------- |
+| `ScorePRCard` | 估計 PR 值卡片，顯示漸層進度條與等級標籤 |
+| `ScoreStatisticsCard` | 成績統計卡片，顯示最高分、最低分、標準差、科目數 |
+| `ScoreDistributionCard` | 成績分佈卡片，以水平長條圖顯示各分數區間的科目數 |
+| `ScoreCreditSummaryCard` | 學分統計卡片，顯示修習學分、及格學分、不及格學分 |
+
+以上元件皆接受 `ScoreAnalysis` 作為必要參數，可從 `ap_common_flutter_ui` 匯入使用。
