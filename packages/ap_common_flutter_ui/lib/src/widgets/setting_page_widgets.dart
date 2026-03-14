@@ -585,12 +585,12 @@ class ChangeThemeColorItem extends StatelessWidget {
 }
 
 class ColorPickerDialog extends StatefulWidget {
-  final Color initialColor;
-
   const ColorPickerDialog({
     super.key,
     required this.initialColor,
   });
+
+  final Color initialColor;
 
   @override
   State<ColorPickerDialog> createState() => _ColorPickerDialogState();
@@ -607,7 +607,6 @@ class _ColorPickerDialogState extends State<ColorPickerDialog> {
 
   @override
   Widget build(BuildContext context) {
-    final ColorScheme colorScheme = Theme.of(context).colorScheme;
     final Color currentColor = _hsvColor.toColor();
 
     return AlertDialog(
@@ -633,7 +632,7 @@ class _ColorPickerDialogState extends State<ColorPickerDialog> {
               ),
               child: Center(
                 child: Text(
-                  '#${currentColor.value.toRadixString(16).substring(2).toUpperCase()}',
+                  '#${currentColor.toARGB32().toRadixString(16).substring(2).toUpperCase()}',
                   style: TextStyle(
                     color: _hsvColor.value > 0.5 && _hsvColor.saturation < 0.5
                         ? const Color(0xDD000000)
