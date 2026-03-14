@@ -68,7 +68,7 @@ class ApUtils {
         contentWidget: Text(
           app.ratingDialogContent,
           style: TextStyle(
-            color: ApTheme.of(context).grey,
+            color: Theme.of(context).colorScheme.onSurfaceVariant,
             height: 1.3,
             fontSize: 16.0,
           ),
@@ -107,7 +107,7 @@ class ApUtils {
                 child: Text(
                   app.ratingDialogTitle,
                   style: TextStyle(
-                      color: ApTheme.of(context).blue, fontSize: 20.0),
+                      color: Theme.of(context).colorScheme.primary, fontSize: 20.0),
                 ),
               ),
             ),
@@ -115,7 +115,7 @@ class ApUtils {
               textAlign: TextAlign.center,
               text: TextSpan(
                 style: TextStyle(
-                  color: ApTheme.of(context).grey,
+                  color: Theme.of(context).colorScheme.onSurfaceVariant,
                   height: 1.3,
                   fontSize: 18.0,
                 ),
@@ -134,7 +134,7 @@ class ApUtils {
                   child: Text(
                     app.later,
                     style: TextStyle(
-                      color: ApTheme.of(context).blue,
+                      color: Theme.of(context).colorScheme.primary,
                       fontSize: 16.0,
                     ),
                   ),
@@ -146,7 +146,7 @@ class ApUtils {
                   child: Text(
                     app.rateNow,
                     style: TextStyle(
-                      color: ApTheme.of(context).blue,
+                      color: Theme.of(context).colorScheme.primary,
                       fontSize: 16.0,
                     ),
                   ),
