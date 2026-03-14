@@ -30,16 +30,6 @@ class NotificationListViewState extends State<NotificationListView>
 
   ScrollController? controller;
 
-  TextStyle get _textStyle => const TextStyle(
-        fontSize: 18.0,
-        fontWeight: FontWeight.bold,
-      );
-
-  TextStyle get _textGreyStyle => TextStyle(
-        color: Theme.of(context).colorScheme.onSurfaceVariant,
-        fontSize: 14.0,
-      );
-
   @override
   void initState() {
     AnalyticsUtil.instance.setCurrentScreen(
@@ -54,64 +44,6 @@ class NotificationListViewState extends State<NotificationListView>
   void dispose() {
     super.dispose();
     controller?.removeListener(_scrollListener);
-  }
-
-  Widget _notificationItem(Notifications notification) {
-    return InkWell(
-      onLongPress: () {
-        final RenderBox? box = context.findRenderObject() as RenderBox?;
-        PlatformUtil.instance.shareTo(
-          '${notification.info.title}\n${notification.link}',
-          sharePositionOrigin: box!.localToGlobal(Offset.zero) & box.size,
-        );
-        AnalyticsUtil.instance.logEvent('share_long_click');
-      },
-      onTap: () {
-        PlatformUtil.instance.launchUrl(notification.link);
-        AnalyticsUtil.instance.logEvent('notification_link_click');
-      },
-      child: Container(
-        width: double.infinity,
-        padding: const EdgeInsets.all(16.0),
-        decoration: BoxDecoration(
-          border: Border(
-            top: BorderSide(
-              color: Theme.of(context).colorScheme.outlineVariant,
-              width: 0.5,
-            ),
-          ),
-        ),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: <Widget>[
-            Text(
-              notification.info.title,
-              style: _textStyle,
-              textAlign: TextAlign.left,
-            ),
-            const SizedBox(height: 8.0),
-            Row(
-              children: <Widget>[
-                Expanded(
-                  child: Text(
-                    notification.info.department,
-                    style: _textGreyStyle,
-                    textAlign: TextAlign.left,
-                  ),
-                ),
-                Expanded(
-                  child: Text(
-                    notification.info.date,
-                    style: _textGreyStyle,
-                    textAlign: TextAlign.right,
-                  ),
-                ),
-              ],
-            ),
-          ],
-        ),
-      ),
-    );
   }
 
   @override
@@ -152,7 +84,9 @@ class NotificationListViewState extends State<NotificationListView>
           child: ListView.builder(
             controller: controller,
             itemBuilder: (BuildContext context, int index) {
-              return _notificationItem(widget.notificationList[index]);
+              return NotificationItem(
+                notification: widget.notificationList[index],
+              );
             },
             itemCount: widget.notificationList.length,
           ),

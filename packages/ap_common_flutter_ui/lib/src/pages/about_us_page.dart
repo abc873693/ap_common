@@ -1,6 +1,5 @@
 import 'package:ap_common_flutter_ui/ap_common_flutter_ui.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_linkify/flutter_linkify.dart';
 
 class AboutUsPage extends StatefulWidget {
   const AboutUsPage({
@@ -96,12 +95,12 @@ class AboutUsPageState extends State<AboutUsPage> {
           SliverList(
             delegate: SliverChildListDelegate(
               <Widget>[
-                _item(app.aboutAuthorTitle, app.aboutAuthorContent),
-                _item(app.about, app.aboutUsContent),
-                _item(app.aboutRecruitTitle, app.aboutRecruitContent),
+                AboutInfoCard(title: app.aboutAuthorTitle, content: app.aboutAuthorContent),
+                AboutInfoCard(title: app.about, content: app.aboutUsContent),
+                AboutInfoCard(title: app.aboutRecruitTitle, content: app.aboutRecruitContent),
                 Stack(
                   children: <Widget>[
-                    _item(app.aboutItcTitle, app.aboutItcContent),
+                    AboutInfoCard(title: app.aboutItcTitle, content: app.aboutItcContent),
                     Padding(
                       padding: const EdgeInsets.symmetric(
                         vertical: 20.0,
@@ -120,9 +119,9 @@ class AboutUsPageState extends State<AboutUsPage> {
                 ),
                 Stack(
                   children: <Widget>[
-                    _item(
-                      app.aboutNsysuCodeClubTitle,
-                      app.aboutNsysuCodeClubContent,
+                    AboutInfoCard(
+                      title: app.aboutNsysuCodeClubTitle,
+                      content: app.aboutNsysuCodeClubContent,
                     ),
                     Padding(
                       padding: const EdgeInsets.symmetric(
@@ -235,7 +234,7 @@ class AboutUsPageState extends State<AboutUsPage> {
                     ),
                   ),
                 ),
-                _item(app.aboutOpenSourceTitle, widget.appLicense),
+                AboutInfoCard(title: app.aboutOpenSourceTitle, content: widget.appLicense),
               ],
             ),
           ),
@@ -244,47 +243,4 @@ class AboutUsPageState extends State<AboutUsPage> {
     );
   }
 
-  Widget _item(String text, String subText) {
-    final ColorScheme colorScheme = Theme.of(context).colorScheme;
-
-    return Card(
-      margin: const EdgeInsets.symmetric(vertical: 8.0, horizontal: 16.0),
-      child: Padding(
-        padding: const EdgeInsets.only(
-          top: 24.0,
-          left: 16.0,
-          bottom: 16.0,
-          right: 16.0,
-        ),
-        child: SizedBox(
-          width: double.infinity,
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: <Widget>[
-              Padding(
-                padding: const EdgeInsets.only(right: 52.0),
-                child: SelectableLinkify(
-                  text: text,
-                  style: const TextStyle(fontSize: 18.0),
-                ),
-              ),
-              const SizedBox(
-                height: 8.0,
-              ),
-              SelectableLinkify(
-                text: subText,
-                style: TextStyle(
-                  fontSize: 14.0,
-                  color: colorScheme.onSurfaceVariant,
-                ),
-                options: const LinkifyOptions(humanize: false),
-                onOpen: (LinkableElement link) =>
-                    PlatformUtil.instance.launchUrl(link.url),
-              ),
-            ],
-          ),
-        ),
-      ),
-    );
-  }
 }

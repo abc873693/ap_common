@@ -645,13 +645,55 @@ class _ColorPickerDialogState extends State<ColorPickerDialog> {
               ),
             ),
             const SizedBox(height: 24),
-            _buildHueSlider(colorScheme),
+            ColorSlider(
+              label: '色相',
+              gradientColors: const <Color>[
+                Color(0xFFFF0000),
+                Color(0xFFFFFF00),
+                Color(0xFF00FF00),
+                Color(0xFF00FFFF),
+                Color(0xFF0000FF),
+                Color(0xFFFF00FF),
+                Color(0xFFFF0000),
+              ],
+              value: _hsvColor.hue,
+              min: 0,
+              max: 360,
+              onChanged: (double value) {
+                setState(() => _hsvColor = _hsvColor.withHue(value));
+              },
+            ),
             const SizedBox(height: 16),
-            _buildSaturationSlider(colorScheme),
+            ColorSlider(
+              label: '飽和度',
+              gradientColors: <Color>[
+                Colors.white,
+                HSVColor.fromAHSV(1, _hsvColor.hue, 1, 1).toColor(),
+              ],
+              value: _hsvColor.saturation,
+              onChanged: (double value) {
+                setState(() => _hsvColor = _hsvColor.withSaturation(value));
+              },
+            ),
             const SizedBox(height: 16),
-            _buildValueSlider(colorScheme),
+            ColorSlider(
+              label: '亮度',
+              gradientColors: <Color>[
+                Colors.black,
+                HSVColor.fromAHSV(1, _hsvColor.hue, _hsvColor.saturation, 1)
+                    .toColor(),
+              ],
+              value: _hsvColor.value,
+              onChanged: (double value) {
+                setState(() => _hsvColor = _hsvColor.withValue(value));
+              },
+            ),
             const SizedBox(height: 24),
-            _buildPresetColors(),
+            PresetColorGrid(
+              onColorSelected: (Color color) {
+                setState(() => _hsvColor = HSVColor.fromColor(color));
+              },
+            ),
           ],
         ),
       ),
@@ -668,188 +710,4 @@ class _ColorPickerDialogState extends State<ColorPickerDialog> {
     );
   }
 
-  Widget _buildHueSlider(ColorScheme colorScheme) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: <Widget>[
-        const Text(
-          '色相',
-          style: TextStyle(
-            fontSize: 12,
-          ),
-        ),
-        const SizedBox(height: 4),
-        Container(
-          height: 24,
-          decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(12),
-            gradient: const LinearGradient(
-              colors: <Color>[
-                Color(0xFFFF0000),
-                Color(0xFFFFFF00),
-                Color(0xFF00FF00),
-                Color(0xFF00FFFF),
-                Color(0xFF0000FF),
-                Color(0xFFFF00FF),
-                Color(0xFFFF0000),
-              ],
-            ),
-          ),
-          child: SliderTheme(
-            data: const SliderThemeData(
-              trackHeight: 24,
-              thumbShape: RoundSliderThumbShape(enabledThumbRadius: 12),
-              overlayShape: RoundSliderOverlayShape(overlayRadius: 16),
-              thumbColor: Colors.white,
-              overlayColor: Colors.white24,
-              trackShape: RoundedRectSliderTrackShape(),
-              activeTrackColor: Colors.transparent,
-              inactiveTrackColor: Colors.transparent,
-            ),
-            child: Slider(
-              value: _hsvColor.hue,
-              min: 0,
-              max: 360,
-              onChanged: (double value) {
-                setState(() {
-                  _hsvColor = _hsvColor.withHue(value);
-                });
-              },
-            ),
-          ),
-        ),
-      ],
-    );
-  }
-
-  Widget _buildSaturationSlider(ColorScheme colorScheme) {
-    final Color endColor = HSVColor.fromAHSV(1, _hsvColor.hue, 1, 1).toColor();
-
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: <Widget>[
-        const Text(
-          '飽和度',
-          style: TextStyle(
-            fontSize: 12,
-          ),
-        ),
-        const SizedBox(height: 4),
-        Container(
-          height: 24,
-          decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(12),
-            gradient: LinearGradient(
-              colors: <Color>[Colors.white, endColor],
-            ),
-          ),
-          child: SliderTheme(
-            data: const SliderThemeData(
-              trackHeight: 24,
-              thumbShape: RoundSliderThumbShape(enabledThumbRadius: 12),
-              overlayShape: RoundSliderOverlayShape(overlayRadius: 16),
-              thumbColor: Colors.white,
-              overlayColor: Colors.white24,
-              trackShape: RoundedRectSliderTrackShape(),
-              activeTrackColor: Colors.transparent,
-              inactiveTrackColor: Colors.transparent,
-            ),
-            child: Slider(
-              value: _hsvColor.saturation,
-              min: 0,
-              max: 1,
-              onChanged: (double value) {
-                setState(() {
-                  _hsvColor = _hsvColor.withSaturation(value);
-                });
-              },
-            ),
-          ),
-        ),
-      ],
-    );
-  }
-
-  Widget _buildValueSlider(ColorScheme colorScheme) {
-    final Color endColor =
-        HSVColor.fromAHSV(1, _hsvColor.hue, _hsvColor.saturation, 1).toColor();
-
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: <Widget>[
-        const Text(
-          '亮度',
-          style: TextStyle(
-            fontSize: 12,
-          ),
-        ),
-        const SizedBox(height: 4),
-        Container(
-          height: 24,
-          decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(12),
-            gradient: LinearGradient(
-              colors: <Color>[Colors.black, endColor],
-            ),
-          ),
-          child: SliderTheme(
-            data: const SliderThemeData(
-              trackHeight: 24,
-              thumbShape: RoundSliderThumbShape(enabledThumbRadius: 12),
-              overlayShape: RoundSliderOverlayShape(overlayRadius: 16),
-              thumbColor: Colors.white,
-              overlayColor: Colors.white24,
-              trackShape: RoundedRectSliderTrackShape(),
-              activeTrackColor: Colors.transparent,
-              inactiveTrackColor: Colors.transparent,
-            ),
-            child: Slider(
-              value: _hsvColor.value,
-              min: 0,
-              max: 1,
-              onChanged: (double value) {
-                setState(() {
-                  _hsvColor = _hsvColor.withValue(value);
-                });
-              },
-            ),
-          ),
-        ),
-      ],
-    );
-  }
-
-  Widget _buildPresetColors() {
-    return Wrap(
-      spacing: 8,
-      runSpacing: 8,
-      children: ApTheme.themeColors.map((ThemeColor themeColor) {
-        return GestureDetector(
-          onTap: () {
-            setState(() {
-              _hsvColor = HSVColor.fromColor(themeColor.color);
-            });
-          },
-          child: Container(
-            width: 32,
-            height: 32,
-            decoration: BoxDecoration(
-              color: themeColor.color,
-              shape: BoxShape.circle,
-              border: Border.all(
-                color: Colors.white,
-                width: 2,
-              ),
-              boxShadow: <BoxShadow>[
-                BoxShadow(
-                  color: themeColor.color.withAlpha(77),
-                  blurRadius: 4,
-                ),
-              ],
-            ),
-          ),
-        );
-      }).toList(),
-    );
-  }
 }
