@@ -137,6 +137,8 @@ class CourseScaffoldState extends State<CourseScaffold> {
 
   List<String> invisibleCourseCodes = <String>[];
 
+  late Map<int, Map<int, Course>> _courseLookup;
+
   final Map<String, Color> _courseColorMap = <String, Color>{};
   int _colorIndex = 0;
 
@@ -151,6 +153,7 @@ class CourseScaffoldState extends State<CourseScaffold> {
 
   @override
   void initState() {
+    _buildCourseLookup();
     showSectionTime = widget.showSectionTime ??
         PreferenceUtil.instance.getBool(ApConstants.showSectionTime, true);
     showInstructors = widget.showInstructors ??
@@ -171,6 +174,9 @@ class CourseScaffoldState extends State<CourseScaffold> {
 
   @override
   void didUpdateWidget(covariant CourseScaffold oldWidget) {
+    if (widget.courseData != oldWidget.courseData) {
+      _buildCourseLookup();
+    }
     fetchInvisibleCourseCodes();
     super.didUpdateWidget(oldWidget);
   }
@@ -786,15 +792,21 @@ class CourseScaffoldState extends State<CourseScaffold> {
     );
   }
 
-  Course? _getCourseAt(int weekday, int timeIndex) {
+  void _buildCourseLookup() {
+    _courseLookup = <int, Map<int, Course>>{};
     for (final Course course in widget.courseData.courses) {
       for (final SectionTime time in course.times) {
-        if (time.weekday == weekday && time.index == timeIndex) {
-          return course;
-        }
+        _courseLookup
+            .putIfAbsent(
+              time.weekday,
+              () => <int, Course>{},
+            )[time.index] = course;
       }
     }
-    return null;
+  }
+
+  Course? _getCourseAt(int weekday, int timeIndex) {
+    return _courseLookup[weekday]?[timeIndex];
   }
 
   Widget _buildCourseCard(
