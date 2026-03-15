@@ -1,3 +1,7 @@
+## 1.0.0
+
+ - **FEAT**: improve model generate by `freezed`. ([43bef51c](https://github.com/abc873693/ap_common/commit/43bef51c42f8cf8b984074d42c16c403ee83c02c))
+
 ## 0.0.4
 
  - **FEAT**: align image upload naming. ([ab2f2492](https://github.com/abc873693/ap_common/commit/ab2f2492f05117a2474357cbd7373498b40df878))

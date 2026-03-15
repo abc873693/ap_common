@@ -1,3 +1,7 @@
+## 1.0.0
+
+ - Bump "ap_common" to `1.0.0`.
+
 ## 0.26.0+3
 
  - Update a dependency to the latest release.

@@ -1,3 +1,9 @@
+## 1.0.0
+
+ - **FIX**: model test error. ([dfaa2cc8](https://github.com/abc873693/ap_common/commit/dfaa2cc87a5667212617d63fe534334fe51fc06b))
+ - **FEAT**: model unit test. ([d3d5de68](https://github.com/abc873693/ap_common/commit/d3d5de688cdba555e2f9ca7e475f031645f578d2))
+ - **FEAT**: improve model generate by `freezed`. ([43bef51c](https://github.com/abc873693/ap_common/commit/43bef51c42f8cf8b984074d42c16c403ee83c02c))
+
 ## 0.0.5
 
  - **FIX**: pub publish requirement. ([1dc81f7d](https://github.com/abc873693/ap_common/commit/1dc81f7dcf5a1445aa14b66b6d2004b7d94ad6b2))

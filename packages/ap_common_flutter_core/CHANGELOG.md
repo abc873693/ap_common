@@ -1,3 +1,7 @@
+## 1.0.0
+
+ - Bump "ap_common_flutter_core" to `1.0.0`.
+
 ## 0.0.4
 
  - **FEAT**(flutter_core): update `multiple_localization` to any version. ([a4114e01](https://github.com/abc873693/ap_common/commit/a4114e0182568d90603041118d59130fbdbd3aa7))

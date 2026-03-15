@@ -3,6 +3,58 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## 2026-03-16
+
+### Changes
+
+---
+
+Packages with breaking changes:
+
+ - There are no breaking changes in this release.
+
+Packages with other changes:
+
+ - [`ap_common` - `v1.0.0`](#ap_common---v100)
+ - [`ap_common_announcement_ui` - `v1.0.0`](#ap_common_announcement_ui---v100)
+ - [`ap_common_core` - `v1.0.0`](#ap_common_core---v100)
+ - [`ap_common_firebase` - `v1.0.0`](#ap_common_firebase---v100)
+ - [`ap_common_flutter_core` - `v1.0.0`](#ap_common_flutter_core---v100)
+ - [`ap_common_flutter_platform` - `v1.0.0`](#ap_common_flutter_platform---v100)
+ - [`ap_common_flutter_ui` - `v1.0.0`](#ap_common_flutter_ui---v100)
+ - [`ap_common_plugin` - `v1.0.0`](#ap_common_plugin---v100)
+
+---
+
+#### `ap_common` - `v1.0.0`
+
+ - Bump "ap_common" to `1.0.0`.
+
+#### `ap_common_announcement_ui` - `v1.0.0`
+
+ - **FEAT**: improve model generate by `freezed`. ([43bef51c](https://github.com/abc873693/ap_common/commit/43bef51c42f8cf8b984074d42c16c403ee83c02c))
+
+#### `ap_common_core` - `v1.0.0`
+
+ - **FIX**: model test error. ([dfaa2cc8](https://github.com/abc873693/ap_common/commit/dfaa2cc87a5667212617d63fe534334fe51fc06b))
+ - **FEAT**: model unit test. ([d3d5de68](https://github.com/abc873693/ap_common/commit/d3d5de688cdba555e2f9ca7e475f031645f578d2))
+ - **FEAT**: improve model generate by `freezed`. ([43bef51c](https://github.com/abc873693/ap_common/commit/43bef51c42f8cf8b984074d42c16c403ee83c02c))
+
+#### `ap_common_firebase` - `v1.0.0`
+
+#### `ap_common_flutter_core` - `v1.0.0`
+
+ - Bump "ap_common_flutter_core" to `1.0.0`.
+
+#### `ap_common_flutter_platform` - `v1.0.0`
+
+#### `ap_common_flutter_ui` - `v1.0.0`
+
+ - **FEAT**: improve model generate by `freezed`. ([43bef51c](https://github.com/abc873693/ap_common/commit/43bef51c42f8cf8b984074d42c16c403ee83c02c))
+
+#### `ap_common_plugin` - `v1.0.0`
+
+
 ## 2025-09-30
 
 ### Changes
