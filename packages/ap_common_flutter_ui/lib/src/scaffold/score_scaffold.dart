@@ -57,6 +57,9 @@ class ScoreScaffold extends StatefulWidget {
 
 class ScoreScaffoldState extends State<ScoreScaffold> {
   ApLocalizations get app => ApLocalizations.of(context);
+  
+  bool get isLandscape =>
+      MediaQuery.of(context).orientation == Orientation.landscape;
 
   bool _isAnalysisView = false;
 
@@ -108,7 +111,8 @@ class ScoreScaffoldState extends State<ScoreScaffold> {
         actions: <Widget>[
           if (widget.state == ScoreState.finish &&
               widget.scoreData != null &&
-              widget.scoreData!.scores.isNotEmpty)
+              widget.scoreData!.scores.isNotEmpty &&
+              !isLandscape)
             IconButton(
               icon: Icon(
                 _isAnalysisView
@@ -130,11 +134,40 @@ class ScoreScaffoldState extends State<ScoreScaffold> {
               child: const Icon(Icons.search),
             )
           : null,
-      body: Column(
+      body: Row(
         children: <Widget>[
-          if (widget.customHint != null && widget.customHint!.isNotEmpty)
-            _buildHintBanner(),
-          Expanded(child: _buildContent(context, colorScheme, app)),
+          Expanded(
+            flex: 3,
+            child: Column(
+              children: <Widget>[
+                if (widget.customHint != null && widget.customHint!.isNotEmpty)
+                  _buildHintBanner(),
+                Expanded(child: _buildContent(context, colorScheme, app)),
+              ],
+            ),
+          ),
+          if (widget.state == ScoreState.finish && isLandscape) ...<Widget>[
+            const SizedBox(width: 16.0),
+            Expanded(
+              flex: 2,
+              child: Material(
+                elevation: 12.0,
+                child: ColoredBox(
+                  color: Theme.of(context).colorScheme.surfaceContainerHighest,
+                  child: _ScoreListTab(
+                    scoreData: widget.scoreData!,
+                    onRefresh: widget.onRefresh,
+                    middleTitle: widget.middleTitle,
+                    finalTitle: widget.finalTitle,
+                    onScoreSelect: widget.onScoreSelect,
+                    middleScoreBuilder: widget.middleScoreBuilder,
+                    finalScoreBuilder: widget.finalScoreBuilder,
+                    details: widget.details,
+                  ),
+                ),
+              ),
+            ),
+          ],
         ],
       ),
     );
@@ -201,7 +234,7 @@ class ScoreScaffoldState extends State<ScoreScaffold> {
           middleScoreBuilder: widget.middleScoreBuilder,
           finalScoreBuilder: widget.finalScoreBuilder,
           details: widget.details,
-          isAnalysisView: _isAnalysisView,
+          isAnalysisView: isLandscape ? true : _isAnalysisView,
         );
     }
   }
