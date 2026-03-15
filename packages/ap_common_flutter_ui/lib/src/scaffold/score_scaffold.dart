@@ -23,7 +23,6 @@ class ScoreScaffold extends StatefulWidget {
     this.finalScoreBuilder,
     this.customHint,
     this.isShowSearchButton = false,
-    this.details,
     this.bottom,
     this.customStateHint,
   });
@@ -43,7 +42,6 @@ class ScoreScaffold extends StatefulWidget {
   final Function(int index)? onScoreSelect;
   final Widget Function(int index)? middleScoreBuilder;
   final Widget Function(int index)? finalScoreBuilder;
-  final List<String>? details;
 
   final bool isShowSearchButton;
 
@@ -162,7 +160,6 @@ class ScoreScaffoldState extends State<ScoreScaffold> {
                     onScoreSelect: widget.onScoreSelect,
                     middleScoreBuilder: widget.middleScoreBuilder,
                     finalScoreBuilder: widget.finalScoreBuilder,
-                    details: widget.details,
                   ),
                 ),
               ),
@@ -233,7 +230,6 @@ class ScoreScaffoldState extends State<ScoreScaffold> {
           onScoreSelect: widget.onScoreSelect,
           middleScoreBuilder: widget.middleScoreBuilder,
           finalScoreBuilder: widget.finalScoreBuilder,
-          details: widget.details,
           isAnalysisView: isLandscape ? true : _isAnalysisView,
         );
     }
@@ -336,7 +332,6 @@ class ScoreContent extends StatefulWidget {
     this.onScoreSelect,
     this.middleScoreBuilder,
     this.finalScoreBuilder,
-    this.details,
     required this.isAnalysisView,
   });
 
@@ -347,7 +342,6 @@ class ScoreContent extends StatefulWidget {
   final Function(int index)? onScoreSelect;
   final Widget Function(int index)? middleScoreBuilder;
   final Widget Function(int index)? finalScoreBuilder;
-  final List<String>? details;
   final bool isAnalysisView;
 
   @override
@@ -373,7 +367,6 @@ class _ScoreContentState extends State<ScoreContent> {
         onScoreSelect: widget.onScoreSelect,
         middleScoreBuilder: widget.middleScoreBuilder,
         finalScoreBuilder: widget.finalScoreBuilder,
-        details: widget.details,
       );
     }
   }
@@ -388,7 +381,6 @@ class _ScoreListTab extends StatelessWidget {
     this.onScoreSelect,
     this.middleScoreBuilder,
     this.finalScoreBuilder,
-    this.details,
   });
 
   final ScoreData scoreData;
@@ -398,7 +390,6 @@ class _ScoreListTab extends StatelessWidget {
   final Function(int index)? onScoreSelect;
   final Widget Function(int index)? middleScoreBuilder;
   final Widget Function(int index)? finalScoreBuilder;
-  final List<String>? details;
 
   @override
   Widget build(BuildContext context) {
@@ -409,49 +400,14 @@ class _ScoreListTab extends StatelessWidget {
       child: ListView.builder(
         physics: const AlwaysScrollableScrollPhysics(),
         padding: const EdgeInsets.all(16),
-        itemCount: scoreData.scores.length +
-            ((details != null && details!.isNotEmpty) ? 1 : 0),
+        itemCount: scoreData.scores.length,
         itemBuilder: (BuildContext context, int index) {
-          if (index < scoreData.scores.length) {
-            return _buildScoreItem(colorScheme, scoreData.scores[index], index);
-          } else {
-            return _buildDetailsCard(colorScheme);
-          }
+          return _buildScoreItem(colorScheme, scoreData.scores[index], index);
         },
       ),
     );
   }
 
-  Widget _buildDetailsCard(ColorScheme colorScheme) {
-    if (details == null || details!.isEmpty) return const SizedBox.shrink();
-    return Container(
-      margin: const EdgeInsets.only(bottom: 8, top: 8),
-      decoration: BoxDecoration(
-        color: colorScheme.surfaceContainerLowest,
-        borderRadius: BorderRadius.circular(16),
-        border: Border.all(color: colorScheme.outlineVariant.withAlpha(77)),
-      ),
-      child: Padding(
-        padding: const EdgeInsets.all(16),
-        child: Column(
-          children: <Widget>[
-            for (final String text in details!)
-              Padding(
-                padding: const EdgeInsets.symmetric(vertical: 4.0),
-                child: SelectableText(
-                  text,
-                  textAlign: TextAlign.center,
-                  style: TextStyle(
-                    fontSize: 14,
-                    color: colorScheme.onSurfaceVariant,
-                  ),
-                ),
-              ),
-          ],
-        ),
-      ),
-    );
-  }
 
   Widget _buildScoreItem(ColorScheme colorScheme, Score score, int index) {
     final String scoreStr = score.semesterScore ?? '';
