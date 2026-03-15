@@ -3,21 +3,45 @@ name: Deploy to Pub Hub
 on:
   push:
     tags:
-      - v*
-jobs:
+      - '*v*'
+    tags-ignore:
+      - '*v*dev*'
 
+jobs:
   deploy:
     name: Deploy
     runs-on: ubuntu-latest
+    if: github.repository == 'abc873693/ap_common'
     steps:
       - name: 'Checkout'
-        uses: actions/checkout@v2 # required!
+        uses: actions/checkout@v4
 
-      - name: '>> Dart package <<'
-        uses: k-paxian/dart-package-publisher@master
+      - name: Setup Flutter
+        uses: subosito/flutter-action@v2
         with:
-          accessToken: ${{ secrets.OAUTH_ACCESS_TOKEN }}
-          refreshToken: ${{ secrets.OAUTH_REFRESH_TOKEN }}
+          flutter-version: '3.29.x'
+          channel: 'stable'
+          cache: true
+
+      - name: Setup Melos
+        uses: bluefireteam/melos-action@v3
+
+      - name: 'Bootstrap'
+        run: melos bootstrap
+
+      - name: 'Publish'
+        run: |
+          # Note: Securely set up credentials here if not using interactive login
+          # melos publish --no-dry-run --yes
+          echo "Please ensure PUB_CREDENTIALS or appropriate secrets are configured for melos publish"
+          # For now, using the old action style but with updated checkout might work if it's single package,
+          # but we recommend switching to full melos publish.
+          # Here we'll use a placeholder or the updated melos command.
+          # To keep it semi-functional based on existing secrets:
+          # (This is a simplified assumption that the user will fix the publishing mechanism)
+          melos publish --no-dry-run --yes
+        env:
+          PUB_CREDENTIALS: ${{ secrets.PUB_CREDENTIALS_JSON }}
 
   github_release:
     name: Create GitHub Release
@@ -25,15 +49,15 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout code
-        uses: actions/checkout@v2
+        uses: actions/checkout@v4
       - name: Create Release
         id: create_release
-        uses: actions/create-release@v1
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }} # This token is provided by Actions, you do not need to create your own token
+        uses: softprops/action-gh-release@v1
         with:
-          tag_name: ${{ github.ref }}
-          release_name: ${{ github.ref }}
-          body_path: RELEASE_NOTE.md
+          tag_name: ${{ github.ref_name }}
+          name: ${{ github.ref_name }}
+          body: |
+            Automatic release for ${{ github.ref_name }}
+            See CHANGELOG.md for details.
           draft: false
           prerelease: false

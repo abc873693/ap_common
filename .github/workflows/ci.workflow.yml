@@ -2,7 +2,7 @@ name: CI Test
 on:
   push:
     tags-ignore:
-      - v*
+      - '*v*'
   pull_request:
     branches:
       - master

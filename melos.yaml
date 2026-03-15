@@ -11,8 +11,8 @@ command:
     fetchTags: false
     # Generate commit links in package changelogs.
     linkToCommits: true
-    # # Only allow versioning to happen on main branch.
-    # branch: main
+    # Only allow versioning to happen on master branch.
+    branch: master
     # Additionally build a changelog at the root of the workspace.
     workspaceChangelog: true
 
@@ -27,8 +27,13 @@ scripts:
   analyze:
     exec: dart analyze .
   clean:
-    run: |
-      melos clean
+    run: melos clean
+  release:
+    run: melos version --yes
+    description: Prepare a production release (merges from release branch to master).
+  release:dev:
+    run: melos version --prerelease --yes
+    description: Prepare a development/prerelease.
   fix:
     run: |
       melos exec -c 1 -- \
