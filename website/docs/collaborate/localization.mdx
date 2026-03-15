@@ -1,0 +1,25 @@
+---
+sidebar_position: 1
+---
+
+# 多國語言(i18n)
+
+現行透過 `Google Sheet` 管理多國語言設定，透過 `App Script` 匯出
+
+可至 [`表格`](https://docs.google.com/spreadsheets/d/1-RsXDTJhsn6bGXYHpgonbxYhAGrvkrqIjH2e-2bFvuk/edit?ouid=112810366409225298544&usp=sheets_home) 提出翻譯修改
+
+## 匯出翻譯表格
+
+可使用 `fetch_i18n.sh` 下載最新的翻譯檔案
+
+```bash
+bash fetch_i18n.sh
+```
+
+## 生成多國語言類別
+
+透過套件 [`intl_utils`](https://pub.dev/packages/intl_utils) 生成對應的類別
+
+```bash
+  flutter pub run intl_utils:generate
+```

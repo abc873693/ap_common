@@ -1,0 +1,24 @@
+---
+sidebar_position: 9
+---
+
+# UiUtil
+
+:::info 實作類別
+目前可使用的實作類別有 `ApUiUtil`
+
+必需透過套件 [`ap_common_flutter_ui`](https://pub.dev/packages/ap_common_flutter_ui)
+使用
+:::
+
+需透過 `registerApCommonFlutter()` 指定成實例，並透過 `ApUiUtil.instance` 使用
+
+## showToast
+
+顯示 Android 風格的 toast 提示字
+
+| 參數名稱    | 型態             | 描述                      |
+|---------|----------------|-------------------------|
+| context | `BuildContext` | Flutter Widget context  |
+| message | `String`       | 想要顯示的文字                 |
+| gravity | `int`          | 顯示位置，預設為 `Toast.bottom` |

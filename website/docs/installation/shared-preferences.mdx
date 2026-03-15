@@ -1,0 +1,52 @@
+---
+sidebar_position: 7
+---
+
+# SharedPreference
+
+使用官方套件 `shared_preference` 實作，整合的功能可查看 [API 說明](../api-utils/preference-utils)
+
+:::caution 注意
+若未設定此頁面會影響以下功能
+
+- [PreferenceUtil](../api-utils/preference-utils) 的功能
+- [課表骨架](../api-scaffolds/course-scaffold) 中的上課提醒
+- 課表小工具
+:::
+
+## 設定
+
+使用前需要先初始化加密設定，在 `main()` 執行 `runApp` 前執行 `(PreferenceUtil.instance as ApPreferenceUtil).init()` 一定要加 `await`
+
+```dart
+
+Future<void> main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  registerOneForAll();
+  await (PreferenceUtil.instance as ApPreferenceUtil).init(
+    key: Constants.key,
+    iv: Constants.iv,
+  );
+  runApp(const MyApp());
+}
+
+
+```
+
+參數說明可見
+
+| 參數名稱          | 型態     | 描述                 |
+|---------------|--------|--------------------|
+| key           | `Key`  | AES 加密演算法中的 key    |
+| iv            | `IV`   | AES 加密演算法中的 iv key |
+
+金鑰的部分可以另外使用獨立靜態變數儲存
+
+```dart title='constants.dart'
+import 'package:encrypt/encrypt.dart';
+
+class Constants {
+  static final key = Key.fromUtf8('<修改成自己的Key>');
+  static final iv = IV.fromUtf8('<修改成自己的IV Key>');
+}
+```

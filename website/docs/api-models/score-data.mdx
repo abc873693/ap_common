@@ -1,0 +1,159 @@
+---
+sidebar_position: 4
+---
+
+# ScoreData
+
+| 參數名稱                         | 型態                             | 描述                             |
+| ------------------------------- | ------------------------------- | ------------------------------- |
+| scores | `List<Score>` | 課堂成績列表 |
+| detail | `Detail` | 成績細節資料 |
+
+### Score
+
+課堂成績
+
+| 參數名稱                         | 型態                             | 描述                             |
+| ------------------------------- | ------------------------------- | ------------------------------- |
+| courseNumber | `String` | 課程編號 |
+| isPreScore | `bool` | 是否為預覽分數 |
+| title | `String` | 課程名稱 |
+| units | `String` | 學分數 |
+| hours | `String` | 上課時數(單位：小時) |
+| required | `String` | 課程類型，選修、必修等等 |
+| at | `String` |  |
+| middleScore | `String` | 期中成績 |
+| generalScore | `String` | 平時成績 |
+| finalScore | `String` | 期末成績 |
+| semesterScore | `String` | 學期最終成績 |
+| remark | `String` | 註記 |
+
+### Detail
+
+學期成績細節
+
+| 參數名稱                         | 型態                             | 描述                             |
+| ------------------------------- | ------------------------------- | ------------------------------- |
+| creditTaken | `double` | 可獲得學分數 |
+| creditEarned | `double` | 實際獲得學分數 |
+| conduct | `double` | 操行成績 |
+| average | `double` | 平均分數 |
+| classRank | `String` | 班級排名 |
+| departmentRank | `String` | 系上排名 |
+| classPercentage | `double` | 班上排名百分比 |
+
+## 範例
+
+```json
+{
+    "scores": [
+        {
+            "title": "英語能力訓練",
+            "units": "0",
+            "hours": "2.0",
+            "required": "【必修】",
+            "at": "【學期】",
+            "middleScore": "",
+            "semesterScore": "",
+            "remark": "停修"
+        },
+        {
+            "title": "財務管理",
+            "units": "3.0",
+            "hours": "3.0",
+            "required": "【必修】",
+            "at": "【學期】",
+            "middleScore": "",
+            "semesterScore": "67.00",
+            "remark": ""
+        },
+        {
+            "title": "統計學(二)",
+            "units": "3.0",
+            "hours": "3.0",
+            "required": "【必修】",
+            "at": "【學期】",
+            "middleScore": "",
+            "semesterScore": "60.00",
+            "remark": ""
+        },
+        {
+            "title": "微積分(二)",
+            "units": "3.0",
+            "hours": "3.0",
+            "required": "【必修】",
+            "at": "【學期】",
+            "middleScore": "",
+            "semesterScore": "60.00",
+            "remark": ""
+        },
+        {
+            "title": "實務專題(二)",
+            "units": "1.0",
+            "hours": "3.0",
+            "required": "【必修】",
+            "at": "【學期】",
+            "middleScore": "",
+            "semesterScore": "98.00",
+            "remark": ""
+        },
+        {
+            "title": "管理資訊系統",
+            "units": "3.0",
+            "hours": "3.0",
+            "required": "【必修】",
+            "at": "【學期】",
+            "middleScore": "",
+            "semesterScore": "80.00",
+            "remark": ""
+        },
+        {
+            "title": "進階英語口語訓練",
+            "units": "3.0",
+            "hours": "3.0",
+            "required": "【選修】",
+            "at": "【學期】",
+            "middleScore": "",
+            "semesterScore": "90.00",
+            "remark": ""
+        },
+        {
+            "title": "Python程式設計",
+            "units": "3.0",
+            "hours": "3.0",
+            "required": "【選修】",
+            "at": "【學期】",
+            "middleScore": "100.00",
+            "semesterScore": "97.00",
+            "remark": ""
+        },
+        {
+            "title": "體育(四)-羽球",
+            "units": "0",
+            "hours": "2.0",
+            "required": "【必修】",
+            "at": "【學期】",
+            "middleScore": "",
+            "semesterScore": "63.00",
+            "remark": ""
+        },
+        {
+            "title": "服務教育(二)",
+            "units": "0",
+            "hours": "2.0",
+            "required": "【必修】",
+            "at": "【學期】",
+            "middleScore": "",
+            "semesterScore": "合格",
+            "remark": ""
+        }
+    ],
+    "detail": {
+        "conduct": 82.0,
+        "classRank": "25/34",
+        "departmentRank": "57/73",
+        "average": 76.84
+    }
+}
+
+```

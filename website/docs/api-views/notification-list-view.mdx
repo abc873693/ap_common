@@ -1,0 +1,33 @@
+---
+sidebar_position: 1
+---
+
+# 校園最新消息列表 NotificationListView
+
+提供校園最新消息列表
+  - 點擊時會開啟 [`Notifications`](../api-models/notification-data) 中的 `link` 設定的連結
+  - 長按時會啟動原生的分享功能，使用 [share](https://pub.dev/packages/share) 實作
+
+手機介面，不包含 `AppBar` 及 `BottomNavigationBar` 的區塊
+
+<img src="../../img/scaffolds/notification/mobile.png" alt="drawing" width="200"/>
+
+## 參數
+
+| 參數名稱                         | 型態                             | 描述                             |
+| ------------------------------- | ------------------------------- | ------------------------------- |
+| state | `NotificationState` | 必要欄位，總共有 `loading` `finish` `error` `empty` `offlineEmpty` 的狀態，只有`finish`才會顯示，其餘都是顯示錯誤狀況 |
+| notificationList | `List<Notifications>` | 校園最新消息列表 |
+| onRefresh | `Function()` | 下拉更新事件 |
+| onLoadingMore | `Function()` | 滾動最底事件 |
+
+## 分析事件
+
+使用抽象函式 `AnalyticsUtils.instance.logEvent()`
+
+| 事件名稱                         | 描述                             |
+| ------------------------------- | ------------------------------- |
+| `share_long_click` | 長按分享的事件 |
+| `notification_link_click` | 項目的點擊事件 |
+| `refresh` | 下拉式更新事件 |
+| `notification_load_more` | 當畫面滾動到最底部的事件 |

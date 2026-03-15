@@ -1,0 +1,15 @@
+---
+sidebar_position: 1
+---
+
+# VersionInfo
+
+版本資訊，版本號(int)格式應該為語意化版本以每兩碼區隔
+
+範例：`3.5.6` 轉換成版本號為 `30506`
+
+| 參數名稱                         | 型態                             | 描述                             |
+| ------------------------------- | ------------------------------- | ------------------------------- |
+| code | int | 版本號，Android 應為 `Version Code`，iOS 和 macOS 應為 `Builder Number` |
+| isForceUpdate | VersionInfo | 是否強制更新 |
+| content | String | 更新內容 |

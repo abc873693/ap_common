@@ -1,0 +1,50 @@
+name: ap_common_example
+description: A new Flutter project.
+
+publish_to: 'none' # Remove this line if you wish to publish to pub.dev
+
+version: 1.0.1+10001
+
+environment:
+  sdk: '>=2.12.0 <3.0.0'
+
+dependencies:
+  flutter:
+    sdk: flutter
+  flutter_localizations:
+    sdk: flutter
+  google_sign_in_dartio: 0.3.0
+
+  ap_common:
+      path: ../../packages/ap_common
+
+  encrypt: any
+  http: any
+  sprintf: any
+  multiple_localization: any
+
+  ap_common_plugin: 1.0.0
+#    path: ../../../GitHub/ap_common_plugin
+
+dependency_overrides:
+  intl: 0.18.0
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+  lint: ^1.5.3
+
+flutter:
+
+  uses-material-design: true
+  assets:
+    - assets/images/
+    - assets/
+
+flutter_intl:
+  enabled: true
+  class_name: AppLocalizations
+  main_locale: 'zh_TW'
+  arb_dir: lib/l10n
+  output_dir: lib/l10n
+  use_deferred_loading: true

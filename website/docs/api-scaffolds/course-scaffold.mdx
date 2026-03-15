@@ -1,0 +1,49 @@
+---
+sidebar_position: 2
+---
+
+# 課表骨架 CourseScaffold
+
+提供顯示課表(Course Table)骨架，另將課表 `CourseContent` 與課程列表 `CourseList` 另拆成兩個Ｗidget
+ - 支援響應式介面
+   - 當 `MediaQuery` 的 `longestSide` >= 880 顯示平板模式
+ - 支援上課通知 (`Android` / `iOS` / `MacOS`)
+ - 將課表加入至行事曆App (`Android` / `iOS`)
+ - 提供學期列表的區域，預設只提供學期資料 `SemesterData`，即可使用相關的 Callback
+ - 課表顏色由 `CourseData` 中的 `courses` 的索引值決定，順序為 [Material Design](https://material.io/design/color/the-color-system.html) 的 500 系列顏色
+
+手機介面
+
+ <img src="../../img/scaffolds/course/mobile.png" alt="drawing" width="200"/>
+
+平板 or 桌面版介面
+
+ <img src="../../img/scaffolds/course/tablet.png" alt="drawing" width="600"/>
+
+## 參數
+
+| 參數名稱                         | 型態                             | 描述                             |
+| ------------------------------- | ------------------------------- | ------------------------------- |
+| state | `CourseState` | 必要欄位，總共有 `loading` `finish` `error` `empty` `offlineEmpty` `custom` 的狀態，只有`finish`才會顯示課表介面，其餘都是顯示錯誤狀況 |
+| customStateHint | `String` | 當 [state] 是 `custom` 時，會顯示此字串 |
+| title | String | `Scaffold` 標題 |
+| courseData | [`CourseData`](../api-models/course-data) | 課表資料，會利用其中的 課表`CourseContent`與課程列表`CourseList`顯示 |
+| itemPicker | `Widget` | 使用自訂元件實作學期選擇器，[itemPicker] 與 [semesterData] 擇一使用 |
+| semesterData | `List<String>` | 學期列表 |
+| onSelect | `Function(int index)` | 學期列表點擊事件，回傳[semesterData]的索引值，[semesterData] 不為 `null` 時才有效 |
+| onSearchButtonClick | `Function` | 搜尋按鍵點擊事件 |
+| onRefresh | `Function` | 下拉更新事件 |
+| actions | `List<Widget>` | 右上角的元件 |
+| customHint | `String` | 學期選擇器與課表中間的提示字 |
+| enableNotifyControl | `bool` | 是否顯示上課通知按鍵，預設值為 `true` |
+| notifyData | `Function()` | 上課通知資料 |
+| autoNotifySave | `bool` | 是否自動儲存上課更新資料，預設值為 `true`，必須完成 [相關設定](../installation/local-notification) |
+| onNotifyClick | `Function()` | 上課通知按鍵點擊事件 |
+| courseNotifySaveKey | `String` | 若`autoNotifySave`有開啟，儲存的Preference key |
+| enableAddToCalendar | `bool` | 是否顯示課表匯出至行事曆 App 的按鍵，預設值為 `true`，必須完成 [相關設定](../installation/export-to-calendar) |
+| androidResourceIcon | `String` | Android的原生資源圖示 |
+| enableCaptureCourseTable | `bool` | 是否顯示匯出課表圖片的按鍵，預設值為 `false`，必須完成 [相關設定](../installation/export-course-table-image) |
+| showSectionTime | `bool` | 是否顯示課表匯出行事曆按鍵，預設值為 `true` |
+| showInstructors | `bool` | 是否顯示課表匯出行事曆按鍵，預設值為 `true` |
+| showClassroomLocation | `bool` | 是否顯示課表匯出行事曆按鍵，預設值為 `true` |
+| showSearchButton | `String` | 是否顯示搜尋按鍵，預設值為 `true` |

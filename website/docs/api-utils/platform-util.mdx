@@ -1,0 +1,62 @@
+---
+sidebar_position: 9
+---
+
+# PlatformUtil
+
+:::info 實作類別
+目前可使用的實作類別有 `ApPlatformUtil`
+
+必需透過套件 [`ap_common_flutter_platform`](https://pub.dev/packages/ap_common_flutter_platform)
+使用
+:::
+
+需透過 `registerApCommonFlutter()` 指定成實例，並透過 `PlatformUtil.instance` 使用
+
+
+## launchUrl
+
+開啟 URL，以 [url_launcher](https://pub.dev/packages/url_launcher) 實作
+
+| 參數名稱 | 型態       | 描述  |
+|------|----------|-----|
+| url  | `String` | URL |
+
+## callPhone
+
+播打電話，會將 `#xxx(yyy)` 格式更改成 `tel:xxx,yyy`
+，以 [url_launcher](https://pub.dev/packages/url_launcher) 實作
+
+
+| 參數名稱 | 型態       | 描述  |
+|------|----------|-----|
+| url  | `String` | URL |
+
+## shareTo
+
+呼叫原生分享功能，以 [share_plus](https://pub.dev/packages/share_plus) 實作
+
+分享格式
+
+```s
+${分享內容}\n\nSend from ${App名稱} ${作業系統名稱}
+```
+
+| 參數名稱    | 型態       | 描述   |
+|---------|----------|------|
+| content | `String` | 分享內容 |
+
+:::caution 注意
+因為在 iPad
+使用者會有圖層錯誤，需要另外加上此程式碼，詳細[可參考](https://github.com/fluttercommunity/plus_plugins/tree/main/packages/share_plus/share_plus#ipad)
+:::
+
+```dart
+
+final box = context.findRenderObject() as RenderBox?;
+
+PlatformUtil.instance.shareTo(
+  'Sharing Content',
+  sharePositionOrigin: box!.localToGlobal(Offset.zero) & box.size,
+);
+```

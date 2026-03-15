@@ -1,0 +1,59 @@
+---
+sidebar_position: 2
+---
+
+# 主題色設定
+
+校務通主題目前提供：
+  - 淺色主題
+  - 深色主題
+
+## 如何設定
+
+在 `MaterialApp` 的上一層加入 `ApTheme`，並設定主題色模式 [`ThemeMode`](https://api.flutter.dev/flutter/material/MaterialApp/themeMode.html)
+
+
+:::caution
+此 API 只支援 Flutter v1.9 以上
+:::
+
+在 `MaterialApp` 的參數 `theme` 設定 `ApTheme.light`，參數 `darkTheme` 設定 `ApTheme.dark`，
+
+並設定與 `ApTheme` 設定相同的 `themeMode`，`ApTheme` 會根據 `themeMode` 切換主題顏色
+
+```dart title="app.dart"
+    ThemeMode themeMode = ThemeMode.system;
+
+    @override
+      Widget build(BuildContext context) {
+        return ApTheme(
+            themeMode,
+            child: MaterialApp(
+              theme: ApTheme.light,
+              darkTheme: ApTheme.dark,
+              themeMode: themeMode,
+            ),
+        );
+    }
+
+```
+
+## 原理說明
+
+MaterialApp 預設主題(`Theme`) 由參數 `theme` 所決定，若有設定參數 `darkTheme`(深色主題)，
+
+且系統主題或是 themeMode 設定 `ThemeMode.dark` 時，則由參數 `darkTheme` 決定
+
+可透過參數 `themeMode` 設定主題切換
+
+此 `enum` 總共有三種：
+  - `system`：系統主題，若系統不支援深色主題，則使用 `theme`
+  - `light`：淺色主題
+  - `dark`：深色主題
+
+## 支援深色主題的系統
+
+ - Android `9.0` 或以上
+ - iOS `13` 或以上
+ - macOS Mojave `10.14.2` 或以上
+ - Winodws 10 Build `14393.10` 以後

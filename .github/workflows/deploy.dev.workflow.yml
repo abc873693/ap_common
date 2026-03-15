@@ -1,0 +1,53 @@
+name: Deploy to Pub Hub
+
+on:
+  push:
+    tags:
+      - '*v*dev*'
+
+jobs:
+  deploy:
+    name: Deploy
+    runs-on: ubuntu-latest
+    if: github.repository == 'abc873693/ap_common'
+    steps:
+      - name: 'Checkout'
+        uses: actions/checkout@v4
+
+      - name: Setup Flutter
+        uses: subosito/flutter-action@v2
+        with:
+          flutter-version: '3.29.x'
+          channel: 'stable'
+          cache: true
+
+      - name: Setup Melos
+        uses: bluefireteam/melos-action@v3
+
+      - name: 'Bootstrap'
+        run: melos bootstrap
+
+      - name: 'Publish'
+        run: |
+          melos publish --no-dry-run --yes
+        env:
+          PUB_CREDENTIALS: ${{ secrets.PUB_CREDENTIALS_JSON }}
+
+  github_pre_release:
+    name: Create GitHub Pre-Release
+    needs: [deploy]
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+      - name: Create Release
+        id: create_release
+        uses: softprops/action-gh-release@v1
+        with:
+          tag_name: ${{ github.ref_name }}
+          name: ${{ github.ref_name }}
+          body: |
+            Development release for ${{ github.ref_name }}
+            See CHANGELOG.md for details.
+          draft: false
+          prerelease: true

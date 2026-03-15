@@ -1,0 +1,51 @@
+---
+sidebar_position: 1
+---
+
+# 共用函式
+
+:::note
+注意此區塊 API 正在遷移至其他抽象版本，部分功能可能無法使用
+:::
+
+## pushCupertinoStyle
+
+以 `Cupertino` 風格開啟頁面
+
+:::caution 注意
+目前已在 `ApTheme` 加入全域的設定，實作採用 `MaterialPageRoute`，未來可能棄用
+:::
+
+| 參數名稱    | 型態             | 描述                     |
+|---------|----------------|------------------------|
+| context | `BuildContext` | Flutter Widget context |
+| page    | `Widget`       | 開啟頁面                   |
+
+
+## launchFbFansPage
+
+開啟 Facebook 粉絲專頁，會先以 app link
+方式開啟，失敗才會以瀏覽器開啟，以 [url_launcher](https://pub.dev/packages/url_launcher) 實作
+
+| 參數名稱       | 型態             | 描述                     |
+|------------|----------------|------------------------|
+| context    | `BuildContext` | Flutter Widget context |
+| fansPageId | `String`       | 粉絲專頁 id                |
+
+## showAppReviewDialog
+
+以 `Dialog` 樣式是否為App評分，同意並呼叫 [`openAppReview`](#openappreview)
+
+| 參數名稱       | 型態             | 描述                     |
+|------------|----------------|------------------------|
+| context    | `BuildContext` | Flutter Widget context |
+| defaultUrl | `String`       | 無原生API則開啟網址            |
+
+## showAppReviewSheet
+
+以 `BottomSheet` 樣式是否為App評分，同意並呼叫 [`openAppReview`](#openappreview)
+
+| 參數名稱       | 型態             | 描述                     |
+|------------|----------------|------------------------|
+| context    | `BuildContext` | Flutter Widget context |
+| defaultUrl | `String`       | 無原生API則開啟網址            |

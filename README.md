@@ -1,129 +1,65 @@
-# 校務通系列介面與函式共用(施工中)
+# 校務通系列介面與函式共用
 
+[![](https://img.shields.io/badge/Flutter-v3.24-blue)](https://github.com/flutter/flutter)
 [![](https://img.shields.io/pub/v/ap_common.svg?style=flat-square)](https://pub.dev/packages/ap_common/)
+[![melos](https://img.shields.io/badge/maintained%20with-melos-f700ff.svg?style=flat-square)](https://github.com/invertase/melos)
 
 長期校務通相關系列的app，介面與相關功能都極為相似，將相關的介面與函式庫，製作此套件以方便維護。
 
+[展示網頁](https://abc873693.github.io/ap_common/#/)
+[文件](https://ap-common.web.app/)
+
 ## 相關專案
+
 - [高科校務通](https://github.com/NKUST-ITC/NKUST-AP-Flutter)
 - [中山校務通](https://github.com/abc873693/NSYSU-AP)
-- [台科校務通](https://github.com/abc873693/NTUST-AP)
+- [文藻校務通](https://github.com/abc873693/WTUC-AP)
+- [台科校務通(已下架)](https://github.com/abc873693/NTUST-AP)
 
-## 目前共用項目 Todo List
+## 套件
 
- - 資源
-    - [x] 主題色
-        - [x] 基本顏色
-        - [x] 淺色主題
-        - [x] 深色主題
-    - [x] 圖示
-        - [x] Outline 
-        - [x] Filled 
-    - [x] 圖片資源(97KB)
- - 工具類
-    - [x] 多國語言
-    - [x] 共用函式
-     - [x] 提示訊息(Toast - Flutter Level)
-    - [x] SharePreferences 包裝
- - 元件
-    - [x] 抽屜 `ap_drawer.dart`
-    - [x] 一般對話框 `default_dialog.dart`
-    - [x] 選項對話框中選項 `dialog_option.dart`
-    - [x] 頁面提示 `hint_content.dart`
-    - [x] 選項對話框 `option_dialog.dart`
-    - [x] 進度對話框 `progress_dialog.dart`
-    - [x] 設定頁元件 `setting_widget.dart`
-    - [x] 是或否對話框 `yes_no_dialog.dart` 
- - 頁面(pages)
-    - [x] 關於我們 `about_us_page.dart`
-    - [x] 開放原始碼 `open_source_page.dart`
-    - [x] 使用者資訊 `user_info_page.dart`
-    - [x] 最新消息詳細資訊 `news_content_page.dart`
- - 頁面骨架(scaffold)
-    - [x] 課表
-    - [x] 成績
-    - [x] 首頁
-    - [ ] 校園資訊
-      - [ ] 教務處最新消息
-      - [ ] 學校電話
-      - [ ] 行事曆
-    - [ ] 空堂教室查詢
-    - [X] 登入頁
- 
-## Getting Started
+| Name                                | pub.dev                                                                                                                                                           | 說明                   |
+|-------------------------------------|-------------------------------------------------------------------------------------------------------------------------------------------------------------------|----------------------|
+| `ap_common`                         | [![ap_common pub.dev badge](https://img.shields.io/pub/v/ap_common.svg?style=flat-square)](https://pub.dev/packages/ap_common/)                                   | 函式庫與相關介面共用           |
+| `ap_common_core`                    | [![ap_common pub.dev badge](https://img.shields.io/pub/v/ap_common.svg?style=flat-square)](https://pub.dev/packages/ap_common_core/)                              | 純 Dart 的基本類別         |
+| `ap_common_flutter_core`            | [![ap_common pub.dev badge](https://img.shields.io/pub/v/ap_common_flutter_core.svg?style=flat-square)](https://pub.dev/packages/ap_common_flutter_core/)         | 基於 Flutter 框架的核心基本類別 |
+| `ap_common_flutter_platform`        | [![ap_common pub.dev badge](https://img.shields.io/pub/v/ap_common_flutter_platform.svg?style=flat-square)](https://pub.dev/packages/ap_common_flutter_platform/) | 原生功能實作               |
+| `ap_common_flutter_ui`              | [![ap_common pub.dev badge](https://img.shields.io/pub/v/ap_common_flutter_ui.svg?style=flat-square)](https://pub.dev/packages/ap_common_flutter_ui/)             | UI 實作但不包含原生功能整合      |
+| `ap_common_flutter_announcement_ui` | [![ap_common pub.dev badge](https://img.shields.io/pub/v/ap_common_announcement_ui.svg?style=flat-square)](https://pub.dev/packages/ap_common_announcement_ui/)   | 最新消息服務相關的介面實作        |
+| `ap_common_plugin`                  | [![ap_common pub.dev badge](https://img.shields.io/pub/v/ap_common_plugin.svg?style=flat-square)](https://pub.dev/packages/ap_common_plugin/)                     | 課表小工具                |
+| `ap_common_firebase`                | [![ap_common pub.dev badge](https://img.shields.io/pub/v/ap_common_firebase.svg?style=flat-square)](https://pub.dev/packages/ap_common_firebase/)                 | 服務 `Firebase` 的整合實作  |
 
-在 `pubspec.yaml` 中加入 package
+## 套件架構
 
-```yaml
-    # 官方多國語套件
-    flutter_localizations:
-        sdk: flutter
-    ap_common: ^0.2.8
+### v0.26 以後
+
+```mermaid
+flowchart TD
+    ap_common[ap_common] --- ap_common_flutter_ui[ap_common_flutter_ui] --- ap_common_flutter_core
+
+    ap_common --- ap_common_flutter_platform[ap_common_flutter_platform] --- ap_common_flutter_core
+
+    ap_common --- ap_common_announcement_ui[ap_common_announcement_ui]  --- ap_common_flutter_core
+
+    ap_common_firebase  --- ap_common_flutter_core
+
+    ap_common_plugin  --- ap_common_flutter_core
+
+    ap_common_flutter_core -- Dart Level --> ap_common_core
+  
 ```
 
-執行加入套件
+### v0.25 前
 
-```bash
-  $ flutter package get
+```mermaid
+flowchart TD
+
+    ap_common_firebase  --- ap_common
+
+    ap_common_plugin  --- ap_common
+  
 ```
 
-在MaterialApp 上一層加入主題色模式(ThemeMode)設定 否則無法正常顯示  
-此功能只支援flutter v1.9 以上的SDK
+## 套件使用要求
 
-```dart
-    ThemeMode themeMode = ThemeMode.system;
-
-    @override
-      Widget build(BuildContext context) {
-        return ApTheme(
-            themeMode,
-            child: MaterialApp(
-              // (選擇)是否加入 
-              theme: ApTheme.light,
-              darkTheme: ApTheme.dark,
-              themeMode: themeMode,
-            ),
-        );
-    }
-
-```
-### 多國語言支援列表
- - 繁體中文(zh-TW)
- - 英文(en)
-
-在MaterialApp 加入多國語言支援(有使用到ApLocalization才需要)
-
-```dart
-    ThemeMode themeMode = ThemeMode.system;
-
-    @override
-      Widget build(BuildContext context) {
-        return MaterialApp(
-              // 在此設定使用的語言，否則會按照系統提供語言，若為不支援語言 預設為英文
-              localeResolutionCallback:
-                    (Locale locale, Iterable<Locale> supportedLocales) {
-                  return locale;
-                },
-               localizationsDelegates: [
-                const ApLocalizationsDelegate(),
-              ],
-              supportedLocales: [
-                const Locale('en', 'US'), // English
-                const Locale('zh', 'TW'), // Chinese
-              ],
-            );
-    }
-
-```
-
-## widgets
-
-此項目必須加入主題色設定，否則會無法正常使用
-
-//TODO 文件
-
-## pages
-
-此項目必須加入多國語言設定，否則會無法正常使用
-
-//TODO 文件
+- Flutter `v3.22` 以上

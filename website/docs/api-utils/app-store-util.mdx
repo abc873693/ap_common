@@ -1,0 +1,39 @@
+---
+sidebar_position: 9
+---
+
+# ApAppStoreUtil
+
+:::info 實作類別
+此為 `AppStoreUtil` 的實作類別
+:::
+
+:::caution 注意
+使用時必須先完成 [相關設定](../installation/app-tracking-transparency)
+:::
+
+提供顯示 App 與平台商店(Play Store / App Store)相關權限或功能的 API
+
+## isAppTrackingApiSupported
+
+目前實作有關的只有 Apple 平台的 `App Tracking API`，只僅於 iOS 14 以上會回傳 `true`
+，其餘平台皆為 `false`
+
+## trackingAuthorizationStatus
+
+封裝套件 [`app_tracking_transparency`](https://developer.apple.com/documentation/apptrackingtransparency)
+的變數`trackingAuthorizationStatus` 會轉換成通用的 `GeneralPermissionStatus`
+
+## openAppReview
+
+開啟原生評分功能，若無原生API則開啟 `defaultUrl`
+，以 [in_app_review](https://pub.dev/packages/in_app_review) 呼叫原生評分 API，支援 `Android`、`iOS`
+及 `macOS`，其他平台會透過 `PlatformUtil.instance.launchUrl(url)` 開啟連結
+
+| 參數名稱       | 型態       | 描述          |
+|------------|----------|-------------|
+| defaultUrl | `String` | 無原生API則開啟網址 |
+
+## requestTrackingAuthorization
+
+目前實作有關的只有 Apple 平台的 `App Tracking API`，開啟原生授權隱私權追蹤的授權
