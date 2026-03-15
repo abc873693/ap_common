@@ -21,6 +21,8 @@ class MyAppState extends State<MyApp> with WidgetsBindingObserver {
   bool hasBusViolationRecords = false;
 
   ThemeMode themeMode = ThemeMode.system;
+  int currentColorIndex = 0;
+  Color? customColor;
   Locale? locale;
 
   void logout() {
@@ -34,6 +36,14 @@ class MyAppState extends State<MyApp> with WidgetsBindingObserver {
   void initState() {
     themeMode = ThemeMode.values[
         PreferenceUtil.instance.getInt(Constants.PREF_THEME_MODE_INDEX, 0)];
+    currentColorIndex =
+        PreferenceUtil.instance.getInt(ApTheme.PREF_COLOR_INDEX, 0);
+    final int customColorValue =
+        PreferenceUtil.instance.getInt(ApTheme.PREF_CUSTOM_COLOR, 0);
+    if (currentColorIndex == ApTheme.customColorIndex &&
+        customColorValue != 0) {
+      customColor = Color(customColorValue);
+    }
     WidgetsBinding.instance.addObserver(this);
     Future<void>.microtask(() {
       SystemChrome.setEnabledSystemUIMode(SystemUiMode.edgeToEdge);
@@ -64,47 +74,57 @@ class MyAppState extends State<MyApp> with WidgetsBindingObserver {
     return ShareDataWidget(
       data: this,
       child: ApTheme(
-        themeMode,
-        child: MaterialApp(
-          localeResolutionCallback:
-              (Locale? locale, Iterable<Locale> supportedLocales) {
-            final String languageCode = PreferenceUtil.instance.getString(
-              Constants.PREF_LANGUAGE_CODE,
-              ApSupportLanguageConstants.system,
+        themeMode: themeMode,
+        currentColorIndex: currentColorIndex,
+        customColor: customColor,
+        preferences: PreferenceUtil.instance,
+        child: Builder(
+          builder: (BuildContext context) {
+            final Color seedColor = ApTheme.of(context).seedColor;
+            return MaterialApp(
+              localeResolutionCallback:
+                  (Locale? locale, Iterable<Locale> supportedLocales) {
+                final String languageCode = PreferenceUtil.instance.getString(
+                  Constants.PREF_LANGUAGE_CODE,
+                  ApSupportLanguageConstants.system,
+                );
+                if (languageCode == ApSupportLanguageConstants.system) {
+                  return this.locale =
+                      ApLocalizations.delegate.isSupported(locale!)
+                          ? locale
+                          : const Locale('en');
+                } else {
+                  return this.locale = Locale(
+                    languageCode,
+                    languageCode == ApSupportLanguageConstants.zh ? 'TW' : null,
+                  );
+                }
+              },
+              onGenerateTitle: (BuildContext context) =>
+                  AppLocalizations.of(context).appName,
+              debugShowCheckedModeBanner: false,
+              routes: <String, WidgetBuilder>{
+                Navigator.defaultRouteName: (BuildContext context) =>
+                    HomePage(),
+                AboutUsPage.routerName: (BuildContext context) =>
+                    HomePageState.aboutPage(context),
+                AnnouncementHomePage.routerName: (BuildContext context) =>
+                    const AnnouncementHomePage(),
+              },
+              theme: ApTheme.light(seedColor),
+              darkTheme: ApTheme.dark(seedColor),
+              themeMode: themeMode,
+              locale: locale,
+              localizationsDelegates: const <LocalizationsDelegate<dynamic>>[
+                apLocalizationsDelegate,
+                appDelegate,
+                GlobalMaterialLocalizations.delegate,
+                GlobalWidgetsLocalizations.delegate,
+                GlobalCupertinoLocalizations.delegate,
+              ],
+              supportedLocales: ApLocalizations.delegate.supportedLocales,
             );
-            if (languageCode == ApSupportLanguageConstants.system) {
-              return this.locale = ApLocalizations.delegate.isSupported(locale!)
-                  ? locale
-                  : const Locale('en');
-            } else {
-              return this.locale = Locale(
-                languageCode,
-                languageCode == ApSupportLanguageConstants.zh ? 'TW' : null,
-              );
-            }
           },
-          onGenerateTitle: (BuildContext context) =>
-              AppLocalizations.of(context).appName,
-          debugShowCheckedModeBanner: false,
-          routes: <String, WidgetBuilder>{
-            Navigator.defaultRouteName: (BuildContext context) => HomePage(),
-            AboutUsPage.routerName: (BuildContext context) =>
-                HomePageState.aboutPage(context),
-            AnnouncementHomePage.routerName: (BuildContext context) =>
-                const AnnouncementHomePage(),
-          },
-          theme: ApTheme.light,
-          darkTheme: ApTheme.dark,
-          themeMode: themeMode,
-          locale: locale,
-          localizationsDelegates: const <LocalizationsDelegate<dynamic>>[
-            apLocalizationsDelegate,
-            appDelegate,
-            GlobalMaterialLocalizations.delegate,
-            GlobalWidgetsLocalizations.delegate,
-            GlobalCupertinoLocalizations.delegate,
-          ],
-          supportedLocales: ApLocalizations.delegate.supportedLocales,
         ),
       ),
     );
@@ -117,6 +137,13 @@ class MyAppState extends State<MyApp> with WidgetsBindingObserver {
   void loadTheme(ThemeMode mode) {
     setState(() {
       themeMode = mode;
+    });
+  }
+
+  void loadThemeColor(int index, Color? custom) {
+    setState(() {
+      currentColorIndex = index;
+      customColor = custom;
     });
   }
 

@@ -1,6 +1,6 @@
+import 'package:ap_common_flutter_core/ap_common_flutter_core.dart';
 import 'package:ap_common_flutter_ui/src/resources/ap_colors.dart';
 import 'package:ap_common_flutter_ui/src/resources/resources.dart';
-import 'package:cupertino_back_gesture/cupertino_back_gesture.dart';
 import 'package:flutter/material.dart';
 
 export 'package:cupertino_back_gesture/cupertino_back_gesture.dart';
@@ -16,22 +16,32 @@ class ThemeColor {
 }
 
 class ApTheme extends InheritedWidget {
-  ApTheme(
-    this.themeMode, {
+  const ApTheme({
     super.key,
     required super.child,
-    BackGestureWidth? backGestureWidth,
+    required this.themeMode,
+    this.currentColorIndex = 0,
+    this.customColor,
+    required this.preferences,
   });
 
   final ThemeMode themeMode;
+  final int currentColorIndex;
+  final Color? customColor;
+  final PreferenceUtil preferences;
 
   static ApTheme of(BuildContext context) {
-    return context.dependOnInheritedWidgetOfExactType()!;
+    final ApTheme? result =
+        context.dependOnInheritedWidgetOfExactType<ApTheme>();
+    assert(result != null, 'No ApTheme found in context');
+    return result!;
   }
 
   @override
   bool updateShouldNotify(ApTheme oldWidget) {
-    return true;
+    return themeMode != oldWidget.themeMode ||
+        currentColorIndex != oldWidget.currentColorIndex ||
+        customColor != oldWidget.customColor;
   }
 
   // ignore: constant_identifier_names
@@ -59,10 +69,23 @@ class ApTheme extends InheritedWidget {
   ];
 
   static const int customColorIndex = -1;
-  static int currentColorIndex = 0;
-  static Color? customColor;
 
-  static String get currentColorName {
+  // ignore: constant_identifier_names
+  static const String PREF_COLOR_INDEX = 'ap_common.theme_color_index';
+  // ignore: constant_identifier_names
+  static const String PREF_CUSTOM_COLOR = 'ap_common.custom_theme_color';
+
+  void saveSettings({
+    required int index,
+    Color? customColor,
+  }) {
+    preferences.setInt(PREF_COLOR_INDEX, index);
+    if (customColor != null) {
+      preferences.setInt(PREF_CUSTOM_COLOR, customColor.toARGB32());
+    }
+  }
+
+  String get currentColorName {
     if (currentColorIndex == customColorIndex && customColor != null) {
       return '自訂色';
     }
@@ -72,12 +95,22 @@ class ApTheme extends InheritedWidget {
     return themeColors[0].name;
   }
 
-  static Color get seedColor {
-    if (currentColorIndex == customColorIndex && customColor != null) {
-      return customColor!;
+  Color get seedColor {
+    return getSeedColor(
+      index: currentColorIndex,
+      customColor: customColor,
+    );
+  }
+
+  Color getSeedColor({
+    required int index,
+    Color? customColor,
+  }) {
+    if (index == customColorIndex && customColor != null) {
+      return customColor;
     }
-    if (currentColorIndex >= 0 && currentColorIndex < themeColors.length) {
-      return themeColors[currentColorIndex].color;
+    if (index >= 0 && index < themeColors.length) {
+      return themeColors[index].color;
     }
     return themeColors[0].color;
   }
@@ -304,7 +337,7 @@ class ApTheme extends InheritedWidget {
     }
   }
 
-  static ThemeData get light {
+  static ThemeData light(Color seedColor) {
     final ColorScheme colorScheme = ColorScheme.fromSeed(
       seedColor: seedColor,
       brightness: Brightness.light,
@@ -312,7 +345,7 @@ class ApTheme extends InheritedWidget {
     return _buildTheme(colorScheme);
   }
 
-  static ThemeData get dark {
+  static ThemeData dark(Color seedColor) {
     final ColorScheme colorScheme = ColorScheme.fromSeed(
       seedColor: seedColor,
       brightness: Brightness.dark,
@@ -482,8 +515,8 @@ class ApTheme extends InheritedWidget {
           }
           return IconThemeData(color: colorScheme.onSurfaceVariant);
         }),
-        labelTextStyle: WidgetStateProperty.resolveWith(
-          (Set<WidgetState> states) {
+        labelTextStyle:
+            WidgetStateProperty.resolveWith((Set<WidgetState> states) {
           if (states.contains(WidgetState.selected)) {
             return TextStyle(
               fontSize: 12,
@@ -602,8 +635,8 @@ class ApTheme extends InheritedWidget {
           }
           return colorScheme.surfaceContainerHighest;
         }),
-        trackOutlineColor: WidgetStateProperty.resolveWith(
-          (Set<WidgetState> states) {
+        trackOutlineColor:
+            WidgetStateProperty.resolveWith((Set<WidgetState> states) {
           if (states.contains(WidgetState.selected)) {
             return colorScheme.primary;
           }

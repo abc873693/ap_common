@@ -101,26 +101,18 @@ class SettingPageState extends State<SettingPage> {
                       (ThemeColor tc) =>
                           tc.color.toARGB32() == color.toARGB32(),
                     );
-                    setState(() {
-                      if (index != -1) {
-                        ApTheme.currentColorIndex = index;
-                        ApTheme.customColor = null;
-                      } else {
-                        ApTheme.currentColorIndex = ApTheme.customColorIndex;
-                        ApTheme.customColor = color;
-                      }
-                    });
-                    PreferenceUtil.instance.setInt(
-                      Constants.PREF_THEME_COLOR_INDEX,
-                      ApTheme.currentColorIndex,
+                    final int newIndex = (index != -1)
+                        ? index
+                        : ApTheme.customColorIndex;
+                    final Color? newCustomColor = (index != -1) ? null : color;
+                    ShareDataWidget.of(context)!.data!.loadThemeColor(
+                          newIndex,
+                          newCustomColor,
+                        );
+                    ApTheme.of(context).saveSettings(
+                      index: newIndex,
+                      customColor: newCustomColor,
                     );
-                    if (ApTheme.customColor != null) {
-                      PreferenceUtil.instance.setInt(
-                        Constants.PREF_CUSTOM_THEME_COLOR,
-                        ApTheme.customColor!.toARGB32(),
-                      );
-                    }
-                    ShareDataWidget.of(context)!.data!.update();
                   },
                 ),
               ],
@@ -170,20 +162,6 @@ class SettingPageState extends State<SettingPage> {
           PreferenceUtil.instance.getBool(Constants.PREF_DISPLAY_PICTURE, true);
       busNotify =
           PreferenceUtil.instance.getBool(Constants.PREF_BUS_NOTIFY, false);
-      final int themeColorIndex = PreferenceUtil.instance.getInt(
-        Constants.PREF_THEME_COLOR_INDEX,
-        0,
-      );
-      ApTheme.currentColorIndex = themeColorIndex;
-      final int? customColorValue = PreferenceUtil.instance.getInt(
-        Constants.PREF_CUSTOM_THEME_COLOR,
-        0,
-      );
-      if (themeColorIndex == ApTheme.customColorIndex &&
-          customColorValue != 0 &&
-          customColorValue != null) {
-        ApTheme.customColor = Color(customColorValue);
-      }
     });
   }
 }

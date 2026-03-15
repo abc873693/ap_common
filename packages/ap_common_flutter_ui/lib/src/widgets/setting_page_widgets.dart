@@ -557,15 +557,16 @@ class ChangeThemeColorItem extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final ColorScheme colorScheme = Theme.of(context).colorScheme;
+    final ApTheme apTheme = ApTheme.of(context);
     return SettingItem(
       text: '主題顏色',
-      subText: ApTheme.currentColorName,
+      subText: apTheme.currentColorName,
       icon: Icons.palette_outlined,
       trailing: Container(
         width: 24,
         height: 24,
         decoration: BoxDecoration(
-          color: ApTheme.seedColor,
+          color: apTheme.seedColor,
           shape: BoxShape.circle,
           border: Border.all(color: colorScheme.outline, width: 1),
         ),
@@ -574,7 +575,7 @@ class ChangeThemeColorItem extends StatelessWidget {
         final Color? result = await showDialog<Color>(
           context: context,
           builder: (BuildContext context) =>
-              ColorPickerDialog(initialColor: ApTheme.seedColor),
+              ColorPickerDialog(initialColor: apTheme.seedColor),
         );
         if (result != null) {
           onChanged(result);
