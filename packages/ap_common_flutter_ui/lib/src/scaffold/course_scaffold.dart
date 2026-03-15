@@ -824,6 +824,11 @@ class CourseScaffoldState extends State<CourseScaffold> {
     final String instructorInfo =
         (showInstructors ?? true) ? course.getInstructors() : '';
 
+    final Color onCourseColor =
+        ThemeData.estimateBrightnessForColor(courseColor) == Brightness.dark
+            ? Colors.white
+            : Colors.black;
+
     final String displayInfo = <String>[
       if (instructorInfo.isNotEmpty) instructorInfo,
       if (locationInfo.isNotEmpty) locationInfo,
@@ -863,7 +868,7 @@ class CourseScaffoldState extends State<CourseScaffold> {
               style: TextStyle(
                 fontSize: span > 1 ? 14 : 9.5,
                 fontWeight: FontWeight.w600,
-                color: Color(0xFFFFFFFF),
+                color: onCourseColor,
                 height: 1.1,
               ),
             ),
@@ -876,7 +881,7 @@ class CourseScaffoldState extends State<CourseScaffold> {
                 overflow: TextOverflow.ellipsis,
                 style: TextStyle(
                   fontSize: span > 1 ? 12 : 8.5,
-                  color: Color(0xFFFFFFFF).withAlpha(217),
+                  color: onCourseColor.withAlpha(217),
                   height: 1.0,
                 ),
               ),
@@ -1022,6 +1027,10 @@ class _CourseContentState extends State<CourseContent> {
     final ColorScheme colorScheme = Theme.of(context).colorScheme;
     final Color courseColor = widget.courseColor ??
         courseColors[widget.course.code.hashCode % courseColors.length];
+    final Color onCourseColor =
+        ThemeData.estimateBrightnessForColor(courseColor) == Brightness.dark
+            ? Colors.white
+            : Colors.black;
     final ApLocalizations app = ApLocalizations.current;
 
     return Container(
@@ -1054,7 +1063,7 @@ class _CourseContentState extends State<CourseContent> {
                         tooltip: ApLocalizations.of(context).addToCalendar,
                         icon: Image.asset(
                           ApImageIcons.calendarImport,
-                          color: Color(0xFFFFFFFF),
+                          color: onCourseColor,
                           height: 24.0,
                           width: 24.0,
                         ),
@@ -1080,7 +1089,7 @@ class _CourseContentState extends State<CourseContent> {
                         visibility
                             ? Icons.visibility_outlined
                             : Icons.visibility_off_outlined,
-                        color: Color(0xFFFFFFFF),
+                        color: onCourseColor,
                       ),
                       onPressed: () {
                         setState(() {
@@ -1096,7 +1105,7 @@ class _CourseContentState extends State<CourseContent> {
                           state == CourseNotifyState.schedule
                               ? Icons.alarm_on
                               : Icons.alarm_off,
-                          color: Color(0xFFFFFFFF),
+                          color: onCourseColor,
                         ),
                         onPressed: () async {
                           CourseNotify? courseNotify = _notifyData!.getByCode(
@@ -1175,10 +1184,10 @@ class _CourseContentState extends State<CourseContent> {
                     Expanded(
                       child: Text(
                         widget.course.title,
-                        style: const TextStyle(
+                        style: TextStyle(
                           fontSize: 20,
                           fontWeight: FontWeight.bold,
-                          color: Color(0xFFFFFFFF),
+                          color: onCourseColor,
                         ),
                       ),
                     ),
@@ -1190,14 +1199,14 @@ class _CourseContentState extends State<CourseContent> {
                           vertical: 4,
                         ),
                         decoration: BoxDecoration(
-                          color: Color(0xFFFFFFFF).withAlpha(51),
+                          color: onCourseColor.withAlpha(51),
                           borderRadius: BorderRadius.circular(12),
                         ),
                         child: Text(
                           widget.course.required!,
-                          style: const TextStyle(
+                          style: TextStyle(
                             fontSize: 12,
-                            color: Color(0xFFFFFFFF),
+                            color: onCourseColor,
                           ),
                         ),
                       ),
@@ -1208,7 +1217,7 @@ class _CourseContentState extends State<CourseContent> {
                   widget.course.code,
                   style: TextStyle(
                     fontSize: 14,
-                    color: Color(0xFFFFFFFF).withAlpha(204),
+                    color: onCourseColor.withAlpha(204),
                   ),
                 ),
               ],
