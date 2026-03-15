@@ -558,9 +558,10 @@ class ChangeThemeColorItem extends StatelessWidget {
   Widget build(BuildContext context) {
     final ColorScheme colorScheme = Theme.of(context).colorScheme;
     final ApTheme apTheme = ApTheme.of(context);
+    final ApLocalizations ap = ApLocalizations.of(context);
     return SettingItem(
-      text: '主題顏色',
-      subText: apTheme.currentColorName,
+      text: ap.themeColor,
+      subText: apTheme.getLocalizedCurrentColorName(context),
       icon: Icons.palette_outlined,
       trailing: Container(
         width: 24,
@@ -609,6 +610,7 @@ class _ColorPickerDialogState extends State<ColorPickerDialog> {
   @override
   Widget build(BuildContext context) {
     final Color currentColor = _hsvColor.toColor();
+    final ApLocalizations ap = ApLocalizations.of(context);
     final String hexCode = currentColor
         .toARGB32()
         .toRadixString(16)
@@ -616,7 +618,7 @@ class _ColorPickerDialogState extends State<ColorPickerDialog> {
         .toUpperCase();
 
     return AlertDialog(
-      title: const Text('選擇主題色'),
+      title: Text(ap.pickThemeColor),
       content: SizedBox(
         width: 300,
         child: Column(
@@ -651,7 +653,7 @@ class _ColorPickerDialogState extends State<ColorPickerDialog> {
             ),
             const SizedBox(height: 24),
             ColorSlider(
-              label: '色相',
+              label: ap.hue,
               gradientColors: const <Color>[
                 Color(0xFFFF0000),
                 Color(0xFFFFFF00),
@@ -670,7 +672,7 @@ class _ColorPickerDialogState extends State<ColorPickerDialog> {
             ),
             const SizedBox(height: 16),
             ColorSlider(
-              label: '飽和度',
+              label: ap.saturation,
               gradientColors: <Color>[
                 const Color(0xFFFFFFFF),
                 HSVColor.fromAHSV(1, _hsvColor.hue, 1, 1).toColor(),
@@ -682,7 +684,7 @@ class _ColorPickerDialogState extends State<ColorPickerDialog> {
             ),
             const SizedBox(height: 16),
             ColorSlider(
-              label: '亮度',
+              label: ap.value,
               gradientColors: <Color>[
                 const Color(0xFF000000),
                 HSVColor.fromAHSV(1, _hsvColor.hue, _hsvColor.saturation, 1)
@@ -705,11 +707,11 @@ class _ColorPickerDialogState extends State<ColorPickerDialog> {
       actions: <Widget>[
         TextButton(
           onPressed: () => Navigator.pop(context),
-          child: const Text('取消'),
+          child: Text(ap.cancel),
         ),
         FilledButton(
           onPressed: () => Navigator.pop(context, currentColor),
-          child: const Text('確定'),
+          child: Text(ap.determine),
         ),
       ],
     );

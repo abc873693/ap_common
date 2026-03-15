@@ -85,14 +85,43 @@ class ApTheme extends InheritedWidget {
     }
   }
 
-  String get currentColorName {
+  String getLocalizedCurrentColorName(BuildContext context) {
+    final ApLocalizations ap = ApLocalizations.of(context);
     if (currentColorIndex == customColorIndex && customColor != null) {
-      return '自訂色';
+      return ap.customColor;
     }
     if (currentColorIndex >= 0 && currentColorIndex < themeColors.length) {
-      return themeColors[currentColorIndex].name;
+      return getLocalizedThemeColorName(context, currentColorIndex);
     }
-    return themeColors[0].name;
+    return getLocalizedThemeColorName(context, 0);
+  }
+
+  static String getLocalizedThemeColorName(BuildContext context, int index) {
+    final ApLocalizations ap = ApLocalizations.of(context);
+    switch (index) {
+      case 0:
+        return ap.nkustBlue;
+      case 1:
+        return ap.oceanBlue;
+      case 2:
+        return ap.emeraldGreen;
+      case 3:
+        return ap.coralOrange;
+      case 4:
+        return ap.elegantPurple;
+      case 5:
+        return ap.roseRed;
+      case 6:
+        return ap.cyan;
+      case 7:
+        return ap.amber;
+      case 8:
+        return ap.indigo;
+      case 9:
+        return ap.brown;
+      default:
+        return ap.nkustBlue;
+    }
   }
 
   Color get seedColor {

@@ -52,6 +52,7 @@ class MessageLookup extends MessageLookupByLibrary {
         "admissionGuide": MessageLookupByLibrary.simpleMessage("入學指南"),
         "allAnnouncements": MessageLookupByLibrary.simpleMessage("所有最新消息"),
         "allApplications": MessageLookupByLibrary.simpleMessage("所有審查"),
+        "amber": MessageLookupByLibrary.simpleMessage("琥珀"),
         "analyticsDescription": MessageLookupByLibrary.simpleMessage(
             "體驗分析：包含使用者在操作上的紀錄，幫助我們提供更好使用者體驗"),
         "announcementEmpty":
@@ -109,6 +110,7 @@ class MessageLookup extends MessageLookupByLibrary {
         "cancelNotifySuccess": MessageLookupByLibrary.simpleMessage("取消通知成功"),
         "canceling": MessageLookupByLibrary.simpleMessage("取消中..."),
         "captcha": MessageLookupByLibrary.simpleMessage("驗證碼"),
+        "brown": MessageLookupByLibrary.simpleMessage("棕褐"),
         "captchaError": MessageLookupByLibrary.simpleMessage("驗證碼錯誤"),
         "changeEmail": MessageLookupByLibrary.simpleMessage("更改電子信箱"),
         "changePassword": MessageLookupByLibrary.simpleMessage("修改密碼"),
@@ -139,6 +141,7 @@ class MessageLookup extends MessageLookupByLibrary {
         "courseDialogProfessor": MessageLookupByLibrary.simpleMessage("授課老師"),
         "courseDialogTime": MessageLookupByLibrary.simpleMessage("上課時間"),
         "courseDialogTitle": MessageLookupByLibrary.simpleMessage("課程資訊"),
+        "coralOrange": MessageLookupByLibrary.simpleMessage("珊瑚橙"),
         "courseEmpty":
             MessageLookupByLibrary.simpleMessage("Oops！本學期沒有任何課哦～\n請選擇其他學期 😋"),
         "courseHoliday":
@@ -165,6 +168,8 @@ class MessageLookup extends MessageLookupByLibrary {
             "崩潰分析：當 App 因為意外崩潰，幫助我們可以追蹤相關的問題並修正"),
         "credits": MessageLookupByLibrary.simpleMessage("學分"),
         "creditsTakenEarned": MessageLookupByLibrary.simpleMessage("修習學分/實得學分"),
+        "customColor": MessageLookupByLibrary.simpleMessage("自訂色"),
+        "cyan": MessageLookupByLibrary.simpleMessage("青色"),
         "dark": MessageLookupByLibrary.simpleMessage("深色"),
         "date": MessageLookupByLibrary.simpleMessage("日期"),
         "delayReason": MessageLookupByLibrary.simpleMessage("請假延遲原因"),
@@ -184,10 +189,12 @@ class MessageLookup extends MessageLookupByLibrary {
         "dotAp": MessageLookupByLibrary.simpleMessage("校務"),
         "dotBus": MessageLookupByLibrary.simpleMessage("校車"),
         "dotLeave": MessageLookupByLibrary.simpleMessage("缺曠"),
+        "elegantPurple": MessageLookupByLibrary.simpleMessage("典雅紫"),
         "easterEggJuke": MessageLookupByLibrary.simpleMessage("這不是彩蛋"),
         "educationSystem": MessageLookupByLibrary.simpleMessage("學制"),
         "electiveCredits": MessageLookupByLibrary.simpleMessage("選修學分"),
         "email": MessageLookupByLibrary.simpleMessage("電子信箱"),
+        "emeraldGreen": MessageLookupByLibrary.simpleMessage("翠綠"),
         "emptyClassroomSearch": MessageLookupByLibrary.simpleMessage("空教室查詢"),
         "english": MessageLookupByLibrary.simpleMessage("English"),
         "enterPasswordHint": MessageLookupByLibrary.simpleMessage("請輸入密碼"),
@@ -218,10 +225,12 @@ class MessageLookup extends MessageLookupByLibrary {
         "headPhotoSetting": MessageLookupByLibrary.simpleMessage("顯示大頭貼"),
         "headPhotoSettingSubTitle":
             MessageLookupByLibrary.simpleMessage("側選單是否顯示大頭貼"),
+        "hue": MessageLookupByLibrary.simpleMessage("色相"),
         "home": MessageLookupByLibrary.simpleMessage("首頁"),
         "iKnow": MessageLookupByLibrary.simpleMessage("我知道了"),
         "iconStyle": MessageLookupByLibrary.simpleMessage("圖案風格"),
         "id": MessageLookupByLibrary.simpleMessage("身分證字號"),
+        "indigo": MessageLookupByLibrary.simpleMessage("靛藍"),
         "idCard": MessageLookupByLibrary.simpleMessage("身分證字號"),
         "idCardLast4Code": MessageLookupByLibrary.simpleMessage("身分證末四碼"),
         "idCardLast6Code": MessageLookupByLibrary.simpleMessage("身分證末六碼"),
@@ -321,6 +330,7 @@ class MessageLookup extends MessageLookupByLibrary {
             MessageLookupByLibrary.simpleMessage("無權限操作審查"),
         "noPermissionUpdateHint":
             MessageLookupByLibrary.simpleMessage("無權限操作更新"),
+        "nkustBlue": MessageLookupByLibrary.simpleMessage("高科藍"),
         "none": MessageLookupByLibrary.simpleMessage("無"),
         "notFoundData": MessageLookupByLibrary.simpleMessage("找不到此資料"),
         "notLogin": MessageLookupByLibrary.simpleMessage("尚未登入"),
@@ -337,6 +347,7 @@ class MessageLookup extends MessageLookupByLibrary {
             MessageLookupByLibrary.simpleMessage("離線登入學號或密碼錯誤"),
         "offlineMode": MessageLookupByLibrary.simpleMessage("離線模式"),
         "offlineScore": MessageLookupByLibrary.simpleMessage("離線成績"),
+        "oceanBlue": MessageLookupByLibrary.simpleMessage("海洋藍"),
         "ok": MessageLookupByLibrary.simpleMessage("好"),
         "onlyShowNotReview": MessageLookupByLibrary.simpleMessage("只顯示尚未審查"),
         "onlySupportInSchool": MessageLookupByLibrary.simpleMessage("僅限在校生使用"),
@@ -356,6 +367,7 @@ class MessageLookup extends MessageLookupByLibrary {
         "pickSemester": MessageLookupByLibrary.simpleMessage("選擇學期"),
         "pickTeacher": MessageLookupByLibrary.simpleMessage("選擇老師"),
         "platformError": MessageLookupByLibrary.simpleMessage("此平台無法使用此功能"),
+        "pickThemeColor": MessageLookupByLibrary.simpleMessage("選擇主題色"),
         "pleasePick": MessageLookupByLibrary.simpleMessage("請選擇"),
         "pleasePickDateAndSection":
             MessageLookupByLibrary.simpleMessage("請選擇日期及節次"),
@@ -380,6 +392,7 @@ class MessageLookup extends MessageLookupByLibrary {
         "rewardAndPenalty": MessageLookupByLibrary.simpleMessage("獎懲紀錄"),
         "rewardAndPenaltyContent":
             MessageLookupByLibrary.simpleMessage("數量：%s\n日期：%s"),
+        "roseRed": MessageLookupByLibrary.simpleMessage("玫瑰紅"),
         "rewardAndPenaltyEmpty": MessageLookupByLibrary.simpleMessage(
             "Oops！本學期沒有任何獎懲紀錄哦～\n請選擇其他學期 😋"),
         "roomList": MessageLookupByLibrary.simpleMessage("教室列表"),
@@ -399,6 +412,7 @@ class MessageLookup extends MessageLookupByLibrary {
         "searchStudentIdError": MessageLookupByLibrary.simpleMessage("查無資料"),
         "searchStudentIdFormat":
             MessageLookupByLibrary.simpleMessage("姓名：%s\n學號：%s\n"),
+        "saturation": MessageLookupByLibrary.simpleMessage("飽和度"),
         "searchUsername": MessageLookupByLibrary.simpleMessage("學號查詢"),
         "semester": MessageLookupByLibrary.simpleMessage("學期"),
         "semesterScore": MessageLookupByLibrary.simpleMessage("學期成績"),
@@ -436,6 +450,7 @@ class MessageLookup extends MessageLookupByLibrary {
             MessageLookupByLibrary.simpleMessage("本 App 僅有學生功能！"),
         "teacherConfirmTitle": MessageLookupByLibrary.simpleMessage("您是老師嗎？"),
         "theme": MessageLookupByLibrary.simpleMessage("主題"),
+        "themeColor": MessageLookupByLibrary.simpleMessage("主題顏色"),
         "thirdPartyLoginFail": MessageLookupByLibrary.simpleMessage("第三方登入失敗"),
         "thu": MessageLookupByLibrary.simpleMessage("四"),
         "thursday": MessageLookupByLibrary.simpleMessage("週四"),
@@ -475,6 +490,7 @@ class MessageLookup extends MessageLookupByLibrary {
         "version": MessageLookupByLibrary.simpleMessage("v.%s"),
         "waitingForReview": MessageLookupByLibrary.simpleMessage("等待審查"),
         "wed": MessageLookupByLibrary.simpleMessage("三"),
+        "value": MessageLookupByLibrary.simpleMessage("亮度"),
         "wednesday": MessageLookupByLibrary.simpleMessage("週三"),
         "weight": MessageLookupByLibrary.simpleMessage("權重")
       };
