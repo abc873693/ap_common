@@ -2,6 +2,7 @@ import 'dart:math';
 
 import 'package:ap_common_flutter_ui/ap_common_flutter_ui.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/rendering.dart';
 
 enum ScoreState { loading, finish, error, empty, offlineEmpty, custom }
 
@@ -60,14 +61,31 @@ class ScoreScaffoldState extends State<ScoreScaffold> {
       MediaQuery.of(context).orientation == Orientation.landscape;
 
   bool _isAnalysisView = false;
+  late ScrollController _scrollController;
+  bool _showFab = true;
 
   @override
   void initState() {
     super.initState();
+    _scrollController = ScrollController();
+    _scrollController.addListener(() {
+      if (_scrollController.position.userScrollDirection ==
+          ScrollDirection.reverse) {
+        if (_showFab) {
+          setState(() => _showFab = false);
+        }
+      } else if (_scrollController.position.userScrollDirection ==
+          ScrollDirection.forward) {
+        if (!_showFab) {
+          setState(() => _showFab = true);
+        }
+      }
+    });
   }
 
   @override
   void dispose() {
+    _scrollController.dispose();
     super.dispose();
   }
 
@@ -106,32 +124,50 @@ class ScoreScaffoldState extends State<ScoreScaffold> {
           ],
         ),
         bottom: widget.bottom as PreferredSizeWidget?,
-        actions: <Widget>[
-          if (widget.state == ScoreState.finish &&
-              widget.scoreData != null &&
-              widget.scoreData!.scores.isNotEmpty &&
-              !isLandscape)
-            IconButton(
-              icon: Icon(
-                _isAnalysisView
-                    ? Icons.list_alt_rounded
-                    : Icons.analytics_outlined,
-              ),
-              onPressed: () {
-                setState(() => _isAnalysisView = !_isAnalysisView);
-              },
-            ),
-        ],
+        actions: const <Widget>[],
       ),
-      floatingActionButton: widget.isShowSearchButton
-          ? FloatingActionButton(
-              onPressed: () {
-                _pickSemester();
-                AnalyticsUtil.instance.logEvent('score_search_button_click');
-              },
-              child: const Icon(Icons.search),
-            )
-          : null,
+      floatingActionButton: AnimatedScale(
+        scale: _showFab ? 1.0 : 0.0,
+        duration: const Duration(milliseconds: 250),
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          crossAxisAlignment: CrossAxisAlignment.end,
+          children: <Widget>[
+            if (widget.state == ScoreState.finish &&
+                widget.scoreData != null &&
+                widget.scoreData!.scores.isNotEmpty &&
+                !isLandscape)
+              FloatingActionButton(
+                key: const ValueKey<String>('switch_view_button'),
+                heroTag: 'switch_view_button',
+                onPressed: () {
+                  setState(() => _isAnalysisView = !_isAnalysisView);
+                },
+                child: Icon(
+                  _isAnalysisView
+                      ? Icons.list_alt_rounded
+                      : Icons.analytics_outlined,
+                ),
+              ),
+            if (widget.isShowSearchButton) ...<Widget>[
+              if (widget.state == ScoreState.finish &&
+                  widget.scoreData != null &&
+                  widget.scoreData!.scores.isNotEmpty &&
+                  !isLandscape)
+                const SizedBox(height: 8),
+              FloatingActionButton(
+                key: const ValueKey<String>('search_button'),
+                heroTag: 'search_button',
+                onPressed: () {
+                  _pickSemester();
+                  AnalyticsUtil.instance.logEvent('score_search_button_click');
+                },
+                child: const Icon(Icons.search),
+              ),
+            ],
+          ],
+        ),
+      ),
       body: Row(
         children: <Widget>[
           Expanded(
@@ -231,6 +267,7 @@ class ScoreScaffoldState extends State<ScoreScaffold> {
           middleScoreBuilder: widget.middleScoreBuilder,
           finalScoreBuilder: widget.finalScoreBuilder,
           isAnalysisView: isLandscape ? true : _isAnalysisView,
+          scrollController: _scrollController,
         );
     }
   }
@@ -333,6 +370,7 @@ class ScoreContent extends StatefulWidget {
     this.middleScoreBuilder,
     this.finalScoreBuilder,
     required this.isAnalysisView,
+    this.scrollController,
   });
 
   final ScoreData? scoreData;
@@ -343,6 +381,7 @@ class ScoreContent extends StatefulWidget {
   final Widget Function(int index)? middleScoreBuilder;
   final Widget Function(int index)? finalScoreBuilder;
   final bool isAnalysisView;
+  final ScrollController? scrollController;
 
   @override
   _ScoreContentState createState() => _ScoreContentState();
@@ -357,6 +396,7 @@ class _ScoreContentState extends State<ScoreContent> {
       return _ScoreAnalysisTab(
         scoreData: widget.scoreData!,
         onRefresh: widget.onRefresh,
+        controller: widget.scrollController,
       );
     } else {
       return _ScoreListTab(
@@ -367,6 +407,7 @@ class _ScoreContentState extends State<ScoreContent> {
         onScoreSelect: widget.onScoreSelect,
         middleScoreBuilder: widget.middleScoreBuilder,
         finalScoreBuilder: widget.finalScoreBuilder,
+        controller: widget.scrollController,
       );
     }
   }
@@ -381,6 +422,7 @@ class _ScoreListTab extends StatelessWidget {
     this.onScoreSelect,
     this.middleScoreBuilder,
     this.finalScoreBuilder,
+    this.controller,
   });
 
   final ScoreData scoreData;
@@ -390,6 +432,7 @@ class _ScoreListTab extends StatelessWidget {
   final Function(int index)? onScoreSelect;
   final Widget Function(int index)? middleScoreBuilder;
   final Widget Function(int index)? finalScoreBuilder;
+  final ScrollController? controller;
 
   @override
   Widget build(BuildContext context) {
@@ -398,6 +441,7 @@ class _ScoreListTab extends StatelessWidget {
     return RefreshIndicator(
       onRefresh: () async => onRefresh?.call(),
       child: ListView.builder(
+        controller: controller,
         physics: const AlwaysScrollableScrollPhysics(),
         padding: const EdgeInsets.all(16),
         itemCount: scoreData.scores.length,
@@ -543,10 +587,15 @@ class _ScoreListTab extends StatelessWidget {
 }
 
 class _ScoreAnalysisTab extends StatelessWidget {
-  const _ScoreAnalysisTab({required this.scoreData, this.onRefresh});
+  const _ScoreAnalysisTab({
+    required this.scoreData,
+    this.onRefresh,
+    this.controller,
+  });
 
   final ScoreData scoreData;
   final VoidCallback? onRefresh;
+  final ScrollController? controller;
 
   @override
   Widget build(BuildContext context) {
@@ -557,6 +606,7 @@ class _ScoreAnalysisTab extends StatelessWidget {
     return RefreshIndicator(
       onRefresh: () async => onRefresh?.call(),
       child: SingleChildScrollView(
+        controller: controller,
         physics: const AlwaysScrollableScrollPhysics(),
         padding: const EdgeInsets.all(16),
         child: Column(

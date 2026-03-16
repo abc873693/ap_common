@@ -151,6 +151,9 @@ class CourseScaffoldState extends State<CourseScaffold> {
     return _courseColorMap[courseCode]!;
   }
 
+  late ScrollController _scrollController;
+  bool _showFab = true;
+
   @override
   void initState() {
     _buildCourseLookup();
@@ -169,6 +172,20 @@ class CourseScaffoldState extends State<CourseScaffold> {
       true,
     );
     fetchInvisibleCourseCodes();
+    _scrollController = ScrollController();
+    _scrollController.addListener(() {
+      if (_scrollController.position.userScrollDirection ==
+          ScrollDirection.reverse) {
+        if (_showFab) {
+          setState(() => _showFab = false);
+        }
+      } else if (_scrollController.position.userScrollDirection ==
+          ScrollDirection.forward) {
+        if (!_showFab) {
+          setState(() => _showFab = true);
+        }
+      }
+    });
     super.initState();
   }
 
@@ -183,6 +200,7 @@ class CourseScaffoldState extends State<CourseScaffold> {
 
   @override
   void dispose() {
+    _scrollController.dispose();
     super.dispose();
   }
 
@@ -336,23 +354,47 @@ class CourseScaffoldState extends State<CourseScaffold> {
             ],
           ],
         ),
-        floatingActionButtonLocation: FloatingActionButtonLocation.endContained,
-        floatingActionButton: !isLandscape
-            ? FloatingActionButton(
-                onPressed: () {
-                  setState(
-                    () => _contentStyle = (_contentStyle == _ContentStyle.table)
-                        ? _ContentStyle.list
-                        : _ContentStyle.table,
-                  );
-                },
-                child: Icon(
-                  _contentStyle == _ContentStyle.table
-                      ? Icons.list_rounded
-                      : Icons.grid_view_rounded,
+        floatingActionButton: AnimatedScale(
+          scale: _showFab ? 1.0 : 0.0,
+          duration: const Duration(milliseconds: 250),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            crossAxisAlignment: CrossAxisAlignment.end,
+            children: <Widget>[
+              if (!isLandscape)
+                FloatingActionButton(
+                  key: const ValueKey<String>('switch_content_style_button'),
+                  heroTag: 'switch_content_style_button',
+                  onPressed: () {
+                    setState(
+                      () => _contentStyle =
+                          (_contentStyle == _ContentStyle.table)
+                              ? _ContentStyle.list
+                              : _ContentStyle.table,
+                    );
+                  },
+                  child: Icon(
+                    _contentStyle == _ContentStyle.table
+                        ? Icons.list_rounded
+                        : Icons.grid_view_rounded,
+                  ),
                 ),
-              )
-            : null,
+              if (showSearchButton ?? true) ...<Widget>[
+                if (!isLandscape) const SizedBox(height: 8),
+                FloatingActionButton(
+                  key: const ValueKey<String>('search_button'),
+                  heroTag: 'search_button',
+                  onPressed: () {
+                    _pickSemester();
+                    AnalyticsUtil.instance
+                        .logEvent('course_search_button_click');
+                  },
+                  child: const Icon(Icons.search),
+                ),
+              ],
+            ],
+          ),
+        ),
       ),
     );
   }
@@ -469,6 +511,7 @@ class CourseScaffoldState extends State<CourseScaffold> {
         if (isLandscape || _contentStyle == _ContentStyle.table) {
           final int weekdayCount = widget.courseData.hasHoliday ? 7 : 5;
           return SingleChildScrollView(
+            controller: _scrollController,
             physics: const AlwaysScrollableScrollPhysics(),
             padding: const EdgeInsets.only(
               top: 8.0,
@@ -490,6 +533,7 @@ class CourseScaffoldState extends State<CourseScaffold> {
           );
         } else {
           return CourseList(
+            controller: _scrollController,
             courses: widget.courseData.courses,
             timeCodes: widget.courseData.timeCodes,
             invisibleCourseCodes: invisibleCourseCodes,
@@ -1337,19 +1381,23 @@ class CourseList extends StatelessWidget {
     this.invisibleCourseCodes = const <String>[],
     this.onVisibilityChanged,
     this.timeCodes,
+    this.controller,
   });
 
   final List<Course> courses;
   final List<String> invisibleCourseCodes;
   final void Function(Course, bool)? onVisibilityChanged;
   final List<TimeCode>? timeCodes;
+  final ScrollController? controller;
 
   @override
   Widget build(BuildContext context) {
     final ApLocalizations app = ApLocalizations.of(context);
     final ColorScheme colorScheme = Theme.of(context).colorScheme;
-
+ 
     return ListView.builder(
+      controller: controller,
+      physics: const AlwaysScrollableScrollPhysics(),
       padding: const EdgeInsets.only(
           bottom: 80.0, left: 16.0, right: 16.0, top: 16.0),
       itemCount: courses.length,
