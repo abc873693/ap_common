@@ -4,6 +4,20 @@ import 'package:flutter/material.dart';
 
 typedef SemesterCallback = void Function(Semester semester, int index);
 
+class SemesterUIConfig {
+  final String Function(String value)? getName;
+  final IconData Function(String value)? getIcon;
+  final Color Function(String value, ColorScheme colorScheme)? getColor;
+  final int Function(String value)? getSortValue;
+
+  const SemesterUIConfig({
+    this.getName,
+    this.getIcon,
+    this.getColor,
+    this.getSortValue,
+  });
+}
+
 class SemesterPicker extends StatefulWidget {
   const SemesterPicker({
     super.key,
@@ -11,248 +25,32 @@ class SemesterPicker extends StatefulWidget {
     this.onSelect,
     this.featureTag,
     this.currentIndex = 0,
+    this.uiConfig,
   });
 
   final SemesterData semesterData;
   final SemesterCallback? onSelect;
   final String? featureTag;
   final int currentIndex;
+  final SemesterUIConfig? uiConfig;
 
   @override
   SemesterPickerState createState() => SemesterPickerState();
-}
 
-class SemesterPickerState extends State<SemesterPicker> {
-  late SemesterData semesterData;
-  Semester? selectSemester;
-  late int currentIndex;
-
-  final Set<String> _emptySemesters = <String>{};
-  final Set<String> _loadingSemesters = <String>{};
-  BuildContext? _sheetContext;
-  StateSetter? _sheetSetState;
-
-  @override
-  void initState() {
-    semesterData = widget.semesterData;
-    currentIndex = widget.currentIndex;
-    if (semesterData.data.isNotEmpty &&
-        currentIndex < semesterData.data.length) {
-      selectSemester = semesterData.data[currentIndex];
-    }
-    super.initState();
-  }
-
-  @override
-  void didUpdateWidget(covariant SemesterPicker oldWidget) {
-    if (oldWidget.semesterData != widget.semesterData ||
-        oldWidget.currentIndex != widget.currentIndex) {
-      semesterData = widget.semesterData;
-      currentIndex = widget.currentIndex;
-      if (semesterData.data.isNotEmpty &&
-          currentIndex < semesterData.data.length) {
-        selectSemester = semesterData.data[currentIndex];
-      }
-    }
-    super.didUpdateWidget(oldWidget);
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    final ColorScheme colorScheme = Theme.of(context).colorScheme;
-    final String displayText =
-        selectSemester != null ? _getShortSemesterText(selectSemester!) : '';
-
-    return Material(
-      color: colorScheme.primaryContainer,
-      borderRadius: BorderRadius.circular(20),
-      child: InkWell(
-        onTap: () {
-          if (selectSemester != null) pickSemester();
-          if (widget.featureTag != null) {
-            AnalyticsUtil.instance
-                .logEvent('${widget.featureTag}_item_picker_click');
-          }
-        },
-        borderRadius: BorderRadius.circular(20),
-        child: Padding(
-          padding: const EdgeInsets.symmetric(vertical: 6, horizontal: 12),
-          child: Row(
-            mainAxisSize: MainAxisSize.min,
-            children: <Widget>[
-              Icon(
-                Icons.calendar_month_rounded,
-                size: 16,
-                color: colorScheme.onPrimaryContainer,
-              ),
-              const SizedBox(width: 6),
-              Text(
-                displayText,
-                style: TextStyle(
-                  color: colorScheme.onPrimaryContainer,
-                  fontSize: 13,
-                  fontWeight: FontWeight.w600,
-                ),
-              ),
-              const SizedBox(width: 2),
-              Icon(
-                Icons.arrow_drop_down_rounded,
-                size: 20,
-                color: colorScheme.onPrimaryContainer,
-              ),
-            ],
-          ),
-        ),
-      ),
-    );
-  }
-
-  String _getShortSemesterText(Semester semester) {
-    final String name = _getSemesterName(semester.value);
-    if (name.isNotEmpty) {
-      return '${semester.year} $name';
-    }
-    return semester.text;
-  }
-
-  void markSemesterEmpty(Semester semester) {
-    _loadingSemesters.remove(semester.code);
-    _emptySemesters.add(semester.code);
-    _sheetSetState?.call(() {});
-    if (mounted) setState(() {});
-  }
-
-  void markSemesterHasData(Semester semester) {
-    _loadingSemesters.remove(semester.code);
-    _emptySemesters.remove(semester.code);
-    if (_sheetContext != null && Navigator.of(_sheetContext!).canPop()) {
-      Navigator.of(_sheetContext!).pop();
-      _sheetContext = null;
-      _sheetSetState = null;
-    }
-    if (mounted) setState(() {});
-  }
-
-  void markSemesterLoading(Semester semester) {
-    _loadingSemesters.add(semester.code);
-    _sheetSetState?.call(() {});
-    if (mounted) setState(() {});
-  }
-
-  bool isSemesterEmpty(Semester semester) {
-    return _emptySemesters.contains(semester.code);
-  }
-
-  bool isSemesterLoading(Semester semester) {
-    return _loadingSemesters.contains(semester.code);
-  }
-
-  int _getSemesterSortValue(String value) {
-    switch (value) {
-      case '4':
-        return 1;
-      case '6':
-        return 2;
-      case '7':
-        return 3;
-      case '2':
-        return 4;
-      case '3':
-        return 5;
-      case '1':
-        return 6;
-      case '5':
-        return 7;
-      default:
-        return 99;
-    }
-  }
-
-  String _getSemesterName(String value) {
-    switch (value) {
-      case '1':
-        return '上學期';
-      case '2':
-        return '下學期';
-      case '3':
-        return '寒修';
-      case '4':
-        return '暑修';
-      case '5':
-        return '先修';
-      case '6':
-        return '暑修(一)';
-      case '7':
-        return '暑修(特)';
-      default:
-        return '';
-    }
-  }
-
-  IconData _getSemesterIcon(String value) {
-    switch (value) {
-      case '1':
-        return Icons.looks_one_rounded;
-      case '2':
-        return Icons.looks_two_rounded;
-      case '3':
-        return Icons.ac_unit_rounded;
-      case '4':
-      case '6':
-      case '7':
-        return Icons.wb_sunny_rounded;
-      case '5':
-        return Icons.auto_awesome_rounded;
-      default:
-        return Icons.calendar_today_rounded;
-    }
-  }
-
-  Color _getSemesterColor(String value, ColorScheme colorScheme) {
-    switch (value) {
-      case '1':
-        return colorScheme.primaryContainer.withAlpha(179);
-      case '2':
-        return colorScheme.secondaryContainer.withAlpha(179);
-      case '3':
-        return colorScheme.errorContainer.withAlpha(128);
-      case '5':
-        return colorScheme.primaryContainer.withAlpha(102);
-      case '4':
-      case '6':
-      case '7':
-        return colorScheme.tertiaryContainer.withAlpha(179);
-      default:
-        return colorScheme.surfaceContainerHighest;
-    }
-  }
-
-  List<MapEntry<int, Semester>> _getSortedSemesters() {
-    final List<MapEntry<int, Semester>> indexed = <MapEntry<int, Semester>>[];
-    for (int i = 0; i < semesterData.data.length; i++) {
-      indexed.add(MapEntry<int, Semester>(i, semesterData.data[i]));
-    }
-
-    indexed.sort((MapEntry<int, Semester> a, MapEntry<int, Semester> b) {
-      final int yearA = int.tryParse(a.value.year) ?? 0;
-      final int yearB = int.tryParse(b.value.year) ?? 0;
-
-      if (yearA != yearB) {
-        return yearB.compareTo(yearA);
-      }
-
-      final int semA = _getSemesterSortValue(a.value.value);
-      final int semB = _getSemesterSortValue(b.value.value);
-      return semA.compareTo(semB);
-    });
-
-    return indexed;
-  }
-
-  void pickSemester() {
+  static void show({
+    required BuildContext context,
+    required SemesterData semesterData,
+    int currentIndex = 0,
+    SemesterCallback? onSelect,
+    String? featureTag,
+    Set<String>? loadingSemesters,
+    Set<String>? emptySemesters,
+    SemesterUIConfig? uiConfig,
+  }) {
     final ColorScheme colorScheme = Theme.of(context).colorScheme;
     final ApLocalizations ap = ApLocalizations.of(context);
-    final List<MapEntry<int, Semester>> sortedSemesters = _getSortedSemesters();
+    final List<MapEntry<int, Semester>> sortedSemesters =
+        SemesterPickerState._getSortedSemesters(semesterData, uiConfig);
 
     final Map<String, List<MapEntry<int, Semester>>> groupedByYear =
         <String, List<MapEntry<int, Semester>>>{};
@@ -267,12 +65,8 @@ class SemesterPickerState extends State<SemesterPicker> {
       backgroundColor: const Color(0x00000000),
       isScrollControlled: true,
       builder: (BuildContext sheetContext) {
-        _sheetContext = sheetContext;
-
         return StatefulBuilder(
           builder: (BuildContext context, StateSetter setSheetState) {
-            _sheetSetState = setSheetState;
-
             return DraggableScrollableSheet(
               initialChildSize: 0.6,
               minChildSize: 0.3,
@@ -336,10 +130,17 @@ class SemesterPickerState extends State<SemesterPicker> {
                                 groupedByYear[year]!;
 
                             return _buildYearGroup(
-                              context,
-                              year,
-                              semesters,
-                              colorScheme,
+                              context: context,
+                              year: year,
+                              semesters: semesters,
+                              colorScheme: colorScheme,
+                              currentIndex: currentIndex,
+                              semesterData: semesterData,
+                              onSelect: onSelect,
+                              loadingSemesters: loadingSemesters,
+                              emptySemesters: emptySemesters,
+                              setSheetState: setSheetState,
+                              uiConfig: uiConfig,
                             );
                           },
                         ),
@@ -352,18 +153,22 @@ class SemesterPickerState extends State<SemesterPicker> {
           },
         );
       },
-    ).whenComplete(() {
-      _sheetContext = null;
-      _sheetSetState = null;
-    });
+    );
   }
 
-  Widget _buildYearGroup(
-    BuildContext context,
-    String year,
-    List<MapEntry<int, Semester>> semesters,
-    ColorScheme colorScheme,
-  ) {
+  static Widget _buildYearGroup({
+    required BuildContext context,
+    required String year,
+    required List<MapEntry<int, Semester>> semesters,
+    required ColorScheme colorScheme,
+    required int currentIndex,
+    required SemesterData semesterData,
+    SemesterCallback? onSelect,
+    Set<String>? loadingSemesters,
+    Set<String>? emptySemesters,
+    required StateSetter setSheetState,
+    SemesterUIConfig? uiConfig,
+  }) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: <Widget>[
@@ -395,28 +200,43 @@ class SemesterPickerState extends State<SemesterPicker> {
         ),
         ...semesters.map(
           (MapEntry<int, Semester> entry) => _buildSemesterItem(
-            context,
-            entry.key,
-            entry.value,
-            colorScheme,
+            context: context,
+            originalIndex: entry.key,
+            semester: entry.value,
+            colorScheme: colorScheme,
+            currentIndex: currentIndex,
+            semesterData: semesterData,
+            onSelect: onSelect,
+            loadingSemesters: loadingSemesters,
+            emptySemesters: emptySemesters,
+            setSheetState: setSheetState,
+            uiConfig: uiConfig,
           ),
         ),
       ],
     );
   }
 
-  Widget _buildSemesterItem(
-    BuildContext context,
-    int originalIndex,
-    Semester semester,
-    ColorScheme colorScheme,
-  ) {
+  static Widget _buildSemesterItem({
+    required BuildContext context,
+    required int originalIndex,
+    required Semester semester,
+    required ColorScheme colorScheme,
+    required int currentIndex,
+    required SemesterData semesterData,
+    SemesterCallback? onSelect,
+    Set<String>? loadingSemesters,
+    Set<String>? emptySemesters,
+    required StateSetter setSheetState,
+    SemesterUIConfig? uiConfig,
+  }) {
     final bool isSelected = originalIndex == currentIndex;
     final bool isDefault = originalIndex == semesterData.defaultIndex;
-    final bool isEmpty = isSemesterEmpty(semester);
-    final bool isLoading = isSemesterLoading(semester);
+    final bool isEmpty = emptySemesters?.contains(semester.code) ?? false;
+    final bool isLoading = loadingSemesters?.contains(semester.code) ?? false;
     final bool isDisabled = isEmpty || isLoading;
-    final String semesterName = _getSemesterName(semester.value);
+    final String semesterName = uiConfig?.getName?.call(semester.value) ??
+        SemesterPickerState._getSemesterName(semester.value);
     final String displayName =
         semesterName.isNotEmpty ? semesterName : semester.text;
 
@@ -448,12 +268,18 @@ class SemesterPickerState extends State<SemesterPicker> {
           onTap: isDisabled
               ? null
               : () {
-                  markSemesterLoading(semester);
-                  currentIndex = originalIndex;
-                  selectSemester = semesterData.data[currentIndex];
-                  widget.onSelect
-                      ?.call(semesterData.data[currentIndex], currentIndex);
-                  if (mounted) setState(() {});
+                  if (onSelect != null) {
+                    if (loadingSemesters != null) {
+                      loadingSemesters.add(semester.code);
+                      setSheetState(() {});
+                      onSelect(semester, originalIndex);
+                    } else {
+                      Navigator.of(context).pop();
+                      onSelect(semester, originalIndex);
+                    }
+                  } else {
+                    Navigator.of(context).pop();
+                  }
                 },
           borderRadius: BorderRadius.circular(12),
           child: Padding(
@@ -470,8 +296,12 @@ class SemesterPickerState extends State<SemesterPicker> {
                             ? colorScheme.primary.withAlpha(77)
                             : isSelected
                                 ? colorScheme.primary
-                                : _getSemesterColor(
-                                    semester.value, colorScheme),
+                                : (uiConfig?.getColor
+                                        ?.call(semester.value, colorScheme) ??
+                                    SemesterPickerState._getSemesterColor(
+                                      semester.value,
+                                      colorScheme,
+                                    )),
                     borderRadius: BorderRadius.circular(10),
                   ),
                   child: Center(
@@ -487,7 +317,10 @@ class SemesterPickerState extends State<SemesterPicker> {
                         : Icon(
                             isEmpty
                                 ? Icons.block_rounded
-                                : _getSemesterIcon(semester.value),
+                                : (uiConfig?.getIcon?.call(semester.value) ??
+                                    SemesterPickerState._getSemesterIcon(
+                                      semester.value,
+                                    )),
                             size: 22,
                             color: isEmpty
                                 ? colorScheme.onSurfaceVariant
@@ -628,3 +461,261 @@ class SemesterPickerState extends State<SemesterPicker> {
     );
   }
 }
+
+class SemesterPickerState extends State<SemesterPicker> {
+  late SemesterData semesterData;
+  Semester? selectSemester;
+  late int currentIndex;
+
+  final Set<String> _emptySemesters = <String>{};
+  final Set<String> _loadingSemesters = <String>{};
+  BuildContext? _sheetContext;
+  StateSetter? _sheetSetState;
+
+  @override
+  void initState() {
+    semesterData = widget.semesterData;
+    currentIndex = widget.currentIndex;
+    if (semesterData.data.isNotEmpty &&
+        currentIndex < semesterData.data.length) {
+      selectSemester = semesterData.data[currentIndex];
+    }
+    super.initState();
+  }
+
+  @override
+  void didUpdateWidget(covariant SemesterPicker oldWidget) {
+    if (oldWidget.semesterData != widget.semesterData ||
+        oldWidget.currentIndex != widget.currentIndex) {
+      semesterData = widget.semesterData;
+      currentIndex = widget.currentIndex;
+      if (semesterData.data.isNotEmpty &&
+          currentIndex < semesterData.data.length) {
+        selectSemester = semesterData.data[currentIndex];
+      }
+    }
+    super.didUpdateWidget(oldWidget);
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final ColorScheme colorScheme = Theme.of(context).colorScheme;
+    final String displayText = selectSemester != null
+        ? _getShortSemesterText(selectSemester!, widget.uiConfig)
+        : '';
+
+    return Material(
+      color: colorScheme.primaryContainer,
+      borderRadius: BorderRadius.circular(20),
+      child: InkWell(
+        onTap: () {
+          if (selectSemester != null) pickSemester();
+          if (widget.featureTag != null) {
+            AnalyticsUtil.instance
+                .logEvent('${widget.featureTag}_item_picker_click');
+          }
+        },
+        borderRadius: BorderRadius.circular(20),
+        child: Padding(
+          padding: const EdgeInsets.symmetric(vertical: 6, horizontal: 12),
+          child: Row(
+            mainAxisSize: MainAxisSize.min,
+            children: <Widget>[
+              Icon(
+                Icons.calendar_month_rounded,
+                size: 16,
+                color: colorScheme.onPrimaryContainer,
+              ),
+              const SizedBox(width: 6),
+              Text(
+                displayText,
+                style: TextStyle(
+                  color: colorScheme.onPrimaryContainer,
+                  fontSize: 13,
+                  fontWeight: FontWeight.w600,
+                ),
+              ),
+              const SizedBox(width: 2),
+              Icon(
+                Icons.arrow_drop_down_rounded,
+                size: 20,
+                color: colorScheme.onPrimaryContainer,
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+
+  static String _getShortSemesterText(
+    Semester semester,
+    SemesterUIConfig? uiConfig,
+  ) {
+    final String name =
+        uiConfig?.getName?.call(semester.value) ?? _getSemesterName(semester.value);
+    if (name.isNotEmpty) {
+      return '${semester.year} $name';
+    }
+    return semester.text;
+  }
+
+  void markSemesterEmpty(Semester semester) {
+    _loadingSemesters.remove(semester.code);
+    _emptySemesters.add(semester.code);
+    _sheetSetState?.call(() {});
+    if (mounted) setState(() {});
+  }
+
+  void markSemesterHasData(Semester semester) {
+    _loadingSemesters.remove(semester.code);
+    _emptySemesters.remove(semester.code);
+    if (_sheetContext != null && Navigator.of(_sheetContext!).canPop()) {
+      Navigator.of(_sheetContext!).pop();
+      _sheetContext = null;
+      _sheetSetState = null;
+    }
+    if (mounted) setState(() {});
+  }
+
+  void markSemesterLoading(Semester semester) {
+    _loadingSemesters.add(semester.code);
+    _sheetSetState?.call(() {});
+    if (mounted) setState(() {});
+  }
+
+  bool isSemesterEmpty(Semester semester) {
+    return _emptySemesters.contains(semester.code);
+  }
+
+  bool isSemesterLoading(Semester semester) {
+    return _loadingSemesters.contains(semester.code);
+  }
+
+  static int _getSemesterSortValue(String value) {
+    switch (value) {
+      case '4':
+        return 1;
+      case '6':
+        return 2;
+      case '7':
+        return 3;
+      case '2':
+        return 4;
+      case '3':
+        return 5;
+      case '1':
+        return 6;
+      case '5':
+        return 7;
+      default:
+        return 99;
+    }
+  }
+
+  static String _getSemesterName(String value) {
+    switch (value) {
+      case '1':
+        return '上學期';
+      case '2':
+        return '下學期';
+      case '3':
+        return '寒修';
+      case '4':
+        return '暑修';
+      case '5':
+        return '先修';
+      case '6':
+        return '暑修(一)';
+      case '7':
+        return '暑修(特)';
+      default:
+        return '';
+    }
+  }
+
+  static IconData _getSemesterIcon(String value) {
+    switch (value) {
+      case '1':
+        return Icons.looks_one_rounded;
+      case '2':
+        return Icons.looks_two_rounded;
+      case '3':
+        return Icons.ac_unit_rounded;
+      case '4':
+      case '6':
+      case '7':
+        return Icons.wb_sunny_rounded;
+      case '5':
+        return Icons.auto_awesome_rounded;
+      default:
+        return Icons.calendar_today_rounded;
+    }
+  }
+
+  static Color _getSemesterColor(String value, ColorScheme colorScheme) {
+    switch (value) {
+      case '1':
+        return colorScheme.primaryContainer.withAlpha(179);
+      case '2':
+        return colorScheme.secondaryContainer.withAlpha(179);
+      case '3':
+        return colorScheme.errorContainer.withAlpha(128);
+      case '5':
+        return colorScheme.primaryContainer.withAlpha(102);
+      case '4':
+      case '6':
+      case '7':
+        return colorScheme.tertiaryContainer.withAlpha(179);
+      default:
+        return colorScheme.surfaceContainerHighest;
+    }
+  }
+
+  static List<MapEntry<int, Semester>> _getSortedSemesters(
+    SemesterData semesterData,
+    SemesterUIConfig? uiConfig,
+  ) {
+    final List<MapEntry<int, Semester>> indexed = <MapEntry<int, Semester>>[];
+    for (int i = 0; i < semesterData.data.length; i++) {
+      indexed.add(MapEntry<int, Semester>(i, semesterData.data[i]));
+    }
+
+    indexed.sort((MapEntry<int, Semester> a, MapEntry<int, Semester> b) {
+      final int yearA = int.tryParse(a.value.year) ?? 0;
+      final int yearB = int.tryParse(b.value.year) ?? 0;
+
+      if (yearA != yearB) {
+        return yearB.compareTo(yearA);
+      }
+
+      final int semA = uiConfig?.getSortValue?.call(a.value.value) ??
+          _getSemesterSortValue(a.value.value);
+      final int semB = uiConfig?.getSortValue?.call(b.value.value) ??
+          _getSemesterSortValue(b.value.value);
+      return semA.compareTo(semB);
+    });
+
+    return indexed;
+  }
+
+  void pickSemester() {
+    SemesterPicker.show(
+      context: context,
+      semesterData: semesterData,
+      currentIndex: currentIndex,
+      onSelect: (Semester semester, int index) {
+        markSemesterLoading(semester);
+        currentIndex = index;
+        selectSemester = semesterData.data[currentIndex];
+        widget.onSelect?.call(semesterData.data[currentIndex], currentIndex);
+        if (mounted) setState(() {});
+      },
+      featureTag: widget.featureTag,
+      loadingSemesters: _loadingSemesters,
+      emptySemesters: _emptySemesters,
+      uiConfig: widget.uiConfig,
+    );
+  }
+}
+

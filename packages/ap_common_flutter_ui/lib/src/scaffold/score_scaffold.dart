@@ -345,14 +345,13 @@ class ScoreScaffoldState extends State<ScoreScaffold> {
 
   void _pickSemester() {
     if (widget.semesterData != null) {
-      showDialog(
+      SemesterPicker.show(
         context: context,
-        builder: (_) => SimpleOptionDialog(
-          title: app.pickSemester,
-          items: widget.semesterData!.semesters,
-          index: widget.semesterData!.currentIndex,
-          onSelected: widget.onSelect,
-        ),
+        semesterData: widget.semesterData!,
+        currentIndex: widget.semesterData!.currentIndex,
+        onSelect: (Semester semester, int index) {
+          widget.onSelect?.call(index);
+        },
       );
     }
     widget.onSearchButtonClick?.call();
