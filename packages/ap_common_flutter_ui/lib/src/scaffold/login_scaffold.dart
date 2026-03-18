@@ -1,5 +1,3 @@
-import 'package:ap_common_flutter_ui/src/resources/ap_colors.dart';
-import 'package:ap_common_flutter_ui/src/resources/ap_theme.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_keyboard_visibility/flutter_keyboard_visibility.dart';
 
@@ -31,74 +29,139 @@ class LoginScaffoldState extends State<LoginScaffold> {
   @override
   Widget build(BuildContext context) {
     final Orientation orientation = MediaQuery.of(context).orientation;
+    final ColorScheme colorScheme = Theme.of(context).colorScheme;
+    final bool isDark = Theme.of(context).brightness == Brightness.dark;
+
     return Scaffold(
-      backgroundColor: ApTheme.of(context).blue,
       resizeToAvoidBottomInset: orientation == Orientation.portrait,
-      body: AutofillGroup(
-        child: KeyboardDismissOnTap(
-          child: Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 30.0),
-            child: orientation == Orientation.portrait
-                ? Center(
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.stretch,
-                      mainAxisAlignment: MainAxisAlignment.spaceAround,
-                      mainAxisSize: MainAxisSize.min,
-                      children: _renderContent(orientation),
-                    ),
-                  )
-                : Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: _renderContent(orientation),
+      body: DecoratedBox(
+        decoration: BoxDecoration(
+          gradient: LinearGradient(
+            begin: Alignment.topCenter,
+            end: Alignment.bottomCenter,
+            colors: isDark
+                ? <Color>[
+                    colorScheme.surface,
+                    colorScheme.surfaceContainerLowest,
+                  ]
+                : <Color>[
+                    colorScheme.primary,
+                    colorScheme.primaryContainer,
+                  ],
+          ),
+        ),
+        child: AutofillGroup(
+          child: KeyboardDismissOnTap(
+            child: SafeArea(
+              child: Center(
+                child: SingleChildScrollView(
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 24.0,
+                    vertical: 32.0,
                   ),
+                  child: orientation == Orientation.portrait
+                      ? Column(
+                          crossAxisAlignment: CrossAxisAlignment.stretch,
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children:
+                              _renderContent(orientation, colorScheme, isDark),
+                        )
+                      : Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children:
+                              _renderContent(orientation, colorScheme, isDark),
+                        ),
+                ),
+              ),
+            ),
           ),
         ),
       ),
     );
   }
 
-  Widget get logo {
+  Widget logo(ColorScheme colorScheme, bool isDark) {
     switch (widget.logoMode) {
       case LogoMode.image:
-        return Image.asset(
-          widget.logoSource,
-          width: 120.0,
-          height: 120.0,
+        return Container(
+          width: 100,
+          height: 100,
+          decoration: BoxDecoration(
+            color: isDark
+                ? colorScheme.primaryContainer
+                : colorScheme.onPrimary.withAlpha(51),
+            borderRadius: BorderRadius.circular(24),
+            boxShadow: <BoxShadow>[
+              BoxShadow(
+                color: colorScheme.shadow.withAlpha(26),
+                blurRadius: 20,
+                offset: const Offset(0, 8),
+              ),
+            ],
+          ),
+          child: ClipRRect(
+            borderRadius: BorderRadius.circular(24),
+            child: Image.asset(
+              widget.logoSource,
+              fit: BoxFit.contain,
+            ),
+          ),
         );
       case LogoMode.text:
         return TextLogo(
           text: widget.logoSource,
+          isDark: isDark,
+          colorScheme: colorScheme,
         );
     }
   }
 
-  List<Widget> _renderContent(Orientation orientation) {
-    final List<Widget> list = orientation == Orientation.portrait
-        ? <Widget>[
-            Center(
-              child: logo,
-            ),
-            SizedBox(height: orientation == Orientation.portrait ? 30.0 : 0.0),
-          ]
-        : <Widget>[
-            Expanded(
-              child: logo,
-            ),
-            SizedBox(height: orientation == Orientation.portrait ? 30.0 : 0.0),
-          ];
-    if (orientation == Orientation.portrait) {
-      list.addAll(widget.forms);
-    } else {
-      list.add(
-        Expanded(
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: widget.forms,
+  List<Widget> _renderContent(
+    Orientation orientation,
+    ColorScheme colorScheme,
+    bool isDark,
+  ) {
+    final Widget logoWidget = logo(colorScheme, isDark);
+    final Widget formCard = Container(
+      constraints: const BoxConstraints(maxWidth: 400),
+      decoration: BoxDecoration(
+        color: colorScheme.surface,
+        borderRadius: BorderRadius.circular(24),
+        boxShadow: <BoxShadow>[
+          BoxShadow(
+            color: colorScheme.shadow.withAlpha(26),
+            blurRadius: 20,
+            offset: const Offset(0, 8),
           ),
+        ],
+      ),
+      child: Padding(
+        padding: const EdgeInsets.all(24),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          children: widget.forms,
         ),
-      );
+      ),
+    );
+
+    if (orientation == Orientation.portrait) {
+      return <Widget>[
+        Center(child: logoWidget),
+        const SizedBox(height: 48),
+        formCard,
+      ];
+    } else {
+      return <Widget>[
+        Expanded(
+          child: Center(child: logoWidget),
+        ),
+        const SizedBox(width: 32),
+        Expanded(
+          child: Center(child: formCard),
+        ),
+      ];
     }
-    return list;
   }
 }
 
@@ -116,27 +179,38 @@ class TextCheckBox extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return GestureDetector(
-      onTap: (onChanged == null) ? null : () => onChanged?.call(value),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.end,
-        children: <Widget>[
-          Theme(
-            data: ThemeData(
-              unselectedWidgetColor: Colors.white,
+    final ColorScheme colorScheme = Theme.of(context).colorScheme;
+    return InkWell(
+      onTap: (onChanged == null) ? null : () => onChanged?.call(!value),
+      borderRadius: BorderRadius.circular(8),
+      child: Padding(
+        padding: const EdgeInsets.symmetric(vertical: 8),
+        child: Row(
+          mainAxisSize: MainAxisSize.min,
+          children: <Widget>[
+            SizedBox(
+              width: 24,
+              height: 24,
+              child: Checkbox(
+                value: value,
+                onChanged: onChanged,
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(4),
+                ),
+              ),
             ),
-            child: Checkbox(
-              activeColor: Colors.white,
-              checkColor: ApTheme.of(context).blue,
-              value: value,
-              onChanged: onChanged,
+            const SizedBox(width: 8),
+            Flexible(
+              child: Text(
+                text,
+                style: TextStyle(
+                  color: colorScheme.onSurface,
+                  fontSize: 13,
+                ),
+              ),
             ),
-          ),
-          Text(
-            text,
-            style: const TextStyle(color: Colors.white),
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }
@@ -156,20 +230,20 @@ class ApButton extends StatelessWidget {
   Widget build(BuildContext context) {
     return SizedBox(
       width: double.infinity,
-      child: ElevatedButton(
-        style: ElevatedButton.styleFrom(
-          shape: const RoundedRectangleBorder(
-            borderRadius: BorderRadius.all(
-              Radius.circular(30.0),
-            ),
+      child: FilledButton(
+        style: FilledButton.styleFrom(
+          padding: const EdgeInsets.symmetric(vertical: 16),
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(12),
           ),
-          backgroundColor: Colors.white,
-          padding: const EdgeInsets.all(14.0),
         ),
         onPressed: onPressed,
         child: Text(
           text,
-          style: TextStyle(color: ApTheme.of(context).blue, fontSize: 18.0),
+          style: const TextStyle(
+            fontSize: 16,
+            fontWeight: FontWeight.w600,
+          ),
         ),
       ),
     );
@@ -192,10 +266,10 @@ class ApFlatButton extends StatelessWidget {
       child: TextButton(
         onPressed: onPressed,
         child: Text(
-          text!,
-          style: const TextStyle(
-            color: Colors.white,
-            fontSize: 16.0,
+          text ?? '',
+          style: TextStyle(
+            color: Theme.of(context).colorScheme.primary,
+            fontSize: 14.0,
           ),
         ),
       ),
@@ -207,17 +281,24 @@ class TextLogo extends StatelessWidget {
   const TextLogo({
     super.key,
     required this.text,
+    this.isDark = false,
+    this.colorScheme,
   });
+
   final String text;
+  final bool isDark;
+  final ColorScheme? colorScheme;
 
   @override
   Widget build(BuildContext context) {
+    final ColorScheme cs = colorScheme ?? Theme.of(context).colorScheme;
     return Text(
       text,
       textAlign: TextAlign.center,
-      style: const TextStyle(
-        fontSize: 120,
-        color: Colors.white,
+      style: TextStyle(
+        fontSize: 80,
+        fontWeight: FontWeight.bold,
+        color: isDark ? cs.onSurface : cs.onPrimary,
       ),
     );
   }
@@ -237,6 +318,8 @@ class ApTextField extends StatelessWidget {
     this.maxLength,
     this.onChanged,
     this.autofillHints,
+    this.prefixIcon,
+    this.suffixIcon,
   });
 
   final TextEditingController controller;
@@ -250,42 +333,55 @@ class ApTextField extends StatelessWidget {
   final int? maxLength;
   final TextInputType keyboardType;
   final Iterable<String>? autofillHints;
+  final IconData? prefixIcon;
+  final Widget? suffixIcon;
 
   @override
   Widget build(BuildContext context) {
-    return Theme(
-      data: Theme.of(context).copyWith(
-        textSelectionTheme: const TextSelectionThemeData(
-          selectionColor: ApColors.blue200,
+    final ColorScheme colorScheme = Theme.of(context).colorScheme;
+    return TextField(
+      key: key,
+      obscureText: obscureText,
+      controller: controller,
+      focusNode: focusNode,
+      maxLength: maxLength,
+      onChanged: onChanged,
+      keyboardType: keyboardType,
+      textInputAction: textInputAction,
+      style: TextStyle(color: colorScheme.onSurface, fontSize: 16),
+      onSubmitted: (String text) {
+        focusNode?.unfocus();
+        if (nextFocusNode != null) {
+          FocusScope.of(context).requestFocus(nextFocusNode);
+        }
+        onSubmitted?.call(text);
+      },
+      decoration: InputDecoration(
+        labelText: labelText,
+        labelStyle: TextStyle(color: colorScheme.onSurfaceVariant),
+        counterText: '',
+        prefixIcon: prefixIcon != null
+            ? Icon(prefixIcon, color: colorScheme.onSurfaceVariant)
+            : null,
+        suffixIcon: suffixIcon,
+        filled: true,
+        fillColor: colorScheme.surfaceContainerHighest,
+        border: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(12),
+          borderSide: BorderSide.none,
+        ),
+        enabledBorder: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(12),
+          borderSide: BorderSide(
+            color: colorScheme.outline.withAlpha(77),
+          ),
+        ),
+        focusedBorder: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(12),
+          borderSide: BorderSide(color: colorScheme.primary, width: 2),
         ),
       ),
-      child: TextField(
-        key: key,
-        obscureText: obscureText,
-        controller: controller,
-        focusNode: focusNode,
-        maxLength: maxLength,
-        onChanged: onChanged,
-        keyboardType: keyboardType,
-        textInputAction: textInputAction,
-        onSubmitted: (String text) {
-          focusNode?.unfocus();
-          if (nextFocusNode != null) {
-            FocusScope.of(context).requestFocus(nextFocusNode);
-          }
-          onSubmitted?.call(text);
-        },
-        decoration: InputDecoration(
-          labelText: labelText,
-          counterText: '',
-        ),
-        style: const TextStyle(
-          color: Colors.white,
-          fontSize: 18.0,
-          decorationColor: Colors.white,
-        ),
-        autofillHints: autofillHints,
-      ),
+      autofillHints: autofillHints,
     );
   }
 }

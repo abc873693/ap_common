@@ -26,19 +26,17 @@ class UserInfoPageState extends State<UserInfoPage> {
   @override
   Widget build(BuildContext context) {
     return UserInfoScaffold(
-      userInfo: widget.userInfo!,
+      userInfo: userInfo!,
       enableBarCode: true,
       onRefresh: () async {
         final String rawString =
             await rootBundle.loadString(FileAssets.userInfo);
-        final UserInfo userInfo = UserInfo.fromRawJson(rawString);
         setState(
-          () => this.userInfo = userInfo.copyWith(
-            pictureBytes: this.userInfo!.pictureBytes,
+          () => userInfo = UserInfo.fromRawJson(rawString).copyWith(
+            pictureBytes: userInfo!.pictureBytes,
           ),
         );
-//        FirebaseAnalyticsUtils.instance.logUserInfo(userInfo);
-        return null;
+        return userInfo;
       },
     );
   }

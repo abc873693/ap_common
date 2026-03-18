@@ -1,4 +1,3 @@
-import 'package:ap_common_flutter_ui/src/resources/ap_theme.dart';
 import 'package:flutter/material.dart';
 
 class DefaultDialog extends StatelessWidget {
@@ -26,76 +25,50 @@ class DefaultDialog extends StatelessWidget {
               Navigator.of(context, rootNavigator: true).pop('dialog'),
           contentWidget: Text(
             '預約日期：2017/09/05\n上車地點：燕巢校區\n預約班次：08:20',
-            style: TextStyle(color: ApTheme.of(context).grey, height: 1.3),
+            style: TextStyle(
+              color: Theme.of(context).colorScheme.onSurfaceVariant,
+              height: 1.3,
+            ),
           ),
         ),
       );
 
   @override
   Widget build(BuildContext context) {
+    final ColorScheme colorScheme = Theme.of(context).colorScheme;
+
     return AlertDialog(
-      shape: const RoundedRectangleBorder(
-        borderRadius: BorderRadius.all(
-          Radius.circular(16),
-        ),
-      ),
       title: Text(
         title,
         textAlign: TextAlign.center,
         style: TextStyle(
-          color: ApTheme.of(context).blueText,
+          color: colorScheme.onSurface,
           fontWeight: FontWeight.bold,
           fontSize: 18.0,
         ),
       ),
-      titlePadding: const EdgeInsets.symmetric(vertical: 16.0),
-      contentPadding: EdgeInsets.zero,
-      content: Column(
-        mainAxisSize: MainAxisSize.min,
-        crossAxisAlignment: CrossAxisAlignment.start,
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: <Widget>[
-          Container(
-            width: double.infinity,
-            constraints: BoxConstraints(
-              maxHeight: MediaQuery.of(context).size.height * 0.5,
-            ),
-            decoration: const BoxDecoration(
-              border: Border(
-                top: BorderSide(color: Colors.grey, width: 0.5),
-                bottom: BorderSide(color: Colors.grey, width: 0.5),
+      content: ConstrainedBox(
+        constraints: BoxConstraints(
+          maxHeight: MediaQuery.of(context).size.height * 0.5,
+        ),
+        child: SingleChildScrollView(
+          padding: contentPadding ??
+              const EdgeInsets.symmetric(
+                horizontal: 8.0,
+                vertical: 8.0,
               ),
-            ),
-            padding: contentPadding ??
-                const EdgeInsets.symmetric(
-                  horizontal: 30.0,
-                  vertical: 24.0,
-                ),
-            child: contentWidget,
-          ),
-          SizedBox(
-            width: double.infinity,
-            child: InkWell(
-              borderRadius: const BorderRadius.only(
-                bottomLeft: Radius.circular(16.0),
-                bottomRight: Radius.circular(16.0),
-              ),
-              onTap: actionFunction,
-              child: Container(
-                alignment: Alignment.center,
-                padding: const EdgeInsets.symmetric(vertical: 16.0),
-                child: Text(
-                  actionText,
-                  style: TextStyle(
-                    color: ApTheme.of(context).greyText,
-                    fontSize: 18.0,
-                  ),
-                ),
-              ),
-            ),
-          ),
-        ],
+          child: contentWidget,
+        ),
       ),
+      actions: <Widget>[
+        SizedBox(
+          width: double.infinity,
+          child: TextButton(
+            onPressed: actionFunction,
+            child: Text(actionText),
+          ),
+        ),
+      ],
     );
   }
 }

@@ -3789,6 +3789,166 @@ class ApLocalizations {
       args: [],
     );
   }
+
+  /// `主題顏色`
+  String get themeColor {
+    return Intl.message(
+      '主題顏色',
+      name: 'themeColor',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `自訂色`
+  String get customColor {
+    return Intl.message(
+      '自訂色',
+      name: 'customColor',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `選擇主題色`
+  String get pickThemeColor {
+    return Intl.message(
+      '選擇主題色',
+      name: 'pickThemeColor',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `色相`
+  String get hue {
+    return Intl.message(
+      '色相',
+      name: 'hue',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `飽和度`
+  String get saturation {
+    return Intl.message(
+      '飽和度',
+      name: 'saturation',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `亮度`
+  String get value {
+    return Intl.message(
+      '亮度',
+      name: 'value',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `高科藍`
+  String get nkustBlue {
+    return Intl.message(
+      '高科藍',
+      name: 'nkustBlue',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `海洋藍`
+  String get oceanBlue {
+    return Intl.message(
+      '海洋藍',
+      name: 'oceanBlue',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `翠綠`
+  String get emeraldGreen {
+    return Intl.message(
+      '翠綠',
+      name: 'emeraldGreen',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `珊瑚橙`
+  String get coralOrange {
+    return Intl.message(
+      '珊瑚橙',
+      name: 'coralOrange',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `典雅紫`
+  String get elegantPurple {
+    return Intl.message(
+      '典雅紫',
+      name: 'elegantPurple',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `玫瑰紅`
+  String get roseRed {
+    return Intl.message(
+      '玫瑰紅',
+      name: 'roseRed',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `青色`
+  String get cyan {
+    return Intl.message(
+      '青色',
+      name: 'cyan',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `琥珀`
+  String get amber {
+    return Intl.message(
+      '琥珀',
+      name: 'amber',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `靛藍`
+  String get indigo {
+    return Intl.message(
+      '靛藍',
+      name: 'indigo',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `棕褐`
+  String get brown {
+    return Intl.message(
+      '棕褐',
+      name: 'brown',
+      desc: '',
+      args: [],
+    );
+  }
 }
 
 class AppLocalizationDelegate extends LocalizationsDelegate<ApLocalizations> {

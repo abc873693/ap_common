@@ -15,7 +15,10 @@ class Toast {
     int duration = 1,
     int gravity = 0,
     Color backgroundColor = const Color(0xAA000000),
-    TextStyle textStyle = const TextStyle(fontSize: 15, color: Colors.white),
+    TextStyle textStyle = const TextStyle(
+      fontSize: 15,
+      color: Color(0xFFFFFFFF),
+    ),
     double backgroundRadius = 20,
     bool rootNavigator = false,
     Border? border,
@@ -116,7 +119,7 @@ class ToastWidget extends StatelessWidget {
       bottom:
           gravity == 0 ? MediaQuery.of(context).viewInsets.bottom + 50 : null,
       child: Material(
-        color: Colors.transparent,
+        color: const Color(0x00000000),
         child: widget,
       ),
     );

@@ -1,4 +1,3 @@
-import 'package:ap_common_flutter_ui/src/resources/ap_theme.dart';
 import 'package:flutter/material.dart';
 
 class ProgressDialog extends StatelessWidget {
@@ -8,25 +7,19 @@ class ProgressDialog extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final ColorScheme colorScheme = Theme.of(context).colorScheme;
+
     return AlertDialog(
-      shape: const RoundedRectangleBorder(
-        borderRadius: BorderRadius.all(
-          Radius.circular(16),
-        ),
-      ),
       content: Column(
         mainAxisSize: MainAxisSize.min,
         mainAxisAlignment: MainAxisAlignment.center,
         children: <Widget>[
           const SizedBox(height: 8.0),
-          CircularProgressIndicator(
-            valueColor:
-                AlwaysStoppedAnimation<Color>(ApTheme.of(context).blueAccent),
-          ),
+          const CircularProgressIndicator(),
           const SizedBox(height: 28.0),
           Text(
             content,
-            style: TextStyle(color: ApTheme.of(context).blueAccent),
+            style: TextStyle(color: colorScheme.primary),
             textAlign: TextAlign.center,
           ),
         ],

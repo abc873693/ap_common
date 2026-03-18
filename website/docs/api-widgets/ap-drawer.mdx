@@ -4,48 +4,76 @@ sidebar_position: 1
 
 # 側選單 ApDrawer
 
-提供校務通v3風格側選單，Flutter 原生的 `Drawer` 封裝  
+提供校務通 v3 風格側選單，Flutter 原生的 `Drawer` 封裝。自 v2 版本起支援更現代化的圓角設計風格、動態色彩主題支援以及更順暢的動畫。v3 全面改用 Material Design 3 的 `colorScheme` 取得主題色彩。
 
-另提供
- - DrawerItem
- - DrawerSubItem
+另提供：
+ - `DrawerMenuItem`（別名 `DrawerItem`）
+ - `DrawerSubMenuItem`（別名 `DrawerSubItem`）
+ - `DrawerMenuSection`（可展開的群組選單）
+ - `DrawerDivider`（分隔線或分組標籤）
 
  <img src="../../img/widgets/ap_drawer.jpg" alt="drawing" width="200"/>
 
-:::caution 使用時必須先完成 
+:::caution 使用時必須先完成
  - [主題色設定](../installation/theme)
  - [多國語言設定](../installation/localization)
 :::
 
 ## ApDrawer
 
-側選單，通常放在左側
+側選單，通常放在左側。Header 區域會以漸層背景顯示使用者的大頭照、姓名、學號與科系資訊。
 
 | 參數名稱                         | 型態                             | 描述                             |
 | ------------------------------- | ------------------------------- | ------------------------------- |
-| userInfo | [`UserInfo`](https://pub.dev/documentation/ap_common/latest/models_user_info/UserInfo-class.html) | 使用者資訊，會在Header顯示 `照片`、`名字`、`學號` |
+| userInfo | [`UserInfo`](https://pub.dev/documentation/ap_common/latest/models_user_info/UserInfo-class.html) | 使用者資訊，會在 Header 顯示 `照片`、`名字`、`學號`、`科系` |
 | onTapHeader | `Function()` | Header 點擊事件 |
-| imageAsset | `String` | Header 右邊的圖片，使用 Asset Image 載入|
-| widgets | `List<Widget>` | 抽屜主體的Widget List，屬於Flutter原生API |
-| imageHeroTag | `String` | Header 中的圖片支援Flutter Hero，可自訂 Tag 對應畫面的tag，預設為 `tag_student_picture` |
-| displayPicture | `bool` | 是否顯示照片，`true`時顯示 `ApIcon.person` 的圖案  |
+| imageAsset | `String` | Header 右邊的圖片，使用 Asset Image 載入 |
+| widgets | `List<Widget>` | 抽屜主體的 Widget List，屬於 Flutter 原生 API |
+| imageHeroTag | `String` | Header 中的圖片支援 Flutter Hero，可自訂 Tag 對應畫面的 tag，預設為 `tag_student_picture` |
+| displayPicture | `bool` | 是否顯示照片，`true` 時顯示 `ApIcon.accountCircle` 的圖案 |
 
-## DrawerItem
+## DrawerMenuItem
 
-側選單的項目，通常放在側選單中
-
-| 參數名稱                         | 型態                             | 描述                             |
-| ------------------------------- | ------------------------------- | ------------------------------- |
-| icon | `IconData` | 圖案資料，可使用 `Icons` 系列 |
-| title | `String` | 標題 |
-| onTap | `Function()` | 點擊事件 |
-
-## DrawerSubItem
-
-側選單的子項目，通常放在側選單項目中
+側選單的項目（舊名 `DrawerItem`，目前保留為別名）。支援選中狀態、停用狀態、外部連結標示及自訂圖示顏色。
 
 | 參數名稱                         | 型態                             | 描述                             |
 | ------------------------------- | ------------------------------- | ------------------------------- |
 | icon | `IconData` | 圖案資料，可使用 `Icons` 系列 |
 | title | `String` | 標題 |
 | onTap | `Function()` | 點擊事件 |
+| selected | `bool` | 是否為選中狀態，預設為 `false` |
+| enabled | `bool` | 是否啟用，停用時顯示鎖頭圖示，預設為 `true` |
+| isExternalLink | `bool` | 是否為外部連結，啟用時顯示外部連結圖示，預設為 `false` |
+| iconColor | `Color` | 自訂圖示顏色，`null` 時使用預設主題色 |
+
+## DrawerMenuSection
+
+側選單的可展開群組，內部放置 `DrawerSubMenuItem` 列表。使用 `ExpansionTile` 實作，支援展開/收合動畫。
+
+| 參數名稱                         | 型態                             | 描述                             |
+| ------------------------------- | ------------------------------- | ------------------------------- |
+| icon | `IconData` | 圖案資料 |
+| title | `String` | 群組標題 |
+| children | `List<DrawerSubMenuItem>` | 子選單項目列表 |
+| initiallyExpanded | `bool` | 是否預設展開，預設為 `false` |
+| enabled | `bool` | 是否啟用，停用時顯示鎖頭圖示，預設為 `true` |
+| onExpansionChanged | `ValueChanged<bool>` | 展開/收合狀態改變的回呼 |
+
+## DrawerSubMenuItem
+
+側選單的子項目（舊名 `DrawerSubItem`，目前保留為別名），通常放在 `DrawerMenuSection` 中。左方帶有圓角背景圖示容器。
+
+| 參數名稱                         | 型態                             | 描述                             |
+| ------------------------------- | ------------------------------- | ------------------------------- |
+| icon | `IconData` | 圖案資料，可使用 `Icons` 系列 |
+| title | `String` | 標題 |
+| onTap | `Function()` | 點擊事件 |
+| enabled | `bool` | 是否啟用，停用時顯示鎖頭圖示，預設為 `true` |
+
+## DrawerDivider
+
+側選單的分隔元件，可作為純分隔線或帶有分組標籤的文字。
+
+| 參數名稱                         | 型態                             | 描述                             |
+| ------------------------------- | ------------------------------- | ------------------------------- |
+| label | `String` | 分組標籤文字，`null` 時顯示為一條分隔線 |

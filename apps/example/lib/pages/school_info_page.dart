@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
 class SchoolInfoPage extends StatefulWidget {
-  static const String routerName = '/ShcoolInfo';
+  static const String routerName = '/SchoolInfo';
 
   @override
   SchoolInfoPageState createState() => SchoolInfoPageState();
@@ -116,25 +116,24 @@ class SchoolInfoPageState extends State<SchoolInfoPage>
           ),
         ],
       ),
-      bottomNavigationBar: BottomNavigationBar(
-        currentIndex: _currentIndex,
-        onTap: (int index) {
+      bottomNavigationBar: NavigationBar(
+        selectedIndex: _currentIndex,
+        onDestinationSelected: (int index) {
           setState(() {
             _currentIndex = index;
             controller!.animateTo(_currentIndex);
           });
         },
-        fixedColor: ApTheme.of(context).yellow,
-        items: <BottomNavigationBarItem>[
-          BottomNavigationBarItem(
+        destinations: <NavigationDestination>[
+          NavigationDestination(
             icon: Icon(ApIcon.fiberNew),
             label: ap.notifications,
           ),
-          BottomNavigationBarItem(
+          NavigationDestination(
             icon: Icon(ApIcon.phone),
             label: ap.phones,
           ),
-          BottomNavigationBarItem(
+          NavigationDestination(
             icon: Icon(ApIcon.dateRange),
             label: ap.events,
           ),

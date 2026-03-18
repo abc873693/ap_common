@@ -19,7 +19,7 @@ class DialogUtils {
         contentWidget: Text(
           content,
           style: TextStyle(
-            color: ApTheme.of(context).grey,
+            color: Theme.of(context).colorScheme.onSurfaceVariant,
             height: 1.3,
             fontSize: 16.0,
           ),
@@ -43,7 +43,10 @@ class DialogUtils {
         title: ap.newsRuleTitle,
         contentWidget: SelectableText.rich(
           TextSpan(
-            style: TextStyle(color: ApTheme.of(context).grey, fontSize: 16.0),
+            style: TextStyle(
+              color: Theme.of(context).colorScheme.onSurfaceVariant,
+              fontSize: 16.0,
+            ),
             children: <TextSpan>[
               TextSpan(
                 text: ap.newsRuleDescription1,
@@ -76,7 +79,9 @@ class DialogUtils {
           contentWidget: Text(
             content,
             textAlign: TextAlign.center,
-            style: TextStyle(color: ApTheme.of(context).grey),
+            style: TextStyle(
+              color: Theme.of(context).colorScheme.onSurfaceVariant,
+            ),
           ),
           actionText: ApLocalizations.of(context).iKnow,
           actionFunction: () => Navigator.of(context).pop(),
@@ -148,7 +153,7 @@ class DialogUtils {
       text: TextSpan(
         style: TextStyle(
           //ignore: use_build_context_synchronously
-          color: ApTheme.of(context).grey,
+          color: Theme.of(context).colorScheme.onSurfaceVariant,
           height: 1.3,
           fontSize: 16.0,
         ),
