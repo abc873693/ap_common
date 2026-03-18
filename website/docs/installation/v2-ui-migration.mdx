@@ -1,0 +1,119 @@
+---
+sidebar_position: 1
+---
+
+# 升級指南 (Migration Guide)
+
+本升級指南針對校務通 UI `v2` (Version 2) 的重大調整提供說明，協助開發者順利過渡到新的視覺風格與元件設計。
+
+## V2 重大變更總覽
+
+`feature/ap-common-ui-v2` 帶來了更佳的多裝置適應性、更平滑的動畫，以及全新的設計語言，主要變更包含但不限於：
+
+1. **全新動態主題色彩系統 (Dynamic Theme Colors)**
+2. **現代化的圓角 Scaffold 骨架與元件**
+3. **優化側選單 (ApDrawer)**
+4. **新增獨立學期選擇器 (SemesterPicker)**
+5. **使用者個人資訊頁面 (UserInfoScaffold) 重新排版與條碼顯示優化**
+
+---
+
+## 🚀 1. 啟用動態主題色彩系統
+
+以往使用者僅能從預設的淺色 (`ApTheme.light`) 或深色 (`ApTheme.dark`) 進行挑選。在 V2 中，新增了自由更換主色調的能力。
+
+### 升級方式
+若要在設定頁面中使用動態選色功能：
+1. 更新 `SettingPageScaffold` 或者自行建構的設定頁。
+2. 加入新元件 `ChangeThemeColorItem`。
+3. 它將會打開新的 `ColorPickerDialog`，並自動處理使用者選擇的 `HSVColor` 到本機偏好中與 `ApTheme.colorScheme` 的綁定。
+
+---
+
+## 🎨 2. 現代化的 Scaffold 骨架
+
+V2 針對各個頁面的底層 Scaffold 做出了更具質感的圓角設計，並大幅改善了平板/電腦（大螢幕）的排版體驗。
+
+### 影響範圍
+包含以下的 Scaffolds 都有明顯的視覺變更，部分欄位被優化或是重新配置：
+- `HomePageScaffold`：改進了響應式佈局以及 `BottomNavigationBar` 動態隱藏機制。
+- `LoginScaffold`：調整螢幕利用率，輸入區域新增安全填入(Autofill)與更明確的主題色對比。
+- `CourseScaffold` & `ScoreScaffold`：在切換學期的部分有了新的互動模式，請參閱下方的 `SemesterPicker`。
+- `UserInfoScaffold`：改用卡片顯示每個資訊欄位，並且條碼顯示區塊擁有更好的防呆與背景色，以防掃碼設備無法讀取。
+
+---
+
+## 🗂 3. 新增學期選擇器元件 (SemesterPicker)
+
+過去學期選擇的邏輯被耦合在不同的 Scaffold 裡面，現在抽出為 `SemesterPicker` 以便獨立服用。
+
+### 升級方式
+如果你有使用 `CourseScaffold.itemPicker` 或自行客製學期區塊，可參考改用 `SemesterPicker` 獲取左右快切能力，並獲得與 v2 相符的一致性 UI。
+
+參考文件：[學期選擇器元件](../api-widgets/semester-picker)
+
+---
+
+## 🔗 其他雜項
+
+### 依賴更新 
+為了支援新版的分享功能以及資料庫架構，`pubspec.yaml` 與 macOS `Podfile` 中的依賴有所更迭，例如 `sqflite_darwin`、`share_plus` 與 Cocoapods 版本等，在拉取後請務必執行 `flutter pub get` 與 `pod install` 以避免編譯錯誤。
+
+### API 更名與棄用
+- 請注意修正部份錯字，例如 `shcool_info_page.dart` 已被修正為 `school_info_page.dart`。
+
+如果您在升級過程中有任何畫面溢出或是 UI 錯誤，請檢查是否有自訂高度被寫死，建議改用彈性的元件排版。
+
+---
+
+## V3 重大變更總覽 (Material Design 3 遷移)
+
+V3 全面採用 Material Design 3 規範，移除對舊版 `ApTheme` 自訂色彩屬性的依賴，所有 UI 元件統一使用 `Theme.of(context).colorScheme` 取得色彩。
+
+### 色彩系統遷移
+
+所有 `ApTheme.of(context).<colorProp>` 呼叫已替換為 `Theme.of(context).colorScheme.<md3Prop>`：
+
+| 舊用法                             | 新用法                             |
+| ------------------------------- | ------------------------------- |
+| `ApTheme.of(context).blue` | `colorScheme.primary` |
+| `ApTheme.of(context).grey` | `colorScheme.onSurfaceVariant` |
+| `ApTheme.of(context).greyText` | `colorScheme.onSurfaceVariant` |
+| `ApTheme.of(context).blueText` | `colorScheme.primary` |
+| `Colors.white` | `Color(0xFFFFFFFF)` |
+| `Colors.transparent` | `Color(0x00000000)` |
+
+同時移除了所有 Flutter `Colors.xxx` 常數的使用（`ap_colors.dart` 的 Material 調色盤除外），替換為明確的 `Color(0xAARRGGBB)` 常數值。
+
+### 元件提取
+
+為了提升可重用性，多個內部 `_build*()` 函式被提取為獨立的 `StatelessWidget`：
+
+| 新元件                             | 來源                             |
+| ------------------------------- | ------------------------------- |
+| `ScorePRCard` | `ScoreScaffold` |
+| `ScoreStatisticsCard` | `ScoreScaffold` |
+| `ScoreDistributionCard` | `ScoreScaffold` |
+| `ScoreCreditSummaryCard` | `ScoreScaffold` |
+| `InfoRow` | `UserInfoScaffold` |
+| `NotificationItem` | `NotificationListView` |
+| `PhoneListItem` | `PhoneListView` |
+| `AboutInfoCard` | `AboutUsPage` |
+| `ColorSlider` | `ColorPickerDialog` |
+| `PresetColorGrid` | `ColorPickerDialog` |
+| `HintBanner` | 新增 |
+
+### Container 最佳化
+
+大量的 `Container` 已根據用途替換為更精確的 Widget：
+- 僅有 `decoration` 時改用 `DecoratedBox`
+- 僅有 `alignment` 時改用 `Center` 或 `Align`
+- 僅有 `padding` 時改用 `Padding`
+
+### ApDrawer 更新
+
+`DrawerItem` 與 `DrawerSubItem` 已重新命名為 `DrawerMenuItem` 與 `DrawerSubMenuItem`（舊名保留為 typedef 別名）。新增 `DrawerMenuSection`（可展開的群組選單）與 `DrawerDivider`（分組標籤或分隔線）。
+
+### 設定頁元件更新
+
+新增 `SettingCard` 卡片容器，`SettingTitle` 與 `SettingSwitch` 新增 `icon` 參數支援。

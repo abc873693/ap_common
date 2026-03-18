@@ -4,9 +4,9 @@ sidebar_position: 6
 
 # 使用者資訊骨架 UserInfoScaffold
 
-提供使用者資訊骨架
- - 可點擊右上角的icon，切換顯示 QR Code 或 Bar Code
- - QR Code 或 Bar Code 顯示時內容是學號
+提供使用者資訊骨架。自 v2 版本起更新為現代化卡片排版。v3 全面改用 Material Design 3 的 `colorScheme` 取得主題色彩，並將資訊列提取為獨立的 `InfoRow` 元件。
+ - 可點擊右上角的icon，切換顯示 QR Code 或 Code 39 條碼
+ - QR Code 或 Bar Code 顯示時內容是學號，並有更大且清晰的防呆邊框
  - 部分欄位為 `Null` 時則不顯示
 
 手機介面
@@ -32,3 +32,15 @@ sidebar_position: 6
 | ------------------------------- | ------------------------------- |
 | `user_info_barcode_switch` | 切換 Qc Code 及 Bar Code 的點擊事件 |
 | `user_info_refresh` | 下拉式更新事件 |
+
+## 提取元件
+
+### InfoRow
+
+自 v3 起從 `UserInfoScaffold` 內部提取為獨立元件，顯示一行帶有圖示的使用者資訊欄位（如學號、科系、班級等）。
+
+| 參數名稱                         | 型態                             | 描述                             |
+| ------------------------------- | ------------------------------- | ------------------------------- |
+| icon | `IconData` | 前置圖示 |
+| title | `String` | 欄位名稱 |
+| value | `String` | 欄位值 |

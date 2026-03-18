@@ -4,7 +4,7 @@ import 'package:ap_common_example/pages/diolog_utils_page.dart';
 import 'package:ap_common_example/pages/login_page.dart';
 import 'package:ap_common_example/pages/notification_utils_page.dart';
 import 'package:ap_common_example/pages/setting_page.dart';
-import 'package:ap_common_example/pages/shcool_info_page.dart';
+import 'package:ap_common_example/pages/school_info_page.dart';
 import 'package:ap_common_example/pages/study/course_page.dart';
 import 'package:ap_common_example/pages/study/score_page.dart';
 import 'package:ap_common_example/pages/user_info_page.dart';
@@ -41,15 +41,8 @@ class HomePageState extends State<HomePage> {
   bool isLogin = false;
   bool displayPicture = true;
   bool isStudyExpanded = false;
-  bool isBusExpanded = false;
-  bool isLeaveExpanded = false;
 
   UserInfo? userInfo;
-
-  TextStyle get _defaultStyle => TextStyle(
-        color: ApTheme.of(context).grey,
-        fontSize: 16.0,
-      );
 
   String get drawerIcon {
     switch (ApTheme.of(context).brightness) {
@@ -101,7 +94,7 @@ class HomePageState extends State<HomePage> {
       isLogin: isLogin,
       actions: <Widget>[
         IconButton(
-          icon: const Icon(Icons.post_add),
+          icon: const Icon(Icons.fiber_new_rounded),
           tooltip: ap.announcementReviewSystem,
           onPressed: () {
             ApUtils.pushCupertinoStyle(
@@ -112,122 +105,7 @@ class HomePageState extends State<HomePage> {
         ),
       ],
       content: content,
-      drawer: ApDrawer(
-        userInfo: userInfo,
-        displayPicture: PreferenceUtil.instance
-            .getBool(Constants.PREF_DISPLAY_PICTURE, true),
-        imageAsset: drawerIcon,
-        onTapHeader: () {
-          if (isLogin) {
-            if (userInfo != null) {
-              ApUtils.pushCupertinoStyle(
-                context,
-                UserInfoPage(userInfo: userInfo),
-              );
-            }
-          } else {
-            if (!isTablet) Navigator.of(context).pop();
-            openLoginPage();
-          }
-        },
-        widgets: <Widget>[
-          if (isTablet)
-            DrawerItem(
-              icon: ApIcon.home,
-              title: ap.home,
-              onTap: () => setState(() => content = null),
-            ),
-          ExpansionTile(
-            initiallyExpanded: isStudyExpanded,
-            onExpansionChanged: (bool bool) {
-              setState(() {
-                isStudyExpanded = bool;
-              });
-            },
-            leading: Icon(
-              ApIcon.school,
-              color: isStudyExpanded
-                  ? ApTheme.of(context).blueAccent
-                  : ApTheme.of(context).grey,
-            ),
-            title: Text(ap.courseInfo, style: _defaultStyle),
-            children: <Widget>[
-              DrawerSubItem(
-                icon: ApIcon.classIcon,
-                title: ap.course,
-                onTap: () => _openPage(
-                  CoursePage(),
-                  needLogin: true,
-                ),
-              ),
-              DrawerSubItem(
-                icon: ApIcon.assignment,
-                title: ap.score,
-                onTap: () => _openPage(
-                  ScorePage(),
-                  needLogin: true,
-                ),
-              ),
-//              DrawerSubItem(
-//                icon: ApIcon.room,
-//                title: ap.classroomCourseTableSearch,
-//                page: RoomListPage(),
-//              ),
-            ],
-          ),
-          DrawerItem(
-            icon: ApIcon.info,
-            title: ap.schoolInfo,
-            onTap: () => _openPage(
-              SchoolInfoPage(),
-            ),
-          ),
-          if (NotificationUtil.instance.isSupport)
-            DrawerItem(
-              icon: ApIcon.dateRange,
-              title: app.localNotificationTest,
-              onTap: () => _openPage(
-                NotificationUtilsTestPage(),
-              ),
-            ),
-          DrawerItem(
-            icon: ApIcon.check,
-            title: app.dialogUtilTest,
-            onTap: () => _openPage(
-              DialogUtilsTestPage(),
-            ),
-          ),
-          DrawerItem(
-            icon: ApIcon.face,
-            title: ap.about,
-            onTap: () => _openPage(
-              aboutPage(context, assetImage: ImageAssets.sectionJiangong),
-            ),
-          ),
-          DrawerItem(
-            icon: ApIcon.settings,
-            title: ap.settings,
-            onTap: () => _openPage(
-              SettingPage(),
-            ),
-          ),
-          if (isLogin)
-            DrawerItem(
-              icon: ApIcon.powerSettingsNew,
-              title: ap.logout,
-              onTap: () async {
-                await PreferenceUtil.instance
-                    .setBool(Constants.PREF_AUTO_LOGIN, false);
-                isLogin = false;
-                userInfo = null;
-                content = null;
-                if (!context.mounted) return;
-                if (!isTablet) Navigator.of(context).pop();
-                checkLogin();
-              },
-            ),
-        ],
-      ),
+      drawer: _buildDrawer(),
       onImageTapped: (Announcement announcement) {
         ApUtils.pushCupertinoStyle(
           context,
@@ -235,10 +113,10 @@ class HomePageState extends State<HomePage> {
         );
       },
       onTabTapped: onTabTapped,
-      bottomNavigationBarItems: <Widget>[
+      bottomNavigationBarItems: <NavigationDestination>[
         NavigationDestination(
-          icon: Icon(ApIcon.face),
-          label: ap.about,
+          icon: Icon(ApIcon.home),
+          label: ap.home,
         ),
         NavigationDestination(
           icon: Icon(ApIcon.classIcon),
@@ -247,6 +125,126 @@ class HomePageState extends State<HomePage> {
         NavigationDestination(
           icon: Icon(ApIcon.assignment),
           label: ap.score,
+        ),
+      ],
+    );
+  }
+
+  Widget _buildDrawer() {
+    final ColorScheme colorScheme = Theme.of(context).colorScheme;
+
+    return ApDrawer(
+      userInfo: userInfo,
+      displayPicture: PreferenceUtil.instance.getBool(
+        Constants.PREF_DISPLAY_PICTURE,
+        true,
+      ),
+      imageAsset: drawerIcon,
+      onTapHeader: () {
+        if (isLogin) {
+          if (userInfo != null) {
+            ApUtils.pushCupertinoStyle(
+              context,
+              UserInfoPage(userInfo: userInfo),
+            );
+          }
+        } else {
+          if (!isTablet) Navigator.of(context).pop();
+          openLoginPage();
+        }
+      },
+      widgets: <Widget>[
+        if (isTablet)
+          DrawerMenuItem(
+            icon: ApIcon.home,
+            title: ap.home,
+            onTap: () => setState(() => content = null),
+          ),
+        _buildStudySection(),
+        DrawerMenuItem(
+          icon: ApIcon.info,
+          title: ap.schoolInfo,
+          onTap: () => _openPage(
+            SchoolInfoPage(),
+          ),
+        ),
+        if (NotificationUtil.instance.isSupport)
+          DrawerMenuItem(
+            icon: ApIcon.dateRange,
+            title: app.localNotificationTest,
+            onTap: () => _openPage(
+              NotificationUtilsTestPage(),
+            ),
+          ),
+        DrawerMenuItem(
+          icon: ApIcon.check,
+          title: app.dialogUtilTest,
+          onTap: () => _openPage(
+            DialogUtilsTestPage(),
+          ),
+        ),
+        DrawerMenuItem(
+          icon: ApIcon.face,
+          title: ap.about,
+          onTap: () => _openPage(
+            aboutPage(context, assetImage: ImageAssets.sectionJiangong),
+          ),
+        ),
+        DrawerMenuItem(
+          icon: ApIcon.settings,
+          title: ap.settings,
+          onTap: () => _openPage(
+            SettingPage(),
+          ),
+        ),
+        if (isLogin) ...<Widget>[
+          const DrawerDivider(),
+          DrawerMenuItem(
+            icon: ApIcon.powerSettingsNew,
+            title: ap.logout,
+            iconColor: colorScheme.error,
+            onTap: () async {
+              await PreferenceUtil.instance
+                  .setBool(Constants.PREF_AUTO_LOGIN, false);
+              isLogin = false;
+              userInfo = null;
+              content = null;
+              if (!mounted) return;
+              if (!isTablet) Navigator.of(context).pop();
+              checkLogin();
+            },
+          ),
+        ],
+      ],
+    );
+  }
+
+  Widget _buildStudySection() {
+    return DrawerMenuSection(
+      icon: ApIcon.school,
+      title: ap.courseInfo,
+      initiallyExpanded: isStudyExpanded,
+      onExpansionChanged: (bool value) {
+        setState(() {
+          isStudyExpanded = value;
+        });
+      },
+      children: <DrawerSubMenuItem>[
+        DrawerSubMenuItem(
+          icon: ApIcon.classIcon,
+          title: ap.course,
+          onTap: () => _openPage(
+            CoursePage(),
+            needLogin: true,
+          ),
+        ),
+        DrawerSubMenuItem(
+          icon: ApIcon.assignment,
+          title: ap.score,
+          onTap: () => _openPage(
+            ScorePage(),
+            needLogin: true,
+          ),
         ),
       ],
     );
@@ -351,9 +349,15 @@ class HomePageState extends State<HomePage> {
 
   Future<void> _login() async {
     await Future<void>.delayed(const Duration(microseconds: 30));
-    // var username = PreferenceUtil.instance.getString(Constants.PREF_USERNAME, '');
+    // var username = PreferenceUtil.instance.getString(
+    //   Constants.PREF_USERNAME,
+    //   '',
+    // );
     // ignore: lines_longer_than_80_chars
-    // var password = PreferenceUtil.instance.getStringSecurity(Constants.PREF_PASSWORD, '');
+    // var password = PreferenceUtil.instance.getStringSecurity(
+    //   Constants.PREF_PASSWORD,
+    //   '',
+    // );
     //to login
     isLogin = true;
     PreferenceUtil.instance.setBool(Constants.PREF_IS_OFFLINE_LOGIN, false);

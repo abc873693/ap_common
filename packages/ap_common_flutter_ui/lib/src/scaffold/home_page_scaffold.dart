@@ -83,22 +83,24 @@ class HomePageScaffoldState extends State<HomePageScaffold> {
           SystemNavigator.pop();
         }
       },
-      child: Row(
-        children: <Widget>[
-          if (isTablet) widget.drawer!,
-          Expanded(
-            child: (isTablet && widget.content != null)
-                ? widget.content!
-                : ScaffoldMessenger(
-                    key: _scaffoldMessengerKey,
-                    child: Scaffold(
-                      appBar: AppBar(
-                        title: Text(widget.title ?? ''),
-                        actions: widget.actions,
-                      ),
-                      drawer: isTablet ? null : widget.drawer,
-                      floatingActionButton: widget.floatingActionButton,
-                      body: OrientationBuilder(
+      child: ScaffoldMessenger(
+        key: _scaffoldMessengerKey,
+        child: Scaffold(
+          appBar: isTablet
+              ? null
+              : AppBar(
+                  title: Text(widget.title ?? ''),
+                  actions: widget.actions,
+                ),
+          drawer: isTablet ? null : widget.drawer,
+          floatingActionButton: widget.floatingActionButton,
+          body: Row(
+            children: <Widget>[
+              if (isTablet) widget.drawer!,
+              Expanded(
+                child: (isTablet && widget.content != null)
+                    ? widget.content!
+                    : OrientationBuilder(
                         builder: (_, Orientation orientation) {
                           return Container(
                             padding: EdgeInsets.symmetric(
@@ -111,29 +113,20 @@ class HomePageScaffoldState extends State<HomePageScaffold> {
                           );
                         },
                       ),
-                      bottomNavigationBar:
-                          (widget.bottomNavigationBarItems == null || isTablet)
-                              ? null
-                              : NavigationBar(
-                                  elevation: 12.0,
-                                  height: 56,
-                                  indicatorColor: Colors.transparent,
-                                  // fixedColor:
-                                  //     ApTheme.of(context).bottomNavigationSelect,
-                                  // unselectedItemColor:
-                                  //     ApTheme.of(context).bottomNavigationSelect,
-                                  // type: BottomNavigationBarType.fixed,
-                                  // selectedFontSize: 12.0,
-                                  // selectedIconTheme:
-                                  //     const IconThemeData(size: 24.0),
-                                  onDestinationSelected: widget.onTabTapped,
-                                  destinations:
-                                      widget.bottomNavigationBarItems!,
-                                ),
-                    ),
-                  ),
+              ),
+            ],
           ),
-        ],
+          bottomNavigationBar:
+              (widget.bottomNavigationBarItems == null || isTablet)
+                  ? null
+                  : NavigationBar(
+                      elevation: 12.0,
+                      height: 56,
+                      indicatorColor: const Color(0x00000000),
+                      onDestinationSelected: widget.onTabTapped,
+                      destinations: widget.bottomNavigationBarItems!,
+                    ),
+        ),
       ),
     );
   }
@@ -227,13 +220,13 @@ class HomePageScaffoldState extends State<HomePageScaffold> {
             Hero(
               tag: ApConstants.tagAnnouncementTitle,
               child: Material(
-                color: Colors.transparent,
+                color: const Color(0x00000000),
                 child: Text(
                   widget.announcements[_currentNewsIndex].title,
                   textAlign: TextAlign.center,
                   style: TextStyle(
                     fontSize: 20.0,
-                    color: ApTheme.of(context).grey,
+                    color: Theme.of(context).colorScheme.onSurfaceVariant,
                     fontWeight: FontWeight.w500,
                   ),
                 ),
@@ -261,15 +254,17 @@ class HomePageScaffoldState extends State<HomePageScaffold> {
             RichText(
               textAlign: TextAlign.center,
               text: TextSpan(
-                style:
-                    TextStyle(color: ApTheme.of(context).grey, fontSize: 24.0),
+                style: TextStyle(
+                    color: Theme.of(context).colorScheme.onSurfaceVariant,
+                    fontSize: 24.0),
                 children: <TextSpan>[
                   TextSpan(
                     text:
                         // ignore: lines_longer_than_80_chars
                         '${widget.announcements.length >= 10 && _currentNewsIndex < 9 ? '0' : ''}'
                         '${_currentNewsIndex + 1}',
-                    style: TextStyle(color: ApTheme.of(context).red),
+                    style:
+                        TextStyle(color: Theme.of(context).colorScheme.primary),
                   ),
                   TextSpan(text: ' / ${widget.announcements.length}'),
                 ],
@@ -304,7 +299,8 @@ class HomePageScaffoldState extends State<HomePageScaffold> {
         contentWidget: Text(
           app.closeAppHint,
           textAlign: TextAlign.center,
-          style: TextStyle(color: ApTheme.of(context).greyText),
+          style:
+              TextStyle(color: Theme.of(context).colorScheme.onSurfaceVariant),
         ),
         leftActionText: app.cancel,
         rightActionText: app.confirm,
@@ -343,7 +339,6 @@ class HomePageScaffoldState extends State<HomePageScaffold> {
             : SnackBarAction(
                 onPressed: onSnackBarTapped!,
                 label: actionText,
-                textColor: ApTheme.of(context).snackBarActionTextColor,
               ),
       ),
     );

@@ -170,13 +170,15 @@ class _NotificationUtilsTestPageState extends State<NotificationUtilsTestPage> {
             },
             title: Text(app.requestPermission),
             subtitle: const Text(
-              'NotificationUtil.instance.requestPermissions (iOS & macOS limit)',
+              'NotificationUtil.instance.requestPermissions '
+              '(iOS & macOS limit)',
             ),
           ),
           // ListTile(
           //   onTap: () async {
           //     final List<PendingNotificationRequest> list =
-          //         await NotificationUtil.instance.getPendingNotificationList();
+          //         await NotificationUtil.instance
+          //             .getPendingNotificationList();
           //     //ignore: use_build_context_synchronously
           //     if (!context.mounted) return;
           //     showDialog(

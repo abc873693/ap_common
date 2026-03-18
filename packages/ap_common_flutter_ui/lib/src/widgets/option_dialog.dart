@@ -20,11 +20,6 @@ class SimpleOptionDialog extends StatelessWidget {
     return items.length > 5
         ? AlertDialog(
             title: Text(title),
-            shape: const RoundedRectangleBorder(
-              borderRadius: BorderRadius.all(
-                Radius.circular(8),
-              ),
-            ),
             contentPadding: EdgeInsets.zero,
             content: SizedBox(
               width: MediaQuery.of(context).size.width * 0.8,
@@ -49,11 +44,6 @@ class SimpleOptionDialog extends StatelessWidget {
             ),
           )
         : SimpleDialog(
-            shape: const RoundedRectangleBorder(
-              borderRadius: BorderRadius.all(
-                Radius.circular(16),
-              ),
-            ),
             title: Text(title),
             children: <Widget>[
               for (int i = 0; i < (items.length); i++)

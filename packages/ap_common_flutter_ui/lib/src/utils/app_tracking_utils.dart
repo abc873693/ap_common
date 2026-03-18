@@ -21,7 +21,7 @@ class AppTrackingUtils {
                 Text(
                   ap.appTrackingDialogContent,
                   style: TextStyle(
-                    color: ApTheme.of(context).grey,
+                    color: Theme.of(context).colorScheme.onSurfaceVariant,
                     height: 1.3,
                     fontSize: 18.0,
                   ),
@@ -31,14 +31,14 @@ class AppTrackingUtils {
                   children: <Widget>[
                     Icon(
                       Icons.analytics_outlined,
-                      color: ApTheme.of(context).grey,
+                      color: Theme.of(context).colorScheme.onSurfaceVariant,
                     ),
                     const SizedBox(width: 8.0),
                     Expanded(
                       child: Text(
                         ap.analyticsDescription,
                         style: TextStyle(
-                          color: ApTheme.of(context).grey,
+                          color: Theme.of(context).colorScheme.onSurfaceVariant,
                         ),
                       ),
                     ),
@@ -49,14 +49,14 @@ class AppTrackingUtils {
                   children: <Widget>[
                     Icon(
                       Icons.bug_report_outlined,
-                      color: ApTheme.of(context).grey,
+                      color: Theme.of(context).colorScheme.onSurfaceVariant,
                     ),
                     const SizedBox(width: 8.0),
                     Expanded(
                       child: Text(
                         ap.crashReportDescription,
                         style: TextStyle(
-                          color: ApTheme.of(context).grey,
+                          color: Theme.of(context).colorScheme.onSurfaceVariant,
                           fontSize: 16.0,
                         ),
                       ),

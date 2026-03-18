@@ -26,16 +26,6 @@ class PhoneListViewState extends State<PhoneListView>
 
   ApLocalizations get ap => ApLocalizations.of(context);
 
-  TextStyle get _textStyle => const TextStyle(
-        fontSize: 18.0,
-        fontWeight: FontWeight.bold,
-      );
-
-  TextStyle get _textGreyStyle => TextStyle(
-        color: ApTheme.of(context).grey,
-        fontSize: 14.0,
-      );
-
   @override
   void initState() {
     AnalyticsUtil.instance.setCurrentScreen(
@@ -94,12 +84,12 @@ class PhoneListViewState extends State<PhoneListView>
                     padding: const EdgeInsets.all(8.0),
                     sliver: DecoratedSliver(
                       decoration: const BoxDecoration(
-                        color: Colors.transparent,
+                        color: Color(0x00000000),
                         borderRadius: BorderRadius.zero,
                       ),
                       sliver: SliverList.separated(
-                        itemBuilder: (_, int index) => _phoneItem(
-                          entries.value[index],
+                        itemBuilder: (_, int index) => PhoneListItem(
+                          phone: entries.value[index],
                         ),
                         separatorBuilder: (_, __) =>
                             const Divider(indent: 8, endIndent: 8),
@@ -114,47 +104,6 @@ class PhoneListViewState extends State<PhoneListView>
     }
   }
 
-  Widget _phoneItem(PhoneModel phone) {
-    return InkWell(
-      onTap: () {
-        AnalyticsUtil.instance.logEvent('call_phone_click');
-        try {
-          PlatformUtil.instance.callPhone(phone.number);
-          AnalyticsUtil.instance.logEvent('call_phone_success');
-        } catch (e) {
-          AnalyticsUtil.instance.logEvent('call_phone_error');
-        }
-      },
-      child: Container(
-        padding: const EdgeInsets.all(16.0),
-        width: double.infinity,
-        decoration: const BoxDecoration(
-          border: Border(
-            bottom: BorderSide(
-              color: Colors.grey,
-              width: 0.5,
-            ),
-          ),
-        ),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: <Widget>[
-            Text(
-              phone.name,
-              style: _textStyle,
-              textAlign: TextAlign.left,
-            ),
-            const SizedBox(height: 8.0),
-            Text(
-              phone.number,
-              style: _textGreyStyle,
-              textAlign: TextAlign.left,
-            ),
-          ],
-        ),
-      ),
-    );
-  }
 }
 
 class HeaderDelegate extends SliverPersistentHeaderDelegate {
@@ -168,9 +117,11 @@ class HeaderDelegate extends SliverPersistentHeaderDelegate {
     double shrinkOffset,
     bool overlapsContent,
   ) {
+    final ColorScheme colorScheme = Theme.of(context).colorScheme;
+
     return Container(
       height: minExtent,
-      color: ApTheme.of(context).background,
+      color: colorScheme.surface,
       padding: const EdgeInsets.symmetric(
         vertical: 8.0,
         horizontal: 16.0,
@@ -178,7 +129,7 @@ class HeaderDelegate extends SliverPersistentHeaderDelegate {
       child: Text(
         title,
         style: TextStyle(
-          color: ApTheme.of(context).blueText,
+          color: colorScheme.primary,
           fontSize: 18.0,
           fontWeight: FontWeight.bold,
         ),

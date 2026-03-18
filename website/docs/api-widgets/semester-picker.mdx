@@ -1,0 +1,27 @@
+---
+sidebar_position: 10
+---
+
+# 學期選擇器 SemesterPicker
+
+提供選擇學年的元件，支援顯示年度以及學期的下拉式選單與左右快速切換功能。
+
+ <img src="../../img/widgets/semester_picker.jpg" alt="drawing" width="300"/>
+
+:::caution 使用時必須先完成
+ - [主題色設定](../installation/theme)
+ - [多國語言設定](../installation/localization)
+:::
+
+## SemesterPicker
+
+可整合於 `CourseScaffold` 或 `ScoreScaffold` 等需要切換學期資料的頁面。
+
+| 參數名稱                         | 型態                             | 描述                             |
+| ------------------------------- | ------------------------------- | ------------------------------- |
+| semesterData | `SemesterData` | 包含所有學期資訊的資料物件 |
+| currentIndex | `int` | 目前選擇的學期索引 |
+| onSelect | `Function(int index, String code)` | 選擇學期時觸發的事件回調，回傳索引與代碼 |
+| textColor | `Color` | 選項文字顏色 (可自訂或使用主題預設值) |
+| backgroundColor | `Color` | 背景顏色 (可自訂或使用主題預設值) |
+| enableLeftRightButton | `bool` | 是否顯示左右切換學期的按鈕，預設為 `true` |

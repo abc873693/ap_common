@@ -1,7 +1,6 @@
 import 'dart:io';
 
 import 'package:ap_common_flutter_core/ap_common_flutter_core.dart';
-import 'package:ap_common_flutter_ui/src/resources/ap_theme.dart';
 import 'package:ap_common_flutter_ui/src/widgets/yes_no_dialog.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
@@ -68,7 +67,7 @@ class ApUtils {
         contentWidget: Text(
           app.ratingDialogContent,
           style: TextStyle(
-            color: ApTheme.of(context).grey,
+            color: Theme.of(context).colorScheme.onSurfaceVariant,
             height: 1.3,
             fontSize: 16.0,
           ),
@@ -88,64 +87,75 @@ class ApUtils {
   ) async {
     // await Future.delayed(Duration(seconds: 1));
     final ApLocalizations app = ApLocalizations.of(context);
-    showModalBottomSheet(
+    showModalBottomSheet<void>(
       context: context,
-      builder: (BuildContext context) => Column(
-        mainAxisSize: MainAxisSize.min,
-        children: <Widget>[
-          Padding(
-            padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 16),
-            child: Align(
-              child: Text(
-                app.ratingDialogTitle,
-                style:
-                    TextStyle(color: ApTheme.of(context).blue, fontSize: 20.0),
+      backgroundColor: const Color(0x00000000),
+      isScrollControlled: true,
+      builder: (BuildContext context) => Container(
+        padding: const EdgeInsets.all(16),
+        decoration: BoxDecoration(
+          color: Theme.of(context).colorScheme.surface,
+          borderRadius: const BorderRadius.vertical(top: Radius.circular(24)),
+        ),
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: <Widget>[
+            Padding(
+              padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 16),
+              child: Align(
+                child: Text(
+                  app.ratingDialogTitle,
+                  style: TextStyle(
+                    color: Theme.of(context).colorScheme.primary,
+                    fontSize: 20.0,
+                  ),
+                ),
               ),
             ),
-          ),
-          RichText(
-            textAlign: TextAlign.center,
-            text: TextSpan(
-              style: TextStyle(
-                color: ApTheme.of(context).grey,
-                height: 1.3,
-                fontSize: 18.0,
+            RichText(
+              textAlign: TextAlign.center,
+              text: TextSpan(
+                style: TextStyle(
+                  color: Theme.of(context).colorScheme.onSurfaceVariant,
+                  height: 1.3,
+                  fontSize: 18.0,
+                ),
+                children: <TextSpan>[
+                  TextSpan(text: app.ratingDialogContent),
+                ],
               ),
-              children: <TextSpan>[
-                TextSpan(text: app.ratingDialogContent),
+            ),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.end,
+              children: <Widget>[
+                TextButton(
+                  onPressed: () {
+                    Navigator.of(context).pop();
+                  },
+                  child: Text(
+                    app.later,
+                    style: TextStyle(
+                      color: Theme.of(context).colorScheme.primary,
+                      fontSize: 16.0,
+                    ),
+                  ),
+                ),
+                TextButton(
+                  onPressed: () => AppStoreUtil.instance.openAppReview(
+                    defaultUrl: defaultUrl,
+                  ),
+                  child: Text(
+                    app.rateNow,
+                    style: TextStyle(
+                      color: Theme.of(context).colorScheme.primary,
+                      fontSize: 16.0,
+                    ),
+                  ),
+                ),
               ],
             ),
-          ),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.end,
-            children: <Widget>[
-              TextButton(
-                onPressed: () {
-                  Navigator.of(context).pop();
-                },
-                child: Text(
-                  app.later,
-                  style: TextStyle(
-                    color: ApTheme.of(context).blue,
-                    fontSize: 16.0,
-                  ),
-                ),
-              ),
-              TextButton(
-                onPressed: () => AppStoreUtil.instance.openAppReview(
-                  defaultUrl: defaultUrl,
-                ),
-                child: Text(
-                  app.rateNow,
-                  style: TextStyle(
-                    color: ApTheme.of(context).blue,
-                    fontSize: 16.0,
-                  ),
-                ),
-              ),
-            ],
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }

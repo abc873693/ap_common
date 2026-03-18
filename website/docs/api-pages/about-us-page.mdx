@@ -6,7 +6,7 @@ sidebar_position: 1
 
 # 關於我們 AboutUsPage
 
-提供校務通系列的歷任作者及社群介紹，可在此頁面放置自己專案的License，期望您使用這份套件時可以加入此頁面，以及PR這個頁面加入您的資訊，我會同步到所有校務通專案中
+提供校務通系列的歷任作者及社群介紹，可在此頁面放置自己專案的 License，期望您使用這份套件時可以加入此頁面，以及 PR 這個頁面加入您的資訊，我會同步到所有校務通專案中。v3 將每一列資訊提取為獨立的 `AboutInfoCard` 元件，並使用 `SelectableLinkify` 支援連結點擊。
 
 <center class="half">
   <img src="../../img/pages/about_us_page/mobile_1.png" alt="drawing" width="180"/>
@@ -26,3 +26,14 @@ sidebar_position: 1
 | actions | `List<Widget>` | 右上角的元件列表，為Flutter Scaffold原生的API |
 | logEvent | Function(String name, String value) | 可搜集使用者行為的事件 |
 | setCurrentScreen | Function | 可搜集目前畫面的事件 |
+
+## 提取元件
+
+### AboutInfoCard
+
+自 v3 起從 `AboutUsPage` 內部提取為獨立元件，顯示帶有標題與可選取連結內容的資訊卡片。
+
+| 參數名稱                         | 型態                             | 描述                             |
+| ------------------------------- | ------------------------------- | ------------------------------- |
+| title | `String` | 卡片標題 |
+| content | `String` | 卡片內容，支援 URL 連結自動偵測 |

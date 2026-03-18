@@ -1,5 +1,8 @@
+import 'dart:math';
+
 import 'package:ap_common_flutter_ui/ap_common_flutter_ui.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/rendering.dart';
 
 enum ScoreState { loading, finish, error, empty, offlineEmpty, custom }
 
@@ -21,7 +24,6 @@ class ScoreScaffold extends StatefulWidget {
     this.finalScoreBuilder,
     this.customHint,
     this.isShowSearchButton = false,
-    this.details,
     this.bottom,
     this.customStateHint,
   });
@@ -41,7 +43,6 @@ class ScoreScaffold extends StatefulWidget {
   final Function(int index)? onScoreSelect;
   final Widget Function(int index)? middleScoreBuilder;
   final Widget Function(int index)? finalScoreBuilder;
-  final List<String>? details;
 
   final bool isShowSearchButton;
 
@@ -55,67 +56,158 @@ class ScoreScaffold extends StatefulWidget {
 
 class ScoreScaffoldState extends State<ScoreScaffold> {
   ApLocalizations get app => ApLocalizations.of(context);
+  
+  bool get isLandscape =>
+      MediaQuery.of(context).orientation == Orientation.landscape;
+
+  bool _isAnalysisView = false;
+  late ScrollController _scrollController;
+  bool _showFab = true;
 
   @override
   void initState() {
     super.initState();
+    _scrollController = ScrollController();
+    _scrollController.addListener(() {
+      if (_scrollController.position.userScrollDirection ==
+          ScrollDirection.reverse) {
+        if (_showFab) {
+          setState(() => _showFab = false);
+        }
+      } else if (_scrollController.position.userScrollDirection ==
+          ScrollDirection.forward) {
+        if (!_showFab) {
+          setState(() => _showFab = true);
+        }
+      }
+    });
   }
 
   @override
   void dispose() {
+    _scrollController.dispose();
     super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
+    final ColorScheme colorScheme = Theme.of(context).colorScheme;
+
     return Scaffold(
+      backgroundColor: colorScheme.surface,
       appBar: AppBar(
-        title: Text(widget.title ?? app.score),
+        titleSpacing: 0,
+        title: Row(
+          children: <Widget>[
+            Flexible(
+              child: Text(
+                widget.title ?? app.score,
+                overflow: TextOverflow.ellipsis,
+              ),
+            ),
+            if (widget.itemPicker != null) ...<Widget>[
+              const SizedBox(width: 12),
+              widget.itemPicker!,
+            ],
+            if (widget.semesterData != null &&
+                widget.itemPicker == null) ...<Widget>[
+              const SizedBox(width: 12),
+              SemesterPicker(
+                semesterData: widget.semesterData!,
+                currentIndex: widget.semesterData!.currentIndex,
+                onSelect: (Semester semester, int index) {
+                  widget.onSelect?.call(index);
+                },
+                featureTag: 'score',
+              ),
+            ],
+          ],
+        ),
         bottom: widget.bottom as PreferredSizeWidget?,
+        actions: const <Widget>[],
       ),
-      floatingActionButton: widget.isShowSearchButton
-          ? FloatingActionButton(
-              onPressed: () {
-                _pickSemester();
-                AnalyticsUtil.instance.logEvent('score_search_button_click');
-              },
-              child: const Icon(Icons.search),
-            )
-          : null,
-      body: Flex(
-        direction: Axis.vertical,
-        mainAxisSize: MainAxisSize.min,
-        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+      floatingActionButton: AnimatedScale(
+        scale: _showFab ? 1.0 : 0.0,
+        duration: const Duration(milliseconds: 250),
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          crossAxisAlignment: CrossAxisAlignment.end,
+          children: <Widget>[
+            if (widget.state == ScoreState.finish &&
+                widget.scoreData != null &&
+                widget.scoreData!.scores.isNotEmpty &&
+                !isLandscape)
+              FloatingActionButton(
+                key: const ValueKey<String>('switch_view_button'),
+                heroTag: 'switch_view_button',
+                onPressed: () {
+                  setState(() => _isAnalysisView = !_isAnalysisView);
+                },
+                child: Icon(
+                  _isAnalysisView
+                      ? Icons.list_alt_rounded
+                      : Icons.analytics_outlined,
+                ),
+              ),
+            if (widget.isShowSearchButton) ...<Widget>[
+              if (widget.state == ScoreState.finish &&
+                  widget.scoreData != null &&
+                  widget.scoreData!.scores.isNotEmpty &&
+                  !isLandscape)
+                const SizedBox(height: 8),
+              FloatingActionButton(
+                key: const ValueKey<String>('search_button'),
+                heroTag: 'search_button',
+                onPressed: () {
+                  _pickSemester();
+                  AnalyticsUtil.instance.logEvent('score_search_button_click');
+                },
+                child: const Icon(Icons.search),
+              ),
+            ],
+          ],
+        ),
+      ),
+      body: Row(
         children: <Widget>[
-          const SizedBox(height: 8.0),
-          if (widget.semesterData != null && widget.itemPicker == null)
-            ItemPicker(
-              dialogTitle: app.pickSemester,
-              onSelected: widget.onSelect,
-              items: widget.semesterData!.semesters,
-              currentIndex: widget.semesterData!.currentIndex,
-              featureTag: 'score',
-            ),
-          if (widget.itemPicker != null) widget.itemPicker!,
-          if (widget.customHint != null && widget.customHint!.isNotEmpty)
-            Text(
-              widget.customHint!,
-              style: TextStyle(color: ApTheme.of(context).grey),
-              textAlign: TextAlign.center,
-            ),
           Expanded(
-            child: RefreshIndicator(
-              onRefresh: () async {
-                await widget.onRefresh?.call();
-                AnalyticsUtil.instance.logEvent('score_refresh');
-                return;
-              },
-              child: _body(),
+            flex: 3,
+            child: Column(
+              children: <Widget>[
+                if (widget.customHint != null && widget.customHint!.isNotEmpty)
+                  _buildHintBanner(),
+                Expanded(child: _buildContent(context, colorScheme, app)),
+              ],
             ),
           ),
+          if (widget.state == ScoreState.finish && isLandscape) ...<Widget>[
+            const SizedBox(width: 16.0),
+            Expanded(
+              flex: 2,
+              child: Material(
+                elevation: 12.0,
+                child: ColoredBox(
+                  color: Theme.of(context).colorScheme.surfaceContainerHighest,
+                  child: _ScoreListTab(
+                    scoreData: widget.scoreData!,
+                    onRefresh: widget.onRefresh,
+                    middleTitle: widget.middleTitle,
+                    finalTitle: widget.finalTitle,
+                    onScoreSelect: widget.onScoreSelect,
+                    middleScoreBuilder: widget.middleScoreBuilder,
+                    finalScoreBuilder: widget.finalScoreBuilder,
+                  ),
+                ),
+              ),
+            ),
+          ],
         ],
       ),
     );
+  }
+
+  Widget _buildHintBanner() {
+    return HintBanner(text: widget.customHint!);
   }
 
   String get hintContent {
@@ -133,31 +225,39 @@ class ScoreScaffoldState extends State<ScoreScaffold> {
     }
   }
 
-  Widget _body() {
+  Widget _buildContent(
+    BuildContext context,
+    ColorScheme colorScheme,
+    ApLocalizations ap,
+  ) {
     switch (widget.state) {
       case ScoreState.loading:
-        return Container(
-          alignment: Alignment.center,
-          child: const CircularProgressIndicator(),
-        );
+        return _buildLoadingState(colorScheme);
       case ScoreState.error:
-      case ScoreState.empty:
-      case ScoreState.custom:
-      case ScoreState.offlineEmpty:
-        return InkWell(
-          onTap: () {
-            if (widget.state == ScoreState.empty) {
-              _pickSemester();
-            } else {
-              widget.onRefresh?.call();
-            }
-          },
-          child: HintContent(
-            icon: ApIcon.assignment,
-            content: hintContent,
-          ),
+        return _buildErrorState(
+          colorScheme,
+          ap.clickToRetry,
+          Icons.error_outline_rounded,
         );
-      default:
+      case ScoreState.empty:
+        return _buildErrorState(
+          colorScheme,
+          ap.scoreEmpty,
+          Icons.assignment_outlined,
+        );
+      case ScoreState.offlineEmpty:
+        return _buildErrorState(
+          colorScheme,
+          ap.noOfflineData,
+          Icons.cloud_off_rounded,
+        );
+      case ScoreState.custom:
+        return _buildErrorState(
+          colorScheme,
+          widget.customStateHint ?? ap.somethingError,
+          Icons.warning_amber_rounded,
+        );
+      case ScoreState.finish:
         return ScoreContent(
           scoreData: widget.scoreData,
           onRefresh: widget.onRefresh,
@@ -166,21 +266,92 @@ class ScoreScaffoldState extends State<ScoreScaffold> {
           onScoreSelect: widget.onScoreSelect,
           middleScoreBuilder: widget.middleScoreBuilder,
           finalScoreBuilder: widget.finalScoreBuilder,
-          details: widget.details,
+          isAnalysisView: isLandscape ? true : _isAnalysisView,
+          scrollController: _scrollController,
         );
     }
   }
 
+  Widget _buildLoadingState(ColorScheme colorScheme) {
+    return Center(
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        children: <Widget>[
+          SizedBox(
+            width: 48,
+            height: 48,
+            child: CircularProgressIndicator(
+              strokeWidth: 3,
+              color: colorScheme.primary,
+            ),
+          ),
+          const SizedBox(height: 16),
+          Text(
+            app.loading,
+            style: TextStyle(fontSize: 16, color: colorScheme.onSurfaceVariant),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildErrorState(
+    ColorScheme colorScheme,
+    String message,
+    IconData icon,
+  ) {
+    return InkWell(
+      onTap: () {
+        if (widget.state == ScoreState.empty) {
+          _pickSemester();
+        } else {
+          widget.onRefresh?.call();
+        }
+      },
+      child: Center(
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: <Widget>[
+            Container(
+              width: 80,
+              height: 80,
+              decoration: BoxDecoration(
+                color: colorScheme.primaryContainer.withAlpha(77),
+                borderRadius: BorderRadius.circular(20),
+              ),
+              child: Icon(icon, size: 40, color: colorScheme.primary),
+            ),
+            const SizedBox(height: 16),
+            Text(
+              message,
+              style: TextStyle(
+                fontSize: 16,
+                color: colorScheme.onSurfaceVariant,
+              ),
+              textAlign: TextAlign.center,
+            ),
+            if (widget.state != ScoreState.empty) ...<Widget>[
+              const SizedBox(height: 8),
+              Text(
+                app.clickToRetry,
+                style: TextStyle(fontSize: 14, color: colorScheme.primary),
+              ),
+            ],
+          ],
+        ),
+      ),
+    );
+  }
+
   void _pickSemester() {
     if (widget.semesterData != null) {
-      showDialog(
+      SemesterPicker.show(
         context: context,
-        builder: (_) => SimpleOptionDialog(
-          title: app.pickSemester,
-          items: widget.semesterData!.semesters,
-          index: widget.semesterData!.currentIndex,
-          onSelected: widget.onSelect,
-        ),
+        semesterData: widget.semesterData!,
+        currentIndex: widget.semesterData!.currentIndex,
+        onSelect: (Semester semester, int index) {
+          widget.onSelect?.call(index);
+        },
       );
     }
     widget.onSearchButtonClick?.call();
@@ -197,7 +368,8 @@ class ScoreContent extends StatefulWidget {
     this.onScoreSelect,
     this.middleScoreBuilder,
     this.finalScoreBuilder,
-    this.details,
+    required this.isAnalysisView,
+    this.scrollController,
   });
 
   final ScoreData? scoreData;
@@ -207,188 +379,41 @@ class ScoreContent extends StatefulWidget {
   final Function(int index)? onScoreSelect;
   final Widget Function(int index)? middleScoreBuilder;
   final Widget Function(int index)? finalScoreBuilder;
-  final List<String>? details;
+  final bool isAnalysisView;
+  final ScrollController? scrollController;
 
   @override
   _ScoreContentState createState() => _ScoreContentState();
 }
 
 class _ScoreContentState extends State<ScoreContent> {
-  TextStyle get _textBlueStyle =>
-      TextStyle(color: ApTheme.of(context).blueText, fontSize: 16.0);
-
-  TextStyle get _textStyle => const TextStyle(fontSize: 15.0);
-
-  BoxDecoration get _boxDecoration => BoxDecoration(
-        borderRadius: const BorderRadius.all(
-          Radius.circular(
-            10.0,
-          ),
-        ),
-        border: Border.all(color: Colors.grey, width: 1.5),
-      );
-
-  TableBorder get _tableBorder => const TableBorder.symmetric(
-        inside: BorderSide(
-          color: Colors.grey,
-          width: 0.5,
-        ),
-      );
-
-  bool get isTablet =>
-      MediaQuery.of(context).size.shortestSide >= 680 ||
-      MediaQuery.of(context).orientation == Orientation.landscape;
-
   @override
   Widget build(BuildContext context) {
-    return SingleChildScrollView(
-      physics: const AlwaysScrollableScrollPhysics(),
-      child: Container(
-        padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8),
-        child: Flex(
-          direction: isTablet ? Axis.horizontal : Axis.vertical,
-          children: <Widget>[
-            Flexible(
-              flex: isTablet ? 2 : 0,
-              child: DecoratedBox(
-                decoration: _boxDecoration,
-                child: Table(
-                  columnWidths: const <int, TableColumnWidth>{
-                    0: FlexColumnWidth(2.5),
-                    1: FlexColumnWidth(),
-                    2: FlexColumnWidth(),
-                  },
-                  defaultVerticalAlignment: TableCellVerticalAlignment.middle,
-                  border: _tableBorder,
-                  children: <TableRow>[
-                    TableRow(
-                      children: <Widget>[
-                        ScoreTextBorder(
-                          text: ApLocalizations.of(context).subject,
-                          style: _textBlueStyle,
-                        ),
-                        ScoreTextBorder(
-                          text: widget.middleTitle ??
-                              ApLocalizations.of(context).midtermScoreTitle,
-                          style: _textBlueStyle,
-                        ),
-                        ScoreTextBorder(
-                          text: widget.finalTitle ??
-                              ApLocalizations.of(context).semesterScoreTitle,
-                          style: _textBlueStyle,
-                        ),
-                      ],
-                    ),
-                    for (int i = 0; i < widget.scoreData!.scores.length; i++)
-                      TableRow(
-                        children: <Widget>[
-                          ScoreTextBorder(
-                            text: widget.scoreData!.scores[i].title,
-                            style: _textStyle,
-                            onTap: (widget.onScoreSelect != null)
-                                ? () {
-                                    widget.onScoreSelect!(i);
-                                    AnalyticsUtil.instance
-                                        .logEvent('score_title_click');
-                                  }
-                                : null,
-                          ),
-                          if (widget.middleScoreBuilder == null)
-                            ScoreTextBorder(
-                              text: widget.scoreData!.scores[i].middleScore,
-                              style: _textStyle,
-                            ),
-                          if (widget.middleScoreBuilder != null)
-                            widget.middleScoreBuilder!(i),
-                          if (widget.finalScoreBuilder == null)
-                            ScoreTextBorder(
-                              text: widget.scoreData!.scores[i].semesterScore,
-                              style: _textStyle,
-                            ),
-                          if (widget.finalScoreBuilder != null)
-                            widget.finalScoreBuilder!(i),
-                        ],
-                      ),
-                  ],
-                ),
-              ),
-            ),
-            SizedBox(
-              height: isTablet ? 0.0 : 20.0,
-              width: isTablet ? 20 : 0.0,
-            ),
-            if (widget.details != null && widget.details!.isNotEmpty)
-              Flexible(
-                flex: isTablet ? 1 : 0,
-                child: DecoratedBox(
-                  decoration: _boxDecoration,
-                  child: Table(
-                    columnWidths: const <int, TableColumnWidth>{
-                      0: FlexColumnWidth(),
-                    },
-                    defaultVerticalAlignment: TableCellVerticalAlignment.middle,
-                    border: _tableBorder,
-                    children: <TableRow>[
-                      for (final String text in widget.details!)
-                        TableRow(
-                          children: <Widget>[
-                            Container(
-                              width: double.infinity,
-                              padding: const EdgeInsets.all(2.0),
-                              alignment: Alignment.center,
-                              child: SelectableText(
-                                text,
-                                textAlign: TextAlign.center,
-                                style: _textBlueStyle,
-                              ),
-                            ),
-                          ],
-                        ),
-                    ],
-                  ),
-                ),
-              ),
-          ],
-        ),
-      ),
-    );
+    if (widget.scoreData == null) return const SizedBox.shrink();
+
+    if (widget.isAnalysisView) {
+      return _ScoreAnalysisTab(
+        scoreData: widget.scoreData!,
+        onRefresh: widget.onRefresh,
+        controller: widget.scrollController,
+      );
+    } else {
+      return _ScoreListTab(
+        scoreData: widget.scoreData!,
+        onRefresh: widget.onRefresh,
+        middleTitle: widget.middleTitle,
+        finalTitle: widget.finalTitle,
+        onScoreSelect: widget.onScoreSelect,
+        middleScoreBuilder: widget.middleScoreBuilder,
+        finalScoreBuilder: widget.finalScoreBuilder,
+        controller: widget.scrollController,
+      );
+    }
   }
 }
 
-class ScoreTextBorder extends StatelessWidget {
-  const ScoreTextBorder({
-    super.key,
-    required this.text,
-    required this.style,
-    this.onTap,
-  });
-  final String? text;
-  final TextStyle style;
-
-  final Function()? onTap;
-
-  @override
-  Widget build(BuildContext context) {
-    return InkWell(
-      onTap: onTap,
-      child: Container(
-        width: double.maxFinite,
-        padding: const EdgeInsets.symmetric(vertical: 2.0, horizontal: 4.0),
-        alignment: Alignment.center,
-        child: SelectableText(
-          text ?? '',
-          textAlign: TextAlign.center,
-          style: style,
-        ),
-      ),
-    );
-  }
-}
-
-/*
-class ScoreCardContent extends StatefulWidget {
-  const ScoreCardContent({
-    super.key,
+class _ScoreListTab extends StatelessWidget {
+  const _ScoreListTab({
     required this.scoreData,
     this.onRefresh,
     this.middleTitle,
@@ -396,102 +421,472 @@ class ScoreCardContent extends StatefulWidget {
     this.onScoreSelect,
     this.middleScoreBuilder,
     this.finalScoreBuilder,
-    this.details,
+    this.controller,
   });
 
-  final ScoreData? scoreData;
-  final Function()? onRefresh;
+  final ScoreData scoreData;
+  final VoidCallback? onRefresh;
   final String? middleTitle;
   final String? finalTitle;
   final Function(int index)? onScoreSelect;
   final Widget Function(int index)? middleScoreBuilder;
   final Widget Function(int index)? finalScoreBuilder;
-  final List<String>? details;
-
-  @override
-  _ScoreCardContentState createState() => _ScoreCardContentState();
-}
-
-class _ScoreCardContentState extends State<ScoreCardContent> {
-  TextStyle get _textPrimaryStyle => TextStyle(
-      color: ApTheme.of(context).blueText,
-      fontSize: 16.0,
-      fontWeight: FontWeight.w600);
-
-  TextStyle get _textSecondaryStyle =>
-      const TextStyle(color: ApColors.secondary, fontSize: 16.0);
-
-  TextStyle get _textStyle => const TextStyle(fontSize: 15.0);
-
-  bool get isTablet =>
-      MediaQuery.of(context).size.shortestSide >= 680 ||
-      MediaQuery.of(context).orientation == Orientation.landscape;
+  final ScrollController? controller;
 
   @override
   Widget build(BuildContext context) {
-    return ListView.builder(
-      itemCount: widget.scoreData!.scores.length,
-      itemBuilder: (_, int index) {
-        return Card(
-          //elevation: 4.0,
-          margin: const EdgeInsets.all(8.0),
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(12.0),
-          ),
-          child: ListTile(
-            contentPadding: const EdgeInsets.symmetric(
-              vertical: 8.0,
-              horizontal: 24.0,
-            ),
-            title: Row(
-              children: <Widget>[
-                Flexible(
-                  flex: 2,
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: <Widget>[
-                      Text(
-                        widget.scoreData!.scores[index].title,
-                        style: _textPrimaryStyle,
+    final ColorScheme colorScheme = Theme.of(context).colorScheme;
+
+    return RefreshIndicator(
+      onRefresh: () async => onRefresh?.call(),
+      child: ListView.builder(
+        controller: controller,
+        physics: const AlwaysScrollableScrollPhysics(),
+        padding: const EdgeInsets.all(16),
+        itemCount: scoreData.scores.length,
+        itemBuilder: (BuildContext context, int index) {
+          return _buildScoreItem(colorScheme, scoreData.scores[index], index);
+        },
+      ),
+    );
+  }
+
+
+  Widget _buildScoreItem(ColorScheme colorScheme, Score score, int index) {
+    final String scoreStr = score.semesterScore ?? '';
+    final double? scoreValue = double.tryParse(scoreStr);
+    final bool isPassed = scoreValue != null && scoreValue >= 60;
+    final Color scoreColor = scoreValue == null
+        ? colorScheme.onSurfaceVariant
+        : isPassed
+            ? _getScoreColor(scoreValue)
+            : colorScheme.error;
+
+    return GestureDetector(
+      onTap: onScoreSelect == null
+          ? null
+          : () {
+              onScoreSelect!(index);
+              AnalyticsUtil.instance.logEvent('score_title_click');
+            },
+      child: Container(
+        margin: const EdgeInsets.only(bottom: 8),
+        decoration: BoxDecoration(
+          color: colorScheme.surfaceContainerLowest,
+          borderRadius: BorderRadius.circular(16),
+          border: Border.all(color: colorScheme.outlineVariant.withAlpha(77)),
+        ),
+        child: Padding(
+          padding: const EdgeInsets.all(16),
+          child: Row(
+            children: <Widget>[
+              Container(
+                width: 4,
+                height: 50,
+                decoration: BoxDecoration(
+                  color: scoreColor,
+                  borderRadius: BorderRadius.circular(2),
+                ),
+              ),
+              const SizedBox(width: 16),
+              Expanded(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: <Widget>[
+                    Text(
+                      score.title,
+                      style: TextStyle(
+                        fontSize: 15,
+                        fontWeight: FontWeight.w600,
+                        color: colorScheme.onSurface,
                       ),
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: <Widget>[
-                          Text(
-                            (widget.middleTitle ??
-                                    ApLocalizations.of(context)
-                                        .midtermScoreTitle) +
-                                (widget.middleScoreBuilder != null
-                                    ? ''
-                                    : ' : ${widget.scoreData!.scores[index].middleScore ?? ''}'),
-                            style: _textSecondaryStyle,
+                    ),
+                    const SizedBox(height: 4),
+                    Row(
+                      children: <Widget>[
+                        _buildTag(
+                          colorScheme,
+                          score.required ?? '',
+                          colorScheme.tertiary,
+                        ),
+                        const SizedBox(width: 8),
+                        Text(
+                          '${score.units} 學分',
+                          style: TextStyle(
+                            fontSize: 12,
+                            color: colorScheme.onSurfaceVariant,
                           ),
-                          if (widget.middleScoreBuilder != null)
-                            widget.middleScoreBuilder!(index),
-                        ],
+                        ),
+                      ],
+                    ),
+                  ],
+                ),
+              ),
+              Column(
+                crossAxisAlignment: CrossAxisAlignment.end,
+                children: <Widget>[
+                  if (finalScoreBuilder == null)
+                    Text(
+                      score.semesterScore ?? '-',
+                      style: TextStyle(
+                        fontSize: 24,
+                        fontWeight: FontWeight.bold,
+                        color: scoreColor,
                       ),
-                    ],
+                    ),
+                  if (finalScoreBuilder != null) finalScoreBuilder!(index),
+                  const SizedBox(height: 4),
+                  if (middleScoreBuilder == null &&
+                      score.middleScore != null &&
+                      score.middleScore!.isNotEmpty)
+                    Text(
+                      '期中: ${score.middleScore}',
+                      style: TextStyle(
+                        fontSize: 11,
+                        color: colorScheme.onSurfaceVariant,
+                      ),
+                    ),
+                  if (middleScoreBuilder != null) middleScoreBuilder!(index),
+                ],
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+
+  Color _getScoreColor(double score) {
+    if (score >= 90) return const Color(0xFF4CAF50);
+    if (score >= 80) return const Color(0xFF8BC34A);
+    if (score >= 70) return const Color(0xFF2196F3);
+    if (score >= 60) return const Color(0xFFFF9800);
+    return const Color(0xFFF44336);
+  }
+
+  Widget _buildTag(ColorScheme colorScheme, String text, Color color) {
+    if (text.isEmpty) return const SizedBox.shrink();
+
+    return Container(
+      padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 2),
+      decoration: BoxDecoration(
+        color: color.withAlpha(26),
+        borderRadius: BorderRadius.circular(4),
+      ),
+      child: Text(
+        text.replaceAll('【', '').replaceAll('】', ''),
+        style: TextStyle(
+          fontSize: 11,
+          fontWeight: FontWeight.w600,
+          color: color,
+        ),
+      ),
+    );
+  }
+}
+
+class _ScoreAnalysisTab extends StatelessWidget {
+  const _ScoreAnalysisTab({
+    required this.scoreData,
+    this.onRefresh,
+    this.controller,
+  });
+
+  final ScoreData scoreData;
+  final VoidCallback? onRefresh;
+  final ScrollController? controller;
+
+  @override
+  Widget build(BuildContext context) {
+    final ColorScheme colorScheme = Theme.of(context).colorScheme;
+    final ApLocalizations ap = ApLocalizations.of(context);
+    final ScoreAnalysis analysis = ScoreAnalysis(scoreData);
+
+    return RefreshIndicator(
+      onRefresh: () async => onRefresh?.call(),
+      child: SingleChildScrollView(
+        controller: controller,
+        physics: const AlwaysScrollableScrollPhysics(),
+        padding: const EdgeInsets.all(16),
+        child: Column(
+          children: <Widget>[
+            _buildMainSummaryCard(colorScheme, ap, analysis),
+            const SizedBox(height: 16),
+            ScorePRCard(analysis: analysis),
+            const SizedBox(height: 16),
+            ScoreStatisticsCard(analysis: analysis),
+            const SizedBox(height: 16),
+            ScoreDistributionCard(analysis: analysis),
+            const SizedBox(height: 16),
+            ScoreCreditSummaryCard(analysis: analysis),
+            const SizedBox(height: 32),
+          ],
+        ),
+      ),
+    );
+  }
+
+  Widget _buildMainSummaryCard(
+    ColorScheme colorScheme,
+    ApLocalizations ap,
+    ScoreAnalysis analysis,
+  ) {
+    final Detail detail = scoreData.detail;
+
+    return Container(
+      decoration: BoxDecoration(
+        gradient: LinearGradient(
+          begin: Alignment.topLeft,
+          end: Alignment.bottomRight,
+          colors: <Color>[
+            colorScheme.primaryContainer,
+            colorScheme.secondaryContainer,
+          ],
+        ),
+        borderRadius: BorderRadius.circular(20),
+        boxShadow: <BoxShadow>[
+          BoxShadow(
+            color: colorScheme.primary.withAlpha(38),
+            blurRadius: 16,
+            offset: const Offset(0, 8),
+          ),
+        ],
+      ),
+      child: Column(
+        children: <Widget>[
+          Padding(
+            padding: const EdgeInsets.all(20),
+            child: Row(
+              children: <Widget>[
+                Expanded(
+                  child: _buildMainItem(
+                    colorScheme,
+                    Icons.star_rounded,
+                    ap.average,
+                    detail.average?.toStringAsFixed(2) ?? '-',
                   ),
                 ),
+                Container(
+                  width: 1,
+                  height: 60,
+                  color: colorScheme.onPrimaryContainer.withAlpha(51),
+                ),
                 Expanded(
-                  child: Column(
-                    children: <Widget>[
-                      if (widget.finalScoreBuilder == null)
-                        Text(
-                          widget.scoreData!.scores[index].semesterScore ?? '',
-                          style: _textStyle,
-                        ),
-                      if (widget.finalScoreBuilder != null)
-                        widget.finalScoreBuilder!(index),
-                    ],
+                  child: _buildMainItem(
+                    colorScheme,
+                    Icons.school_rounded,
+                    ap.conductScore,
+                    detail.conduct?.toStringAsFixed(0) ?? '-',
                   ),
                 ),
               ],
             ),
           ),
-        );
-      },
+          Container(
+            padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 16),
+            decoration: BoxDecoration(
+              color: colorScheme.surface.withAlpha(179),
+              borderRadius: const BorderRadius.vertical(
+                bottom: Radius.circular(20),
+              ),
+            ),
+            child: Row(
+              children: <Widget>[
+                Expanded(
+                  child: _buildRankItem(
+                    colorScheme,
+                    ap.classRank,
+                    detail.classRank ?? '-',
+                  ),
+                ),
+                Container(
+                  width: 1,
+                  height: 40,
+                  color: colorScheme.outlineVariant.withAlpha(128),
+                ),
+                Expanded(
+                  child: _buildRankItem(
+                    colorScheme,
+                    ap.departmentRank,
+                    detail.departmentRank ?? '-',
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ],
+      ),
     );
   }
+
+  Widget _buildMainItem(
+    ColorScheme colorScheme,
+    IconData icon,
+    String label,
+    String value,
+  ) {
+    return Column(
+      children: <Widget>[
+        Icon(icon, size: 28, color: colorScheme.primary),
+        const SizedBox(height: 8),
+        Text(
+          value,
+          style: TextStyle(
+            fontSize: 28,
+            fontWeight: FontWeight.bold,
+            color: colorScheme.onPrimaryContainer,
+          ),
+        ),
+        const SizedBox(height: 4),
+        Text(
+          label,
+          style: TextStyle(
+            fontSize: 13,
+            color: colorScheme.onPrimaryContainer.withAlpha(179),
+          ),
+        ),
+      ],
+    );
+  }
+
+  Widget _buildRankItem(ColorScheme colorScheme, String label, String value) {
+    return Column(
+      children: <Widget>[
+        Text(
+          value,
+          style: TextStyle(
+            fontSize: 18,
+            fontWeight: FontWeight.bold,
+            color: colorScheme.onSurface,
+          ),
+        ),
+        const SizedBox(height: 2),
+        Text(
+          label,
+          style: TextStyle(fontSize: 12, color: colorScheme.onSurfaceVariant),
+        ),
+      ],
+    );
+  }
+
 }
-*/
+
+class ScoreAnalysis {
+  ScoreAnalysis(this.scoreData) {
+    _scores = <double>[];
+    for (final Score score in scoreData.scores) {
+      final double? value = double.tryParse(score.semesterScore ?? '');
+      if (value != null) {
+        _scores.add(value);
+      }
+    }
+    _totalSubjects = _scores.length;
+  }
+
+  final ScoreData scoreData;
+  late List<double> _scores;
+  late int _totalSubjects;
+
+  int get totalSubjects => _totalSubjects;
+
+  double get maxScore => _scores.isEmpty ? 0 : _scores.reduce(max);
+
+  double get minScore => _scores.isEmpty ? 0 : _scores.reduce(min);
+
+  double get average {
+    if (_scores.isEmpty) return 0;
+    return _scores.reduce((double a, double b) => a + b) / _scores.length;
+  }
+
+  double get standardDeviation {
+    if (_scores.isEmpty) return 0;
+    final double avg = average;
+    final double sumSquares = _scores.fold<double>(
+      0,
+      (double sum, double score) => sum + (score - avg) * (score - avg),
+    );
+    return sqrt(sumSquares / _scores.length);
+  }
+
+  int get estimatedPR {
+    final double avg = scoreData.detail.average ?? average;
+    if (avg >= 95) return 99;
+    if (avg >= 90) return 95;
+    if (avg >= 85) return 88;
+    if (avg >= 80) return 78;
+    if (avg >= 75) return 65;
+    if (avg >= 70) return 50;
+    if (avg >= 65) return 35;
+    if (avg >= 60) return 22;
+    if (avg >= 55) return 12;
+    return 5;
+  }
+
+  String get prLevel {
+    final int pr = estimatedPR;
+    if (pr >= 90) return '頂尖';
+    if (pr >= 75) return '優秀';
+    if (pr >= 50) return '中等';
+    if (pr >= 25) return '待加強';
+    return '需努力';
+  }
+
+  Map<String, int> get distribution {
+    final Map<String, int> dist = <String, int>{
+      '90-100': 0,
+      '80-89': 0,
+      '70-79': 0,
+      '60-69': 0,
+      '0-59': 0,
+    };
+
+    for (final double score in _scores) {
+      if (score >= 90) {
+        dist['90-100'] = dist['90-100']! + 1;
+      } else if (score >= 80) {
+        dist['80-89'] = dist['80-89']! + 1;
+      } else if (score >= 70) {
+        dist['70-79'] = dist['70-79']! + 1;
+      } else if (score >= 60) {
+        dist['60-69'] = dist['60-69']! + 1;
+      } else {
+        dist['0-59'] = dist['0-59']! + 1;
+      }
+    }
+
+    return dist;
+  }
+
+  double get totalCredits {
+    double credits = 0;
+    for (final Score score in scoreData.scores) {
+      final double? unit = double.tryParse(score.units);
+      if (unit != null) credits += unit;
+    }
+    return credits;
+  }
+
+  double get passedCredits {
+    double credits = 0;
+    for (final Score score in scoreData.scores) {
+      final double? scoreValue = double.tryParse(score.semesterScore ?? '');
+      final double? unit = double.tryParse(score.units);
+      if (scoreValue != null && scoreValue >= 60 && unit != null) {
+        credits += unit;
+      }
+    }
+    return credits;
+  }
+
+  double get failedCredits {
+    double credits = 0;
+    for (final Score score in scoreData.scores) {
+      final double? scoreValue = double.tryParse(score.semesterScore ?? '');
+      final double? unit = double.tryParse(score.units);
+      if (scoreValue != null && scoreValue < 60 && unit != null) {
+        credits += unit;
+      }
+    }
+    return credits;
+  }
+}

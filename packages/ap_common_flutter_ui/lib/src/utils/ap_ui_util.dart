@@ -1,5 +1,4 @@
 import 'package:ap_common_flutter_core/ap_common_flutter_core.dart';
-import 'package:ap_common_flutter_ui/src/resources/ap_theme.dart';
 import 'package:ap_common_flutter_ui/src/utils/toast.dart';
 import 'package:flutter/material.dart';
 
@@ -10,15 +9,17 @@ class ApUiUtil extends UiUtil {
     String? message, {
     int? gravity,
   }) {
+    final ColorScheme colorScheme = Theme.of(context).colorScheme;
+
     Toast.show(
       message,
       context,
       duration: Toast.lengthLong,
       gravity: gravity ?? Toast.bottom,
       textStyle: TextStyle(
-        color: ApTheme.of(context).toastText,
+        color: colorScheme.onInverseSurface,
       ),
-      backgroundColor: ApTheme.of(context).toastBackground,
+      backgroundColor: colorScheme.inverseSurface,
     );
   }
 }

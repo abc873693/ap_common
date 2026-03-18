@@ -59,6 +59,7 @@ class MessageLookup extends MessageLookupByLibrary {
             MessageLookupByLibrary.simpleMessage("All Announcements"),
         "allApplications":
             MessageLookupByLibrary.simpleMessage("All Applications"),
+        "amber": MessageLookupByLibrary.simpleMessage("Amber"),
         "analyticsDescription": MessageLookupByLibrary.simpleMessage(
             "Activity Log: We would like to log your usage to improve user experience."),
         "announcementEmpty": MessageLookupByLibrary.simpleMessage(
@@ -109,6 +110,7 @@ class MessageLookup extends MessageLookupByLibrary {
             MessageLookupByLibrary.simpleMessage("Do you want to call %s?"),
         "callPhoneTitle": MessageLookupByLibrary.simpleMessage("Calling"),
         "campus": MessageLookupByLibrary.simpleMessage(" campus"),
+        "brown": MessageLookupByLibrary.simpleMessage("Brown"),
         "campusNotSupport": MessageLookupByLibrary.simpleMessage(
             "This feature is unavailable in current campus."),
         "canNotUseFeature": MessageLookupByLibrary.simpleMessage(
@@ -165,6 +167,7 @@ class MessageLookup extends MessageLookupByLibrary {
             "Rotate the screen to see weekend schedule %s"),
         "courseHours": MessageLookupByLibrary.simpleMessage("Hours"),
         "courseInfo": MessageLookupByLibrary.simpleMessage("Course Info"),
+        "coralOrange": MessageLookupByLibrary.simpleMessage("Coral Orange"),
         "courseNotify": MessageLookupByLibrary.simpleMessage("Class Reminder"),
         "courseNotifyContent": MessageLookupByLibrary.simpleMessage(
             "The class %s will be delivered at room %s!"),
@@ -190,6 +193,8 @@ class MessageLookup extends MessageLookupByLibrary {
         "credits": MessageLookupByLibrary.simpleMessage("Credits"),
         "creditsTakenEarned":
             MessageLookupByLibrary.simpleMessage("Credits Taken/Earned"),
+        "customColor": MessageLookupByLibrary.simpleMessage("Custom Color"),
+        "cyan": MessageLookupByLibrary.simpleMessage("Cyan"),
         "dark": MessageLookupByLibrary.simpleMessage("Dark"),
         "date": MessageLookupByLibrary.simpleMessage("Date"),
         "delayReason": MessageLookupByLibrary.simpleMessage(
@@ -220,7 +225,9 @@ class MessageLookup extends MessageLookupByLibrary {
         "educationSystem": MessageLookupByLibrary.simpleMessage("Scheme"),
         "electiveCredits":
             MessageLookupByLibrary.simpleMessage("Elective Credits"),
+        "elegantPurple": MessageLookupByLibrary.simpleMessage("Elegant Purple"),
         "email": MessageLookupByLibrary.simpleMessage("Email Address"),
+        "emeraldGreen": MessageLookupByLibrary.simpleMessage("Emerald Green"),
         "emptyClassroomSearch":
             MessageLookupByLibrary.simpleMessage("Empty Classroom Search"),
         "english": MessageLookupByLibrary.simpleMessage("English"),
@@ -259,10 +266,12 @@ class MessageLookup extends MessageLookupByLibrary {
             MessageLookupByLibrary.simpleMessage("Show Avatar "),
         "headPhotoSettingSubTitle":
             MessageLookupByLibrary.simpleMessage("Show avatar in side menu."),
+        "hue": MessageLookupByLibrary.simpleMessage("Hue"),
         "home": MessageLookupByLibrary.simpleMessage("Home"),
         "iKnow": MessageLookupByLibrary.simpleMessage("Got it"),
         "iconStyle": MessageLookupByLibrary.simpleMessage("Icon Style"),
         "id": MessageLookupByLibrary.simpleMessage("ID"),
+        "indigo": MessageLookupByLibrary.simpleMessage("Indigo"),
         "idCard": MessageLookupByLibrary.simpleMessage("ID number"),
         "idCardLast4Code":
             MessageLookupByLibrary.simpleMessage("last 4 digits of ID number"),
@@ -383,6 +392,8 @@ class MessageLookup extends MessageLookupByLibrary {
             MessageLookupByLibrary.simpleMessage("No permission to review."),
         "noPermissionUpdateHint":
             MessageLookupByLibrary.simpleMessage("No permission to update."),
+        "nobleBlack": MessageLookupByLibrary.simpleMessage("Noble Black"),
+        "nkustBlue": MessageLookupByLibrary.simpleMessage("NKUST Blue"),
         "none": MessageLookupByLibrary.simpleMessage("None"),
         "notFoundData":
             MessageLookupByLibrary.simpleMessage("No matching Data~"),
@@ -406,6 +417,7 @@ class MessageLookup extends MessageLookupByLibrary {
         "offlineMode": MessageLookupByLibrary.simpleMessage("Offline Mode"),
         "offlineScore":
             MessageLookupByLibrary.simpleMessage("Offline Transcript"),
+        "oceanBlue": MessageLookupByLibrary.simpleMessage("Ocean Blue"),
         "ok": MessageLookupByLibrary.simpleMessage("OK"),
         "onlyShowNotReview":
             MessageLookupByLibrary.simpleMessage("Not been reviewed"),
@@ -430,6 +442,7 @@ class MessageLookup extends MessageLookupByLibrary {
             MessageLookupByLibrary.simpleMessage("Choose your teacher"),
         "platformError": MessageLookupByLibrary.simpleMessage(
             "This feature is unavailable in this platform."),
+        "pickThemeColor": MessageLookupByLibrary.simpleMessage("Pick Theme Color"),
         "pleasePick": MessageLookupByLibrary.simpleMessage("Please pick one"),
         "pleasePickDateAndSection": MessageLookupByLibrary.simpleMessage(
             "Please pick a date and course section."),
@@ -460,6 +473,7 @@ class MessageLookup extends MessageLookupByLibrary {
             MessageLookupByLibrary.simpleMessage("Reward and Punishment"),
         "rewardAndPenaltyContent":
             MessageLookupByLibrary.simpleMessage("Counts：%s\nDate：%s"),
+        "roseRed": MessageLookupByLibrary.simpleMessage("Rose Red"),
         "rewardAndPenaltyEmpty": MessageLookupByLibrary.simpleMessage(
             "Oops！No reward and punishment record in this semester~\nPlease choose another semester. 😋"),
         "roomList": MessageLookupByLibrary.simpleMessage("Classroom List"),
@@ -481,6 +495,7 @@ class MessageLookup extends MessageLookupByLibrary {
             MessageLookupByLibrary.simpleMessage("No matching data."),
         "searchStudentIdFormat":
             MessageLookupByLibrary.simpleMessage("Name：%s\nStudent ID：%s\n"),
+        "saturation": MessageLookupByLibrary.simpleMessage("Saturation"),
         "searchUsername":
             MessageLookupByLibrary.simpleMessage("Search Student ID"),
         "semester": MessageLookupByLibrary.simpleMessage("Semester"),
@@ -530,6 +545,7 @@ class MessageLookup extends MessageLookupByLibrary {
         "teacherConfirmTitle":
             MessageLookupByLibrary.simpleMessage("Are you a teacher?"),
         "theme": MessageLookupByLibrary.simpleMessage("Theme"),
+        "themeColor": MessageLookupByLibrary.simpleMessage("Theme Color"),
         "thirdPartyLoginFail": MessageLookupByLibrary.simpleMessage(
             "Failed to login from third-party service."),
         "thu": MessageLookupByLibrary.simpleMessage("Thu."),
@@ -579,6 +595,7 @@ class MessageLookup extends MessageLookupByLibrary {
         "waitingForReview":
             MessageLookupByLibrary.simpleMessage("Waiting for review"),
         "wed": MessageLookupByLibrary.simpleMessage("Wed."),
+        "value": MessageLookupByLibrary.simpleMessage("Value"),
         "wednesday": MessageLookupByLibrary.simpleMessage("Wed"),
         "weight": MessageLookupByLibrary.simpleMessage("Weight")
       };
