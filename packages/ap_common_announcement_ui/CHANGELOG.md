@@ -1,3 +1,7 @@
+## 1.0.1-dev.0
+
+ - Update a dependency to the latest release.
+
 ## 1.0.0
 
  - **FEAT**: improve model generate by `freezed`. ([43bef51c](https://github.com/abc873693/ap_common/commit/43bef51c42f8cf8b984074d42c16c403ee83c02c))

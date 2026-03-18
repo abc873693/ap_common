@@ -1,3 +1,7 @@
+## 1.1.0-dev.0
+
+ - **FEAT**: update i18n for theme translate. ([2e7e862d](https://github.com/abc873693/ap_common/commit/2e7e862d0f8803d64403c15df67108863a74fb1f))
+
 ## 1.0.0
 
  - Bump "ap_common_flutter_core" to `1.0.0`.
