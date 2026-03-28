@@ -11,8 +11,6 @@ class ScorePage extends StatefulWidget {
 }
 
 class ScorePageState extends State<ScorePage> {
-  late ApLocalizations ap;
-
   ScoreState state = ScoreState.loading;
 
   SemesterData? semesterData;
@@ -36,11 +34,10 @@ class ScorePageState extends State<ScorePage> {
 
   @override
   Widget build(BuildContext context) {
-    ap = ApLocalizations.of(context);
     return ScoreScaffold(
       state: state,
       scoreData: scoreData,
-      customHint: isOffline ? ap.offlineScore : '',
+      customHint: isOffline ? context.ap.offlineScore : '',
       customStateHint: customStateHint,
       semesterData: semesterData,
       onSelect: (int index) {

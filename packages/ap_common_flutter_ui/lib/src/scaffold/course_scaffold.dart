@@ -121,8 +121,6 @@ class CourseScaffold extends StatefulWidget {
 class CourseScaffoldState extends State<CourseScaffold> {
   final GlobalKey _repaintBoundaryGlobalKey = GlobalKey();
 
-  ApLocalizations get app => ApLocalizations.of(context);
-
   _ContentStyle _contentStyle = _ContentStyle.table;
 
   bool? showSectionTime;
@@ -217,7 +215,7 @@ class CourseScaffoldState extends State<CourseScaffold> {
             children: <Widget>[
               Flexible(
                 child: Text(
-                  widget.title ?? app.course,
+                  widget.title ?? context.ap.course,
                   overflow: TextOverflow.ellipsis,
                 ),
               ),
@@ -245,7 +243,7 @@ class CourseScaffoldState extends State<CourseScaffold> {
               IconButton(
                 icon: Icon(ApIcon.download),
                 onPressed: _captureCourseTable,
-                tooltip: ApLocalizations.of(context).exportCourseTable,
+                tooltip: context.ap.exportCourseTable,
               ),
             IconButton(
               icon: Icon(ApIcon.settings),
@@ -297,7 +295,7 @@ class CourseScaffoldState extends State<CourseScaffold> {
                 );
                 AnalyticsUtil.instance.logEvent('course_setting_click');
               },
-              tooltip: ApLocalizations.of(context).courseScaffoldSetting,
+              tooltip: context.ap.courseScaffoldSetting,
             ),
           ],
         ),
@@ -402,13 +400,13 @@ class CourseScaffoldState extends State<CourseScaffold> {
   String get hintContent {
     switch (widget.state) {
       case CourseState.error:
-        return app.clickToRetry;
+        return context.ap.clickToRetry;
       case CourseState.empty:
-        return app.courseEmpty;
+        return context.ap.courseEmpty;
       case CourseState.offlineEmpty:
-        return app.noOfflineData;
+        return context.ap.noOfflineData;
       case CourseState.custom:
-        return widget.customStateHint ?? app.unknownError;
+        return widget.customStateHint ?? context.ap.unknownError;
       default:
         return '';
     }
@@ -451,7 +449,7 @@ class CourseScaffoldState extends State<CourseScaffold> {
             ),
             const SizedBox(height: 8),
             Text(
-              app.clickToRetry,
+              context.ap.clickToRetry,
               style: TextStyle(fontSize: 14, color: colorScheme.primary),
             ),
           ],
@@ -486,25 +484,25 @@ class CourseScaffoldState extends State<CourseScaffold> {
       case CourseState.error:
         return _buildErrorState(
           colorScheme,
-          app.clickToRetry,
+          context.ap.clickToRetry,
           Icons.error_outline_rounded,
         );
       case CourseState.empty:
         return _buildErrorState(
           colorScheme,
-          app.courseEmpty,
+          context.ap.courseEmpty,
           Icons.event_busy_rounded,
         );
       case CourseState.offlineEmpty:
         return _buildErrorState(
           colorScheme,
-          app.noOfflineData,
+          context.ap.noOfflineData,
           Icons.cloud_off_rounded,
         );
       case CourseState.custom:
         return _buildErrorState(
           colorScheme,
-          widget.customStateHint ?? app.unknownError,
+          widget.customStateHint ?? context.ap.unknownError,
           Icons.warning_amber_rounded,
         );
       default:
@@ -555,7 +553,7 @@ class CourseScaffoldState extends State<CourseScaffold> {
         _repaintBoundaryGlobalKey.currentContext!.findRenderObject()
             as RenderRepaintBoundary?;
     if (boundary == null) {
-      UiUtil.instance.showToast(context, app.unknownError);
+      UiUtil.instance.showToast(context, context.ap.unknownError);
       return;
     }
     final ui.Image image = await boundary.toImage(pixelRatio: 3.0);
@@ -569,7 +567,7 @@ class CourseScaffoldState extends State<CourseScaffold> {
         context,
         byteData: byteData,
         fileName: 'course_table_$formattedDate',
-        successMessage: ApLocalizations.of(context).exportCourseTableSuccess,
+        successMessage: context.ap.exportCourseTableSuccess,
         onSuccess: (GeneralResponse r) => Toast.show(
           r.message,
           context,
@@ -582,7 +580,7 @@ class CourseScaffoldState extends State<CourseScaffold> {
       AnalyticsUtil.instance.logEvent('export_course_table_image_success');
     } else {
       if (!mounted) return;
-      UiUtil.instance.showToast(context, app.unknownError);
+      UiUtil.instance.showToast(context, context.ap.unknownError);
     }
   }
 
@@ -604,7 +602,7 @@ class CourseScaffoldState extends State<CourseScaffold> {
               child: Container(
                 padding: const EdgeInsets.symmetric(vertical: 12),
                 child: Text(
-                  ApLocalizations.of(context).weekdaysCourse[i],
+                  context.ap.weekdaysCourse[i],
                   textAlign: TextAlign.center,
                   style: TextStyle(
                     fontSize: 14,
@@ -1074,8 +1072,6 @@ class _CourseContentState extends State<CourseContent> {
         ThemeData.estimateBrightnessForColor(courseColor) == Brightness.dark
             ? Colors.white
             : Colors.black;
-    final ApLocalizations app = ApLocalizations.current;
-
     return Container(
       decoration: BoxDecoration(
         color: colorScheme.surface,
@@ -1103,7 +1099,7 @@ class _CourseContentState extends State<CourseContent> {
                     if ((!kIsWeb && (Platform.isAndroid || Platform.isIOS)) &&
                         widget.enableAddToCalendar)
                       IconButton(
-                        tooltip: ApLocalizations.of(context).addToCalendar,
+                        tooltip: context.ap.addToCalendar,
                         icon: Image.asset(
                           ApImageIcons.calendarImport,
                           color: onCourseColor,
@@ -1182,7 +1178,7 @@ class _CourseContentState extends State<CourseContent> {
                               if (!context.mounted) return;
                               UiUtil.instance.showToast(
                                 context,
-                                ApLocalizations.of(context).courseNotifyHint,
+                                context.ap.courseNotifyHint,
                               );
                               AnalyticsUtil.instance
                                   .logEvent('course_notify_schedule');
@@ -1203,7 +1199,7 @@ class _CourseContentState extends State<CourseContent> {
                               if (!context.mounted) return;
                               UiUtil.instance.showToast(
                                 context,
-                                ApLocalizations.of(context).cancelNotifySuccess,
+                                context.ap.cancelNotifySuccess,
                               );
                             }
                             setState(() {});
@@ -1272,25 +1268,25 @@ class _CourseContentState extends State<CourseContent> {
               children: <Widget>[
                 _buildDetailRow(
                   Icons.person_outline_rounded,
-                  app.courseDialogProfessor,
+                  context.ap.courseDialogProfessor,
                   widget.course.getInstructors(),
                   colorScheme,
                 ),
                 _buildDetailRow(
                   Icons.location_on_outlined,
-                  app.courseDialogLocation,
+                  context.ap.courseDialogLocation,
                   widget.course.location?.toString() ?? '-',
                   colorScheme,
                 ),
                 _buildDetailRow(
                   Icons.school_outlined,
                   '學分數',
-                  '${widget.course.units ?? "-"} ${app.units}',
+                  '${widget.course.units ?? "-"} ${context.ap.units}',
                   colorScheme,
                 ),
                 _buildDetailRow(
                   Icons.schedule_outlined,
-                  app.courseDialogTime,
+                  context.ap.courseDialogTime,
                   '${widget.timeCode.startTime}-${widget.timeCode.endTime}',
                   colorScheme,
                 ),
@@ -1298,7 +1294,7 @@ class _CourseContentState extends State<CourseContent> {
                     widget.course.className!.isNotEmpty)
                   _buildDetailRow(
                     Icons.class_outlined,
-                    app.studentClass,
+                    context.ap.studentClass,
                     widget.course.className!,
                     colorScheme,
                   ),
@@ -1306,7 +1302,7 @@ class _CourseContentState extends State<CourseContent> {
                     widget.course.hours!.isNotEmpty)
                   _buildDetailRow(
                     Icons.timer_outlined,
-                    app.courseHours,
+                    context.ap.courseHours,
                     widget.course.hours!,
                     colorScheme,
                   ),
@@ -1391,9 +1387,8 @@ class CourseList extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final ApLocalizations app = ApLocalizations.of(context);
     final ColorScheme colorScheme = Theme.of(context).colorScheme;
- 
+
     return ListView.builder(
       controller: controller,
       physics: const AlwaysScrollableScrollPhysics(),
@@ -1470,7 +1465,7 @@ class CourseList extends StatelessWidget {
                         Text(
                           instructors.isNotEmpty
                               ? instructors
-                              : app.unknown,
+                              : context.ap.unknown,
                           style: TextStyle(
                             fontSize: 13,
                             color: colorScheme.onSurfaceVariant,
@@ -1514,7 +1509,7 @@ class CourseList extends StatelessWidget {
                           borderRadius: BorderRadius.circular(8),
                         ),
                         child: Text(
-                          '${course.units ?? "-"} ${app.units}',
+                          '${course.units ?? "-"} ${context.ap.units}',
                           style: TextStyle(
                             fontSize: 12,
                             fontWeight: FontWeight.w600,
@@ -1585,17 +1580,16 @@ class _CourseScaffoldSettingDialogState
 
   @override
   Widget build(BuildContext context) {
-    final ApLocalizations ap = ApLocalizations.current;
     return DefaultDialog(
-      title: ap.courseScaffoldSetting,
-      actionText: ApLocalizations.current.confirm,
+      title: context.ap.courseScaffoldSetting,
+      actionText: context.ap.confirm,
       actionFunction: () => Navigator.of(context, rootNavigator: true).pop(),
       contentPadding: EdgeInsets.zero,
       contentWidget: Column(
         mainAxisSize: MainAxisSize.min,
         children: <Widget>[
           CheckboxListTile(
-            title: Text(ap.showSectionTime),
+            title: Text(context.ap.showSectionTime),
             secondary: Icon(ApIcon.accessTime),
             value: showSectionTime,
             onChanged: (bool? value) {
@@ -1604,7 +1598,7 @@ class _CourseScaffoldSettingDialogState
             },
           ),
           CheckboxListTile(
-            title: Text(ap.showInstructors),
+            title: Text(context.ap.showInstructors),
             secondary: Icon(ApIcon.person),
             value: showInstructors,
             onChanged: (bool? value) {
@@ -1613,7 +1607,7 @@ class _CourseScaffoldSettingDialogState
             },
           ),
           CheckboxListTile(
-            title: Text(ap.showClassroomLocation),
+            title: Text(context.ap.showClassroomLocation),
             secondary: Icon(ApIcon.locationOn),
             value: showClassroomLocation,
             onChanged: (bool? value) {

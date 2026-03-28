@@ -1,4 +1,7 @@
-import 'package:ap_common/ap_common.dart';
+import 'package:ap_common/ap_common.dart'
+    hide TranslationProvider, LocaleSettings, AppLocaleUtils, AppLocale;
+import 'package:ap_common_flutter_core/src/l10n/strings.g.dart'
+    as ap_l10n;
 import 'package:ap_common_example/config/constants.dart';
 import 'package:ap_common_example/pages/home_page.dart';
 import 'package:ap_common_example/utils/app_localizations.dart';
@@ -23,7 +26,6 @@ class MyAppState extends State<MyApp> with WidgetsBindingObserver {
   ThemeMode themeMode = ThemeMode.system;
   int currentColorIndex = 0;
   Color? customColor;
-  Locale? locale;
 
   void logout() {
     setState(() {
@@ -45,6 +47,7 @@ class MyAppState extends State<MyApp> with WidgetsBindingObserver {
       customColor = Color(customColorValue);
     }
     WidgetsBinding.instance.addObserver(this);
+    _initLocale();
     Future<void>.microtask(() {
       SystemChrome.setEnabledSystemUIMode(SystemUiMode.edgeToEdge);
       SystemChrome.setSystemUIOverlayStyle(
@@ -55,6 +58,30 @@ class MyAppState extends State<MyApp> with WidgetsBindingObserver {
       );
     });
     super.initState();
+  }
+
+  Future<void> _initLocale() async {
+    final String languageCode = PreferenceUtil.instance.getString(
+      Constants.PREF_LANGUAGE_CODE,
+      ApSupportLanguageConstants.system,
+    );
+    if (languageCode == ApSupportLanguageConstants.system) {
+      await useApDeviceLocale();
+      await LocaleSettings.useDeviceLocale();
+    } else {
+      final locale = Locale(
+        languageCode,
+        languageCode == ApSupportLanguageConstants.zh ? 'TW' : null,
+      );
+      await setApLocaleFromFlutter(locale);
+      final appLocale = AppLocaleUtils.instance.parseLocaleParts(
+        languageCode: locale.languageCode,
+        scriptCode: locale.scriptCode,
+        countryCode: locale.countryCode,
+      );
+      await LocaleSettings.setLocale(appLocale);
+    }
+    if (mounted) setState(() {});
   }
 
   @override
@@ -81,48 +108,36 @@ class MyAppState extends State<MyApp> with WidgetsBindingObserver {
         child: Builder(
           builder: (BuildContext context) {
             final Color seedColor = ApTheme.of(context).seedColor;
-            return MaterialApp(
-              localeResolutionCallback:
-                  (Locale? locale, Iterable<Locale> supportedLocales) {
-                final String languageCode = PreferenceUtil.instance.getString(
-                  Constants.PREF_LANGUAGE_CODE,
-                  ApSupportLanguageConstants.system,
-                );
-                if (languageCode == ApSupportLanguageConstants.system) {
-                  return this.locale =
-                      ApLocalizations.delegate.isSupported(locale!)
-                          ? locale
-                          : const Locale('en');
-                } else {
-                  return this.locale = Locale(
-                    languageCode,
-                    languageCode == ApSupportLanguageConstants.zh ? 'TW' : null,
-                  );
-                }
-              },
-              onGenerateTitle: (BuildContext context) =>
-                  AppLocalizations.of(context).appName,
-              debugShowCheckedModeBanner: false,
-              routes: <String, WidgetBuilder>{
-                Navigator.defaultRouteName: (BuildContext context) =>
-                    HomePage(),
-                AboutUsPage.routerName: (BuildContext context) =>
-                    HomePageState.aboutPage(context),
-                AnnouncementHomePage.routerName: (BuildContext context) =>
-                    const AnnouncementHomePage(),
-              },
-              theme: ApTheme.light(seedColor),
-              darkTheme: ApTheme.dark(seedColor),
-              themeMode: themeMode,
-              locale: locale,
-              localizationsDelegates: const <LocalizationsDelegate<dynamic>>[
-                apLocalizationsDelegate,
-                appDelegate,
-                GlobalMaterialLocalizations.delegate,
-                GlobalWidgetsLocalizations.delegate,
-                GlobalCupertinoLocalizations.delegate,
-              ],
-              supportedLocales: ApLocalizations.delegate.supportedLocales,
+            return ap_l10n.TranslationProvider(
+              child: TranslationProvider(
+                child: Builder(
+                  builder: (BuildContext context) {
+                  return MaterialApp(
+                    onGenerateTitle: (BuildContext context) => context.app.appName,
+                    debugShowCheckedModeBanner: false,
+                    routes: <String, WidgetBuilder>{
+                      Navigator.defaultRouteName: (BuildContext context) =>
+                          HomePage(),
+                      AboutUsPage.routerName: (BuildContext context) =>
+                          HomePageState.aboutPage(context),
+                      AnnouncementHomePage.routerName: (BuildContext context) =>
+                          const AnnouncementHomePage(),
+                    },
+                    theme: ApTheme.light(seedColor),
+                    darkTheme: ApTheme.dark(seedColor),
+                    themeMode: themeMode,
+                    locale: TranslationProvider.of(context).flutterLocale,
+                    supportedLocales: AppLocaleUtils.supportedLocales,
+                    localizationsDelegates:
+                        const <LocalizationsDelegate<dynamic>>[
+                      GlobalMaterialLocalizations.delegate,
+                      GlobalWidgetsLocalizations.delegate,
+                      GlobalCupertinoLocalizations.delegate,
+                    ],
+                    );
+                  },
+                ),
+              ),
             );
           },
         ),
@@ -149,10 +164,14 @@ class MyAppState extends State<MyApp> with WidgetsBindingObserver {
 
   void loadLocale(Locale locale) {
     debugPrint('loadLocale $locale');
-    setState(() {
-      this.locale = locale;
-      appDelegate.load(locale);
-      ApLocalizations.load(locale);
-    });
+    // Sync ap_common library locale
+    setApLocaleFromFlutter(locale);
+    // Sync example app locale
+    final appLocale = AppLocaleUtils.instance.parseLocaleParts(
+      languageCode: locale.languageCode,
+      scriptCode: locale.scriptCode,
+      countryCode: locale.countryCode,
+    );
+    LocaleSettings.setLocale(appLocale);
   }
 }

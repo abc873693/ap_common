@@ -6,7 +6,7 @@ publish_to: 'none' # Remove this line if you wish to publish to pub.dev
 version: 1.0.1+10001
 
 environment:
-  sdk: '>=2.12.0 <3.0.0'
+  sdk: ^3.4.0
 
 dependencies:
   flutter:
@@ -21,7 +21,8 @@ dependencies:
   encrypt: any
   http: any
   sprintf: any
-  multiple_localization: any
+  slang: ^4.14.0
+  slang_flutter: ^4.14.0
 
   ap_common_plugin: 1.0.0
 #    path: ../../../GitHub/ap_common_plugin
@@ -33,6 +34,8 @@ dev_dependencies:
   flutter_test:
     sdk: flutter
   lint: ^1.5.3
+  slang_build_runner: ^4.14.0
+  build_runner: ^2.4.0
 
 flutter:
 
@@ -40,11 +43,3 @@ flutter:
   assets:
     - assets/images/
     - assets/
-
-flutter_intl:
-  enabled: true
-  class_name: AppLocalizations
-  main_locale: 'zh_TW'
-  arb_dir: lib/l10n
-  output_dir: lib/l10n
-  use_deferred_loading: true

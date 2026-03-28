@@ -57,7 +57,7 @@ class ImgurHelper {
           GeneralResponse(
             statusCode: 201,
             message:
-                response.statusMessage ?? ApLocalizations.current.unknownError,
+                response.statusMessage ?? ap.unknownError,
           ),
         );
 
@@ -69,7 +69,7 @@ class ImgurHelper {
         callback?.onError(
           GeneralResponse(
             statusCode: 201,
-            message: ApLocalizations.current.notSupportImageType,
+            message: ap.notSupportImageType,
           ),
         );
       } else {
