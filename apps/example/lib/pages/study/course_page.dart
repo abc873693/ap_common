@@ -46,7 +46,7 @@ class CoursePageState extends State<CoursePage> {
       state: state,
       courseData: courseData,
       notifyData: notifyData,
-      customHint: isOffline ? t.offlineCourse : '',
+      customHint: isOffline ? ap.offlineCourse : '',
       customStateHint: customStateHint,
       courseNotifySaveKey: courseNotifyCacheKey,
       androidResourceIcon: Constants.ANDROID_DEFAULT_NOTIFICATION_NAME,

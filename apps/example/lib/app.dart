@@ -112,7 +112,7 @@ class MyAppState extends State<MyApp> with WidgetsBindingObserver {
               child: Builder(
                 builder: (BuildContext context) {
                   return MaterialApp(
-                    onGenerateTitle: (BuildContext context) => appT.appName,
+                    onGenerateTitle: (BuildContext context) => app.appName,
                     debugShowCheckedModeBanner: false,
                     routes: <String, WidgetBuilder>{
                       Navigator.defaultRouteName: (BuildContext context) =>

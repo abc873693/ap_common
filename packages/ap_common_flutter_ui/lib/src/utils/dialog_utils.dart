@@ -24,7 +24,7 @@ class DialogUtils {
             fontSize: 16.0,
           ),
         ),
-        actionText: t.iKnow,
+        actionText: ap.iKnow,
         actionFunction: () {
           Navigator.of(context, rootNavigator: true).pop();
         },
@@ -39,7 +39,7 @@ class DialogUtils {
     showDialog(
       context: context,
       builder: (BuildContext context) => YesNoDialog(
-        title: t.newsRuleTitle,
+        title: ap.newsRuleTitle,
         contentWidget: SelectableText.rich(
           TextSpan(
             style: TextStyle(
@@ -48,22 +48,22 @@ class DialogUtils {
             ),
             children: <TextSpan>[
               TextSpan(
-                text: t.newsRuleDescription1(arg1: ''),
+                text: ap.newsRuleDescription1(arg1: ''),
                 style: const TextStyle(fontWeight: FontWeight.normal),
               ),
               TextSpan(
-                text: t.newsRuleDescription2,
+                text: ap.newsRuleDescription2,
                 style: const TextStyle(fontWeight: FontWeight.bold),
               ),
               TextSpan(
-                text: t.newsRuleDescription3,
+                text: ap.newsRuleDescription3,
                 style: const TextStyle(fontWeight: FontWeight.normal),
               ),
             ],
           ),
         ),
-        leftActionText: t.cancel,
-        rightActionText: t.contactFansPage,
+        leftActionText: ap.cancel,
+        rightActionText: ap.contactFansPage,
         leftActionFunction: () {},
         rightActionFunction: onRightButtonClick,
       ),
@@ -74,7 +74,7 @@ class DialogUtils {
       showDialog(
         context: context,
         builder: (BuildContext context) => DefaultDialog(
-          title: t.updateNoteTitle,
+          title: ap.updateNoteTitle,
           contentWidget: Text(
             content,
             textAlign: TextAlign.center,
@@ -82,7 +82,7 @@ class DialogUtils {
               color: Theme.of(context).colorScheme.onSurfaceVariant,
             ),
           ),
-          actionText: t.iKnow,
+          actionText: ap.iKnow,
           actionFunction: () => Navigator.of(context).pop(),
         ),
       );

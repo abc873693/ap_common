@@ -11,10 +11,10 @@ import 'package:slang/generated.dart';
 import 'strings.g.dart';
 
 // Path: <root>
-class TranslationsZhHantTw extends Translations with BaseTranslations<AppLocale, Translations> {
+class ApLocalizationsZhHantTw extends ApLocalizations with BaseTranslations<AppLocale, ApLocalizations> {
 	/// You can call this constructor and build your own translation instance of this locale.
 	/// Constructing via the enum [AppLocale.build] is preferred.
-	TranslationsZhHantTw({Map<String, Node>? overrides, PluralResolver? cardinalResolver, PluralResolver? ordinalResolver, TranslationMetadata<AppLocale, Translations>? meta})
+	ApLocalizationsZhHantTw({Map<String, Node>? overrides, PluralResolver? cardinalResolver, PluralResolver? ordinalResolver, TranslationMetadata<AppLocale, ApLocalizations>? meta})
 		: assert(overrides == null, 'Set "translation_overrides: true" in order to enable this feature.'),
 		  $meta = meta ?? TranslationMetadata(
 		    locale: AppLocale.zhHantTw,
@@ -28,15 +28,15 @@ class TranslationsZhHantTw extends Translations with BaseTranslations<AppLocale,
 	}
 
 	/// Metadata for the translations of <zh-Hant-TW>.
-	@override final TranslationMetadata<AppLocale, Translations> $meta;
+	@override final TranslationMetadata<AppLocale, ApLocalizations> $meta;
 
 	/// Access flat map
 	@override dynamic operator[](String key) => $meta.getTranslation(key) ?? super.$meta.getTranslation(key);
 
-	late final TranslationsZhHantTw _root = this; // ignore: unused_field
+	late final ApLocalizationsZhHantTw _root = this; // ignore: unused_field
 
 	@override 
-	TranslationsZhHantTw $copyWith({TranslationMetadata<AppLocale, Translations>? meta}) => TranslationsZhHantTw(meta: meta ?? this.$meta);
+	ApLocalizationsZhHantTw $copyWith({TranslationMetadata<AppLocale, ApLocalizations>? meta}) => ApLocalizationsZhHantTw(meta: meta ?? this.$meta);
 
 	// Translations
 	@override String get updateNoteTitle => '更新日誌';
@@ -436,7 +436,7 @@ class TranslationsZhHantTw extends Translations with BaseTranslations<AppLocale,
 ///
 /// The Dart AOT compiler has issues with very large switch statements,
 /// so the map is split into smaller functions (512 entries each).
-extension on TranslationsZhHantTw {
+extension on ApLocalizationsZhHantTw {
 	dynamic _flatMapFunction(String path) {
 		return switch (path) {
 			'updateNoteTitle' => '更新日誌',

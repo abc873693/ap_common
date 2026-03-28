@@ -130,22 +130,22 @@ class ApNotificationUtil extends NotificationUtil {
     String? androidResourceIcon = androidResourceName,
     VoidCallback? onSelectNotification,
   }) async {
-    final String content = t.courseNotifyContent(
+    final String content = ap.courseNotifyContent(
       arg1: courseNotify.title ?? '',
       arg2: (courseNotify.location == null || courseNotify.location!.isEmpty)
-          ? t.courseNotifyUnknown
+          ? ap.courseNotifyUnknown
           : courseNotify.location!,
     );
     final TimeOfDay time =
         parseTime(courseNotify.startTime, beforeMinutes: beforeMinutes);
     await scheduleWeeklyNotify(
       id: courseNotify.id,
-      title: t.courseNotify,
+      title: ap.courseNotify,
       content: content,
       weekday: weekday,
       time: time,
       androidChannelId: '$course',
-      androidChannelDescription: t.courseNotify,
+      androidChannelDescription: ap.courseNotify,
       settings: settings,
       onSelectNotification: onSelectNotification,
     );

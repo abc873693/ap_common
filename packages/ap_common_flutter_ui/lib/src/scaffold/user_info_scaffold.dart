@@ -25,7 +25,7 @@ class UserInfoScaffold extends StatefulWidget {
 }
 
 class UserInfoScaffoldState extends State<UserInfoScaffold> {
-  Translations get app => t;
+  ApLocalizations get app => ap;
 
   BarCodeMode codeMode = BarCodeMode.qrCode;
 

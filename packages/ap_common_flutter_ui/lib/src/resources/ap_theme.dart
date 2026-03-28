@@ -87,7 +87,7 @@ class ApTheme extends InheritedWidget {
 
   String getLocalizedCurrentColorName(BuildContext context) {
     if (currentColorIndex == customColorIndex && customColor != null) {
-      return t.customColor;
+      return ap.customColor;
     }
     if (currentColorIndex >= 0 && currentColorIndex < themeColors.length) {
       return getLocalizedThemeColorName(context, currentColorIndex);
@@ -98,27 +98,27 @@ class ApTheme extends InheritedWidget {
   static String getLocalizedThemeColorName(BuildContext context, int index) {
     switch (index) {
       case 0:
-        return t.nkustBlue;
+        return ap.nkustBlue;
       case 1:
-        return t.oceanBlue;
+        return ap.oceanBlue;
       case 2:
-        return t.emeraldGreen;
+        return ap.emeraldGreen;
       case 3:
-        return t.coralOrange;
+        return ap.coralOrange;
       case 4:
-        return t.elegantPurple;
+        return ap.elegantPurple;
       case 5:
-        return t.roseRed;
+        return ap.roseRed;
       case 6:
-        return t.cyan;
+        return ap.cyan;
       case 7:
-        return t.amber;
+        return ap.amber;
       case 8:
-        return t.indigo;
+        return ap.indigo;
       case 9:
-        return t.brown;
+        return ap.brown;
       default:
-        return t.nkustBlue;
+        return ap.nkustBlue;
     }
   }
 

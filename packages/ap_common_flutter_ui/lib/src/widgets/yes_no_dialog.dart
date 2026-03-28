@@ -64,7 +64,7 @@ class YesNoDialog extends StatelessWidget {
             leftActionFunction?.call();
           },
           child: Text(
-            leftActionText ?? t.confirm,
+            leftActionText ?? ap.confirm,
           ),
         ),
         FilledButton(
@@ -73,7 +73,7 @@ class YesNoDialog extends StatelessWidget {
             rightActionFunction?.call();
           },
           child: Text(
-            rightActionText ?? t.cancel,
+            rightActionText ?? ap.cancel,
           ),
         ),
       ],

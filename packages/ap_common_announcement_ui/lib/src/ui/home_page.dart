@@ -40,8 +40,6 @@ class _AnnouncementHomePageState extends State<AnnouncementHomePage> {
   final TextEditingController _password = TextEditingController();
   final TextEditingController _reviewDescription = TextEditingController();
 
-  Translations get ap => t;
-
   _State state = _State.notLogin;
 
   List<Announcement>? announcements;

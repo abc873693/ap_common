@@ -82,7 +82,7 @@ class SchoolInfoPageState extends State<SchoolInfoPage>
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text(t.schoolInfo),
+        title: Text(ap.schoolInfo),
       ),
       body: TabBarView(
         controller: controller,
@@ -124,15 +124,15 @@ class SchoolInfoPageState extends State<SchoolInfoPage>
         destinations: <NavigationDestination>[
           NavigationDestination(
             icon: Icon(ApIcon.fiberNew),
-            label: t.notifications,
+            label: ap.notifications,
           ),
           NavigationDestination(
             icon: Icon(ApIcon.phone),
-            label: t.phones,
+            label: ap.phones,
           ),
           NavigationDestination(
             icon: Icon(ApIcon.dateRange),
-            label: t.events,
+            label: ap.events,
           ),
         ],
       ),

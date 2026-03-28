@@ -26,8 +26,6 @@ class NotificationListViewState extends State<NotificationListView>
   @override
   bool get wantKeepAlive => true;
 
-  Translations get ap => t;
-
   ScrollController? controller;
 
   @override

@@ -24,8 +24,6 @@ class PhoneListViewState extends State<PhoneListView>
   @override
   bool get wantKeepAlive => true;
 
-  Translations get ap => t;
-
   @override
   void initState() {
     AnalyticsUtil.instance.setCurrentScreen(

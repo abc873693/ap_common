@@ -56,7 +56,7 @@ class HomePageState extends State<HomePage> {
       assetImage: assetImage ?? ImageAssets.kuasap2,
       githubName: 'NKUST-ITC',
       email: 'abc873693@gmail.com',
-      appLicense: appT.aboutOpenSourceContent,
+      appLicense: app.aboutOpenSourceContent,
       fbFanPageId: '735951703168873',
       fbFanPageUrl: 'https://www.facebook.com/NKUST.ITC/',
       githubUrl: 'https://github.com/NKUST-ITC',
@@ -82,7 +82,7 @@ class HomePageState extends State<HomePage> {
   @override
   Widget build(BuildContext context) {
     return HomePageScaffold(
-      title: appT.appName,
+      title: app.appName,
       key: _homeKey,
       state: state,
       announcements: announcements,
@@ -90,7 +90,7 @@ class HomePageState extends State<HomePage> {
       actions: <Widget>[
         IconButton(
           icon: const Icon(Icons.fiber_new_rounded),
-          tooltip: t.announcementReviewSystem,
+          tooltip: ap.announcementReviewSystem,
           onPressed: () {
             ApUtils.pushCupertinoStyle(
               context,
@@ -111,15 +111,15 @@ class HomePageState extends State<HomePage> {
       bottomNavigationBarItems: <NavigationDestination>[
         NavigationDestination(
           icon: Icon(ApIcon.home),
-          label: t.home,
+          label: ap.home,
         ),
         NavigationDestination(
           icon: Icon(ApIcon.classIcon),
-          label: t.course,
+          label: ap.course,
         ),
         NavigationDestination(
           icon: Icon(ApIcon.assignment),
-          label: t.score,
+          label: ap.score,
         ),
       ],
     );
@@ -152,13 +152,13 @@ class HomePageState extends State<HomePage> {
         if (isTablet)
           DrawerMenuItem(
             icon: ApIcon.home,
-            title: t.home,
+            title: ap.home,
             onTap: () => setState(() => content = null),
           ),
         _buildStudySection(),
         DrawerMenuItem(
           icon: ApIcon.info,
-          title: t.schoolInfo,
+          title: ap.schoolInfo,
           onTap: () => _openPage(
             SchoolInfoPage(),
           ),
@@ -166,28 +166,28 @@ class HomePageState extends State<HomePage> {
         if (NotificationUtil.instance.isSupport)
           DrawerMenuItem(
             icon: ApIcon.dateRange,
-            title: appT.localNotificationTest,
+            title: app.localNotificationTest,
             onTap: () => _openPage(
               NotificationUtilsTestPage(),
             ),
           ),
         DrawerMenuItem(
           icon: ApIcon.check,
-          title: appT.dialogUtilTest,
+          title: app.dialogUtilTest,
           onTap: () => _openPage(
             DialogUtilsTestPage(),
           ),
         ),
         DrawerMenuItem(
           icon: ApIcon.face,
-          title: t.about,
+          title: ap.about,
           onTap: () => _openPage(
             aboutPage(context, assetImage: ImageAssets.sectionJiangong),
           ),
         ),
         DrawerMenuItem(
           icon: ApIcon.settings,
-          title: t.settings,
+          title: ap.settings,
           onTap: () => _openPage(
             SettingPage(),
           ),
@@ -196,7 +196,7 @@ class HomePageState extends State<HomePage> {
           const DrawerDivider(),
           DrawerMenuItem(
             icon: ApIcon.powerSettingsNew,
-            title: t.logout,
+            title: ap.logout,
             iconColor: colorScheme.error,
             onTap: () async {
               await PreferenceUtil.instance
@@ -217,7 +217,7 @@ class HomePageState extends State<HomePage> {
   Widget _buildStudySection() {
     return DrawerMenuSection(
       icon: ApIcon.school,
-      title: t.courseInfo,
+      title: ap.courseInfo,
       initiallyExpanded: isStudyExpanded,
       onExpansionChanged: (bool value) {
         setState(() {
@@ -227,7 +227,7 @@ class HomePageState extends State<HomePage> {
       children: <DrawerSubMenuItem>[
         DrawerSubMenuItem(
           icon: ApIcon.classIcon,
-          title: t.course,
+          title: ap.course,
           onTap: () => _openPage(
             CoursePage(),
             needLogin: true,
@@ -235,7 +235,7 @@ class HomePageState extends State<HomePage> {
         ),
         DrawerSubMenuItem(
           icon: ApIcon.assignment,
-          title: t.score,
+          title: ap.score,
           onTap: () => _openPage(
             ScorePage(),
             needLogin: true,
@@ -265,7 +265,7 @@ class HomePageState extends State<HomePage> {
           break;
       }
     } else {
-      UiUtil.instance.showToast(context, t.notLogin);
+      UiUtil.instance.showToast(context, ap.notLogin);
     }
   }
 
@@ -360,7 +360,7 @@ class HomePageState extends State<HomePage> {
     if (state != HomeState.finish) {
       _getAnnouncements();
     }
-    _homeKey.currentState!.showBasicHint(text: t.loginSuccess);
+    _homeKey.currentState!.showBasicHint(text: ap.loginSuccess);
   }
 
   Future<void> openLoginPage() async {
@@ -390,8 +390,8 @@ class HomePageState extends State<HomePage> {
       if (!mounted) return;
       _homeKey.currentState!
           .showSnackBar(
-            text: t.notLogin,
-            actionText: t.login,
+            text: ap.notLogin,
+            actionText: ap.login,
             onSnackBarTapped: openLoginPage,
           )!
           .closed
@@ -408,7 +408,7 @@ class HomePageState extends State<HomePage> {
     if (needLogin && !isLogin) {
       UiUtil.instance.showToast(
         context,
-        t.notLoginHint,
+        ap.notLoginHint,
       );
     } else {
       if (isTablet) {

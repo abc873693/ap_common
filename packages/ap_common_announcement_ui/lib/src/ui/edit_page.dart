@@ -37,7 +37,7 @@ class AnnouncementEditPage extends StatefulWidget {
 class _AnnouncementEditPageState extends State<AnnouncementEditPage> {
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
 
-  Translations get app => t;
+  ApLocalizations get app => ap;
 
   late Announcement announcements;
 
@@ -188,7 +188,7 @@ class _AnnouncementEditPageState extends State<AnnouncementEditPage> {
                                 hintText: app.tagName,
                               ),
                             ),
-                            actionText: t.confirm,
+                            actionText: ap.confirm,
                             actionFunction: () {
                               if (_newTag.text.isEmpty) {
                                 UiUtil.instance

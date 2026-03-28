@@ -45,7 +45,7 @@ class LoginPageState extends State<LoginPage> {
           keyboardType: TextInputType.emailAddress,
           focusNode: usernameFocusNode,
           nextFocusNode: passwordFocusNode,
-          labelText: t.studentId,
+          labelText: ap.studentId,
           autofillHints: const <String>[AutofillHints.username],
         ),
         ApTextField(
@@ -57,7 +57,7 @@ class LoginPageState extends State<LoginPage> {
             passwordFocusNode.unfocus();
             _login();
           },
-          labelText: t.password,
+          labelText: ap.password,
           autofillHints: const <String>[AutofillHints.password],
         ),
         const SizedBox(height: 8.0),
@@ -65,12 +65,12 @@ class LoginPageState extends State<LoginPage> {
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
             TextCheckBox(
-              text: t.autoLogin,
+              text: ap.autoLogin,
               value: isAutoLogin!,
               onChanged: _onAutoLoginChanged,
             ),
             TextCheckBox(
-              text: t.rememberPassword,
+              text: ap.rememberPassword,
               value: isRememberPassword!,
               onChanged: _onRememberPasswordChanged,
             ),
@@ -78,13 +78,13 @@ class LoginPageState extends State<LoginPage> {
         ),
         const SizedBox(height: 8.0),
         ApButton(
-          text: t.login,
+          text: ap.login,
           onPressed: () {
             _login();
           },
         ),
         ApFlatButton(
-          text: t.offlineLogin,
+          text: ap.offlineLogin,
           onPressed: _offlineLogin,
         ),
 //        ApFlatButton(
@@ -149,7 +149,7 @@ class LoginPageState extends State<LoginPage> {
 
   Future<void> _login() async {
     if (_username.text.isEmpty || _password.text.isEmpty) {
-      UiUtil.instance.showToast(context, t.doNotEmpty, gravity: gravity);
+      UiUtil.instance.showToast(context, ap.doNotEmpty, gravity: gravity);
     } else {
       asyncLogin();
     }
@@ -160,7 +160,7 @@ class LoginPageState extends State<LoginPage> {
       context: context,
       builder: (BuildContext context) => PopScope(
         canPop: false,
-        child: ProgressDialog(t.logining),
+        child: ProgressDialog(ap.logining),
       ),
       barrierDismissible: false,
     );
@@ -182,13 +182,13 @@ class LoginPageState extends State<LoginPage> {
     final String password =
         PreferenceUtil.instance.getStringSecurity(Constants.PREF_PASSWORD, '');
     if (username.isEmpty || password.isEmpty) {
-      UiUtil.instance.showToast(context, t.noOfflineLoginData);
+      UiUtil.instance.showToast(context, ap.noOfflineLoginData);
     } else {
       if (username != _username.text || password != _password.text) {
-        UiUtil.instance.showToast(context, t.offlineLoginPasswordError);
+        UiUtil.instance.showToast(context, ap.offlineLoginPasswordError);
       } else {
         PreferenceUtil.instance.setBool(Constants.PREF_IS_OFFLINE_LOGIN, true);
-        UiUtil.instance.showToast(context, t.loadOfflineData);
+        UiUtil.instance.showToast(context, ap.loadOfflineData);
         Navigator.of(context).pop(true);
       }
     }

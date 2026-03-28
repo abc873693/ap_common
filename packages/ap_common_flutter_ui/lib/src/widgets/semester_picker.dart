@@ -100,7 +100,7 @@ class SemesterPicker extends StatefulWidget {
                             ),
                             const SizedBox(width: 12),
                             Text(
-                              t.pickSemester,
+                              ap.pickSemester,
                               style: TextStyle(
                                 fontSize: 20,
                                 fontWeight: FontWeight.bold,

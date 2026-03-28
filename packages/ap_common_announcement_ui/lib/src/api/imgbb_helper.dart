@@ -61,7 +61,7 @@ class ImgbbHelper {
         callback?.onError(
           GeneralResponse(
             statusCode: 500,
-            message: t.unknownError,
+            message: ap.unknownError,
           ),
         );
         return null;
@@ -70,7 +70,7 @@ class ImgbbHelper {
           GeneralResponse(
             statusCode: 500,
             message:
-                response.statusMessage ?? t.unknownError,
+                response.statusMessage ?? ap.unknownError,
           ),
         );
 
@@ -82,7 +82,7 @@ class ImgbbHelper {
         callback?.onError(
           GeneralResponse(
             statusCode: 400,
-            message: t.notSupportImageType,
+            message: ap.notSupportImageType,
           ),
         );
       } else {

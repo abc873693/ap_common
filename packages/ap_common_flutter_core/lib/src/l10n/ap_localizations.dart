@@ -32,7 +32,7 @@ Future<AppLocale> useApDeviceLocale() async {
   return result;
 }
 
-extension ApExtension on Translations {
+extension ApExtension on ApLocalizations {
   String get dateTimeLocale {
     final current = LocaleSettings.currentLocale;
     if (current == AppLocale.zhHantTw) {
@@ -88,9 +88,9 @@ extension DioExceptionI18nExtension on DioException {
       case DioExceptionType.connectionTimeout:
       case DioExceptionType.receiveTimeout:
       case DioExceptionType.sendTimeout:
-        return t.timeoutMessage;
+        return ap.timeoutMessage;
       case DioExceptionType.badCertificate:
-        return t.unknownError;
+        return ap.unknownError;
       case DioExceptionType.badResponse:
         if (response!.data is Map<String, dynamic>) {
           //ignore: avoid_dynamic_calls
@@ -99,9 +99,9 @@ extension DioExceptionI18nExtension on DioException {
           return message;
         }
       case DioExceptionType.connectionError:
-        return t.noInternet;
+        return ap.noInternet;
       case DioExceptionType.unknown:
-        return t.unknownError;
+        return ap.unknownError;
       case DioExceptionType.cancel:
         return null;
     }

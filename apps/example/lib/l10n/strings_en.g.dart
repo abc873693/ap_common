@@ -8,17 +8,17 @@
 part of 'strings.g.dart';
 
 // Path: <root>
-typedef TranslationsEn = Translations; // ignore: unused_element
-class Translations with BaseTranslations<AppLocale, Translations> {
+typedef AppLocalizationsEn = AppLocalizations; // ignore: unused_element
+class AppLocalizations with BaseTranslations<AppLocale, AppLocalizations> {
 	/// Returns the current translations of the given [context].
 	///
 	/// Usage:
-	/// final appT = Translations.of(context);
-	static Translations of(BuildContext context) => InheritedLocaleData.of<AppLocale, Translations>(context).translations;
+	/// final app = AppLocalizations.of(context);
+	static AppLocalizations of(BuildContext context) => InheritedLocaleData.of<AppLocale, AppLocalizations>(context).translations;
 
 	/// You can call this constructor and build your own translation instance of this locale.
 	/// Constructing via the enum [AppLocale.build] is preferred.
-	Translations({Map<String, Node>? overrides, PluralResolver? cardinalResolver, PluralResolver? ordinalResolver, TranslationMetadata<AppLocale, Translations>? meta})
+	AppLocalizations({Map<String, Node>? overrides, PluralResolver? cardinalResolver, PluralResolver? ordinalResolver, TranslationMetadata<AppLocale, AppLocalizations>? meta})
 		: assert(overrides == null, 'Set "translation_overrides: true" in order to enable this feature.'),
 		  $meta = meta ?? TranslationMetadata(
 		    locale: AppLocale.en,
@@ -30,14 +30,14 @@ class Translations with BaseTranslations<AppLocale, Translations> {
 	}
 
 	/// Metadata for the translations of <en>.
-	@override final TranslationMetadata<AppLocale, Translations> $meta;
+	@override final TranslationMetadata<AppLocale, AppLocalizations> $meta;
 
 	/// Access flat map
 	dynamic operator[](String key) => $meta.getTranslation(key);
 
-	late final Translations _root = this; // ignore: unused_field
+	late final AppLocalizations _root = this; // ignore: unused_field
 
-	Translations $copyWith({TranslationMetadata<AppLocale, Translations>? meta}) => Translations(meta: meta ?? this.$meta);
+	AppLocalizations $copyWith({TranslationMetadata<AppLocale, AppLocalizations>? meta}) => AppLocalizations(meta: meta ?? this.$meta);
 
 	// Translations
 
@@ -383,7 +383,7 @@ class Translations with BaseTranslations<AppLocale, Translations> {
 ///
 /// The Dart AOT compiler has issues with very large switch statements,
 /// so the map is split into smaller functions (512 entries each).
-extension on Translations {
+extension on AppLocalizations {
 	dynamic _flatMapFunction(String path) {
 		return switch (path) {
 			'appName' => 'NKUST AP',

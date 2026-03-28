@@ -127,7 +127,7 @@ class AnnouncementHelper {
           callback.onError(
             GeneralResponse(
               statusCode: 401,
-              message: t.loginFail,
+              message: ap.loginFail,
             ),
           );
         } else {
@@ -168,7 +168,7 @@ class AnnouncementHelper {
             GeneralResponse(
               statusCode: 401,
               message: dioException.response?.data as String? ??
-                  t.unknownError,
+                  ap.unknownError,
             ),
           );
         }
@@ -209,7 +209,7 @@ class AnnouncementHelper {
             GeneralResponse(
               statusCode: 401,
               message: dioException.response?.data as String? ??
-                  t.unknownError,
+                  ap.unknownError,
             ),
           );
         }
@@ -650,14 +650,14 @@ class AnnouncementHelper {
       callback.onError(
         GeneralResponse(
           statusCode: notPermission,
-          message: t.noPermissionHint,
+          message: ap.noPermissionHint,
         ),
       );
     } else if (dioException.isNotFoundAnnouncement) {
       callback.onError(
         GeneralResponse(
           statusCode: notPermission,
-          message: t.notFoundData,
+          message: ap.notFoundData,
         ),
       );
     } else {

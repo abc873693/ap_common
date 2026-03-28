@@ -121,7 +121,7 @@ class CourseScaffold extends StatefulWidget {
 class CourseScaffoldState extends State<CourseScaffold> {
   final GlobalKey _repaintBoundaryGlobalKey = GlobalKey();
 
-  Translations get app => t;
+  ApLocalizations get app => ap;
 
   _ContentStyle _contentStyle = _ContentStyle.table;
 
@@ -245,7 +245,7 @@ class CourseScaffoldState extends State<CourseScaffold> {
               IconButton(
                 icon: Icon(ApIcon.download),
                 onPressed: _captureCourseTable,
-                tooltip: t.exportCourseTable,
+                tooltip: ap.exportCourseTable,
               ),
             IconButton(
               icon: Icon(ApIcon.settings),
@@ -297,7 +297,7 @@ class CourseScaffoldState extends State<CourseScaffold> {
                 );
                 AnalyticsUtil.instance.logEvent('course_setting_click');
               },
-              tooltip: t.courseScaffoldSetting,
+              tooltip: ap.courseScaffoldSetting,
             ),
           ],
         ),
@@ -569,7 +569,7 @@ class CourseScaffoldState extends State<CourseScaffold> {
         context,
         byteData: byteData,
         fileName: 'course_table_$formattedDate',
-        successMessage: t.exportCourseTableSuccess,
+        successMessage: ap.exportCourseTableSuccess,
         onSuccess: (GeneralResponse r) => Toast.show(
           r.message,
           context,
@@ -604,7 +604,7 @@ class CourseScaffoldState extends State<CourseScaffold> {
               child: Container(
                 padding: const EdgeInsets.symmetric(vertical: 12),
                 child: Text(
-                  t.weekdaysCourse[i],
+                  ap.weekdaysCourse[i],
                   textAlign: TextAlign.center,
                   style: TextStyle(
                     fontSize: 14,
@@ -1074,7 +1074,7 @@ class _CourseContentState extends State<CourseContent> {
         ThemeData.estimateBrightnessForColor(courseColor) == Brightness.dark
             ? Colors.white
             : Colors.black;
-    final Translations app = t;
+    final ApLocalizations app = ap;
 
     return Container(
       decoration: BoxDecoration(
@@ -1103,7 +1103,7 @@ class _CourseContentState extends State<CourseContent> {
                     if ((!kIsWeb && (Platform.isAndroid || Platform.isIOS)) &&
                         widget.enableAddToCalendar)
                       IconButton(
-                        tooltip: t.addToCalendar,
+                        tooltip: ap.addToCalendar,
                         icon: Image.asset(
                           ApImageIcons.calendarImport,
                           color: onCourseColor,
@@ -1182,7 +1182,7 @@ class _CourseContentState extends State<CourseContent> {
                               if (!context.mounted) return;
                               UiUtil.instance.showToast(
                                 context,
-                                t.courseNotifyHint,
+                                ap.courseNotifyHint,
                               );
                               AnalyticsUtil.instance
                                   .logEvent('course_notify_schedule');
@@ -1203,7 +1203,7 @@ class _CourseContentState extends State<CourseContent> {
                               if (!context.mounted) return;
                               UiUtil.instance.showToast(
                                 context,
-                                t.cancelNotifySuccess,
+                                ap.cancelNotifySuccess,
                               );
                             }
                             setState(() {});
@@ -1391,7 +1391,7 @@ class CourseList extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final Translations app = t;
+    final ApLocalizations app = ap;
     final ColorScheme colorScheme = Theme.of(context).colorScheme;
 
     return ListView.builder(
@@ -1585,10 +1585,9 @@ class _CourseScaffoldSettingDialogState
 
   @override
   Widget build(BuildContext context) {
-    final Translations ap = t;
     return DefaultDialog(
       title: ap.courseScaffoldSetting,
-      actionText: t.confirm,
+      actionText: ap.confirm,
       actionFunction: () => Navigator.of(context, rootNavigator: true).pop(),
       contentPadding: EdgeInsets.zero,
       contentWidget: Column(

@@ -10,4 +10,5 @@ targets:
           fallback_strategy: base_locale
           key_case: camel
           key_map_case: camel
-          translate_var: t
+          translate_var: ap
+          class_name: ApLocalizations

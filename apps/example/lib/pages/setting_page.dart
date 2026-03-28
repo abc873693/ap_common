@@ -40,14 +40,14 @@ class SettingPageState extends State<SettingPage> {
     return Scaffold(
       key: _scaffoldKey,
       appBar: AppBar(
-        title: Text(t.settings),
+        title: Text(ap.settings),
       ),
       body: SingleChildScrollView(
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: <Widget>[
             SettingTitle(
-              text: t.notificationItem,
+              text: ap.notificationItem,
               icon: Icons.notifications_outlined,
             ),
             SettingCard(
@@ -57,14 +57,14 @@ class SettingPageState extends State<SettingPage> {
               ],
             ),
             SettingTitle(
-              text: t.otherSettings,
+              text: ap.otherSettings,
               icon: Icons.tune_outlined,
             ),
             SettingCard(
               children: <Widget>[
                 SettingSwitch(
-                  text: t.headPhotoSetting,
-                  subText: t.headPhotoSettingSubTitle,
+                  text: ap.headPhotoSetting,
+                  subText: ap.headPhotoSettingSubTitle,
                   icon: Icons.person_outline,
                   value: displayPicture,
                   onChanged: (bool b) {
@@ -115,14 +115,14 @@ class SettingPageState extends State<SettingPage> {
               ],
             ),
             SettingTitle(
-              text: t.otherInfo,
+              text: ap.otherInfo,
               icon: Icons.info_outline,
             ),
             SettingCard(
               children: <Widget>[
                 SettingItem(
-                  text: t.feedback,
-                  subText: t.feedbackViaFacebook,
+                  text: ap.feedback,
+                  subText: ap.feedbackViaFacebook,
                   icon: Icons.feedback_outlined,
                   isExternalLink: true,
                   onTap: () {
@@ -130,7 +130,7 @@ class SettingPageState extends State<SettingPage> {
                   },
                 ),
                 SettingInfoItem(
-                  text: t.appVersion,
+                  text: ap.appVersion,
                   icon: Icons.info_outline,
                   value: 'v$appVersion',
                 ),

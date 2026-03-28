@@ -91,7 +91,7 @@ class _PdfViewState extends State<PdfView> {
         child: HintContent(
           icon: ApIcon.error,
           content:
-              widget.errorMessage ?? t.clickToRetry,
+              widget.errorMessage ?? ap.clickToRetry,
         ),
       );
 }

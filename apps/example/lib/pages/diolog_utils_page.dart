@@ -15,7 +15,7 @@ class _DialogUtilsTestPageState extends State<DialogUtilsTestPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text(appT.dialogUtilTest),
+        title: Text(app.dialogUtilTest),
       ),
       body: ListView(
         children: <Widget>[
@@ -31,7 +31,7 @@ class _DialogUtilsTestPageState extends State<DialogUtilsTestPage> {
             onTap: () {
               DialogUtils.showNewVersionContent(
                 context: context,
-                appName: appT.appName,
+                appName: app.appName,
                 iOSAppId: '1439751462',
                 defaultUrl: 'https://www.facebook.com/NKUST.ITC/',
                 githubRepositoryName: 'NKUST-ITC/NKUST-AP-Flutter',
@@ -50,7 +50,7 @@ class _DialogUtilsTestPageState extends State<DialogUtilsTestPage> {
             onTap: () {
               DialogUtils.showUpdateContent(
                 context,
-                appT.updateNoteContent,
+                app.updateNoteContent,
               );
             },
             title: const Text('版本內容對話框'),

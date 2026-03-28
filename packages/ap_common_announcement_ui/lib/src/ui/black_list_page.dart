@@ -32,7 +32,7 @@ class _BlackListPageState extends State<BlackListPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text(t.blackList),
+        title: Text(ap.blackList),
       ),
       body: _body(),
     );
@@ -52,7 +52,7 @@ class _BlackListPageState extends State<BlackListPage> {
           },
           child: HintContent(
             icon: ApIcon.classIcon,
-            content: t.clickToRetry,
+            content: ap.clickToRetry,
           ),
         );
       case _State.done:
@@ -106,7 +106,7 @@ class _BlackListPageState extends State<BlackListPage> {
       // ignore: always_specify_types
       callback: GeneralCallback(
         onSuccess: (_) {
-          Toast.show(t.updateSuccess, context);
+          Toast.show(ap.updateSuccess, context);
           setState(() => state = _State.done);
         },
         onFailure: (DioException e) {

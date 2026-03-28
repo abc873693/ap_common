@@ -67,13 +67,13 @@ class ApMediaUtil extends MediaUtil {
         onSuccess?.call(
           GeneralResponse(
             statusCode: 401,
-            message: t.grandPermissionFail,
+            message: ap.grandPermissionFail,
           ),
         );
       }
     } catch (e, s) {
       if (!context.mounted) return;
-      UiUtil.instance.showToast(context, t.unknownError);
+      UiUtil.instance.showToast(context, ap.unknownError);
       CrashlyticsUtil.instance.recordError(e, s);
     }
   }

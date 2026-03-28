@@ -19,7 +19,7 @@ class _NotificationUtilsTestPageState extends State<NotificationUtilsTestPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text(appT.localNotificationTest),
+        title: Text(app.localNotificationTest),
       ),
       body: ListView(
         children: <Widget>[
@@ -37,11 +37,11 @@ class _NotificationUtilsTestPageState extends State<NotificationUtilsTestPage> {
                 id: 1,
                 androidChannelId: '1',
                 androidChannelDescription: 'Test',
-                title: appT.testTitle,
-                content: appT.testContent,
+                title: app.testTitle,
+                content: app.testContent,
               );
             },
-            title: Text(appT.showNow),
+            title: Text(app.showNow),
             subtitle: const Text('NotificationUtil.instance.show'),
           ),
           const Divider(height: 0.0),
@@ -58,14 +58,14 @@ class _NotificationUtilsTestPageState extends State<NotificationUtilsTestPage> {
                 id: 2,
                 androidChannelId: '1',
                 androidChannelDescription: 'Test',
-                title: appT.testTitle,
-                content: appT.testContent,
+                title: app.testTitle,
+                content: app.testContent,
                 dateTime: DateTime.now().add(
                   const Duration(seconds: 5),
                 ),
               );
             },
-            title: Text(appT.showInFiveSeconds),
+            title: Text(app.showInFiveSeconds),
             subtitle: const Text('NotificationUtil.instance.schedule'),
           ),
           const Divider(height: 0.0),
@@ -81,8 +81,8 @@ class _NotificationUtilsTestPageState extends State<NotificationUtilsTestPage> {
               showDialog(
                 context: context,
                 builder: (_) => SimpleOptionDialog(
-                  title: appT.setWeekDay,
-                  items: t.weekdays,
+                  title: app.setWeekDay,
+                  items: ap.weekdays,
                   index: weekday - 1,
                   onSelected: (int index) {
                     setState(() => weekday = index + 1);
@@ -91,7 +91,7 @@ class _NotificationUtilsTestPageState extends State<NotificationUtilsTestPage> {
               );
             },
             title: Text(
-              appT.setWeekDay,
+              app.setWeekDay,
             ),
           ),
           ListTile(
@@ -105,7 +105,7 @@ class _NotificationUtilsTestPageState extends State<NotificationUtilsTestPage> {
               );
               if (dayOfTime != null) setState(() => time = dayOfTime);
             },
-            title: Text(appT.setTimeOfDay),
+            title: Text(app.setTimeOfDay),
           ),
           ListTile(
             onTap: () {
@@ -114,9 +114,9 @@ class _NotificationUtilsTestPageState extends State<NotificationUtilsTestPage> {
                 id: id,
                 androidChannelId: '1',
                 androidChannelDescription: 'Schedule Weekly Notify',
-                title: appT.scheduleWeeklyNotifyTitle,
-                content: appT.scheduleWeeklyNotifyContent(
-                  arg1: t.weekdaysCourse[weekday - 1],
+                title: app.scheduleWeeklyNotifyTitle,
+                content: app.scheduleWeeklyNotifyContent(
+                  arg1: ap.weekdaysCourse[weekday - 1],
                   arg2: time.format(context),
                 ),
                 weekday: weekday,
@@ -127,8 +127,8 @@ class _NotificationUtilsTestPageState extends State<NotificationUtilsTestPage> {
               );
             },
             title: Text(
-              appT.scheduleWeeklyNotifyContent(
-                arg1: t.weekdaysCourse[weekday - 1],
+              app.scheduleWeeklyNotifyContent(
+                arg1: ap.weekdaysCourse[weekday - 1],
                 arg2: time.format(context),
               ),
             ),
@@ -152,14 +152,14 @@ class _NotificationUtilsTestPageState extends State<NotificationUtilsTestPage> {
                 if (!context.mounted) return;
                 DialogUtils.showDefault(
                   context: context,
-                  title: appT.requestPermission,
+                  title: app.requestPermission,
                   content: result
-                      ? t.updateSuccess
-                      : t.loginFail,
+                      ? ap.updateSuccess
+                      : ap.loginFail,
                 );
               }
             },
-            title: Text(appT.requestPermission),
+            title: Text(app.requestPermission),
             subtitle: const Text(
               'NotificationUtil.instance.requestPermissions '
               '(iOS & macOS limit)',
@@ -175,7 +175,7 @@ class _NotificationUtilsTestPageState extends State<NotificationUtilsTestPage> {
           //     showDialog(
           //       context: context,
           //       builder: (_) => SimpleOptionDialog(
-          //         title: appT.getPendingNotificationList,
+          //         title: app.getPendingNotificationList,
           //         items: <String>[
           //           for (final PendingNotificationRequest item in list)
           //             'id = ${item.id}, ' +
@@ -189,7 +189,7 @@ class _NotificationUtilsTestPageState extends State<NotificationUtilsTestPage> {
           //       ),
           //     );
           //   },
-          //   title: Text(appT.getPendingNotificationList),
+          //   title: Text(app.getPendingNotificationList),
           //   subtitle: const Text(
           //       'NotificationUtil.instance.getPendingNotificationList'),
           // ),
@@ -198,7 +198,7 @@ class _NotificationUtilsTestPageState extends State<NotificationUtilsTestPage> {
             onTap: () {
               NotificationUtil.instance.cancelAll();
             },
-            title: Text(appT.cancelAll),
+            title: Text(app.cancelAll),
             subtitle: const Text('NotificationUtil.instance.cancelAll'),
           ),
         ],

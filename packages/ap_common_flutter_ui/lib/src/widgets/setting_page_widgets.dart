@@ -305,8 +305,8 @@ class CheckCourseNotifyItem extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return SettingItem(
-      text: t.courseNotify,
-      subText: t.courseNotifySubTitle,
+      text: ap.courseNotify,
+      subText: ap.courseNotifySubTitle,
       icon: Icons.notifications_outlined,
       onTap: () {
         final CourseNotifyData notifyData = tag == null
@@ -317,10 +317,10 @@ class CheckCourseNotifyItem extends StatelessWidget {
             showDialog(
               context: context,
               builder: (_) => SimpleOptionDialog(
-                title: t.courseNotify,
+                title: ap.courseNotify,
                 items: <String>[
                   for (final CourseNotify notify in notifyData.data)
-                    '${t.weekdaysCourse[notify.weekdayIndex]} ' +
+                    '${ap.weekdaysCourse[notify.weekdayIndex]} ' +
                         '${notify.startTime} ${notify.title}',
                 ],
                 index: -1,
@@ -330,15 +330,15 @@ class CheckCourseNotifyItem extends StatelessWidget {
                   );
                   notifyData.data.removeAt(index);
                   notifyData.save();
-                  UiUtil.instance.showToast(context, t.cancelNotifySuccess);
+                  UiUtil.instance.showToast(context, ap.cancelNotifySuccess);
                 },
               ),
             );
           } else {
-            UiUtil.instance.showToast(context, t.courseNotifyEmpty);
+            UiUtil.instance.showToast(context, ap.courseNotifyEmpty);
           }
         } else {
-          UiUtil.instance.showToast(context, t.platformError);
+          UiUtil.instance.showToast(context, ap.platformError);
         }
       },
     );
@@ -353,8 +353,8 @@ class ClearAllNotifyItem extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return SettingItem(
-      text: t.cancelAllNotify,
-      subText: t.cancelAllNotifySubTitle,
+      text: ap.cancelAllNotify,
+      subText: ap.cancelAllNotifySubTitle,
       icon: Icons.notifications_off_outlined,
       onTap: () {
         if (NotificationUtil.instance.isSupport) {
@@ -364,9 +364,9 @@ class ClearAllNotifyItem extends StatelessWidget {
               : CourseNotifyData.load(tag);
           notifyData.data.clear();
           notifyData.save();
-          UiUtil.instance.showToast(context, t.cancelNotifySuccess);
+          UiUtil.instance.showToast(context, ap.cancelNotifySuccess);
         } else {
-          UiUtil.instance.showToast(context, t.platformError);
+          UiUtil.instance.showToast(context, ap.platformError);
         }
       },
     );
@@ -387,9 +387,9 @@ class ChangeLanguageItem extends StatelessWidget {
   Widget build(BuildContext context) {
     final List<String> languageTextList = textList ??
         <String>[
-          t.systemLanguage,
-          t.traditionalChinese,
-          t.english,
+          ap.systemLanguage,
+          ap.traditionalChinese,
+          ap.english,
         ];
     final String code = PreferenceUtil.instance.getString(
       ApConstants.prefLanguageCode,
@@ -397,14 +397,14 @@ class ChangeLanguageItem extends StatelessWidget {
     );
     final int languageIndex = ApSupportLanguageExtension.fromCode(code);
     return SettingItem(
-      text: t.language,
+      text: ap.language,
       subText: languageTextList[languageIndex],
       icon: Icons.language_outlined,
       onTap: () {
         showDialog(
           context: context,
           builder: (_) => SimpleOptionDialog(
-            title: t.language,
+            title: ap.language,
             items: languageTextList,
             index: languageIndex,
             onSelected: (int index) {
@@ -461,20 +461,20 @@ class ChangeThemeModeItem extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final List<String> themeTextList = <String>[
-      t.systemTheme,
-      t.light,
-      t.dark,
+      ap.systemTheme,
+      ap.light,
+      ap.dark,
     ];
     final int themeModeIndex = ApTheme.of(context).themeMode.index;
     return SettingItem(
-      text: t.theme,
+      text: ap.theme,
       subText: themeTextList[themeModeIndex],
       icon: Icons.dark_mode_outlined,
       onTap: () {
         showDialog(
           context: context,
           builder: (_) => SimpleOptionDialog(
-            title: t.theme,
+            title: ap.theme,
             items: themeTextList,
             index: themeModeIndex,
             onSelected: (int index) {
@@ -509,17 +509,17 @@ class ChangeIconStyleItem extends StatelessWidget {
   Widget build(BuildContext context) {
     final int iconStyleIndex = ApIcon.index;
     return SettingItem(
-      text: t.iconStyle,
-      subText: t.iconText,
+      text: ap.iconStyle,
+      subText: ap.iconText,
       icon: Icons.style_outlined,
       onTap: () {
         showDialog(
           context: context,
           builder: (_) => SimpleOptionDialog(
-            title: t.theme,
+            title: ap.theme,
             items: <String>[
-              t.outlined,
-              t.filled,
+              ap.outlined,
+              ap.filled,
             ],
             index: iconStyleIndex,
             onSelected: (int index) {
@@ -554,7 +554,7 @@ class ChangeThemeColorItem extends StatelessWidget {
     final ColorScheme colorScheme = Theme.of(context).colorScheme;
     final ApTheme apTheme = ApTheme.of(context);
     return SettingItem(
-      text: t.themeColor,
+      text: ap.themeColor,
       subText: apTheme.getLocalizedCurrentColorName(context),
       icon: Icons.palette_outlined,
       trailing: Container(
@@ -611,7 +611,7 @@ class _ColorPickerDialogState extends State<ColorPickerDialog> {
         .toUpperCase();
 
     return AlertDialog(
-      title: Text(t.pickThemeColor),
+      title: Text(ap.pickThemeColor),
       content: SizedBox(
         width: 300,
         child: Column(
@@ -646,7 +646,7 @@ class _ColorPickerDialogState extends State<ColorPickerDialog> {
             ),
             const SizedBox(height: 24),
             ColorSlider(
-              label: t.hue,
+              label: ap.hue,
               gradientColors: const <Color>[
                 Color(0xFFFF0000),
                 Color(0xFFFFFF00),
@@ -665,7 +665,7 @@ class _ColorPickerDialogState extends State<ColorPickerDialog> {
             ),
             const SizedBox(height: 16),
             ColorSlider(
-              label: t.saturation,
+              label: ap.saturation,
               gradientColors: <Color>[
                 const Color(0xFFFFFFFF),
                 HSVColor.fromAHSV(1, _hsvColor.hue, 1, 1).toColor(),
@@ -677,7 +677,7 @@ class _ColorPickerDialogState extends State<ColorPickerDialog> {
             ),
             const SizedBox(height: 16),
             ColorSlider(
-              label: t.value,
+              label: ap.value,
               gradientColors: <Color>[
                 const Color(0xFF000000),
                 HSVColor.fromAHSV(1, _hsvColor.hue, _hsvColor.saturation, 1)
@@ -700,11 +700,11 @@ class _ColorPickerDialogState extends State<ColorPickerDialog> {
       actions: <Widget>[
         TextButton(
           onPressed: () => Navigator.pop(context),
-          child: Text(t.cancel),
+          child: Text(ap.cancel),
         ),
         FilledButton(
           onPressed: () => Navigator.pop(context, currentColor),
-          child: Text(t.determine),
+          child: Text(ap.determine),
         ),
       ],
     );

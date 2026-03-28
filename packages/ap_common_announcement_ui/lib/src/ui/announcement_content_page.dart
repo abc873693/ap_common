@@ -21,7 +21,7 @@ class AnnouncementContentPage extends StatefulWidget {
 class AnnouncementContentPageState extends State<AnnouncementContentPage> {
   _Status state = _Status.finish;
 
-  Translations get app => t;
+  ApLocalizations get app => ap;
 
   @override
   void initState() {
