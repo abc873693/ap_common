@@ -24,7 +24,7 @@ dependencies:
   slang: ^4.14.0
   slang_flutter: ^4.14.0
 
-  ap_common_plugin: 1.0.0
+  ap_common_plugin: 1.0.1-dev.0
 #    path: ../../../GitHub/ap_common_plugin
 
 dependency_overrides:

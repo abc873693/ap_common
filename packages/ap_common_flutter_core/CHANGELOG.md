@@ -1,3 +1,17 @@
+## 1.1.0-dev.1
+
+ - **REFACTOR**(l10n): restore original i18n variable naming conventions. ([c21ed521](https://github.com/abc873693/ap_common/commit/c21ed521369b6a3f6030da7ac9a9bae6b97d13dd))
+ - **FIX**: pub publish requirement. ([1dc81f7d](https://github.com/abc873693/ap_common/commit/1dc81f7dcf5a1445aa14b66b6d2004b7d94ad6b2))
+ - **FIX**: packages version constraint. ([8231a423](https://github.com/abc873693/ap_common/commit/8231a423b237d6f38b3531ec4fc2b06e713a6c51))
+ - **FEAT**(l10n): migrate ap_common_flutter_core from intl to slang. ([de440d23](https://github.com/abc873693/ap_common/commit/de440d23f8c8e0276e62e2728a242cb782e05ba7))
+ - **FEAT**: update i18n for theme translate. ([2e7e862d](https://github.com/abc873693/ap_common/commit/2e7e862d0f8803d64403c15df67108863a74fb1f))
+ - **FEAT**(flutter_core): update `multiple_localization` to any version. ([a4114e01](https://github.com/abc873693/ap_common/commit/a4114e0182568d90603041118d59130fbdbd3aa7))
+ - **FEAT**: update GDG on Campus NKUST x ITC information". ([b2e1c200](https://github.com/abc873693/ap_common/commit/b2e1c200374c0090c9888f6642dc1d8a197ed661))
+ - **FEAT**: move UI implement to `ap_common_flutter_ui`. ([803b2dcb](https://github.com/abc873693/ap_common/commit/803b2dcbb37d970de803670c7a76404356c4a651))
+ - **FEAT**: move native platform util implement to `ap_common_flutter_platform`. ([55b2fa00](https://github.com/abc873693/ap_common/commit/55b2fa00ea5fa4dafb15fc19e19b33dd9d72ef92))
+ - **FEAT**: `AppStoreUtil` and `PlatformUtil` for `ap_common_flutter_core`. ([f9abb16d](https://github.com/abc873693/ap_common/commit/f9abb16d2e525ff8d5d4a68cd7a098e8025cd772))
+ - **FEAT**: migrate `util` `l10n`  to new `ap_common_flutter_core`. ([be152bac](https://github.com/abc873693/ap_common/commit/be152bac1b94f8e80baba9c098a938c44246b810))
+
 ## 1.1.0-dev.0
 
  - **FEAT**: update i18n for theme translate. ([2e7e862d](https://github.com/abc873693/ap_common/commit/2e7e862d0f8803d64403c15df67108863a74fb1f))

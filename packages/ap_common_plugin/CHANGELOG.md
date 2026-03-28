@@ -1,3 +1,7 @@
+## 1.0.1-dev.0
+
+ - **REFACTOR**(l10n): restore original i18n variable naming conventions. ([c21ed521](https://github.com/abc873693/ap_common/commit/c21ed521369b6a3f6030da7ac9a9bae6b97d13dd))
+
 ## 1.0.0
 
 ## 0.5.1
