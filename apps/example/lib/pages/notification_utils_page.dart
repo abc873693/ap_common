@@ -3,7 +3,7 @@ import 'dart:math';
 import 'package:ap_common/ap_common.dart';
 import 'package:ap_common_example/utils/app_localizations.dart';
 import 'package:flutter/material.dart';
-import 'package:sprintf/sprintf.dart';
+
 
 class NotificationUtilsTestPage extends StatefulWidget {
   @override
@@ -12,17 +12,14 @@ class NotificationUtilsTestPage extends StatefulWidget {
 }
 
 class _NotificationUtilsTestPageState extends State<NotificationUtilsTestPage> {
-  late AppLocalizations app;
-
   int weekday = DateTime.now().weekday;
   TimeOfDay time = TimeOfDay.now();
 
   @override
   Widget build(BuildContext context) {
-    app = AppLocalizations.of(context);
     return Scaffold(
       appBar: AppBar(
-        title: Text(app.localNotificationTest),
+        title: Text(context.app.localNotificationTest),
       ),
       body: ListView(
         children: <Widget>[
@@ -40,11 +37,11 @@ class _NotificationUtilsTestPageState extends State<NotificationUtilsTestPage> {
                 id: 1,
                 androidChannelId: '1',
                 androidChannelDescription: 'Test',
-                title: app.testTitle,
-                content: app.testContent,
+                title: context.app.testTitle,
+                content: context.app.testContent,
               );
             },
-            title: Text(app.showNow),
+            title: Text(context.app.showNow),
             subtitle: const Text('NotificationUtil.instance.show'),
           ),
           const Divider(height: 0.0),
@@ -61,14 +58,14 @@ class _NotificationUtilsTestPageState extends State<NotificationUtilsTestPage> {
                 id: 2,
                 androidChannelId: '1',
                 androidChannelDescription: 'Test',
-                title: app.testTitle,
-                content: app.testContent,
+                title: context.app.testTitle,
+                content: context.app.testContent,
                 dateTime: DateTime.now().add(
                   const Duration(seconds: 5),
                 ),
               );
             },
-            title: Text(app.showInFiveSeconds),
+            title: Text(context.app.showInFiveSeconds),
             subtitle: const Text('NotificationUtil.instance.schedule'),
           ),
           const Divider(height: 0.0),
@@ -84,8 +81,8 @@ class _NotificationUtilsTestPageState extends State<NotificationUtilsTestPage> {
               showDialog(
                 context: context,
                 builder: (_) => SimpleOptionDialog(
-                  title: app.setWeekDay,
-                  items: ApLocalizations.of(context).weekdays,
+                  title: context.app.setWeekDay,
+                  items: context.ap.weekdays,
                   index: weekday - 1,
                   onSelected: (int index) {
                     setState(() => weekday = index + 1);
@@ -94,7 +91,7 @@ class _NotificationUtilsTestPageState extends State<NotificationUtilsTestPage> {
               );
             },
             title: Text(
-              app.setWeekDay,
+              context.app.setWeekDay,
             ),
           ),
           ListTile(
@@ -108,7 +105,7 @@ class _NotificationUtilsTestPageState extends State<NotificationUtilsTestPage> {
               );
               if (dayOfTime != null) setState(() => time = dayOfTime);
             },
-            title: Text(app.setTimeOfDay),
+            title: Text(context.app.setTimeOfDay),
           ),
           ListTile(
             onTap: () {
@@ -117,13 +114,10 @@ class _NotificationUtilsTestPageState extends State<NotificationUtilsTestPage> {
                 id: id,
                 androidChannelId: '1',
                 androidChannelDescription: 'Schedule Weekly Notify',
-                title: app.scheduleWeeklyNotifyTitle,
-                content: sprintf(
-                  app.scheduleWeeklyNotifyContent,
-                  <String>[
-                    ApLocalizations.of(context).weekdaysCourse[weekday - 1],
-                    time.format(context),
-                  ],
+                title: context.app.scheduleWeeklyNotifyTitle,
+                content: context.app.scheduleWeeklyNotifyContent(
+                  arg1: context.ap.weekdaysCourse[weekday - 1],
+                  arg2: time.format(context),
                 ),
                 weekday: weekday,
                 time: TimeOfDay(
@@ -133,12 +127,9 @@ class _NotificationUtilsTestPageState extends State<NotificationUtilsTestPage> {
               );
             },
             title: Text(
-              sprintf(
-                app.scheduleWeeklyNotifyContent,
-                <String>[
-                  ApLocalizations.of(context).weekdaysCourse[weekday - 1],
-                  time.format(context),
-                ],
+              context.app.scheduleWeeklyNotifyContent(
+                arg1: context.ap.weekdaysCourse[weekday - 1],
+                arg2: time.format(context),
               ),
             ),
             subtitle:
@@ -161,14 +152,14 @@ class _NotificationUtilsTestPageState extends State<NotificationUtilsTestPage> {
                 if (!context.mounted) return;
                 DialogUtils.showDefault(
                   context: context,
-                  title: app.requestPermission,
+                  title: context.app.requestPermission,
                   content: result
-                      ? ApLocalizations.of(context).updateSuccess
-                      : ApLocalizations.of(context).loginFail,
+                      ? context.ap.updateSuccess
+                      : context.ap.loginFail,
                 );
               }
             },
-            title: Text(app.requestPermission),
+            title: Text(context.app.requestPermission),
             subtitle: const Text(
               'NotificationUtil.instance.requestPermissions '
               '(iOS & macOS limit)',
@@ -207,7 +198,7 @@ class _NotificationUtilsTestPageState extends State<NotificationUtilsTestPage> {
             onTap: () {
               NotificationUtil.instance.cancelAll();
             },
-            title: Text(app.cancelAll),
+            title: Text(context.app.cancelAll),
             subtitle: const Text('NotificationUtil.instance.cancelAll'),
           ),
         ],

@@ -1,3 +1,22 @@
+## 1.1.0-dev.0
+
+ - **REFACTOR**(ui): fix lint errors and improve code quality. ([36a092bd](https://github.com/abc873693/ap_common/commit/36a092bd42002835b5ea2252c15d21f78d39691d))
+ - **REFACTOR**(ui): update pages and views with Material 3 components. ([fcb897f0](https://github.com/abc873693/ap_common/commit/fcb897f031ec5fa9d9342477b026aa221900b6da))
+ - **REFACTOR**(ui): update scaffolds to use new widgets and Material 3. ([da1b8e0c](https://github.com/abc873693/ap_common/commit/da1b8e0c165ce1d9d9477160a9b15779dddb0855))
+ - **REFACTOR**(ui): update utility classes for Material 3 compatibility. ([5fbee088](https://github.com/abc873693/ap_common/commit/5fbee0887fc9e26fdc976b82ddea3bcf5b16e8d8))
+ - **REFACTOR**(ui): update scaffolds and views to use Material 3 color schemes. ([7f3e6a1c](https://github.com/abc873693/ap_common/commit/7f3e6a1cb7bbf17b5f9c70274b48577311f9f93d))
+ - **REFACTOR**(ui): migrate dialog widgets to Material 3 theme and components. ([34466ce6](https://github.com/abc873693/ap_common/commit/34466ce667cc1c0f098939b9cbd75e18ad530998))
+ - **REFACTOR**: optimize layout and barcode display for UserInfo Scaffold. ([933cd633](https://github.com/abc873693/ap_common/commit/933cd633d637293920186f8611784566578cc241))
+ - **REFACTOR**: optimize UI design for Course and Score Scaffolds. ([b1c3e915](https://github.com/abc873693/ap_common/commit/b1c3e915206e2cc389304e4e234aeed4f97ab6fd))
+ - **REFACTOR**: optimize UI design for Login and HomePage Scaffolds. ([3aa9190c](https://github.com/abc873693/ap_common/commit/3aa9190c4fc96ec1543a3bb769cf69a9e9012757))
+ - **FEAT**: update float action button can invisible. ([c30380bc](https://github.com/abc873693/ap_common/commit/c30380bc2254fc1fe1ac31deea4c7c62658ae9c8))
+ - **FEAT**: score scaffold responsive. ([426678f5](https://github.com/abc873693/ap_common/commit/426678f5d2559179cce9e9b0c5cfb3216147532b))
+ - **FEAT**: update i18n for theme translate. ([2e7e862d](https://github.com/abc873693/ap_common/commit/2e7e862d0f8803d64403c15df67108863a74fb1f))
+ - **FEAT**(ui): extract common widgets into separate components. ([fd19e957](https://github.com/abc873693/ap_common/commit/fd19e957372f6266ba8657a2a90800737e760881))
+ - **FEAT**: add merged course view and optimize table layout density. ([410808a5](https://github.com/abc873693/ap_common/commit/410808a59c1d5cf68999e2deba86b78b7aaff552))
+ - **FEAT**: add SemesterPicker and optimize ApUtils and ApDrawer. ([0ebafe0c](https://github.com/abc873693/ap_common/commit/0ebafe0cbe9fb35d2199f79efa633f7c811c90d0))
+ - **FEAT**: implement dynamic theme color switching and color picker in settings. ([2dce7929](https://github.com/abc873693/ap_common/commit/2dce792963a6520e221e83dec2ab9081e50d3b14))
+
 ## 1.0.0
 
  - **FEAT**: improve model generate by `freezed`. ([43bef51c](https://github.com/abc873693/ap_common/commit/43bef51c42f8cf8b984074d42c16c403ee83c02c))

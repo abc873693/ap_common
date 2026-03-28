@@ -12,8 +12,6 @@ class CoursePage extends StatefulWidget {
 }
 
 class CoursePageState extends State<CoursePage> {
-  late ApLocalizations ap;
-
   CourseState state = CourseState.loading;
 
   SemesterData? semesterData;
@@ -44,12 +42,11 @@ class CoursePageState extends State<CoursePage> {
 
   @override
   Widget build(BuildContext context) {
-    ap = ApLocalizations.of(context);
     return CourseScaffold(
       state: state,
       courseData: courseData,
       notifyData: notifyData,
-      customHint: isOffline ? ap.offlineCourse : '',
+      customHint: isOffline ? context.ap.offlineCourse : '',
       customStateHint: customStateHint,
       courseNotifySaveKey: courseNotifyCacheKey,
       androidResourceIcon: Constants.ANDROID_DEFAULT_NOTIFICATION_NAME,

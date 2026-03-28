@@ -13,8 +13,6 @@ class SettingPage extends StatefulWidget {
 class SettingPageState extends State<SettingPage> {
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
 
-  late ApLocalizations ap;
-
   String? appVersion;
   bool busNotify = false;
   bool courseNotify = false;
@@ -39,18 +37,17 @@ class SettingPageState extends State<SettingPage> {
 
   @override
   Widget build(BuildContext context) {
-    ap = ApLocalizations.of(context);
     return Scaffold(
       key: _scaffoldKey,
       appBar: AppBar(
-        title: Text(ap.settings),
+        title: Text(context.ap.settings),
       ),
       body: SingleChildScrollView(
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: <Widget>[
             SettingTitle(
-              text: ap.notificationItem,
+              text: context.ap.notificationItem,
               icon: Icons.notifications_outlined,
             ),
             SettingCard(
@@ -60,14 +57,14 @@ class SettingPageState extends State<SettingPage> {
               ],
             ),
             SettingTitle(
-              text: ap.otherSettings,
+              text: context.ap.otherSettings,
               icon: Icons.tune_outlined,
             ),
             SettingCard(
               children: <Widget>[
                 SettingSwitch(
-                  text: ap.headPhotoSetting,
-                  subText: ap.headPhotoSettingSubTitle,
+                  text: context.ap.headPhotoSetting,
+                  subText: context.ap.headPhotoSettingSubTitle,
                   icon: Icons.person_outline,
                   value: displayPicture,
                   onChanged: (bool b) {
@@ -118,14 +115,14 @@ class SettingPageState extends State<SettingPage> {
               ],
             ),
             SettingTitle(
-              text: ap.otherInfo,
+              text: context.ap.otherInfo,
               icon: Icons.info_outline,
             ),
             SettingCard(
               children: <Widget>[
                 SettingItem(
-                  text: ap.feedback,
-                  subText: ap.feedbackViaFacebook,
+                  text: context.ap.feedback,
+                  subText: context.ap.feedbackViaFacebook,
                   icon: Icons.feedback_outlined,
                   isExternalLink: true,
                   onTap: () {
@@ -133,7 +130,7 @@ class SettingPageState extends State<SettingPage> {
                   },
                 ),
                 SettingInfoItem(
-                  text: ap.appVersion,
+                  text: context.ap.appVersion,
                   icon: Icons.info_outline,
                   value: 'v$appVersion',
                 ),

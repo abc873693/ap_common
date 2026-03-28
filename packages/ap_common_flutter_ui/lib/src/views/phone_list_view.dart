@@ -24,8 +24,6 @@ class PhoneListViewState extends State<PhoneListView>
   @override
   bool get wantKeepAlive => true;
 
-  ApLocalizations get ap => ApLocalizations.of(context);
-
   @override
   void initState() {
     AnalyticsUtil.instance.setCurrentScreen(
@@ -66,7 +64,7 @@ class PhoneListViewState extends State<PhoneListView>
       case PhoneState.error:
         return HintContent(
           icon: ApIcon.assignment,
-          content: ap.clickToRetry,
+          content: context.ap.clickToRetry,
         );
       default:
         return CustomScrollView(

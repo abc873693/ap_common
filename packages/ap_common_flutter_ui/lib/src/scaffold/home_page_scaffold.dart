@@ -50,8 +50,6 @@ class HomePageScaffoldState extends State<HomePageScaffold> {
   final GlobalKey<ScaffoldMessengerState> _scaffoldMessengerKey =
       GlobalKey<ScaffoldMessengerState>();
 
-  ApLocalizations get app => ApLocalizations.of(context);
-
   PageController? pageController;
 
   int _currentNewsIndex = 0;
@@ -276,34 +274,35 @@ class HomePageScaffoldState extends State<HomePageScaffold> {
       case HomeState.offline:
         return HintContent(
           icon: ApIcon.offlineBolt,
-          content: app.offlineMode,
+          content: context.ap.offlineMode,
         );
       case HomeState.empty:
         return HintContent(
           icon: ApIcon.offlineBolt,
-          content: app.announcementEmpty,
+          content: context.ap.announcementEmpty,
         );
       case HomeState.error:
         return HintContent(
           icon: ApIcon.offlineBolt,
-          content: app.somethingError,
+          content: context.ap.somethingError,
         );
     }
   }
 
   void _showLogoutDialog() {
+    final ApLocalizations l10n = context.ap;
     showDialog(
       context: context,
       builder: (BuildContext context) => YesNoDialog(
-        title: app.closeAppTitle,
+        title: l10n.closeAppTitle,
         contentWidget: Text(
-          app.closeAppHint,
+          l10n.closeAppHint,
           textAlign: TextAlign.center,
           style:
               TextStyle(color: Theme.of(context).colorScheme.onSurfaceVariant),
         ),
-        leftActionText: app.cancel,
-        rightActionText: app.confirm,
+        leftActionText: l10n.cancel,
+        rightActionText: l10n.confirm,
         rightActionFunction: () {
           AnalyticsUtil.instance.logEvent('logout_dialog_confirm');
           SystemNavigator.pop();

@@ -40,8 +40,6 @@ class AboutUsPage extends StatefulWidget {
 }
 
 class AboutUsPageState extends State<AboutUsPage> {
-  ApLocalizations get app => ApLocalizations.of(context);
-
   @override
   void initState() {
     AnalyticsUtil.instance.setCurrentScreen(
@@ -65,7 +63,7 @@ class AboutUsPageState extends State<AboutUsPage> {
           SliverAppBar(
             expandedHeight: expandedHeight,
             pinned: true,
-            title: Text(app.about),
+            title: Text(context.ap.about),
             actions: <Widget>[
               ...widget.actions ?? <Widget>[],
               IconButton(
@@ -96,19 +94,19 @@ class AboutUsPageState extends State<AboutUsPage> {
             delegate: SliverChildListDelegate(
               <Widget>[
                 AboutInfoCard(
-                  title: app.aboutAuthorTitle,
-                  content: app.aboutAuthorContent,
+                  title: context.ap.aboutAuthorTitle,
+                  content: context.ap.aboutAuthorContent,
                 ),
-                AboutInfoCard(title: app.about, content: app.aboutUsContent),
+                AboutInfoCard(title: context.ap.about, content: context.ap.aboutUsContent),
                 AboutInfoCard(
-                  title: app.aboutRecruitTitle,
-                  content: app.aboutRecruitContent,
+                  title: context.ap.aboutRecruitTitle,
+                  content: context.ap.aboutRecruitContent,
                 ),
                 Stack(
                   children: <Widget>[
                     AboutInfoCard(
-                      title: app.aboutItcTitle,
-                      content: app.aboutItcContent,
+                      title: context.ap.aboutItcTitle,
+                      content: context.ap.aboutItcContent,
                     ),
                     Padding(
                       padding: const EdgeInsets.symmetric(
@@ -129,8 +127,8 @@ class AboutUsPageState extends State<AboutUsPage> {
                 Stack(
                   children: <Widget>[
                     AboutInfoCard(
-                      title: app.aboutNsysuCodeClubTitle,
-                      content: app.aboutNsysuCodeClubContent,
+                      title: context.ap.aboutNsysuCodeClubTitle,
+                      content: context.ap.aboutNsysuCodeClubContent,
                     ),
                     Padding(
                       padding: const EdgeInsets.symmetric(
@@ -164,7 +162,7 @@ class AboutUsPageState extends State<AboutUsPage> {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: <Widget>[
                         SelectableText(
-                          app.aboutContactUsTitle,
+                          context.ap.aboutContactUsTitle,
                           style: const TextStyle(fontSize: 18.0),
                         ),
                         const SizedBox(
@@ -208,7 +206,7 @@ class AboutUsPageState extends State<AboutUsPage> {
                                       if (!context.mounted) return;
                                       UiUtil.instance.showToast(
                                         context,
-                                        app.platformError,
+                                        context.ap.platformError,
                                       );
                                     },
                                   );
@@ -227,7 +225,7 @@ class AboutUsPageState extends State<AboutUsPage> {
                                       if (!context.mounted) return;
                                       UiUtil.instance.showToast(
                                         context,
-                                        app.platformError,
+                                        context.ap.platformError,
                                       );
                                     },
                                   );
@@ -244,7 +242,7 @@ class AboutUsPageState extends State<AboutUsPage> {
                   ),
                 ),
                 AboutInfoCard(
-                  title: app.aboutOpenSourceTitle,
+                  title: context.ap.aboutOpenSourceTitle,
                   content: widget.appLicense,
                 ),
               ],

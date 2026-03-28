@@ -27,7 +27,6 @@ class ApMediaUtil extends MediaUtil {
     GeneralResponseCallback? onSuccess,
     GeneralResponseCallback? onError,
   }) async {
-    final ApLocalizations ap = ApLocalizations.of(context);
     try {
       PermissionState hasGrantPermission = PermissionState.notDetermined;
       if (!kIsWeb && (Platform.isAndroid || Platform.isIOS)) {
@@ -68,13 +67,13 @@ class ApMediaUtil extends MediaUtil {
         onSuccess?.call(
           GeneralResponse(
             statusCode: 401,
-            message: ap.grandPermissionFail,
+            message: context.ap.grandPermissionFail,
           ),
         );
       }
     } catch (e, s) {
       if (!context.mounted) return;
-      UiUtil.instance.showToast(context, ap.unknownError);
+      UiUtil.instance.showToast(context, context.ap.unknownError);
       CrashlyticsUtil.instance.recordError(e, s);
     }
   }

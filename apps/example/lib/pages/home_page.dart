@@ -29,9 +29,6 @@ class HomePageState extends State<HomePage> {
 
   HomeState state = HomeState.loading;
 
-  late AppLocalizations app;
-  late ApLocalizations ap;
-
   Map<String, List<Announcement>>? newsMap;
 
   Widget? content;
@@ -59,7 +56,7 @@ class HomePageState extends State<HomePage> {
       assetImage: assetImage ?? ImageAssets.kuasap2,
       githubName: 'NKUST-ITC',
       email: 'abc873693@gmail.com',
-      appLicense: AppLocalizations.of(context).aboutOpenSourceContent,
+      appLicense: context.app.aboutOpenSourceContent,
       fbFanPageId: '735951703168873',
       fbFanPageUrl: 'https://www.facebook.com/NKUST.ITC/',
       githubUrl: 'https://github.com/NKUST-ITC',
@@ -84,10 +81,8 @@ class HomePageState extends State<HomePage> {
 
   @override
   Widget build(BuildContext context) {
-    app = AppLocalizations.of(context);
-    ap = ApLocalizations.of(context);
     return HomePageScaffold(
-      title: app.appName,
+      title: context.app.appName,
       key: _homeKey,
       state: state,
       announcements: announcements,
@@ -95,7 +90,7 @@ class HomePageState extends State<HomePage> {
       actions: <Widget>[
         IconButton(
           icon: const Icon(Icons.fiber_new_rounded),
-          tooltip: ap.announcementReviewSystem,
+          tooltip: context.ap.announcementReviewSystem,
           onPressed: () {
             ApUtils.pushCupertinoStyle(
               context,
@@ -116,15 +111,15 @@ class HomePageState extends State<HomePage> {
       bottomNavigationBarItems: <NavigationDestination>[
         NavigationDestination(
           icon: Icon(ApIcon.home),
-          label: ap.home,
+          label: context.ap.home,
         ),
         NavigationDestination(
           icon: Icon(ApIcon.classIcon),
-          label: ap.course,
+          label: context.ap.course,
         ),
         NavigationDestination(
           icon: Icon(ApIcon.assignment),
-          label: ap.score,
+          label: context.ap.score,
         ),
       ],
     );
@@ -157,13 +152,13 @@ class HomePageState extends State<HomePage> {
         if (isTablet)
           DrawerMenuItem(
             icon: ApIcon.home,
-            title: ap.home,
+            title: context.ap.home,
             onTap: () => setState(() => content = null),
           ),
         _buildStudySection(),
         DrawerMenuItem(
           icon: ApIcon.info,
-          title: ap.schoolInfo,
+          title: context.ap.schoolInfo,
           onTap: () => _openPage(
             SchoolInfoPage(),
           ),
@@ -171,28 +166,28 @@ class HomePageState extends State<HomePage> {
         if (NotificationUtil.instance.isSupport)
           DrawerMenuItem(
             icon: ApIcon.dateRange,
-            title: app.localNotificationTest,
+            title: context.app.localNotificationTest,
             onTap: () => _openPage(
               NotificationUtilsTestPage(),
             ),
           ),
         DrawerMenuItem(
           icon: ApIcon.check,
-          title: app.dialogUtilTest,
+          title: context.app.dialogUtilTest,
           onTap: () => _openPage(
             DialogUtilsTestPage(),
           ),
         ),
         DrawerMenuItem(
           icon: ApIcon.face,
-          title: ap.about,
+          title: context.ap.about,
           onTap: () => _openPage(
             aboutPage(context, assetImage: ImageAssets.sectionJiangong),
           ),
         ),
         DrawerMenuItem(
           icon: ApIcon.settings,
-          title: ap.settings,
+          title: context.ap.settings,
           onTap: () => _openPage(
             SettingPage(),
           ),
@@ -201,7 +196,7 @@ class HomePageState extends State<HomePage> {
           const DrawerDivider(),
           DrawerMenuItem(
             icon: ApIcon.powerSettingsNew,
-            title: ap.logout,
+            title: context.ap.logout,
             iconColor: colorScheme.error,
             onTap: () async {
               await PreferenceUtil.instance
@@ -222,7 +217,7 @@ class HomePageState extends State<HomePage> {
   Widget _buildStudySection() {
     return DrawerMenuSection(
       icon: ApIcon.school,
-      title: ap.courseInfo,
+      title: context.ap.courseInfo,
       initiallyExpanded: isStudyExpanded,
       onExpansionChanged: (bool value) {
         setState(() {
@@ -232,7 +227,7 @@ class HomePageState extends State<HomePage> {
       children: <DrawerSubMenuItem>[
         DrawerSubMenuItem(
           icon: ApIcon.classIcon,
-          title: ap.course,
+          title: context.ap.course,
           onTap: () => _openPage(
             CoursePage(),
             needLogin: true,
@@ -240,7 +235,7 @@ class HomePageState extends State<HomePage> {
         ),
         DrawerSubMenuItem(
           icon: ApIcon.assignment,
-          title: ap.score,
+          title: context.ap.score,
           onTap: () => _openPage(
             ScorePage(),
             needLogin: true,
@@ -270,7 +265,7 @@ class HomePageState extends State<HomePage> {
           break;
       }
     } else {
-      UiUtil.instance.showToast(context, ap.notLogin);
+      UiUtil.instance.showToast(context, context.ap.notLogin);
     }
   }
 
@@ -365,7 +360,7 @@ class HomePageState extends State<HomePage> {
     if (state != HomeState.finish) {
       _getAnnouncements();
     }
-    _homeKey.currentState!.showBasicHint(text: ap.loginSuccess);
+    _homeKey.currentState!.showBasicHint(text: context.ap.loginSuccess);
   }
 
   Future<void> openLoginPage() async {
@@ -395,8 +390,8 @@ class HomePageState extends State<HomePage> {
       if (!mounted) return;
       _homeKey.currentState!
           .showSnackBar(
-            text: ApLocalizations.of(context).notLogin,
-            actionText: ApLocalizations.of(context).login,
+            text: context.ap.notLogin,
+            actionText: context.ap.login,
             onSnackBarTapped: openLoginPage,
           )!
           .closed
@@ -413,7 +408,7 @@ class HomePageState extends State<HomePage> {
     if (needLogin && !isLogin) {
       UiUtil.instance.showToast(
         context,
-        ApLocalizations.of(context).notLoginHint,
+        context.ap.notLoginHint,
       );
     } else {
       if (isTablet) {

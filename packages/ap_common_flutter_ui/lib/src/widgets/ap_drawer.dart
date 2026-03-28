@@ -163,7 +163,7 @@ class ApDrawer extends StatelessWidget {
 
     if (userInfo == null) {
       return Text(
-        ApLocalizations.of(context).notLogin,
+        context.ap.notLogin,
         style: TextStyle(
           color: textColor,
           fontSize: 18,

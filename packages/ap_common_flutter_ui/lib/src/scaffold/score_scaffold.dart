@@ -55,8 +55,6 @@ class ScoreScaffold extends StatefulWidget {
 }
 
 class ScoreScaffoldState extends State<ScoreScaffold> {
-  ApLocalizations get app => ApLocalizations.of(context);
-  
   bool get isLandscape =>
       MediaQuery.of(context).orientation == Orientation.landscape;
 
@@ -101,7 +99,7 @@ class ScoreScaffoldState extends State<ScoreScaffold> {
           children: <Widget>[
             Flexible(
               child: Text(
-                widget.title ?? app.score,
+                widget.title ?? context.ap.score,
                 overflow: TextOverflow.ellipsis,
               ),
             ),
@@ -176,7 +174,7 @@ class ScoreScaffoldState extends State<ScoreScaffold> {
               children: <Widget>[
                 if (widget.customHint != null && widget.customHint!.isNotEmpty)
                   _buildHintBanner(),
-                Expanded(child: _buildContent(context, colorScheme, app)),
+                Expanded(child: _buildContent(context, colorScheme)),
               ],
             ),
           ),
@@ -213,13 +211,13 @@ class ScoreScaffoldState extends State<ScoreScaffold> {
   String get hintContent {
     switch (widget.state) {
       case ScoreState.error:
-        return app.clickToRetry;
+        return context.ap.clickToRetry;
       case ScoreState.empty:
-        return app.scoreEmpty;
+        return context.ap.scoreEmpty;
       case ScoreState.offlineEmpty:
-        return app.noOfflineData;
+        return context.ap.noOfflineData;
       case ScoreState.custom:
-        return widget.customStateHint ?? app.unknownError;
+        return widget.customStateHint ?? context.ap.unknownError;
       default:
         return '';
     }
@@ -228,7 +226,6 @@ class ScoreScaffoldState extends State<ScoreScaffold> {
   Widget _buildContent(
     BuildContext context,
     ColorScheme colorScheme,
-    ApLocalizations ap,
   ) {
     switch (widget.state) {
       case ScoreState.loading:
@@ -236,25 +233,25 @@ class ScoreScaffoldState extends State<ScoreScaffold> {
       case ScoreState.error:
         return _buildErrorState(
           colorScheme,
-          ap.clickToRetry,
+          context.ap.clickToRetry,
           Icons.error_outline_rounded,
         );
       case ScoreState.empty:
         return _buildErrorState(
           colorScheme,
-          ap.scoreEmpty,
+          context.ap.scoreEmpty,
           Icons.assignment_outlined,
         );
       case ScoreState.offlineEmpty:
         return _buildErrorState(
           colorScheme,
-          ap.noOfflineData,
+          context.ap.noOfflineData,
           Icons.cloud_off_rounded,
         );
       case ScoreState.custom:
         return _buildErrorState(
           colorScheme,
-          widget.customStateHint ?? ap.somethingError,
+          widget.customStateHint ?? context.ap.somethingError,
           Icons.warning_amber_rounded,
         );
       case ScoreState.finish:
@@ -287,7 +284,7 @@ class ScoreScaffoldState extends State<ScoreScaffold> {
           ),
           const SizedBox(height: 16),
           Text(
-            app.loading,
+            context.ap.loading,
             style: TextStyle(fontSize: 16, color: colorScheme.onSurfaceVariant),
           ),
         ],
@@ -333,7 +330,7 @@ class ScoreScaffoldState extends State<ScoreScaffold> {
             if (widget.state != ScoreState.empty) ...<Widget>[
               const SizedBox(height: 8),
               Text(
-                app.clickToRetry,
+                context.ap.clickToRetry,
                 style: TextStyle(fontSize: 14, color: colorScheme.primary),
               ),
             ],
@@ -599,7 +596,6 @@ class _ScoreAnalysisTab extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final ColorScheme colorScheme = Theme.of(context).colorScheme;
-    final ApLocalizations ap = ApLocalizations.of(context);
     final ScoreAnalysis analysis = ScoreAnalysis(scoreData);
 
     return RefreshIndicator(
@@ -610,7 +606,7 @@ class _ScoreAnalysisTab extends StatelessWidget {
         padding: const EdgeInsets.all(16),
         child: Column(
           children: <Widget>[
-            _buildMainSummaryCard(colorScheme, ap, analysis),
+            _buildMainSummaryCard(colorScheme, context.ap, analysis),
             const SizedBox(height: 16),
             ScorePRCard(analysis: analysis),
             const SizedBox(height: 16),
