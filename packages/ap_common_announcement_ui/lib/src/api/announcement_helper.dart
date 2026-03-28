@@ -127,7 +127,7 @@ class AnnouncementHelper {
           callback.onError(
             GeneralResponse(
               statusCode: 401,
-              message: ApLocalizations.current.loginFail,
+              message: t.loginFail,
             ),
           );
         } else {
@@ -168,7 +168,7 @@ class AnnouncementHelper {
             GeneralResponse(
               statusCode: 401,
               message: dioException.response?.data as String? ??
-                  ApLocalizations.current.unknownError,
+                  t.unknownError,
             ),
           );
         }
@@ -209,7 +209,7 @@ class AnnouncementHelper {
             GeneralResponse(
               statusCode: 401,
               message: dioException.response?.data as String? ??
-                  ApLocalizations.current.unknownError,
+                  t.unknownError,
             ),
           );
         }
@@ -650,14 +650,14 @@ class AnnouncementHelper {
       callback.onError(
         GeneralResponse(
           statusCode: notPermission,
-          message: ApLocalizations.current.noPermissionHint,
+          message: t.noPermissionHint,
         ),
       );
     } else if (dioException.isNotFoundAnnouncement) {
       callback.onError(
         GeneralResponse(
           statusCode: notPermission,
-          message: ApLocalizations.current.notFoundData,
+          message: t.notFoundData,
         ),
       );
     } else {

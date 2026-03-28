@@ -55,7 +55,7 @@ class ScoreScaffold extends StatefulWidget {
 }
 
 class ScoreScaffoldState extends State<ScoreScaffold> {
-  ApLocalizations get app => ApLocalizations.of(context);
+  Translations get app => t;
   
   bool get isLandscape =>
       MediaQuery.of(context).orientation == Orientation.landscape;
@@ -228,7 +228,7 @@ class ScoreScaffoldState extends State<ScoreScaffold> {
   Widget _buildContent(
     BuildContext context,
     ColorScheme colorScheme,
-    ApLocalizations ap,
+    Translations ap,
   ) {
     switch (widget.state) {
       case ScoreState.loading:
@@ -599,7 +599,7 @@ class _ScoreAnalysisTab extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final ColorScheme colorScheme = Theme.of(context).colorScheme;
-    final ApLocalizations ap = ApLocalizations.of(context);
+    final Translations ap = t;
     final ScoreAnalysis analysis = ScoreAnalysis(scoreData);
 
     return RefreshIndicator(
@@ -628,7 +628,7 @@ class _ScoreAnalysisTab extends StatelessWidget {
 
   Widget _buildMainSummaryCard(
     ColorScheme colorScheme,
-    ApLocalizations ap,
+    Translations ap,
     ScoreAnalysis analysis,
   ) {
     final Detail detail = scoreData.detail;

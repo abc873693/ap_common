@@ -24,7 +24,7 @@ class PhoneListViewState extends State<PhoneListView>
   @override
   bool get wantKeepAlive => true;
 
-  ApLocalizations get ap => ApLocalizations.of(context);
+  Translations get ap => t;
 
   @override
   void initState() {

@@ -40,7 +40,7 @@ class AboutUsPage extends StatefulWidget {
 }
 
 class AboutUsPageState extends State<AboutUsPage> {
-  ApLocalizations get app => ApLocalizations.of(context);
+  Translations get app => t;
 
   @override
   void initState() {

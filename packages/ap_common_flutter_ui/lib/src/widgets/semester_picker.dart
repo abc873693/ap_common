@@ -48,7 +48,6 @@ class SemesterPicker extends StatefulWidget {
     SemesterUIConfig? uiConfig,
   }) {
     final ColorScheme colorScheme = Theme.of(context).colorScheme;
-    final ApLocalizations ap = ApLocalizations.of(context);
     final List<MapEntry<int, Semester>> sortedSemesters =
         SemesterPickerState._getSortedSemesters(semesterData, uiConfig);
 
@@ -101,7 +100,7 @@ class SemesterPicker extends StatefulWidget {
                             ),
                             const SizedBox(width: 12),
                             Text(
-                              ap.pickSemester,
+                              t.pickSemester,
                               style: TextStyle(
                                 fontSize: 20,
                                 fontWeight: FontWeight.bold,

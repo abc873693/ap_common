@@ -50,7 +50,7 @@ class HomePageScaffoldState extends State<HomePageScaffold> {
   final GlobalKey<ScaffoldMessengerState> _scaffoldMessengerKey =
       GlobalKey<ScaffoldMessengerState>();
 
-  ApLocalizations get app => ApLocalizations.of(context);
+  Translations get app => t;
 
   PageController? pageController;
 

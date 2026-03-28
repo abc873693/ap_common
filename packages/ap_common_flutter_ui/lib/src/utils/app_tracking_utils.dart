@@ -7,19 +7,18 @@ class AppTrackingUtils {
     required BuildContext context,
     VoidCallback? onTap,
   }) {
-    final ApLocalizations ap = ApLocalizations.of(context);
     showDialog(
       context: context,
       barrierDismissible: false,
       builder: (BuildContext context) => PopScope(
         canPop: false,
         child: DefaultDialog(
-          title: ap.appTrackingDialogTitle,
+          title: t.appTrackingDialogTitle,
           contentWidget: SingleChildScrollView(
             child: Column(
               children: <Widget>[
                 Text(
-                  ap.appTrackingDialogContent,
+                  t.appTrackingDialogContent,
                   style: TextStyle(
                     color: Theme.of(context).colorScheme.onSurfaceVariant,
                     height: 1.3,
@@ -36,7 +35,7 @@ class AppTrackingUtils {
                     const SizedBox(width: 8.0),
                     Expanded(
                       child: Text(
-                        ap.analyticsDescription,
+                        t.analyticsDescription,
                         style: TextStyle(
                           color: Theme.of(context).colorScheme.onSurfaceVariant,
                         ),
@@ -54,7 +53,7 @@ class AppTrackingUtils {
                     const SizedBox(width: 8.0),
                     Expanded(
                       child: Text(
-                        ap.crashReportDescription,
+                        t.crashReportDescription,
                         style: TextStyle(
                           color: Theme.of(context).colorScheme.onSurfaceVariant,
                           fontSize: 16.0,
@@ -66,7 +65,7 @@ class AppTrackingUtils {
               ],
             ),
           ),
-          actionText: ap.continueToUse,
+          actionText: t.continueToUse,
           actionFunction: onTap ??
               () async {
                 try {

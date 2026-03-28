@@ -24,7 +24,7 @@ class DialogUtils {
             fontSize: 16.0,
           ),
         ),
-        actionText: ApLocalizations.of(context).iKnow,
+        actionText: t.iKnow,
         actionFunction: () {
           Navigator.of(context, rootNavigator: true).pop();
         },
@@ -36,11 +36,10 @@ class DialogUtils {
     required BuildContext context,
     required Function() onRightButtonClick,
   }) {
-    final ApLocalizations ap = ApLocalizations.of(context);
     showDialog(
       context: context,
       builder: (BuildContext context) => YesNoDialog(
-        title: ap.newsRuleTitle,
+        title: t.newsRuleTitle,
         contentWidget: SelectableText.rich(
           TextSpan(
             style: TextStyle(
@@ -49,22 +48,22 @@ class DialogUtils {
             ),
             children: <TextSpan>[
               TextSpan(
-                text: ap.newsRuleDescription1,
+                text: t.newsRuleDescription1(arg1: ''),
                 style: const TextStyle(fontWeight: FontWeight.normal),
               ),
               TextSpan(
-                text: ap.newsRuleDescription2,
+                text: t.newsRuleDescription2,
                 style: const TextStyle(fontWeight: FontWeight.bold),
               ),
               TextSpan(
-                text: ap.newsRuleDescription3,
+                text: t.newsRuleDescription3,
                 style: const TextStyle(fontWeight: FontWeight.normal),
               ),
             ],
           ),
         ),
-        leftActionText: ap.cancel,
-        rightActionText: ap.contactFansPage,
+        leftActionText: t.cancel,
+        rightActionText: t.contactFansPage,
         leftActionFunction: () {},
         rightActionFunction: onRightButtonClick,
       ),
@@ -75,7 +74,7 @@ class DialogUtils {
       showDialog(
         context: context,
         builder: (BuildContext context) => DefaultDialog(
-          title: ApLocalizations.of(context).updateNoteTitle,
+          title: t.updateNoteTitle,
           contentWidget: Text(
             content,
             textAlign: TextAlign.center,
@@ -83,7 +82,7 @@ class DialogUtils {
               color: Theme.of(context).colorScheme.onSurfaceVariant,
             ),
           ),
-          actionText: ApLocalizations.of(context).iKnow,
+          actionText: t.iKnow,
           actionFunction: () => Navigator.of(context).pop(),
         ),
       );
@@ -100,7 +99,7 @@ class DialogUtils {
     String? githubBranchName,
   }) async {
     final PackageInfo packageInfo = await PackageInfo.fromPlatform();
-    final ApLocalizations app = ApLocalizations.current;
+    final app = t;
     final int versionDiff =
         versionInfo.code - int.parse(packageInfo.buildNumber);
     final String versionName = 'v${versionInfo.code ~/ 10000}.'
@@ -142,12 +141,7 @@ class DialogUtils {
       );
     }
     final String versionContent = '${'\n$versionName\n'}${versionInfo.content}';
-    final String updateContent = sprintf(
-      app.updateContent,
-      <String>[
-        appName,
-      ],
-    );
+    final String updateContent = app.updateContent(arg1: appName);
     final RichText contentWidget = RichText(
       textAlign: TextAlign.center,
       text: TextSpan(

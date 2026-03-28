@@ -9,7 +9,7 @@ import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:sign_in_with_apple/sign_in_with_apple.dart';
-import 'package:sprintf/sprintf.dart';
+
 
 enum _State { notLogin, loading, done, error }
 
@@ -40,7 +40,7 @@ class _AnnouncementHomePageState extends State<AnnouncementHomePage> {
   final TextEditingController _password = TextEditingController();
   final TextEditingController _reviewDescription = TextEditingController();
 
-  ApLocalizations get ap => ApLocalizations.of(context);
+  Translations get ap => t;
 
   _State state = _State.notLogin;
 
@@ -233,11 +233,8 @@ class _AnnouncementHomePageState extends State<AnnouncementHomePage> {
                           ),
                           children: <TextSpan>[
                             TextSpan(
-                              text: '${sprintf(
-                                ap.newsRuleDescription1,
-                                <String>[
-                                  widget.organizationDomain ?? '',
-                                ],
+                              text: '${ap.newsRuleDescription1(
+                                arg1: widget.organizationDomain ?? '',
                               )}\n',
                               style: const TextStyle(
                                 fontWeight: FontWeight.normal,
@@ -357,11 +354,8 @@ class _AnnouncementHomePageState extends State<AnnouncementHomePage> {
                     TextStyle(color: ApTheme.of(context).grey, fontSize: 16.0),
                 children: <TextSpan>[
                   TextSpan(
-                    text: sprintf(
-                      ap.newsRuleDescription1,
-                      <String>[
-                        widget.organizationDomain ?? '',
-                      ],
+                    text: ap.newsRuleDescription1(
+                      arg1: widget.organizationDomain ?? '',
                     ),
                     style: const TextStyle(fontWeight: FontWeight.normal),
                   ),

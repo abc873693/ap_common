@@ -32,14 +32,13 @@ class _BlackListPageState extends State<BlackListPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text(ApLocalizations.of(context).blackList),
+        title: Text(t.blackList),
       ),
       body: _body(),
     );
   }
 
   Widget _body() {
-    final ApLocalizations ap = ApLocalizations.of(context);
     switch (state) {
       case _State.loading:
         return Container(
@@ -53,7 +52,7 @@ class _BlackListPageState extends State<BlackListPage> {
           },
           child: HintContent(
             icon: ApIcon.classIcon,
-            content: ap.clickToRetry,
+            content: t.clickToRetry,
           ),
         );
       case _State.done:
@@ -107,7 +106,7 @@ class _BlackListPageState extends State<BlackListPage> {
       // ignore: always_specify_types
       callback: GeneralCallback(
         onSuccess: (_) {
-          Toast.show(ApLocalizations.current.updateSuccess, context);
+          Toast.show(t.updateSuccess, context);
           setState(() => state = _State.done);
         },
         onFailure: (DioException e) {

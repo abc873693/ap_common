@@ -26,7 +26,7 @@ class NotificationListViewState extends State<NotificationListView>
   @override
   bool get wantKeepAlive => true;
 
-  ApLocalizations get ap => ApLocalizations.of(context);
+  Translations get ap => t;
 
   ScrollController? controller;
 

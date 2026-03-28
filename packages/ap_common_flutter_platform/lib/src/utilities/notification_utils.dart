@@ -4,7 +4,7 @@ import 'package:ap_common_flutter_core/ap_common_flutter_core.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
-import 'package:sprintf/sprintf.dart';
+
 import 'package:timezone/data/latest.dart' as tz;
 import 'package:timezone/timezone.dart' as tz;
 
@@ -130,27 +130,22 @@ class ApNotificationUtil extends NotificationUtil {
     String? androidResourceIcon = androidResourceName,
     VoidCallback? onSelectNotification,
   }) async {
-    final ApLocalizations ap = ApLocalizations.of(context);
-    final String content = sprintf(
-      ap.courseNotifyContent,
-      <String?>[
-        courseNotify.title,
-        if (courseNotify.location == null || courseNotify.location!.isEmpty)
-          ap.courseNotifyUnknown
-        else
-          courseNotify.location,
-      ],
+    final String content = t.courseNotifyContent(
+      arg1: courseNotify.title ?? '',
+      arg2: (courseNotify.location == null || courseNotify.location!.isEmpty)
+          ? t.courseNotifyUnknown
+          : courseNotify.location!,
     );
     final TimeOfDay time =
         parseTime(courseNotify.startTime, beforeMinutes: beforeMinutes);
     await scheduleWeeklyNotify(
       id: courseNotify.id,
-      title: ap.courseNotify,
+      title: t.courseNotify,
       content: content,
       weekday: weekday,
       time: time,
       androidChannelId: '$course',
-      androidChannelDescription: ap.courseNotify,
+      androidChannelDescription: t.courseNotify,
       settings: settings,
       onSelectNotification: onSelectNotification,
     );
