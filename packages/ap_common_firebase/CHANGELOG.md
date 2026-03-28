@@ -1,3 +1,7 @@
+## 1.0.1-dev.3
+
+ - **FIX**(firebase): upgrade firebase deps and adapt to new API. ([7540d9db](https://github.com/abc873693/ap_common/commit/7540d9db6474bef1e6952a72366686389087f2ad))
+
 ## 1.0.1-dev.2
 
  - Update a dependency to the latest release.
