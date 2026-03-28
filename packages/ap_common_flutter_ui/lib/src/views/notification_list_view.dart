@@ -66,14 +66,14 @@ class NotificationListViewState extends State<NotificationListView>
           child: HintContent(
             icon: ApIcon.assignment,
             content: widget.state == NotificationState.error
-                ? ap.clickToRetry
-                : ap.clickToRetry,
+                ? context.ap.clickToRetry
+                : context.ap.clickToRetry,
           ),
         );
       case NotificationState.offline:
         return HintContent(
           icon: ApIcon.offlineBolt,
-          content: ap.offlineMode,
+          content: context.ap.offlineMode,
         );
       default:
         return RefreshIndicator(

@@ -21,8 +21,6 @@ class AnnouncementContentPage extends StatefulWidget {
 class AnnouncementContentPageState extends State<AnnouncementContentPage> {
   _Status state = _Status.finish;
 
-  ApLocalizations get app => ap;
-
   @override
   void initState() {
     AnalyticsUtil.instance.setCurrentScreen(
@@ -41,7 +39,7 @@ class AnnouncementContentPageState extends State<AnnouncementContentPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text(app.announcements),
+        title: Text(context.ap.announcements),
       ),
       body: _homebody(),
     );
@@ -79,7 +77,7 @@ class AnnouncementContentPageState extends State<AnnouncementContentPage> {
       case _Status.empty:
         return HintContent(
           icon: ApIcon.error,
-          content: app.somethingError,
+          content: context.ap.somethingError,
         );
     }
   }

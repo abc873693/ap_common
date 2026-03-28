@@ -37,7 +37,7 @@ class ScorePageState extends State<ScorePage> {
     return ScoreScaffold(
       state: state,
       scoreData: scoreData,
-      customHint: isOffline ? ap.offlineScore : '',
+      customHint: isOffline ? context.ap.offlineScore : '',
       customStateHint: customStateHint,
       semesterData: semesterData,
       onSelect: (int index) {

@@ -45,7 +45,7 @@ class LoginPageState extends State<LoginPage> {
           keyboardType: TextInputType.emailAddress,
           focusNode: usernameFocusNode,
           nextFocusNode: passwordFocusNode,
-          labelText: ap.studentId,
+          labelText: context.ap.studentId,
           autofillHints: const <String>[AutofillHints.username],
         ),
         ApTextField(
@@ -57,7 +57,7 @@ class LoginPageState extends State<LoginPage> {
             passwordFocusNode.unfocus();
             _login();
           },
-          labelText: ap.password,
+          labelText: context.ap.password,
           autofillHints: const <String>[AutofillHints.password],
         ),
         const SizedBox(height: 8.0),
@@ -65,12 +65,12 @@ class LoginPageState extends State<LoginPage> {
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
             TextCheckBox(
-              text: ap.autoLogin,
+              text: context.ap.autoLogin,
               value: isAutoLogin!,
               onChanged: _onAutoLoginChanged,
             ),
             TextCheckBox(
-              text: ap.rememberPassword,
+              text: context.ap.rememberPassword,
               value: isRememberPassword!,
               onChanged: _onRememberPasswordChanged,
             ),
@@ -78,13 +78,13 @@ class LoginPageState extends State<LoginPage> {
         ),
         const SizedBox(height: 8.0),
         ApButton(
-          text: ap.login,
+          text: context.ap.login,
           onPressed: () {
             _login();
           },
         ),
         ApFlatButton(
-          text: ap.offlineLogin,
+          text: context.ap.offlineLogin,
           onPressed: _offlineLogin,
         ),
 //        ApFlatButton(
@@ -149,7 +149,7 @@ class LoginPageState extends State<LoginPage> {
 
   Future<void> _login() async {
     if (_username.text.isEmpty || _password.text.isEmpty) {
-      UiUtil.instance.showToast(context, ap.doNotEmpty, gravity: gravity);
+      UiUtil.instance.showToast(context, context.ap.doNotEmpty, gravity: gravity);
     } else {
       asyncLogin();
     }
@@ -160,7 +160,7 @@ class LoginPageState extends State<LoginPage> {
       context: context,
       builder: (BuildContext context) => PopScope(
         canPop: false,
-        child: ProgressDialog(ap.logining),
+        child: ProgressDialog(context.ap.logining),
       ),
       barrierDismissible: false,
     );
@@ -182,13 +182,13 @@ class LoginPageState extends State<LoginPage> {
     final String password =
         PreferenceUtil.instance.getStringSecurity(Constants.PREF_PASSWORD, '');
     if (username.isEmpty || password.isEmpty) {
-      UiUtil.instance.showToast(context, ap.noOfflineLoginData);
+      UiUtil.instance.showToast(context, context.ap.noOfflineLoginData);
     } else {
       if (username != _username.text || password != _password.text) {
-        UiUtil.instance.showToast(context, ap.offlineLoginPasswordError);
+        UiUtil.instance.showToast(context, context.ap.offlineLoginPasswordError);
       } else {
         PreferenceUtil.instance.setBool(Constants.PREF_IS_OFFLINE_LOGIN, true);
-        UiUtil.instance.showToast(context, ap.loadOfflineData);
+        UiUtil.instance.showToast(context, context.ap.loadOfflineData);
         Navigator.of(context).pop(true);
       }
     }

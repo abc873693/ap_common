@@ -12,6 +12,7 @@ class DialogUtils {
     required String title,
     required String content,
   }) {
+    final ApLocalizations l10n = context.ap;
     showDialog(
       context: context,
       builder: (BuildContext context) => DefaultDialog(
@@ -24,7 +25,7 @@ class DialogUtils {
             fontSize: 16.0,
           ),
         ),
-        actionText: ap.iKnow,
+        actionText: l10n.iKnow,
         actionFunction: () {
           Navigator.of(context, rootNavigator: true).pop();
         },
@@ -36,10 +37,11 @@ class DialogUtils {
     required BuildContext context,
     required Function() onRightButtonClick,
   }) {
+    final ApLocalizations l10n = context.ap;
     showDialog(
       context: context,
       builder: (BuildContext context) => YesNoDialog(
-        title: ap.newsRuleTitle,
+        title: l10n.newsRuleTitle,
         contentWidget: SelectableText.rich(
           TextSpan(
             style: TextStyle(
@@ -48,44 +50,46 @@ class DialogUtils {
             ),
             children: <TextSpan>[
               TextSpan(
-                text: ap.newsRuleDescription1(arg1: ''),
+                text: l10n.newsRuleDescription1(arg1: ''),
                 style: const TextStyle(fontWeight: FontWeight.normal),
               ),
               TextSpan(
-                text: ap.newsRuleDescription2,
+                text: l10n.newsRuleDescription2,
                 style: const TextStyle(fontWeight: FontWeight.bold),
               ),
               TextSpan(
-                text: ap.newsRuleDescription3,
+                text: l10n.newsRuleDescription3,
                 style: const TextStyle(fontWeight: FontWeight.normal),
               ),
             ],
           ),
         ),
-        leftActionText: ap.cancel,
-        rightActionText: ap.contactFansPage,
+        leftActionText: l10n.cancel,
+        rightActionText: l10n.contactFansPage,
         leftActionFunction: () {},
         rightActionFunction: onRightButtonClick,
       ),
     );
   }
 
-  static void showUpdateContent(BuildContext context, String content) =>
-      showDialog(
-        context: context,
-        builder: (BuildContext context) => DefaultDialog(
-          title: ap.updateNoteTitle,
-          contentWidget: Text(
-            content,
-            textAlign: TextAlign.center,
-            style: TextStyle(
-              color: Theme.of(context).colorScheme.onSurfaceVariant,
-            ),
+  static void showUpdateContent(BuildContext context, String content) {
+    final ApLocalizations l10n = context.ap;
+    showDialog(
+      context: context,
+      builder: (BuildContext context) => DefaultDialog(
+        title: l10n.updateNoteTitle,
+        contentWidget: Text(
+          content,
+          textAlign: TextAlign.center,
+          style: TextStyle(
+            color: Theme.of(context).colorScheme.onSurfaceVariant,
           ),
-          actionText: ap.iKnow,
-          actionFunction: () => Navigator.of(context).pop(),
         ),
-      );
+        actionText: l10n.iKnow,
+        actionFunction: () => Navigator.of(context).pop(),
+      ),
+    );
+  }
 
   static Future<void> showNewVersionContent({
     required BuildContext context,
@@ -99,7 +103,7 @@ class DialogUtils {
     String? githubBranchName,
   }) async {
     final PackageInfo packageInfo = await PackageInfo.fromPlatform();
-    final app = t;
+    final ApLocalizations app = context.ap;
     final int versionDiff =
         versionInfo.code - int.parse(packageInfo.buildNumber);
     final String versionName = 'v${versionInfo.code ~/ 10000}.'

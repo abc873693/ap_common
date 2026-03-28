@@ -45,7 +45,7 @@ class ApUtils {
           if (!context.mounted) return;
           UiUtil.instance.showToast(
             context,
-            ap.platformError,
+            context.ap.platformError,
           );
         },
       );
@@ -56,8 +56,8 @@ class ApUtils {
     BuildContext context,
     String defaultUrl,
   ) async {
+    final ApLocalizations app = context.ap;
     await Future<void>.delayed(const Duration(seconds: 1));
-    final ApLocalizations app = ap;
     //ignore: use_build_context_synchronously
     if (!context.mounted) return;
     showDialog(
@@ -86,7 +86,7 @@ class ApUtils {
     String defaultUrl,
   ) async {
     // await Future.delayed(Duration(seconds: 1));
-    final ApLocalizations app = ap;
+    final ApLocalizations app = context.ap;
     showModalBottomSheet<void>(
       context: context,
       backgroundColor: const Color(0x00000000),

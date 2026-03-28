@@ -64,7 +64,7 @@ class PhoneListViewState extends State<PhoneListView>
       case PhoneState.error:
         return HintContent(
           icon: ApIcon.assignment,
-          content: ap.clickToRetry,
+          content: context.ap.clickToRetry,
         );
       default:
         return CustomScrollView(

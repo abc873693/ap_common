@@ -108,11 +108,12 @@ class MyAppState extends State<MyApp> with WidgetsBindingObserver {
         child: Builder(
           builder: (BuildContext context) {
             final Color seedColor = ApTheme.of(context).seedColor;
-            return TranslationProvider(
-              child: Builder(
-                builder: (BuildContext context) {
+            return ap_l10n.TranslationProvider(
+              child: TranslationProvider(
+                child: Builder(
+                  builder: (BuildContext context) {
                   return MaterialApp(
-                    onGenerateTitle: (BuildContext context) => app.appName,
+                    onGenerateTitle: (BuildContext context) => context.app.appName,
                     debugShowCheckedModeBanner: false,
                     routes: <String, WidgetBuilder>{
                       Navigator.defaultRouteName: (BuildContext context) =>
@@ -133,8 +134,9 @@ class MyAppState extends State<MyApp> with WidgetsBindingObserver {
                       GlobalWidgetsLocalizations.delegate,
                       GlobalCupertinoLocalizations.delegate,
                     ],
-                  );
-                },
+                    );
+                  },
+                ),
               ),
             );
           },

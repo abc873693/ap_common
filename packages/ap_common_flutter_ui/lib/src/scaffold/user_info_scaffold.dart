@@ -25,8 +25,6 @@ class UserInfoScaffold extends StatefulWidget {
 }
 
 class UserInfoScaffoldState extends State<UserInfoScaffold> {
-  ApLocalizations get app => ap;
-
   BarCodeMode codeMode = BarCodeMode.qrCode;
 
   bool _isRefreshing = false;
@@ -213,14 +211,14 @@ class UserInfoScaffoldState extends State<UserInfoScaffold> {
         children: <Widget>[
           InfoRow(
             icon: Icons.badge_outlined,
-            title: app.studentId,
+            title: context.ap.studentId,
             value: widget.userInfo.id,
           ),
           _buildDivider(colorScheme),
           if (widget.userInfo.educationSystem != null) ...<Widget>[
             InfoRow(
               icon: Icons.school_outlined,
-              title: app.educationSystem,
+              title: context.ap.educationSystem,
               value: widget.userInfo.educationSystem!,
             ),
             _buildDivider(colorScheme),
@@ -228,20 +226,20 @@ class UserInfoScaffoldState extends State<UserInfoScaffold> {
           if (widget.userInfo.email != null) ...<Widget>[
             InfoRow(
               icon: Icons.email_outlined,
-              title: app.email,
+              title: context.ap.email,
               value: widget.userInfo.email!,
             ),
             _buildDivider(colorScheme),
           ],
           InfoRow(
             icon: Icons.domain_outlined,
-            title: app.department,
+            title: context.ap.department,
             value: widget.userInfo.department ?? '',
           ),
           _buildDivider(colorScheme),
           InfoRow(
             icon: Icons.class_outlined,
-            title: app.studentClass,
+            title: context.ap.studentClass,
             value: widget.userInfo.className ?? '',
           ),
         ],
