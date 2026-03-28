@@ -15,19 +15,14 @@ dependencies:
   ap_common_core: ^1.0.0
   dio: ^5.7.0
   intl: ">=0.16.0 <1.0.0"
-  multiple_localization: any
   cross_file: ^0.3.4+2
+  slang: ^4.14.0
+  slang_flutter: ^4.14.0
 
 dev_dependencies:
   flutter_test:
     sdk: flutter
+  slang_build_runner: ^4.14.0
+  build_runner: ^2.4.0
 
 flutter:
-
-flutter_intl:
-  enabled: true
-  class_name: ApLocalizations
-  main_locale: 'zh_TW'
-  arb_dir: lib/src/l10n
-  output_dir: lib/src/l10n
-  use_deferred_loading: true
