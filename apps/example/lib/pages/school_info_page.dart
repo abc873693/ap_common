@@ -54,8 +54,6 @@ class SchoolInfoPageState extends State<SchoolInfoPage>
 
   PdfState pdfState = PdfState.loading;
 
-  late ApLocalizations ap;
-
   TabController? controller;
 
   int _currentIndex = 0;
@@ -82,10 +80,9 @@ class SchoolInfoPageState extends State<SchoolInfoPage>
 
   @override
   Widget build(BuildContext context) {
-    ap = ApLocalizations.of(context);
     return Scaffold(
       appBar: AppBar(
-        title: Text(ap.schoolInfo),
+        title: Text(t.schoolInfo),
       ),
       body: TabBarView(
         controller: controller,
@@ -127,15 +124,15 @@ class SchoolInfoPageState extends State<SchoolInfoPage>
         destinations: <NavigationDestination>[
           NavigationDestination(
             icon: Icon(ApIcon.fiberNew),
-            label: ap.notifications,
+            label: t.notifications,
           ),
           NavigationDestination(
             icon: Icon(ApIcon.phone),
-            label: ap.phones,
+            label: t.phones,
           ),
           NavigationDestination(
             icon: Icon(ApIcon.dateRange),
-            label: ap.events,
+            label: t.events,
           ),
         ],
       ),

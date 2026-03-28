@@ -1,0 +1,13 @@
+targets:
+  $default:
+    builders:
+      slang_build_runner:
+        options:
+          input_directory: lib/l10n
+          output_directory: lib/l10n
+          input_file_pattern: .json
+          base_locale: en
+          fallback_strategy: base_locale
+          key_case: camel
+          key_map_case: camel
+          translate_var: appT

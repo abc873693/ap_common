@@ -9,16 +9,13 @@ class DialogUtilsTestPage extends StatefulWidget {
 }
 
 class _DialogUtilsTestPageState extends State<DialogUtilsTestPage> {
-  late AppLocalizations app;
-
   TimeOfDay time = TimeOfDay.now();
 
   @override
   Widget build(BuildContext context) {
-    app = AppLocalizations.of(context);
     return Scaffold(
       appBar: AppBar(
-        title: Text(app.dialogUtilTest),
+        title: Text(appT.dialogUtilTest),
       ),
       body: ListView(
         children: <Widget>[
@@ -34,7 +31,7 @@ class _DialogUtilsTestPageState extends State<DialogUtilsTestPage> {
             onTap: () {
               DialogUtils.showNewVersionContent(
                 context: context,
-                appName: app.appName,
+                appName: appT.appName,
                 iOSAppId: '1439751462',
                 defaultUrl: 'https://www.facebook.com/NKUST.ITC/',
                 githubRepositoryName: 'NKUST-ITC/NKUST-AP-Flutter',
@@ -53,7 +50,7 @@ class _DialogUtilsTestPageState extends State<DialogUtilsTestPage> {
             onTap: () {
               DialogUtils.showUpdateContent(
                 context,
-                app.updateNoteContent,
+                appT.updateNoteContent,
               );
             },
             title: const Text('版本內容對話框'),

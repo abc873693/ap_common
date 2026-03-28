@@ -12,8 +12,6 @@ class LoginPage extends StatefulWidget {
 }
 
 class LoginPageState extends State<LoginPage> {
-  late ApLocalizations ap;
-
   final TextEditingController _username = TextEditingController();
   final TextEditingController _password = TextEditingController();
 
@@ -38,7 +36,6 @@ class LoginPageState extends State<LoginPage> {
 
   @override
   Widget build(BuildContext context) {
-    ap = ApLocalizations.of(context);
     return LoginScaffold(
       logoMode: LogoMode.image,
       logoSource: ImageAssets.K,
@@ -48,7 +45,7 @@ class LoginPageState extends State<LoginPage> {
           keyboardType: TextInputType.emailAddress,
           focusNode: usernameFocusNode,
           nextFocusNode: passwordFocusNode,
-          labelText: ap.studentId,
+          labelText: t.studentId,
           autofillHints: const <String>[AutofillHints.username],
         ),
         ApTextField(
@@ -60,7 +57,7 @@ class LoginPageState extends State<LoginPage> {
             passwordFocusNode.unfocus();
             _login();
           },
-          labelText: ap.password,
+          labelText: t.password,
           autofillHints: const <String>[AutofillHints.password],
         ),
         const SizedBox(height: 8.0),
@@ -68,12 +65,12 @@ class LoginPageState extends State<LoginPage> {
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
             TextCheckBox(
-              text: ap.autoLogin,
+              text: t.autoLogin,
               value: isAutoLogin!,
               onChanged: _onAutoLoginChanged,
             ),
             TextCheckBox(
-              text: ap.rememberPassword,
+              text: t.rememberPassword,
               value: isRememberPassword!,
               onChanged: _onRememberPasswordChanged,
             ),
@@ -81,13 +78,13 @@ class LoginPageState extends State<LoginPage> {
         ),
         const SizedBox(height: 8.0),
         ApButton(
-          text: ap.login,
+          text: t.login,
           onPressed: () {
             _login();
           },
         ),
         ApFlatButton(
-          text: ap.offlineLogin,
+          text: t.offlineLogin,
           onPressed: _offlineLogin,
         ),
 //        ApFlatButton(
@@ -152,7 +149,7 @@ class LoginPageState extends State<LoginPage> {
 
   Future<void> _login() async {
     if (_username.text.isEmpty || _password.text.isEmpty) {
-      UiUtil.instance.showToast(context, ap.doNotEmpty, gravity: gravity);
+      UiUtil.instance.showToast(context, t.doNotEmpty, gravity: gravity);
     } else {
       asyncLogin();
     }
@@ -163,7 +160,7 @@ class LoginPageState extends State<LoginPage> {
       context: context,
       builder: (BuildContext context) => PopScope(
         canPop: false,
-        child: ProgressDialog(ap.logining),
+        child: ProgressDialog(t.logining),
       ),
       barrierDismissible: false,
     );
@@ -185,13 +182,13 @@ class LoginPageState extends State<LoginPage> {
     final String password =
         PreferenceUtil.instance.getStringSecurity(Constants.PREF_PASSWORD, '');
     if (username.isEmpty || password.isEmpty) {
-      UiUtil.instance.showToast(context, ap.noOfflineLoginData);
+      UiUtil.instance.showToast(context, t.noOfflineLoginData);
     } else {
       if (username != _username.text || password != _password.text) {
-        UiUtil.instance.showToast(context, ap.offlineLoginPasswordError);
+        UiUtil.instance.showToast(context, t.offlineLoginPasswordError);
       } else {
         PreferenceUtil.instance.setBool(Constants.PREF_IS_OFFLINE_LOGIN, true);
-        UiUtil.instance.showToast(context, ap.loadOfflineData);
+        UiUtil.instance.showToast(context, t.loadOfflineData);
         Navigator.of(context).pop(true);
       }
     }
