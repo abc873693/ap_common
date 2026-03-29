@@ -286,38 +286,36 @@ class _AnnouncementEditPageState extends State<AnnouncementEditPage> {
                       setState(
                         () => imgurUploadState = _ImgurUploadState.uploading,
                       );
-                      ImgbbHelper.instance!.uploadImage(
+                      final ApiResult<String> result =
+                          await ImgbbHelper.instance!.uploadImage(
                         file: image,
                         expireTime: expireTime,
-                        callback: GeneralCallback<String>(
-                          onFailure: (DioException dioException) {
-                            if (dioException.message
-                                case final String message?) {
-                              UiUtil.instance.showToast(context, message);
-                            }
-                            setState(
-                              () => imgurUploadState = _imgUrl.text.isEmpty
-                                  ? _ImgurUploadState.noFile
-                                  : _ImgurUploadState.done,
-                            );
-                          },
-                          onError: (GeneralResponse generalResponse) {
-                            UiUtil.instance
-                                .showToast(context, generalResponse.message);
-                            setState(
-                              () => imgurUploadState = _imgUrl.text.isEmpty
-                                  ? _ImgurUploadState.noFile
-                                  : _ImgurUploadState.done,
-                            );
-                          },
-                          onSuccess: (String? data) {
-                            _imgUrl.text = data!;
-                            setState(
-                              () => imgurUploadState = _ImgurUploadState.done,
-                            );
-                          },
-                        ),
                       );
+                      switch (result) {
+                        case ApiSuccess<String>(:final data):
+                          _imgUrl.text = data;
+                          setState(
+                            () => imgurUploadState = _ImgurUploadState.done,
+                          );
+                        case ApiFailure<String>(:final exception):
+                          if (exception.message
+                              case final String message?) {
+                            UiUtil.instance.showToast(context, message);
+                          }
+                          setState(
+                            () => imgurUploadState = _imgUrl.text.isEmpty
+                                ? _ImgurUploadState.noFile
+                                : _ImgurUploadState.done,
+                          );
+                        case ApiError<String>(:final response):
+                          UiUtil.instance
+                              .showToast(context, response.message);
+                          setState(
+                            () => imgurUploadState = _imgUrl.text.isEmpty
+                                ? _ImgurUploadState.noFile
+                                : _ImgurUploadState.done,
+                          );
+                      }
                     }
                   },
                   child: Text(
@@ -603,31 +601,30 @@ class _AnnouncementEditPageState extends State<AnnouncementEditPage> {
     tags = announcements.tags ?? <String>[];
   }
 
-  void _fetchData() {
+  Future<void> _fetchData() async {
+    final ApiResult<Announcement> result;
     if (widget.mode == Mode.edit) {
-      AnnouncementHelper.instance.getAnnouncement(
+      result = await AnnouncementHelper.instance.getAnnouncement(
         id: announcements.id!,
-        callback: GeneralCallback<Announcement>.simple(
-          context,
-          (Announcement data) {
-            announcements = data;
-            _mapData();
-            setState(() {});
-          },
-        ),
       );
     } else if (widget.mode == Mode.editApplication) {
-      AnnouncementHelper.instance.getApplication(
+      result = await AnnouncementHelper.instance.getApplication(
         id: announcements.applicationId!,
-        callback: GeneralCallback<Announcement>.simple(
-          context,
-          (Announcement data) {
-            announcements = data;
-            _mapData();
-            setState(() {});
-          },
-        ),
       );
+    } else {
+      return;
+    }
+    switch (result) {
+      case ApiSuccess<Announcement>(:final data):
+        announcements = data;
+        _mapData();
+        setState(() {});
+      case ApiFailure<Announcement>(:final exception):
+        if (exception.i18nMessage case final String message?) {
+          UiUtil.instance.showToast(context, message);
+        }
+      case ApiError<Announcement>(:final response):
+        UiUtil.instance.showToast(context, response.message);
     }
   }
 
@@ -646,10 +643,29 @@ class _AnnouncementEditPageState extends State<AnnouncementEditPage> {
         reviewDescription: _reviewDescription.text,
         tags: tags,
       );
-      final GeneralCallback<Response<dynamic>> callback =
-          GeneralCallback<Response<dynamic>>.simple(
-        context,
-        (_) async {
+
+      final ApiResult<Response<dynamic>> result;
+      switch (widget.mode) {
+        case Mode.add:
+          result = await AnnouncementHelper.instance.addAnnouncement(
+            data: announcements,
+          );
+        case Mode.edit:
+          result = await AnnouncementHelper.instance.updateAnnouncement(
+            data: announcements,
+          );
+        case Mode.application:
+          result = await AnnouncementHelper.instance.addApplication(
+            data: announcements,
+          );
+        case Mode.editApplication:
+          result = await AnnouncementHelper.instance.updateApplication(
+            data: announcements,
+          );
+      }
+
+      switch (result) {
+        case ApiSuccess<Response<dynamic>>():
           switch (widget.mode) {
             case Mode.add:
               UiUtil.instance.showToast(context, context.ap.addSuccess);
@@ -664,59 +680,28 @@ class _AnnouncementEditPageState extends State<AnnouncementEditPage> {
                   await AnnouncementHelper.instance.approveApplication(
                     applicationId: announcements.applicationId,
                     reviewDescription: announcements.reviewDescription,
-                    callback: GeneralCallback<Response<dynamic>>.simple(
-                      context,
-                      (_) {},
-                    ),
                   );
                 } else {
                   await AnnouncementHelper.instance.rejectApplication(
                     applicationId: announcements.applicationId,
                     reviewDescription: announcements.reviewDescription,
-                    callback: GeneralCallback<Response<dynamic>>.simple(
-                      context,
-                      (_) => <dynamic>{},
-                    ),
                   );
                 }
               }
               if (addBlackList ?? false) {
-                if (!mounted) return;
                 await AnnouncementHelper.instance.addBlackList(
                   username: announcements.applicant!,
-                  //ignore: use_build_context_synchronously
-                  callback: GeneralCallback<Response<dynamic>>.simple(
-                    context,
-                    (_) => <dynamic>{},
-                  ),
                 );
               }
           }
           if (!mounted) return;
           Navigator.of(context).pop(true);
-        },
-      );
-      switch (widget.mode) {
-        case Mode.add:
-          AnnouncementHelper.instance.addAnnouncement(
-            data: announcements,
-            callback: callback,
-          );
-        case Mode.edit:
-          AnnouncementHelper.instance.updateAnnouncement(
-            data: announcements,
-            callback: callback,
-          );
-        case Mode.application:
-          AnnouncementHelper.instance.addApplication(
-            data: announcements,
-            callback: callback,
-          );
-        case Mode.editApplication:
-          AnnouncementHelper.instance.updateApplication(
-            data: announcements,
-            callback: callback,
-          );
+        case ApiFailure<Response<dynamic>>(:final exception):
+          if (exception.i18nMessage case final String message?) {
+            UiUtil.instance.showToast(context, message);
+          }
+        case ApiError<Response<dynamic>>(:final response):
+          UiUtil.instance.showToast(context, response.message);
       }
     }
   }

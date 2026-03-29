@@ -290,23 +290,22 @@ class HomePageState extends State<HomePage> {
     //     },
     //   ),
     // );
-    AnnouncementHelper.instance.getAnnouncements(
-      tags: <String>[],
-      callback: GeneralCallback<List<Announcement>>(
-        onFailure: (_) => setState(() => state = HomeState.error),
-        onError: (_) => setState(() => state = HomeState.error),
-        onSuccess: (List<Announcement> data) {
-          announcements = data;
-          setState(() {
-            if (announcements.isEmpty) {
-              state = HomeState.empty;
-            } else {
-              state = HomeState.finish;
-            }
-          });
-        },
-      ),
-    );
+    final ApiResult<List<Announcement>> result =
+        await AnnouncementHelper.instance.getAnnouncements(tags: <String>[]);
+    switch (result) {
+      case ApiSuccess<List<Announcement>>(:final data):
+        announcements = data;
+        setState(() {
+          if (announcements.isEmpty) {
+            state = HomeState.empty;
+          } else {
+            state = HomeState.finish;
+          }
+        });
+      case ApiFailure<List<Announcement>>():
+      case ApiError<List<Announcement>>():
+        setState(() => state = HomeState.error);
+    }
   }
 
   Future<void> _getUserInfo() async {
