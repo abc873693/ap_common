@@ -4,13 +4,18 @@ import 'package:ap_common_announcement_ui/src/api/announcement_helper.dart';
 import 'package:ap_common_flutter_core/ap_common_flutter_core.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:http_mock_adapter/http_mock_adapter.dart';
+import 'package:http_mock_adapter/src/handlers/request_handler.dart';
 
-// A valid JWT token for testing (payload: {"user":{"permission_level":2,"username":"admin","login_type":"normal"},"iat":1700000000,"exp":9999999999})
+// A valid JWT token for testing.
 final String _testJwt = <String>[
   base64Url.encode(utf8.encode('{"alg":"HS256","typ":"JWT"}')),
-  base64Url.encode(utf8.encode(
-    '{"user":{"permission_level":2,"username":"admin","login_type":"normal"},"iat":1700000000,"exp":9999999999}',
-  )),
+  base64Url.encode(
+    utf8.encode(
+      '{"user":{"permission_level":2,"username":"admin",'
+      '"login_type":"normal"},"iat":1700000000,'
+      '"exp":9999999999}',
+    ),
+  ),
   'test_signature',
 ].join('.');
 
@@ -64,7 +69,7 @@ void main() {
     test('returns ApiSuccess with login data on 200', () async {
       dioAdapter.onPost(
         '/login',
-        (server) => server.reply(200, _loginResponse),
+        (MockServer server) => server.reply(200, _loginResponse),
         data: Matchers.any,
       );
 
@@ -89,7 +94,7 @@ void main() {
     test('returns ApiError on 401', () async {
       dioAdapter.onPost(
         '/login',
-        (server) => server.reply(401, 'Invalid credentials'),
+        (MockServer server) => server.reply(401, 'Invalid credentials'),
         data: Matchers.any,
       );
 
@@ -107,7 +112,7 @@ void main() {
     test('returns ApiFailure on network error', () async {
       dioAdapter.onPost(
         '/login',
-        (server) => server.throws(
+        (MockServer server) => server.throws(
           0,
           DioException(
             requestOptions: RequestOptions(path: '/login'),
@@ -130,7 +135,7 @@ void main() {
     test('returns ApiSuccess and sets loginType to google', () async {
       dioAdapter.onPost(
         '/oauth2/google/token',
-        (server) => server.reply(200, _loginResponse),
+        (MockServer server) => server.reply(200, _loginResponse),
         data: Matchers.any,
       );
 
@@ -147,7 +152,7 @@ void main() {
     test('returns ApiSuccess and sets loginType to apple', () async {
       dioAdapter.onPost(
         '/oauth2/apple/token',
-        (server) => server.reply(200, _loginResponse),
+        (MockServer server) => server.reply(200, _loginResponse),
         data: Matchers.any,
       );
 
@@ -168,7 +173,7 @@ void main() {
     test('returns sorted list on 200', () async {
       dioAdapter.onGet(
         '/announcements',
-        (server) => server.reply(200, _announcementListResponse),
+        (MockServer server) => server.reply(200, _announcementListResponse),
       );
 
       final ApiResult<List<Announcement>> result =
@@ -186,7 +191,7 @@ void main() {
     test('returns empty list on 204', () async {
       dioAdapter.onGet(
         '/announcements',
-        (server) => server.reply(204, null),
+        (MockServer server) => server.reply(204, null),
       );
 
       final ApiResult<List<Announcement>> result =
@@ -199,7 +204,7 @@ void main() {
     test('returns ApiError on 403', () async {
       dioAdapter.onGet(
         '/announcements',
-        (server) => server.reply(403, 'Forbidden'),
+        (MockServer server) => server.reply(403, 'Forbidden'),
       );
 
       final ApiResult<List<Announcement>> result =
@@ -215,7 +220,7 @@ void main() {
     test('returns ApiError on 404', () async {
       dioAdapter.onGet(
         '/announcements',
-        (server) => server.reply(404, 'Not Found'),
+        (MockServer server) => server.reply(404, 'Not Found'),
       );
 
       final ApiResult<List<Announcement>> result =
@@ -233,7 +238,7 @@ void main() {
     test('posts with tags and locale', () async {
       dioAdapter.onPost(
         '/announcements',
-        (server) => server.reply(200, _announcementListResponse),
+        (MockServer server) => server.reply(200, _announcementListResponse),
         data: Matchers.any,
       );
 
@@ -250,7 +255,7 @@ void main() {
     test('returns unsorted data when sorted is false', () async {
       dioAdapter.onPost(
         '/announcements',
-        (server) => server.reply(200, _announcementListResponse),
+        (MockServer server) => server.reply(200, _announcementListResponse),
         data: Matchers.any,
       );
 
@@ -270,7 +275,7 @@ void main() {
     test('returns single announcement by id', () async {
       dioAdapter.onGet(
         '/announcements/99',
-        (server) => server.reply(200, _singleAnnouncementResponse),
+        (MockServer server) => server.reply(200, _singleAnnouncementResponse),
       );
 
       final ApiResult<Announcement> result =
@@ -287,12 +292,12 @@ void main() {
     test('returns ApiSuccess on 200', () async {
       dioAdapter.onPost(
         '/announcements/add',
-        (server) => server.reply(200, <String, dynamic>{'message': 'ok'}),
+        (MockServer server) =>
+            server.reply(200, <String, dynamic>{'message': 'ok'}),
         data: Matchers.any,
       );
 
-      final ApiResult<Response<dynamic>> result =
-          await helper.addAnnouncement(
+      final ApiResult<Response<dynamic>> result = await helper.addAnnouncement(
         data: const Announcement(
           title: 'New',
           weight: 1,
@@ -309,12 +314,12 @@ void main() {
       helper.organization = 'nkust';
       dioAdapter.onPost(
         '/announcements/add',
-        (server) => server.reply(200, <String, dynamic>{'message': 'ok'}),
+        (MockServer server) =>
+            server.reply(200, <String, dynamic>{'message': 'ok'}),
         data: Matchers.any,
       );
 
-      final ApiResult<Response<dynamic>> result =
-          await helper.addAnnouncement(
+      final ApiResult<Response<dynamic>> result = await helper.addAnnouncement(
         data: const Announcement(
           title: 'New',
           weight: 1,
@@ -333,7 +338,8 @@ void main() {
     test('returns ApiSuccess on 200', () async {
       dioAdapter.onPut(
         '/announcements/update/1',
-        (server) => server.reply(200, <String, dynamic>{'message': 'ok'}),
+        (MockServer server) =>
+            server.reply(200, <String, dynamic>{'message': 'ok'}),
         data: Matchers.any,
       );
 
@@ -356,7 +362,8 @@ void main() {
     test('returns ApiSuccess on 200', () async {
       dioAdapter.onDelete(
         '/announcements/delete/1',
-        (server) => server.reply(200, <String, dynamic>{'message': 'ok'}),
+        (MockServer server) =>
+            server.reply(200, <String, dynamic>{'message': 'ok'}),
         data: Matchers.any,
       );
 
@@ -383,7 +390,7 @@ void main() {
     test('returns sorted list on 200', () async {
       dioAdapter.onGet(
         '/application',
-        (server) => server.reply(200, _announcementListResponse),
+        (MockServer server) => server.reply(200, _announcementListResponse),
       );
 
       final ApiResult<List<Announcement>> result =
@@ -396,7 +403,7 @@ void main() {
     test('returns empty list on 204', () async {
       dioAdapter.onGet(
         '/application',
-        (server) => server.reply(204, null),
+        (MockServer server) => server.reply(204, null),
       );
 
       final ApiResult<List<Announcement>> result =
@@ -411,7 +418,8 @@ void main() {
     test('returns ApiSuccess on 200', () async {
       dioAdapter.onPut(
         '/application/app-1/approve',
-        (server) => server.reply(200, <String, dynamic>{'message': 'ok'}),
+        (MockServer server) =>
+            server.reply(200, <String, dynamic>{'message': 'ok'}),
         data: Matchers.any,
       );
 
@@ -429,7 +437,8 @@ void main() {
     test('returns ApiSuccess on 200', () async {
       dioAdapter.onPut(
         '/application/app-1/reject',
-        (server) => server.reply(200, <String, dynamic>{'message': 'ok'}),
+        (MockServer server) =>
+            server.reply(200, <String, dynamic>{'message': 'ok'}),
         data: Matchers.any,
       );
 
@@ -447,7 +456,8 @@ void main() {
     test('returns ApiSuccess on 200', () async {
       dioAdapter.onDelete(
         '/application/app-1',
-        (server) => server.reply(200, <String, dynamic>{'message': 'ok'}),
+        (MockServer server) =>
+            server.reply(200, <String, dynamic>{'message': 'ok'}),
       );
 
       final ApiResult<Response<dynamic>> result =
@@ -467,7 +477,7 @@ void main() {
       // so the mock must return a raw JSON string.
       dioAdapter.onGet(
         '/ban',
-        (server) => server.reply(
+        (MockServer server) => server.reply(
           200,
           '["user1","user2"]',
           headers: <String, List<String>>{
@@ -490,7 +500,8 @@ void main() {
     test('returns ApiSuccess on 200', () async {
       dioAdapter.onPut(
         '/ban/',
-        (server) => server.reply(200, <String, dynamic>{'message': 'ok'}),
+        (MockServer server) =>
+            server.reply(200, <String, dynamic>{'message': 'ok'}),
         data: Matchers.any,
       );
 
@@ -505,7 +516,8 @@ void main() {
     test('returns ApiSuccess on 200', () async {
       dioAdapter.onDelete(
         '/ban/',
-        (server) => server.reply(200, <String, dynamic>{'message': 'ok'}),
+        (MockServer server) =>
+            server.reply(200, <String, dynamic>{'message': 'ok'}),
         data: Matchers.any,
       );
 
@@ -524,7 +536,7 @@ void main() {
     test('401 maps to ApiError with tokenExpire status', () async {
       dioAdapter.onGet(
         '/announcements',
-        (server) => server.reply(401, 'Unauthorized'),
+        (MockServer server) => server.reply(401, 'Unauthorized'),
       );
 
       final ApiResult<List<Announcement>> result =
@@ -540,7 +552,7 @@ void main() {
     test('403 maps to ApiError with notPermission status', () async {
       dioAdapter.onGet(
         '/announcements',
-        (server) => server.reply(403, 'Forbidden'),
+        (MockServer server) => server.reply(403, 'Forbidden'),
       );
 
       final ApiResult<List<Announcement>> result =
@@ -556,7 +568,7 @@ void main() {
     test('404 maps to ApiError with notFoundData status', () async {
       dioAdapter.onGet(
         '/announcements',
-        (server) => server.reply(404, 'Not Found'),
+        (MockServer server) => server.reply(404, 'Not Found'),
       );
 
       final ApiResult<List<Announcement>> result =
@@ -572,7 +584,7 @@ void main() {
     test('500 maps to ApiFailure', () async {
       dioAdapter.onGet(
         '/announcements',
-        (server) => server.reply(500, 'Internal Server Error'),
+        (MockServer server) => server.reply(500, 'Internal Server Error'),
       );
 
       final ApiResult<List<Announcement>> result =
@@ -584,7 +596,7 @@ void main() {
     test('connection timeout maps to ApiFailure', () async {
       dioAdapter.onGet(
         '/announcements',
-        (server) => server.throws(
+        (MockServer server) => server.throws(
           0,
           DioException(
             requestOptions: RequestOptions(path: '/announcements'),

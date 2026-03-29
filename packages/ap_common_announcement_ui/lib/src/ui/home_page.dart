@@ -600,7 +600,9 @@ class _AnnouncementHomePageState extends State<AnnouncementHomePage> {
                     text: '\n${context.ap.expireTime}：',
                     style: const TextStyle(fontWeight: FontWeight.bold),
                   ),
-                  TextSpan(text: '${item.expireTime ?? context.ap.noExpiration}\n'),
+                  TextSpan(
+                    text: '${item.expireTime ?? context.ap.noExpiration}\n',
+                  ),
                   TextSpan(
                     text: '${context.ap.description}：',
                     style: const TextStyle(fontWeight: FontWeight.bold),
@@ -633,7 +635,11 @@ class _AnnouncementHomePageState extends State<AnnouncementHomePage> {
   Future<void> _getAnnouncements() async {
     final ApiResult<List<Announcement>> result =
         await AnnouncementHelper.instance.getAllAnnouncements();
-    if (result case ApiSuccess<List<Announcement>>(:final data)) {
+    if (!mounted) return;
+    if (result
+        case ApiSuccess<List<Announcement>>(
+          :final List<Announcement> data,
+        )) {
       announcements = data;
       setState(() => state = _State.done);
     } else {
@@ -644,7 +650,11 @@ class _AnnouncementHomePageState extends State<AnnouncementHomePage> {
   Future<void> _getApplications() async {
     final ApiResult<List<Announcement>> result =
         await AnnouncementHelper.instance.getApplications();
-    if (result case ApiSuccess<List<Announcement>>(:final data)) {
+    if (!mounted) return;
+    if (result
+        case ApiSuccess<List<Announcement>>(
+          :final List<Announcement> data,
+        )) {
       applications = data;
       setState(() => state = _State.done);
     } else {
@@ -781,7 +791,9 @@ class _AnnouncementHomePageState extends State<AnnouncementHomePage> {
       if (!mounted) return;
 
       switch (result) {
-        case ApiSuccess<AnnouncementLoginData>(:final data):
+        case ApiSuccess<AnnouncementLoginData>(
+              :final AnnouncementLoginData data,
+            ):
           loginData = data;
           loginData!.save();
           if (kDebugMode) debugPrint(data.key);
@@ -808,10 +820,14 @@ class _AnnouncementHomePageState extends State<AnnouncementHomePage> {
             if (data.level != PermissionLevel.user) _getAnnouncements();
             _getApplications();
           });
-        case ApiError<AnnouncementLoginData>(:final response):
+        case ApiError<AnnouncementLoginData>(
+              :final GeneralResponse response,
+            ):
           if (isNotLogin) Navigator.of(context, rootNavigator: true).pop();
           UiUtil.instance.showToast(context, response.message);
-        case ApiFailure<AnnouncementLoginData>(:final exception):
+        case ApiFailure<AnnouncementLoginData>(
+              :final DioException exception,
+            ):
           if (isNotLogin) Navigator.of(context, rootNavigator: true).pop();
           if (exception.i18nMessage case final String message?) {
             UiUtil.instance.showToast(context, message);

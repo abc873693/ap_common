@@ -60,7 +60,7 @@ void main() {
       const ApiResult<String> result = ApiSuccess<String>('data');
 
       final String value = switch (result) {
-        ApiSuccess<String>(:final data) => data,
+        ApiSuccess<String>(:final String data) => data,
         ApiFailure<String>() => 'fail',
         ApiError<String>() => 'error',
       };

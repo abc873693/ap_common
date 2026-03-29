@@ -200,7 +200,9 @@ class _AnnouncementEditPageState extends State<AnnouncementEditPage> {
                                       .pop();
                                 } else {
                                   UiUtil.instance.showToast(
-                                      context, context.ap.tagRepeatHint);
+                                    context,
+                                    context.ap.tagRepeatHint,
+                                  );
                                 }
                               }
                             },
@@ -291,28 +293,21 @@ class _AnnouncementEditPageState extends State<AnnouncementEditPage> {
                         file: image,
                         expireTime: expireTime,
                       );
-                      switch (result) {
-                        case ApiSuccess<String>(:final data):
-                          _imgUrl.text = data;
-                          setState(
-                            () => imgurUploadState = _ImgurUploadState.done,
-                          );
-                        case ApiFailure<String>(:final exception):
-                          if (exception.message case final String message?) {
-                            UiUtil.instance.showToast(context, message);
-                          }
-                          setState(
-                            () => imgurUploadState = _imgUrl.text.isEmpty
-                                ? _ImgurUploadState.noFile
-                                : _ImgurUploadState.done,
-                          );
-                        case ApiError<String>(:final response):
-                          UiUtil.instance.showToast(context, response.message);
-                          setState(
-                            () => imgurUploadState = _imgUrl.text.isEmpty
-                                ? _ImgurUploadState.noFile
-                                : _ImgurUploadState.done,
-                          );
+                      if (!mounted) return;
+                      if (result
+                          case ApiSuccess<String>(:final String data)) {
+                        _imgUrl.text = data;
+                        setState(
+                          () => imgurUploadState = _ImgurUploadState.done,
+                        );
+                      } else {
+                        // ignore: use_build_context_synchronously
+                        result.showErrorToast(context);
+                        setState(
+                          () => imgurUploadState = _imgUrl.text.isEmpty
+                              ? _ImgurUploadState.noFile
+                              : _ImgurUploadState.done,
+                        );
                       }
                     }
                   },
@@ -612,7 +607,8 @@ class _AnnouncementEditPageState extends State<AnnouncementEditPage> {
     } else {
       return;
     }
-    if (result case ApiSuccess<Announcement>(:final data)) {
+    if (!mounted) return;
+    if (result case ApiSuccess<Announcement>(:final Announcement data)) {
       announcements = data;
       _mapData();
       setState(() {});
@@ -631,8 +627,10 @@ class _AnnouncementEditPageState extends State<AnnouncementEditPage> {
         description: _description.text,
         imgUrl: _imgUrl.text,
         url: _url.text,
-        weight: _weight.text.isNotEmpty ? (int.tryParse(_weight.text) ?? 0) : 0,
-        expireTime: (expireTime == null) ? null : expireTime!.parseToString(),
+        weight:
+            _weight.text.isNotEmpty ? (int.tryParse(_weight.text) ?? 0) : 0,
+        expireTime:
+            (expireTime == null) ? null : expireTime!.parseToString(),
         reviewDescription: _reviewDescription.text,
         tags: tags,
       );
@@ -657,6 +655,7 @@ class _AnnouncementEditPageState extends State<AnnouncementEditPage> {
           );
       }
 
+      if (!mounted) return;
       if (!result.isSuccess) {
         result.showErrorToast(context);
         return;
@@ -673,25 +672,30 @@ class _AnnouncementEditPageState extends State<AnnouncementEditPage> {
         case Mode.editApplication:
           UiUtil.instance.showToast(context, context.ap.updateSuccess);
           if (isApproval != null) {
+            final ApiResult<Response<dynamic>> reviewResult;
             if (isApproval) {
-              (await AnnouncementHelper.instance.approveApplication(
+              reviewResult =
+                  await AnnouncementHelper.instance.approveApplication(
                 applicationId: announcements.applicationId,
                 reviewDescription: announcements.reviewDescription,
-              ))
-                  .showErrorToast(context);
+              );
             } else {
-              (await AnnouncementHelper.instance.rejectApplication(
+              reviewResult =
+                  await AnnouncementHelper.instance.rejectApplication(
                 applicationId: announcements.applicationId,
                 reviewDescription: announcements.reviewDescription,
-              ))
-                  .showErrorToast(context);
+              );
             }
+            if (!mounted) return;
+            reviewResult.showErrorToast(context);
           }
           if (addBlackList ?? false) {
-            (await AnnouncementHelper.instance.addBlackList(
+            final ApiResult<Response<dynamic>> banResult =
+                await AnnouncementHelper.instance.addBlackList(
               username: announcements.applicant!,
-            ))
-                .showErrorToast(context);
+            );
+            if (!mounted) return;
+            banResult.showErrorToast(context);
           }
       }
       if (!mounted) return;

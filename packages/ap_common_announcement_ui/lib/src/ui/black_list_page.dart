@@ -80,7 +80,8 @@ class _BlackListPageState extends State<BlackListPage> {
     setState(() => state = _State.loading);
     final ApiResult<List<String>> result =
         await AnnouncementHelper.instance.getBlackList();
-    if (result case ApiSuccess<List<String>>(:final data)) {
+    if (!mounted) return;
+    if (result case ApiSuccess<List<String>>(:final List<String> data)) {
       blackList = data;
       setState(() => state = _State.done);
     } else {
@@ -97,6 +98,7 @@ class _BlackListPageState extends State<BlackListPage> {
         await AnnouncementHelper.instance.removeFromBlackList(
       username: username,
     );
+    if (!mounted) return;
     if (result.isSuccess) {
       Toast.show(context.ap.updateSuccess, context);
     } else {

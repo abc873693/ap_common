@@ -119,8 +119,9 @@ class AnnouncementHelper {
       return ApiSuccess<T>(await action());
     } on DioException catch (e) {
       if (e.isUnauthorized) {
-        final String message =
-            e.response?.data is String ? e.response!.data as String : ap.loginFail;
+        final String message = e.response?.data is String
+            ? e.response!.data as String
+            : ap.loginFail;
         return ApiError<T>(
           GeneralResponse(statusCode: tokenExpire, message: message),
         );
@@ -140,9 +141,9 @@ class AnnouncementHelper {
     );
     return switch (result) {
       ApiSuccess<AnnouncementLoginData>() => const ApiSuccess<bool>(true),
-      ApiFailure<AnnouncementLoginData>(:final exception) =>
+      ApiFailure<AnnouncementLoginData>(:final DioException exception) =>
         ApiFailure<bool>(exception),
-      ApiError<AnnouncementLoginData>(:final response) =>
+      ApiError<AnnouncementLoginData>(:final GeneralResponse response) =>
         ApiError<bool>(response),
     };
   }
