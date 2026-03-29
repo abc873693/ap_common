@@ -80,16 +80,12 @@ class _BlackListPageState extends State<BlackListPage> {
     setState(() => state = _State.loading);
     final ApiResult<List<String>> result =
         await AnnouncementHelper.instance.getBlackList();
-    switch (result) {
-      case ApiSuccess<List<String>>(:final data):
-        blackList = data;
-        setState(() => state = _State.done);
-      case ApiFailure<List<String>>(:final exception):
-        Toast.show(exception.i18nMessage, context);
-        setState(() => state = _State.error);
-      case ApiError<List<String>>(:final response):
-        Toast.show(response.message, context);
-        setState(() => state = _State.error);
+    if (result case ApiSuccess<List<String>>(:final data)) {
+      blackList = data;
+      setState(() => state = _State.done);
+    } else {
+      result.showErrorToast(context);
+      setState(() => state = _State.error);
     }
   }
 
@@ -101,16 +97,11 @@ class _BlackListPageState extends State<BlackListPage> {
         await AnnouncementHelper.instance.removeFromBlackList(
       username: username,
     );
-    switch (result) {
-      case ApiSuccess<Response<dynamic>>():
-        Toast.show(context.ap.updateSuccess, context);
-        setState(() => state = _State.done);
-      case ApiFailure<Response<dynamic>>(:final exception):
-        Toast.show(exception.i18nMessage, context);
-        setState(() => state = _State.done);
-      case ApiError<Response<dynamic>>(:final response):
-        Toast.show(response.message, context);
-        setState(() => state = _State.done);
+    if (result.isSuccess) {
+      Toast.show(context.ap.updateSuccess, context);
+    } else {
+      result.showErrorToast(context);
     }
+    setState(() => state = _State.done);
   }
 }

@@ -622,48 +622,33 @@ class _AnnouncementHomePageState extends State<AnnouncementHomePage> {
   }
 
   void _handleResult(ApiResult<dynamic> result, VoidCallback onSuccess) {
-    switch (result) {
-      case ApiSuccess<dynamic>():
-        UiUtil.instance.showToast(context, context.ap.updateSuccess);
-        onSuccess();
-      case ApiFailure<dynamic>(:final exception):
-        if (exception.i18nMessage case final String message?) {
-          UiUtil.instance.showToast(context, message);
-        }
-      case ApiError<dynamic>(:final response):
-        UiUtil.instance.showToast(context, response.message);
+    if (result.isSuccess) {
+      UiUtil.instance.showToast(context, context.ap.updateSuccess);
+      onSuccess();
+    } else {
+      result.showErrorToast(context);
     }
   }
 
   Future<void> _getAnnouncements() async {
     final ApiResult<List<Announcement>> result =
         await AnnouncementHelper.instance.getAllAnnouncements();
-    switch (result) {
-      case ApiSuccess<List<Announcement>>(:final data):
-        announcements = data;
-        setState(() => state = _State.done);
-      case ApiFailure<List<Announcement>>(:final exception):
-        if (exception.i18nMessage case final String message?) {
-          UiUtil.instance.showToast(context, message);
-        }
-      case ApiError<List<Announcement>>(:final response):
-        UiUtil.instance.showToast(context, response.message);
+    if (result case ApiSuccess<List<Announcement>>(:final data)) {
+      announcements = data;
+      setState(() => state = _State.done);
+    } else {
+      result.showErrorToast(context);
     }
   }
 
   Future<void> _getApplications() async {
     final ApiResult<List<Announcement>> result =
         await AnnouncementHelper.instance.getApplications();
-    switch (result) {
-      case ApiSuccess<List<Announcement>>(:final data):
-        applications = data;
-        setState(() => state = _State.done);
-      case ApiFailure<List<Announcement>>(:final exception):
-        if (exception.i18nMessage case final String message?) {
-          UiUtil.instance.showToast(context, message);
-        }
-      case ApiError<List<Announcement>>(:final response):
-        UiUtil.instance.showToast(context, response.message);
+    if (result case ApiSuccess<List<Announcement>>(:final data)) {
+      applications = data;
+      setState(() => state = _State.done);
+    } else {
+      result.showErrorToast(context);
     }
   }
 

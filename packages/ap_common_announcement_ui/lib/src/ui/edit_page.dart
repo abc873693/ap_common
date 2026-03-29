@@ -612,17 +612,12 @@ class _AnnouncementEditPageState extends State<AnnouncementEditPage> {
     } else {
       return;
     }
-    switch (result) {
-      case ApiSuccess<Announcement>(:final data):
-        announcements = data;
-        _mapData();
-        setState(() {});
-      case ApiFailure<Announcement>(:final exception):
-        if (exception.i18nMessage case final String message?) {
-          UiUtil.instance.showToast(context, message);
-        }
-      case ApiError<Announcement>(:final response):
-        UiUtil.instance.showToast(context, response.message);
+    if (result case ApiSuccess<Announcement>(:final data)) {
+      announcements = data;
+      _mapData();
+      setState(() {});
+    } else {
+      result.showErrorToast(context);
     }
   }
 
@@ -662,68 +657,45 @@ class _AnnouncementEditPageState extends State<AnnouncementEditPage> {
           );
       }
 
-      switch (result) {
-        case ApiSuccess<Response<dynamic>>():
-          switch (widget.mode) {
-            case Mode.add:
-              UiUtil.instance.showToast(context, context.ap.addSuccess);
-            case Mode.edit:
-              UiUtil.instance.showToast(context, context.ap.updateSuccess);
-            case Mode.application:
-              UiUtil.instance
-                  .showToast(context, context.ap.applicationSubmitSuccess);
-            case Mode.editApplication:
-              UiUtil.instance.showToast(context, context.ap.updateSuccess);
-              if (isApproval != null) {
-                final ApiResult<Response<dynamic>> result;
-                if (isApproval) {
-                  result = await AnnouncementHelper.instance.approveApplication(
-                    applicationId: announcements.applicationId,
-                    reviewDescription: announcements.reviewDescription,
-                  );
-                } else {
-                  result = await AnnouncementHelper.instance.rejectApplication(
-                    applicationId: announcements.applicationId,
-                    reviewDescription: announcements.reviewDescription,
-                  );
-                }
-                switch (result) {
-                  case ApiSuccess<Response<dynamic>>():
-                    break;
-                  case ApiFailure<Response<dynamic>>(:final exception):
-                    if (exception.i18nMessage case final String message?) {
-                      UiUtil.instance.showToast(context, message);
-                    }
-                  case ApiError<Response<dynamic>>(:final response):
-                    UiUtil.instance.showToast(context, response.message);
-                }
-              }
-              if (addBlackList ?? false) {
-                final ApiResult<Response<dynamic>> result =
-                    await AnnouncementHelper.instance.addBlackList(
-                  username: announcements.applicant!,
-                );
-                switch (result) {
-                  case ApiSuccess<Response<dynamic>>():
-                    break;
-                  case ApiFailure<Response<dynamic>>(:final exception):
-                    if (exception.i18nMessage case final String message?) {
-                      UiUtil.instance.showToast(context, message);
-                    }
-                  case ApiError<Response<dynamic>>(:final response):
-                    UiUtil.instance.showToast(context, response.message);
-                }
-              }
-          }
-          if (!mounted) return;
-          Navigator.of(context).pop(true);
-        case ApiFailure<Response<dynamic>>(:final exception):
-          if (exception.i18nMessage case final String message?) {
-            UiUtil.instance.showToast(context, message);
-          }
-        case ApiError<Response<dynamic>>(:final response):
-          UiUtil.instance.showToast(context, response.message);
+      if (!result.isSuccess) {
+        result.showErrorToast(context);
+        return;
       }
+
+      switch (widget.mode) {
+        case Mode.add:
+          UiUtil.instance.showToast(context, context.ap.addSuccess);
+        case Mode.edit:
+          UiUtil.instance.showToast(context, context.ap.updateSuccess);
+        case Mode.application:
+          UiUtil.instance
+              .showToast(context, context.ap.applicationSubmitSuccess);
+        case Mode.editApplication:
+          UiUtil.instance.showToast(context, context.ap.updateSuccess);
+          if (isApproval != null) {
+            if (isApproval) {
+              (await AnnouncementHelper.instance.approveApplication(
+                applicationId: announcements.applicationId,
+                reviewDescription: announcements.reviewDescription,
+              ))
+                  .showErrorToast(context);
+            } else {
+              (await AnnouncementHelper.instance.rejectApplication(
+                applicationId: announcements.applicationId,
+                reviewDescription: announcements.reviewDescription,
+              ))
+                  .showErrorToast(context);
+            }
+          }
+          if (addBlackList ?? false) {
+            (await AnnouncementHelper.instance.addBlackList(
+              username: announcements.applicant!,
+            ))
+                .showErrorToast(context);
+          }
+      }
+      if (!mounted) return;
+      Navigator.of(context).pop(true);
     }
   }
 }
