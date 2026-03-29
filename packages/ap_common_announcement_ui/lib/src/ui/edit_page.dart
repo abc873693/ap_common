@@ -199,8 +199,8 @@ class _AnnouncementEditPageState extends State<AnnouncementEditPage> {
                                   Navigator.of(context, rootNavigator: true)
                                       .pop();
                                 } else {
-                                  UiUtil.instance
-                                      .showToast(context, context.ap.tagRepeatHint);
+                                  UiUtil.instance.showToast(
+                                      context, context.ap.tagRepeatHint);
                                 }
                               }
                             },
@@ -298,8 +298,7 @@ class _AnnouncementEditPageState extends State<AnnouncementEditPage> {
                             () => imgurUploadState = _ImgurUploadState.done,
                           );
                         case ApiFailure<String>(:final exception):
-                          if (exception.message
-                              case final String message?) {
+                          if (exception.message case final String message?) {
                             UiUtil.instance.showToast(context, message);
                           }
                           setState(
@@ -308,8 +307,7 @@ class _AnnouncementEditPageState extends State<AnnouncementEditPage> {
                                 : _ImgurUploadState.done,
                           );
                         case ApiError<String>(:final response):
-                          UiUtil.instance
-                              .showToast(context, response.message);
+                          UiUtil.instance.showToast(context, response.message);
                           setState(
                             () => imgurUploadState = _imgUrl.text.isEmpty
                                 ? _ImgurUploadState.noFile
@@ -672,26 +670,49 @@ class _AnnouncementEditPageState extends State<AnnouncementEditPage> {
             case Mode.edit:
               UiUtil.instance.showToast(context, context.ap.updateSuccess);
             case Mode.application:
-              UiUtil.instance.showToast(context, context.ap.applicationSubmitSuccess);
+              UiUtil.instance
+                  .showToast(context, context.ap.applicationSubmitSuccess);
             case Mode.editApplication:
               UiUtil.instance.showToast(context, context.ap.updateSuccess);
               if (isApproval != null) {
+                final ApiResult<Response<dynamic>> result;
                 if (isApproval) {
-                  await AnnouncementHelper.instance.approveApplication(
+                  result = await AnnouncementHelper.instance.approveApplication(
                     applicationId: announcements.applicationId,
                     reviewDescription: announcements.reviewDescription,
                   );
                 } else {
-                  await AnnouncementHelper.instance.rejectApplication(
+                  result = await AnnouncementHelper.instance.rejectApplication(
                     applicationId: announcements.applicationId,
                     reviewDescription: announcements.reviewDescription,
                   );
                 }
+                switch (result) {
+                  case ApiSuccess<Response<dynamic>>():
+                    break;
+                  case ApiFailure<Response<dynamic>>(:final exception):
+                    if (exception.i18nMessage case final String message?) {
+                      UiUtil.instance.showToast(context, message);
+                    }
+                  case ApiError<Response<dynamic>>(:final response):
+                    UiUtil.instance.showToast(context, response.message);
+                }
               }
               if (addBlackList ?? false) {
-                await AnnouncementHelper.instance.addBlackList(
+                final ApiResult<Response<dynamic>> result =
+                    await AnnouncementHelper.instance.addBlackList(
                   username: announcements.applicant!,
                 );
+                switch (result) {
+                  case ApiSuccess<Response<dynamic>>():
+                    break;
+                  case ApiFailure<Response<dynamic>>(:final exception):
+                    if (exception.i18nMessage case final String message?) {
+                      UiUtil.instance.showToast(context, message);
+                    }
+                  case ApiError<Response<dynamic>>(:final response):
+                    UiUtil.instance.showToast(context, response.message);
+                }
               }
           }
           if (!mounted) return;
