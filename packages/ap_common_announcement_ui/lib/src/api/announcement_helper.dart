@@ -1,4 +1,3 @@
-import 'dart:async';
 import 'dart:convert';
 import 'dart:ui' show Locale;
 
@@ -82,556 +81,339 @@ class AnnouncementHelper {
     }
   }
 
-  Future<bool> reLogin(GeneralCallback<GeneralResponse> callback) async {
-    final AnnouncementLoginData? loginData = await login(
+  // ---------------------------------------------------------------------------
+  // Generic API executor
+  // ---------------------------------------------------------------------------
+
+  Future<ApiResult<T>> _execute<T>(Future<T> Function() action) async {
+    try {
+      return ApiSuccess<T>(await action());
+    } on DioException catch (e) {
+      if (e.isUnauthorized) {
+        return ApiError<T>(
+          GeneralResponse(statusCode: tokenExpire, message: ap.loginFail),
+        );
+      }
+      if (e.isNotPermission) {
+        return ApiError<T>(
+          GeneralResponse(
+            statusCode: notPermission,
+            message: ap.noPermissionHint,
+          ),
+        );
+      }
+      if (e.isNotFoundAnnouncement) {
+        return ApiError<T>(
+          GeneralResponse(
+            statusCode: notFoundData,
+            message: ap.notFoundData,
+          ),
+        );
+      }
+      return ApiFailure<T>(e);
+    }
+  }
+
+  Future<ApiResult<T>> _executeAuth<T>(Future<T> Function() action) async {
+    try {
+      return ApiSuccess<T>(await action());
+    } on DioException catch (e) {
+      if (e.isUnauthorized) {
+        final String message =
+            e.response?.data is String ? e.response!.data as String : ap.loginFail;
+        return ApiError<T>(
+          GeneralResponse(statusCode: tokenExpire, message: message),
+        );
+      }
+      return ApiFailure<T>(e);
+    }
+  }
+
+  // ---------------------------------------------------------------------------
+  // Auth
+  // ---------------------------------------------------------------------------
+
+  Future<ApiResult<bool>> reLogin() async {
+    final ApiResult<AnnouncementLoginData> result = await login(
       username: username,
       password: password,
-      callback: GeneralCallback<AnnouncementLoginData>(
-        onSuccess: (AnnouncementLoginData loginData) => AnnouncementLoginData,
-        onFailure: callback.onFailure,
-        onError: callback.onError,
-      ),
     );
-    return loginData != null;
+    return switch (result) {
+      ApiSuccess<AnnouncementLoginData>() => const ApiSuccess<bool>(true),
+      ApiFailure<AnnouncementLoginData>(:final exception) =>
+        ApiFailure<bool>(exception),
+      ApiError<AnnouncementLoginData>(:final response) =>
+        ApiError<bool>(response),
+    };
   }
 
-  Future<AnnouncementLoginData?> login({
+  Future<ApiResult<AnnouncementLoginData>> login({
     required String? username,
     required String? password,
-    GeneralCallback<AnnouncementLoginData>? callback,
-  }) async {
-    try {
-      final Response<Map<String, dynamic>> response = await dio.post(
-        '/login',
-        data: <String, String?>{
-          'username': username,
-          'password': password,
-          'fcmToken': fcmToken,
-        },
-      );
-      final AnnouncementLoginData loginData =
-          AnnouncementLoginData.fromJson(response.data!);
-      setAuthorization(loginData.key);
-      this.username = username;
-      this.password = password;
-      loginType = AnnouncementLoginType.normal;
-      if (callback != null) {
-        callback.onSuccess(loginData);
-      }
-      return loginData;
-    } on DioException catch (dioException) {
-      if (callback == null) {
-        rethrow;
-      } else {
-        if (dioException.isUnauthorized) {
-          callback.onError(
-            GeneralResponse(
-              statusCode: 401,
-              message: ap.loginFail,
-            ),
-          );
-        } else {
-          callback.onFailure(dioException);
-        }
-      }
-    }
-    return null;
-  }
+  }) =>
+      _executeAuth(() async {
+        final Response<Map<String, dynamic>> response = await dio.post(
+          '/login',
+          data: <String, String?>{
+            'username': username,
+            'password': password,
+            'fcmToken': fcmToken,
+          },
+        );
+        final AnnouncementLoginData loginData =
+            AnnouncementLoginData.fromJson(response.data!);
+        setAuthorization(loginData.key);
+        this.username = username;
+        this.password = password;
+        loginType = AnnouncementLoginType.normal;
+        return loginData;
+      });
 
-  Future<AnnouncementLoginData?> googleLogin({
+  Future<ApiResult<AnnouncementLoginData>> googleLogin({
     required String? idToken,
-    GeneralCallback<AnnouncementLoginData>? callback,
-  }) async {
-    try {
-      final Response<Map<String, dynamic>> response = await dio.post(
-        '/oauth2/google/token',
-        data: <String, String?>{
-          'token': idToken,
-          'fcmToken': fcmToken,
-        },
-      );
-      final AnnouncementLoginData loginData =
-          AnnouncementLoginData.fromJson(response.data!);
-      setAuthorization(loginData.key);
-      code = idToken;
-      loginType = AnnouncementLoginType.google;
-      if (callback != null) {
-        callback.onSuccess(loginData);
-      }
-      return loginData;
-    } on DioException catch (dioException) {
-      if (callback == null) {
-        rethrow;
-      } else {
-        if (dioException.isUnauthorized) {
-          callback.onError(
-            GeneralResponse(
-              statusCode: 401,
-              message: dioException.response?.data as String? ??
-                  ap.unknownError,
-            ),
-          );
-        }
-        callback.onFailure(dioException);
-      }
-    }
-    return null;
-  }
+  }) =>
+      _executeAuth(() async {
+        final Response<Map<String, dynamic>> response = await dio.post(
+          '/oauth2/google/token',
+          data: <String, String?>{
+            'token': idToken,
+            'fcmToken': fcmToken,
+          },
+        );
+        final AnnouncementLoginData loginData =
+            AnnouncementLoginData.fromJson(response.data!);
+        setAuthorization(loginData.key);
+        code = idToken;
+        loginType = AnnouncementLoginType.google;
+        return loginData;
+      });
 
-  Future<AnnouncementLoginData?> appleLogin({
+  Future<ApiResult<AnnouncementLoginData>> appleLogin({
     required String idToken,
-    GeneralCallback<AnnouncementLoginData>? callback,
-  }) async {
-    try {
-      final Response<Map<String, dynamic>> response = await dio.post(
-        '/oauth2/apple/token',
-        data: <String, String?>{
-          'token': idToken,
-          'fcmToken': fcmToken,
-          'bundleId': appleBundleId,
-        },
-      );
-      final AnnouncementLoginData loginData =
-          AnnouncementLoginData.fromJson(response.data!);
-      setAuthorization(loginData.key);
-      code = idToken;
-      loginType = AnnouncementLoginType.apple;
-      if (callback != null) {
-        callback.onSuccess(loginData);
-      }
-      return loginData;
-    } on DioException catch (dioException) {
-      if (callback == null) {
-        rethrow;
-      } else {
-        if (dioException.isUnauthorized) {
-          callback.onError(
-            GeneralResponse(
-              statusCode: 401,
-              message: dioException.response?.data as String? ??
-                  ap.unknownError,
-            ),
-          );
-        }
-        callback.onFailure(dioException);
-      }
-    }
-    return null;
-  }
+  }) =>
+      _executeAuth(() async {
+        final Response<Map<String, dynamic>> response = await dio.post(
+          '/oauth2/apple/token',
+          data: <String, String?>{
+            'token': idToken,
+            'fcmToken': fcmToken,
+            'bundleId': appleBundleId,
+          },
+        );
+        final AnnouncementLoginData loginData =
+            AnnouncementLoginData.fromJson(response.data!);
+        setAuthorization(loginData.key);
+        code = idToken;
+        loginType = AnnouncementLoginType.apple;
+        return loginData;
+      });
 
-  Future<List<Announcement>?> getAllAnnouncements({
-    GeneralCallback<List<Announcement>?>? callback,
-  }) async {
-    try {
-      final Response<Map<String, dynamic>> response = await dio.get(
-        '/announcements',
-      );
-      AnnouncementData data = AnnouncementData(data: <Announcement>[]);
-      if (response.statusCode != 204) {
-        data = AnnouncementData.fromJson(response.data!);
-        data.data.sort((Announcement a, Announcement b) {
-          return b.weight.compareTo(a.weight);
-        });
-      }
-      if (callback != null) {
-        callback.onSuccess(data.data);
-      }
-      return data.data;
-    } on DioException catch (dioException) {
-      if (callback == null) {
-        rethrow;
-      } else {
-        callback.onFailure(dioException);
-      }
-    }
-    return null;
-  }
+  // ---------------------------------------------------------------------------
+  // Announcements
+  // ---------------------------------------------------------------------------
 
-  Future<List<Announcement>?> getAnnouncements({
-    GeneralCallback<List<Announcement>>? callback,
+  Future<ApiResult<List<Announcement>>> getAllAnnouncements() =>
+      _execute(() async {
+        final Response<Map<String, dynamic>> response = await dio.get(
+          '/announcements',
+        );
+        if (response.statusCode == 204) return <Announcement>[];
+        final AnnouncementData data =
+            AnnouncementData.fromJson(response.data!);
+        return data.sortedData;
+      });
+
+  Future<ApiResult<List<Announcement>>> getAnnouncements({
     String? locale,
     List<String>? tags,
     bool sorted = true,
-  }) async {
-    try {
-      final Response<Map<String, dynamic>> response = await dio.post(
-        '/announcements',
-        data: <String, dynamic>{
-          'tag': tags ?? <String>[],
-          'lang': locale ?? 'zh',
-        },
-      );
-      AnnouncementData data = AnnouncementData(data: <Announcement>[]);
-      if (response.statusCode != 204) {
-        data = AnnouncementData.fromJson(response.data!);
-        if (sorted) data = data.copyWith(data: data.sortedData);
-      }
-      if (callback != null) {
-        callback.onSuccess(data.data);
-      }
-      return data.data;
-    } on DioException catch (dioException) {
-      if (callback == null) {
-        rethrow;
-      } else {
-        callback.onFailure(dioException);
-      }
-    }
-    return null;
-  }
+  }) =>
+      _execute(() async {
+        final Response<Map<String, dynamic>> response = await dio.post(
+          '/announcements',
+          data: <String, dynamic>{
+            'tag': tags ?? <String>[],
+            'lang': locale ?? 'zh',
+          },
+        );
+        if (response.statusCode == 204) return <Announcement>[];
+        final AnnouncementData data =
+            AnnouncementData.fromJson(response.data!);
+        return sorted ? data.sortedData : data.data;
+      });
 
-  Future<Announcement?> getAnnouncement({
+  Future<ApiResult<Announcement>> getAnnouncement({
     required int id,
-    String? locale,
-    GeneralCallback<Announcement>? callback,
-  }) async {
-    try {
-      final Response<Map<String, dynamic>> response = await dio.get(
-        '/announcements/$id',
-      );
-      final Announcement data = Announcement.fromJson(
-        response.data!['data'] as Map<String, dynamic>,
-      );
-      if (callback != null) {
-        callback.onSuccess(data);
-      }
-      return data;
-    } on DioException catch (dioException) {
-      if (callback == null) {
-        rethrow;
-      } else {
-        callback.onFailure(dioException);
-      }
-    }
-    return null;
-  }
+  }) =>
+      _execute(() async {
+        final Response<Map<String, dynamic>> response = await dio.get(
+          '/announcements/$id',
+        );
+        return Announcement.fromJson(
+          response.data!['data'] as Map<String, dynamic>,
+        );
+      });
 
-  Future<Response<dynamic>?> addAnnouncement({
+  Future<ApiResult<Response<dynamic>>> addAnnouncement({
     required Announcement data,
-    GeneralCallback<Response<dynamic>>? callback,
     String? languageCode,
-  }) async {
-    try {
-      final List<String> currentTags = (data.tags ?? <String>[]).toList();
-      currentTags.addAll(
-        <String>[
-          languageCode ?? 'zh',
-          if (organization != null) organization!,
-        ],
-      );
-      final Announcement dataToSend = data.copyWith(tags: currentTags);
-      final Response<dynamic> response = await dio.post(
-        '/announcements/add',
-        data: dataToSend.toUpdateJson(),
-      );
-      if (callback != null) {
-        callback.onSuccess(response);
-      }
-      return response;
-    } on DioException catch (dioException) {
-      if (callback == null) {
-        rethrow;
-      } else {
-        handleCrudError(dioException, callback);
-      }
-    }
-    return null;
-  }
+  }) =>
+      _execute(() async {
+        final List<String> currentTags = (data.tags ?? <String>[]).toList();
+        currentTags.addAll(
+          <String>[
+            languageCode ?? 'zh',
+            if (organization != null) organization!,
+          ],
+        );
+        final Announcement dataToSend = data.copyWith(tags: currentTags);
+        return dio.post(
+          '/announcements/add',
+          data: dataToSend.toUpdateJson(),
+        );
+      });
 
-  Future<Response<dynamic>?> updateAnnouncement({
+  Future<ApiResult<Response<dynamic>>> updateAnnouncement({
     required Announcement data,
-    GeneralCallback<Response<dynamic>>? callback,
-  }) async {
-    try {
-      final Response<dynamic> response = await dio.put(
-        '/announcements/update/${data.id}',
-        data: data.toUpdateJson(),
-      );
-      if (callback != null) {
-        callback.onSuccess(response);
-      }
-      return response;
-    } on DioException catch (dioException) {
-      if (callback == null) {
-        rethrow;
-      } else {
-        handleCrudError(dioException, callback);
-      }
-    }
-    return null;
-  }
+  }) =>
+      _execute(() async {
+        return dio.put(
+          '/announcements/update/${data.id}',
+          data: data.toUpdateJson(),
+        );
+      });
 
-  Future<Response<dynamic>?> deleteAnnouncement({
+  Future<ApiResult<Response<dynamic>>> deleteAnnouncement({
     required Announcement data,
-    GeneralCallback<Response<dynamic>>? callback,
-  }) async {
-    try {
-      final Response<dynamic> response = await dio.delete(
-        '/announcements/delete/${data.id}',
-        data: data.toUpdateJson(),
-      );
-      if (callback != null) {
-        callback.onSuccess(response);
-      }
-      return response;
-    } on DioException catch (dioException) {
-      if (callback == null) {
-        rethrow;
-      } else {
-        handleCrudError(dioException, callback);
-      }
-    }
-    return null;
-  }
+  }) =>
+      _execute(() async {
+        return dio.delete(
+          '/announcements/delete/${data.id}',
+          data: data.toUpdateJson(),
+        );
+      });
 
-  Future<List<Announcement>?> getApplications({
-    String? locale,
-    GeneralCallback<List<Announcement>?>? callback,
-  }) async {
-    try {
-      final Response<Map<String, dynamic>> response = await dio.get(
-        '/application',
-      );
-      AnnouncementData data = AnnouncementData(data: <Announcement>[]);
-      if (response.statusCode != 204) {
-        data = AnnouncementData.fromJson(response.data!);
-        data.data.sort((Announcement a, Announcement b) {
-          return b.weight.compareTo(a.weight);
-        });
-      }
-      if (callback != null) {
-        callback.onSuccess(data.data);
-      }
-      return data.data;
-    } on DioException catch (dioException) {
-      if (callback == null) {
-        rethrow;
-      } else {
-        callback.onFailure(dioException);
-      }
-    }
-    return null;
-  }
+  // ---------------------------------------------------------------------------
+  // Applications
+  // ---------------------------------------------------------------------------
 
-  Future<Announcement?> getApplication({
+  Future<ApiResult<List<Announcement>>> getApplications() =>
+      _execute(() async {
+        final Response<Map<String, dynamic>> response = await dio.get(
+          '/application',
+        );
+        if (response.statusCode == 204) return <Announcement>[];
+        final AnnouncementData data =
+            AnnouncementData.fromJson(response.data!);
+        return data.sortedData;
+      });
+
+  Future<ApiResult<Announcement>> getApplication({
     required String id,
-    String? locale,
-    GeneralCallback<Announcement>? callback,
-  }) async {
-    try {
-      final Response<Map<String, dynamic>> response = await dio.get(
-        '/application/$id',
-      );
-      final Announcement data = Announcement.fromJson(response.data!);
-      if (callback != null) {
-        callback.onSuccess(data);
-      }
-      return data;
-    } on DioException catch (dioException) {
-      if (callback == null) {
-        rethrow;
-      } else {
-        callback.onFailure(dioException);
-      }
-    }
-    return null;
-  }
+  }) =>
+      _execute(() async {
+        final Response<Map<String, dynamic>> response = await dio.get(
+          '/application/$id',
+        );
+        return Announcement.fromJson(response.data!);
+      });
 
-  Future<Response<dynamic>?> addApplication({
+  Future<ApiResult<Response<dynamic>>> addApplication({
     required Announcement data,
-    GeneralCallback<Response<dynamic>>? callback,
     String? languageCode,
-  }) async {
-    try {
-      final List<String> currentTags = (data.tags ?? <String>[]).toList();
-      currentTags.addAll(
-        <String>[
-          languageCode ?? 'zh',
-          if (organization != null) organization!,
-        ],
-      );
-      final Announcement dataToSend = data.copyWith(tags: currentTags);
-      final Response<dynamic> response = await dio.post(
-        '/application',
-        data: dataToSend.toUpdateJson(),
-      );
-      if (callback != null) {
-        callback.onSuccess(response);
-      }
-      return response;
-    } on DioException catch (dioException) {
-      if (callback == null) {
-        rethrow;
-      } else {
-        handleCrudError(dioException, callback);
-      }
-    }
-    return null;
-  }
+  }) =>
+      _execute(() async {
+        final List<String> currentTags = (data.tags ?? <String>[]).toList();
+        currentTags.addAll(
+          <String>[
+            languageCode ?? 'zh',
+            if (organization != null) organization!,
+          ],
+        );
+        final Announcement dataToSend = data.copyWith(tags: currentTags);
+        return dio.post(
+          '/application',
+          data: dataToSend.toUpdateJson(),
+        );
+      });
 
-  Future<Response<dynamic>?> approveApplication({
+  Future<ApiResult<Response<dynamic>>> approveApplication({
     required String? applicationId,
     String? reviewDescription,
-    GeneralCallback<Response<dynamic>>? callback,
-  }) async {
-    try {
-      final Response<dynamic> response = await dio.put(
-        '/application/$applicationId/approve',
-        data: <String, String>{
-          'description': reviewDescription ?? '',
-        },
-      );
-      if (callback != null) {
-        callback.onSuccess(response);
-      }
-      return response;
-    } on DioException catch (dioException) {
-      if (callback == null) {
-        rethrow;
-      } else {
-        handleCrudError(dioException, callback);
-      }
-    }
-    return null;
-  }
+  }) =>
+      _execute(() async {
+        return dio.put(
+          '/application/$applicationId/approve',
+          data: <String, String>{
+            'description': reviewDescription ?? '',
+          },
+        );
+      });
 
-  Future<Response<dynamic>?> rejectApplication({
+  Future<ApiResult<Response<dynamic>>> rejectApplication({
     required String? applicationId,
     String? reviewDescription,
-    GeneralCallback<Response<dynamic>>? callback,
-  }) async {
-    try {
-      final Response<dynamic> response = await dio.put(
-        '/application/$applicationId/reject',
-        data: <String, String>{
-          'description': reviewDescription ?? '',
-        },
-      );
-      if (callback != null) {
-        callback.onSuccess(response);
-      }
-      return response;
-    } on DioException catch (dioException) {
-      if (callback == null) {
-        rethrow;
-      } else {
-        handleCrudError(dioException, callback);
-      }
-    }
-    return null;
-  }
+  }) =>
+      _execute(() async {
+        return dio.put(
+          '/application/$applicationId/reject',
+          data: <String, String>{
+            'description': reviewDescription ?? '',
+          },
+        );
+      });
 
-  Future<Response<dynamic>?> removeApplication({
+  Future<ApiResult<Response<dynamic>>> removeApplication({
     required String applicationId,
-    GeneralCallback<Response<dynamic>>? callback,
-  }) async {
-    try {
-      final Response<dynamic> response = await dio.delete(
-        '/application/$applicationId',
-      );
-      if (callback != null) {
-        callback.onSuccess(response);
-      }
-      return response;
-    } on DioException catch (dioException) {
-      if (callback == null) {
-        rethrow;
-      } else {
-        handleCrudError(dioException, callback);
-      }
-    }
-    return null;
-  }
+  }) =>
+      _execute(() async {
+        return dio.delete('/application/$applicationId');
+      });
 
-  Future<Response<dynamic>?> updateApplication({
+  Future<ApiResult<Response<dynamic>>> updateApplication({
     required Announcement data,
-    GeneralCallback<Response<dynamic>>? callback,
-  }) async {
-    try {
-      final Response<dynamic> response = await dio.put(
-        '/application/${data.applicationId}',
-        data: data.toUpdateApplicationJson(),
-      );
-      if (callback != null) {
-        callback.onSuccess(response);
-      }
-      return response;
-    } on DioException catch (dioException) {
-      if (callback == null) {
-        rethrow;
-      } else {
-        handleCrudError(dioException, callback);
-      }
-    }
-    return null;
-  }
+  }) =>
+      _execute(() async {
+        return dio.put(
+          '/application/${data.applicationId}',
+          data: data.toUpdateApplicationJson(),
+        );
+      });
 
-  Future<void> getBlackList({
-    required GeneralCallback<List<String>> callback,
-  }) async {
-    try {
-      final Response<String> response = await dio.get<String>(
-        '/ban',
-      );
-      final List<dynamic> list = jsonDecode(response.data!) as List<dynamic>;
-      callback.onSuccess(list.map((dynamic e) => e as String).toList());
-    } on DioException catch (dioException) {
-      handleCrudError(dioException, callback);
-    } catch (e) {
-      callback.onError(GeneralResponse.unknownError());
-      rethrow;
-    }
-  }
+  // ---------------------------------------------------------------------------
+  // Blacklist
+  // ---------------------------------------------------------------------------
 
-  Future<Response<dynamic>?> addBlackList({
+  Future<ApiResult<List<String>>> getBlackList() => _execute(() async {
+        final Response<String> response = await dio.get<String>('/ban');
+        final List<dynamic> list =
+            jsonDecode(response.data!) as List<dynamic>;
+        return list.map((dynamic e) => e as String).toList();
+      });
+
+  Future<ApiResult<Response<dynamic>>> addBlackList({
     required String username,
-    GeneralCallback<Response<dynamic>>? callback,
-  }) async {
-    try {
-      final Response<dynamic> response = await dio.put(
-        '/ban/',
-        data: <String, String>{
-          'username': username,
-        },
-      );
-      if (callback != null) {
-        callback.onSuccess(response);
-      }
-      return response;
-    } on DioException catch (dioException) {
-      if (callback == null) {
-        rethrow;
-      } else {
-        handleCrudError(dioException, callback);
-      }
-    }
-    return null;
-  }
+  }) =>
+      _execute(() async {
+        return dio.put(
+          '/ban/',
+          data: <String, String>{'username': username},
+        );
+      });
 
-  Future<Response<dynamic>?> removeFromBlackList({
+  Future<ApiResult<Response<dynamic>>> removeFromBlackList({
     required String username,
-    GeneralCallback<Response<dynamic>>? callback,
-  }) async {
-    try {
-      final Response<dynamic> response = await dio.delete(
-        '/ban/',
-        data: <String, String>{
-          'username': username,
-        },
-      );
-      if (callback != null) {
-        callback.onSuccess(response);
-      }
-      return response;
-    } on DioException catch (dioException) {
-      if (callback == null) {
-        rethrow;
-      } else {
-        handleCrudError(dioException, callback);
-      }
-    }
-    return null;
-  }
+  }) =>
+      _execute(() async {
+        return dio.delete(
+          '/ban/',
+          data: <String, String>{'username': username},
+        );
+      });
+
+  // ---------------------------------------------------------------------------
+  // Utilities
+  // ---------------------------------------------------------------------------
 
   void setAuthorization(String? key) {
     dio.options.headers['Authorization'] = 'Bearer $key';
@@ -640,28 +422,5 @@ class AnnouncementHelper {
   void clearSetting() {
     username = null;
     password = null;
-  }
-
-  void handleCrudError(
-    DioException dioException,
-    GeneralCallback<dynamic> callback,
-  ) {
-    if (dioException.isNotPermission) {
-      callback.onError(
-        GeneralResponse(
-          statusCode: notPermission,
-          message: ap.noPermissionHint,
-        ),
-      );
-    } else if (dioException.isNotFoundAnnouncement) {
-      callback.onError(
-        GeneralResponse(
-          statusCode: notPermission,
-          message: ap.notFoundData,
-        ),
-      );
-    } else {
-      callback.onFailure(dioException);
-    }
   }
 }
