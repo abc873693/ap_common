@@ -26,12 +26,12 @@ void main() {
     });
 
     test('ApiError should hold GeneralResponse', () {
-      final ApiResult<String> result = ApiError<String>(
+      const ApiResult<String> result = ApiError<String>(
         GeneralResponse(statusCode: 404, message: 'Not Found'),
       );
 
       expect(result, isA<ApiError<String>>());
-      final ApiError<String> error = result as ApiError<String>;
+      const ApiError<String> error = result as ApiError<String>;
       expect(error.response.statusCode, 404);
       expect(error.response.message, 'Not Found');
     });
@@ -41,7 +41,7 @@ void main() {
       final ApiResult<int> failure = ApiFailure<int>(
         DioException(requestOptions: RequestOptions(path: '/')),
       );
-      final ApiResult<int> error = ApiError<int>(
+      const ApiResult<int> error = ApiError<int>(
         GeneralResponse(statusCode: 500, message: 'Error'),
       );
 

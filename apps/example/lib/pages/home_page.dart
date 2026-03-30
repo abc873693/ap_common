@@ -293,7 +293,7 @@ class HomePageState extends State<HomePage> {
     final ApiResult<List<Announcement>> result =
         await AnnouncementHelper.instance.getAnnouncements(tags: <String>[]);
     switch (result) {
-      case ApiSuccess<List<Announcement>>(:final data):
+      case ApiSuccess<List<Announcement>>(:final List<Announcement> data):
         announcements = data;
         setState(() {
           if (announcements.isEmpty) {
