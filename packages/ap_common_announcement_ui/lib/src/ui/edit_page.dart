@@ -294,8 +294,7 @@ class _AnnouncementEditPageState extends State<AnnouncementEditPage> {
                         expireTime: expireTime,
                       );
                       if (!mounted) return;
-                      if (result
-                          case ApiSuccess<String>(:final String data)) {
+                      if (result case ApiSuccess<String>(:final String data)) {
                         _imgUrl.text = data;
                         setState(
                           () => imgurUploadState = _ImgurUploadState.done,
@@ -527,7 +526,10 @@ class _AnnouncementEditPageState extends State<AnnouncementEditPage> {
                       ),
                     ),
                     onPressed: () {
-                      _announcementSubmit(isApproval: false);
+                      _announcementSubmit(
+                        isApproval: false,
+                        addBlackList: true,
+                      );
                     },
                     child: Text(
                       context.ap.updateRejectAndBan,
@@ -627,10 +629,8 @@ class _AnnouncementEditPageState extends State<AnnouncementEditPage> {
         description: _description.text,
         imgUrl: _imgUrl.text,
         url: _url.text,
-        weight:
-            _weight.text.isNotEmpty ? (int.tryParse(_weight.text) ?? 0) : 0,
-        expireTime:
-            (expireTime == null) ? null : expireTime!.parseToString(),
+        weight: _weight.text.isNotEmpty ? (int.tryParse(_weight.text) ?? 0) : 0,
+        expireTime: (expireTime == null) ? null : expireTime!.parseToString(),
         reviewDescription: _reviewDescription.text,
         tags: tags,
       );
