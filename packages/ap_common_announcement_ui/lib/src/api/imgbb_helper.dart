@@ -26,10 +26,9 @@ class ImgbbHelper {
 
   static ImgbbHelper? _instance;
 
-  Future<String?> uploadImage({
+  Future<ApiResult<String>> uploadImage({
     required XFile file,
     DateTime? expireTime,
-    GeneralCallback<String?>? callback,
   }) async {
     try {
       final Uint8List bytes = await file.readAsBytes();
@@ -50,45 +49,35 @@ class ImgbbHelper {
       if (response.statusCode == 200) {
         if (response.data?['data'] case final Map<String, dynamic> data?) {
           if (data['url'] case final String url?) {
-            if (callback == null) {
-              return url;
-            } else {
-              callback.onSuccess(url);
-              return url;
-            }
+            return ApiSuccess<String>(url);
           }
         }
-        callback?.onError(
+        return ApiError<String>(
           GeneralResponse(
             statusCode: 500,
             message: ap.unknownError,
           ),
         );
-        return null;
       } else {
-        callback?.onError(
+        return ApiError<String>(
           GeneralResponse(
             statusCode: 500,
-            message:
-                response.statusMessage ?? ap.unknownError,
+            message: response.statusMessage ?? ap.unknownError,
           ),
         );
-
-        return null;
       }
     } on DioException catch (dioException) {
       if (dioException.type == DioExceptionType.badResponse &&
           dioException.response?.statusCode == 400) {
-        callback?.onError(
+        return ApiError<String>(
           GeneralResponse(
             statusCode: 400,
             message: ap.notSupportImageType,
           ),
         );
       } else {
-        callback?.onFailure(dioException);
+        return ApiFailure<String>(dioException);
       }
-      return null;
     }
   }
 }

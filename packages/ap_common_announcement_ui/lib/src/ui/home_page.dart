@@ -460,22 +460,14 @@ class _AnnouncementHomePageState extends State<AnnouncementHomePage> {
                               ),
                               leftActionText: context.ap.determine,
                               rightActionText: context.ap.back,
-                              leftActionFunction: () {
-                                AnnouncementHelper.instance.deleteAnnouncement(
-                                  data: item,
-                                  // ignore: always_specify_types
-                                  callback: GeneralCallback.simple(
-                                    context,
-                                    (_) {
-                                      UiUtil.instance.showToast(
-                                        context,
-                                        context.ap.updateSuccess,
-                                      );
-                                      _reviewDescription.text = '';
-                                      _getAnnouncements();
-                                    },
-                                  ),
-                                );
+                              leftActionFunction: () async {
+                                final ApiResult<Response<dynamic>> result =
+                                    await AnnouncementHelper.instance
+                                        .deleteAnnouncement(data: item);
+                                _handleResult(result, () {
+                                  _reviewDescription.text = '';
+                                  _getAnnouncements();
+                                });
                               },
                             )
                           : YesNoDialog(
@@ -494,43 +486,31 @@ class _AnnouncementHomePageState extends State<AnnouncementHomePage> {
                               ),
                               leftActionText: context.ap.approve,
                               rightActionText: context.ap.reject,
-                              leftActionFunction: () {
-                                AnnouncementHelper.instance.approveApplication(
+                              leftActionFunction: () async {
+                                final ApiResult<Response<dynamic>> result =
+                                    await AnnouncementHelper.instance
+                                        .approveApplication(
                                   applicationId: item.applicationId,
                                   reviewDescription: _reviewDescription.text,
-                                  // ignore: always_specify_types
-                                  callback: GeneralCallback.simple(
-                                    context,
-                                    (_) {
-                                      UiUtil.instance.showToast(
-                                        context,
-                                        context.ap.updateSuccess,
-                                      );
-                                      _reviewDescription.text = '';
-                                      _getAnnouncements();
-                                      _getApplications();
-                                    },
-                                  ),
                                 );
+                                _handleResult(result, () {
+                                  _reviewDescription.text = '';
+                                  _getAnnouncements();
+                                  _getApplications();
+                                });
                               },
-                              rightActionFunction: () {
-                                AnnouncementHelper.instance.rejectApplication(
+                              rightActionFunction: () async {
+                                final ApiResult<Response<dynamic>> result =
+                                    await AnnouncementHelper.instance
+                                        .rejectApplication(
                                   applicationId: item.applicationId,
                                   reviewDescription: _reviewDescription.text,
-                                  // ignore: always_specify_types
-                                  callback: GeneralCallback.simple(
-                                    context,
-                                    (_) {
-                                      UiUtil.instance.showToast(
-                                        context,
-                                        context.ap.updateSuccess,
-                                      );
-                                      _reviewDescription.text = '';
-                                      _getAnnouncements();
-                                      _getApplications();
-                                    },
-                                  ),
                                 );
+                                _handleResult(result, () {
+                                  _reviewDescription.text = '';
+                                  _getAnnouncements();
+                                  _getApplications();
+                                });
                               },
                             ),
                     );
@@ -620,7 +600,9 @@ class _AnnouncementHomePageState extends State<AnnouncementHomePage> {
                     text: '\n${context.ap.expireTime}：',
                     style: const TextStyle(fontWeight: FontWeight.bold),
                   ),
-                  TextSpan(text: '${item.expireTime ?? context.ap.noExpiration}\n'),
+                  TextSpan(
+                    text: '${item.expireTime ?? context.ap.noExpiration}\n',
+                  ),
                   TextSpan(
                     text: '${context.ap.description}：',
                     style: const TextStyle(fontWeight: FontWeight.bold),
@@ -641,30 +623,43 @@ class _AnnouncementHomePageState extends State<AnnouncementHomePage> {
     );
   }
 
+  void _handleResult(ApiResult<dynamic> result, VoidCallback onSuccess) {
+    if (result.isSuccess) {
+      UiUtil.instance.showToast(context, context.ap.updateSuccess);
+      onSuccess();
+    } else {
+      result.showErrorToast(context);
+    }
+  }
+
   Future<void> _getAnnouncements() async {
-    AnnouncementHelper.instance.getAllAnnouncements(
-      // ignore: always_specify_types
-      callback: GeneralCallback.simple(
-        context,
-        (List<Announcement>? data) {
-          announcements = data;
-          setState(() => state = _State.done);
-        },
-      ),
-    );
+    final ApiResult<List<Announcement>> result =
+        await AnnouncementHelper.instance.getAllAnnouncements();
+    if (!mounted) return;
+    if (result
+        case ApiSuccess<List<Announcement>>(
+          :final List<Announcement> data,
+        )) {
+      announcements = data;
+      setState(() => state = _State.done);
+    } else {
+      result.showErrorToast(context);
+    }
   }
 
   Future<void> _getApplications() async {
-    AnnouncementHelper.instance.getApplications(
-      // ignore: always_specify_types
-      callback: GeneralCallback.simple(
-        context,
-        (List<Announcement>? data) {
-          applications = data;
-          setState(() => state = _State.done);
-        },
-      ),
-    );
+    final ApiResult<List<Announcement>> result =
+        await AnnouncementHelper.instance.getApplications();
+    if (!mounted) return;
+    if (result
+        case ApiSuccess<List<Announcement>>(
+          :final List<Announcement> data,
+        )) {
+      applications = data;
+      setState(() => state = _State.done);
+    } else {
+      result.showErrorToast(context);
+    }
   }
 
   Future<void> _getPreference() async {
@@ -734,28 +729,74 @@ class _AnnouncementHomePageState extends State<AnnouncementHomePage> {
             )
           : '';
 
-      final GeneralCallback<AnnouncementLoginData> callback =
-          GeneralCallback<AnnouncementLoginData>(
-        onError: (GeneralResponse response) {
-          if (isNotLogin) Navigator.of(context, rootNavigator: true).pop();
-          UiUtil.instance.showToast(context, response.message);
-        },
-        onFailure: (DioException dioException) async {
-          if (isNotLogin) Navigator.of(context, rootNavigator: true).pop();
-          if (dioException.i18nMessage case final String message?) {
-            UiUtil.instance.showToast(context, message);
-          }
-          if (dioException.type == DioExceptionType.badResponse &&
-              dioException.response!.statusCode == 403) {
-            if (loginType == AnnouncementLoginType.google) {
-              await _googleSignIn.signOut();
+      debugPrint('$loginType');
+
+      ApiResult<AnnouncementLoginData>? result;
+
+      switch (loginType) {
+        case AnnouncementLoginType.normal:
+          PreferenceUtil.instance.setString(
+            ApConstants.announcementUsername,
+            _username.text,
+          );
+          result = await AnnouncementHelper.instance.login(
+            username: _username.text,
+            password: _password.text,
+          );
+        case AnnouncementLoginType.google:
+          try {
+            final bool isSignIn = await _googleSignIn.isSignedIn();
+            final GoogleSignInAccount? data = isSignIn
+                ? await _googleSignIn.signInSilently()
+                : await _googleSignIn.signIn();
+            if (data != null) {
+              final GoogleSignInAuthentication authentication =
+                  await data.authentication;
+              idToken = authentication.idToken;
+              result = await AnnouncementHelper.instance
+                  .googleLogin(idToken: idToken);
+            } else if (isNotLogin) {
+              if (!mounted) return;
+              Navigator.of(context, rootNavigator: true).pop();
+              return;
             }
+          } catch (e, s) {
+            if (!mounted) return;
+            UiUtil.instance.showToast(context, context.ap.thirdPartyLoginFail);
+            CrashlyticsUtil.instance.recordError(e, s);
+            if (isNotLogin) Navigator.of(context, rootNavigator: true).pop();
+            return;
           }
-        },
-        onSuccess: (AnnouncementLoginData loginData) {
-          this.loginData = loginData;
-          this.loginData!.save();
-          if (kDebugMode) debugPrint(loginData.key);
+        case AnnouncementLoginType.apple:
+          try {
+            final AuthorizationCredentialAppleID credential =
+                await SignInWithApple.getAppleIDCredential(
+              scopes: <AppleIDAuthorizationScopes>[
+                AppleIDAuthorizationScopes.email,
+              ],
+            );
+            idToken = credential.identityToken;
+            result = await AnnouncementHelper.instance
+                .appleLogin(idToken: idToken!);
+          } catch (e, s) {
+            if (!mounted) return;
+            UiUtil.instance.showToast(context, context.ap.thirdPartyLoginFail);
+            if (isNotLogin) Navigator.of(context, rootNavigator: true).pop();
+            CrashlyticsUtil.instance.recordError(e, s);
+            return;
+          }
+      }
+
+      if (result == null) return;
+      if (!mounted) return;
+
+      switch (result) {
+        case ApiSuccess<AnnouncementLoginData>(
+              :final AnnouncementLoginData data,
+            ):
+          loginData = data;
+          loginData!.save();
+          if (kDebugMode) debugPrint(data.key);
           if (isNotLogin) Navigator.of(context, rootNavigator: true).pop();
           if (loginType == AnnouncementLoginType.normal) {
             PreferenceUtil.instance.setStringSecurity(
@@ -776,61 +817,26 @@ class _AnnouncementHomePageState extends State<AnnouncementHomePage> {
             loginType.index,
           );
           setState(() {
-            if (loginData.level != PermissionLevel.user) _getAnnouncements();
+            if (data.level != PermissionLevel.user) _getAnnouncements();
             _getApplications();
           });
-        },
-      );
-      debugPrint('$loginType');
-      switch (loginType) {
-        case AnnouncementLoginType.normal:
-          PreferenceUtil.instance.setString(
-            ApConstants.announcementUsername,
-            _username.text,
-          );
-          AnnouncementHelper.instance.login(
-            username: _username.text,
-            password: _password.text,
-            callback: callback,
-          );
-        case AnnouncementLoginType.google:
-          try {
-            final bool isSignIn = await _googleSignIn.isSignedIn();
-            final GoogleSignInAccount? data = isSignIn
-                ? await _googleSignIn.signInSilently()
-                : await _googleSignIn.signIn();
-            if (data != null) {
-              final GoogleSignInAuthentication authentication =
-                  await data.authentication;
-              idToken = authentication.idToken;
-              AnnouncementHelper.instance
-                  .googleLogin(idToken: idToken, callback: callback);
-            } else if (isNotLogin) {
-              if (!mounted) return;
-              Navigator.of(context, rootNavigator: true).pop();
-            }
-          } catch (e, s) {
-            if (!mounted) return;
-            UiUtil.instance.showToast(context, context.ap.thirdPartyLoginFail);
-            CrashlyticsUtil.instance.recordError(e, s);
-            if (isNotLogin) Navigator.of(context, rootNavigator: true).pop();
+        case ApiError<AnnouncementLoginData>(
+              :final GeneralResponse response,
+            ):
+          if (isNotLogin) Navigator.of(context, rootNavigator: true).pop();
+          UiUtil.instance.showToast(context, response.message);
+        case ApiFailure<AnnouncementLoginData>(
+              :final DioException exception,
+            ):
+          if (isNotLogin) Navigator.of(context, rootNavigator: true).pop();
+          if (exception.i18nMessage case final String message?) {
+            UiUtil.instance.showToast(context, message);
           }
-        case AnnouncementLoginType.apple:
-          try {
-            final AuthorizationCredentialAppleID credential =
-                await SignInWithApple.getAppleIDCredential(
-              scopes: <AppleIDAuthorizationScopes>[
-                AppleIDAuthorizationScopes.email,
-              ],
-            );
-            idToken = credential.identityToken;
-            AnnouncementHelper.instance
-                .appleLogin(idToken: idToken!, callback: callback);
-          } catch (e, s) {
-            if (!mounted) return;
-            UiUtil.instance.showToast(context, context.ap.thirdPartyLoginFail);
-            if (isNotLogin) Navigator.of(context, rootNavigator: true).pop();
-            CrashlyticsUtil.instance.recordError(e, s);
+          if (exception.type == DioExceptionType.badResponse &&
+              exception.response!.statusCode == 403) {
+            if (loginType == AnnouncementLoginType.google) {
+              await _googleSignIn.signOut();
+            }
           }
       }
     }

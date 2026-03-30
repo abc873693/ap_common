@@ -24,11 +24,10 @@ class GitHubHelper {
 
   late CookieJar cookieJar;
 
-  Future<Map<String, List<Announcement>>?> getAnnouncement({
+  Future<ApiResult<Map<String, List<Announcement>?>>> getAnnouncement({
     required String gitHubUsername,
     required String hashCode,
     required String tag,
-    GeneralCallback<Map<String, List<Announcement>?>>? callback,
   }) async {
     try {
       final Response<String> response = await dio.get(
@@ -45,17 +44,13 @@ class GitHubHelper {
           }
         });
       }
-      return callback?.onSuccess(map) as Map<String, List<Announcement>>;
+      return ApiSuccess<Map<String, List<Announcement>?>>(map);
     } on DioException catch (e) {
-      if (callback != null) {
-        callback.onFailure(e);
-      } else {
-        rethrow;
-      }
+      return ApiFailure<Map<String, List<Announcement>?>>(e);
     } on Exception catch (_) {
-      callback?.onError(GeneralResponse.unknownError());
-      rethrow;
+      return ApiError<Map<String, List<Announcement>?>>(
+        GeneralResponse.unknownError(),
+      );
     }
-    return null;
   }
 }

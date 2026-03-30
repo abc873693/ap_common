@@ -76,48 +76,34 @@ class _BlackListPageState extends State<BlackListPage> {
     }
   }
 
-  void _getData() {
+  Future<void> _getData() async {
     setState(() => state = _State.loading);
-    AnnouncementHelper.instance.getBlackList(
-      // ignore: always_specify_types
-      callback: GeneralCallback(
-        onSuccess: (List<String> data) {
-          blackList = data;
-          setState(() => state = _State.done);
-        },
-        onFailure: (DioException e) {
-          Toast.show(e.i18nMessage, context);
-          setState(() => state = _State.error);
-        },
-        onError: (GeneralResponse response) {
-          Toast.show(response.message, context);
-          setState(() => state = _State.error);
-        },
-      ),
-    );
+    final ApiResult<List<String>> result =
+        await AnnouncementHelper.instance.getBlackList();
+    if (!mounted) return;
+    if (result case ApiSuccess<List<String>>(:final List<String> data)) {
+      blackList = data;
+      setState(() => state = _State.done);
+    } else {
+      result.showErrorToast(context);
+      setState(() => state = _State.error);
+    }
   }
 
-  void _removeFromBlackList({
+  Future<void> _removeFromBlackList({
     required String username,
-  }) {
+  }) async {
     setState(() => state = _State.loading);
-    AnnouncementHelper.instance.removeFromBlackList(
+    final ApiResult<Response<dynamic>> result =
+        await AnnouncementHelper.instance.removeFromBlackList(
       username: username,
-      // ignore: always_specify_types
-      callback: GeneralCallback(
-        onSuccess: (_) {
-          Toast.show(context.ap.updateSuccess, context);
-          setState(() => state = _State.done);
-        },
-        onFailure: (DioException e) {
-          Toast.show(e.i18nMessage, context);
-          setState(() => state = _State.done);
-        },
-        onError: (GeneralResponse response) {
-          Toast.show(response.message, context);
-          setState(() => state = _State.done);
-        },
-      ),
     );
+    if (!mounted) return;
+    if (result.isSuccess) {
+      Toast.show(context.ap.updateSuccess, context);
+    } else {
+      result.showErrorToast(context);
+    }
+    setState(() => state = _State.done);
   }
 }
