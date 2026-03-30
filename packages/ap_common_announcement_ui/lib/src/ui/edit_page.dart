@@ -409,6 +409,21 @@ class _AnnouncementEditPageState extends State<AnnouncementEditPage> {
               if (widget.mode == Mode.editApplication) ...<Widget>[
                 SizedBox(height: dividerHeight),
                 TextFormField(
+                  controller: TextEditingController(
+                    text: announcements.applicant ?? '',
+                  ),
+                  enabled: false,
+                  decoration: InputDecoration(
+                    border: const OutlineInputBorder(),
+                    fillColor: ApTheme.of(context).blueAccent,
+                    labelStyle: TextStyle(
+                      color: ApTheme.of(context).grey,
+                    ),
+                    labelText: context.ap.applicant,
+                  ),
+                ),
+                SizedBox(height: dividerHeight),
+                TextFormField(
                   maxLines: 2,
                   controller: _reviewDescription,
                   validator: (String? value) {
