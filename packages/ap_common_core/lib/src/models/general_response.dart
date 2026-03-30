@@ -7,12 +7,12 @@ part 'general_response.g.dart';
 
 @freezed
 abstract class GeneralResponse with _$GeneralResponse {
-  const GeneralResponse._();
 
   const factory GeneralResponse({
     @JsonKey(name: 'code') required int statusCode,
     @JsonKey(name: 'description') required String message,
   }) = _GeneralResponse;
+  const GeneralResponse._();
 
   factory GeneralResponse.success() => const GeneralResponse(
         statusCode: successCode,

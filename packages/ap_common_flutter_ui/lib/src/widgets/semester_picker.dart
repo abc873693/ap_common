@@ -5,10 +5,6 @@ import 'package:flutter/material.dart';
 typedef SemesterCallback = void Function(Semester semester, int index);
 
 class SemesterUIConfig {
-  final String Function(String value)? getName;
-  final IconData Function(String value)? getIcon;
-  final Color Function(String value, ColorScheme colorScheme)? getColor;
-  final int Function(String value)? getSortValue;
 
   const SemesterUIConfig({
     this.getName,
@@ -16,6 +12,10 @@ class SemesterUIConfig {
     this.getColor,
     this.getSortValue,
   });
+  final String Function(String value)? getName;
+  final IconData Function(String value)? getIcon;
+  final Color Function(String value, ColorScheme colorScheme)? getColor;
+  final int Function(String value)? getSortValue;
 }
 
 class SemesterPicker extends StatefulWidget {
@@ -552,7 +552,8 @@ class SemesterPickerState extends State<SemesterPicker> {
     SemesterUIConfig? uiConfig,
   ) {
     final String name =
-        uiConfig?.getName?.call(semester.value) ?? _getSemesterName(semester.value);
+        uiConfig?.getName?.call(semester.value) ??
+            _getSemesterName(semester.value);
     if (name.isNotEmpty) {
       return '${semester.year} $name';
     }
@@ -717,4 +718,3 @@ class SemesterPickerState extends State<SemesterPicker> {
     );
   }
 }
-

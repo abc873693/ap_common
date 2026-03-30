@@ -16,7 +16,7 @@ void main() {
     });
 
     test('toJson should return a valid JSON map', () {
-      final GeneralResponse data =
+      const GeneralResponse data =
           GeneralResponse(statusCode: 200, message: 'Success');
 
       final Map<String, dynamic> json = data.toJson();

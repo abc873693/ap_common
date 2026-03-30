@@ -1,17 +1,17 @@
 import 'package:ap_common/ap_common.dart'
-    hide TranslationProvider, LocaleSettings, AppLocaleUtils, AppLocale;
-import 'package:ap_common_flutter_core/src/l10n/strings.g.dart'
-    as ap_l10n;
+    hide AppLocale, AppLocaleUtils, LocaleSettings, TranslationProvider;
 import 'package:ap_common_example/config/constants.dart';
 import 'package:ap_common_example/pages/home_page.dart';
 import 'package:ap_common_example/utils/app_localizations.dart';
 import 'package:ap_common_example/widgets/share_data_widget.dart';
+import 'package:ap_common_flutter_core/ap_common_flutter_core.dart'
+    as ap_l10n;
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 
 class MyApp extends StatefulWidget {
-  const MyApp({Key? key}) : super(key: key);
+  const MyApp({super.key});
 
   @override
   MyAppState createState() => MyAppState();
@@ -69,12 +69,12 @@ class MyAppState extends State<MyApp> with WidgetsBindingObserver {
       await useApDeviceLocale();
       await LocaleSettings.useDeviceLocale();
     } else {
-      final locale = Locale(
+      final Locale locale = Locale(
         languageCode,
         languageCode == ApSupportLanguageConstants.zh ? 'TW' : null,
       );
       await setApLocaleFromFlutter(locale);
-      final appLocale = AppLocaleUtils.instance.parseLocaleParts(
+      final AppLocale appLocale = AppLocaleUtils.instance.parseLocaleParts(
         languageCode: locale.languageCode,
         scriptCode: locale.scriptCode,
         countryCode: locale.countryCode,
@@ -113,7 +113,8 @@ class MyAppState extends State<MyApp> with WidgetsBindingObserver {
                 child: Builder(
                   builder: (BuildContext context) {
                   return MaterialApp(
-                    onGenerateTitle: (BuildContext context) => context.app.appName,
+                    onGenerateTitle: (BuildContext context) =>
+                        context.app.appName,
                     debugShowCheckedModeBanner: false,
                     routes: <String, WidgetBuilder>{
                       Navigator.defaultRouteName: (BuildContext context) =>
@@ -167,7 +168,7 @@ class MyAppState extends State<MyApp> with WidgetsBindingObserver {
     // Sync ap_common library locale
     setApLocaleFromFlutter(locale);
     // Sync example app locale
-    final appLocale = AppLocaleUtils.instance.parseLocaleParts(
+    final AppLocale appLocale = AppLocaleUtils.instance.parseLocaleParts(
       languageCode: locale.languageCode,
       scriptCode: locale.scriptCode,
       countryCode: locale.countryCode,

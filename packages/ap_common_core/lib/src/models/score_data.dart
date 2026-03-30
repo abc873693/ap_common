@@ -9,12 +9,12 @@ part 'score_data.g.dart';
 
 @freezed
 abstract class ScoreData with _$ScoreData {
-  const ScoreData._();
 
   const factory ScoreData({
     required List<Score> scores,
     required Detail detail,
   }) = _ScoreData;
+  const ScoreData._();
 
   factory ScoreData.empty() => ScoreData(
         scores: <Score>[],
@@ -54,7 +54,6 @@ abstract class ScoreData with _$ScoreData {
 
 @freezed
 abstract class Detail with _$Detail {
-  const Detail._();
 
   const factory Detail({
     double? creditTaken,
@@ -65,6 +64,7 @@ abstract class Detail with _$Detail {
     double? classPercentage,
     double? conduct,
   }) = _Detail;
+  const Detail._();
 
   factory Detail.empty() => const Detail(
         creditTaken: 0.0,
@@ -85,7 +85,6 @@ abstract class Detail with _$Detail {
 
 @freezed
 abstract class Score with _$Score {
-  const Score._();
 
   const factory Score({
     required String? courseNumber,
@@ -101,6 +100,7 @@ abstract class Score with _$Score {
     required String? semesterScore,
     required String? remark,
   }) = _Score;
+  const Score._();
 
   factory Score.fromJson(Map<String, dynamic> json) => _$ScoreFromJson(json);
 

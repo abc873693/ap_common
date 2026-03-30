@@ -17,7 +17,7 @@ void main() {
             'required': 'Required',
             'at': 'Mon 1-3',
             'sectionTimes': <Map<String, int>>[
-              <String, int>{'weekday': 1, 'index': 0}
+              <String, int>{'weekday': 1, 'index': 0},
             ],
             'instructors': <String>['John Doe'],
             'location': <String, String>{'room': '101', 'building': 'Room'},
@@ -40,16 +40,16 @@ void main() {
     });
 
     test('toJson should return a valid JSON map', () {
-      final Course course = Course(
+      const Course course = Course(
         code: 'CS101',
         title: 'Intro to CS',
         units: '3.0',
         times: <SectionTime>[SectionTime(weekday: 1, index: 0)],
         instructors: <String>['John Doe'],
       );
-      final TimeCode timeCode =
+      const TimeCode timeCode =
           TimeCode(title: '1', startTime: '08:00', endTime: '08:50');
-      final CourseData data = CourseData(
+      const CourseData data = CourseData(
         courses: <Course>[course],
         timeCodes: <TimeCode>[timeCode],
       );
@@ -57,7 +57,9 @@ void main() {
       final Map<String, dynamic> json = data.toJson();
 
       expect(json['courses'], isA<List<dynamic>>());
-      expect(json['courses'][0]['title'], 'Intro to CS');
+      final Map<String, dynamic> first =
+          (json['courses'] as List<dynamic>)[0] as Map<String, dynamic>;
+      expect(first['title'], 'Intro to CS');
     });
   });
 }

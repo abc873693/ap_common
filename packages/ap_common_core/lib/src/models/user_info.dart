@@ -10,7 +10,6 @@ part 'user_info.g.dart';
 
 @freezed
 abstract class UserInfo with _$UserInfo {
-  const UserInfo._();
 
   const factory UserInfo({
     String? educationSystem,
@@ -23,6 +22,7 @@ abstract class UserInfo with _$UserInfo {
     @JsonKey(includeToJson: false, includeFromJson: false)
     Uint8List? pictureBytes,
   }) = _UserInfo;
+  const UserInfo._();
 
   factory UserInfo.empty() => const UserInfo(
         id: '',

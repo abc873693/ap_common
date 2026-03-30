@@ -11,7 +11,6 @@ part 'imgur_upload_response.g.dart';
 
 @freezed
 abstract class ImgurUploadResponse with _$ImgurUploadResponse {
-  const ImgurUploadResponse._();
 
   @JsonSerializable(fieldRename: FieldRename.snake)
   const factory ImgurUploadResponse({
@@ -19,6 +18,7 @@ abstract class ImgurUploadResponse with _$ImgurUploadResponse {
     bool? success,
     ImgurUploadData? data,
   }) = _ImgurUploadResponse;
+  const ImgurUploadResponse._();
 
   factory ImgurUploadResponse.fromJson(Map<String, dynamic> json) =>
       _$ImgurUploadResponseFromJson(json);
@@ -33,7 +33,6 @@ abstract class ImgurUploadResponse with _$ImgurUploadResponse {
 
 @freezed
 abstract class ImgurUploadData with _$ImgurUploadData {
-  const ImgurUploadData._();
 
   @JsonSerializable(fieldRename: FieldRename.snake)
   const factory ImgurUploadData({
@@ -67,6 +66,7 @@ abstract class ImgurUploadData with _$ImgurUploadData {
     String? mp4,
     String? hls,
   }) = _ImgurUploadData;
+  const ImgurUploadData._();
 
   factory ImgurUploadData.fromJson(Map<String, dynamic> json) =>
       _$ImgurUploadDataFromJson(json);

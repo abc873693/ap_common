@@ -36,7 +36,7 @@ void main() {
     });
 
     test('toJson should return a valid JSON map', () {
-      final Score score = Score(
+      const Score score = Score(
         courseNumber: 'CS101',
         title: 'Intro to CS',
         units: '3.0',
@@ -49,13 +49,15 @@ void main() {
         semesterScore: '90',
         remark: null,
       );
-      final ScoreData data =
-          ScoreData(scores: <Score>[score], detail: const Detail());
+      const ScoreData data =
+          ScoreData(scores: <Score>[score], detail: Detail());
 
       final Map<String, dynamic> json = data.toJson();
 
       expect(json['scores'], isA<List<dynamic>>());
-      expect(json['scores'][0]['title'], 'Intro to CS');
+      final Map<String, dynamic> first =
+          (json['scores'] as List<dynamic>)[0] as Map<String, dynamic>;
+      expect(first['title'], 'Intro to CS');
     });
 
     test('ScoreData.empty() should return empty ScoreData', () {

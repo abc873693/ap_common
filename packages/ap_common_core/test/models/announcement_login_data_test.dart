@@ -14,7 +14,7 @@ void main() {
     });
 
     test('toJson should return a valid JSON map', () {
-      final AnnouncementLoginData data = AnnouncementLoginData(key: 'test_key');
+      const AnnouncementLoginData data = AnnouncementLoginData(key: 'test_key');
 
       final Map<String, dynamic> json = data.toJson();
 

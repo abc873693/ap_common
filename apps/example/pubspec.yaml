@@ -29,6 +29,7 @@ dependencies:
   ap_common_plugin: 1.0.1-dev.2
 #    path: ../../../GitHub/ap_common_plugin
 
+  ap_common_flutter_core: any
 dependency_overrides:
   intl: 0.18.0
 

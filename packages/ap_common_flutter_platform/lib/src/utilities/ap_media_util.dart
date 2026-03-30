@@ -64,6 +64,7 @@ class ApMediaUtil extends MediaUtil {
           ),
         );
       } else {
+        if (!context.mounted) return;
         onSuccess?.call(
           GeneralResponse(
             statusCode: 401,

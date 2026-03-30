@@ -35,7 +35,7 @@ class _DialogUtilsTestPageState extends State<DialogUtilsTestPage> {
                 iOSAppId: '1439751462',
                 defaultUrl: 'https://www.facebook.com/NKUST.ITC/',
                 githubRepositoryName: 'NKUST-ITC/NKUST-AP-Flutter',
-                versionInfo: VersionInfo(
+                versionInfo: const VersionInfo(
                   code: 30713,
                   isForceUpdate: false,
                   content:

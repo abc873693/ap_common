@@ -12,7 +12,6 @@ part 'course_notify_data.g.dart';
 
 @freezed
 abstract class CourseNotifyData with _$CourseNotifyData {
-  const CourseNotifyData._();
 
   const factory CourseNotifyData({
     @Default(2) int version,
@@ -20,6 +19,7 @@ abstract class CourseNotifyData with _$CourseNotifyData {
     @Default(<CourseNotify>[]) List<CourseNotify> data,
     @JsonKey(includeToJson: false, includeFromJson: false) String? tag,
   }) = _CourseNotifyData;
+  const CourseNotifyData._();
 
   factory CourseNotifyData.fromJson(Map<String, dynamic> json) =>
       _$CourseNotifyDataFromJson(json);
@@ -113,7 +113,6 @@ abstract class CourseNotifyData with _$CourseNotifyData {
 
 @freezed
 abstract class CourseNotify with _$CourseNotify {
-  const CourseNotify._();
 
   const factory CourseNotify({
     required int id,
@@ -127,6 +126,7 @@ abstract class CourseNotify with _$CourseNotify {
     String? location,
     String? code,
   }) = _CourseNotify;
+  const CourseNotify._();
 
   factory CourseNotify.fromCourse({
     required int id,

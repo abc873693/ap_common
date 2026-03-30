@@ -149,7 +149,11 @@ class LoginPageState extends State<LoginPage> {
 
   Future<void> _login() async {
     if (_username.text.isEmpty || _password.text.isEmpty) {
-      UiUtil.instance.showToast(context, context.ap.doNotEmpty, gravity: gravity);
+      UiUtil.instance.showToast(
+        context,
+        context.ap.doNotEmpty,
+        gravity: gravity,
+      );
     } else {
       asyncLogin();
     }
@@ -185,7 +189,10 @@ class LoginPageState extends State<LoginPage> {
       UiUtil.instance.showToast(context, context.ap.noOfflineLoginData);
     } else {
       if (username != _username.text || password != _password.text) {
-        UiUtil.instance.showToast(context, context.ap.offlineLoginPasswordError);
+        UiUtil.instance.showToast(
+          context,
+          context.ap.offlineLoginPasswordError,
+        );
       } else {
         PreferenceUtil.instance.setBool(Constants.PREF_IS_OFFLINE_LOGIN, true);
         UiUtil.instance.showToast(context, context.ap.loadOfflineData);

@@ -3,8 +3,8 @@ import 'package:ap_common_example/config/constants.dart';
 import 'package:ap_common_example/pages/diolog_utils_page.dart';
 import 'package:ap_common_example/pages/login_page.dart';
 import 'package:ap_common_example/pages/notification_utils_page.dart';
-import 'package:ap_common_example/pages/setting_page.dart';
 import 'package:ap_common_example/pages/school_info_page.dart';
+import 'package:ap_common_example/pages/setting_page.dart';
 import 'package:ap_common_example/pages/study/course_page.dart';
 import 'package:ap_common_example/pages/study/score_page.dart';
 import 'package:ap_common_example/pages/user_info_page.dart';
@@ -46,7 +46,6 @@ class HomePageState extends State<HomePage> {
       case Brightness.light:
         return ImageAssets.drawerIconLight;
       case Brightness.dark:
-      default:
         return ImageAssets.drawerIconDark;
     }
   }
@@ -256,13 +255,10 @@ class HomePageState extends State<HomePage> {
               assetImage: ImageAssets.sectionJiangong,
             ),
           );
-          break;
         case 1:
           ApUtils.pushCupertinoStyle(context, CoursePage());
-          break;
         case 2:
           ApUtils.pushCupertinoStyle(context, ScorePage());
-          break;
       }
     } else {
       UiUtil.instance.showToast(context, context.ap.notLogin);
@@ -360,6 +356,7 @@ class HomePageState extends State<HomePage> {
     if (state != HomeState.finish) {
       _getAnnouncements();
     }
+    if (!mounted) return;
     _homeKey.currentState!.showBasicHint(text: context.ap.loginSuccess);
   }
 

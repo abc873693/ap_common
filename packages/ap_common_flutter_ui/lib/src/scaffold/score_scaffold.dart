@@ -263,7 +263,7 @@ class ScoreScaffoldState extends State<ScoreScaffold> {
           onScoreSelect: widget.onScoreSelect,
           middleScoreBuilder: widget.middleScoreBuilder,
           finalScoreBuilder: widget.finalScoreBuilder,
-          isAnalysisView: isLandscape ? true : _isAnalysisView,
+          isAnalysisView: isLandscape || _isAnalysisView,
           scrollController: _scrollController,
         );
     }

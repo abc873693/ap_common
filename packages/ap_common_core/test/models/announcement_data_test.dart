@@ -35,17 +35,19 @@ void main() {
         imgUrl: 'https://example.com/image.png',
         description: 'Test Description',
       );
-      final AnnouncementData announcementData =
+      const AnnouncementData announcementData =
           AnnouncementData(data: <Announcement>[announcement]);
 
       final Map<String, dynamic> json = announcementData.toJson();
 
       expect(json['data'], isA<List<dynamic>>());
-      expect(json['data'][0]['title'], 'Test Title');
-      expect(json['data'][0]['id'], 1);
-      expect(json['data'][0]['weight'], 10);
-      expect(json['data'][0]['imgUrl'], 'https://example.com/image.png');
-      expect(json['data'][0]['description'], 'Test Description');
+      final Map<String, dynamic> first =
+          (json['data'] as List<dynamic>)[0] as Map<String, dynamic>;
+      expect(first['title'], 'Test Title');
+      expect(first['id'], 1);
+      expect(first['weight'], 10);
+      expect(first['imgUrl'], 'https://example.com/image.png');
+      expect(first['description'], 'Test Description');
     });
 
     test('sortedData should return announcements sorted by weight descending',
@@ -72,7 +74,7 @@ void main() {
         description: '',
       );
 
-      final AnnouncementData announcementData =
+      const AnnouncementData announcementData =
           AnnouncementData(data: <Announcement>[a1, a2, a3]);
       final List<Announcement> sorted = announcementData.sortedData;
 

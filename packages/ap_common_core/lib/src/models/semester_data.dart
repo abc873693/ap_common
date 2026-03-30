@@ -9,13 +9,13 @@ part 'semester_data.g.dart';
 
 @freezed
 abstract class SemesterData with _$SemesterData {
-  const SemesterData._();
 
   const factory SemesterData({
     required List<Semester> data,
     @JsonKey(name: 'default') required Semester defaultSemester,
     @Default(0) int currentIndex,
   }) = _SemesterData;
+  const SemesterData._();
 
   factory SemesterData.fromJson(Map<String, dynamic> json) =>
       _$SemesterDataFromJson(json);
@@ -73,13 +73,13 @@ abstract class SemesterData with _$SemesterData {
 
 @freezed
 abstract class Semester with _$Semester {
-  const Semester._();
 
   const factory Semester({
     required String year,
     required String value,
     required String text,
   }) = _Semester;
+  const Semester._();
 
   factory Semester.fromJson(Map<String, dynamic> json) =>
       _$SemesterFromJson(json);

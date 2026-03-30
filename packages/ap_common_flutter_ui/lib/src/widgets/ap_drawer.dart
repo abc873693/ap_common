@@ -26,7 +26,7 @@ class ApDrawer extends StatelessWidget {
     final bool isDark = Theme.of(context).brightness == Brightness.dark;
 
     return Drawer(
-      backgroundColor: Color(0x00000000),
+      backgroundColor: const Color(0x00000000),
       elevation: 0,
       shape: const RoundedRectangleBorder(
         borderRadius: BorderRadius.horizontal(right: Radius.circular(20)),
@@ -110,7 +110,7 @@ class ApDrawer extends StatelessWidget {
   }
 
   Widget _buildAvatar(
-      BuildContext context, ColorScheme colorScheme, bool isDark) {
+      BuildContext context, ColorScheme colorScheme, bool isDark,) {
     final bool hasImage = displayPicture &&
         userInfo?.pictureBytes != null &&
         userInfo!.pictureBytes!.isNotEmpty;
@@ -154,7 +154,7 @@ class ApDrawer extends StatelessWidget {
   }
 
   Widget _buildUserInfo(
-      BuildContext context, ColorScheme colorScheme, bool isDark) {
+      BuildContext context, ColorScheme colorScheme, bool isDark,) {
     final Color textColor =
         isDark ? colorScheme.onSurface : colorScheme.onPrimary;
     final Color subtitleColor = isDark
@@ -326,7 +326,7 @@ class DrawerMenuSection extends StatelessWidget {
       return Padding(
         padding: const EdgeInsets.symmetric(vertical: 2),
         child: Material(
-          color: Color(0x00000000),
+          color: const Color(0x00000000),
           borderRadius: BorderRadius.circular(12),
           child: Padding(
             padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 18),
@@ -360,7 +360,7 @@ class DrawerMenuSection extends StatelessWidget {
       padding: const EdgeInsets.symmetric(vertical: 2),
       child: Theme(
         data: Theme.of(context).copyWith(
-          dividerColor: Color(0x00000000),
+          dividerColor: const Color(0x00000000),
           splashColor: colorScheme.primary.withAlpha(26),
         ),
         child: ExpansionTile(

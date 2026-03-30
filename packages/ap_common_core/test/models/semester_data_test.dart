@@ -27,9 +27,9 @@ void main() {
     });
 
     test('toJson should return a valid JSON map', () {
-      final Semester semester =
+      const Semester semester =
           Semester(year: '112', value: '1', text: '112-1');
-      final SemesterData data = SemesterData(
+      const SemesterData data = SemesterData(
         data: <Semester>[semester],
         defaultSemester: Semester(year: '112', value: '1', text: '112-1'),
       );
@@ -37,7 +37,9 @@ void main() {
       final Map<String, dynamic> json = data.toJson();
 
       expect(json['data'], isA<List<dynamic>>());
-      expect(json['data'][0]['year'], '112');
+      final Map<String, dynamic> first =
+          (json['data'] as List<dynamic>)[0] as Map<String, dynamic>;
+      expect(first['year'], '112');
     });
   });
 }

@@ -11,11 +11,11 @@ part 'notification_data.g.dart';
 
 @freezed
 abstract class NotificationsData with _$NotificationsData {
-  const NotificationsData._();
 
   const factory NotificationsData({
     required Data data,
   }) = _NotificationsData;
+  const NotificationsData._();
 
   factory NotificationsData.fromJson(Map<String, dynamic> json) =>
       _$NotificationsDataFromJson(json);
@@ -36,12 +36,12 @@ abstract class NotificationsData with _$NotificationsData {
 
 @freezed
 abstract class Data with _$Data {
-  const Data._();
 
   const factory Data({
     int? page,
     @JsonKey(name: 'notification') required List<Notifications> notifications,
   }) = _Data;
+  const Data._();
 
   factory Data.fromJson(Map<String, dynamic> json) => _$DataFromJson(json);
 
@@ -54,12 +54,12 @@ abstract class Data with _$Data {
 
 @freezed
 abstract class Notifications with _$Notifications {
-  const Notifications._();
 
   const factory Notifications({
     required String link,
     required Info info,
   }) = _Notifications;
+  const Notifications._();
 
   factory Notifications.fromJson(Map<String, dynamic> json) =>
       _$NotificationsFromJson(json);
@@ -73,13 +73,13 @@ abstract class Notifications with _$Notifications {
 
 @freezed
 abstract class Info with _$Info {
-  const Info._();
 
   const factory Info({
     required String title,
     required String department,
     required String date,
   }) = _Info;
+  const Info._();
 
   factory Info.fromJson(Map<String, dynamic> json) => _$InfoFromJson(json);
 

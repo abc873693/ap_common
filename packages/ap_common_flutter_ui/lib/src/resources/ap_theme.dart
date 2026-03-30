@@ -367,7 +367,6 @@ class ApTheme extends InheritedWidget {
   static ThemeData light(Color seedColor) {
     final ColorScheme colorScheme = ColorScheme.fromSeed(
       seedColor: seedColor,
-      brightness: Brightness.light,
     );
     return _buildTheme(colorScheme);
   }
@@ -387,7 +386,6 @@ class ApTheme extends InheritedWidget {
       useMaterial3: true,
       colorScheme: colorScheme,
       scaffoldBackgroundColor: colorScheme.surface,
-      indicatorColor: colorScheme.primary,
       pageTransitionsTheme: _pageTransitionsTheme,
       visualDensity: VisualDensity.adaptivePlatformDensity,
       appBarTheme: AppBarTheme(
@@ -466,7 +464,7 @@ class ApTheme extends InheritedWidget {
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(12),
           ),
-          side: BorderSide(color: colorScheme.outline, width: 1),
+          side: BorderSide(color: colorScheme.outline),
         ),
       ),
       floatingActionButtonTheme: FloatingActionButtonThemeData(

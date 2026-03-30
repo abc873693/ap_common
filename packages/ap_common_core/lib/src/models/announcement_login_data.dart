@@ -12,11 +12,11 @@ enum PermissionLevel { user, editor, admin }
 
 @freezed
 abstract class AnnouncementLoginData with _$AnnouncementLoginData {
-  const AnnouncementLoginData._();
 
   const factory AnnouncementLoginData({
     required String key,
   }) = _AnnouncementLoginData;
+  const AnnouncementLoginData._();
 
   factory AnnouncementLoginData.fromJson(Map<String, dynamic> json) =>
       _$AnnouncementLoginDataFromJson(json);

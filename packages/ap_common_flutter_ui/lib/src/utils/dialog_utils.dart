@@ -103,6 +103,7 @@ class DialogUtils {
     String? githubBranchName,
   }) async {
     final PackageInfo packageInfo = await PackageInfo.fromPlatform();
+    if (!context.mounted) return;
     final ApLocalizations app = context.ap;
     final int versionDiff =
         versionInfo.code - int.parse(packageInfo.buildNumber);
@@ -138,19 +139,21 @@ class DialogUtils {
         ),
         options: Options(responseType: ResponseType.plain),
       );
-      final dynamic json = jsonDecode(response.data as String);
-      //ignore: avoid_dynamic_calls
+      final Map<String, dynamic> json =
+          jsonDecode(response.data as String) as Map<String, dynamic>;
+      final Map<String, dynamic> versionMap =
+          json['${versionInfo.code}'] as Map<String, dynamic>;
       versionInfo = versionInfo.copyWith(
-        content: json['${versionInfo.code}'][app.locale] as String,
+        content: versionMap[app.locale] as String,
       );
     }
+    if (!context.mounted) return;
     final String versionContent = '${'\n$versionName\n'}${versionInfo.content}';
     final String updateContent = app.updateContent(arg1: appName);
     final RichText contentWidget = RichText(
       textAlign: TextAlign.center,
       text: TextSpan(
         style: TextStyle(
-          //ignore: use_build_context_synchronously
           color: Theme.of(context).colorScheme.onSurfaceVariant,
           height: 1.3,
           fontSize: 16.0,

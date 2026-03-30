@@ -163,14 +163,10 @@ class FirebaseAnalyticsUtils extends AnalyticsUtil {
       case ThemeMode.system:
         brightness =
             WidgetsBinding.instance.platformDispatcher.platformBrightness;
-        break;
       case ThemeMode.light:
         brightness = Brightness.light;
-        break;
       case ThemeMode.dark:
-      default:
         brightness = Brightness.dark;
-        break;
     }
     setUserProperty(
       AnalyticsConstants.theme,

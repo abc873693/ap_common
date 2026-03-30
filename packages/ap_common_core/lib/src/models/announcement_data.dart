@@ -9,11 +9,11 @@ part 'announcement_data.g.dart';
 
 @freezed
 abstract class AnnouncementData with _$AnnouncementData {
-  const AnnouncementData._();
 
   const factory AnnouncementData({
     required List<Announcement> data,
   }) = _AnnouncementData;
+  const AnnouncementData._();
 
   factory AnnouncementData.fromJson(Map<String, dynamic> json) =>
       _$AnnouncementDataFromJson(json);
@@ -57,7 +57,6 @@ abstract class AnnouncementData with _$AnnouncementData {
 
 @freezed
 abstract class Announcement with _$Announcement {
-  const Announcement._();
 
   const factory Announcement({
     required String title,
@@ -79,6 +78,7 @@ abstract class Announcement with _$Announcement {
     @Default(0)
     int randomWeight,
   }) = _Announcement;
+  const Announcement._();
 
   factory Announcement.empty() => const Announcement(
         title: '',

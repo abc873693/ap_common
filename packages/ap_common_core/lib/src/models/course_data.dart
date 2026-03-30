@@ -10,12 +10,12 @@ part 'course_data.g.dart';
 
 @freezed
 abstract class CourseData with _$CourseData {
-  const CourseData._();
 
   const factory CourseData({
     required List<Course> courses,
     required List<TimeCode> timeCodes,
   }) = _CourseData;
+  const CourseData._();
 
   factory CourseData.empty() => const CourseData(
         courses: <Course>[],
@@ -132,7 +132,6 @@ abstract class CourseData with _$CourseData {
 
 @freezed
 abstract class Course with _$Course {
-  const Course._();
 
   const factory Course({
     required String code,
@@ -147,6 +146,7 @@ abstract class Course with _$Course {
     Location? location,
     required List<String> instructors,
   }) = _Course;
+  const Course._();
 
   factory Course.fromJson(Map<String, dynamic> json) => _$CourseFromJson(json);
 
@@ -171,12 +171,12 @@ abstract class Course with _$Course {
 
 @freezed
 abstract class Location with _$Location {
-  const Location._();
 
   const factory Location({
     required String room,
     required String building,
   }) = _Location;
+  const Location._();
 
   factory Location.fromJson(Map<String, dynamic> json) =>
       _$LocationFromJson(json);
@@ -195,7 +195,6 @@ abstract class Location with _$Location {
 
 @freezed
 abstract class SectionTime with _$SectionTime {
-  const SectionTime._();
 
   const factory SectionTime({
     ///The day of the week [DateTime.monday]..[DateTime.sunday].
@@ -206,6 +205,7 @@ abstract class SectionTime with _$SectionTime {
     /// index of [CourseData.timeCodes]
     required int index,
   }) = _SectionTime;
+  const SectionTime._();
 
   factory SectionTime.fromJson(Map<String, dynamic> json) =>
       _$SectionTimeFromJson(json);
@@ -221,13 +221,13 @@ abstract class SectionTime with _$SectionTime {
 
 @freezed
 abstract class TimeCode with _$TimeCode {
-  const TimeCode._();
 
   const factory TimeCode({
     required String title,
     required String startTime,
     required String endTime,
   }) = _TimeCode;
+  const TimeCode._();
 
   factory TimeCode.fromJson(Map<String, dynamic> json) =>
       _$TimeCodeFromJson(json);
