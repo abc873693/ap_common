@@ -687,7 +687,10 @@ class _AnnouncementEditPageState extends State<AnnouncementEditPage> {
               );
             }
             if (!mounted) return;
-            reviewResult.showErrorToast(context);
+            if (!reviewResult.isSuccess) {
+              reviewResult.showErrorToast(context);
+              return;
+            }
           }
           if (addBlackList ?? false) {
             final ApiResult<Response<dynamic>> banResult =
@@ -695,7 +698,10 @@ class _AnnouncementEditPageState extends State<AnnouncementEditPage> {
               username: announcements.applicant!,
             );
             if (!mounted) return;
-            banResult.showErrorToast(context);
+            if (!banResult.isSuccess) {
+              banResult.showErrorToast(context);
+              return;
+            }
           }
       }
       if (!mounted) return;
