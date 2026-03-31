@@ -11,7 +11,7 @@ export 'package:intl/intl.dart';
 /// Call this from your app when changing locale.
 Future<AppLocale> setApLocale(AppLocale locale) async {
   final AppLocale result = await LocaleSettings.setLocale(locale);
-  Intl.defaultLocale = locale.flutterLocale.toString();
+  Intl.defaultLocale = result.flutterLocale.toString();
   return result;
 }
 
