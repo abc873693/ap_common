@@ -7,11 +7,11 @@ import 'package:intl/intl.dart';
 export 'package:ap_common_flutter_core/src/l10n/strings.g.dart';
 export 'package:intl/intl.dart';
 
-/// Helper to set locale for both slang and Intl.
+/// Helper to set locale for both slang and Intl (DateFormat).
 /// Call this from your app when changing locale.
 Future<AppLocale> setApLocale(AppLocale locale) async {
   final AppLocale result = await LocaleSettings.setLocale(locale);
-  Intl.defaultLocale = locale.flutterLocale.toString();
+  Intl.defaultLocale = result.flutterLocale.toString();
   return result;
 }
 
@@ -25,7 +25,7 @@ Future<AppLocale> setApLocaleFromFlutter(Locale locale) async {
   return setApLocale(appLocale);
 }
 
-/// Helper to use device locale for both slang and Intl.
+/// Helper to use device locale for both slang and Intl (DateFormat).
 Future<AppLocale> useApDeviceLocale() async {
   final AppLocale result = await LocaleSettings.useDeviceLocale();
   Intl.defaultLocale = result.flutterLocale.toString();

@@ -85,30 +85,6 @@ abstract class CourseNotifyData with _$CourseNotifyData {
     );
   }
 
-  //TODO: revert for i18n implement
-  // void update(BuildContext context, String tag, CourseData courseData) {
-  //   final String key = '${ApConstants.packageName}.course_notify_data_$tag';
-  //   final ApLocalizations ap = ApLocalizations.of(context);
-  //   final CourseNotifyData cache = CourseNotifyData.load(key);
-  //   for (final CourseNotify courseNotify in cache.data) {
-  //     for (final Course courseDetail in courseData.courses) {
-  //       if (courseDetail.code == courseNotify.code) {
-  //         courseNotify.title = sprintf(ap.courseNotifyContent, <String?>[
-  //           courseNotify.title,
-  //           if (courseNotify.location == null ||
-  //               courseNotify.location!.isEmpty)
-  //             ap.courseNotifyUnknown
-  //           else
-  //             courseNotify.location,
-  //         ]);
-  //       }
-  //     }
-  //   }
-  //   PreferenceUtil.instance.setString(
-  //     key,
-  //     toRawJson(),
-  //   );
-  // }
 }
 
 @freezed
