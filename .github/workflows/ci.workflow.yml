@@ -40,6 +40,28 @@ jobs:
       - name: Build Web
         run: flutter build web
         working-directory: ./apps/example
-#      - name: Run Flutter Driver tests
-#        run: flutter drive
-#        working-directory: ./apps/example
+      - name: Build Android APK
+        run: flutter build apk --debug
+        working-directory: ./apps/example
+
+  build-ios:
+    name: iOS Build Test
+    runs-on: macos-latest
+
+    steps:
+      - uses: actions/checkout@v4
+      - uses: subosito/flutter-action@v2
+        with:
+          flutter-version: '3.38.x'
+          channel: 'stable'
+          cache: true
+          cache-key: 'flutter-:os:-:channel:-:version:-:arch:-:hash:'
+      - uses: bluefireteam/melos-action@v3
+        with:
+          run-bootstrap: false
+          melos-version: '6.1.0'
+      - name: 'Bootstrap package'
+        run: melos bootstrap --sdk-path ${{ env.FLUTTER_ROOT }}
+      - name: Build iOS
+        run: flutter build ios --no-codesign
+        working-directory: ./apps/example
