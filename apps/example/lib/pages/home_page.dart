@@ -266,30 +266,6 @@ class HomePageState extends State<HomePage> {
   }
 
   Future<void> _getAnnouncements() async {
-    // GitHubHelper.instance.getAnnouncement(
-    //   gitHubUsername: 'abc873693',
-    //   hashCode: 'a8e048d24f892ce95a633aa5966c030a',
-    //   tag: 'nkust',
-    //   callback: GeneralCallback(
-    //     onFailure: (_) => setState(() => state = HomeState.error),
-    //     onError: (_) => setState(() => state = HomeState.error),
-    //     onSuccess: (Map<String, List<Announcement>> data) {
-    //       newsMap = data;
-    //       setState(() {
-    //         if (announcements == null || announcements.length == 0)
-    //           state = HomeState.empty;
-    //         else {
-    //           newsMap.forEach((_, data) {
-    //             data.sort((a, b) {
-    //               return b.weight.compareTo(a.weight);
-    //             });
-    //           });
-    //           state = HomeState.finish;
-    //         }
-    //       });
-    //     },
-    //   ),
-    // );
     final ApiResult<List<Announcement>> result =
         await AnnouncementHelper.instance.getAnnouncements(tags: <String>[]);
     switch (result) {

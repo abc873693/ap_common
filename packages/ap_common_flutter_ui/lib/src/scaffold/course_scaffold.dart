@@ -565,22 +565,21 @@ class CourseScaffoldState extends State<CourseScaffold> {
     final DateTime now = DateTime.now();
     final String formattedDate = DateFormat('yyyyMMdd_hhmmss').format(now);
     if (byteData != null) {
-      if (!mounted) return;
-      await MediaUtil.instance.saveImage(
-        context,
+      final SaveImageResult result = await MediaUtil.instance.saveImage(
         byteData: byteData,
         fileName: 'course_table_$formattedDate',
-        successMessage: context.ap.exportCourseTableSuccess,
-        onSuccess: (GeneralResponse r) => Toast.show(
-          r.message,
-          context,
-        ),
-        onError: (GeneralResponse e) => Toast.show(
-          e.message,
-          context,
-        ),
       );
-      AnalyticsUtil.instance.logEvent('export_course_table_image_success');
+      if (!mounted) return;
+      switch (result) {
+        case SaveImageSuccess(:final String filePath):
+          final String message =
+              '${context.ap.exportCourseTableSuccess}\n$filePath';
+          Toast.show(message, context);
+          AnalyticsUtil.instance
+              .logEvent('export_course_table_image_success');
+        case SaveImageError(:final String message):
+          UiUtil.instance.showToast(context, message);
+      }
     } else {
       if (!mounted) return;
       UiUtil.instance.showToast(context, context.ap.unknownError);

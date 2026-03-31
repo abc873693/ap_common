@@ -3,8 +3,8 @@ import 'package:ap_common_flutter_core/ap_common_flutter_core.dart';
 
 export 'package:ap_common_core/ap_common_core.dart';
 export 'package:cross_file/cross_file.dart';
+export 'package:dio/dio.dart';
 
-export 'src/callback/general_callback.dart';
 export 'src/l10n/ap_localizations.dart';
 export 'src/models/general_permission_status.dart';
 export 'src/ui/ap_icon.dart';
