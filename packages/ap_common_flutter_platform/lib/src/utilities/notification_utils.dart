@@ -1,6 +1,7 @@
 import 'dart:io';
 
 import 'package:ap_common_flutter_core/ap_common_flutter_core.dart';
+import 'package:clock/clock.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
@@ -64,7 +65,7 @@ class ApNotificationUtil extends NotificationUtil {
   }
 
   DateTime getNextWeekdayDateTime(Day day, TimeOfDay time) {
-    final DateTime now = DateTime.now();
+    final DateTime now = clock.now();
     final DateTime dateTime = DateTime(
       now.year,
       now.month,
