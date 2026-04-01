@@ -11,6 +11,8 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
+  flutter_localizations:
+    sdk: flutter
   ap_common_flutter_core: ^1.1.0-dev.0
   # Dart Package
   sprintf: ^7.0.0

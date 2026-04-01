@@ -15,15 +15,22 @@ void main() {
   });
 
   Widget buildTestApp(Widget child) {
-    return MaterialApp(
-      localizationsDelegates: const <LocalizationsDelegate<dynamic>>[
-        apLocalizationsDelegate,
-        GlobalMaterialLocalizations.delegate,
-        GlobalWidgetsLocalizations.delegate,
-        GlobalCupertinoLocalizations.delegate,
-      ],
-      supportedLocales: ApLocalizations.delegate.supportedLocales,
-      home: child,
+    return TranslationProvider(
+      child: Builder(
+        builder: (BuildContext context) {
+          return MaterialApp(
+            locale: TranslationProvider.of(context).flutterLocale,
+            supportedLocales: AppLocaleUtils.supportedLocales,
+            localizationsDelegates:
+                const <LocalizationsDelegate<dynamic>>[
+              GlobalMaterialLocalizations.delegate,
+              GlobalWidgetsLocalizations.delegate,
+              GlobalCupertinoLocalizations.delegate,
+            ],
+            home: child,
+          );
+        },
+      ),
     );
   }
 

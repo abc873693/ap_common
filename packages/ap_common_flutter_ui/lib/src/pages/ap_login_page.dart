@@ -61,7 +61,7 @@ class ApLoginPage extends StatefulWidget {
 }
 
 class _ApLoginPageState extends State<ApLoginPage> {
-  late ApLocalizations ap;
+  ApLocalizations get ap => context.ap;
 
   final TextEditingController _username = TextEditingController();
   final TextEditingController _password = TextEditingController();
@@ -103,7 +103,6 @@ class _ApLoginPageState extends State<ApLoginPage> {
 
   @override
   Widget build(BuildContext context) {
-    ap = ApLocalizations.of(context);
     return LoginScaffold(
       logoMode: widget.logoMode,
       logoSource: widget.logoSource,

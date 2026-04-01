@@ -18,23 +18,21 @@ void main() {
   });
 
   Widget buildTestApp(Widget child) {
-    return MaterialApp(
-      localizationsDelegates: const <LocalizationsDelegate<dynamic>>[
-        apLocalizationsDelegate,
-        GlobalMaterialLocalizations.delegate,
-        GlobalWidgetsLocalizations.delegate,
-        GlobalCupertinoLocalizations.delegate,
-      ],
-      supportedLocales: ApLocalizations.delegate.supportedLocales,
-      home: Builder(
-        builder: (BuildContext context) => ElevatedButton(
-          onPressed: () {
-            Navigator.of(context).push(
-              MaterialPageRoute<bool>(builder: (_) => child),
-            );
-          },
-          child: const Text('Open Login'),
-        ),
+    return TranslationProvider(
+      child: Builder(
+        builder: (BuildContext context) {
+          return MaterialApp(
+            locale: TranslationProvider.of(context).flutterLocale,
+            supportedLocales: AppLocaleUtils.supportedLocales,
+            localizationsDelegates:
+                const <LocalizationsDelegate<dynamic>>[
+              GlobalMaterialLocalizations.delegate,
+              GlobalWidgetsLocalizations.delegate,
+              GlobalCupertinoLocalizations.delegate,
+            ],
+            home: child,
+          );
+        },
       ),
     );
   }
@@ -43,9 +41,20 @@ void main() {
     testWidgets('should render login form', (WidgetTester tester) async {
       await tester.pumpWidget(
         buildTestApp(
-          ApLoginPage(
-            logoSource: 'Test',
-            onLogin: (String u, String p) async => true,
+          Builder(
+            builder: (BuildContext context) => ElevatedButton(
+              onPressed: () {
+                Navigator.of(context).push(
+                  MaterialPageRoute<bool>(
+                    builder: (_) => ApLoginPage(
+                      logoSource: 'Test',
+                      onLogin: (String u, String p) async => true,
+                    ),
+                  ),
+                );
+              },
+              child: const Text('Open Login'),
+            ),
           ),
         ),
       );
@@ -59,18 +68,11 @@ void main() {
       expect(find.byType(ApButton), findsOneWidget);
     });
 
-    testWidgets('should render with image logo mode',
+    testWidgets('should render with text logo mode',
         (WidgetTester tester) async {
       await tester.pumpWidget(
-        MaterialApp(
-          localizationsDelegates: const <LocalizationsDelegate<dynamic>>[
-            apLocalizationsDelegate,
-            GlobalMaterialLocalizations.delegate,
-            GlobalWidgetsLocalizations.delegate,
-            GlobalCupertinoLocalizations.delegate,
-          ],
-          supportedLocales: ApLocalizations.delegate.supportedLocales,
-          home: ApLoginPage(
+        buildTestApp(
+          ApLoginPage(
             logoMode: LogoMode.text,
             logoSource: 'AP',
             onLogin: (String u, String p) async => true,
@@ -86,15 +88,8 @@ void main() {
     testWidgets('should show offline login button when enabled',
         (WidgetTester tester) async {
       await tester.pumpWidget(
-        MaterialApp(
-          localizationsDelegates: const <LocalizationsDelegate<dynamic>>[
-            apLocalizationsDelegate,
-            GlobalMaterialLocalizations.delegate,
-            GlobalWidgetsLocalizations.delegate,
-            GlobalCupertinoLocalizations.delegate,
-          ],
-          supportedLocales: ApLocalizations.delegate.supportedLocales,
-          home: ApLoginPage(
+        buildTestApp(
+          ApLoginPage(
             logoSource: 'AP',
             onLogin: (String u, String p) async => true,
             enableOfflineLogin: true,
@@ -111,15 +106,8 @@ void main() {
     testWidgets('should show checkboxes for auto-login and remember password',
         (WidgetTester tester) async {
       await tester.pumpWidget(
-        MaterialApp(
-          localizationsDelegates: const <LocalizationsDelegate<dynamic>>[
-            apLocalizationsDelegate,
-            GlobalMaterialLocalizations.delegate,
-            GlobalWidgetsLocalizations.delegate,
-            GlobalCupertinoLocalizations.delegate,
-          ],
-          supportedLocales: ApLocalizations.delegate.supportedLocales,
-          home: ApLoginPage(
+        buildTestApp(
+          ApLoginPage(
             logoSource: 'AP',
             onLogin: (String u, String p) async => true,
           ),
@@ -136,15 +124,8 @@ void main() {
       await mockPrefs.setString('pref_username', 'saved_user');
 
       await tester.pumpWidget(
-        MaterialApp(
-          localizationsDelegates: const <LocalizationsDelegate<dynamic>>[
-            apLocalizationsDelegate,
-            GlobalMaterialLocalizations.delegate,
-            GlobalWidgetsLocalizations.delegate,
-            GlobalCupertinoLocalizations.delegate,
-          ],
-          supportedLocales: ApLocalizations.delegate.supportedLocales,
-          home: ApLoginPage(
+        buildTestApp(
+          ApLoginPage(
             logoSource: 'AP',
             onLogin: (String u, String p) async => true,
           ),

@@ -12,13 +12,11 @@ class SimpleApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return ApApp(
-      home: const SimpleHomePage(),
-      onGenerateTitle: (BuildContext context) =>
-          AppLocalizations.of(context).appName,
-      additionalLocalizationsDelegates: const <LocalizationsDelegate<dynamic>>[
-        appDelegate,
-      ],
+    return TranslationProvider(
+      child: ApApp(
+        home: const SimpleHomePage(),
+        onGenerateTitle: (BuildContext context) => context.app.appName,
+      ),
     );
   }
 }

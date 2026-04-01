@@ -11,7 +11,7 @@ class SimpleHomePage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final ApLocalizations ap = ApLocalizations.of(context);
+    final ApLocalizations ap = context.ap;
 
     return Scaffold(
       appBar: AppBar(

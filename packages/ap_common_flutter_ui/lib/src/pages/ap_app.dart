@@ -4,8 +4,8 @@ import 'package:flutter/services.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 
 /// A convenience wrapper around [MaterialApp] that handles common setup:
-/// - [ApTheme] with light/dark theme support
-/// - [ApLocalizations] and custom localization delegates
+/// - [ApTheme] with light/dark theme support and seed color
+/// - [TranslationProvider] for slang-based localization
 /// - Theme mode and locale management
 /// - Edge-to-edge system UI
 ///
@@ -36,9 +36,7 @@ import 'package:flutter_localizations/flutter_localizations.dart';
 ///       routes: {
 ///         '/about': (_) => AboutUsPage(...),
 ///       },
-///       // Optional: add your own localization delegate
-///       additionalLocalizationsDelegates: [myAppDelegate],
-///       onGenerateTitle: (context) => 'My App',
+///       onGenerateTitle: (context) => context.ap.appName,
 ///     );
 ///   }
 /// }
@@ -103,17 +101,26 @@ class ApApp extends StatefulWidget {
 
 class ApAppState extends State<ApApp> with WidgetsBindingObserver {
   late ThemeMode _themeMode;
-  Locale? _locale;
+  int _currentColorIndex = 0;
+  Color? _customColor;
 
   ThemeMode get themeMode => _themeMode;
-  Locale? get locale => _locale;
 
   @override
   void initState() {
     super.initState();
     _themeMode = ThemeMode.values[
         PreferenceUtil.instance.getInt(widget.themeModePreferenceKey, 0)];
+    _currentColorIndex =
+        PreferenceUtil.instance.getInt(ApTheme.PREF_COLOR_INDEX, 0);
+    final int customColorValue =
+        PreferenceUtil.instance.getInt(ApTheme.PREF_CUSTOM_COLOR, 0);
+    if (_currentColorIndex == ApTheme.customColorIndex &&
+        customColorValue != 0) {
+      _customColor = Color(customColorValue);
+    }
     WidgetsBinding.instance.addObserver(this);
+    _initLocale();
     Future<void>.microtask(() {
       SystemChrome.setEnabledSystemUIMode(SystemUiMode.edgeToEdge);
       SystemChrome.setSystemUIOverlayStyle(
@@ -123,6 +130,23 @@ class ApAppState extends State<ApApp> with WidgetsBindingObserver {
         ),
       );
     });
+  }
+
+  Future<void> _initLocale() async {
+    final String languageCode = PreferenceUtil.instance.getString(
+      widget.languageCodePreferenceKey,
+      ApSupportLanguageConstants.system,
+    );
+    if (languageCode == ApSupportLanguageConstants.system) {
+      await useApDeviceLocale();
+    } else {
+      final Locale locale = Locale(
+        languageCode,
+        languageCode == ApSupportLanguageConstants.zh ? 'TW' : null,
+      );
+      await setApLocaleFromFlutter(locale);
+    }
+    if (mounted) setState(() {});
   }
 
   @override
@@ -144,9 +168,15 @@ class ApAppState extends State<ApApp> with WidgetsBindingObserver {
 
   /// Change the app's locale.
   void setLocale(Locale locale) {
+    setApLocaleFromFlutter(locale);
+    setState(() {});
+  }
+
+  /// Change the app's theme color.
+  void setThemeColor(int index, Color? custom) {
     setState(() {
-      _locale = locale;
-      ApLocalizations.load(locale);
+      _currentColorIndex = index;
+      _customColor = custom;
     });
   }
 
@@ -160,46 +190,43 @@ class ApAppState extends State<ApApp> with WidgetsBindingObserver {
     return _ApAppScope(
       state: this,
       child: ApTheme(
-        _themeMode,
-        child: MaterialApp(
-          localeResolutionCallback:
-              (Locale? locale, Iterable<Locale> supportedLocales) {
-            final String languageCode = PreferenceUtil.instance.getString(
-              widget.languageCodePreferenceKey,
-              ApSupportLanguageConstants.system,
+        themeMode: _themeMode,
+        currentColorIndex: _currentColorIndex,
+        customColor: _customColor,
+        preferences: PreferenceUtil.instance,
+        child: Builder(
+          builder: (BuildContext context) {
+            final Color seedColor = ApTheme.of(context).seedColor;
+            return TranslationProvider(
+              child: Builder(
+                builder: (BuildContext context) {
+                  return MaterialApp(
+                    onGenerateTitle: widget.onGenerateTitle,
+                    debugShowCheckedModeBanner:
+                        widget.debugShowCheckedModeBanner,
+                    routes: <String, WidgetBuilder>{
+                      if (widget.home != null)
+                        Navigator.defaultRouteName: (_) => widget.home!,
+                      ...widget.routes,
+                    },
+                    onGenerateRoute: widget.onGenerateRoute,
+                    theme: ApTheme.light(seedColor),
+                    darkTheme: ApTheme.dark(seedColor),
+                    themeMode: _themeMode,
+                    locale: TranslationProvider.of(context).flutterLocale,
+                    navigatorObservers: widget.navigatorObservers,
+                    supportedLocales: AppLocaleUtils.supportedLocales,
+                    localizationsDelegates: <LocalizationsDelegate<dynamic>>[
+                      ...widget.additionalLocalizationsDelegates,
+                      GlobalMaterialLocalizations.delegate,
+                      GlobalWidgetsLocalizations.delegate,
+                      GlobalCupertinoLocalizations.delegate,
+                    ],
+                  );
+                },
+              ),
             );
-            if (languageCode == ApSupportLanguageConstants.system) {
-              return _locale = ApLocalizations.delegate.isSupported(locale!)
-                  ? locale
-                  : const Locale('en');
-            } else {
-              return _locale = Locale(
-                languageCode,
-                languageCode == ApSupportLanguageConstants.zh ? 'TW' : null,
-              );
-            }
           },
-          onGenerateTitle: widget.onGenerateTitle,
-          debugShowCheckedModeBanner: widget.debugShowCheckedModeBanner,
-          routes: <String, WidgetBuilder>{
-            if (widget.home != null)
-              Navigator.defaultRouteName: (_) => widget.home!,
-            ...widget.routes,
-          },
-          onGenerateRoute: widget.onGenerateRoute,
-          theme: ApTheme.light,
-          darkTheme: ApTheme.dark,
-          themeMode: _themeMode,
-          locale: _locale,
-          navigatorObservers: widget.navigatorObservers,
-          localizationsDelegates: <LocalizationsDelegate<dynamic>>[
-            apLocalizationsDelegate,
-            ...widget.additionalLocalizationsDelegates,
-            GlobalMaterialLocalizations.delegate,
-            GlobalWidgetsLocalizations.delegate,
-            GlobalCupertinoLocalizations.delegate,
-          ],
-          supportedLocales: ApLocalizations.delegate.supportedLocales,
         ),
       ),
     );
