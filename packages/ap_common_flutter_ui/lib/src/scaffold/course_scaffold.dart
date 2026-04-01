@@ -87,6 +87,56 @@ class CourseScaffold extends StatefulWidget {
     this.showSearchButton,
   });
 
+  /// Creates a [CourseScaffold] from a [DataState<CourseData>].
+  ///
+  /// This constructor simplifies usage by automatically mapping the
+  /// [DataState] to the appropriate [CourseState] and extracting hints.
+  ///
+  /// ```dart
+  /// CourseScaffold.fromDataState(
+  ///   dataState: DataLoaded(courseData),
+  ///   semesterData: semesterData,
+  ///   onSelect: (index) => loadCourse(index),
+  /// )
+  /// ```
+  CourseScaffold.fromDataState({
+    super.key,
+    required DataState<CourseData> dataState,
+    this.title,
+    this.semesterData,
+    this.onSelect,
+    this.onRefresh,
+    this.actions,
+    this.enableNotifyControl = true,
+    this.notifyData,
+    this.autoNotifySave = true,
+    this.onNotifyClick,
+    this.courseNotifySaveKey = ApConstants.semesterLatest,
+    this.itemPicker,
+    this.onSearchButtonClick,
+    this.enableAddToCalendar = true,
+    this.androidResourceIcon,
+    this.enableCaptureCourseTable = false,
+    this.showSectionTime,
+    this.showInstructors,
+    this.showClassroomLocation,
+    this.showSearchButton,
+  })  : state = dataState.when(
+          loading: () => CourseState.loading,
+          loaded: (_, __) => CourseState.finish,
+          error: (_) => CourseState.error,
+          empty: (_) => CourseState.empty,
+        ),
+        courseData = dataState.dataOrNull ?? CourseData.empty(),
+        customHint = dataState is DataLoaded<CourseData>
+            ? dataState.hint
+            : null,
+        customStateHint = dataState is DataError<CourseData>
+            ? dataState.hint
+            : dataState is DataEmpty<CourseData>
+                ? dataState.hint
+                : null;
+
   /// 必要欄位，總共有
   /// `loading` `finish` `error` `empty` `offlineEmpty` `custom` 的狀態，
   /// 只有`finish`才會顯示課表介面，其餘都是顯示錯誤狀況
