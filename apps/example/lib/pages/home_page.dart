@@ -4,6 +4,7 @@ import 'package:ap_common_example/pages/diolog_utils_page.dart';
 import 'package:ap_common_example/pages/login_page.dart';
 import 'package:ap_common_example/pages/notification_utils_page.dart';
 import 'package:ap_common_example/pages/setting_page.dart';
+import 'package:ap_common_example/pages/simple_example/simple_home_page.dart';
 import 'package:ap_common_example/pages/school_info_page.dart';
 import 'package:ap_common_example/pages/study/course_page.dart';
 import 'package:ap_common_example/pages/study/score_page.dart';
@@ -190,6 +191,13 @@ class HomePageState extends State<HomePage> {
           title: context.ap.settings,
           onTap: () => _openPage(
             SettingPage(),
+          ),
+        ),
+        DrawerMenuItem(
+          icon: Icons.auto_awesome,
+          title: 'Simple Example',
+          onTap: () => _openPage(
+            const SimpleHomePage(),
           ),
         ),
         if (isLogin) ...<Widget>[
