@@ -1,0 +1,1911 @@
+{
+  "openapi": "3.0.1",
+  "info": {
+    "title": "announcement",
+    "description": "",
+    "version": "1.0.0"
+  },
+  "tags": [
+    {
+      "name": "application"
+    },
+    {
+      "name": "auth"
+    },
+    {
+      "name": "announcement"
+    }
+  ],
+  "paths": {
+    "/application/{application_id}": {
+      "get": {
+        "summary": "Get application (Admin or editor required.)",
+        "deprecated": false,
+        "description": "",
+        "operationId": "Updateapplication(foreditor)",
+        "tags": [
+          "application"
+        ],
+        "parameters": [
+          {
+            "name": "application_id",
+            "in": "path",
+            "description": "",
+            "required": true,
+            "example": "",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/application_success"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "auth problem.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/401_Unauthorized"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "not owner or editor.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {}
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "not found application by application_id.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {}
+                }
+              }
+            }
+          }
+        },
+        "security": []
+      },
+      "put": {
+        "summary": "Update application (Admin or editor required.)",
+        "deprecated": false,
+        "description": "",
+        "tags": [
+          "application"
+        ],
+        "parameters": [
+          {
+            "name": "application_id",
+            "in": "path",
+            "description": "",
+            "required": true,
+            "example": "",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/get_application_data_type"
+              },
+              "example": ""
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Success.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/application_success"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "auth problem.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/401_Unauthorized"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "not owner or editor.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {}
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "not found application by application_id.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {}
+                }
+              }
+            }
+          }
+        },
+        "security": []
+      },
+      "delete": {
+        "summary": "remove application (editor or owner)",
+        "deprecated": false,
+        "description": "",
+        "operationId": "removeapplication(foreditor)",
+        "tags": [
+          "application"
+        ],
+        "parameters": [
+          {
+            "name": "application_id",
+            "in": "path",
+            "description": "",
+            "required": true,
+            "example": "",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "success delete application. No content.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {}
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "auth problem.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/401_Unauthorized"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "not owner or editor.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {}
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "not found application by application_id.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {}
+                }
+              }
+            }
+          }
+        },
+        "security": []
+      }
+    },
+    "/application/{application_id}/approve": {
+      "put": {
+        "summary": "approve application (Admin or editor required.)",
+        "deprecated": false,
+        "description": "",
+        "operationId": "approveapplication(foreditor)",
+        "tags": [
+          "application"
+        ],
+        "parameters": [
+          {
+            "name": "application_id",
+            "in": "path",
+            "description": "",
+            "required": true,
+            "example": "",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/approve_data"
+              },
+              "example": ""
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "success approve.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/announcement_id"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "auth problem.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/401_Unauthorized"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "not owner or editor.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {}
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "not found application by application_id.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {}
+                }
+              }
+            }
+          }
+        },
+        "security": []
+      }
+    },
+    "/application/{application_id}/reject": {
+      "put": {
+        "summary": "reject application (Admin or editor required.)",
+        "deprecated": false,
+        "description": "",
+        "operationId": "reject_application(foreditor)",
+        "tags": [
+          "application"
+        ],
+        "parameters": [
+          {
+            "name": "application_id",
+            "in": "path",
+            "description": "",
+            "required": true,
+            "example": "",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "description": {
+                    "type": "string",
+                    "examples": [
+                      "reject description, allow null"
+                    ]
+                  }
+                }
+              },
+              "example": ""
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "success approve.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/announcement_id"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "auth problem.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/401_Unauthorized"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "not owner or editor.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {}
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "not found application by application_id.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {}
+                }
+              }
+            }
+          }
+        },
+        "security": []
+      }
+    },
+    "/user/application/{username}": {
+      "get": {
+        "summary": "get user's application ( editor or owner required.)",
+        "deprecated": false,
+        "description": "",
+        "tags": [
+          "application"
+        ],
+        "parameters": [
+          {
+            "name": "username",
+            "in": "path",
+            "description": "",
+            "required": true,
+            "example": "",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success get all application submit.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "data": {
+                      "type": "array",
+                      "items": {
+                        "$ref": "#/components/schemas/get_application_data_type"
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "not owner or editor.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {}
+                }
+              }
+            }
+          }
+        },
+        "security": []
+      }
+    },
+    "/application": {
+      "get": {
+        "summary": "get all application (Admin or editor required.)",
+        "deprecated": false,
+        "description": "",
+        "tags": [
+          "application"
+        ],
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Success get all application submit.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "data": {
+                      "type": "array",
+                      "items": {
+                        "$ref": "#/components/schemas/get_application_data_type"
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "not owner or editor.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {}
+                }
+              }
+            }
+          }
+        },
+        "security": []
+      },
+      "post": {
+        "summary": "submit application (User)",
+        "deprecated": false,
+        "description": "",
+        "tags": [
+          "application"
+        ],
+        "parameters": [],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/application_submit_data_type"
+              },
+              "example": ""
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Success.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/application_success"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "auth problem.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/401_Unauthorized"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "not found application by application_id.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {}
+                }
+              }
+            }
+          }
+        },
+        "security": []
+      }
+    },
+    "/login": {
+      "post": {
+        "summary": "login",
+        "deprecated": false,
+        "description": "",
+        "tags": [
+          "auth"
+        ],
+        "parameters": [],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/login_request"
+              },
+              "example": {
+                "username": "{{username}}",
+                "password": "{{password}}",
+                "fcmToken": "{{fcmToken}}"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Success login",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/login_return_api_key"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "password or username error.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/401_Unauthorized"
+                }
+              }
+            }
+          }
+        },
+        "security": []
+      }
+    },
+    "/oauth2/google/login": {
+      "post": {
+        "summary": "Use redirect code to login (server side verify)",
+        "deprecated": false,
+        "description": "",
+        "tags": [
+          "auth"
+        ],
+        "parameters": [],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "code": {
+                    "type": "string"
+                  }
+                }
+              },
+              "example": ""
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Success login",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/login_return_api_key"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "password or username error.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/401_Unauthorized"
+                }
+              }
+            }
+          }
+        },
+        "security": []
+      }
+    },
+    "/oauth2/google/token": {
+      "post": {
+        "summary": "Use id_token to login (client side)",
+        "deprecated": false,
+        "description": "",
+        "tags": [
+          "auth"
+        ],
+        "parameters": [],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "token": {
+                    "type": "string"
+                  },
+                  "fcmToken": {
+                    "type": "string",
+                    "description": "Firebase Cloud Messaging token"
+                  }
+                }
+              },
+              "example": ""
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Success login",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/login_return_api_key"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "password or username error.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/401_Unauthorized"
+                }
+              }
+            }
+          }
+        },
+        "security": []
+      }
+    },
+    "/oauth2/apple/token": {
+      "post": {
+        "summary": "Use id_token to login (client side) (Apple sign in)",
+        "deprecated": false,
+        "description": "",
+        "tags": [
+          "auth"
+        ],
+        "parameters": [],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "token": {
+                    "type": "string"
+                  },
+                  "fcmToken": {
+                    "type": "string",
+                    "description": "Firebase Cloud Messaging token"
+                  },
+                  "bundleId": {
+                    "type": "string",
+                    "description": "Apple bundle identifier for Apple Sign In"
+                  }
+                }
+              },
+              "example": ""
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Success login",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/login_return_api_key"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "password or username error.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/401_Unauthorized"
+                }
+              }
+            }
+          }
+        },
+        "security": []
+      }
+    },
+    "/register": {
+      "post": {
+        "summary": "register",
+        "deprecated": false,
+        "description": "",
+        "operationId": "register",
+        "tags": [
+          "auth"
+        ],
+        "parameters": [],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/login_request"
+              },
+              "example": {
+                "username": "{{username}}",
+                "password": "{{password}}"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Success login",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/login_return_api_key"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "default password length 50~80, username 8~64",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/401_Unauthorized"
+                },
+                "examples": {
+                  "1": {
+                    "summary": "already register",
+                    "value": {
+                      "title": "401 Unauthorized",
+                      "description": "already register"
+                    }
+                  },
+                  "2": {
+                    "summary": "username_length_error",
+                    "value": {
+                      "title": "401 Unauthorized",
+                      "description": "username length error"
+                    }
+                  },
+                  "3": {
+                    "summary": "password_length_error",
+                    "value": {
+                      "title": "401 Unauthorized",
+                      "description": "password length error"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "security": []
+      }
+    },
+    "/user/info": {
+      "get": {
+        "summary": "get user JWT payload data",
+        "deprecated": false,
+        "description": "",
+        "tags": [
+          "auth"
+        ],
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "user info",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/user_info"
+                }
+              }
+            }
+          }
+        },
+        "security": []
+      }
+    },
+    "/auth/editor": {
+      "get": {
+        "summary": "get editor list (Admin required)",
+        "deprecated": false,
+        "description": "",
+        "operationId": "geteditorlist",
+        "tags": [
+          "auth"
+        ],
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "editor list",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "type": "string"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "security": []
+      },
+      "post": {
+        "summary": "Add editor (Admin required)",
+        "deprecated": false,
+        "description": "",
+        "tags": [
+          "auth"
+        ],
+        "parameters": [],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "username": {
+                    "type": "string"
+                  }
+                }
+              },
+              "example": ""
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Not content",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {}
+                }
+              }
+            }
+          },
+          "406": {
+            "description": "detail see response content, most error are about user status.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/401_Unauthorized"
+                }
+              }
+            }
+          }
+        },
+        "security": []
+      },
+      "delete": {
+        "summary": "remove editor (Admin required)",
+        "deprecated": false,
+        "description": "",
+        "tags": [
+          "auth"
+        ],
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Not content",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {}
+                }
+              }
+            }
+          },
+          "406": {
+            "description": "detail see response content, most error are about user status.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/401_Unauthorized"
+                }
+              }
+            }
+          }
+        },
+        "security": []
+      }
+    },
+    "/ban": {
+      "get": {
+        "summary": "get banned list (Admin required)",
+        "deprecated": false,
+        "description": "",
+        "tags": [
+          "auth"
+        ],
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "banned list",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "type": "string"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "security": []
+      },
+      "put": {
+        "summary": "banned user (Admin required)",
+        "deprecated": false,
+        "description": "",
+        "tags": [
+          "auth"
+        ],
+        "parameters": [],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "username": {
+                    "type": "string"
+                  }
+                }
+              },
+              "example": ""
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Not content",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {}
+                }
+              }
+            }
+          },
+          "406": {
+            "description": "detail see response content, most error are about user status.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/401_Unauthorized"
+                }
+              }
+            }
+          }
+        },
+        "security": []
+      },
+      "delete": {
+        "summary": "unban user (Admin required)",
+        "deprecated": false,
+        "description": "",
+        "tags": [
+          "auth"
+        ],
+        "parameters": [],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "username": {
+                    "type": "string"
+                  }
+                }
+              },
+              "example": ""
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Not content",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {}
+                }
+              }
+            }
+          },
+          "406": {
+            "description": "detail see response content, most error are about user status.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/401_Unauthorized"
+                }
+              }
+            }
+          }
+        },
+        "security": []
+      }
+    },
+    "/announcements/add": {
+      "post": {
+        "summary": "announcement add (Admin or editor required.)",
+        "deprecated": false,
+        "description": "",
+        "tags": [
+          "announcement"
+        ],
+        "parameters": [],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/application_submit_data_type"
+              },
+              "example": ""
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Success add.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "id": {
+                      "type": "integer",
+                      "examples": [
+                        0
+                      ]
+                    },
+                    "message": {
+                      "type": "string",
+                      "examples": [
+                        "add success,id 0."
+                      ]
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "auth problem.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/401_Unauthorized"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "not owner or editor.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {}
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "not found application by announcement id.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {}
+                }
+              }
+            }
+          }
+        },
+        "security": []
+      }
+    },
+    "/announcements/update/{id}": {
+      "put": {
+        "summary": "announcement update (Admin or editor required.)",
+        "deprecated": false,
+        "description": "",
+        "tags": [
+          "announcement"
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "",
+            "required": true,
+            "example": "",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/get_announcement_data_type"
+              },
+              "example": ""
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Success update.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "id": {
+                      "type": "integer",
+                      "examples": [
+                        0
+                      ]
+                    },
+                    "message": {
+                      "type": "string",
+                      "examples": [
+                        "update success,id 0."
+                      ]
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "auth problem.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/401_Unauthorized"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "not owner or editor.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {}
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "not found application by announcement id.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {}
+                }
+              }
+            }
+          }
+        },
+        "security": []
+      }
+    },
+    "/announcements/delete/{id}": {
+      "delete": {
+        "summary": "announcement delete  (Admin or editor required.)",
+        "deprecated": false,
+        "description": "",
+        "operationId": "announcementdelete",
+        "tags": [
+          "announcement"
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "",
+            "required": true,
+            "example": "",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success remove.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "id": {
+                      "type": "integer",
+                      "examples": [
+                        0
+                      ]
+                    },
+                    "message": {
+                      "type": "string",
+                      "examples": [
+                        "Remove success,id 0."
+                      ]
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "auth problem.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/401_Unauthorized"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "not owner or editor.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {}
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "not found application by announcement id.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {}
+                }
+              }
+            }
+          }
+        },
+        "security": []
+      }
+    },
+    "/announcements/{id}": {
+      "get": {
+        "summary": "get announcement by id (Public)",
+        "deprecated": false,
+        "description": "",
+        "tags": [
+          "announcement"
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "announcement id",
+            "required": true,
+            "example": "1",
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "data": {
+                      "$ref": "#/components/schemas/get_announcement_data_type"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "not found announcement by id.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {}
+                }
+              }
+            }
+          }
+        },
+        "security": []
+      }
+    },
+    "/announcements": {
+      "get": {
+        "summary": "get all (Public)",
+        "deprecated": false,
+        "description": "",
+        "tags": [
+          "announcement"
+        ],
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "data": {
+                      "type": "array",
+                      "items": {
+                        "$ref": "#/components/schemas/get_announcement_data_type"
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "security": []
+      },
+      "post": {
+        "summary": "get tag by POST",
+        "deprecated": false,
+        "description": "",
+        "operationId": "gettagbyPOST",
+        "tags": [
+          "announcement"
+        ],
+        "parameters": [],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/tag_query_request"
+              },
+              "example": {
+                "tag": [
+                  "test"
+                ],
+                "lang": "zh"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "data": {
+                      "type": "array",
+                      "items": {
+                        "$ref": "#/components/schemas/get_announcement_data_type"
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "security": []
+      }
+    },
+    "/announcements/tags": {
+      "get": {
+        "summary": "get tag count",
+        "deprecated": false,
+        "description": "",
+        "operationId": "gettagcount",
+        "tags": [
+          "announcement"
+        ],
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "all tags annoumcement count. {tagname:tagcount}",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "tag1": {
+                      "type": "string"
+                    },
+                    "tag2": {
+                      "type": "string"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "security": []
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "approve_data": {
+        "type": "object",
+        "properties": {
+          "description": {
+            "type": "string",
+            "description": "Optional, not required",
+            "examples": [
+              "some review description"
+            ]
+          }
+        }
+      },
+      "login_return_api_key": {
+        "type": "object",
+        "properties": {
+          "key": {
+            "type": "string",
+            "description": "JWT",
+            "examples": [
+              "aaa.aaaa.zzz"
+            ]
+          }
+        }
+      },
+      "403_Forbidden": {
+        "type": "string"
+      },
+      "401_Unauthorized": {
+        "type": "object",
+        "properties": {
+          "title": {
+            "type": "string",
+            "description": "login fail.",
+            "examples": [
+              "401 Unauthorized"
+            ]
+          },
+          "description": {
+            "type": "string",
+            "description": "fail description."
+          }
+        }
+      },
+      "application_success": {
+        "type": "object",
+        "properties": {
+          "application_id": {
+            "type": "string",
+            "description": "application id, wait for editor review.",
+            "examples": [
+              "LxTOUSBfPTrNcfA9"
+            ]
+          }
+        }
+      },
+      "get_announcement_data_type": {
+        "type": "object",
+        "properties": {
+          "title": {
+            "type": "string",
+            "examples": [
+              "announcement title."
+            ]
+          },
+          "weight": {
+            "type": "integer",
+            "description": "Need reviewer set this.",
+            "examples": [
+              0
+            ]
+          },
+          "url": {
+            "type": "string",
+            "description": "announcement other link.",
+            "examples": [
+              "https://..."
+            ]
+          },
+          "imgUrl": {
+            "type": "string",
+            "description": "announcement main image link.",
+            "examples": [
+              "https://..."
+            ]
+          },
+          "description": {
+            "type": "string",
+            "description": "annoumcement main description.",
+            "examples": [
+              "annoumcement main description"
+            ]
+          },
+          "location": {
+            "type": "string",
+            "description": "About this event location.",
+            "examples": [
+              "Classroom 101."
+            ]
+          },
+          "expireTime": {
+            "type": "string",
+            "description": "ISO 8601, support all timezome char.",
+            "examples": [
+              "2020-10-13T14:49:10Z"
+            ]
+          },
+          "tag": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "description": "tag"
+            }
+          },
+          "publishedAt": {
+            "type": "string",
+            "description": "ISO 8601, support all timezome char.",
+            "examples": [
+              "2020-10-13T14:49:10Z"
+            ]
+          },
+          "id": {
+            "type": "integer",
+            "description": "annoumcement id.",
+            "examples": [
+              0
+            ]
+          },
+          "nextId": {
+            "type": "integer",
+            "description": "next announcement id",
+            "examples": [
+              1
+            ]
+          },
+          "lastId": {
+            "type": "integer",
+            "description": "last announcement id",
+            "examples": [
+              null
+            ]
+          }
+        }
+      },
+      "get_application_data_type": {
+        "type": "object",
+        "properties": {
+          "title": {
+            "type": "string",
+            "examples": [
+              "announcement title."
+            ]
+          },
+          "weight": {
+            "type": "integer",
+            "description": "Need reviewer set this.",
+            "examples": [
+              0
+            ]
+          },
+          "url": {
+            "type": "string",
+            "description": "announcement other link.",
+            "examples": [
+              "https://..."
+            ]
+          },
+          "imgUrl": {
+            "type": "string",
+            "description": "announcement main image link.",
+            "examples": [
+              "https://..."
+            ]
+          },
+          "description": {
+            "type": "string",
+            "description": "annoumcement main description.",
+            "examples": [
+              "annoumcement main description"
+            ]
+          },
+          "location": {
+            "type": "string",
+            "description": "About this event location.",
+            "examples": [
+              "Classroom 101."
+            ]
+          },
+          "expireTime": {
+            "type": "string",
+            "description": "ISO 8601, support all timezome char.",
+            "examples": [
+              "2020-10-13T14:49:10Z"
+            ]
+          },
+          "tag": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "description": "tag"
+            }
+          },
+          "publishedAt": {
+            "type": "string",
+            "description": "ISO 8601, support all timezome char.",
+            "examples": [
+              "2020-10-13T14:49:10Z"
+            ]
+          },
+          "application_id": {
+            "type": "string",
+            "description": "application id.",
+            "examples": [
+              "LxTOUSBfPTrNcfA9"
+            ]
+          },
+          "applicant": {
+            "type": "string",
+            "description": "submit username.",
+            "examples": [
+              "xxxx@gmail.com"
+            ]
+          },
+          "reviewStatus": {
+            "type": "boolean",
+            "description": "review status, Null is wait for review, False is reject, True is approve ",
+            "examples": [
+              false
+            ]
+          },
+          "reviewDescription": {
+            "type": "string",
+            "description": "review description",
+            "examples": [
+              "Need image url or something"
+            ]
+          }
+        }
+      },
+      "application_submit_data_type": {
+        "type": "object",
+        "properties": {
+          "title": {
+            "type": "string",
+            "examples": [
+              "announcement title."
+            ]
+          },
+          "url": {
+            "type": "string",
+            "description": "announcement other link.",
+            "examples": [
+              "https://..."
+            ]
+          },
+          "imgUrl": {
+            "type": "string",
+            "description": "announcement main image link.",
+            "examples": [
+              "https://..."
+            ]
+          },
+          "description": {
+            "type": "string",
+            "description": "annoumcement main description.",
+            "examples": [
+              "annoumcement main description"
+            ]
+          },
+          "location": {
+            "type": "string",
+            "description": "About this event location.",
+            "examples": [
+              "Classroom 101."
+            ]
+          },
+          "expireTime": {
+            "type": "string",
+            "description": "ISO 8601, support all timezome char.",
+            "examples": [
+              "2020-10-13T14:49:10Z"
+            ]
+          },
+          "tag": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "description": "tag"
+            }
+          }
+        }
+      },
+      "application_status": {
+        "type": "object",
+        "properties": {
+          "status": {
+            "type": "string",
+            "description": "3 status, approve, reject, waiting",
+            "examples": [
+              "approve"
+            ]
+          },
+          "description": {
+            "type": "string",
+            "examples": [
+              "no allow, blablabla.."
+            ]
+          },
+          "application_id": {
+            "type": "string",
+            "examples": [
+              "asdfghj"
+            ]
+          },
+          "announcement_id": {
+            "type": "integer",
+            "description": "on allow post.",
+            "examples": [
+              1
+            ]
+          }
+        }
+      },
+      "announcement_id": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer",
+            "examples": [
+              0
+            ]
+          }
+        }
+      },
+      "user_info": {
+        "title": "user_info",
+        "type": "object",
+        "properties": {
+          "username": {
+            "type": "string"
+          },
+          "login_type": {
+            "type": "string",
+            "description": "Oauth2(login by Google Oauth2) General (login by username and password)"
+          },
+          "permission_level": {
+            "type": "integer",
+            "description": "permission level"
+          }
+        },
+        "examples": [
+          {
+            "username": "123",
+            "login_type": "Oauth2",
+            "permission_level": 0
+          }
+        ]
+      },
+      "tag_query_request": {
+        "title": "tag_query_request",
+        "type": "object",
+        "properties": {
+          "tag": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "lang": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "tag",
+          "lang"
+        ],
+        "examples": [
+          {
+            "tag": [
+              "test"
+            ],
+            "lang": "zh"
+          }
+        ]
+      },
+      "login_request": {
+        "title": "login_request",
+        "type": "object",
+        "properties": {
+          "username": {
+            "type": "string"
+          },
+          "password": {
+            "type": "string"
+          },
+          "fcmToken": {
+            "type": "string",
+            "description": "Firebase Cloud Messaging token"
+          }
+        },
+        "required": [
+          "username",
+          "password"
+        ],
+        "examples": [
+          {
+            "username": "{{username}}",
+            "password": "{{password}}",
+            "fcmToken": "{{fcmToken}}"
+          }
+        ]
+      }
+    },
+    "securitySchemes": {}
+  },
+  "servers": []
+}

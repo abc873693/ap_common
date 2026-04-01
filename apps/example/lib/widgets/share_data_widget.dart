@@ -3,10 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 
 class ShareDataWidget extends InheritedWidget {
-  const ShareDataWidget({this.data, required Widget child})
-      : super(
-          child: child,
-        );
+  const ShareDataWidget({this.data, required super.child});
 
   final MyAppState? data;
 

@@ -1,12 +1,14 @@
 name: ap_common_plugin
 description: ap_common Native Plugin
-version: 1.0.0
+version: 1.0.1-dev.2
 homepage: https://github.com/abc873693/ap_common
 repository: https://github.com/abc873693/ap_common/tree/master/packages/ap_common_plugin
 
 environment:
-  sdk: '>=3.0.0 <4.0.0'
+  sdk: ^3.5.0
   flutter: ">=3.0.0"
+
+resolution: workspace
 
 dependencies:
   flutter:

@@ -6,6 +6,7 @@ import 'package:ap_common_example/pages/notification_utils_page.dart';
 import 'package:ap_common_example/pages/setting_page.dart';
 import 'package:ap_common_example/pages/simple_example/simple_home_page.dart';
 import 'package:ap_common_example/pages/school_info_page.dart';
+import 'package:ap_common_example/pages/setting_page.dart';
 import 'package:ap_common_example/pages/study/course_page.dart';
 import 'package:ap_common_example/pages/study/score_page.dart';
 import 'package:ap_common_example/pages/user_info_page.dart';
@@ -47,7 +48,6 @@ class HomePageState extends State<HomePage> {
       case Brightness.light:
         return ImageAssets.drawerIconLight;
       case Brightness.dark:
-      default:
         return ImageAssets.drawerIconDark;
     }
   }
@@ -264,13 +264,10 @@ class HomePageState extends State<HomePage> {
               assetImage: ImageAssets.sectionJiangong,
             ),
           );
-          break;
         case 1:
           ApUtils.pushCupertinoStyle(context, CoursePage());
-          break;
         case 2:
           ApUtils.pushCupertinoStyle(context, ScorePage());
-          break;
       }
     } else {
       UiUtil.instance.showToast(context, context.ap.notLogin);
@@ -278,47 +275,22 @@ class HomePageState extends State<HomePage> {
   }
 
   Future<void> _getAnnouncements() async {
-    // GitHubHelper.instance.getAnnouncement(
-    //   gitHubUsername: 'abc873693',
-    //   hashCode: 'a8e048d24f892ce95a633aa5966c030a',
-    //   tag: 'nkust',
-    //   callback: GeneralCallback(
-    //     onFailure: (_) => setState(() => state = HomeState.error),
-    //     onError: (_) => setState(() => state = HomeState.error),
-    //     onSuccess: (Map<String, List<Announcement>> data) {
-    //       newsMap = data;
-    //       setState(() {
-    //         if (announcements == null || announcements.length == 0)
-    //           state = HomeState.empty;
-    //         else {
-    //           newsMap.forEach((_, data) {
-    //             data.sort((a, b) {
-    //               return b.weight.compareTo(a.weight);
-    //             });
-    //           });
-    //           state = HomeState.finish;
-    //         }
-    //       });
-    //     },
-    //   ),
-    // );
-    AnnouncementHelper.instance.getAnnouncements(
-      tags: <String>[],
-      callback: GeneralCallback<List<Announcement>>(
-        onFailure: (_) => setState(() => state = HomeState.error),
-        onError: (_) => setState(() => state = HomeState.error),
-        onSuccess: (List<Announcement> data) {
-          announcements = data;
-          setState(() {
-            if (announcements.isEmpty) {
-              state = HomeState.empty;
-            } else {
-              state = HomeState.finish;
-            }
-          });
-        },
-      ),
-    );
+    final ApiResult<List<Announcement>> result =
+        await AnnouncementHelper.instance.getAnnouncements(tags: <String>[]);
+    switch (result) {
+      case ApiSuccess<List<Announcement>>(:final List<Announcement> data):
+        announcements = data;
+        setState(() {
+          if (announcements.isEmpty) {
+            state = HomeState.empty;
+          } else {
+            state = HomeState.finish;
+          }
+        });
+      case ApiFailure<List<Announcement>>():
+      case ApiError<List<Announcement>>():
+        setState(() => state = HomeState.error);
+    }
   }
 
   Future<void> _getUserInfo() async {
@@ -368,6 +340,7 @@ class HomePageState extends State<HomePage> {
     if (state != HomeState.finish) {
       _getAnnouncements();
     }
+    if (!mounted) return;
     _homeKey.currentState!.showBasicHint(text: context.ap.loginSuccess);
   }
 

@@ -3,7 +3,6 @@ import 'dart:io';
 import 'package:ap_common_flutter_core/ap_common_flutter_core.dart';
 import 'package:file_saver/file_saver.dart';
 import 'package:flutter/foundation.dart';
-import 'package:flutter/widgets.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:path/path.dart' as path;
 import 'package:path_provider/path_provider.dart';
@@ -19,13 +18,9 @@ class ApMediaUtil extends MediaUtil {
   }
 
   @override
-  Future<void> saveImage(
-    BuildContext context, {
+  Future<SaveImageResult> saveImage({
     required ByteData byteData,
     required String fileName,
-    required String successMessage,
-    GeneralResponseCallback? onSuccess,
-    GeneralResponseCallback? onError,
   }) async {
     try {
       PermissionState hasGrantPermission = PermissionState.notDetermined;
@@ -57,24 +52,13 @@ class ApMediaUtil extends MediaUtil {
             bytes: pngBytes,
           );
         }
-        onSuccess?.call(
-          GeneralResponse(
-            statusCode: 200,
-            message: '$successMessage\n$filePath',
-          ),
-        );
+        return SaveImageSuccess(filePath);
       } else {
-        onSuccess?.call(
-          GeneralResponse(
-            statusCode: 401,
-            message: context.ap.grandPermissionFail,
-          ),
-        );
+        return const SaveImageError('permission_denied');
       }
     } catch (e, s) {
-      if (!context.mounted) return;
-      UiUtil.instance.showToast(context, context.ap.unknownError);
       CrashlyticsUtil.instance.recordError(e, s);
+      return SaveImageError(e.toString());
     }
   }
 }

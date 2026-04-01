@@ -23,9 +23,8 @@ class ImgurHelper {
 
   static ImgurHelper? _instance;
 
-  Future<String?> uploadImage({
+  Future<ApiResult<String>> uploadImage({
     required XFile file,
-    GeneralCallback<String?>? callback,
   }) async {
     try {
       final Uint8List bytes = await file.readAsBytes();
@@ -49,33 +48,35 @@ class ImgurHelper {
         final ImgurUploadResponse imgurUploadResponse =
             ImgurUploadResponse.fromJson(response.data!);
         final String? link = imgurUploadResponse.data?.link;
-        return callback == null
-            ? link
-            : callback.onSuccess.call(link) as String?;
-      } else {
-        callback?.onError(
+        if (link != null) {
+          return ApiSuccess<String>(link);
+        }
+        return ApiError<String>(
           GeneralResponse(
-            statusCode: 201,
-            message:
-                response.statusMessage ?? ap.unknownError,
+            statusCode: 200,
+            message: ap.unknownError,
           ),
         );
-
-        return null;
+      } else {
+        return ApiError<String>(
+          GeneralResponse(
+            statusCode: 201,
+            message: response.statusMessage ?? ap.unknownError,
+          ),
+        );
       }
     } on DioException catch (dioException) {
       if (dioException.type == DioExceptionType.badResponse &&
           dioException.response?.statusCode == 400) {
-        callback?.onError(
+        return ApiError<String>(
           GeneralResponse(
             statusCode: 201,
             message: ap.notSupportImageType,
           ),
         );
       } else {
-        callback?.onFailure(dioException);
+        return ApiFailure<String>(dioException);
       }
-      return null;
     }
   }
 }

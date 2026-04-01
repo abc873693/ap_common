@@ -14,7 +14,7 @@ abstract class AnalyticsUtil {
 
   Future<void> logUserInfo(UserInfo userInfo);
 
-  Future<void> logEvent(String name, {Map<String, dynamic>? parameters});
+  Future<void> logEvent(String name, {Map<String, Object>? parameters});
 
   Future<void> logApiEvent(String type, int status, {String message = ''});
 

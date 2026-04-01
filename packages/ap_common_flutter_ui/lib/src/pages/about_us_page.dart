@@ -97,7 +97,10 @@ class AboutUsPageState extends State<AboutUsPage> {
                   title: context.ap.aboutAuthorTitle,
                   content: context.ap.aboutAuthorContent,
                 ),
-                AboutInfoCard(title: context.ap.about, content: context.ap.aboutUsContent),
+                AboutInfoCard(
+                  title: context.ap.about,
+                  content: context.ap.aboutUsContent,
+                ),
                 AboutInfoCard(
                   title: context.ap.aboutRecruitTitle,
                   content: context.ap.aboutRecruitContent,

@@ -23,7 +23,7 @@ void main() {
     });
 
     test('toJson should return a valid JSON map', () {
-      final TimeCodeConfig config = TimeCodeConfig(
+      const TimeCodeConfig config = TimeCodeConfig(
         timeCodes: <TimeCode>[
           TimeCode(title: '1', startTime: '08:00', endTime: '08:50'),
         ],
@@ -32,11 +32,14 @@ void main() {
       final Map<String, dynamic> json = config.toJson();
 
       expect(json['timeCodes'], isA<List<dynamic>>());
-      expect(json['timeCodes'][0]['title'], '1');
+      final Map<String, dynamic> first =
+          (json['timeCodes'] as List<dynamic>)[0]
+              as Map<String, dynamic>;
+      expect(first['title'], '1');
     });
 
     test('textList should return list of titles', () {
-      final TimeCodeConfig config = TimeCodeConfig(
+      const TimeCodeConfig config = TimeCodeConfig(
         timeCodes: <TimeCode>[
           TimeCode(title: '1', startTime: '08:00', endTime: '08:50'),
           TimeCode(title: '2', startTime: '09:00', endTime: '09:50'),
@@ -47,7 +50,7 @@ void main() {
     });
 
     test('indexOf should return correct index', () {
-      final TimeCodeConfig config = TimeCodeConfig(
+      const TimeCodeConfig config = TimeCodeConfig(
         timeCodes: <TimeCode>[
           TimeCode(title: '1', startTime: '08:00', endTime: '08:50'),
           TimeCode(title: '2', startTime: '09:00', endTime: '09:50'),

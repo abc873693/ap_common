@@ -28,18 +28,25 @@ void main() {
     });
 
     test('toJson should return a valid JSON map', () {
-      final Notifications notification = Notifications(
+      const Notifications notification = Notifications(
         link: 'https://example.com',
         info: Info(title: 'Test Title', department: 'CS', date: '2023-01-01'),
       );
-      final NotificationsData data = NotificationsData(
+      const NotificationsData data = NotificationsData(
         data: Data(notifications: <Notifications>[notification], page: 1),
       );
 
       final Map<String, dynamic> json = data.toJson();
 
-      expect(json['data']['notification'], isA<List<dynamic>>());
-      expect(json['data']['notification'][0]['info']['title'], 'Test Title');
+      final Map<String, dynamic> jsonData =
+          json['data'] as Map<String, dynamic>;
+      expect(jsonData['notification'], isA<List<dynamic>>());
+      final Map<String, dynamic> first =
+          (jsonData['notification'] as List<dynamic>)[0]
+              as Map<String, dynamic>;
+      final Map<String, dynamic> info =
+          first['info'] as Map<String, dynamic>;
+      expect(info['title'], 'Test Title');
     });
   });
 }

@@ -6,7 +6,9 @@ publish_to: 'none' # Remove this line if you wish to publish to pub.dev
 version: 1.0.1+10001
 
 environment:
-  sdk: ^3.4.0
+  sdk: ^3.5.0
+
+resolution: workspace
 
 dependencies:
   flutter:
@@ -24,16 +26,17 @@ dependencies:
   slang: ^4.14.0
   slang_flutter: ^4.14.0
 
-  ap_common_plugin: 1.0.0
+  ap_common_plugin: 1.0.1-dev.2
 #    path: ../../../GitHub/ap_common_plugin
 
+  ap_common_flutter_core: any
 dependency_overrides:
   intl: 0.18.0
 
 dev_dependencies:
   flutter_test:
     sdk: flutter
-  lint: ^1.5.3
+  lint: ^2.1.2
   slang_build_runner: ^4.14.0
   build_runner: ^2.4.0
 

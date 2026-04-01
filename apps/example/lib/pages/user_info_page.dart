@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
 class UserInfoPage extends StatefulWidget {
-  const UserInfoPage({Key? key, this.userInfo}) : super(key: key);
+  const UserInfoPage({super.key, this.userInfo});
 
   static const String routerName = '/userInfo';
 

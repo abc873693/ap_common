@@ -330,7 +330,10 @@ class CheckCourseNotifyItem extends StatelessWidget {
                   );
                   notifyData.data.removeAt(index);
                   notifyData.save();
-                  UiUtil.instance.showToast(context, context.ap.cancelNotifySuccess);
+                  UiUtil.instance.showToast(
+                    context,
+                    context.ap.cancelNotifySuccess,
+                  );
                 },
               ),
             );
@@ -419,7 +422,8 @@ class ChangeLanguageItem extends StatelessWidget {
                   } else {
                     locale = locales.first;
                   }
-                  locale = AppLocaleUtils.supportedLocalesRaw.contains(locale.languageCode)
+                  locale = AppLocaleUtils.supportedLocalesRaw
+                          .contains(locale.languageCode)
                       ? locale
                       : const Locale('en');
                 default:
@@ -563,7 +567,7 @@ class ChangeThemeColorItem extends StatelessWidget {
         decoration: BoxDecoration(
           color: apTheme.seedColor,
           shape: BoxShape.circle,
-          border: Border.all(color: colorScheme.outline, width: 1),
+          border: Border.all(color: colorScheme.outline),
         ),
       ),
       onTap: () async {
@@ -657,7 +661,6 @@ class _ColorPickerDialogState extends State<ColorPickerDialog> {
                 Color(0xFFFF0000),
               ],
               value: _hsvColor.hue,
-              min: 0,
               max: 360,
               onChanged: (double value) {
                 setState(() => _hsvColor = _hsvColor.withHue(value));

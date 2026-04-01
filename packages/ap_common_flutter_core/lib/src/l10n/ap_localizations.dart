@@ -7,17 +7,17 @@ import 'package:intl/intl.dart';
 export 'package:ap_common_flutter_core/src/l10n/strings.g.dart';
 export 'package:intl/intl.dart';
 
-/// Helper to set locale for both slang and Intl.
+/// Helper to set locale for both slang and Intl (DateFormat).
 /// Call this from your app when changing locale.
 Future<AppLocale> setApLocale(AppLocale locale) async {
-  final result = await LocaleSettings.setLocale(locale);
-  Intl.defaultLocale = locale.flutterLocale.toString();
+  final AppLocale result = await LocaleSettings.setLocale(locale);
+  Intl.defaultLocale = result.flutterLocale.toString();
   return result;
 }
 
 /// Helper to set locale from a Flutter [Locale].
 Future<AppLocale> setApLocaleFromFlutter(Locale locale) async {
-  final appLocale = AppLocaleUtils.parseLocaleParts(
+  final AppLocale appLocale = AppLocaleUtils.parseLocaleParts(
     languageCode: locale.languageCode,
     scriptCode: locale.scriptCode,
     countryCode: locale.countryCode,
@@ -25,16 +25,16 @@ Future<AppLocale> setApLocaleFromFlutter(Locale locale) async {
   return setApLocale(appLocale);
 }
 
-/// Helper to use device locale for both slang and Intl.
+/// Helper to use device locale for both slang and Intl (DateFormat).
 Future<AppLocale> useApDeviceLocale() async {
-  final result = await LocaleSettings.useDeviceLocale();
+  final AppLocale result = await LocaleSettings.useDeviceLocale();
   Intl.defaultLocale = result.flutterLocale.toString();
   return result;
 }
 
 extension ApExtension on ApLocalizations {
   String get dateTimeLocale {
-    final current = LocaleSettings.currentLocale;
+    final AppLocale current = LocaleSettings.currentLocale;
     if (current == AppLocale.zhHantTw) {
       return 'zh-TW';
     } else {
@@ -43,7 +43,7 @@ extension ApExtension on ApLocalizations {
   }
 
   String get locale {
-    final current = LocaleSettings.currentLocale;
+    final AppLocale current = LocaleSettings.currentLocale;
     if (current == AppLocale.zhHantTw) {
       return 'zh-TW';
     } else {

@@ -199,8 +199,10 @@ class _AnnouncementEditPageState extends State<AnnouncementEditPage> {
                                   Navigator.of(context, rootNavigator: true)
                                       .pop();
                                 } else {
-                                  UiUtil.instance
-                                      .showToast(context, context.ap.tagRepeatHint);
+                                  UiUtil.instance.showToast(
+                                    context,
+                                    context.ap.tagRepeatHint,
+                                  );
                                 }
                               }
                             },
@@ -286,38 +288,26 @@ class _AnnouncementEditPageState extends State<AnnouncementEditPage> {
                       setState(
                         () => imgurUploadState = _ImgurUploadState.uploading,
                       );
-                      ImgbbHelper.instance!.uploadImage(
+                      final ApiResult<String> result =
+                          await ImgbbHelper.instance!.uploadImage(
                         file: image,
                         expireTime: expireTime,
-                        callback: GeneralCallback<String>(
-                          onFailure: (DioException dioException) {
-                            if (dioException.message
-                                case final String message?) {
-                              UiUtil.instance.showToast(context, message);
-                            }
-                            setState(
-                              () => imgurUploadState = _imgUrl.text.isEmpty
-                                  ? _ImgurUploadState.noFile
-                                  : _ImgurUploadState.done,
-                            );
-                          },
-                          onError: (GeneralResponse generalResponse) {
-                            UiUtil.instance
-                                .showToast(context, generalResponse.message);
-                            setState(
-                              () => imgurUploadState = _imgUrl.text.isEmpty
-                                  ? _ImgurUploadState.noFile
-                                  : _ImgurUploadState.done,
-                            );
-                          },
-                          onSuccess: (String? data) {
-                            _imgUrl.text = data!;
-                            setState(
-                              () => imgurUploadState = _ImgurUploadState.done,
-                            );
-                          },
-                        ),
                       );
+                      if (!mounted) return;
+                      if (result case ApiSuccess<String>(:final String data)) {
+                        _imgUrl.text = data;
+                        setState(
+                          () => imgurUploadState = _ImgurUploadState.done,
+                        );
+                      } else {
+                        // ignore: use_build_context_synchronously
+                        result.showErrorToast(context);
+                        setState(
+                          () => imgurUploadState = _imgUrl.text.isEmpty
+                              ? _ImgurUploadState.noFile
+                              : _ImgurUploadState.done,
+                        );
+                      }
                     }
                   },
                   child: Text(
@@ -417,6 +407,21 @@ class _AnnouncementEditPageState extends State<AnnouncementEditPage> {
                 ),
               ),
               if (widget.mode == Mode.editApplication) ...<Widget>[
+                SizedBox(height: dividerHeight),
+                TextFormField(
+                  controller: TextEditingController(
+                    text: announcements.applicant ?? '',
+                  ),
+                  enabled: false,
+                  decoration: InputDecoration(
+                    border: const OutlineInputBorder(),
+                    fillColor: ApTheme.of(context).blueAccent,
+                    labelStyle: TextStyle(
+                      color: ApTheme.of(context).grey,
+                    ),
+                    labelText: context.ap.applicant,
+                  ),
+                ),
                 SizedBox(height: dividerHeight),
                 TextFormField(
                   maxLines: 2,
@@ -536,7 +541,10 @@ class _AnnouncementEditPageState extends State<AnnouncementEditPage> {
                       ),
                     ),
                     onPressed: () {
-                      _announcementSubmit(isApproval: false);
+                      _announcementSubmit(
+                        isApproval: false,
+                        addBlackList: true,
+                      );
                     },
                     child: Text(
                       context.ap.updateRejectAndBan,
@@ -603,31 +611,26 @@ class _AnnouncementEditPageState extends State<AnnouncementEditPage> {
     tags = announcements.tags ?? <String>[];
   }
 
-  void _fetchData() {
+  Future<void> _fetchData() async {
+    final ApiResult<Announcement> result;
     if (widget.mode == Mode.edit) {
-      AnnouncementHelper.instance.getAnnouncement(
+      result = await AnnouncementHelper.instance.getAnnouncement(
         id: announcements.id!,
-        callback: GeneralCallback<Announcement>.simple(
-          context,
-          (Announcement data) {
-            announcements = data;
-            _mapData();
-            setState(() {});
-          },
-        ),
       );
     } else if (widget.mode == Mode.editApplication) {
-      AnnouncementHelper.instance.getApplication(
+      result = await AnnouncementHelper.instance.getApplication(
         id: announcements.applicationId!,
-        callback: GeneralCallback<Announcement>.simple(
-          context,
-          (Announcement data) {
-            announcements = data;
-            _mapData();
-            setState(() {});
-          },
-        ),
       );
+    } else {
+      return;
+    }
+    if (!mounted) return;
+    if (result case ApiSuccess<Announcement>(:final Announcement data)) {
+      announcements = data;
+      _mapData();
+      setState(() {});
+    } else {
+      result.showErrorToast(context);
     }
   }
 
@@ -646,78 +649,78 @@ class _AnnouncementEditPageState extends State<AnnouncementEditPage> {
         reviewDescription: _reviewDescription.text,
         tags: tags,
       );
-      final GeneralCallback<Response<dynamic>> callback =
-          GeneralCallback<Response<dynamic>>.simple(
-        context,
-        (_) async {
-          switch (widget.mode) {
-            case Mode.add:
-              UiUtil.instance.showToast(context, context.ap.addSuccess);
-            case Mode.edit:
-              UiUtil.instance.showToast(context, context.ap.updateSuccess);
-            case Mode.application:
-              UiUtil.instance.showToast(context, context.ap.applicationSubmitSuccess);
-            case Mode.editApplication:
-              UiUtil.instance.showToast(context, context.ap.updateSuccess);
-              if (isApproval != null) {
-                if (isApproval) {
-                  await AnnouncementHelper.instance.approveApplication(
-                    applicationId: announcements.applicationId,
-                    reviewDescription: announcements.reviewDescription,
-                    callback: GeneralCallback<Response<dynamic>>.simple(
-                      context,
-                      (_) {},
-                    ),
-                  );
-                } else {
-                  await AnnouncementHelper.instance.rejectApplication(
-                    applicationId: announcements.applicationId,
-                    reviewDescription: announcements.reviewDescription,
-                    callback: GeneralCallback<Response<dynamic>>.simple(
-                      context,
-                      (_) => <dynamic>{},
-                    ),
-                  );
-                }
-              }
-              if (addBlackList ?? false) {
-                if (!mounted) return;
-                await AnnouncementHelper.instance.addBlackList(
-                  username: announcements.applicant!,
-                  //ignore: use_build_context_synchronously
-                  callback: GeneralCallback<Response<dynamic>>.simple(
-                    context,
-                    (_) => <dynamic>{},
-                  ),
-                );
-              }
-          }
-          if (!mounted) return;
-          Navigator.of(context).pop(true);
-        },
-      );
+
+      final ApiResult<Response<dynamic>> result;
       switch (widget.mode) {
         case Mode.add:
-          AnnouncementHelper.instance.addAnnouncement(
+          result = await AnnouncementHelper.instance.addAnnouncement(
             data: announcements,
-            callback: callback,
           );
         case Mode.edit:
-          AnnouncementHelper.instance.updateAnnouncement(
+          result = await AnnouncementHelper.instance.updateAnnouncement(
             data: announcements,
-            callback: callback,
           );
         case Mode.application:
-          AnnouncementHelper.instance.addApplication(
+          result = await AnnouncementHelper.instance.addApplication(
             data: announcements,
-            callback: callback,
           );
         case Mode.editApplication:
-          AnnouncementHelper.instance.updateApplication(
+          result = await AnnouncementHelper.instance.updateApplication(
             data: announcements,
-            callback: callback,
           );
       }
+
+      if (!mounted) return;
+      if (!result.isSuccess) {
+        result.showErrorToast(context);
+        return;
+      }
+
+      switch (widget.mode) {
+        case Mode.add:
+          UiUtil.instance.showToast(context, context.ap.addSuccess);
+        case Mode.edit:
+          UiUtil.instance.showToast(context, context.ap.updateSuccess);
+        case Mode.application:
+          UiUtil.instance
+              .showToast(context, context.ap.applicationSubmitSuccess);
+        case Mode.editApplication:
+          UiUtil.instance.showToast(context, context.ap.updateSuccess);
+          if (isApproval != null) {
+            final ApiResult<Response<dynamic>> reviewResult;
+            if (isApproval) {
+              reviewResult =
+                  await AnnouncementHelper.instance.approveApplication(
+                applicationId: announcements.applicationId,
+                reviewDescription: announcements.reviewDescription,
+              );
+            } else {
+              reviewResult =
+                  await AnnouncementHelper.instance.rejectApplication(
+                applicationId: announcements.applicationId,
+                reviewDescription: announcements.reviewDescription,
+              );
+            }
+            if (!mounted) return;
+            if (!reviewResult.isSuccess) {
+              reviewResult.showErrorToast(context);
+              return;
+            }
+          }
+          if (addBlackList ?? false) {
+            final ApiResult<Response<dynamic>> banResult =
+                await AnnouncementHelper.instance.addBlackList(
+              username: announcements.applicant!,
+            );
+            if (!mounted) return;
+            if (!banResult.isSuccess) {
+              banResult.showErrorToast(context);
+              return;
+            }
+          }
+      }
+      if (!mounted) return;
+      Navigator.of(context).pop(true);
     }
   }
 }

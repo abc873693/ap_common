@@ -573,7 +573,10 @@ class CourseScaffoldState extends State<CourseScaffold> {
                   children: <Widget>[
                     _buildWeekdayHeader(colorScheme, weekdayCount),
                     _buildCourseGrid(
-                        colorScheme, weekdayCount, widget.courseData.timeCodes),
+                      colorScheme,
+                      weekdayCount,
+                      widget.courseData.timeCodes,
+                    ),
                   ],
                 ),
               ),
@@ -612,22 +615,21 @@ class CourseScaffoldState extends State<CourseScaffold> {
     final DateTime now = DateTime.now();
     final String formattedDate = DateFormat('yyyyMMdd_hhmmss').format(now);
     if (byteData != null) {
-      if (!mounted) return;
-      await MediaUtil.instance.saveImage(
-        context,
+      final SaveImageResult result = await MediaUtil.instance.saveImage(
         byteData: byteData,
         fileName: 'course_table_$formattedDate',
-        successMessage: context.ap.exportCourseTableSuccess,
-        onSuccess: (GeneralResponse r) => Toast.show(
-          r.message,
-          context,
-        ),
-        onError: (GeneralResponse e) => Toast.show(
-          e.message,
-          context,
-        ),
       );
-      AnalyticsUtil.instance.logEvent('export_course_table_image_success');
+      if (!mounted) return;
+      switch (result) {
+        case SaveImageSuccess(:final String filePath):
+          final String message =
+              '${context.ap.exportCourseTableSuccess}\n$filePath';
+          Toast.show(message, context);
+          AnalyticsUtil.instance
+              .logEvent('export_course_table_image_success');
+        case SaveImageError(:final String message):
+          UiUtil.instance.showToast(context, message);
+      }
     } else {
       if (!mounted) return;
       UiUtil.instance.showToast(context, context.ap.unknownError);
@@ -930,7 +932,7 @@ class CourseScaffoldState extends State<CourseScaffold> {
       onTap: () {
         final TimeCode timeCode = timeIndex < widget.courseData.timeCodes.length
             ? widget.courseData.timeCodes[timeIndex]
-            : TimeCode(title: '?', startTime: '?', endTime: '?');
+            : const TimeCode(title: '?', startTime: '?', endTime: '?');
         _onPressed(weekday, timeCode, course);
       },
       child: Container(
@@ -987,7 +989,7 @@ class CourseScaffoldState extends State<CourseScaffold> {
   void _onPressed(int weekday, TimeCode timeCode, Course course) {
     showModalBottomSheet<void>(
       context: context,
-      backgroundColor: Color(0x00000000),
+      backgroundColor: const Color(0x00000000),
       isScrollControlled: true,
       builder: (BuildContext builder) {
         return CourseContent(
@@ -1443,7 +1445,7 @@ class CourseList extends StatelessWidget {
       controller: controller,
       physics: const AlwaysScrollableScrollPhysics(),
       padding: const EdgeInsets.only(
-          bottom: 80.0, left: 16.0, right: 16.0, top: 16.0),
+          bottom: 80.0, left: 16.0, right: 16.0, top: 16.0,),
       itemCount: courses.length,
       itemBuilder: (_, int index) {
         final Course course = courses[index];
@@ -1464,7 +1466,7 @@ class CourseList extends StatelessWidget {
             onTap: () {
               showModalBottomSheet<void>(
                 context: context,
-                backgroundColor: Color(0x00000000),
+                backgroundColor: const Color(0x00000000),
                 isScrollControlled: true,
                 builder: (BuildContext context) => CourseContent(
                   course: course,

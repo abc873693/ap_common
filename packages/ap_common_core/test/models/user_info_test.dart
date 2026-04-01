@@ -26,7 +26,7 @@ void main() {
     });
 
     test('toJson should return a valid JSON map', () {
-      final UserInfo userInfo = UserInfo(
+      const UserInfo userInfo = UserInfo(
         id: '123',
         name: 'Test User',
         department: 'CS',
@@ -56,7 +56,7 @@ void main() {
     });
 
     test('copyWith should return a new object with updated fields', () {
-      final UserInfo userInfo = UserInfo(
+      const UserInfo userInfo = UserInfo(
         id: '123',
         name: 'Test User',
         department: 'CS',

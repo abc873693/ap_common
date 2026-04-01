@@ -4,7 +4,7 @@ import 'package:test/test.dart';
 void main() {
   group('VersionInfo', () {
     test('should create a VersionInfo with correct values', () {
-      final VersionInfo data = VersionInfo(
+      const VersionInfo data = VersionInfo(
         code: 1,
         isForceUpdate: true,
         content: 'Test Content',
@@ -16,7 +16,7 @@ void main() {
     });
 
     test('isForceUpdate should default to false when set explicitly', () {
-      final VersionInfo data = VersionInfo(
+      const VersionInfo data = VersionInfo(
         code: 2,
         isForceUpdate: false,
         content: 'No update needed',

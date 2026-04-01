@@ -285,7 +285,7 @@ class HomePageScaffoldState extends State<HomePageScaffold> {
               text: TextSpan(
                 style: TextStyle(
                     color: Theme.of(context).colorScheme.onSurfaceVariant,
-                    fontSize: 24.0),
+                    fontSize: 24.0,),
                 children: <TextSpan>[
                   TextSpan(
                     text:

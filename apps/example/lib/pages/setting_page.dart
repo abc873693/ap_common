@@ -50,10 +50,10 @@ class SettingPageState extends State<SettingPage> {
               text: context.ap.notificationItem,
               icon: Icons.notifications_outlined,
             ),
-            SettingCard(
+            const SettingCard(
               children: <Widget>[
-                const CheckCourseNotifyItem(),
-                const ClearAllNotifyItem(),
+                CheckCourseNotifyItem(),
+                ClearAllNotifyItem(),
               ],
             ),
             SettingTitle(

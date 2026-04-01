@@ -12,11 +12,11 @@ part 'time_code.g.dart';
 
 @freezed
 abstract class TimeCodeConfig with _$TimeCodeConfig {
-  const TimeCodeConfig._();
 
   const factory TimeCodeConfig({
     required List<TimeCode> timeCodes,
   }) = _TimeCodeConfig;
+  const TimeCodeConfig._();
 
   factory TimeCodeConfig.fromJson(Map<String, dynamic> json) =>
       _$TimeCodeConfigFromJson(json);

@@ -1,11 +1,13 @@
 name: ap_common
 description: The school affairs(AP) series shares the engineering kit, rapid development of the school affairs series(AP) app
-version: 1.0.1-dev.0
+version: 1.0.1-dev.2
 homepage: https://github.com/abc873693/ap_common
 repository: https://github.com/abc873693/ap_common/tree/master/packages/ap_common
 
 environment:
-  sdk: '>=3.0.0 <4.0.0'
+  sdk: ^3.5.0
+
+resolution: workspace
 
 dependencies:
   flutter:
@@ -13,9 +15,9 @@ dependencies:
   flutter_localizations:
     sdk: flutter
 
-  ap_common_flutter_ui: ^1.1.0-dev.0
-  ap_common_flutter_platform: ^1.0.1-dev.0
-  ap_common_announcement_ui: ^1.0.1-dev.0
+  ap_common_flutter_ui: ^1.0.1-dev.3
+  ap_common_flutter_platform: ^1.0.1-dev.3
+  ap_common_announcement_ui: ^1.0.1-dev.3
 
 #dependency_overrides:
 #  ap_common_core:

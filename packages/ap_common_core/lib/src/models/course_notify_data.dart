@@ -12,7 +12,6 @@ part 'course_notify_data.g.dart';
 
 @freezed
 abstract class CourseNotifyData with _$CourseNotifyData {
-  const CourseNotifyData._();
 
   const factory CourseNotifyData({
     @Default(2) int version,
@@ -20,6 +19,7 @@ abstract class CourseNotifyData with _$CourseNotifyData {
     @Default(<CourseNotify>[]) List<CourseNotify> data,
     @JsonKey(includeToJson: false, includeFromJson: false) String? tag,
   }) = _CourseNotifyData;
+  const CourseNotifyData._();
 
   factory CourseNotifyData.fromJson(Map<String, dynamic> json) =>
       _$CourseNotifyDataFromJson(json);
@@ -85,35 +85,10 @@ abstract class CourseNotifyData with _$CourseNotifyData {
     );
   }
 
-  //TODO: revert for i18n implement
-  // void update(BuildContext context, String tag, CourseData courseData) {
-  //   final String key = '${ApConstants.packageName}.course_notify_data_$tag';
-  //   final ApLocalizations ap = ApLocalizations.of(context);
-  //   final CourseNotifyData cache = CourseNotifyData.load(key);
-  //   for (final CourseNotify courseNotify in cache.data) {
-  //     for (final Course courseDetail in courseData.courses) {
-  //       if (courseDetail.code == courseNotify.code) {
-  //         courseNotify.title = sprintf(ap.courseNotifyContent, <String?>[
-  //           courseNotify.title,
-  //           if (courseNotify.location == null ||
-  //               courseNotify.location!.isEmpty)
-  //             ap.courseNotifyUnknown
-  //           else
-  //             courseNotify.location,
-  //         ]);
-  //       }
-  //     }
-  //   }
-  //   PreferenceUtil.instance.setString(
-  //     key,
-  //     toRawJson(),
-  //   );
-  // }
 }
 
 @freezed
 abstract class CourseNotify with _$CourseNotify {
-  const CourseNotify._();
 
   const factory CourseNotify({
     required int id,
@@ -127,6 +102,7 @@ abstract class CourseNotify with _$CourseNotify {
     String? location,
     String? code,
   }) = _CourseNotify;
+  const CourseNotify._();
 
   factory CourseNotify.fromCourse({
     required int id,

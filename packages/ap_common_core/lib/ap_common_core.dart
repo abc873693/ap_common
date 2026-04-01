@@ -7,6 +7,7 @@ export 'src/config/ap_constants.dart';
 export 'src/models/announcement_data.dart';
 export 'src/models/announcement_login_data.dart';
 export 'src/models/ap_support_language.dart';
+export 'src/models/api_result.dart';
 export 'src/models/course_data.dart';
 export 'src/models/data_state.dart';
 export 'src/models/course_notify_data.dart';
