@@ -21,8 +21,7 @@ class SimpleScorePage extends StatelessWidget {
         return SemesterData.fromRawJson(rawString);
       },
       onLoadScore: (Semester semester) async {
-        final String rawString =
-            await rootBundle.loadString(FileAssets.scores);
+        final String rawString = await rootBundle.loadString(FileAssets.scores);
         return ScoreData.fromRawJson(rawString);
       },
       detailBuilder: (ScoreData? scoreData) => <String>[

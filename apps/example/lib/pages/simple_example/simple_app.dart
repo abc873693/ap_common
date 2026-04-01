@@ -1,4 +1,5 @@
-import 'package:ap_common/ap_common.dart';
+import 'package:ap_common/ap_common.dart'
+    hide AppLocaleUtils, TranslationProvider;
 import 'package:ap_common_example/pages/simple_example/simple_home_page.dart';
 import 'package:ap_common_example/utils/app_localizations.dart';
 import 'package:flutter/material.dart';

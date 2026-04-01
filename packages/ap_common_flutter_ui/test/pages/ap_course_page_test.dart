@@ -1,4 +1,3 @@
-import 'package:ap_common_core/ap_common_core.dart';
 import 'package:ap_common_core/injector.dart';
 import 'package:ap_common_flutter_ui/ap_common_flutter_ui.dart';
 import 'package:flutter/material.dart';
@@ -21,8 +20,7 @@ void main() {
           return MaterialApp(
             locale: TranslationProvider.of(context).flutterLocale,
             supportedLocales: AppLocaleUtils.supportedLocales,
-            localizationsDelegates:
-                const <LocalizationsDelegate<dynamic>>[
+            localizationsDelegates: const <LocalizationsDelegate<dynamic>>[
               GlobalMaterialLocalizations.delegate,
               GlobalWidgetsLocalizations.delegate,
               GlobalCupertinoLocalizations.delegate,
@@ -35,7 +33,8 @@ void main() {
   }
 
   group('ApCoursePage', () {
-    testWidgets('should show loading state initially', (WidgetTester tester) async {
+    testWidgets('should show loading state initially',
+        (WidgetTester tester) async {
       await tester.pumpWidget(
         buildTestApp(
           ApCoursePage(
@@ -108,18 +107,21 @@ void main() {
 }
 
 SemesterData _mockSemesterData() {
-  return SemesterData(
+  return const SemesterData(
     data: <Semester>[
-      const Semester(year: '112', value: '1', text: '112-1'),
-      const Semester(year: '112', value: '2', text: '112-2'),
+      Semester(year: '112', value: '1', text: '112-1'),
+      Semester(year: '112', value: '2', text: '112-2'),
     ],
-    defaultSemester: const Semester(year: '112', value: '1', text: '112-1'),
-    currentIndex: 0,
+    defaultSemester: Semester(
+      year: '112',
+      value: '1',
+      text: '112-1',
+    ),
   );
 }
 
 CourseData _mockCourseData() {
-  return CourseData(
+  return const CourseData(
     courses: <Course>[
       Course(
         code: 'CS101',
@@ -129,7 +131,6 @@ CourseData _mockCourseData() {
         units: '3',
         hours: '3',
         required: 'Required',
-        at: null,
         times: <SectionTime>[],
         instructors: <String>['Professor A'],
         location: Location(

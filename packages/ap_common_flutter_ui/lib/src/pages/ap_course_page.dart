@@ -1,8 +1,8 @@
 import 'package:ap_common_flutter_ui/ap_common_flutter_ui.dart';
 import 'package:flutter/material.dart';
 
-/// A ready-to-use course page that handles semester loading and state management
-/// internally using [DataState].
+/// A ready-to-use course page that handles semester loading and
+/// state management internally using [DataState].
 ///
 /// Instead of managing [CourseState], [SemesterData], [CourseData] manually,
 /// just provide data-fetching callbacks:

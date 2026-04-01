@@ -120,7 +120,6 @@ class _ApScorePageState extends State<ApScorePage> {
       middleScoreBuilder: widget.middleScoreBuilder,
       finalScoreBuilder: widget.finalScoreBuilder,
       bottom: widget.bottom,
-      details: widget.detailBuilder?.call(scoreData),
       onSelect: (int index) {
         _semesterData = _semesterData!.copyWith(currentIndex: index);
         _loadScore();

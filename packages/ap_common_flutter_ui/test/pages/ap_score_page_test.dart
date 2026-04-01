@@ -1,4 +1,3 @@
-import 'package:ap_common_core/ap_common_core.dart';
 import 'package:ap_common_core/injector.dart';
 import 'package:ap_common_flutter_ui/ap_common_flutter_ui.dart';
 import 'package:flutter/material.dart';
@@ -21,8 +20,7 @@ void main() {
           return MaterialApp(
             locale: TranslationProvider.of(context).flutterLocale,
             supportedLocales: AppLocaleUtils.supportedLocales,
-            localizationsDelegates:
-                const <LocalizationsDelegate<dynamic>>[
+            localizationsDelegates: const <LocalizationsDelegate<dynamic>>[
               GlobalMaterialLocalizations.delegate,
               GlobalWidgetsLocalizations.delegate,
               GlobalCupertinoLocalizations.delegate,
@@ -122,17 +120,20 @@ void main() {
 }
 
 SemesterData _mockSemesterData() {
-  return SemesterData(
+  return const SemesterData(
     data: <Semester>[
-      const Semester(year: '112', value: '1', text: '112-1'),
+      Semester(year: '112', value: '1', text: '112-1'),
     ],
-    defaultSemester: const Semester(year: '112', value: '1', text: '112-1'),
-    currentIndex: 0,
+    defaultSemester: Semester(
+      year: '112',
+      value: '1',
+      text: '112-1',
+    ),
   );
 }
 
 ScoreData _mockScoreData() {
-  return ScoreData(
+  return const ScoreData(
     scores: <Score>[
       Score(
         courseNumber: 'CS101',

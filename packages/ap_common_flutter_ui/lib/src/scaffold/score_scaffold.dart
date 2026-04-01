@@ -51,7 +51,6 @@ class ScoreScaffold extends StatefulWidget {
     this.middleScoreBuilder,
     this.finalScoreBuilder,
     this.isShowSearchButton = false,
-    this.details,
     this.bottom,
   })  : state = dataState.when(
           loading: () => ScoreState.loading,
@@ -60,9 +59,8 @@ class ScoreScaffold extends StatefulWidget {
           empty: (_) => ScoreState.empty,
         ),
         scoreData = dataState.dataOrNull,
-        customHint = dataState is DataLoaded<ScoreData?>
-            ? dataState.hint
-            : null,
+        customHint =
+            dataState is DataLoaded<ScoreData?> ? dataState.hint : null,
         customStateHint = dataState is DataError<ScoreData?>
             ? dataState.hint
             : dataState is DataEmpty<ScoreData?>
@@ -489,7 +487,6 @@ class _ScoreListTab extends StatelessWidget {
     );
   }
 
-
   Widget _buildScoreItem(ColorScheme colorScheme, Score score, int index) {
     final String scoreStr = score.semesterScore ?? '';
     final double? scoreValue = double.tryParse(scoreStr);
@@ -805,7 +802,6 @@ class _ScoreAnalysisTab extends StatelessWidget {
       ],
     );
   }
-
 }
 
 class ScoreAnalysis {

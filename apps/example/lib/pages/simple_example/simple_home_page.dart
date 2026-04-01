@@ -2,7 +2,6 @@ import 'package:ap_common/ap_common.dart';
 import 'package:ap_common_example/pages/simple_example/simple_course_page.dart';
 import 'package:ap_common_example/pages/simple_example/simple_login_page.dart';
 import 'package:ap_common_example/pages/simple_example/simple_score_page.dart';
-import 'package:ap_common_example/res/assets.dart';
 import 'package:flutter/material.dart';
 
 /// Simplified home page demonstrating the convenience widgets.

@@ -1,4 +1,4 @@
-import 'package:ap_common_core/ap_common_core.dart';
+import 'package:ap_common_flutter_ui/ap_common_flutter_ui.dart';
 import 'package:flutter/widgets.dart';
 
 /// Mock [PreferenceUtil] that stores values in memory for testing.
@@ -90,18 +90,25 @@ class MockAnalyticsUtil extends AnalyticsUtil {
   const MockAnalyticsUtil();
 
   @override
-  Future<void> logApiEvent(String type, int status,
-      {String message = ''}) async {}
+  Future<void> logApiEvent(
+    String type,
+    int status, {
+    String message = '',
+  }) async {}
   @override
-  Future<void> logEvent(String name,
-      {Map<String, dynamic>? parameters}) async {}
+  Future<void> logEvent(
+    String name, {
+    Map<String, dynamic>? parameters,
+  }) async {}
   @override
   Future<void> logTimeEvent(String name, double seconds) async {}
   @override
   Future<void> logUserInfo(UserInfo userInfo) async {}
   @override
   Future<void> setCurrentScreen(
-      String screenName, String screenClassOverride) async {}
+    String screenName,
+    String screenClassOverride,
+  ) async {}
   @override
   Future<void> setUserId(String id) async {}
   @override

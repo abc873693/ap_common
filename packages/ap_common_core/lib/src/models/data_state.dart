@@ -43,17 +43,17 @@ sealed class DataState<T> {
 
   /// Returns the data if this is [DataLoaded], otherwise null.
   T? get dataOrNull => switch (this) {
-        DataLoaded<T>(:final data) => data,
+        DataLoaded<T>(:final T data) => data,
         _ => null,
       };
 
   /// Maps the data to a new type.
   DataState<R> map<R>(R Function(T data) transform) => switch (this) {
-        DataLoaded<T>(:final data, :final hint) =>
+        DataLoaded<T>(:final T data, :final String? hint) =>
           DataLoaded<R>(transform(data), hint: hint),
         DataLoading<T>() => DataLoading<R>(),
-        DataError<T>(:final hint) => DataError<R>(hint: hint),
-        DataEmpty<T>(:final hint) => DataEmpty<R>(hint: hint),
+        DataError<T>(:final String? hint) => DataError<R>(hint: hint),
+        DataEmpty<T>(:final String? hint) => DataEmpty<R>(hint: hint),
       };
 
   /// Executes the appropriate callback based on the state.
@@ -65,9 +65,9 @@ sealed class DataState<T> {
   }) =>
       switch (this) {
         DataLoading<T>() => loading(),
-        DataLoaded<T>(:final data, :final hint) => loaded(data, hint),
-        DataError<T>(:final hint) => error(hint),
-        DataEmpty<T>(:final hint) => empty(hint),
+        DataLoaded<T>(:final T data, :final String? hint) => loaded(data, hint),
+        DataError<T>(:final String? hint) => error(hint),
+        DataEmpty<T>(:final String? hint) => empty(hint),
       };
 }
 

@@ -1,4 +1,3 @@
-import 'package:ap_common_core/ap_common_core.dart';
 import 'package:ap_common_core/injector.dart';
 import 'package:ap_common_flutter_ui/ap_common_flutter_ui.dart';
 import 'package:flutter/material.dart';
@@ -24,8 +23,7 @@ void main() {
           return MaterialApp(
             locale: TranslationProvider.of(context).flutterLocale,
             supportedLocales: AppLocaleUtils.supportedLocales,
-            localizationsDelegates:
-                const <LocalizationsDelegate<dynamic>>[
+            localizationsDelegates: const <LocalizationsDelegate<dynamic>>[
               GlobalMaterialLocalizations.delegate,
               GlobalWidgetsLocalizations.delegate,
               GlobalCupertinoLocalizations.delegate,
@@ -73,7 +71,6 @@ void main() {
       await tester.pumpWidget(
         buildTestApp(
           ApLoginPage(
-            logoMode: LogoMode.text,
             logoSource: 'AP',
             onLogin: (String u, String p) async => true,
           ),

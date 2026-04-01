@@ -1,5 +1,4 @@
 export 'package:ap_common_flutter_core/ap_common_flutter_core.dart';
-export 'package:ap_common_flutter_ui/ap_common_flutter_ui.dart';
 
 export 'src/pages/about_us_page.dart';
 export 'src/pages/ap_app.dart';
