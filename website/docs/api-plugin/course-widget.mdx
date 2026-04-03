@@ -127,44 +127,119 @@ Plugin 內部的 manifest 已自動註冊以下 receiver，會在建置時合併
 
 ### 原生實作細節
 
+Android 端使用 **Jetpack Glance**（Compose-like Widget 框架）和 **kotlinx.serialization** 實作。
+
+#### 架構總覽
+
+| 檔案 | 類別 | 說明 |
+|------|------|------|
+| `ApCommonPlugin.kt` | `FlutterPlugin` | MethodChannel 處理，寫入 SharedPreferences 並觸發 widget 更新 |
+| `CourseAppWidgetProvider.kt` | `GlanceAppWidgetReceiver` | Widget receiver，僅負責橋接 `CourseAppWidget` |
+| `CourseAppWidget.kt` | `GlanceAppWidget` | Widget UI 與課程解析邏輯（Compose-like 語法） |
+| `RefreshAction.kt` | `ActionCallback` | 重新整理按鈕的 callback |
+| `Course.kt` | `@Serializable` data classes | 型別安全的 JSON 資料模型 |
+
 #### MethodChannel 處理（`ApCommonPlugin.kt`）
 
 | Method | 行為 |
 |--------|------|
 | `getPlatformVersion` | 回傳 `"Android {版本號}"` |
 | `configure` | **No-op**，App Group 僅 iOS 需要 |
-| `updateCourseWidget` | 將 JSON 字串寫入 `SharedPreferences`（name: `ap_common_plugin`、key: `course_notify`），然後呼叫 `onUpdate()` 觸發所有已註冊的 widget 更新 |
+| `updateCourseWidget` | 將 JSON 字串寫入 `SharedPreferences`（name: `ap_common_plugin`、key: `course_notify`），透過 coroutine 呼叫 `CourseAppWidget().updateAll(context)` 更新所有 widget |
 | `clearCourseWidget` | 從 `SharedPreferences` 移除 `course_notify`，觸發 widget 更新 |
 
-#### Widget Provider（`CourseAppWidgetProvider.kt`）
+#### JSON 解析（`Course.kt` — kotlinx.serialization）
 
-Widget 的顯示邏輯完全在原生端處理：
+使用 `@Serializable` data class 取代手動 `org.json.JSONObject` 解析：
 
-1. **讀取資料**：從 `SharedPreferences("ap_common_plugin")` 讀取 `course_notify` JSON 字串
-2. **解析今日課程**：使用 `org.json.JSONObject` 解析，根據今天星期幾（ISO 8601：1=週一、7=週日）篩選課程
-3. **找出下一堂課**：比對每堂課的 `startTime` 與目前時間，取時間差最小的正值
-4. **顯示格式**：`"下一節課是{startTime}\n在 {location} 的 {title}"`（繁中），支援 `"HH:mm"` 和 `"HHmm"` 兩種時間格式
+```kotlin
+@Serializable
+data class CourseData(
+    val courses: List<Course> = emptyList(),
+    val timeCodes: List<TimeCode> = emptyList(),
+)
+
+@Serializable
+data class Course(
+    val code: String = "",
+    val title: String = "",
+    @SerialName("sectionTimes")
+    val times: List<SectionTime> = emptyList(),
+    val location: Location? = null,
+    // ... 其他欄位
+)
+
+@Serializable
+data class Location(
+    val building: String? = null,
+    val room: String? = null,
+) {
+    val displayText: String
+        get() = listOf(building, room)
+            .filterNot { it.isNullOrEmpty() }
+            .joinToString("")
+}
+```
+
+- `Json { ignoreUnknownKeys = true }` 安全解碼，忽略未知欄位
+- `@SerialName("sectionTimes")` 對應 Dart 端的 JSON key 映射
+- `Location.displayText` computed property 自動組合地點字串
+
+#### Widget UI（`CourseAppWidget.kt` — Jetpack Glance）
+
+使用 Compose-like 語法定義 Widget UI，取代傳統 XML `RemoteViews`：
+
+```kotlin
+class CourseAppWidget : GlanceAppWidget() {
+    override suspend fun provideGlance(context: Context, id: GlanceId) {
+        val content = loadCourseContent(context)
+        provideContent {
+            GlanceTheme {
+                CourseWidgetContent(context, content)
+            }
+        }
+    }
+}
+```
+
+**課程顯示邏輯：**
+
+1. **讀取資料**：從 `SharedPreferences("ap_common_plugin")` 讀取 `course_notify` JSON
+2. **型別安全解碼**：`Json.decodeFromString<CourseData>(rawData)`
+3. **篩選今日課程**：根據星期幾（ISO 8601：1=週一、7=週日）篩選
+4. **找出下一堂課**：比對 `startTime` 與目前時間，取時間差最小的正值
 5. **特殊狀態**：
    - 無資料 → `"尚無課程資料"`
    - 今日無課 → `"太好了今天沒有任何課"`
-   - 今日課程皆已結束 → `"太好了今天已經沒有任何課"`
+   - 課程皆已結束 → `"太好了今天已經沒有任何課"`
 
-#### Widget 佈局（`course_appwidget_provider_layout.xml`）
+#### Widget 佈局
 
 ```
 ┌─────────────────────────┐
-│  上課提醒          [🔄] │ ← 深藍背景 (#141e2f)，白色文字
+│  上課提醒          [🔄] │ ← 深藍/亮藍背景（支援深色模式）
 ├─────────────────────────┤
 │                         │
-│   下一節課是 09:00      │ ← 深色背景 (#121212)，灰色文字
+│   下一節課是 09:00      │ ← 白/深色背景（支援深色模式）
 │   在 EC5012 的 演算法   │
 │                         │
 └─────────────────────────┘
 ```
 
-- **標題列**：「上課提醒」文字 + 右側重新整理按鈕
-- **內容區**：點擊後開啟主 App
+- **標題列**：「上課提醒」文字 + 右側重新整理按鈕（`RefreshAction` callback）
+- **內容區**：點擊後開啟主 App（`actionStartActivity`）
+- **深色模式**：使用 `ColorProvider(day, night)` 自動適配
+- **圓角**：Glance 自動支援 Android 12+ 系統圓角
 - **多語系**：支援英文（預設）與繁體中文（`values-zh-rTW`）
+
+#### 依賴與相容性
+
+| 項目 | 值 |
+|------|------|
+| Jetpack Glance | `1.1.1` |
+| kotlinx.serialization | `1.6.3` |
+| Kotlin | 1.9.x 和 2.0+（自動偵測 Compose compiler 配置） |
+| Compose compiler | Kotlin 2.0+ 內建 / Kotlin 1.9.x 使用 `1.5.3` |
 
 ## iOS 整合
 
