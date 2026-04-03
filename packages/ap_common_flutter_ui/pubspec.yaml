@@ -13,6 +13,8 @@ resolution: workspace
 dependencies:
   flutter:
     sdk: flutter
+  flutter_localizations:
+    sdk: flutter
   ap_common_flutter_core: ^1.1.0-dev.3
   # Dart Package
   sprintf: ^7.0.0
@@ -33,6 +35,7 @@ dependencies:
 dev_dependencies:
   flutter_test:
     sdk: flutter
+  ap_common_core: any
   spider: ^4.2.2
 
 flutter:

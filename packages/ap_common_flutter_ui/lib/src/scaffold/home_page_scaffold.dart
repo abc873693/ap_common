@@ -25,6 +25,37 @@ class HomePageScaffold extends StatefulWidget {
     this.autoPlayDuration = const Duration(milliseconds: 5000),
   });
 
+  /// Creates a [HomePageScaffold] from a [DataState<List<Announcement>>].
+  ///
+  /// ```dart
+  /// HomePageScaffold.fromDataState(
+  ///   dataState: DataLoaded(announcements),
+  ///   isLogin: true,
+  ///   drawer: myDrawer,
+  /// )
+  /// ```
+  HomePageScaffold.fromDataState({
+    super.key,
+    required DataState<List<Announcement>> dataState,
+    required this.isLogin,
+    this.actions,
+    this.onTabTapped,
+    this.bottomNavigationBarItems,
+    this.drawer,
+    this.content,
+    this.floatingActionButton,
+    this.title,
+    this.onImageTapped,
+    this.autoPlay = true,
+    this.autoPlayDuration = const Duration(milliseconds: 5000),
+  })  : state = dataState.when(
+          loading: () => HomeState.loading,
+          loaded: (_, __) => HomeState.finish,
+          error: (_) => HomeState.error,
+          empty: (_) => HomeState.empty,
+        ),
+        announcements = dataState.dataOrNull ?? <Announcement>[];
+
   final HomeState state;
   final String? title;
   final List<Announcement> announcements;

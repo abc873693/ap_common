@@ -1,7 +1,10 @@
 export 'package:ap_common_flutter_core/ap_common_flutter_core.dart';
-export 'package:ap_common_flutter_ui/ap_common_flutter_ui.dart';
 
 export 'src/pages/about_us_page.dart';
+export 'src/pages/ap_app.dart';
+export 'src/pages/ap_course_page.dart';
+export 'src/pages/ap_login_page.dart';
+export 'src/pages/ap_score_page.dart';
 export 'src/resources/ap_colors.dart';
 export 'src/resources/ap_theme.dart';
 export 'src/resources/resources.dart';
