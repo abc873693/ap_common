@@ -2,6 +2,12 @@
     android:initialLayout="@layout/course_appwidget_provider_layout"
     android:minWidth="160dp"
     android:minHeight="40dp"
+    android:targetCellWidth="3"
+    android:targetCellHeight="1"
+    android:maxResizeWidth="530dp"
+    android:maxResizeHeight="200dp"
     android:resizeMode="horizontal|vertical"
     android:updatePeriodMillis="6000000"
-    android:widgetCategory="home_screen" />
+    android:widgetCategory="home_screen"
+    android:previewLayout="@layout/course_appwidget_provider_layout"
+    android:description="@string/widget_description" />

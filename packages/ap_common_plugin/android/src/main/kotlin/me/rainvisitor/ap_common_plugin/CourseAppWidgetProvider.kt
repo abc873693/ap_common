@@ -32,7 +32,7 @@ class CourseAppWidgetProvider : AppWidgetProvider() {
         val intent = Intent(context, javaClass)
         intent.action = action
         val flags = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
-            PendingIntent.FLAG_MUTABLE
+            PendingIntent.FLAG_IMMUTABLE or PendingIntent.FLAG_UPDATE_CURRENT
         } else {
             PendingIntent.FLAG_UPDATE_CURRENT
         }
@@ -54,7 +54,7 @@ class CourseAppWidgetProvider : AppWidgetProvider() {
         val packageName: String = context.packageName
         val launchIntent = context.packageManager.getLaunchIntentForPackage(packageName)
         val flags = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
-            PendingIntent.FLAG_MUTABLE
+            PendingIntent.FLAG_IMMUTABLE or PendingIntent.FLAG_UPDATE_CURRENT
         } else {
             PendingIntent.FLAG_UPDATE_CURRENT
         }
