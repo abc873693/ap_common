@@ -1,3 +1,16 @@
+## 1.0.1-dev.4
+
+ - **REFACTOR**(plugin): migrate Android widget to kotlinx.serialization and Jetpack Glance. ([a712b2cd](https://github.com/abc873693/ap_common/commit/a712b2cd4cd9a595a138322173cfd91140f181e6))
+ - **REFACTOR**(l10n): restore original i18n variable naming conventions. ([c21ed521](https://github.com/abc873693/ap_common/commit/c21ed521369b6a3f6030da7ac9a9bae6b97d13dd))
+ - **FIX**(plugin): use FLAG_IMMUTABLE and add Android 12+ widget attributes. ([66ebe902](https://github.com/abc873693/ap_common/commit/66ebe9021171d961f285f10e69c9c26ce417daae))
+ - **FIX**(plugin): sync iOS CourseData model and docs with Dart model. ([4047c945](https://github.com/abc873693/ap_common/commit/4047c9450a399eb188b6744b0d55586a3716e0b7))
+ - **FIX**(ci): upgrade Gradle to 8.11.1 and address PR review feedback. ([575733e7](https://github.com/abc873693/ap_common/commit/575733e75c5b3d9f3f8924565341d3f90c54fbfe))
+ - **FIX**(ap_common_plugin): android plugin register setting. ([07968966](https://github.com/abc873693/ap_common/commit/07968966be3576952eb924832048e51292a877e4))
+ - **FEAT**(plugin): add setFakeCourseWidget and update documentation. ([ac51812b](https://github.com/abc873693/ap_common/commit/ac51812b59c55f4a90f840bcc7d21c7154b44efe))
+ - **FEAT**(plugin): add course widget support for Android and iOS. ([613249b1](https://github.com/abc873693/ap_common/commit/613249b15b358cc9b8add2ce4882cde809efed2f))
+ - **FEAT**: upgrade package flutter 3.29 compatible. ([54ae5f08](https://github.com/abc873693/ap_common/commit/54ae5f087f95858e551b0a78008072f74faaa17b))
+ - **DOCS**(plugin): clarify Android manifest is auto-merged from plugin. ([277e24c4](https://github.com/abc873693/ap_common/commit/277e24c4a62e73002899362952cd9fcb246d7367))
+
 ## 1.0.1-dev.3
 
  - **REFACTOR**(l10n): restore original i18n variable naming conventions. ([c21ed521](https://github.com/abc873693/ap_common/commit/c21ed521369b6a3f6030da7ac9a9bae6b97d13dd))
