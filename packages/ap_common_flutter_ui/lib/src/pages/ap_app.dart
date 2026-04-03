@@ -109,8 +109,13 @@ class ApAppState extends State<ApApp> with WidgetsBindingObserver {
   @override
   void initState() {
     super.initState();
-    _themeMode = ThemeMode.values[
-        PreferenceUtil.instance.getInt(widget.themeModePreferenceKey, 0)];
+    final int themeIndex = PreferenceUtil.instance.getInt(
+      widget.themeModePreferenceKey,
+      0,
+    );
+    _themeMode = themeIndex >= 0 && themeIndex < ThemeMode.values.length
+        ? ThemeMode.values[themeIndex]
+        : ThemeMode.system;
     _currentColorIndex =
         PreferenceUtil.instance.getInt(ApTheme.PREF_COLOR_INDEX, 0);
     final int customColorValue =
