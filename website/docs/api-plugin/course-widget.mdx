@@ -119,13 +119,99 @@ Plugin 內部的 manifest 已自動註冊以下 receiver，會在建置時合併
 | 項目 | 值 |
 |------|------|
 | 最小尺寸 | 160dp x 40dp |
-| 更新週期 | 100 分鐘 |
+| 更新週期 | 6,000,000 ms（約 100 分鐘） |
 | 縮放模式 | 水平 + 垂直 |
 | 分類 | 主畫面 |
+| 最低 SDK | 21（Android 5.0） |
+| compileSdk | 35 |
+
+### 原生實作細節
+
+#### MethodChannel 處理（`ApCommonPlugin.kt`）
+
+| Method | 行為 |
+|--------|------|
+| `getPlatformVersion` | 回傳 `"Android {版本號}"` |
+| `configure` | **No-op**，App Group 僅 iOS 需要 |
+| `updateCourseWidget` | 將 JSON 字串寫入 `SharedPreferences`（name: `ap_common_plugin`、key: `course_notify`），然後呼叫 `onUpdate()` 觸發所有已註冊的 widget 更新 |
+| `clearCourseWidget` | 從 `SharedPreferences` 移除 `course_notify`，觸發 widget 更新 |
+
+#### Widget Provider（`CourseAppWidgetProvider.kt`）
+
+Widget 的顯示邏輯完全在原生端處理：
+
+1. **讀取資料**：從 `SharedPreferences("ap_common_plugin")` 讀取 `course_notify` JSON 字串
+2. **解析今日課程**：使用 `org.json.JSONObject` 解析，根據今天星期幾（ISO 8601：1=週一、7=週日）篩選課程
+3. **找出下一堂課**：比對每堂課的 `startTime` 與目前時間，取時間差最小的正值
+4. **顯示格式**：`"下一節課是{startTime}\n在 {location} 的 {title}"`（繁中），支援 `"HH:mm"` 和 `"HHmm"` 兩種時間格式
+5. **特殊狀態**：
+   - 無資料 → `"尚無課程資料"`
+   - 今日無課 → `"太好了今天沒有任何課"`
+   - 今日課程皆已結束 → `"太好了今天已經沒有任何課"`
+
+#### Widget 佈局（`course_appwidget_provider_layout.xml`）
+
+```
+┌─────────────────────────┐
+│  上課提醒          [🔄] │ ← 深藍背景 (#141e2f)，白色文字
+├─────────────────────────┤
+│                         │
+│   下一節課是 09:00      │ ← 深色背景 (#121212)，灰色文字
+│   在 EC5012 的 演算法   │
+│                         │
+└─────────────────────────┘
+```
+
+- **標題列**：「上課提醒」文字 + 右側重新整理按鈕
+- **內容區**：點擊後開啟主 App
+- **多語系**：支援英文（預設）與繁體中文（`values-zh-rTW`）
 
 ## iOS 整合
 
-iOS 的 Widget Extension 需要在各 App 的 Xcode 專案中獨立建立，Plugin 提供範例程式碼作為參考。
+iOS 的 Widget Extension **無法**由 Flutter Plugin 自動打包（iOS 架構限制），需要在各 App 的 Xcode 專案中獨立建立。Plugin 提供範例程式碼作為參考。
+
+### 原生實作細節
+
+#### MethodChannel 處理（`SwiftApCommonPlugin.swift`）
+
+| Method | 行為 |
+|--------|------|
+| `getPlatformVersion` | 回傳 `"iOS {版本號}"` |
+| `configure` | 將 `appGroupId` 存入 `UserDefaults.standard`（key: `app_group_id`），供後續 method 讀取 |
+| `updateCourseWidget` | 從 `UserDefaults.standard` 讀取 `appGroupId`，將 JSON 寫入 `UserDefaults(suiteName: appGroupId)`（key: `course_notify`），呼叫 `WidgetCenter.shared.reloadAllTimelines()` |
+| `clearCourseWidget` | 從 App Group UserDefaults 移除 `course_notify`，重新載入所有 timeline |
+
+:::info 資料儲存位置
+- **App Group ID**：`UserDefaults.standard`，key `"app_group_id"`
+- **課表 JSON**：`UserDefaults(suiteName: appGroupId)`，key `"course_notify"`
+
+Widget Extension 透過相同的 App Group ID 存取 `UserDefaults`，讀取課表 JSON。
+:::
+
+#### Widget Extension（`CourseAppWidget.swift`）
+
+Widget 使用 `TimelineProvider` 實作，顯示邏輯：
+
+1. **讀取資料**：從 `UserDefaults(suiteName: appGroupId)` 讀取 `course_notify` JSON
+2. **JSON 解碼**：使用 `JSONDecoder` 解碼為 `CourseData` struct
+3. **計算星期**：`Calendar.current.dateComponents` 取得今天星期幾，轉換為 ISO 8601（1=週一、7=週日）
+4. **找出下一堂課**：篩選今日 weekday 的課程，比對 `startTime` 與當前時間，取最小正值時間差
+5. **Timeline 策略**：使用 `.atEnd` policy，timeline 結束後系統自動請求新的 timeline
+6. **顯示格式**：
+   - 有下一堂課 → `"下一節課是{startTime}\n在 {building}{room} 的 {title}"`
+   - 今日無課 → `"太好了今天沒有任何課"`
+   - 課程皆已結束 → `"太好了今天已經沒有任何課"`
+
+#### Widget View 結構
+
+| View | 用途 | 版本要求 |
+|------|------|----------|
+| `CourseAppWidgetEntryView` | 主畫面 widget，含標題列與課程內容 | iOS 14+ |
+| `InlineWidgetView` | 鎖定畫面單行顯示（短文字） | iOS 16+ |
+| `CourseTextWidgetEntryView` | 鎖定畫面矩形顯示 | iOS 16+ |
+| `ViewSizeWidgetView` | 根據 `widgetFamily` 分派對應 View | — |
+
+### 建立步驟
 
 ### Step 1：建立 Widget Extension
 
