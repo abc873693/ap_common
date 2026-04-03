@@ -67,20 +67,7 @@ if (kDebugMode) {
 
 ### Android
 
-Plugin 已包含完整的 `AppWidgetProvider` 實作，App 端只需在 `AndroidManifest.xml` 註冊 receiver：
-
-```xml
-<receiver
-    android:name="me.rainvisitor.ap_common_plugin.CourseAppWidgetProvider"
-    android:exported="true">
-    <intent-filter>
-        <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
-    </intent-filter>
-    <meta-data
-        android:name="android.appwidget.provider"
-        android:resource="@xml/course_appwidget_info" />
-</receiver>
-```
+Plugin 已包含完整的 `CourseAppWidgetProvider` 實作與 `AndroidManifest.xml` 註冊，App 端**不需要額外修改 manifest**。建置時會自動合併。
 
 ### iOS
 

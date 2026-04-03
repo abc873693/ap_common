@@ -97,15 +97,13 @@ if (kDebugMode) ...[
 
 ## Android 整合
 
-Plugin 已包含完整的 `CourseAppWidgetProvider` 實作，不需要額外撰寫原生程式碼。
+Plugin 已包含完整的 `CourseAppWidgetProvider` 實作與 `AndroidManifest.xml` 註冊，**App 端不需要額外撰寫原生程式碼或修改 manifest**。
 
-### AndroidManifest.xml
+Plugin 內部的 manifest 已自動註冊以下 receiver，會在建置時合併至 App 的 manifest：
 
-確認 `AndroidManifest.xml` 中有註冊 widget receiver：
-
-```xml title="android/app/src/main/AndroidManifest.xml"
+```xml title="ap_common_plugin/android/src/main/AndroidManifest.xml（Plugin 內部）"
 <receiver
-    android:name="me.rainvisitor.ap_common_plugin.CourseAppWidgetProvider"
+    android:name=".CourseAppWidgetProvider"
     android:exported="true">
     <intent-filter>
         <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
