@@ -8,9 +8,16 @@ sidebar_position: 1
 
 ## 支援平台
 
-| 功能 | Android | iOS | macOS | Web |
-|:---:|:-------:|:---:|:-----:|:---:|
-| 課表小工具 | ✅ | ✅ | — | — |
+| 功能 | Android | iOS | macOS | Windows | Linux | Web |
+|:---:|:-------:|:---:|:-----:|:-------:|:-----:|:---:|
+| 課表小工具 | ✅ | ✅ | 🔜 | — | — | — |
+
+:::info 平台支援說明
+- **macOS**：WidgetKit（macOS 11+）與 iOS 技術棧一致，可複用 SwiftUI 程式碼，規劃中
+- **Windows**：Widget Provider 需 C++/WinRT 實作，目前 Flutter 生態系無可用方案
+- **Linux**：桌面環境碎片化（KDE/GNOME），無統一 widget 框架
+- **Web**：PWA 不支援原生 widget
+:::
 
 ## 安裝
 

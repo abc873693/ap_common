@@ -259,3 +259,43 @@ struct Provider: TimelineProvider {
 
 也可參考 [高科校務通](https://github.com/NKUST-ITC/NKUST-AP-Flutter) 的實際整合。
 :::
+
+## macOS 整合（規劃中）
+
+macOS 從 Big Sur（11.0）起支援 WidgetKit，與 iOS 使用相同的 SwiftUI + WidgetKit 技術棧。現有的 iOS Widget 程式碼可大幅複用。
+
+### 與 iOS 的差異
+
+| 項目 | iOS | macOS |
+|------|-----|-------|
+| Widget 顯示位置 | 主畫面、鎖定畫面 | 通知中心、桌面（Sonoma+） |
+| 最低版本 | 14.0 | 11.0 |
+| UIColor | ✅ 可用 | ❌ 需改用 `Color` 或 `NSColor` |
+| App Group 設定 | Signing & Capabilities | 相同 |
+
+### 移植要點
+
+1. `CourseAppWidget.swift` 中的 `UIColor` 需替換為跨平台寫法：
+   ```swift
+   // 原本（僅 iOS）
+   Color(UIColor(red: 0.15, green: 0.45, blue: 1.00, alpha: 1))
+
+   // 跨平台
+   Color(red: 0.15, green: 0.45, blue: 1.00)
+   ```
+2. `SwiftApCommonPlugin.swift` 的 MethodChannel 邏輯在 macOS 上相同
+3. Dart 端 `configure()` 已支援 macOS（`Platform.isMacOS` 判斷）
+
+### 不支援的平台
+
+| 平台 | 原因 |
+|------|------|
+| **Windows** | Widget Provider 需 C++/WinRT 實作 `IWidgetProvider` COM 介面，Flutter 生態系無可用方案 |
+| **Linux** | 桌面環境碎片化（KDE 用 QML、GNOME 用 GJS），無統一 widget 框架 |
+| **Web** | PWA 不支援原生 widget，W3C 提案仍在早期階段 |
+
+:::info 相關 Flutter Issue
+- [flutter/flutter#16092](https://github.com/flutter/flutter/issues/16092) — Support iOS app extensions
+- [flutter/flutter#110286](https://github.com/flutter/flutter/issues/110286) — Support WidgetKit
+- [flutter/flutter#97273](https://github.com/flutter/flutter/issues/97273) — Add iOS WidgetKit support
+:::
