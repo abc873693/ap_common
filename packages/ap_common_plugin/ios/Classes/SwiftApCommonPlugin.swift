@@ -52,7 +52,6 @@ public class SwiftApCommonPlugin: NSObject, FlutterPlugin {
             if let appGroupId = appGroupId,
                let groupDefaults = UserDefaults(suiteName: appGroupId) {
                 groupDefaults.set(json, forKey: SwiftApCommonPlugin.keyCourseNotify)
-                groupDefaults.synchronize()
             }
             if #available(iOS 14.0, *) {
                 WidgetCenter.shared.reloadAllTimelines()
@@ -65,7 +64,6 @@ public class SwiftApCommonPlugin: NSObject, FlutterPlugin {
             if let appGroupId = appGroupId,
                let groupDefaults = UserDefaults(suiteName: appGroupId) {
                 groupDefaults.removeObject(forKey: SwiftApCommonPlugin.keyCourseNotify)
-                groupDefaults.synchronize()
             }
             if #available(iOS 14.0, *) {
                 WidgetCenter.shared.reloadAllTimelines()

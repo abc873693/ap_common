@@ -145,8 +145,9 @@ class CourseAppWidgetProvider : AppWidgetProvider() {
                         .getString("startTime")
                     val building = location?.optString("building", "") ?: ""
                     val room = location?.optString("room", "") ?: ""
-                    val locationText = if (building == "null") "" else building +
-                        if (room == "null") "" else room
+                    val locationText = listOf(building, room)
+                        .filter { it.isNotEmpty() && it != "null" }
+                        .joinToString("")
                     todayCourses.add(
                         Course(
                             location = locationText,

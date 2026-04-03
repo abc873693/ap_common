@@ -66,7 +66,6 @@ class ApCommonPlugin : FlutterPlugin, MethodCallHandler {
         val widgetComponent = ComponentName(context, CourseAppWidgetProvider::class.java)
         val widgetIds = appWidgetManager.getAppWidgetIds(widgetComponent)
         if (widgetIds.isNotEmpty()) {
-            appWidgetManager.notifyAppWidgetViewDataChanged(widgetIds, android.R.id.text1)
             CourseAppWidgetProvider().onUpdate(context, appWidgetManager, widgetIds)
         }
     }
