@@ -1,19 +1,23 @@
 package me.rainvisitor.ap_common_plugin
 
-import android.appwidget.AppWidgetManager
-import android.content.ComponentName
 import android.content.Context
 import androidx.annotation.NonNull
+import androidx.glance.appwidget.GlanceAppWidgetManager
+import androidx.glance.appwidget.updateAll
 import io.flutter.embedding.engine.plugins.FlutterPlugin
 import io.flutter.plugin.common.MethodCall
 import io.flutter.plugin.common.MethodChannel
 import io.flutter.plugin.common.MethodChannel.MethodCallHandler
 import io.flutter.plugin.common.MethodChannel.Result
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 
 /** ApCommonPlugin */
 class ApCommonPlugin : FlutterPlugin, MethodCallHandler {
     private lateinit var channel: MethodChannel
     private lateinit var context: Context
+    private val scope = CoroutineScope(Dispatchers.Main)
 
     companion object {
         const val PREF_NAME = "ap_common_plugin"
@@ -62,11 +66,8 @@ class ApCommonPlugin : FlutterPlugin, MethodCallHandler {
     }
 
     private fun notifyWidgetUpdate() {
-        val appWidgetManager = AppWidgetManager.getInstance(context)
-        val widgetComponent = ComponentName(context, CourseAppWidgetProvider::class.java)
-        val widgetIds = appWidgetManager.getAppWidgetIds(widgetComponent)
-        if (widgetIds.isNotEmpty()) {
-            CourseAppWidgetProvider().onUpdate(context, appWidgetManager, widgetIds)
+        scope.launch {
+            CourseAppWidget().updateAll(context)
         }
     }
 
