@@ -36,7 +36,12 @@ void main() {
   }
 
   group('ApLoginPage', () {
+    const Size largeSize = Size(1080, 1920);
+
     testWidgets('should render login form', (WidgetTester tester) async {
+      await tester.binding.setSurfaceSize(largeSize);
+      addTearDown(() => tester.binding.setSurfaceSize(null));
+
       await tester.pumpWidget(
         buildTestApp(
           Builder(
@@ -68,6 +73,9 @@ void main() {
 
     testWidgets('should render with text logo mode',
         (WidgetTester tester) async {
+      await tester.binding.setSurfaceSize(largeSize);
+      addTearDown(() => tester.binding.setSurfaceSize(null));
+
       await tester.pumpWidget(
         buildTestApp(
           ApLoginPage(
@@ -84,6 +92,9 @@ void main() {
 
     testWidgets('should show offline login button when enabled',
         (WidgetTester tester) async {
+      await tester.binding.setSurfaceSize(largeSize);
+      addTearDown(() => tester.binding.setSurfaceSize(null));
+
       await tester.pumpWidget(
         buildTestApp(
           ApLoginPage(
@@ -102,6 +113,9 @@ void main() {
 
     testWidgets('should show checkboxes for auto-login and remember password',
         (WidgetTester tester) async {
+      await tester.binding.setSurfaceSize(largeSize);
+      addTearDown(() => tester.binding.setSurfaceSize(null));
+
       await tester.pumpWidget(
         buildTestApp(
           ApLoginPage(
@@ -118,6 +132,9 @@ void main() {
 
     testWidgets('should load saved username from preferences',
         (WidgetTester tester) async {
+      await tester.binding.setSurfaceSize(largeSize);
+      addTearDown(() => tester.binding.setSurfaceSize(null));
+
       await mockPrefs.setString('pref_username', 'saved_user');
 
       await tester.pumpWidget(

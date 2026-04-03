@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:ap_common_core/injector.dart';
 import 'package:ap_common_flutter_ui/ap_common_flutter_ui.dart';
 import 'package:flutter/material.dart';
@@ -38,10 +40,7 @@ void main() {
       await tester.pumpWidget(
         buildTestApp(
           ApScorePage(
-            onLoadSemesters: () async {
-              await Future<void>.delayed(const Duration(seconds: 10));
-              return _mockSemesterData();
-            },
+            onLoadSemesters: () => Completer<SemesterData>().future,
             onLoadScore: (Semester semester) async => _mockScoreData(),
           ),
         ),
