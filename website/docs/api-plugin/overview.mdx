@@ -1,0 +1,36 @@
+---
+sidebar_position: 1
+---
+
+# 原生插件總覽
+
+`ap_common_plugin` 提供校務通系列 App 所需的原生平台功能，目前支援**課表桌面小工具**。
+
+## 支援平台
+
+| 功能 | Android | iOS | macOS | Web |
+|:---:|:-------:|:---:|:-----:|:---:|
+| 課表小工具 | ✅ | ✅ | — | — |
+
+## 安裝
+
+在 `pubspec.yaml` 中加入：
+
+```yaml title="pubspec.yaml"
+dependencies:
+  ap_common_plugin: ^1.0.1-dev.3
+```
+
+```bash
+flutter pub get
+```
+
+## API 總覽
+
+| 方法 | 說明 |
+|------|------|
+| `ApCommonPlugin.configure()` | 設定 iOS App Group ID |
+| `ApCommonPlugin.updateCourseWidget()` | 更新課表小工具資料 |
+| `ApCommonPlugin.clearCourseWidget()` | 清除課表小工具資料 |
+| `ApCommonPlugin.setFakeCourseWidget()` | 注入假資料供測試 |
+| `ApCommonPlugin.platformVersion` | 取得平台版本字串 |

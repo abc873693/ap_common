@@ -1,0 +1,262 @@
+---
+sidebar_position: 2
+---
+
+# 課表桌面小工具
+
+提供原生桌面小工具（App Widget），在手機主畫面或鎖定畫面顯示下一堂課的資訊。
+
+## 資料流程
+
+```
+Dart (CourseData)
+  │
+  ▼ jsonEncode → MethodChannel
+  │
+  ├─ Android: SharedPreferences → AppWidgetManager 更新
+  │
+  └─ iOS:     App Group UserDefaults → WidgetCenter 更新
+```
+
+## Dart 端使用
+
+### 初始化
+
+iOS 需要設定 App Group ID，讓主 App 與 Widget Extension 共享資料。Android 會忽略此設定。
+
+```dart
+import 'package:ap_common_plugin/ap_common_plugin.dart';
+
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+
+  if (!kIsWeb && (Platform.isIOS || Platform.isMacOS)) {
+    await ApCommonPlugin.configure(
+      appGroupId: 'group.com.yourapp.id',
+    );
+  }
+
+  runApp(const MyApp());
+}
+```
+
+### 更新小工具
+
+在課表資料載入成功後呼叫：
+
+```dart
+final CourseData courseData = await fetchCourseData();
+
+// 儲存快取
+courseData.save(semester.cacheSaveTag);
+
+// 推送至原生小工具
+await ApCommonPlugin.updateCourseWidget(courseData);
+```
+
+### 清除小工具
+
+在使用者登出時清除小工具資料：
+
+```dart
+await ApCommonPlugin.clearCourseWidget();
+```
+
+### 測試用假資料
+
+在除錯模式下注入假課程資料，會建立兩筆課程（30 分鐘後、90 分鐘後）：
+
+```dart
+if (kDebugMode) {
+  await ApCommonPlugin.setFakeCourseWidget();
+}
+```
+
+:::tip 設定頁整合範例
+可在設定頁面加入除錯區塊，方便測試：
+
+```dart
+if (kDebugMode) ...[
+  SettingItem(
+    text: '設定測試課表 Widget',
+    subText: '注入 30 分鐘後的假課程資料',
+    onTap: () async {
+      await ApCommonPlugin.setFakeCourseWidget();
+    },
+  ),
+  SettingItem(
+    text: '清除課表 Widget',
+    subText: '移除 Widget 中的課程資料',
+    onTap: () async {
+      await ApCommonPlugin.clearCourseWidget();
+    },
+  ),
+]
+```
+:::
+
+## Android 整合
+
+Plugin 已包含完整的 `CourseAppWidgetProvider` 實作，不需要額外撰寫原生程式碼。
+
+### AndroidManifest.xml
+
+確認 `AndroidManifest.xml` 中有註冊 widget receiver：
+
+```xml title="android/app/src/main/AndroidManifest.xml"
+<receiver
+    android:name="me.rainvisitor.ap_common_plugin.CourseAppWidgetProvider"
+    android:exported="true">
+    <intent-filter>
+        <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
+    </intent-filter>
+    <meta-data
+        android:name="android.appwidget.provider"
+        android:resource="@xml/course_appwidget_info" />
+</receiver>
+```
+
+### Widget 規格
+
+| 項目 | 值 |
+|------|------|
+| 最小尺寸 | 160dp x 40dp |
+| 更新週期 | 100 分鐘 |
+| 縮放模式 | 水平 + 垂直 |
+| 分類 | 主畫面 |
+
+## iOS 整合
+
+iOS 的 Widget Extension 需要在各 App 的 Xcode 專案中獨立建立，Plugin 提供範例程式碼作為參考。
+
+### Step 1：建立 Widget Extension
+
+在 Xcode 中 **File → New → Target → Widget Extension**，命名為 `CourseAppWidget`。
+
+### Step 2：設定 App Group
+
+在主 App 和 Widget Extension 的 **Signing & Capabilities** 中加入相同的 App Group：
+
+```
+group.com.yourapp.id
+```
+
+:::caution 重要
+此 ID 必須與 Dart 端 `ApCommonPlugin.configure(appGroupId:)` 傳入的值一致。
+:::
+
+### Step 3：建立資料模型
+
+在 Widget Extension 中建立 `CourseData.swift`，欄位需與 Dart 端的 `CourseData` JSON 格式一致：
+
+```swift title="CourseAppWidget/CourseData.swift"
+import Foundation
+
+struct CourseData: Codable {
+    let courses: [Course]
+    let timeCodes: [TimeCode]
+}
+
+struct Course: Codable {
+    let code: String
+    let title: String
+    let className: String?
+    let group: String?
+    let units: String?
+    let hours: String?
+    let required: String?
+    let sectionTimes: [SectionTime]
+    let location: Location?
+    let instructors: [String]
+
+    enum CodingKeys: String, CodingKey {
+        case code, title, className, group, units, hours
+        case required
+        case sectionTimes, location, instructors
+    }
+}
+
+struct Location: Codable {
+    let building: String?
+    let room: String?
+}
+
+struct SectionTime: Codable {
+    let weekday: Int
+    let index: Int
+}
+
+struct TimeCode: Codable {
+    let title: String
+    let startTime: String
+    let endTime: String
+}
+```
+
+:::caution JSON 欄位對應注意事項
+- `required` 是 Swift 保留字，需透過 `CodingKeys` 明確對應
+- `location` 必須為 `Optional`（`Location?`），因為部分課程可能沒有地點資訊
+- `sectionTimes` 對應 Dart 端的 `@JsonKey(name: 'sectionTimes')` 欄位
+- `startTime` 格式支援 `"HH:mm"` 和 `"HHmm"` 兩種
+:::
+
+### Step 4：實作 Timeline Provider
+
+從 App Group UserDefaults 讀取課程資料，計算今天的下一堂課：
+
+```swift title="CourseAppWidget/CourseAppWidget.swift"
+struct Provider: TimelineProvider {
+    func getTimeline(
+        in context: Context,
+        completion: @escaping (Timeline<SimpleEntry>) -> Void
+    ) {
+        let defaults = UserDefaults(
+            suiteName: "group.com.yourapp.id"
+        )
+        let json = defaults?.string(forKey: "course_notify")
+
+        // 解碼 JSON
+        guard let data = json?.data(using: .utf8),
+              let courseData = try? JSONDecoder().decode(
+                  CourseData.self, from: data
+              )
+        else {
+            // 無資料時的預設顯示
+            let entry = SimpleEntry(text: "尚無課程資料")
+            let timeline = Timeline(
+                entries: [entry], policy: .atEnd
+            )
+            completion(timeline)
+            return
+        }
+
+        // 計算今天星期幾 (ISO 8601: 1=週一, 7=週日)
+        let components = Calendar.current.dateComponents(
+            in: TimeZone.current, from: Date()
+        )
+        let weekday = components.weekday == 1
+            ? 7
+            : (components.weekday ?? 1) - 1
+
+        // 找出下一堂課...
+    }
+}
+```
+
+### 支援的 Widget 尺寸
+
+| Widget Family | iOS 版本 | 顯示位置 |
+|:---:|:---:|:---:|
+| `systemSmall` | 14.0+ | 主畫面 |
+| `systemMedium` | 14.0+ | 主畫面 |
+| `systemLarge` | 14.0+ | 主畫面 |
+| `accessoryRectangular` | 16.0+ | 鎖定畫面 |
+| `accessoryInline` | 16.0+ | 鎖定畫面 |
+
+:::tip 完整範例
+完整的 iOS Widget 實作可參考 Plugin 原始碼中的 `ios/CourseAppWidget/` 目錄，包含：
+- `CourseAppWidget.swift` — Timeline Provider 與各尺寸 Widget View
+- `CourseData.swift` — 資料模型
+
+也可參考 [高科校務通](https://github.com/NKUST-ITC/NKUST-AP-Flutter) 的實際整合。
+:::

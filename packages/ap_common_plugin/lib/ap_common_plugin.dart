@@ -41,4 +41,62 @@ class ApCommonPlugin {
   static Future<void> clearCourseWidget() async {
     await _channel.invokeMethod<void>('clearCourseWidget');
   }
+
+  /// Update the course widget with fake data for testing.
+  ///
+  /// Injects two courses starting 30 and 90 minutes from now
+  /// on today's weekday. Only intended for debug builds.
+  static Future<void> setFakeCourseWidget() async {
+    final DateTime now = DateTime.now();
+    final DateTime t1 = now.add(const Duration(minutes: 30));
+    final DateTime t2 = now.add(const Duration(minutes: 90));
+    final DateTime t3 = now.add(const Duration(minutes: 150));
+    String fmt(DateTime dt) =>
+        '${dt.hour.toString().padLeft(2, '0')}:'
+        '${dt.minute.toString().padLeft(2, '0')}';
+    await updateCourseWidget(
+      CourseData(
+        courses: <Course>[
+          Course(
+            code: 'TEST001',
+            title: '測試課程 A',
+            className: 'Test',
+            instructors: <String>['測試教師'],
+            location: const Location(
+              building: 'EC',
+              room: '5012',
+            ),
+            times: <SectionTime>[
+              SectionTime(weekday: now.weekday, index: 0),
+            ],
+          ),
+          Course(
+            code: 'TEST002',
+            title: '測試課程 B',
+            className: 'Test',
+            instructors: <String>['測試教師'],
+            location: const Location(
+              building: 'EC',
+              room: '4008',
+            ),
+            times: <SectionTime>[
+              SectionTime(weekday: now.weekday, index: 1),
+            ],
+          ),
+        ],
+        timeCodes: <TimeCode>[
+          TimeCode(
+            title: 'T1',
+            startTime: fmt(t1),
+            endTime: fmt(t2),
+          ),
+          TimeCode(
+            title: 'T2',
+            startTime: fmt(t2),
+            endTime: fmt(t3),
+          ),
+        ],
+      ),
+    );
+  }
 }
