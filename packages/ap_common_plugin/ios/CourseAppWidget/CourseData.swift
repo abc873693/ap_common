@@ -15,13 +15,14 @@ struct Course: Codable {
     let units: String?
     let hours: String?
     let required: String?
+    let at: String?
     let sectionTimes: [SectionTime]
     let location: Location?
     let instructors: [String]
 
     enum CodingKeys: String, CodingKey {
         case code, title, className, group, units, hours
-        case required
+        case required, at
         case sectionTimes, location, instructors
     }
 }

@@ -165,13 +165,14 @@ struct Course: Codable {
     let units: String?
     let hours: String?
     let required: String?
+    let at: String?
     let sectionTimes: [SectionTime]
     let location: Location?
     let instructors: [String]
 
     enum CodingKeys: String, CodingKey {
         case code, title, className, group, units, hours
-        case required
+        case required, at
         case sectionTimes, location, instructors
     }
 }
@@ -194,9 +195,9 @@ struct TimeCode: Codable {
 ```
 
 :::caution JSON 欄位對應注意事項
-- `required` 是 Swift 保留字，需透過 `CodingKeys` 明確對應
-- `location` 必須為 `Optional`（`Location?`），因為部分課程可能沒有地點資訊
-- `sectionTimes` 對應 Dart 端的 `@JsonKey(name: 'sectionTimes')` 欄位
+- `required` 和 `at` 是 Swift 保留字/關鍵字，需透過 `CodingKeys` 明確對應
+- `location` 必須為 `Optional`（`Location?`），因為部分課程可能沒有地點資訊；Dart 端 `Location` 的 `building` 和 `room` 雖為 required，但 JSON 層級可能為 null
+- `sectionTimes` 對應 Dart 端屬性名為 `times`，透過 `@JsonKey(name: 'sectionTimes')` 映射為 JSON key `sectionTimes`
 - `startTime` 格式支援 `"HH:mm"` 和 `"HHmm"` 兩種
 :::
 
