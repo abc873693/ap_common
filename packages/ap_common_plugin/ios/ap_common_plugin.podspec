@@ -5,17 +5,17 @@
 Pod::Spec.new do |s|
   s.name             = 'ap_common_plugin'
   s.version          = '0.0.1'
-  s.summary          = 'A new Flutter plugin project.'
+  s.summary          = 'AP Common native plugin for course widget.'
   s.description      = <<-DESC
-A new Flutter plugin.
+Flutter plugin providing native course schedule widget for iOS and Android.
                        DESC
-  s.homepage         = 'http://example.com'
+  s.homepage         = 'https://github.com/abc873693/ap_common'
   s.license          = { :file => '../LICENSE' }
-  s.author           = { 'Your Company' => 'email@example.com' }
+  s.author           = { 'Rainvisitor' => 'abc873693@gmail.com' }
   s.source           = { :path => '.' }
   s.source_files = 'Classes/**/*'
   s.dependency 'Flutter'
-  s.platform = :ios, '12.0'
+  s.platform = :ios, '14.0'
 
   # Flutter.framework does not contain a i386 slice.
   s.pod_target_xcconfig = { 'DEFINES_MODULE' => 'YES', 'EXCLUDED_ARCHS[sdk=iphonesimulator*]' => 'i386' }

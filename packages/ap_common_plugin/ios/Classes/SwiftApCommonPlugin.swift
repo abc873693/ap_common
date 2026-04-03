@@ -1,14 +1,76 @@
 import Flutter
 import UIKit
+import WidgetKit
 
 public class SwiftApCommonPlugin: NSObject, FlutterPlugin {
-  public static func register(with registrar: FlutterPluginRegistrar) {
-    let channel = FlutterMethodChannel(name: "ap_common_plugin", binaryMessenger: registrar.messenger())
-    let instance = SwiftApCommonPlugin()
-    registrar.addMethodCallDelegate(instance, channel: channel)
-  }
+    private static let keyAppGroupId = "app_group_id"
+    private static let keyCourseNotify = "course_notify"
+    private static let prefName = "ap_common_plugin"
 
-  public func handle(_ call: FlutterMethodCall, result: @escaping FlutterResult) {
-    result("iOS " + UIDevice.current.systemVersion)
-  }
+    public static func register(with registrar: FlutterPluginRegistrar) {
+        let channel = FlutterMethodChannel(
+            name: "ap_common_plugin",
+            binaryMessenger: registrar.messenger()
+        )
+        let instance = SwiftApCommonPlugin()
+        registrar.addMethodCallDelegate(instance, channel: channel)
+    }
+
+    public func handle(_ call: FlutterMethodCall, result: @escaping FlutterResult) {
+        switch call.method {
+        case "getPlatformVersion":
+            result("iOS " + UIDevice.current.systemVersion)
+        case "configure":
+            guard let args = call.arguments as? [String: String],
+                  let appGroupId = args["appGroupId"] else {
+                result(
+                    FlutterError(
+                        code: "INVALID_ARGUMENT",
+                        message: "appGroupId is required",
+                        details: nil
+                    )
+                )
+                return
+            }
+            let prefs = UserDefaults.standard
+            prefs.set(appGroupId, forKey: SwiftApCommonPlugin.keyAppGroupId)
+            result(nil)
+        case "updateCourseWidget":
+            guard let json = call.arguments as? String else {
+                result(
+                    FlutterError(
+                        code: "INVALID_ARGUMENT",
+                        message: "Course data JSON is required",
+                        details: nil
+                    )
+                )
+                return
+            }
+            let appGroupId = UserDefaults.standard.string(
+                forKey: SwiftApCommonPlugin.keyAppGroupId
+            )
+            if let appGroupId = appGroupId,
+               let groupDefaults = UserDefaults(suiteName: appGroupId) {
+                groupDefaults.set(json, forKey: SwiftApCommonPlugin.keyCourseNotify)
+            }
+            if #available(iOS 14.0, *) {
+                WidgetCenter.shared.reloadAllTimelines()
+            }
+            result(nil)
+        case "clearCourseWidget":
+            let appGroupId = UserDefaults.standard.string(
+                forKey: SwiftApCommonPlugin.keyAppGroupId
+            )
+            if let appGroupId = appGroupId,
+               let groupDefaults = UserDefaults(suiteName: appGroupId) {
+                groupDefaults.removeObject(forKey: SwiftApCommonPlugin.keyCourseNotify)
+            }
+            if #available(iOS 14.0, *) {
+                WidgetCenter.shared.reloadAllTimelines()
+            }
+            result(nil)
+        default:
+            result(FlutterMethodNotImplemented)
+        }
+    }
 }
