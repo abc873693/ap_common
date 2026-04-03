@@ -1,3 +1,30 @@
+## 1.0.1-dev.1
+
+ - **REFACTOR**(l10n): address code review feedback. ([7c7b84e0](https://github.com/abc873693/ap_common/commit/7c7b84e08be6352a3e50d427ce792834c0435a2c))
+ - **REFACTOR**(l10n): clean up intl remnants after slang migration. ([ea893e6d](https://github.com/abc873693/ap_common/commit/ea893e6d5b0e0587231cab2741e309da909d5a7b))
+ - **REFACTOR**(core): introduce ApiResult sealed class for typed API responses. ([8538398e](https://github.com/abc873693/ap_common/commit/8538398e9514ea653847833b5ce571ef44b89c2f))
+ - **FIX**: resolve analyze errors and lint issues in simplified UI integration. ([d0f2e45e](https://github.com/abc873693/ap_common/commit/d0f2e45eef25441b5786f3e65f4190b4e798b342))
+ - **FIX**: resolve all pre-existing lint issues across packages. ([13d260b3](https://github.com/abc873693/ap_common/commit/13d260b36a8fc21b79cd1ab94d855d0138e5d9b3))
+ - **FIX**: resolve analyze-ci lint issues in changed files. ([ea86b935](https://github.com/abc873693/ap_common/commit/ea86b9350c97dac8e51fad98273c4d9f2925e3b7))
+ - **FIX**: resolve all pre-existing lint issues across packages. ([84db9998](https://github.com/abc873693/ap_common/commit/84db99986ccfac62b720cbf69f03bc021c154bc5))
+ - **FIX**(firebase): upgrade firebase deps and adapt to new API. ([7540d9db](https://github.com/abc873693/ap_common/commit/7540d9db6474bef1e6952a72366686389087f2ad))
+ - **FIX**: model test error. ([dfaa2cc8](https://github.com/abc873693/ap_common/commit/dfaa2cc87a5667212617d63fe534334fe51fc06b))
+ - **FIX**: pub publish requirement. ([1dc81f7d](https://github.com/abc873693/ap_common/commit/1dc81f7dcf5a1445aa14b66b6d2004b7d94ad6b2))
+ - **FIX**: `ap_common_core` separate static error. ([177a00fd](https://github.com/abc873693/ap_common/commit/177a00fd613c7d869643f8d2c7ab02bc102fc064))
+ - **FEAT**(ui): add HomePageScaffold.fromDataState() and test suite. ([307a296b](https://github.com/abc873693/ap_common/commit/307a296b6fc6268e4a147faa1093d7e9e0a58221))
+ - **FEAT**(ui): add simplified UI integration API with DataState sealed class. ([54f566bd](https://github.com/abc873693/ap_common/commit/54f566bd0dc3fe857ef623d5ac8c24e23547f096))
+ - **FEAT**: model unit test. ([d3d5de68](https://github.com/abc873693/ap_common/commit/d3d5de688cdba555e2f9ca7e475f031645f578d2))
+ - **FEAT**: improve model generate by `freezed`. ([43bef51c](https://github.com/abc873693/ap_common/commit/43bef51c42f8cf8b984074d42c16c403ee83c02c))
+ - **FEAT**: `AnalyticsUtil` and `CrashlyticsUtil` migrate to injection version. ([0e8a9aab](https://github.com/abc873693/ap_common/commit/0e8a9aab76b2a6994dbcfdf4814e6f7104e4b312))
+ - **FEAT**: move UI implement to `ap_common_flutter_ui`. ([803b2dcb](https://github.com/abc873693/ap_common/commit/803b2dcbb37d970de803670c7a76404356c4a651))
+ - **FEAT**: move native platform util implement to `ap_common_flutter_platform`. ([55b2fa00](https://github.com/abc873693/ap_common/commit/55b2fa00ea5fa4dafb15fc19e19b33dd9d72ef92))
+ - **FEAT**: migrate `util` `l10n`  to new `ap_common_flutter_core`. ([be152bac](https://github.com/abc873693/ap_common/commit/be152bac1b94f8e80baba9c098a938c44246b810))
+ - **FEAT**: centralized package lint rule. ([c2b8ad80](https://github.com/abc873693/ap_common/commit/c2b8ad8000bb19d0d5fccdaf63f0411329e6dcfa))
+ - **FEAT**: release `ap_common_core` v0.0.2. ([7eef7658](https://github.com/abc873693/ap_common/commit/7eef76580b57b66dfd78f5692cdc2a8748f575a3))
+ - **FEAT**: migrate `NotificationUtil` and `Preference` to injection version. ([4326c12e](https://github.com/abc873693/ap_common/commit/4326c12e28732d86a1b5a0fff2fdd6d3a3c6e5e6))
+ - **FEAT**: `ap_common` import `ap_common_core`. ([d463f7c7](https://github.com/abc873693/ap_common/commit/d463f7c7b5cd78c171b90eea0210f81649fc5626))
+ - **FEAT**: migrate `model`  `util` `config` to new `ap_common_core`. ([3887bc05](https://github.com/abc873693/ap_common/commit/3887bc05ebf8612f2b2a1cc607ec3c3fdf3135e1))
+
 ## 1.0.1-dev.0
 
  - **FIX**(firebase): upgrade firebase deps and adapt to new API. ([7540d9db](https://github.com/abc873693/ap_common/commit/7540d9db6474bef1e6952a72366686389087f2ad))
