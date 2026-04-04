@@ -30,6 +30,10 @@ dependencies:
   sign_in_with_apple: ^6.1.1
 
 dev_dependencies:
+  ap_common_core:
+    path: ../ap_common_core
+  flutter_localizations:
+    sdk: flutter
   flutter_test:
     sdk: flutter
   http_mock_adapter: ^0.6.1
