@@ -15,6 +15,193 @@ Packages with breaking changes:
 
 Packages with other changes:
 
+ - [`ap_common` - `v1.0.1-dev.5`](#ap_common---v101-dev5)
+ - [`ap_common_announcement_ui` - `v1.0.1-dev.6`](#ap_common_announcement_ui---v101-dev6)
+ - [`ap_common_core` - `v1.0.1-dev.3`](#ap_common_core---v101-dev3)
+ - [`ap_common_firebase` - `v1.0.1-dev.6`](#ap_common_firebase---v101-dev6)
+ - [`ap_common_flutter_core` - `v1.1.0-dev.6`](#ap_common_flutter_core---v110-dev6)
+ - [`ap_common_flutter_platform` - `v1.0.1-dev.6`](#ap_common_flutter_platform---v101-dev6)
+ - [`ap_common_flutter_ui` - `v1.1.0-dev.6`](#ap_common_flutter_ui---v110-dev6)
+ - [`ap_common_plugin` - `v1.0.1-dev.5`](#ap_common_plugin---v101-dev5)
+
+---
+
+#### `ap_common` - `v1.0.1-dev.5`
+
+ - **REFACTOR**(ui): fix lint errors and improve code quality. ([36a092bd](https://github.com/abc873693/ap_common/commit/36a092bd42002835b5ea2252c15d21f78d39691d))
+ - **FIX**(deps): downgrade ap_common version and fix flutter_ui constraint. ([c3167a59](https://github.com/abc873693/ap_common/commit/c3167a590546fcac8cc858dd4c97ac5b87d4be51))
+ - **DOCS**(announcement): fix Swagger spec for ban API. ([5a7efe3c](https://github.com/abc873693/ap_common/commit/5a7efe3ca6d3181024b69286451c3b5d3ebfa137))
+ - **DOCS**(swagger): sync announcement_api.json with current implementation. ([ce398d86](https://github.com/abc873693/ap_common/commit/ce398d865056f734652cf80454add2a2030aa101))
+
+#### `ap_common_announcement_ui` - `v1.0.1-dev.6`
+
+ - **REFACTOR**(announcement): extract AnnouncementEditForm and add widget tests. ([f8907ad0](https://github.com/abc873693/ap_common/commit/f8907ad0a43968b88f8d1eb0aa4366e7d68c2736))
+ - **REFACTOR**(announcement): move thumbnail to right side of card. ([e51e4f3a](https://github.com/abc873693/ap_common/commit/e51e4f3ae7cd88b5d3f48cd8220289e5959d95d9))
+ - **REFACTOR**(announcement): improve home page UX with card preview and tab navigation. ([ed4f8387](https://github.com/abc873693/ap_common/commit/ed4f8387216a3e2bc2ffb74854e04fac918e09ae))
+ - **REFACTOR**(announcement): redesign UI with DataState and Material Design 3. ([4a6689d5](https://github.com/abc873693/ap_common/commit/4a6689d57265a4e4437a4da01642e3f275822b51))
+ - **REFACTOR**(announcement): add showErrorToast extension and simplify UI error handling. ([dc46221d](https://github.com/abc873693/ap_common/commit/dc46221d222f1a68a458d6a226d82ccf7bf7049a))
+ - **REFACTOR**(announcement): migrate UI pages to async/await with ApiResult. ([31902f52](https://github.com/abc873693/ap_common/commit/31902f525e92830fd6c88fde3555e4ba58ba6d05))
+ - **REFACTOR**(announcement): rewrite API helpers with ApiResult, remove GeneralCallback. ([715803a4](https://github.com/abc873693/ap_common/commit/715803a4fd1c45cda7b66c0857150cdfb79062f4))
+ - **REFACTOR**(l10n): use context-based translation access for reactive locale switching. ([e9429aa1](https://github.com/abc873693/ap_common/commit/e9429aa1bbfc2e97b72e0010d8bebf63777b050d))
+ - **REFACTOR**(l10n): restore original i18n variable naming conventions. ([c21ed521](https://github.com/abc873693/ap_common/commit/c21ed521369b6a3f6030da7ac9a9bae6b97d13dd))
+ - **REFACTOR**(l10n): update UI packages to use slang translation API. ([697e1e15](https://github.com/abc873693/ap_common/commit/697e1e15b28ab194f71e322da1acf48d14fb2cd2))
+ - **FIX**(core,announcement): address PR review comments. ([858e4a5d](https://github.com/abc873693/ap_common/commit/858e4a5dcedf35e900562aae7f2c050a5150f718))
+ - **FIX**(announcement): add final to local variable. ([4eb1de84](https://github.com/abc873693/ap_common/commit/4eb1de84de740cef9d87297a4ee725557132fc1c))
+ - **FIX**(announcement): correct HTTP method and path for ban API. ([f3073b1a](https://github.com/abc873693/ap_common/commit/f3073b1ac8746c0d7498845a862a74df6d416a10))
+ - **FIX**: reject and add to ban error. ([80734bed](https://github.com/abc873693/ap_common/commit/80734bed83acf7e9a7b334c0a5754269cd8030e5))
+ - **FIX**(announcement): handle nested API errors in _announcementSubmit. ([819636e4](https://github.com/abc873693/ap_common/commit/819636e4f5aeddc2ea427bb91ebdc1d6aac0ca5e))
+ - **FIX**: resolve analyze-ci lint issues in changed files. ([ea86b935](https://github.com/abc873693/ap_common/commit/ea86b9350c97dac8e51fad98273c4d9f2925e3b7))
+ - **FIX**: pub publish requirement. ([1dc81f7d](https://github.com/abc873693/ap_common/commit/1dc81f7dcf5a1445aa14b66b6d2004b7d94ad6b2))
+ - **FIX**: packages version constraint. ([8231a423](https://github.com/abc873693/ap_common/commit/8231a423b237d6f38b3531ec4fc2b06e713a6c51))
+ - **FEAT**(firebase,announcement): wire FCM token for review push notifications. ([f3569aa7](https://github.com/abc873693/ap_common/commit/f3569aa73fa3dbfeb9a32b58906558c603a5aa79))
+ - **FEAT**(announcement): add review status filter chips for applications. ([9129d115](https://github.com/abc873693/ap_common/commit/9129d115821d8b350f8cd3637b925736da201021))
+ - **FEAT**(announcement): show application rules on edit page. ([2cd76010](https://github.com/abc873693/ap_common/commit/2cd7601042d16996ee16c99c754e7b2e4e630570))
+ - **FEAT**(announcement): add editor management page and tag filter. ([6ebe38e8](https://github.com/abc873693/ap_common/commit/6ebe38e8ac43b6ca8d16e3e3880fbd89bae3919c))
+ - **FEAT**(announcement): add auto re-login on 401 for all login types. ([b9aa2dea](https://github.com/abc873693/ap_common/commit/b9aa2deaf8e9b2e9666010fce43bc6d9856d7d66))
+ - **FEAT**(announcement): add applicant copy and blacklist indicator. ([6cedddaf](https://github.com/abc873693/ap_common/commit/6cedddaf1a45fe684e66fc8f2cc63cdfbe7929a0))
+ - **FEAT**(announcement): add full CRUD and M3 UI for black list page. ([a68d5224](https://github.com/abc873693/ap_common/commit/a68d5224d0518e7383a28813e2667d05584ea483))
+ - **FEAT**(announcement): display applicant email on edit application page. ([f898b3e7](https://github.com/abc873693/ap_common/commit/f898b3e7544a72bcb250fbb3e09ead662482fbf0))
+ - **FEAT**: improve model generate by `freezed`. ([43bef51c](https://github.com/abc873693/ap_common/commit/43bef51c42f8cf8b984074d42c16c403ee83c02c))
+ - **FEAT**: align image upload naming. ([ab2f2492](https://github.com/abc873693/ap_common/commit/ab2f2492f05117a2474357cbd7373498b40df878))
+ - **FEAT**: revert imgur implement. ([30bbf5ea](https://github.com/abc873693/ap_common/commit/30bbf5eadc1b05d08f5c269169e9bfe715c5bbb0))
+ - **FEAT**: move UI implement to `ap_common_flutter_ui`. ([803b2dcb](https://github.com/abc873693/ap_common/commit/803b2dcbb37d970de803670c7a76404356c4a651))
+
+#### `ap_common_core` - `v1.0.1-dev.3`
+
+ - **REFACTOR**(l10n): address code review feedback. ([7c7b84e0](https://github.com/abc873693/ap_common/commit/7c7b84e08be6352a3e50d427ce792834c0435a2c))
+ - **REFACTOR**(l10n): clean up intl remnants after slang migration. ([ea893e6d](https://github.com/abc873693/ap_common/commit/ea893e6d5b0e0587231cab2741e309da909d5a7b))
+ - **REFACTOR**(core): introduce ApiResult sealed class for typed API responses. ([8538398e](https://github.com/abc873693/ap_common/commit/8538398e9514ea653847833b5ce571ef44b89c2f))
+ - **FIX**(core,announcement): address PR review comments. ([858e4a5d](https://github.com/abc873693/ap_common/commit/858e4a5dcedf35e900562aae7f2c050a5150f718))
+ - **FIX**: resolve analyze errors and lint issues in simplified UI integration. ([d0f2e45e](https://github.com/abc873693/ap_common/commit/d0f2e45eef25441b5786f3e65f4190b4e798b342))
+ - **FIX**: resolve all pre-existing lint issues across packages. ([13d260b3](https://github.com/abc873693/ap_common/commit/13d260b36a8fc21b79cd1ab94d855d0138e5d9b3))
+ - **FIX**: resolve analyze-ci lint issues in changed files. ([ea86b935](https://github.com/abc873693/ap_common/commit/ea86b9350c97dac8e51fad98273c4d9f2925e3b7))
+ - **FIX**: resolve all pre-existing lint issues across packages. ([84db9998](https://github.com/abc873693/ap_common/commit/84db99986ccfac62b720cbf69f03bc021c154bc5))
+ - **FIX**(firebase): upgrade firebase deps and adapt to new API. ([7540d9db](https://github.com/abc873693/ap_common/commit/7540d9db6474bef1e6952a72366686389087f2ad))
+ - **FIX**: model test error. ([dfaa2cc8](https://github.com/abc873693/ap_common/commit/dfaa2cc87a5667212617d63fe534334fe51fc06b))
+ - **FIX**: pub publish requirement. ([1dc81f7d](https://github.com/abc873693/ap_common/commit/1dc81f7dcf5a1445aa14b66b6d2004b7d94ad6b2))
+ - **FIX**: `ap_common_core` separate static error. ([177a00fd](https://github.com/abc873693/ap_common/commit/177a00fd613c7d869643f8d2c7ab02bc102fc064))
+ - **FEAT**(core): add ApiResult.toDataState() extension. ([b0c25bf2](https://github.com/abc873693/ap_common/commit/b0c25bf22c83f48c6c17ed0fbb8e3244397e129b))
+ - **FEAT**(ui): add HomePageScaffold.fromDataState() and test suite. ([307a296b](https://github.com/abc873693/ap_common/commit/307a296b6fc6268e4a147faa1093d7e9e0a58221))
+ - **FEAT**(ui): add simplified UI integration API with DataState sealed class. ([54f566bd](https://github.com/abc873693/ap_common/commit/54f566bd0dc3fe857ef623d5ac8c24e23547f096))
+ - **FEAT**: model unit test. ([d3d5de68](https://github.com/abc873693/ap_common/commit/d3d5de688cdba555e2f9ca7e475f031645f578d2))
+ - **FEAT**: improve model generate by `freezed`. ([43bef51c](https://github.com/abc873693/ap_common/commit/43bef51c42f8cf8b984074d42c16c403ee83c02c))
+ - **FEAT**: `AnalyticsUtil` and `CrashlyticsUtil` migrate to injection version. ([0e8a9aab](https://github.com/abc873693/ap_common/commit/0e8a9aab76b2a6994dbcfdf4814e6f7104e4b312))
+ - **FEAT**: move UI implement to `ap_common_flutter_ui`. ([803b2dcb](https://github.com/abc873693/ap_common/commit/803b2dcbb37d970de803670c7a76404356c4a651))
+ - **FEAT**: move native platform util implement to `ap_common_flutter_platform`. ([55b2fa00](https://github.com/abc873693/ap_common/commit/55b2fa00ea5fa4dafb15fc19e19b33dd9d72ef92))
+ - **FEAT**: migrate `util` `l10n`  to new `ap_common_flutter_core`. ([be152bac](https://github.com/abc873693/ap_common/commit/be152bac1b94f8e80baba9c098a938c44246b810))
+ - **FEAT**: centralized package lint rule. ([c2b8ad80](https://github.com/abc873693/ap_common/commit/c2b8ad8000bb19d0d5fccdaf63f0411329e6dcfa))
+ - **FEAT**: release `ap_common_core` v0.0.2. ([7eef7658](https://github.com/abc873693/ap_common/commit/7eef76580b57b66dfd78f5692cdc2a8748f575a3))
+ - **FEAT**: migrate `NotificationUtil` and `Preference` to injection version. ([4326c12e](https://github.com/abc873693/ap_common/commit/4326c12e28732d86a1b5a0fff2fdd6d3a3c6e5e6))
+ - **FEAT**: `ap_common` import `ap_common_core`. ([d463f7c7](https://github.com/abc873693/ap_common/commit/d463f7c7b5cd78c171b90eea0210f81649fc5626))
+ - **FEAT**: migrate `model`  `util` `config` to new `ap_common_core`. ([3887bc05](https://github.com/abc873693/ap_common/commit/3887bc05ebf8612f2b2a1cc607ec3c3fdf3135e1))
+
+#### `ap_common_firebase` - `v1.0.1-dev.6`
+
+ - **FIX**: resolve all pre-existing lint issues across packages. ([84db9998](https://github.com/abc873693/ap_common/commit/84db99986ccfac62b720cbf69f03bc021c154bc5))
+ - **FIX**(firebase): upgrade firebase deps and adapt to new API. ([7540d9db](https://github.com/abc873693/ap_common/commit/7540d9db6474bef1e6952a72366686389087f2ad))
+ - **FEAT**(firebase,announcement): wire FCM token for review push notifications. ([f3569aa7](https://github.com/abc873693/ap_common/commit/f3569aa73fa3dbfeb9a32b58906558c603a5aa79))
+
+#### `ap_common_flutter_core` - `v1.1.0-dev.6`
+
+ - **REFACTOR**(l10n): address code review feedback. ([7c7b84e0](https://github.com/abc873693/ap_common/commit/7c7b84e08be6352a3e50d427ce792834c0435a2c))
+ - **REFACTOR**(l10n): clean up intl remnants after slang migration. ([ea893e6d](https://github.com/abc873693/ap_common/commit/ea893e6d5b0e0587231cab2741e309da909d5a7b))
+ - **REFACTOR**(media): replace GeneralResponseCallback with SaveImageResult sealed class. ([2cfc5176](https://github.com/abc873693/ap_common/commit/2cfc51762e25bc361c1420e405a7c444224477e5))
+ - **REFACTOR**(flutter_core): remove GeneralCallback pattern completely. ([e463cf75](https://github.com/abc873693/ap_common/commit/e463cf75723acb18d44e974f1ff9b3e00cccc3d6))
+ - **REFACTOR**(announcement): add showErrorToast extension and simplify UI error handling. ([dc46221d](https://github.com/abc873693/ap_common/commit/dc46221d222f1a68a458d6a226d82ccf7bf7049a))
+ - **REFACTOR**(l10n): restore original i18n variable naming conventions. ([c21ed521](https://github.com/abc873693/ap_common/commit/c21ed521369b6a3f6030da7ac9a9bae6b97d13dd))
+ - **FIX**: resolve all pre-existing lint issues across packages. ([84db9998](https://github.com/abc873693/ap_common/commit/84db99986ccfac62b720cbf69f03bc021c154bc5))
+ - **FIX**: pub publish requirement. ([1dc81f7d](https://github.com/abc873693/ap_common/commit/1dc81f7dcf5a1445aa14b66b6d2004b7d94ad6b2))
+ - **FIX**: packages version constraint. ([8231a423](https://github.com/abc873693/ap_common/commit/8231a423b237d6f38b3531ec4fc2b06e713a6c51))
+ - **FEAT**(announcement): add editor management page and tag filter. ([6ebe38e8](https://github.com/abc873693/ap_common/commit/6ebe38e8ac43b6ca8d16e3e3880fbd89bae3919c))
+ - **FEAT**(l10n): migrate ap_common_flutter_core from intl to slang. ([de440d23](https://github.com/abc873693/ap_common/commit/de440d23f8c8e0276e62e2728a242cb782e05ba7))
+ - **FEAT**: update i18n for theme translate. ([2e7e862d](https://github.com/abc873693/ap_common/commit/2e7e862d0f8803d64403c15df67108863a74fb1f))
+ - **FEAT**(flutter_core): update `multiple_localization` to any version. ([a4114e01](https://github.com/abc873693/ap_common/commit/a4114e0182568d90603041118d59130fbdbd3aa7))
+ - **FEAT**: update GDG on Campus NKUST x ITC information". ([b2e1c200](https://github.com/abc873693/ap_common/commit/b2e1c200374c0090c9888f6642dc1d8a197ed661))
+ - **FEAT**: move UI implement to `ap_common_flutter_ui`. ([803b2dcb](https://github.com/abc873693/ap_common/commit/803b2dcbb37d970de803670c7a76404356c4a651))
+ - **FEAT**: move native platform util implement to `ap_common_flutter_platform`. ([55b2fa00](https://github.com/abc873693/ap_common/commit/55b2fa00ea5fa4dafb15fc19e19b33dd9d72ef92))
+ - **FEAT**: `AppStoreUtil` and `PlatformUtil` for `ap_common_flutter_core`. ([f9abb16d](https://github.com/abc873693/ap_common/commit/f9abb16d2e525ff8d5d4a68cd7a098e8025cd772))
+ - **FEAT**: migrate `util` `l10n`  to new `ap_common_flutter_core`. ([be152bac](https://github.com/abc873693/ap_common/commit/be152bac1b94f8e80baba9c098a938c44246b810))
+
+#### `ap_common_flutter_platform` - `v1.0.1-dev.6`
+
+ - **REFACTOR**(platform): use clock package for testable time in notification utils. ([544327a8](https://github.com/abc873693/ap_common/commit/544327a89c570f97f6d28cf234f7b99cb0c944ca))
+ - **REFACTOR**(media): replace GeneralResponseCallback with SaveImageResult sealed class. ([2cfc5176](https://github.com/abc873693/ap_common/commit/2cfc51762e25bc361c1420e405a7c444224477e5))
+ - **REFACTOR**(l10n): use context-based translation access for reactive locale switching. ([e9429aa1](https://github.com/abc873693/ap_common/commit/e9429aa1bbfc2e97b72e0010d8bebf63777b050d))
+ - **REFACTOR**(l10n): restore original i18n variable naming conventions. ([c21ed521](https://github.com/abc873693/ap_common/commit/c21ed521369b6a3f6030da7ac9a9bae6b97d13dd))
+ - **REFACTOR**(l10n): update UI packages to use slang translation API. ([697e1e15](https://github.com/abc873693/ap_common/commit/697e1e15b28ab194f71e322da1acf48d14fb2cd2))
+ - **REFACTOR**(ui): fix lint errors and improve code quality. ([36a092bd](https://github.com/abc873693/ap_common/commit/36a092bd42002835b5ea2252c15d21f78d39691d))
+ - **FIX**(test): suppress depend_on_referenced_packages for intl in notification test. ([28678c77](https://github.com/abc873693/ap_common/commit/28678c77751fdda5003ea158827b98b7f692c41e))
+ - **FIX**: resolve all pre-existing lint issues across packages. ([84db9998](https://github.com/abc873693/ap_common/commit/84db99986ccfac62b720cbf69f03bc021c154bc5))
+ - **FIX**: pub publish requirement. ([1dc81f7d](https://github.com/abc873693/ap_common/commit/1dc81f7dcf5a1445aa14b66b6d2004b7d94ad6b2))
+ - **FIX**: packages version constraint. ([8231a423](https://github.com/abc873693/ap_common/commit/8231a423b237d6f38b3531ec4fc2b06e713a6c51))
+ - **FEAT**: upgrade package flutter 3.29 compatible. ([54ae5f08](https://github.com/abc873693/ap_common/commit/54ae5f087f95858e551b0a78008072f74faaa17b))
+ - **FEAT**: upgrade package for package `web` 1.0.0. ([c0ac3e33](https://github.com/abc873693/ap_common/commit/c0ac3e331b64a436e909a8ec7ab2983974ae37a4))
+ - **FEAT**: move UI implement to `ap_common_flutter_ui`. ([803b2dcb](https://github.com/abc873693/ap_common/commit/803b2dcbb37d970de803670c7a76404356c4a651))
+ - **FEAT**: move native platform util implement to `ap_common_flutter_platform`. ([55b2fa00](https://github.com/abc873693/ap_common/commit/55b2fa00ea5fa4dafb15fc19e19b33dd9d72ef92))
+
+#### `ap_common_flutter_ui` - `v1.1.0-dev.6`
+
+ - **REFACTOR**: optimize layout and barcode display for UserInfo Scaffold. ([933cd633](https://github.com/abc873693/ap_common/commit/933cd633d637293920186f8611784566578cc241))
+ - **REFACTOR**: migrate to slang i18n and new ApTheme API after rebase on develop. ([80307353](https://github.com/abc873693/ap_common/commit/80307353da283af46cd9e61a578cfbb795b6cdb8))
+ - **REFACTOR**(media): replace GeneralResponseCallback with SaveImageResult sealed class. ([2cfc5176](https://github.com/abc873693/ap_common/commit/2cfc51762e25bc361c1420e405a7c444224477e5))
+ - **REFACTOR**(l10n): use context-based translation access for reactive locale switching. ([e9429aa1](https://github.com/abc873693/ap_common/commit/e9429aa1bbfc2e97b72e0010d8bebf63777b050d))
+ - **REFACTOR**(l10n): restore original i18n variable naming conventions. ([c21ed521](https://github.com/abc873693/ap_common/commit/c21ed521369b6a3f6030da7ac9a9bae6b97d13dd))
+ - **REFACTOR**(l10n): update UI packages to use slang translation API. ([697e1e15](https://github.com/abc873693/ap_common/commit/697e1e15b28ab194f71e322da1acf48d14fb2cd2))
+ - **REFACTOR**(ui): fix lint errors and improve code quality. ([36a092bd](https://github.com/abc873693/ap_common/commit/36a092bd42002835b5ea2252c15d21f78d39691d))
+ - **REFACTOR**(ui): update pages and views with Material 3 components. ([fcb897f0](https://github.com/abc873693/ap_common/commit/fcb897f031ec5fa9d9342477b026aa221900b6da))
+ - **REFACTOR**(ui): update scaffolds to use new widgets and Material 3. ([da1b8e0c](https://github.com/abc873693/ap_common/commit/da1b8e0c165ce1d9d9477160a9b15779dddb0855))
+ - **REFACTOR**(ui): update utility classes for Material 3 compatibility. ([5fbee088](https://github.com/abc873693/ap_common/commit/5fbee0887fc9e26fdc976b82ddea3bcf5b16e8d8))
+ - **REFACTOR**(ui): update scaffolds and views to use Material 3 color schemes. ([7f3e6a1c](https://github.com/abc873693/ap_common/commit/7f3e6a1cb7bbf17b5f9c70274b48577311f9f93d))
+ - **REFACTOR**(ui): migrate dialog widgets to Material 3 theme and components. ([34466ce6](https://github.com/abc873693/ap_common/commit/34466ce667cc1c0f098939b9cbd75e18ad530998))
+ - **REFACTOR**: optimize UI design for Login and HomePage Scaffolds. ([3aa9190c](https://github.com/abc873693/ap_common/commit/3aa9190c4fc96ec1543a3bb769cf69a9e9012757))
+ - **REFACTOR**: optimize UI design for Course and Score Scaffolds. ([b1c3e915](https://github.com/abc873693/ap_common/commit/b1c3e915206e2cc389304e4e234aeed4f97ab6fd))
+ - **FIX**: resolve all pre-existing lint issues across packages. ([84db9998](https://github.com/abc873693/ap_common/commit/84db99986ccfac62b720cbf69f03bc021c154bc5))
+ - **FIX**: packages version constraint. ([8231a423](https://github.com/abc873693/ap_common/commit/8231a423b237d6f38b3531ec4fc2b06e713a6c51))
+ - **FIX**: pub publish requirement. ([1dc81f7d](https://github.com/abc873693/ap_common/commit/1dc81f7dcf5a1445aa14b66b6d2004b7d94ad6b2))
+ - **FIX**: resolve analyze errors and lint issues in simplified UI integration. ([d0f2e45e](https://github.com/abc873693/ap_common/commit/d0f2e45eef25441b5786f3e65f4190b4e798b342))
+ - **FIX**: `ApAssets` path error. ([558e5445](https://github.com/abc873693/ap_common/commit/558e54451ed7ae1d1d0a9de2e74a8c2172845b9b))
+ - **FIX**(test): resolve widget test failures in simplified UI pages. ([12094e48](https://github.com/abc873693/ap_common/commit/12094e48e37baf42f6168c651796a6c253d86639))
+ - **FEAT**: add merged course view and optimize table layout density. ([410808a5](https://github.com/abc873693/ap_common/commit/410808a59c1d5cf68999e2deba86b78b7aaff552))
+ - **FEAT**: move UI implement to `ap_common_flutter_ui`. ([803b2dcb](https://github.com/abc873693/ap_common/commit/803b2dcbb37d970de803670c7a76404356c4a651))
+ - **FEAT**: score scaffold responsive. ([426678f5](https://github.com/abc873693/ap_common/commit/426678f5d2559179cce9e9b0c5cfb3216147532b))
+ - **FEAT**: update i18n for theme translate. ([2e7e862d](https://github.com/abc873693/ap_common/commit/2e7e862d0f8803d64403c15df67108863a74fb1f))
+ - **FEAT**: add SemesterPicker and optimize ApUtils and ApDrawer. ([0ebafe0c](https://github.com/abc873693/ap_common/commit/0ebafe0cbe9fb35d2199f79efa633f7c811c90d0))
+ - **FEAT**: implement dynamic theme color switching and color picker in settings. ([2dce7929](https://github.com/abc873693/ap_common/commit/2dce792963a6520e221e83dec2ab9081e50d3b14))
+ - **FEAT**: improve model generate by `freezed`. ([43bef51c](https://github.com/abc873693/ap_common/commit/43bef51c42f8cf8b984074d42c16c403ee83c02c))
+ - **FEAT**(flutter_ui): `PdfView` custom error messageOB. ([0426059d](https://github.com/abc873693/ap_common/commit/0426059d16d364bd6ebf02398ffea13628119c6f))
+ - **FEAT**: update GDG on Campus NKUST x ITC information". ([b2e1c200](https://github.com/abc873693/ap_common/commit/b2e1c200374c0090c9888f6642dc1d8a197ed661))
+ - **FEAT**: change to material design 3. ([04a13b5d](https://github.com/abc873693/ap_common/commit/04a13b5da516b9cbbc3a56eb29ab670c34653e55))
+ - **FEAT**: update float action button can invisible. ([c30380bc](https://github.com/abc873693/ap_common/commit/c30380bc2254fc1fe1ac31deea4c7c62658ae9c8))
+ - **FEAT**(ui): add simplified UI integration API with DataState sealed class. ([54f566bd](https://github.com/abc873693/ap_common/commit/54f566bd0dc3fe857ef623d5ac8c24e23547f096))
+ - **FEAT**(ui): add HomePageScaffold.fromDataState() and test suite. ([307a296b](https://github.com/abc873693/ap_common/commit/307a296b6fc6268e4a147faa1093d7e9e0a58221))
+ - **FEAT**(ui): extract common widgets into separate components. ([fd19e957](https://github.com/abc873693/ap_common/commit/fd19e957372f6266ba8657a2a90800737e760881))
+
+#### `ap_common_plugin` - `v1.0.1-dev.5`
+
+ - **REFACTOR**(plugin): migrate Android widget to kotlinx.serialization and Jetpack Glance. ([a712b2cd](https://github.com/abc873693/ap_common/commit/a712b2cd4cd9a595a138322173cfd91140f181e6))
+ - **REFACTOR**(l10n): restore original i18n variable naming conventions. ([c21ed521](https://github.com/abc873693/ap_common/commit/c21ed521369b6a3f6030da7ac9a9bae6b97d13dd))
+ - **FIX**(plugin): use FLAG_IMMUTABLE and add Android 12+ widget attributes. ([66ebe902](https://github.com/abc873693/ap_common/commit/66ebe9021171d961f285f10e69c9c26ce417daae))
+ - **FIX**(plugin): sync iOS CourseData model and docs with Dart model. ([4047c945](https://github.com/abc873693/ap_common/commit/4047c9450a399eb188b6744b0d55586a3716e0b7))
+ - **FIX**(ci): upgrade Gradle to 8.11.1 and address PR review feedback. ([575733e7](https://github.com/abc873693/ap_common/commit/575733e75c5b3d9f3f8924565341d3f90c54fbfe))
+ - **FIX**(ap_common_plugin): android plugin register setting. ([07968966](https://github.com/abc873693/ap_common/commit/07968966be3576952eb924832048e51292a877e4))
+ - **FEAT**(plugin): add setFakeCourseWidget and update documentation. ([ac51812b](https://github.com/abc873693/ap_common/commit/ac51812b59c55f4a90f840bcc7d21c7154b44efe))
+ - **FEAT**(plugin): add course widget support for Android and iOS. ([613249b1](https://github.com/abc873693/ap_common/commit/613249b15b358cc9b8add2ce4882cde809efed2f))
+ - **FEAT**: upgrade package flutter 3.29 compatible. ([54ae5f08](https://github.com/abc873693/ap_common/commit/54ae5f087f95858e551b0a78008072f74faaa17b))
+ - **DOCS**(plugin): clarify Android manifest is auto-merged from plugin. ([277e24c4](https://github.com/abc873693/ap_common/commit/277e24c4a62e73002899362952cd9fcb246d7367))
+
+
+## 2026-04-04
+
+### Changes
+
+---
+
+Packages with breaking changes:
+
+ - There are no breaking changes in this release.
+
+Packages with other changes:
+
  - [`ap_common` - `v1.0.1-dev.4`](#ap_common---v101-dev4)
  - [`ap_common_announcement_ui` - `v1.0.1-dev.5`](#ap_common_announcement_ui---v101-dev5)
  - [`ap_common_core` - `v1.0.1-dev.2`](#ap_common_core---v101-dev2)
