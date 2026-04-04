@@ -996,6 +996,9 @@ class _AnnouncementHomePageState extends State<AnnouncementHomePage>
           mode: mode,
           announcement: announcement,
           blackList: _blackListSet,
+          applicationDescriptionWidget:
+              widget.reviewDescriptionWidget,
+          organizationDomain: widget.organizationDomain,
         ),
       ),
     );

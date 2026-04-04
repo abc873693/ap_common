@@ -24,6 +24,8 @@ class AnnouncementEditPage extends StatefulWidget {
     this.announcement,
     this.needFetch = false,
     this.blackList = const <String>{},
+    this.applicationDescriptionWidget,
+    this.organizationDomain,
   });
 
   static const String routerName = '/news/edit';
@@ -32,6 +34,12 @@ class AnnouncementEditPage extends StatefulWidget {
   final Announcement? announcement;
   final bool needFetch;
   final Set<String> blackList;
+
+  /// Description widget shown at the top of the application form.
+  final Widget? applicationDescriptionWidget;
+
+  /// Organization domain for default description text.
+  final String? organizationDomain;
 
   @override
   _AnnouncementEditPageState createState() =>
@@ -114,6 +122,10 @@ class _AnnouncementEditPageState extends State<AnnouncementEditPage> {
           child: ListView(
             padding: const EdgeInsets.symmetric(horizontal: 16.0),
             children: <Widget>[
+              if (widget.mode == Mode.application) ...<Widget>[
+                const SizedBox(height: 16),
+                _buildApplicationHint(colorScheme),
+              ],
               const SizedBox(height: 16),
               _buildTextField(
                 controller: _title,
@@ -216,6 +228,59 @@ class _AnnouncementEditPageState extends State<AnnouncementEditPage> {
       decoration: InputDecoration(
         labelText: label,
       ),
+    );
+  }
+
+  Widget _buildApplicationHint(ColorScheme colorScheme) {
+    return Container(
+      padding: const EdgeInsets.symmetric(
+        horizontal: 16,
+        vertical: 12,
+      ),
+      decoration: BoxDecoration(
+        color: colorScheme.tertiaryContainer.withAlpha(128),
+        borderRadius: BorderRadius.circular(12),
+      ),
+      child: widget.applicationDescriptionWidget ??
+          Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: <Widget>[
+              Row(
+                children: <Widget>[
+                  Icon(
+                    Icons.info_outline,
+                    size: 18,
+                    color: colorScheme.onTertiaryContainer,
+                  ),
+                  const SizedBox(width: 8),
+                  Text(
+                    context.ap.newsRuleDescription2,
+                    style: TextStyle(
+                      fontWeight: FontWeight.bold,
+                      color: colorScheme.onTertiaryContainer,
+                    ),
+                  ),
+                ],
+              ),
+              const SizedBox(height: 4),
+              Text(
+                context.ap.newsRuleDescription1(
+                  arg1: widget.organizationDomain ?? '',
+                ),
+                style: TextStyle(
+                  fontSize: 13,
+                  color: colorScheme.onTertiaryContainer,
+                ),
+              ),
+              Text(
+                context.ap.newsRuleDescription3,
+                style: TextStyle(
+                  fontSize: 13,
+                  color: colorScheme.onTertiaryContainer,
+                ),
+              ),
+            ],
+          ),
     );
   }
 
