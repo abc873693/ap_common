@@ -240,11 +240,13 @@ class _BlackListPageState extends State<BlackListPage> {
           .showToast(context, context.ap.doNotEmpty);
       return;
     }
+    _showLoading();
     final ApiResult<Response<dynamic>> result =
         await AnnouncementHelper.instance.addBlackList(
       username: username,
     );
     if (!mounted) return;
+    _dismissLoading();
     if (result.isSuccess) {
       UiUtil.instance
           .showToast(context, context.ap.addSuccess);
@@ -257,11 +259,13 @@ class _BlackListPageState extends State<BlackListPage> {
   Future<void> _removeFromBlackList({
     required String username,
   }) async {
+    _showLoading();
     final ApiResult<Response<dynamic>> result =
         await AnnouncementHelper.instance.removeFromBlackList(
       username: username,
     );
     if (!mounted) return;
+    _dismissLoading();
     if (result.isSuccess) {
       UiUtil.instance
           .showToast(context, context.ap.deleteSuccess);
@@ -269,5 +273,20 @@ class _BlackListPageState extends State<BlackListPage> {
     } else {
       result.showErrorToast(context);
     }
+  }
+
+  void _showLoading() {
+    showDialog(
+      context: context,
+      builder: (_) => PopScope(
+        canPop: false,
+        child: ProgressDialog(context.ap.loading),
+      ),
+      barrierDismissible: false,
+    );
+  }
+
+  void _dismissLoading() {
+    Navigator.of(context, rootNavigator: true).pop();
   }
 }

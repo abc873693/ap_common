@@ -26,10 +26,13 @@ extension ApiResultToDataState<T> on ApiResult<T> {
   /// Converts this [ApiResult] to a [DataState].
   ///
   /// - [ApiSuccess] with non-null data → [DataLoaded]
-  /// - [ApiSuccess] with null data → [DataEmpty]
+  /// - [ApiSuccess] with null or empty list data → [DataEmpty]
   /// - [ApiError] → [DataError] with the error message as hint
   /// - [ApiFailure] → [DataError] with the exception message as hint
   DataState<T> toDataState() => switch (this) {
+        ApiSuccess<T>(:final T data)
+            when data == null || (data is List && data.isEmpty) =>
+          DataEmpty<T>(),
         ApiSuccess<T>(:final T data) => DataLoaded<T>(data),
         ApiError<T>(:final GeneralResponse response) =>
           DataError<T>(hint: response.message),
