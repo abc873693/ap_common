@@ -85,13 +85,25 @@ class AnnouncementHelper {
   // Generic API executor
   // ---------------------------------------------------------------------------
 
-  Future<ApiResult<T>> _execute<T>(Future<T> Function() action) async {
+  Future<ApiResult<T>> _execute<T>(
+    Future<T> Function() action, {
+    bool hasRetried = false,
+  }) async {
     try {
       return ApiSuccess<T>(await action());
     } on DioException catch (e) {
       if (e.isUnauthorized) {
+        if (!hasRetried) {
+          final ApiResult<bool> reLoginResult = await reLogin();
+          if (reLoginResult is ApiSuccess<bool>) {
+            return _execute(action, hasRetried: true);
+          }
+        }
         return ApiError<T>(
-          GeneralResponse(statusCode: tokenExpire, message: ap.loginFail),
+          GeneralResponse(
+            statusCode: tokenExpire,
+            message: ap.loginFail,
+          ),
         );
       }
       if (e.isNotPermission) {
@@ -135,12 +147,29 @@ class AnnouncementHelper {
   // ---------------------------------------------------------------------------
 
   Future<ApiResult<bool>> reLogin() async {
-    final ApiResult<AnnouncementLoginData> result = await login(
-      username: username,
-      password: password,
-    );
+    final ApiResult<AnnouncementLoginData> result;
+    switch (loginType) {
+      case AnnouncementLoginType.normal:
+        result = await login(
+          username: username,
+          password: password,
+        );
+      case AnnouncementLoginType.google:
+        result = await googleLogin(idToken: code);
+      case AnnouncementLoginType.apple:
+        if (code == null) {
+          return const ApiError<bool>(
+            GeneralResponse(statusCode: 401, message: ''),
+          );
+        }
+        result = await appleLogin(idToken: code!);
+    }
     return switch (result) {
-      ApiSuccess<AnnouncementLoginData>() => const ApiSuccess<bool>(true),
+      ApiSuccess<AnnouncementLoginData>(:final AnnouncementLoginData data) =>
+        () {
+          data.save();
+          return const ApiSuccess<bool>(true);
+        }(),
       ApiFailure<AnnouncementLoginData>(:final DioException exception) =>
         ApiFailure<bool>(exception),
       ApiError<AnnouncementLoginData>(:final GeneralResponse response) =>
