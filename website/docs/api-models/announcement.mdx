@@ -8,29 +8,89 @@ sidebar_position: 2
 
 ## AnnouncementData
 
-| 參數名稱                         | 型態                             | 描述                             |
-| ------------------------------- | ------------------------------- | ------------------------------- |
+| 參數名稱 | 型態 | 描述 |
+| --- | --- | --- |
 | data | `List<Announcement>` | 最新消息列表 |
 
 ## Announcement
 
-| 參數名稱                         | 型態                             | 描述                             |
-| ------------------------------- | ------------------------------- | ------------------------------- |
+| 參數名稱 | 型態 | 描述 |
+| --- | --- | --- |
 | title | `String` | 標題 |
-| id | `String` | 最新消息id |
-| tags | `List<String>` | 標籤，目前用來區隔不同學校的最新消息 |
-| nextId | `Location` | 下一個最新消息id |
-| lastId | `int` | 最後一個最新消息的id |
-| weight | `int` | 權重 `HomeScaffold` 會從權重大的排序顯示 |
+| id | `int?` | 最新消息 id |
+| tags | `List<String>?` | 標籤，用來區隔不同學校的最新消息 |
+| nextId | `int?` | 下一個最新消息 id |
+| lastId | `int?` | 最後一個最新消息的 id |
+| weight | `int` | 權重，`HomeScaffold` 會從權重大的排序顯示 |
 | imgUrl | `String` | 圖片網址 |
-| url | `int` | 活動連結 |
-| description | `int` | 描述 會在 `AnnouncementContentPage` 顯示 |
-| publishTime | `int` | 發布時間，格式 `YYYY-MM-DDTHH:mm::ss` |
-| expireTime | `int` | 過期時間 `HomeScaffold` 會讓超過此時間的最新消息不顯示，格式 `YYYY-MM-DDTHH:mm::ss` |
-| applicant | `String` | 申請人名字 |
-| applicationId | `String` | 申請人 ID，通常為電子信箱 |
-| reviewStatus | `bool` | 審查狀態，若為 `null` 代表尚未審查，`true` 代表通過，`false` 代表失敗 |
-| reviewDescription | `String` | 審查說明，由審查人員填寫，讓申請者得知審查不通過原因 |
+| url | `String?` | 活動連結 |
+| description | `String` | 描述，會在 `AnnouncementContentPage` 顯示 |
+| publishedTime | `String?` | 發布時間，格式 `YYYY-MM-DDTHH:mm:ssZ` |
+| expireTime | `String?` | 過期時間，`HomeScaffold` 會讓超過此時間的最新消息不顯示 |
+| applicant | `String?` | 申請人帳號（通常為電子信箱） |
+| applicationId | `String?` | 申請 ID |
+| reviewStatus | `bool?` | 審查狀態：`null` = 尚未審查、`true` = 通過、`false` = 駁回 |
+| reviewDescription | `String?` | 審查說明，由審查人員填寫 |
+
+## AnnouncementLoginData
+
+JWT 登入資料，由後端 `/login`、`/oauth2/google/token`、`/oauth2/apple/token` 回傳。
+
+| 參數名稱 / Getter | 型態 | 描述 |
+| --- | --- | --- |
+| key | `String` | JWT token |
+| decodedToken | `Map<String, dynamic>` | 解碼後的 JWT payload |
+| isExpired | `bool` | Token 是否過期 |
+| level | `PermissionLevel` | 權限等級 |
+| loginType | `String?` | 登入方式（`General` / `Oauth2` / `Apple_sign_in`） |
+| username | `String?` | 使用者帳號 |
+
+## PermissionLevel
+
+```dart
+enum PermissionLevel { user, editor, admin }
+//                      0      1       2
+```
+
+| 等級 | 值 | 說明 | 來源 |
+| --- | --- | --- | --- |
+| user | 0 | 一般使用者：可申請公告、查看自己的申請 | 預設 |
+| editor | 1 | 編輯者：可新增/編輯/刪除公告、審核申請、管理黑名單 | 由 Admin 透過 `/auth/editor` API 管理 |
+| admin | 2 | 管理員：同 editor + 管理編輯者名單 | 後端環境變數 `ADMIN` 設定 |
+
+## ApiResult\<T\> 與 DataState\<T\>
+
+### ApiResult\<T\>
+
+API 回應的型別安全封裝：
+
+```dart
+sealed class ApiResult<T> {}
+class ApiSuccess<T> extends ApiResult<T> { final T data; }
+class ApiError<T> extends ApiResult<T> { final GeneralResponse response; }
+class ApiFailure<T> extends ApiResult<T> { final DioException exception; }
+```
+
+### DataState\<T\>
+
+UI 狀態管理用的 sealed class：
+
+```dart
+sealed class DataState<T> {}
+class DataLoading<T> extends DataState<T> {}
+class DataLoaded<T> extends DataState<T> { final T data; final String? hint; }
+class DataError<T> extends DataState<T> { final String? hint; }
+class DataEmpty<T> extends DataState<T> { final String? hint; }
+```
+
+### ApiResult.toDataState()
+
+將 API 回應轉換為 UI 狀態：
+
+```dart
+final ApiResult<List<Announcement>> result = await api.getAnnouncements();
+final DataState<List<Announcement>> state = result.toDataState();
+```
 
 ## 範例
 
@@ -42,35 +102,14 @@ sidebar_position: 2
             "weight": 0,
             "url": "https://imgur.com/gallery/jmyXaq3",
             "imgUrl": "https://i.imgur.com/zESMBwN.jpg",
-            "description": "《久逢知吉》大型成果發表會\n來看表演還有機會抽到西堤餐券、威秀電影票、小米行動電源…等多項精美好禮?\n這麼好康的事還不來嗎 心動不如馬上行動❤️\n帶上你的親朋好友一起來欣賞\n_\n\n♦️P.M.6：00~6：30簽到，即可領取抽獎券，打卡還可以兌換活動周邊商品♦️\n?活動時間：6/8（二）P.M.6：00~9：00?\n?活動地點：活動中心B1音樂廳?\n_\n6月8號 我們不見不散?",
-            "location": null,
+            "description": "《久逢知吉》大型成果發表會",
             "expireTime": "2021-06-07T22:00:00Z",
-            "tag": [
-                "zh"
-            ],
+            "tag": ["zh"],
             "publishedAt": "2021-05-13T20:21:55Z",
             "id": 5,
             "lastId": null,
             "nextId": 14
-        },
-        {
-            "title": "第54屆大專生命成長營",
-            "weight": 0,
-            "url": "https://bwyouth.wixsite.com/camp2021",
-            "imgUrl": "https://i.imgur.com/Ai7b5af.jpg",
-            "description": "第54屆大專生命成長營開跑囉！\n\n揮別疫情，迎接溫暖與希望\n\n讓自己的生命更上一層樓！\n\n「課程內容」\n\n1.新世紀生命價值觀\n\n2.美好的人際關係\n\n3.關心健康關愛生命\n\n4.建立崇高的生命目標",
-            "location": null,
-            "expireTime": "2021-06-09T20:00:00Z",
-            "tag": [
-                "nkust",
-                "zh"
-            ],
-            "publishedAt": "2021-05-14T01:23:03Z",
-            "id": 14,
-            "nextId": null,
-            "lastId": 5
         }
     ]
 }
-
 ```

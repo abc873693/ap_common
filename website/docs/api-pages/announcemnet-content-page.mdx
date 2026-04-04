@@ -6,7 +6,7 @@ sidebar_position: 3
 
 # 最新消息詳細資訊 AnnouncementContentPage
 
-最新消息詳細資訊，採用頁面顯示
+最新消息詳細資訊，採用頁面顯示。支援直向/橫向自動排版，點擊圖片可進入全螢幕預覽（PhotoView）。
 
 手機介面
 
@@ -17,8 +17,24 @@ sidebar_position: 3
  <img src="../../img/pages/announcement_content_page/tablet.png" alt="drawing" width="600"/>
 
 
-| 參數名稱                         | 型態                             | 描述                             |
-| ------------------------------- | ------------------------------- | ------------------------------- |
-| announcement | Announcement | 最新消息 |
-| logEvent | Function(String name, String value) | 可搜集使用者行為的事件 |
-| setCurrentScreen | Function | 可搜集目前畫面的事件 |
+| 參數名稱 | 型態 | 描述 |
+| --- | --- | --- |
+| announcement | `Announcement` | 最新消息資料（必填） |
+
+## 使用方式
+
+```dart
+ApUtils.pushCupertinoStyle(
+  context,
+  AnnouncementContentPage(announcement: item),
+);
+```
+
+## 特性
+
+- 標題與描述使用 `colorScheme.onSurface` / `colorScheme.onSurfaceVariant`
+- 描述中的連結可點擊（使用 `SelectableLinkify`）
+- 外部連結按鈕使用 M3 `FilledButton`
+- 點擊圖片進入全螢幕 `PhotoView` 預覽
+- 直向模式：圖片在上、文字在下
+- 橫向模式：圖片與文字左右並列

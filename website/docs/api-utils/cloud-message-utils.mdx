@@ -2,10 +2,52 @@
 sidebar_position: 8
 ---
 
-# CloudMessageUtils
+# CloudMessageUtils / FirebaseMessagingUtils
 
 :::caution 注意
  因考量 Flutter 背景儲存機制無法實現，Hive 儲存雲端訊息功能已在 0.24.0 移除
 :::
 
 提供雲端通知相關的工具
+
+## FirebaseMessagingUtils
+
+位於 `ap_common_firebase` 套件，封裝 Firebase Cloud Messaging 的初始化與 token 管理。
+
+### 屬性
+
+| 名稱 | 型態 | 描述 |
+| --- | --- | --- |
+| token | `String?` | 目前的 FCM token，`init()` 完成後可用 |
+| messaging | `FirebaseMessaging?` | Firebase Messaging 實例 |
+| isSupported | `bool` | 當前平台是否支援（Web、Android、iOS、macOS） |
+
+### 使用方式
+
+```dart
+// 初始化（通常在 main.dart）
+await FirebaseMessagingUtils.instance.init(
+  onClick: (RemoteMessage message) {
+    // 處理通知點擊
+  },
+);
+
+// 取得 FCM token（用於公告審查推播）
+final String? fcmToken = FirebaseMessagingUtils.instance.token;
+```
+
+### 搭配公告審查系統
+
+後端會在公告申請被批准或駁回時，透過 FCM 推播通知申請者。需將 token 傳入 `AnnouncementHomePage`：
+
+```dart
+AnnouncementHomePage(
+  fcmToken: FirebaseMessagingUtils.instance.token,
+)
+```
+
+### Token 生命週期
+
+- `init()` 時透過 `getToken()` 取得初始 token
+- 自動監聽 `onTokenRefresh` 事件，token 更新時同步更新 `instance.token`
+- Token 會在登入 API 時自動傳送給後端

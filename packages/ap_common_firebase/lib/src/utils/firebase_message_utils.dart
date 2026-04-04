@@ -35,6 +35,9 @@ class FirebaseMessagingUtils {
 
   FirebaseMessaging? messaging;
 
+  /// The current FCM token, available after [init] completes.
+  String? token;
+
   Future<void> init({
     Function(RemoteMessage)? onClick,
     String? vapidKey,
@@ -80,9 +83,17 @@ class FirebaseMessagingUtils {
     });
     final NotificationSettings? value = await messaging?.requestPermission();
     if (value?.authorizationStatus == AuthorizationStatus.authorized) {
-      messaging?.getToken(vapidKey: vapidKey).then((String? token) {
-        if (token != null && kDebugMode) {
-          log('Push Messaging token: $token', name: 'firebase');
+      token = await messaging?.getToken(vapidKey: vapidKey);
+      if (token != null && kDebugMode) {
+        log('Push Messaging token: $token', name: 'firebase');
+      }
+      messaging?.onTokenRefresh.listen((String newToken) {
+        token = newToken;
+        if (kDebugMode) {
+          log(
+            'Push Messaging token refreshed: $newToken',
+            name: 'firebase',
+          );
         }
       });
       AnalyticsUtil.instance.setUserProperty(

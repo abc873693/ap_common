@@ -954,7 +954,7 @@
     },
     "/ban": {
       "get": {
-        "summary": "get banned list (Admin required)",
+        "summary": "get banned list (Editor/Admin required, permission_level >= 1)",
         "deprecated": false,
         "description": "",
         "tags": [
@@ -974,14 +974,20 @@
                 }
               }
             }
+          },
+          "401": {
+            "description": "JWT expired or invalid"
+          },
+          "403": {
+            "description": "permission_level < 1"
           }
         },
         "security": []
       },
-      "put": {
-        "summary": "banned user (Admin required)",
+      "post": {
+        "summary": "ban user (Editor/Admin required, permission_level >= 1)",
         "deprecated": false,
-        "description": "",
+        "description": "Accepts single username string or array of usernames. Duplicates are ignored via set dedup.",
         "tags": [
           "auth"
         ],
@@ -993,43 +999,34 @@
                 "type": "object",
                 "properties": {
                   "username": {
-                    "type": "string"
+                    "oneOf": [
+                      { "type": "string" },
+                      { "type": "array", "items": { "type": "string" } }
+                    ]
                   }
                 }
               },
-              "example": ""
+              "example": { "username": "user@example.com" }
             }
           }
         },
         "responses": {
           "200": {
-            "description": "Not content",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "object",
-                  "properties": {}
-                }
-              }
-            }
+            "description": "User banned successfully"
           },
-          "406": {
-            "description": "detail see response content, most error are about user status.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/401_Unauthorized"
-                }
-              }
-            }
+          "401": {
+            "description": "JWT expired or invalid"
+          },
+          "403": {
+            "description": "permission_level < 1"
           }
         },
         "security": []
       },
       "delete": {
-        "summary": "unban user (Admin required)",
+        "summary": "unban user (Editor/Admin required, permission_level >= 1)",
         "deprecated": false,
-        "description": "",
+        "description": "Accepts single username string or array of usernames.",
         "tags": [
           "auth"
         ],
@@ -1041,35 +1038,26 @@
                 "type": "object",
                 "properties": {
                   "username": {
-                    "type": "string"
+                    "oneOf": [
+                      { "type": "string" },
+                      { "type": "array", "items": { "type": "string" } }
+                    ]
                   }
                 }
               },
-              "example": ""
+              "example": { "username": "user@example.com" }
             }
           }
         },
         "responses": {
           "200": {
-            "description": "Not content",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "object",
-                  "properties": {}
-                }
-              }
-            }
+            "description": "User unbanned successfully"
           },
-          "406": {
-            "description": "detail see response content, most error are about user status.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/401_Unauthorized"
-                }
-              }
-            }
+          "401": {
+            "description": "JWT expired or invalid"
+          },
+          "403": {
+            "description": "permission_level < 1"
           }
         },
         "security": []
@@ -1839,7 +1827,7 @@
           },
           "permission_level": {
             "type": "integer",
-            "description": "permission level"
+            "description": "permission level: 0=user, 1=editor/reviewer, 2=admin. Admin is set via ADMIN env var. Editor is managed via POST/DELETE /auth/editor (admin only)."
           }
         },
         "examples": [

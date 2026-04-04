@@ -498,8 +498,8 @@ void main() {
 
   group('addBlackList', () {
     test('returns ApiSuccess on 200', () async {
-      dioAdapter.onPut(
-        '/ban/',
+      dioAdapter.onPost(
+        '/ban',
         (MockServer server) =>
             server.reply(200, <String, dynamic>{'message': 'ok'}),
         data: Matchers.any,
@@ -515,7 +515,7 @@ void main() {
   group('removeFromBlackList', () {
     test('returns ApiSuccess on 200', () async {
       dioAdapter.onDelete(
-        '/ban/',
+        '/ban',
         (MockServer server) =>
             server.reply(200, <String, dynamic>{'message': 'ok'}),
         data: Matchers.any,

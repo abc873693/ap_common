@@ -1,3 +1,4 @@
+import 'package:ap_common_core/src/models/data_state.dart';
 import 'package:ap_common_core/src/models/general_response.dart';
 import 'package:dio/dio.dart';
 
@@ -18,4 +19,24 @@ class ApiFailure<T> extends ApiResult<T> {
 class ApiError<T> extends ApiResult<T> {
   const ApiError(this.response);
   final GeneralResponse response;
+}
+
+/// Extension to convert [ApiResult] into [DataState] for UI state management.
+extension ApiResultToDataState<T> on ApiResult<T> {
+  /// Converts this [ApiResult] to a [DataState].
+  ///
+  /// - [ApiSuccess] with non-null data → [DataLoaded]
+  /// - [ApiSuccess] with null or empty list data → [DataEmpty]
+  /// - [ApiError] → [DataError] with the error message as hint
+  /// - [ApiFailure] → [DataError] with the exception message as hint
+  DataState<T> toDataState() => switch (this) {
+        ApiSuccess<T>(:final T data)
+            when data == null || (data is List && data.isEmpty) =>
+          DataEmpty<T>(),
+        ApiSuccess<T>(:final T data) => DataLoaded<T>(data),
+        ApiError<T>(:final GeneralResponse response) =>
+          DataError<T>(hint: response.message),
+        ApiFailure<T>(:final DioException exception) =>
+          DataError<T>(hint: exception.message),
+      };
 }

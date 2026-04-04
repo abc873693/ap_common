@@ -340,6 +340,8 @@
   "notFoundData": "No matching Data~",
   "updateRejectAndBan": "Updated, Rejected and Ban",
   "blackList": "Black List",
+  "editorList": "Editor Management",
+  "all": "All",
   "delete": "Delete",
   "allAnnouncements": "All Announcements",
   "allApplications": "All Applications",

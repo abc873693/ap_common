@@ -1,0 +1,76 @@
+---
+sidebar_position: 4
+---
+
+# 公告審查系統 AnnouncementHomePage
+
+公告審查系統的主頁面，整合登入、公告管理、申請審核等功能。根據使用者權限自動顯示不同介面。
+
+## 參數
+
+| 參數名稱 | 型態 | 描述 |
+| --- | --- | --- |
+| loginDescriptionWidget | `Widget?` | 自訂登入頁面說明文字 |
+| reviewDescriptionWidget | `Widget?` | 自訂申請規則說明文字 |
+| organizationDomain | `String?` | 組織域名，用於預設說明文字 |
+| enableNormalLogin | `bool` | 是否啟用帳號密碼登入（預設 `false`） |
+| fcmToken | `String?` | FCM token，用於審核通過/駁回時推播通知申請者 |
+
+## 使用方式
+
+```dart
+AnnouncementHomePage(
+  fcmToken: FirebaseMessagingUtils.instance.token,
+  organizationDomain: 'nkust.edu.tw',
+  enableNormalLogin: false,
+)
+```
+
+## 權限與介面
+
+### User（permission_level = 0）
+
+- 查看申請規則說明
+- 提交新申請（FAB）
+- 查看自己的申請列表
+- 依審核狀態篩選（全部/待審核/已通過/已駁回）
+
+### Editor（permission_level = 1）
+
+- TabBar 切換「申請」/「公告」
+- 審核申請（批准/駁回）
+- 新增/編輯/刪除公告
+- Tag 篩選公告
+- 管理黑名單
+- 申請人帳號：點擊複製、黑名單狀態顯示
+
+### Admin（permission_level = 2）
+
+- 同 Editor 所有功能
+- 編輯者管理（新增/移除編輯者）
+
+## 登入方式
+
+支援三種登入方式：
+
+1. **帳號密碼**（需設定 `enableNormalLogin: true`）
+2. **Google 登入**（OAuth2 id token）
+3. **Apple 登入**（僅 iOS/macOS）
+
+## 自動 Re-login
+
+當 JWT 過期（預設 1 小時）時，API 呼叫會自動嘗試重新登入一次，支援所有登入方式。
+
+## FCM 推播
+
+後端在審核通過/駁回時會透過 FCM 推播通知申請者。需傳入 `fcmToken` 才能正常運作：
+
+```dart
+// 確保 FirebaseMessagingUtils 已初始化
+await FirebaseMessagingUtils.instance.init();
+
+// 傳入 token
+AnnouncementHomePage(
+  fcmToken: FirebaseMessagingUtils.instance.token,
+)
+```

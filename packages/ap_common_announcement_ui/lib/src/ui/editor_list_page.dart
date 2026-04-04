@@ -1,15 +1,16 @@
 import 'package:ap_common_announcement_ui/src/api/announcement_helper.dart';
 import 'package:ap_common_flutter_ui/ap_common_flutter_ui.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 
-class BlackListPage extends StatefulWidget {
-  const BlackListPage({super.key});
+class EditorListPage extends StatefulWidget {
+  const EditorListPage({super.key});
 
   @override
-  State<BlackListPage> createState() => _BlackListPageState();
+  State<EditorListPage> createState() => _EditorListPageState();
 }
 
-class _BlackListPageState extends State<BlackListPage> {
+class _EditorListPageState extends State<EditorListPage> {
   DataState<List<String>> state =
       const DataLoading<List<String>>();
 
@@ -34,11 +35,11 @@ class _BlackListPageState extends State<BlackListPage> {
 
     return Scaffold(
       appBar: AppBar(
-        title: Text(context.ap.blackList),
+        title: Text(context.ap.editorList),
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: () => _showAddDialog(colorScheme),
-        child: const Icon(Icons.person_add_alt),
+        child: const Icon(Icons.person_add_alt_1),
       ),
       body: switch (state) {
         DataLoading<List<String>>() => const Center(
@@ -64,7 +65,7 @@ class _BlackListPageState extends State<BlackListPage> {
                     borderRadius: BorderRadius.circular(20),
                   ),
                   child: Icon(
-                    Icons.person_off_outlined,
+                    Icons.edit_outlined,
                     size: 40,
                     color: colorScheme.primary,
                   ),
@@ -111,13 +112,13 @@ class _BlackListPageState extends State<BlackListPage> {
           width: 40,
           height: 40,
           decoration: BoxDecoration(
-            color: colorScheme.errorContainer.withAlpha(128),
+            color: colorScheme.primaryContainer.withAlpha(128),
             borderRadius: BorderRadius.circular(10),
           ),
           child: Icon(
-            Icons.person_off_outlined,
+            Icons.edit_outlined,
             size: 20,
-            color: colorScheme.error,
+            color: colorScheme.primary,
           ),
         ),
         title: Text(
@@ -127,14 +128,39 @@ class _BlackListPageState extends State<BlackListPage> {
             color: colorScheme.onSurface,
           ),
         ),
-        trailing: IconButton(
-          onPressed: () =>
-              _showRemoveDialog(colorScheme, username),
-          icon: Icon(
-            Icons.delete_outline,
-            color: colorScheme.error,
-          ),
-          tooltip: context.ap.delete,
+        trailing: Row(
+          mainAxisSize: MainAxisSize.min,
+          children: <Widget>[
+            IconButton(
+              onPressed: () {
+                Clipboard.setData(
+                  ClipboardData(text: username),
+                );
+                ScaffoldMessenger.of(context).showSnackBar(
+                  SnackBar(
+                    content: Text(username),
+                    behavior: SnackBarBehavior.floating,
+                    duration: const Duration(seconds: 2),
+                  ),
+                );
+              },
+              icon: Icon(
+                Icons.copy,
+                size: 20,
+                color: colorScheme.onSurfaceVariant,
+              ),
+              tooltip: username,
+            ),
+            IconButton(
+              onPressed: () =>
+                  _showRemoveDialog(colorScheme, username),
+              icon: Icon(
+                Icons.delete_outline,
+                color: colorScheme.error,
+              ),
+              tooltip: context.ap.delete,
+            ),
+          ],
         ),
       ),
     );
@@ -145,7 +171,7 @@ class _BlackListPageState extends State<BlackListPage> {
     showDialog(
       context: context,
       builder: (BuildContext dialogContext) => AlertDialog(
-        title: Text(context.ap.blackList),
+        title: Text(context.ap.editorList),
         content: TextField(
           controller: _usernameController,
           autofocus: true,
@@ -155,7 +181,7 @@ class _BlackListPageState extends State<BlackListPage> {
           ),
           onSubmitted: (_) {
             Navigator.of(dialogContext).pop();
-            _addToBlackList();
+            _addEditor();
           },
         ),
         actions: <Widget>[
@@ -166,7 +192,7 @@ class _BlackListPageState extends State<BlackListPage> {
           FilledButton(
             onPressed: () {
               Navigator.of(dialogContext).pop();
-              _addToBlackList();
+              _addEditor();
             },
             child: Text(context.ap.confirm),
           ),
@@ -199,7 +225,7 @@ class _BlackListPageState extends State<BlackListPage> {
             ),
             onPressed: () {
               Navigator.of(dialogContext).pop();
-              _removeFromBlackList(username: username);
+              _removeEditor(username: username);
             },
             child: Text(context.ap.delete),
           ),
@@ -213,7 +239,7 @@ class _BlackListPageState extends State<BlackListPage> {
       () => state = const DataLoading<List<String>>(),
     );
     final ApiResult<List<String>> result =
-        await AnnouncementHelper.instance.getBlackList();
+        await AnnouncementHelper.instance.getEditorList();
     if (!mounted) return;
     switch (result) {
       case ApiSuccess<List<String>>(:final List<String> data):
@@ -233,20 +259,18 @@ class _BlackListPageState extends State<BlackListPage> {
     }
   }
 
-  Future<void> _addToBlackList() async {
+  Future<void> _addEditor() async {
     final String username = _usernameController.text.trim();
     if (username.isEmpty) {
       UiUtil.instance
           .showToast(context, context.ap.doNotEmpty);
       return;
     }
-    _showLoading();
     final ApiResult<Response<dynamic>> result =
-        await AnnouncementHelper.instance.addBlackList(
+        await AnnouncementHelper.instance.addEditor(
       username: username,
     );
     if (!mounted) return;
-    _dismissLoading();
     if (result.isSuccess) {
       UiUtil.instance
           .showToast(context, context.ap.addSuccess);
@@ -256,16 +280,14 @@ class _BlackListPageState extends State<BlackListPage> {
     }
   }
 
-  Future<void> _removeFromBlackList({
+  Future<void> _removeEditor({
     required String username,
   }) async {
-    _showLoading();
     final ApiResult<Response<dynamic>> result =
-        await AnnouncementHelper.instance.removeFromBlackList(
+        await AnnouncementHelper.instance.removeEditor(
       username: username,
     );
     if (!mounted) return;
-    _dismissLoading();
     if (result.isSuccess) {
       UiUtil.instance
           .showToast(context, context.ap.deleteSuccess);
@@ -273,20 +295,5 @@ class _BlackListPageState extends State<BlackListPage> {
     } else {
       result.showErrorToast(context);
     }
-  }
-
-  void _showLoading() {
-    showDialog(
-      context: context,
-      builder: (_) => PopScope(
-        canPop: false,
-        child: ProgressDialog(context.ap.loading),
-      ),
-      barrierDismissible: false,
-    );
-  }
-
-  void _dismissLoading() {
-    Navigator.of(context, rootNavigator: true).pop();
   }
 }

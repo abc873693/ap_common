@@ -1,0 +1,42 @@
+---
+sidebar_position: 5
+---
+
+# 黑名單管理 BlackListPage
+
+管理被封鎖的使用者名單。需要 Editor 以上權限（permission_level >= 1）。
+
+## 使用方式
+
+```dart
+Navigator.push(
+  context,
+  MaterialPageRoute<void>(
+    builder: (_) => const BlackListPage(),
+  ),
+);
+```
+
+通常從 `AnnouncementHomePage` 的 AppBar 進入，不需手動建立。
+
+## 功能
+
+- 查看所有被封鎖的使用者
+- 新增使用者至黑名單（FAB → 輸入帳號對話框）
+- 移除使用者（刪除確認對話框）
+- 使用 `DataState<List<String>>` 管理載入/錯誤/空狀態
+
+## API 對應
+
+| 操作 | API | HTTP 方法 |
+| --- | --- | --- |
+| 取得黑名單 | `/ban` | GET |
+| 新增至黑名單 | `/ban` | POST |
+| 從黑名單移除 | `/ban` | DELETE |
+
+## UI 風格
+
+- M3 容器卡片（borderRadius: 12、outlineVariant 邊框）
+- 紅色 icon 容器表示封鎖狀態
+- 空狀態：居中 icon + 提示文字
+- 刪除前跳出確認對話框（M3 AlertDialog）

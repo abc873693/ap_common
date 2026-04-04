@@ -340,6 +340,8 @@
   "notFoundData": "找不到此資料",
   "updateRejectAndBan": "更新駁回並加入黑名單",
   "blackList": "黑名單",
+  "editorList": "編輯者管理",
+  "all": "全部",
   "delete": "刪除",
   "allAnnouncements": "所有最新消息",
   "allApplications": "所有審查",

@@ -1064,6 +1064,12 @@ class ApLocalizations with BaseTranslations<AppLocale, ApLocalizations> {
 	/// en: 'Black List'
 	String get blackList => 'Black List';
 
+	/// en: 'Editor Management'
+	String get editorList => 'Editor Management';
+
+	/// en: 'All'
+	String get all => 'All';
+
 	/// en: 'Delete'
 	String get delete => 'Delete';
 
@@ -1561,6 +1567,8 @@ extension on ApLocalizations {
 			'notFoundData' => 'No matching Data~',
 			'updateRejectAndBan' => 'Updated, Rejected and Ban',
 			'blackList' => 'Black List',
+			'editorList' => 'Editor Management',
+			'all' => 'All',
 			'delete' => 'Delete',
 			'allAnnouncements' => 'All Announcements',
 			'allApplications' => 'All Applications',
