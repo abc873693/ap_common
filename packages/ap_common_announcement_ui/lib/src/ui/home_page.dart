@@ -373,69 +373,86 @@ class _AnnouncementHomePageState extends State<AnnouncementHomePage>
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: <Widget>[
-            // Thumbnail
-            if (item.imgUrl.isNotEmpty)
-              ClipRRect(
-                borderRadius: const BorderRadius.vertical(
-                  top: Radius.circular(16),
-                ),
-                child: AspectRatio(
-                  aspectRatio: 16 / 9,
-                  child: ApNetworkImage(url: item.imgUrl),
-                ),
-              ),
-            // Content
             Padding(
               padding: const EdgeInsets.all(16),
-              child: Column(
+              child: Row(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: <Widget>[
-                  // Title
-                  Text(
-                    item.title,
-                    style: TextStyle(
-                      fontSize: 16,
-                      fontWeight: FontWeight.w600,
-                      color: colorScheme.onSurface,
+                  // Content
+                  Expanded(
+                    child: Column(
+                      crossAxisAlignment:
+                          CrossAxisAlignment.start,
+                      children: <Widget>[
+                        Text(
+                          item.title,
+                          style: TextStyle(
+                            fontSize: 16,
+                            fontWeight: FontWeight.w600,
+                            color: colorScheme.onSurface,
+                          ),
+                          maxLines: 2,
+                          overflow: TextOverflow.ellipsis,
+                        ),
+                        if (item.description
+                            .isNotEmpty) ...<Widget>[
+                          const SizedBox(height: 4),
+                          Text(
+                            item.description,
+                            style: TextStyle(
+                              fontSize: 13,
+                              color: colorScheme
+                                  .onSurfaceVariant,
+                            ),
+                            maxLines: 2,
+                            overflow: TextOverflow.ellipsis,
+                          ),
+                        ],
+                        const SizedBox(height: 8),
+                        Wrap(
+                          spacing: 6,
+                          runSpacing: 4,
+                          children: <Widget>[
+                            if (dataType ==
+                                _DataType.application)
+                              _buildReviewStatusBadge(
+                                colorScheme,
+                                item.reviewStatus,
+                              ),
+                            if (item.applicant != null &&
+                                _isAdmin)
+                              _buildInfoBadge(
+                                colorScheme,
+                                Icons.person_outline,
+                                item.applicant!,
+                              ),
+                            for (final String? tag
+                                in item.tags ?? <String>[])
+                              if (tag != null)
+                                _buildTagBadge(
+                                  colorScheme,
+                                  tag,
+                                ),
+                          ],
+                        ),
+                      ],
                     ),
-                    maxLines: 2,
-                    overflow: TextOverflow.ellipsis,
                   ),
-                  if (item.description.isNotEmpty) ...<Widget>[
-                    const SizedBox(height: 4),
-                    Text(
-                      item.description,
-                      style: TextStyle(
-                        fontSize: 13,
-                        color: colorScheme.onSurfaceVariant,
+                  // Thumbnail
+                  if (item.imgUrl.isNotEmpty) ...<Widget>[
+                    const SizedBox(width: 12),
+                    ClipRRect(
+                      borderRadius:
+                          BorderRadius.circular(8),
+                      child: SizedBox(
+                        width: 72,
+                        height: 72,
+                        child: ApNetworkImage(
+                          url: item.imgUrl,
+                        ),
                       ),
-                      maxLines: 2,
-                      overflow: TextOverflow.ellipsis,
                     ),
                   ],
-                  const SizedBox(height: 8),
-                  // Status + Tags row
-                  Wrap(
-                    spacing: 6,
-                    runSpacing: 4,
-                    children: <Widget>[
-                      if (dataType == _DataType.application)
-                        _buildReviewStatusBadge(
-                          colorScheme,
-                          item.reviewStatus,
-                        ),
-                      if (item.applicant != null && _isAdmin)
-                        _buildInfoBadge(
-                          colorScheme,
-                          Icons.person_outline,
-                          item.applicant!,
-                        ),
-                      for (final String? tag
-                          in item.tags ?? <String>[])
-                        if (tag != null)
-                          _buildTagBadge(colorScheme, tag),
-                    ],
-                  ),
                 ],
               ),
             ),
