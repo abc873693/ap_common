@@ -1,12 +1,12 @@
 import 'dart:io';
 
 import 'package:ap_common_announcement_ui/src/api/announcement_helper.dart';
+import 'package:ap_common_announcement_ui/src/ui/announcement_content_page.dart';
 import 'package:ap_common_announcement_ui/src/ui/black_list_page.dart';
 import 'package:ap_common_announcement_ui/src/ui/edit_page.dart';
 import 'package:ap_common_announcement_ui/src/utils/tag_colors.dart';
 import 'package:ap_common_flutter_ui/ap_common_flutter_ui.dart';
 import 'package:flutter/foundation.dart';
-import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:sign_in_with_apple/sign_in_with_apple.dart';
@@ -34,7 +34,8 @@ class AnnouncementHomePage extends StatefulWidget {
       _AnnouncementHomePageState();
 }
 
-class _AnnouncementHomePageState extends State<AnnouncementHomePage> {
+class _AnnouncementHomePageState extends State<AnnouncementHomePage>
+    with SingleTickerProviderStateMixin {
   final TextEditingController _username = TextEditingController();
   final TextEditingController _password = TextEditingController();
   final TextEditingController _reviewDescription =
@@ -52,6 +53,8 @@ class _AnnouncementHomePageState extends State<AnnouncementHomePage> {
   FocusNode? usernameFocusNode;
   FocusNode? passwordFocusNode;
 
+  TabController? _tabController;
+
   final GoogleSignIn _googleSignIn = GoogleSignIn(
     scopes: <String>['email'],
   );
@@ -61,14 +64,6 @@ class _AnnouncementHomePageState extends State<AnnouncementHomePage> {
   bool get _isAdmin =>
       loginData?.level != null &&
       loginData!.level != PermissionLevel.user;
-
-  bool get _isDataLoading =>
-      applicationState.isLoading ||
-      (_isAdmin && announcementState.isLoading);
-
-  bool get _hasError =>
-      applicationState.isError ||
-      (_isAdmin && announcementState.isError);
 
   String _reviewStateText(bool? reviewStatus) {
     if (reviewStatus == null) {
@@ -86,82 +81,35 @@ class _AnnouncementHomePageState extends State<AnnouncementHomePage> {
   }
 
   @override
+  void dispose() {
+    _tabController?.dispose();
+    super.dispose();
+  }
+
+  void _initTabController() {
+    if (_tabController != null) return;
+    _tabController = TabController(length: 2, vsync: this);
+  }
+
+  @override
   Widget build(BuildContext context) {
     final ColorScheme colorScheme = Theme.of(context).colorScheme;
 
     return Scaffold(
       appBar: AppBar(
         title: Text(context.ap.announcementReviewSystem),
-        actions: <Widget>[
-          if (_isLoggedIn && _isAdmin) ...<Widget>[
-            TextButton(
-              onPressed: () {
-                setState(() {
-                  onlyShowNotReview = !onlyShowNotReview!;
-                });
-                PreferenceUtil.instance.setBool(
-                  ApConstants.announcementOnlyNotReview,
-                  onlyShowNotReview!,
-                );
-              },
-              child: Row(
-                children: <Widget>[
-                  Checkbox(
-                    value: onlyShowNotReview,
-                    onChanged: (bool? value) {
-                      setState(() => onlyShowNotReview = value);
-                      PreferenceUtil.instance.setBool(
-                        ApConstants.announcementOnlyNotReview,
-                        onlyShowNotReview!,
-                      );
-                    },
-                  ),
-                  Text(
-                    context.ap.onlyShowNotReview,
-                    style: TextStyle(
-                      color: colorScheme.onSurface,
-                    ),
-                  ),
+        actions: _buildAppBarActions(colorScheme),
+        bottom: _isLoggedIn && _isAdmin
+            ? TabBar(
+                controller: _tabController,
+                tabs: <Tab>[
+                  Tab(text: context.ap.allApplications),
+                  Tab(text: context.ap.allAnnouncements),
                 ],
-              ),
-            ),
-            IconButton(
-              icon: const Icon(Icons.playlist_remove),
-              tooltip: context.ap.blackList,
-              onPressed: () {
-                ApUtils.pushCupertinoStyle(
-                  context,
-                  const BlackListPage(),
-                );
-              },
-            ),
-          ],
-          if (_isLoggedIn)
-            IconButton(
-              icon: const Icon(Icons.exit_to_app),
-              tooltip: context.ap.logout,
-              onPressed: _logout,
-            ),
-        ],
+              )
+            : null,
       ),
-      floatingActionButton: !_isAdmin
-          ? null
-          : FloatingActionButton(
-              onPressed: () async {
-                final dynamic success = await Navigator.push(
-                  context,
-                  MaterialPageRoute<dynamic>(
-                    builder: (_) => const AnnouncementEditPage(
-                      mode: Mode.add,
-                    ),
-                  ),
-                );
-                if (success is bool && success) {
-                  _getAnnouncements();
-                }
-              },
-              child: const Icon(Icons.add),
-            ),
+      floatingActionButton: _buildFab(),
       body: _isLoggedIn
           ? RefreshIndicator(
               onRefresh: () async {
@@ -174,162 +122,517 @@ class _AnnouncementHomePageState extends State<AnnouncementHomePage> {
     );
   }
 
-  Widget _buildContent(ColorScheme colorScheme) {
-    if (_isDataLoading) {
-      return const Center(child: CircularProgressIndicator());
-    }
-
-    if (_hasError) {
-      return InkWell(
-        onTap: () {
-          _getAnnouncements();
-          _getApplications();
-        },
-        child: HintContent(
-          icon: ApIcon.classIcon,
-          content: context.ap.clickToRetry,
+  List<Widget> _buildAppBarActions(ColorScheme colorScheme) {
+    return <Widget>[
+      if (_isLoggedIn && _isAdmin) ...<Widget>[
+        IconButton(
+          icon: Icon(
+            onlyShowNotReview!
+                ? Icons.filter_alt
+                : Icons.filter_alt_outlined,
+          ),
+          tooltip: context.ap.onlyShowNotReview,
+          onPressed: () {
+            setState(() {
+              onlyShowNotReview = !onlyShowNotReview!;
+            });
+            PreferenceUtil.instance.setBool(
+              ApConstants.announcementOnlyNotReview,
+              onlyShowNotReview!,
+            );
+          },
         ),
+        IconButton(
+          icon: const Icon(Icons.playlist_remove),
+          tooltip: context.ap.blackList,
+          onPressed: () {
+            ApUtils.pushCupertinoStyle(
+              context,
+              const BlackListPage(),
+            );
+          },
+        ),
+      ],
+      if (_isLoggedIn)
+        IconButton(
+          icon: const Icon(Icons.exit_to_app),
+          tooltip: context.ap.logout,
+          onPressed: _logout,
+        ),
+    ];
+  }
+
+  Widget? _buildFab() {
+    if (!_isLoggedIn) return null;
+
+    if (_isAdmin) {
+      return FloatingActionButton(
+        onPressed: () => _navigateToEdit(Mode.add),
+        child: const Icon(Icons.add),
       );
     }
 
-    final List<Announcement> apps =
-        applicationState.dataOrNull ?? <Announcement>[];
-    final List<Announcement> news =
-        announcementState.dataOrNull ?? <Announcement>[];
-
-    if (_isAdmin) {
-      return _buildAdminView(colorScheme, apps, news);
-    }
-    return _buildUserView(colorScheme, apps);
+    return FloatingActionButton.extended(
+      onPressed: () => _navigateToEdit(Mode.application),
+      icon: const Icon(Icons.add),
+      label: Text(context.ap.apply),
+    );
   }
 
-  Widget _buildUserView(
+  Widget _buildContent(ColorScheme colorScheme) {
+    if (_isAdmin) {
+      return _buildAdminTabView(colorScheme);
+    }
+    return _buildUserView(colorScheme);
+  }
+
+  // ─── User View ─────────────────────────────────────────
+
+  Widget _buildUserView(ColorScheme colorScheme) {
+    return switch (applicationState) {
+      DataLoading<List<Announcement>>() =>
+        const Center(child: CircularProgressIndicator()),
+      DataError<List<Announcement>>() => InkWell(
+          onTap: _getApplications,
+          child: HintContent(
+            icon: ApIcon.classIcon,
+            content: context.ap.clickToRetry,
+          ),
+        ),
+      DataEmpty<List<Announcement>>() => HintContent(
+          icon: ApIcon.classIcon,
+          content: context.ap.noData,
+        ),
+      DataLoaded<List<Announcement>>(:final List<Announcement> data) =>
+        _buildUserList(colorScheme, data),
+    };
+  }
+
+  Widget _buildUserList(
     ColorScheme colorScheme,
     List<Announcement> apps,
   ) {
-    return SingleChildScrollView(
-      padding: const EdgeInsets.symmetric(horizontal: 16),
-      child: Column(
+    final List<Announcement> filtered = onlyShowNotReview!
+        ? apps
+            .where(
+              (Announcement a) => a.reviewStatus == null,
+            )
+            .toList()
+        : apps;
+
+    return ListView.builder(
+      padding: const EdgeInsets.all(16),
+      itemCount: filtered.length + 1,
+      itemBuilder: (BuildContext context, int index) {
+        if (index == 0) {
+          return _buildRulesHint(colorScheme);
+        }
+        return _buildItemCard(
+          colorScheme,
+          _DataType.application,
+          filtered[index - 1],
+        );
+      },
+    );
+  }
+
+  Widget _buildRulesHint(ColorScheme colorScheme) {
+    return Container(
+      margin: const EdgeInsets.only(bottom: 16),
+      padding: const EdgeInsets.symmetric(
+        horizontal: 16,
+        vertical: 12,
+      ),
+      decoration: BoxDecoration(
+        color: colorScheme.tertiaryContainer.withAlpha(128),
+        borderRadius: BorderRadius.circular(12),
+      ),
+      child: Row(
         children: <Widget>[
-          const SizedBox(height: 16),
-          widget.reviewDescriptionWidget ??
-              SelectableText.rich(
-                TextSpan(
+          Icon(
+            Icons.info_outline,
+            size: 18,
+            color: colorScheme.onTertiaryContainer,
+          ),
+          const SizedBox(width: 8),
+          Expanded(
+            child: widget.reviewDescriptionWidget ??
+                Text(
+                  context.ap.newsRuleDescription2,
                   style: TextStyle(
-                    color: colorScheme.onSurfaceVariant,
-                    fontSize: 16.0,
-                    height: 1.5,
-                  ),
-                  children: <TextSpan>[
-                    TextSpan(
-                      text: '${context.ap.newsRuleDescription1(
-                        arg1: widget.organizationDomain ?? '',
-                      )}\n',
-                    ),
-                    TextSpan(
-                      text: context.ap.newsRuleDescription2,
-                      style: const TextStyle(
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ),
-                    TextSpan(
-                      text: context.ap.newsRuleDescription3,
-                    ),
-                  ],
-                ),
-                textAlign: TextAlign.center,
-              ),
-          const SizedBox(height: 24),
-          FilledButton.icon(
-            onPressed: () async {
-              final dynamic success = await Navigator.push(
-                context,
-                MaterialPageRoute<dynamic>(
-                  builder: (_) => const AnnouncementEditPage(
-                    mode: Mode.application,
+                    color: colorScheme.onTertiaryContainer,
+                    fontSize: 13,
                   ),
                 ),
-              );
-              if (success is bool && success) {
-                _getApplications();
-              }
-            },
-            icon: const Icon(Icons.add),
-            label: Text(context.ap.apply),
           ),
-          const SizedBox(height: 24),
-          Text(
-            context.ap.myApplications,
-            style: TextStyle(
-              fontWeight: FontWeight.w600,
-              color: colorScheme.onSurface,
-            ),
-          ),
-          const SizedBox(height: 8),
-          for (final Announcement item in apps)
-            if ((onlyShowNotReview! &&
-                    item.reviewStatus == null) ||
-                !onlyShowNotReview!)
-              _buildItem(
-                colorScheme,
-                _DataType.application,
-                item,
-              ),
         ],
       ),
     );
   }
 
-  Widget _buildAdminView(
+  // ─── Admin Tab View ────────────────────────────────────
+
+  Widget _buildAdminTabView(ColorScheme colorScheme) {
+    return TabBarView(
+      controller: _tabController,
+      children: <Widget>[
+        _buildDataStateList(
+          colorScheme,
+          applicationState,
+          _DataType.application,
+          onRetry: _getApplications,
+        ),
+        _buildDataStateList(
+          colorScheme,
+          announcementState,
+          _DataType.announcement,
+          onRetry: _getAnnouncements,
+        ),
+      ],
+    );
+  }
+
+  Widget _buildDataStateList(
     ColorScheme colorScheme,
-    List<Announcement> apps,
-    List<Announcement> news,
-  ) {
-    return SingleChildScrollView(
-      padding: const EdgeInsets.symmetric(horizontal: 16),
-      child: Theme(
-        data: Theme.of(context)
-            .copyWith(dividerColor: Colors.transparent),
-        child: Column(
-          children: <Widget>[
-            const SizedBox(height: 16, width: double.infinity),
-            Text(
-              context.ap.allApplications,
-              style: TextStyle(
-                fontWeight: FontWeight.w600,
-                color: colorScheme.onSurface,
-              ),
-            ),
-            const SizedBox(height: 8),
-            for (final Announcement item in apps)
-              if ((onlyShowNotReview! &&
-                      item.reviewStatus == null) ||
-                  !onlyShowNotReview!)
-                _buildItem(
-                  colorScheme,
-                  _DataType.application,
-                  item,
-                ),
-            const SizedBox(height: 24),
-            Text(
-              context.ap.allAnnouncements,
-              style: TextStyle(
-                fontWeight: FontWeight.w600,
-                color: colorScheme.onSurface,
-              ),
-            ),
-            const SizedBox(height: 8),
-            for (final Announcement item in news)
-              _buildItem(
+    DataState<List<Announcement>> state,
+    _DataType dataType, {
+    required VoidCallback onRetry,
+  }) {
+    return switch (state) {
+      DataLoading<List<Announcement>>() =>
+        const Center(child: CircularProgressIndicator()),
+      DataError<List<Announcement>>() => InkWell(
+          onTap: onRetry,
+          child: HintContent(
+            icon: ApIcon.classIcon,
+            content: context.ap.clickToRetry,
+          ),
+        ),
+      DataEmpty<List<Announcement>>() => HintContent(
+          icon: ApIcon.classIcon,
+          content: context.ap.noData,
+        ),
+      DataLoaded<List<Announcement>>(
+        :final List<Announcement> data,
+      ) =>
+        () {
+          final List<Announcement> filtered = onlyShowNotReview!
+              ? data
+                  .where(
+                    (Announcement a) => a.reviewStatus == null,
+                  )
+                  .toList()
+              : data;
+
+          if (filtered.isEmpty) {
+            return HintContent(
+              icon: ApIcon.classIcon,
+              content: context.ap.noData,
+            );
+          }
+
+          return ListView.builder(
+            padding: const EdgeInsets.all(16),
+            itemCount: filtered.length,
+            itemBuilder: (BuildContext context, int index) {
+              return _buildItemCard(
                 colorScheme,
-                _DataType.announcement,
-                item,
+                dataType,
+                filtered[index],
+              );
+            },
+          );
+        }(),
+    };
+  }
+
+  // ─── Item Card ─────────────────────────────────────────
+
+  Widget _buildItemCard(
+    ColorScheme colorScheme,
+    _DataType dataType,
+    Announcement item,
+  ) {
+    return Container(
+      margin: const EdgeInsets.only(bottom: 12),
+      decoration: BoxDecoration(
+        color: colorScheme.surfaceContainerLowest,
+        borderRadius: BorderRadius.circular(16),
+        border: Border.all(
+          color: colorScheme.outlineVariant.withAlpha(77),
+        ),
+      ),
+      child: InkWell(
+        borderRadius: BorderRadius.circular(16),
+        onTap: () {
+          ApUtils.pushCupertinoStyle(
+            context,
+            AnnouncementContentPage(announcement: item),
+          );
+        },
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: <Widget>[
+            // Thumbnail
+            if (item.imgUrl.isNotEmpty)
+              ClipRRect(
+                borderRadius: const BorderRadius.vertical(
+                  top: Radius.circular(16),
+                ),
+                child: AspectRatio(
+                  aspectRatio: 16 / 9,
+                  child: ApNetworkImage(url: item.imgUrl),
+                ),
               ),
+            // Content
+            Padding(
+              padding: const EdgeInsets.all(16),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: <Widget>[
+                  // Title
+                  Text(
+                    item.title,
+                    style: TextStyle(
+                      fontSize: 16,
+                      fontWeight: FontWeight.w600,
+                      color: colorScheme.onSurface,
+                    ),
+                    maxLines: 2,
+                    overflow: TextOverflow.ellipsis,
+                  ),
+                  if (item.description.isNotEmpty) ...<Widget>[
+                    const SizedBox(height: 4),
+                    Text(
+                      item.description,
+                      style: TextStyle(
+                        fontSize: 13,
+                        color: colorScheme.onSurfaceVariant,
+                      ),
+                      maxLines: 2,
+                      overflow: TextOverflow.ellipsis,
+                    ),
+                  ],
+                  const SizedBox(height: 8),
+                  // Status + Tags row
+                  Wrap(
+                    spacing: 6,
+                    runSpacing: 4,
+                    children: <Widget>[
+                      if (dataType == _DataType.application)
+                        _buildReviewStatusBadge(
+                          colorScheme,
+                          item.reviewStatus,
+                        ),
+                      if (item.applicant != null && _isAdmin)
+                        _buildInfoBadge(
+                          colorScheme,
+                          Icons.person_outline,
+                          item.applicant!,
+                        ),
+                      for (final String? tag
+                          in item.tags ?? <String>[])
+                        if (tag != null)
+                          _buildTagBadge(colorScheme, tag),
+                    ],
+                  ),
+                ],
+              ),
+            ),
+            // Action buttons
+            if (_isAdmin && item.reviewStatus == null)
+              _buildActionBar(colorScheme, dataType, item),
           ],
         ),
       ),
     );
   }
+
+  Widget _buildReviewStatusBadge(
+    ColorScheme colorScheme,
+    bool? reviewStatus,
+  ) {
+    final Color badgeColor;
+    final IconData icon;
+    if (reviewStatus == null) {
+      badgeColor = colorScheme.tertiary;
+      icon = Icons.schedule;
+    } else if (reviewStatus) {
+      badgeColor = colorScheme.primary;
+      icon = Icons.check_circle_outline;
+    } else {
+      badgeColor = colorScheme.error;
+      icon = Icons.cancel_outlined;
+    }
+
+    return Container(
+      padding: const EdgeInsets.symmetric(
+        horizontal: 8,
+        vertical: 3,
+      ),
+      decoration: BoxDecoration(
+        color: badgeColor.withAlpha(26),
+        borderRadius: BorderRadius.circular(6),
+      ),
+      child: Row(
+        mainAxisSize: MainAxisSize.min,
+        children: <Widget>[
+          Icon(icon, size: 12, color: badgeColor),
+          const SizedBox(width: 4),
+          Text(
+            _reviewStateText(reviewStatus),
+            style: TextStyle(
+              fontSize: 11,
+              fontWeight: FontWeight.w600,
+              color: badgeColor,
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildInfoBadge(
+    ColorScheme colorScheme,
+    IconData icon,
+    String text,
+  ) {
+    return Container(
+      padding: const EdgeInsets.symmetric(
+        horizontal: 8,
+        vertical: 3,
+      ),
+      decoration: BoxDecoration(
+        color: colorScheme.secondaryContainer.withAlpha(128),
+        borderRadius: BorderRadius.circular(6),
+      ),
+      child: Row(
+        mainAxisSize: MainAxisSize.min,
+        children: <Widget>[
+          Icon(
+            icon,
+            size: 12,
+            color: colorScheme.onSecondaryContainer,
+          ),
+          const SizedBox(width: 4),
+          Text(
+            text,
+            style: TextStyle(
+              fontSize: 11,
+              color: colorScheme.onSecondaryContainer,
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildTagBadge(ColorScheme colorScheme, String tag) {
+    final Color color = tagColor(tag, colorScheme);
+    return Container(
+      padding: const EdgeInsets.symmetric(
+        horizontal: 8,
+        vertical: 3,
+      ),
+      decoration: BoxDecoration(
+        color: color.withAlpha(26),
+        borderRadius: BorderRadius.circular(6),
+      ),
+      child: Text(
+        tag,
+        style: TextStyle(
+          fontSize: 11,
+          fontWeight: FontWeight.w600,
+          color: color,
+        ),
+      ),
+    );
+  }
+
+  Widget _buildActionBar(
+    ColorScheme colorScheme,
+    _DataType dataType,
+    Announcement item,
+  ) {
+    return Container(
+      decoration: BoxDecoration(
+        border: Border(
+          top: BorderSide(
+            color: colorScheme.outlineVariant.withAlpha(77),
+          ),
+        ),
+      ),
+      padding: const EdgeInsets.symmetric(
+        horizontal: 8,
+        vertical: 4,
+      ),
+      child: Row(
+        children: <Widget>[
+          TextButton.icon(
+            onPressed: () => _navigateToEdit(
+              dataType == _DataType.announcement
+                  ? Mode.edit
+                  : Mode.editApplication,
+              announcement: item,
+            ),
+            icon: const Icon(Icons.edit_outlined, size: 18),
+            label: Text(context.ap.update),
+            style: TextButton.styleFrom(
+              foregroundColor: colorScheme.primary,
+              textStyle: const TextStyle(fontSize: 13),
+            ),
+          ),
+          if (dataType == _DataType.announcement)
+            TextButton.icon(
+              onPressed: () => _showDeleteDialog(item),
+              icon: const Icon(
+                Icons.delete_outline,
+                size: 18,
+              ),
+              label: Text(context.ap.delete),
+              style: TextButton.styleFrom(
+                foregroundColor: colorScheme.error,
+                textStyle: const TextStyle(fontSize: 13),
+              ),
+            ),
+          if (dataType == _DataType.application) ...<Widget>[
+            TextButton.icon(
+              onPressed: () => _showReviewDialog(
+                item,
+                isApprove: true,
+              ),
+              icon: const Icon(
+                Icons.check_circle_outline,
+                size: 18,
+              ),
+              label: Text(context.ap.approve),
+              style: TextButton.styleFrom(
+                foregroundColor: colorScheme.primary,
+                textStyle: const TextStyle(fontSize: 13),
+              ),
+            ),
+            TextButton.icon(
+              onPressed: () => _showReviewDialog(
+                item,
+                isApprove: false,
+              ),
+              icon: const Icon(
+                Icons.cancel_outlined,
+                size: 18,
+              ),
+              label: Text(context.ap.reject),
+              style: TextButton.styleFrom(
+                foregroundColor: colorScheme.error,
+                textStyle: const TextStyle(fontSize: 13),
+              ),
+            ),
+          ],
+        ],
+      ),
+    );
+  }
+
+  // ─── Login ─────────────────────────────────────────────
 
   Widget _buildLoginContent(ColorScheme colorScheme) {
     return Center(
@@ -451,335 +754,114 @@ class _AnnouncementHomePageState extends State<AnnouncementHomePage> {
     );
   }
 
-  Widget _buildItem(
-    ColorScheme colorScheme,
-    _DataType dataType,
-    Announcement item,
-  ) {
-    return Container(
-      margin: const EdgeInsets.only(bottom: 8),
-      decoration: BoxDecoration(
-        color: colorScheme.surfaceContainerLowest,
-        borderRadius: BorderRadius.circular(16),
-        border: Border.all(
-          color: colorScheme.outlineVariant.withAlpha(77),
+  // ─── Dialogs ───────────────────────────────────────────
+
+  void _showDeleteDialog(Announcement item) {
+    showDialog(
+      context: context,
+      builder: (_) => YesNoDialog(
+        title: context.ap.deleteNewsTitle,
+        contentWidget: Text(
+          context.ap.deleteNewsContent,
+          textAlign: TextAlign.center,
         ),
+        leftActionText: context.ap.determine,
+        rightActionText: context.ap.back,
+        leftActionFunction: () async {
+          final ApiResult<Response<dynamic>> result =
+              await AnnouncementHelper.instance
+                  .deleteAnnouncement(data: item);
+          _handleResult(result, () {
+            _getAnnouncements();
+          });
+        },
       ),
-      child: GestureDetector(
-        onLongPress:
-            loginData?.level == PermissionLevel.user ||
-                    item.reviewStatus != null
+    );
+  }
+
+  void _showReviewDialog(
+    Announcement item, {
+    required bool isApprove,
+  }) {
+    _reviewDescription.clear();
+    showDialog(
+      context: context,
+      builder: (_) => AlertDialog(
+        title: Text(context.ap.reviewApplication),
+        content: TextField(
+          controller: _reviewDescription,
+          maxLines: 3,
+          decoration: InputDecoration(
+            labelText: context.ap.reviewDescription,
+          ),
+        ),
+        actions: <Widget>[
+          TextButton(
+            onPressed: () =>
+                Navigator.of(context, rootNavigator: true).pop(),
+            child: Text(context.ap.back),
+          ),
+          FilledButton(
+            onPressed: () async {
+              Navigator.of(context, rootNavigator: true).pop();
+              final ApiResult<Response<dynamic>> result;
+              if (isApprove) {
+                result = await AnnouncementHelper.instance
+                    .approveApplication(
+                  applicationId: item.applicationId,
+                  reviewDescription: _reviewDescription.text,
+                );
+              } else {
+                result = await AnnouncementHelper.instance
+                    .rejectApplication(
+                  applicationId: item.applicationId,
+                  reviewDescription: _reviewDescription.text,
+                );
+              }
+              _handleResult(result, () {
+                _getAnnouncements();
+                _getApplications();
+              });
+            },
+            style: isApprove
                 ? null
-                : () async {
-                    final dynamic success = await Navigator.push(
-                      context,
-                      MaterialPageRoute<dynamic>(
-                        builder: (_) => AnnouncementEditPage(
-                          mode: dataType == _DataType.announcement
-                              ? Mode.edit
-                              : Mode.editApplication,
-                          announcement: item,
-                        ),
-                      ),
-                    );
-                    if (success is bool && success) {
-                      _getAnnouncements();
-                      _getApplications();
-                    }
-                  },
-        child: ExpansionTile(
-          childrenPadding:
-              const EdgeInsets.symmetric(horizontal: 24),
-          shape: const RoundedRectangleBorder(),
-          title: Padding(
-            padding: const EdgeInsets.only(top: 8),
+                : FilledButton.styleFrom(
+                    backgroundColor:
+                        Theme.of(context).colorScheme.error,
+                    foregroundColor:
+                        Theme.of(context).colorScheme.onError,
+                  ),
             child: Text(
-              item.title,
-              style: TextStyle(
-                fontSize: 16,
-                fontWeight: FontWeight.w500,
-                color: colorScheme.onSurface,
-              ),
+              isApprove ? context.ap.approve : context.ap.reject,
             ),
-          ),
-          trailing: _buildItemTrailing(
-            colorScheme,
-            dataType,
-            item,
-          ),
-          subtitle: _buildItemSubtitle(
-            colorScheme,
-            dataType,
-            item,
-          ),
-          children: <Widget>[
-            _buildItemDetails(colorScheme, dataType, item),
-            const SizedBox(height: 16),
-          ],
-        ),
-      ),
-    );
-  }
-
-  Widget? _buildItemTrailing(
-    ColorScheme colorScheme,
-    _DataType dataType,
-    Announcement item,
-  ) {
-    if (!_isAdmin || item.reviewStatus != null) return null;
-
-    return IconButton(
-      icon: Icon(
-        dataType == _DataType.announcement
-            ? ApIcon.cancel
-            : Icons.approval,
-        color: dataType == _DataType.announcement
-            ? colorScheme.error
-            : colorScheme.tertiary,
-      ),
-      onPressed: () => _showActionDialog(dataType, item),
-    );
-  }
-
-  Widget _buildItemSubtitle(
-    ColorScheme colorScheme,
-    _DataType dataType,
-    Announcement item,
-  ) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: <Widget>[
-        if (dataType == _DataType.application)
-          _buildReviewStatusBadge(colorScheme, item.reviewStatus),
-        if (_isAdmin)
-          Padding(
-            padding: const EdgeInsets.only(top: 4),
-            child: Wrap(
-              spacing: 6,
-              runSpacing: 4,
-              children: <Widget>[
-                for (final String? tag
-                    in item.tags ?? <String>[])
-                  if (tag != null)
-                    Container(
-                      padding: const EdgeInsets.symmetric(
-                        horizontal: 8,
-                        vertical: 2,
-                      ),
-                      decoration: BoxDecoration(
-                        color: tagColor(tag, colorScheme)
-                            .withAlpha(26),
-                        borderRadius: BorderRadius.circular(4),
-                      ),
-                      child: Text(
-                        tag,
-                        style: TextStyle(
-                          fontSize: 11,
-                          fontWeight: FontWeight.w600,
-                          color: tagColor(tag, colorScheme),
-                        ),
-                      ),
-                    ),
-              ],
-            ),
-          ),
-      ],
-    );
-  }
-
-  Widget _buildReviewStatusBadge(
-    ColorScheme colorScheme,
-    bool? reviewStatus,
-  ) {
-    final Color badgeColor;
-    if (reviewStatus == null) {
-      badgeColor = colorScheme.tertiary;
-    } else if (reviewStatus) {
-      badgeColor = colorScheme.primary;
-    } else {
-      badgeColor = colorScheme.error;
-    }
-
-    return Container(
-      margin: const EdgeInsets.only(top: 4),
-      padding: const EdgeInsets.symmetric(
-        horizontal: 8,
-        vertical: 2,
-      ),
-      decoration: BoxDecoration(
-        color: badgeColor.withAlpha(26),
-        borderRadius: BorderRadius.circular(4),
-      ),
-      child: Text(
-        '${context.ap.reviewState}：${_reviewStateText(reviewStatus)}',
-        style: TextStyle(
-          fontSize: 12,
-          fontWeight: FontWeight.w600,
-          color: badgeColor,
-        ),
-      ),
-    );
-  }
-
-  Widget _buildItemDetails(
-    ColorScheme colorScheme,
-    _DataType dataType,
-    Announcement item,
-  ) {
-    final TextStyle labelStyle = TextStyle(
-      color: colorScheme.onSurface,
-      fontWeight: FontWeight.bold,
-      height: 1.5,
-      fontSize: 14,
-    );
-    final TextStyle valueStyle = TextStyle(
-      color: colorScheme.onSurfaceVariant,
-      height: 1.5,
-      fontSize: 14,
-    );
-    final TextStyle linkStyle = TextStyle(
-      color: colorScheme.primary,
-      decoration: TextDecoration.underline,
-      decorationColor: colorScheme.primary,
-      height: 1.5,
-      fontSize: 14,
-    );
-
-    return SelectableText.rich(
-      TextSpan(
-        children: <TextSpan>[
-          if (_isAdmin) ...<TextSpan>[
-            TextSpan(
-              text: '${context.ap.weight}：',
-              style: labelStyle,
-            ),
-            TextSpan(
-              text: '${item.weight}\n',
-              style: valueStyle,
-            ),
-          ],
-          TextSpan(
-            text: '${context.ap.imageUrl}：',
-            style: labelStyle,
-          ),
-          TextSpan(
-            text: '${item.imgUrl}\n',
-            style: linkStyle,
-            recognizer: TapGestureRecognizer()
-              ..onTap = () =>
-                  PlatformUtil.instance.launchUrl(item.imgUrl),
-          ),
-          TextSpan(
-            text: '${context.ap.url}：',
-            style: labelStyle,
-          ),
-          TextSpan(
-            text: '${item.url ?? ""}\n',
-            style: linkStyle,
-            recognizer: TapGestureRecognizer()
-              ..onTap = () {
-                if (item.url != null) {
-                  PlatformUtil.instance.launchUrl(item.url!);
-                }
-              },
-          ),
-          TextSpan(
-            text: '${context.ap.expireTime}：',
-            style: labelStyle,
-          ),
-          TextSpan(
-            text:
-                '${item.expireTime ?? context.ap.noExpiration}\n',
-            style: valueStyle,
-          ),
-          TextSpan(
-            text: '${context.ap.description}：',
-            style: labelStyle,
-          ),
-          TextSpan(
-            text: '${item.description}\n',
-            style: valueStyle,
-          ),
-          TextSpan(
-            text: '${context.ap.reviewDescription}：',
-            style: labelStyle,
-          ),
-          TextSpan(
-            text: item.reviewDescription ?? '',
-            style: valueStyle,
           ),
         ],
       ),
     );
   }
 
-  void _showActionDialog(_DataType dataType, Announcement item) {
-    final ColorScheme colorScheme = Theme.of(context).colorScheme;
+  // ─── Navigation ────────────────────────────────────────
 
-    showDialog(
-      context: context,
-      builder: (_) => dataType == _DataType.announcement
-          ? YesNoDialog(
-              title: context.ap.deleteNewsTitle,
-              contentWidget: Text(
-                context.ap.deleteNewsContent,
-                textAlign: TextAlign.center,
-              ),
-              leftActionText: context.ap.determine,
-              rightActionText: context.ap.back,
-              leftActionFunction: () async {
-                final ApiResult<Response<dynamic>> result =
-                    await AnnouncementHelper.instance
-                        .deleteAnnouncement(data: item);
-                _handleResult(result, () {
-                  _reviewDescription.text = '';
-                  _getAnnouncements();
-                });
-              },
-            )
-          : YesNoDialog(
-              title: context.ap.reviewApplication,
-              contentWidget: TextField(
-                controller: _reviewDescription,
-                maxLines: 3,
-                decoration: InputDecoration(
-                  labelText: context.ap.reviewDescription,
-                  labelStyle: TextStyle(
-                    color: colorScheme.onSurfaceVariant,
-                  ),
-                ),
-              ),
-              leftActionText: context.ap.approve,
-              rightActionText: context.ap.reject,
-              leftActionFunction: () async {
-                final ApiResult<Response<dynamic>> result =
-                    await AnnouncementHelper.instance
-                        .approveApplication(
-                  applicationId: item.applicationId,
-                  reviewDescription: _reviewDescription.text,
-                );
-                _handleResult(result, () {
-                  _reviewDescription.text = '';
-                  _getAnnouncements();
-                  _getApplications();
-                });
-              },
-              rightActionFunction: () async {
-                final ApiResult<Response<dynamic>> result =
-                    await AnnouncementHelper.instance
-                        .rejectApplication(
-                  applicationId: item.applicationId,
-                  reviewDescription: _reviewDescription.text,
-                );
-                _handleResult(result, () {
-                  _reviewDescription.text = '';
-                  _getAnnouncements();
-                  _getApplications();
-                });
-              },
-            ),
+  Future<void> _navigateToEdit(
+    Mode mode, {
+    Announcement? announcement,
+  }) async {
+    final dynamic success = await Navigator.push(
+      context,
+      MaterialPageRoute<dynamic>(
+        builder: (_) => AnnouncementEditPage(
+          mode: mode,
+          announcement: announcement,
+        ),
+      ),
     );
+    if (success is bool && success) {
+      _getAnnouncements();
+      _getApplications();
+    }
   }
+
+  // ─── Data & State ──────────────────────────────────────
 
   void _handleResult(
     ApiResult<dynamic> result,
@@ -799,6 +881,8 @@ class _AnnouncementHomePageState extends State<AnnouncementHomePage> {
         AnnouncementLoginType.google) {
       await _googleSignIn.signOut();
     }
+    _tabController?.dispose();
+    _tabController = null;
     setState(() {
       PreferenceUtil.instance.setBool(
         ApConstants.announcementIsLogin,
@@ -821,8 +905,9 @@ class _AnnouncementHomePageState extends State<AnnouncementHomePage> {
             :final List<Announcement> data,
           ):
         setState(() {
-          announcementState =
-              DataLoaded<List<Announcement>>(data);
+          announcementState = data.isEmpty
+              ? const DataEmpty<List<Announcement>>()
+              : DataLoaded<List<Announcement>>(data);
         });
       case ApiError<List<Announcement>>():
       case ApiFailure<List<Announcement>>():
@@ -843,8 +928,9 @@ class _AnnouncementHomePageState extends State<AnnouncementHomePage> {
             :final List<Announcement> data,
           ):
         setState(() {
-          applicationState =
-              DataLoaded<List<Announcement>>(data);
+          applicationState = data.isEmpty
+              ? const DataEmpty<List<Announcement>>()
+              : DataLoaded<List<Announcement>>(data);
         });
       case ApiError<List<Announcement>>():
       case ApiFailure<List<Announcement>>():
@@ -878,6 +964,7 @@ class _AnnouncementHomePageState extends State<AnnouncementHomePage> {
           'token = ${loginData!.key}',
         );
       }
+      if (_isAdmin) _initTabController();
       if (loginData?.isExpired ?? true) {
         final int index = PreferenceUtil.instance
             .getInt(ApConstants.announcementLoginType, 0);
@@ -1028,6 +1115,7 @@ class _AnnouncementHomePageState extends State<AnnouncementHomePage> {
           ApConstants.announcementLoginType,
           loginType.index,
         );
+        if (_isAdmin) _initTabController();
         setState(() {
           if (_isAdmin) _getAnnouncements();
           _getApplications();
