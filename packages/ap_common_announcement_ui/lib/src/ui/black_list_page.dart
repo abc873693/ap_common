@@ -13,12 +13,19 @@ class _BlackListPageState extends State<BlackListPage> {
   DataState<List<String>> state =
       const DataLoading<List<String>>();
 
+  final TextEditingController _usernameController =
+      TextEditingController();
+
   @override
   void initState() {
-    Future<dynamic>.microtask(
-      () => _getData(),
-    );
+    Future<dynamic>.microtask(() => _getData());
     super.initState();
+  }
+
+  @override
+  void dispose() {
+    _usernameController.dispose();
+    super.dispose();
   }
 
   @override
@@ -28,6 +35,10 @@ class _BlackListPageState extends State<BlackListPage> {
     return Scaffold(
       appBar: AppBar(
         title: Text(context.ap.blackList),
+      ),
+      floatingActionButton: FloatingActionButton(
+        onPressed: () => _showAddDialog(colorScheme),
+        child: const Icon(Icons.person_add_alt),
       ),
       body: switch (state) {
         DataLoading<List<String>>() => const Center(
@@ -40,47 +51,160 @@ class _BlackListPageState extends State<BlackListPage> {
               content: context.ap.clickToRetry,
             ),
           ),
-        DataEmpty<List<String>>() => HintContent(
-            icon: ApIcon.classIcon,
-            content: context.ap.noData,
-          ),
-        DataLoaded<List<String>>(:final List<String> data) =>
-          ListView.separated(
-            itemCount: data.length,
-            itemBuilder: (BuildContext context, int index) {
-              return ListTile(
-                leading: Container(
-                  width: 40,
-                  height: 40,
+        DataEmpty<List<String>>() => Center(
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: <Widget>[
+                Container(
+                  width: 80,
+                  height: 80,
                   decoration: BoxDecoration(
-                    color: colorScheme.errorContainer
-                        .withAlpha(128),
-                    borderRadius: BorderRadius.circular(10),
+                    color: colorScheme.primaryContainer
+                        .withAlpha(77),
+                    borderRadius: BorderRadius.circular(20),
                   ),
                   child: Icon(
                     Icons.person_off_outlined,
-                    size: 20,
-                    color: colorScheme.error,
+                    size: 40,
+                    color: colorScheme.primary,
                   ),
                 ),
-                title: Text(data[index]),
-                trailing: IconButton(
-                  onPressed: () => _removeFromBlackList(
-                    username: data[index],
-                  ),
-                  icon: Icon(
-                    Icons.delete_forever_outlined,
-                    color: colorScheme.error,
+                const SizedBox(height: 16),
+                Text(
+                  context.ap.noData,
+                  style: TextStyle(
+                    fontSize: 16,
+                    color: colorScheme.onSurfaceVariant,
                   ),
                 ),
-              );
-            },
-            separatorBuilder: (_, __) => Divider(
-              height: 1,
-              color: colorScheme.outlineVariant.withAlpha(77),
+              ],
             ),
           ),
+        DataLoaded<List<String>>(:final List<String> data) =>
+          ListView.builder(
+            padding: const EdgeInsets.all(16),
+            itemCount: data.length,
+            itemBuilder: (BuildContext context, int index) {
+              return _buildItem(colorScheme, data[index]);
+            },
+          ),
       },
+    );
+  }
+
+  Widget _buildItem(ColorScheme colorScheme, String username) {
+    return Container(
+      margin: const EdgeInsets.only(bottom: 8),
+      decoration: BoxDecoration(
+        color: colorScheme.surfaceContainerLowest,
+        borderRadius: BorderRadius.circular(12),
+        border: Border.all(
+          color: colorScheme.outlineVariant.withAlpha(77),
+        ),
+      ),
+      child: ListTile(
+        contentPadding: const EdgeInsets.symmetric(
+          horizontal: 16,
+          vertical: 4,
+        ),
+        leading: Container(
+          width: 40,
+          height: 40,
+          decoration: BoxDecoration(
+            color: colorScheme.errorContainer.withAlpha(128),
+            borderRadius: BorderRadius.circular(10),
+          ),
+          child: Icon(
+            Icons.person_off_outlined,
+            size: 20,
+            color: colorScheme.error,
+          ),
+        ),
+        title: Text(
+          username,
+          style: TextStyle(
+            fontWeight: FontWeight.w500,
+            color: colorScheme.onSurface,
+          ),
+        ),
+        trailing: IconButton(
+          onPressed: () =>
+              _showRemoveDialog(colorScheme, username),
+          icon: Icon(
+            Icons.delete_outline,
+            color: colorScheme.error,
+          ),
+          tooltip: context.ap.delete,
+        ),
+      ),
+    );
+  }
+
+  void _showAddDialog(ColorScheme colorScheme) {
+    _usernameController.clear();
+    showDialog(
+      context: context,
+      builder: (BuildContext dialogContext) => AlertDialog(
+        title: Text(context.ap.blackList),
+        content: TextField(
+          controller: _usernameController,
+          autofocus: true,
+          decoration: InputDecoration(
+            labelText: context.ap.account,
+            prefixIcon: const Icon(Icons.person_outline),
+          ),
+          onSubmitted: (_) {
+            Navigator.of(dialogContext).pop();
+            _addToBlackList();
+          },
+        ),
+        actions: <Widget>[
+          TextButton(
+            onPressed: () => Navigator.of(dialogContext).pop(),
+            child: Text(context.ap.back),
+          ),
+          FilledButton(
+            onPressed: () {
+              Navigator.of(dialogContext).pop();
+              _addToBlackList();
+            },
+            child: Text(context.ap.confirm),
+          ),
+        ],
+      ),
+    );
+  }
+
+  void _showRemoveDialog(
+    ColorScheme colorScheme,
+    String username,
+  ) {
+    showDialog(
+      context: context,
+      builder: (BuildContext dialogContext) => AlertDialog(
+        title: Text(context.ap.delete),
+        content: Text(
+          '${context.ap.deleteNewsContent}\n$username',
+          textAlign: TextAlign.center,
+        ),
+        actions: <Widget>[
+          TextButton(
+            onPressed: () => Navigator.of(dialogContext).pop(),
+            child: Text(context.ap.back),
+          ),
+          FilledButton(
+            style: FilledButton.styleFrom(
+              backgroundColor: colorScheme.error,
+              foregroundColor: colorScheme.onError,
+            ),
+            onPressed: () {
+              Navigator.of(dialogContext).pop();
+              _removeFromBlackList(username: username);
+            },
+            child: Text(context.ap.delete),
+          ),
+        ],
+      ),
     );
   }
 
@@ -109,6 +233,27 @@ class _BlackListPageState extends State<BlackListPage> {
     }
   }
 
+  Future<void> _addToBlackList() async {
+    final String username = _usernameController.text.trim();
+    if (username.isEmpty) {
+      UiUtil.instance
+          .showToast(context, context.ap.doNotEmpty);
+      return;
+    }
+    final ApiResult<Response<dynamic>> result =
+        await AnnouncementHelper.instance.addBlackList(
+      username: username,
+    );
+    if (!mounted) return;
+    if (result.isSuccess) {
+      UiUtil.instance
+          .showToast(context, context.ap.addSuccess);
+      _getData();
+    } else {
+      result.showErrorToast(context);
+    }
+  }
+
   Future<void> _removeFromBlackList({
     required String username,
   }) async {
@@ -118,10 +263,8 @@ class _BlackListPageState extends State<BlackListPage> {
     );
     if (!mounted) return;
     if (result.isSuccess) {
-      UiUtil.instance.showToast(
-        context,
-        context.ap.updateSuccess,
-      );
+      UiUtil.instance
+          .showToast(context, context.ap.deleteSuccess);
       _getData();
     } else {
       result.showErrorToast(context);
