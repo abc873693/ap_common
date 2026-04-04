@@ -46,6 +46,8 @@ class SemesterPicker extends StatefulWidget {
     Set<String>? loadingSemesters,
     Set<String>? emptySemesters,
     SemesterUIConfig? uiConfig,
+    void Function(BuildContext sheetContext, StateSetter setSheetState)?
+        onSheetReady,
   }) {
     final ColorScheme colorScheme = Theme.of(context).colorScheme;
     final List<MapEntry<int, Semester>> sortedSemesters =
@@ -66,6 +68,7 @@ class SemesterPicker extends StatefulWidget {
       builder: (BuildContext sheetContext) {
         return StatefulBuilder(
           builder: (BuildContext context, StateSetter setSheetState) {
+            onSheetReady?.call(sheetContext, setSheetState);
             return DraggableScrollableSheet(
               initialChildSize: 0.6,
               minChildSize: 0.3,
@@ -715,6 +718,13 @@ class SemesterPickerState extends State<SemesterPicker> {
       loadingSemesters: _loadingSemesters,
       emptySemesters: _emptySemesters,
       uiConfig: widget.uiConfig,
+      onSheetReady: (
+        BuildContext sheetContext,
+        StateSetter setSheetState,
+      ) {
+        _sheetContext = sheetContext;
+        _sheetSetState = setSheetState;
+      },
     );
   }
 }
