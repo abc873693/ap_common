@@ -94,6 +94,9 @@ class ScoreScaffold extends StatefulWidget {
 }
 
 class ScoreScaffoldState extends State<ScoreScaffold> {
+  final GlobalKey<SemesterPickerState> _semesterPickerKey =
+      GlobalKey<SemesterPickerState>();
+
   bool get isLandscape =>
       MediaQuery.of(context).orientation == Orientation.landscape;
 
@@ -118,6 +121,34 @@ class ScoreScaffoldState extends State<ScoreScaffold> {
         }
       }
     });
+  }
+
+  @override
+  void didUpdateWidget(covariant ScoreScaffold oldWidget) {
+    if (widget.state != oldWidget.state) {
+      _notifySemesterPicker();
+    }
+    super.didUpdateWidget(oldWidget);
+  }
+
+  void _notifySemesterPicker() {
+    final SemesterPickerState? pickerState =
+        _semesterPickerKey.currentState;
+    if (pickerState == null) return;
+    final Semester? semester = pickerState.selectSemester;
+    if (semester == null) return;
+    switch (widget.state) {
+      case ScoreState.finish:
+        pickerState.markSemesterHasData(semester);
+      case ScoreState.empty:
+      case ScoreState.offlineEmpty:
+        pickerState.markSemesterEmpty(semester);
+      case ScoreState.error:
+        pickerState.markSemesterEmpty(semester);
+      case ScoreState.loading:
+      case ScoreState.custom:
+        break;
+    }
   }
 
   @override
@@ -150,6 +181,7 @@ class ScoreScaffoldState extends State<ScoreScaffold> {
                 widget.itemPicker == null) ...<Widget>[
               const SizedBox(width: 12),
               SemesterPicker(
+                key: _semesterPickerKey,
                 semesterData: widget.semesterData!,
                 currentIndex: widget.semesterData!.currentIndex,
                 onSelect: (Semester semester, int index) {

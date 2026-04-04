@@ -170,6 +170,8 @@ class CourseScaffold extends StatefulWidget {
 
 class CourseScaffoldState extends State<CourseScaffold> {
   final GlobalKey _repaintBoundaryGlobalKey = GlobalKey();
+  final GlobalKey<SemesterPickerState> _semesterPickerKey =
+      GlobalKey<SemesterPickerState>();
 
   _ContentStyle _contentStyle = _ContentStyle.table;
 
@@ -242,8 +244,31 @@ class CourseScaffoldState extends State<CourseScaffold> {
     if (widget.courseData != oldWidget.courseData) {
       _buildCourseLookup();
     }
+    if (widget.state != oldWidget.state) {
+      _notifySemesterPicker();
+    }
     fetchInvisibleCourseCodes();
     super.didUpdateWidget(oldWidget);
+  }
+
+  void _notifySemesterPicker() {
+    final SemesterPickerState? pickerState =
+        _semesterPickerKey.currentState;
+    if (pickerState == null) return;
+    final Semester? semester = pickerState.selectSemester;
+    if (semester == null) return;
+    switch (widget.state) {
+      case CourseState.finish:
+        pickerState.markSemesterHasData(semester);
+      case CourseState.empty:
+      case CourseState.offlineEmpty:
+        pickerState.markSemesterEmpty(semester);
+      case CourseState.error:
+        pickerState.markSemesterEmpty(semester);
+      case CourseState.loading:
+      case CourseState.custom:
+        break;
+    }
   }
 
   @override
@@ -277,6 +302,7 @@ class CourseScaffoldState extends State<CourseScaffold> {
                   widget.itemPicker == null) ...<Widget>[
                 const SizedBox(width: 8),
                 SemesterPicker(
+                  key: _semesterPickerKey,
                   semesterData: widget.semesterData!,
                   currentIndex: widget.semesterData!.currentIndex,
                   onSelect: (Semester semester, int index) {
