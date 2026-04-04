@@ -1,0 +1,44 @@
+---
+sidebar_position: 6
+---
+
+# 編輯者管理 EditorListPage
+
+管理擁有公告編輯權限的使用者名單。僅 Admin（permission_level = 2）可使用。
+
+## 使用方式
+
+```dart
+Navigator.push(
+  context,
+  MaterialPageRoute<void>(
+    builder: (_) => const EditorListPage(),
+  ),
+);
+```
+
+通常從 `AnnouncementHomePage` 的 AppBar 進入（manage_accounts icon），不需手動建立。
+
+## 功能
+
+- 查看所有編輯者
+- 新增編輯者（FAB → 輸入帳號對話框）
+- 移除編輯者（刪除確認對話框）
+- 複製帳號（點擊 copy icon）
+- 使用 `DataState<List<String>>` 管理載入/錯誤/空狀態
+
+## API 對應
+
+| 操作 | API | HTTP 方法 | 權限 |
+| --- | --- | --- | --- |
+| 取得編輯者列表 | `/auth/editor` | GET | Admin |
+| 新增編輯者 | `/auth/editor` | POST | Admin |
+| 移除編輯者 | `/auth/editor` | DELETE | Admin |
+
+## 與黑名單的差異
+
+| 項目 | EditorListPage | BlackListPage |
+| --- | --- | --- |
+| 權限需求 | Admin（level = 2） | Editor+（level >= 1） |
+| 用途 | 授予公告編輯權限 | 封鎖使用者 |
+| icon 顏色 | `colorScheme.primary` | `colorScheme.error` |

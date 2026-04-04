@@ -108,3 +108,26 @@ sidebar_position: 1
 ```bash
   flutter run
 ```
+
+## 公告審查系統設定（可選）
+
+如需使用 `ap_common_announcement_ui` 的公告審查功能：
+
+1. 確認已加入 `ap_common_announcement_ui` 依賴
+2. 設定 `AnnouncementHelper` 的主機位址：
+
+```dart
+AnnouncementHelper.reInstance(
+  host: 'your-host.example.com',
+  tag: 'your-tag',
+);
+```
+
+3. 如需推播通知（審核通過/駁回時通知申請者），傳入 FCM token：
+
+```dart
+AnnouncementHomePage(
+  fcmToken: FirebaseMessagingUtils.instance.token,
+  organizationDomain: 'example.edu.tw',
+)
+```
