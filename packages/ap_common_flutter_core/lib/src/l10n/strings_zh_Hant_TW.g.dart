@@ -380,6 +380,8 @@ class ApLocalizationsZhHantTw extends ApLocalizations with BaseTranslations<AppL
 	@override String get notFoundData => '找不到此資料';
 	@override String get updateRejectAndBan => '更新駁回並加入黑名單';
 	@override String get blackList => '黑名單';
+	@override String get editorList => '編輯者管理';
+	@override String get all => '全部';
 	@override String get delete => '刪除';
 	@override String get allAnnouncements => '所有最新消息';
 	@override String get allApplications => '所有審查';
@@ -780,6 +782,8 @@ extension on ApLocalizationsZhHantTw {
 			'notFoundData' => '找不到此資料',
 			'updateRejectAndBan' => '更新駁回並加入黑名單',
 			'blackList' => '黑名單',
+			'editorList' => '編輯者管理',
+			'all' => '全部',
 			'delete' => '刪除',
 			'allAnnouncements' => '所有最新消息',
 			'allApplications' => '所有審查',

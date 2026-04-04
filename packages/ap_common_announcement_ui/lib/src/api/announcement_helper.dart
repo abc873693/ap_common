@@ -442,6 +442,52 @@ class AnnouncementHelper {
       });
 
   // ---------------------------------------------------------------------------
+  // Editor Management (Admin only, permission_level >= 2)
+  // ---------------------------------------------------------------------------
+
+  Future<ApiResult<List<String>>> getEditorList() => _execute(() async {
+        final Response<String> response =
+            await dio.get<String>('/auth/editor');
+        final List<dynamic> list =
+            jsonDecode(response.data!) as List<dynamic>;
+        return list.map((dynamic e) => e as String).toList();
+      });
+
+  Future<ApiResult<Response<dynamic>>> addEditor({
+    required String username,
+  }) =>
+      _execute(() async {
+        return dio.post(
+          '/auth/editor',
+          data: <String, String>{'username': username},
+        );
+      });
+
+  Future<ApiResult<Response<dynamic>>> removeEditor({
+    required String username,
+  }) =>
+      _execute(() async {
+        return dio.delete(
+          '/auth/editor',
+          data: <String, String>{'username': username},
+        );
+      });
+
+  // ---------------------------------------------------------------------------
+  // Tag Statistics (public)
+  // ---------------------------------------------------------------------------
+
+  Future<ApiResult<Map<String, int>>> getTagsCount() =>
+      _execute(() async {
+        final Response<String> response =
+            await dio.get<String>('/announcements/tags');
+        final Map<String, dynamic> map =
+            jsonDecode(response.data!) as Map<String, dynamic>;
+        return map
+            .map((String k, dynamic v) => MapEntry<String, int>(k, v as int));
+      });
+
+  // ---------------------------------------------------------------------------
   // Utilities
   // ---------------------------------------------------------------------------
 

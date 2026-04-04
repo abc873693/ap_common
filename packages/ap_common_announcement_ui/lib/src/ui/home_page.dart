@@ -4,6 +4,7 @@ import 'package:ap_common_announcement_ui/src/api/announcement_helper.dart';
 import 'package:ap_common_announcement_ui/src/ui/announcement_content_page.dart';
 import 'package:ap_common_announcement_ui/src/ui/black_list_page.dart';
 import 'package:ap_common_announcement_ui/src/ui/edit_page.dart';
+import 'package:ap_common_announcement_ui/src/ui/editor_list_page.dart';
 import 'package:ap_common_announcement_ui/src/utils/tag_colors.dart';
 import 'package:ap_common_flutter_ui/ap_common_flutter_ui.dart';
 import 'package:flutter/foundation.dart';
@@ -52,6 +53,9 @@ class _AnnouncementHomePageState extends State<AnnouncementHomePage>
   bool? onlyShowNotReview = false;
 
   Set<String> _blackListSet = <String>{};
+
+  Map<String, int> _tagsCount = <String, int>{};
+  String? _selectedTag;
 
   FocusNode? usernameFocusNode;
   FocusNode? passwordFocusNode;
@@ -158,6 +162,19 @@ class _AnnouncementHomePageState extends State<AnnouncementHomePage>
             _getBlackList();
           },
         ),
+        if (loginData?.level == PermissionLevel.admin)
+          IconButton(
+            icon: const Icon(Icons.manage_accounts),
+            tooltip: context.ap.editorList,
+            onPressed: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute<void>(
+                  builder: (_) => const EditorListPage(),
+                ),
+              );
+            },
+          ),
       ],
       if (_isLoggedIn)
         IconButton(
@@ -293,6 +310,7 @@ class _AnnouncementHomePageState extends State<AnnouncementHomePage>
           announcementState,
           _DataType.announcement,
           onRetry: _getAnnouncements,
+          showTagFilter: true,
         ),
       ],
     );
@@ -303,6 +321,7 @@ class _AnnouncementHomePageState extends State<AnnouncementHomePage>
     DataState<List<Announcement>> state,
     _DataType dataType, {
     required VoidCallback onRetry,
+    bool showTagFilter = false,
   }) {
     return switch (state) {
       DataLoading<List<Announcement>>() =>
@@ -322,7 +341,7 @@ class _AnnouncementHomePageState extends State<AnnouncementHomePage>
         :final List<Announcement> data,
       ) =>
         () {
-          final List<Announcement> filtered = onlyShowNotReview!
+          List<Announcement> filtered = onlyShowNotReview!
               ? data
                   .where(
                     (Announcement a) => a.reviewStatus == null,
@@ -330,7 +349,21 @@ class _AnnouncementHomePageState extends State<AnnouncementHomePage>
                   .toList()
               : data;
 
-          if (filtered.isEmpty) {
+          if (showTagFilter && _selectedTag != null) {
+            filtered = filtered
+                .where(
+                  (Announcement a) =>
+                      a.tags?.contains(_selectedTag) ?? false,
+                )
+                .toList();
+          }
+
+          final int headerCount = showTagFilter &&
+                  _tagsCount.isNotEmpty
+              ? 1
+              : 0;
+
+          if (filtered.isEmpty && headerCount == 0) {
             return HintContent(
               icon: ApIcon.classIcon,
               content: context.ap.noData,
@@ -339,17 +372,76 @@ class _AnnouncementHomePageState extends State<AnnouncementHomePage>
 
           return ListView.builder(
             padding: const EdgeInsets.all(16),
-            itemCount: filtered.length,
+            itemCount: filtered.length + headerCount,
             itemBuilder: (BuildContext context, int index) {
+              if (index < headerCount) {
+                return _buildTagFilterChips(colorScheme);
+              }
               return _buildItemCard(
                 colorScheme,
                 dataType,
-                filtered[index],
+                filtered[index - headerCount],
               );
             },
           );
         }(),
     };
+  }
+
+  Widget _buildTagFilterChips(ColorScheme colorScheme) {
+    final List<MapEntry<String, int>> sorted =
+        _tagsCount.entries.toList()
+          ..sort(
+            (MapEntry<String, int> a, MapEntry<String, int> b) =>
+                b.value.compareTo(a.value),
+          );
+
+    return Padding(
+      padding: const EdgeInsets.only(bottom: 12),
+      child: SingleChildScrollView(
+        scrollDirection: Axis.horizontal,
+        child: Row(
+          children: <Widget>[
+            FilterChip(
+              label: Text(
+                context.ap.all,
+                style: const TextStyle(fontSize: 12),
+              ),
+              selected: _selectedTag == null,
+              onSelected: (_) {
+                setState(() => _selectedTag = null);
+              },
+              showCheckmark: false,
+            ),
+            const SizedBox(width: 8),
+            for (final MapEntry<String, int> entry in sorted)
+              Padding(
+                padding: const EdgeInsets.only(right: 8),
+                child: FilterChip(
+                  label: Text(
+                    '${entry.key} (${entry.value})',
+                    style: const TextStyle(fontSize: 12),
+                  ),
+                  selected: _selectedTag == entry.key,
+                  selectedColor: tagColor(
+                    entry.key,
+                    colorScheme,
+                  ).withAlpha(51),
+                  onSelected: (_) {
+                    setState(() {
+                      _selectedTag =
+                          _selectedTag == entry.key
+                              ? null
+                              : entry.key;
+                    });
+                  },
+                  showCheckmark: false,
+                ),
+              ),
+          ],
+        ),
+      ),
+    );
   }
 
   // ─── Item Card ─────────────────────────────────────────
@@ -960,6 +1052,18 @@ class _AnnouncementHomePageState extends State<AnnouncementHomePage>
     }
   }
 
+  Future<void> _getTagsCount() async {
+    final ApiResult<Map<String, int>> result =
+        await AnnouncementHelper.instance.getTagsCount();
+    if (!mounted) return;
+    if (result
+        case ApiSuccess<Map<String, int>>(
+          :final Map<String, int> data,
+        )) {
+      setState(() => _tagsCount = data);
+    }
+  }
+
   Future<void> _getAnnouncements() async {
     final ApiResult<List<Announcement>> result =
         await AnnouncementHelper.instance.getAllAnnouncements();
@@ -1040,6 +1144,7 @@ class _AnnouncementHomePageState extends State<AnnouncementHomePage>
           if (_isAdmin) {
             _getAnnouncements();
             _getBlackList();
+            _getTagsCount();
           }
           _getApplications();
         });
@@ -1187,6 +1292,7 @@ class _AnnouncementHomePageState extends State<AnnouncementHomePage>
           if (_isAdmin) {
             _getAnnouncements();
             _getBlackList();
+            _getTagsCount();
           }
           _getApplications();
         });
