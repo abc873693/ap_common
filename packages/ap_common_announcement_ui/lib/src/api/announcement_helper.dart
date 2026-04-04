@@ -396,8 +396,8 @@ class AnnouncementHelper {
     required String username,
   }) =>
       _execute(() async {
-        return dio.put(
-          '/ban/',
+        return dio.post(
+          '/ban',
           data: <String, String>{'username': username},
         );
       });
@@ -407,7 +407,7 @@ class AnnouncementHelper {
   }) =>
       _execute(() async {
         return dio.delete(
-          '/ban/',
+          '/ban',
           data: <String, String>{'username': username},
         );
       });
