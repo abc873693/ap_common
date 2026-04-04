@@ -3,6 +3,7 @@ import 'package:ap_common_announcement_ui/src/api/imgbb_helper.dart';
 import 'package:ap_common_announcement_ui/src/utils/tag_colors.dart';
 import 'package:ap_common_flutter_ui/ap_common_flutter_ui.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 
 enum _ImgurUploadState { noFile, uploading, done }
 
@@ -22,6 +23,7 @@ class AnnouncementEditPage extends StatefulWidget {
     required this.mode,
     this.announcement,
     this.needFetch = false,
+    this.blackList = const <String>{},
   });
 
   static const String routerName = '/news/edit';
@@ -29,6 +31,7 @@ class AnnouncementEditPage extends StatefulWidget {
   final Mode mode;
   final Announcement? announcement;
   final bool needFetch;
+  final Set<String> blackList;
 
   @override
   _AnnouncementEditPageState createState() =>
@@ -178,13 +181,7 @@ class _AnnouncementEditPageState extends State<AnnouncementEditPage> {
               if (widget.mode ==
                   Mode.editApplication) ...<Widget>[
                 const SizedBox(height: 16),
-                _buildTextField(
-                  controller: TextEditingController(
-                    text: announcements.applicant ?? '',
-                  ),
-                  label: context.ap.applicant,
-                  enabled: false,
-                ),
+                _buildApplicantField(colorScheme),
                 const SizedBox(height: 16),
                 _buildTextField(
                   controller: _reviewDescription,
@@ -218,6 +215,115 @@ class _AnnouncementEditPageState extends State<AnnouncementEditPage> {
       keyboardType: keyboardType,
       decoration: InputDecoration(
         labelText: label,
+      ),
+    );
+  }
+
+  Widget _buildApplicantField(ColorScheme colorScheme) {
+    final String applicant = announcements.applicant ?? '';
+    final bool isBanned =
+        widget.blackList.contains(applicant);
+
+    return Container(
+      padding: const EdgeInsets.all(16),
+      decoration: BoxDecoration(
+        color: isBanned
+            ? colorScheme.errorContainer.withAlpha(64)
+            : colorScheme.surfaceContainerLowest,
+        borderRadius: BorderRadius.circular(12),
+        border: Border.all(
+          color: isBanned
+              ? colorScheme.error.withAlpha(77)
+              : colorScheme.outlineVariant.withAlpha(77),
+        ),
+      ),
+      child: Row(
+        children: <Widget>[
+          Container(
+            width: 40,
+            height: 40,
+            decoration: BoxDecoration(
+              color: isBanned
+                  ? colorScheme.errorContainer.withAlpha(128)
+                  : colorScheme.secondaryContainer
+                      .withAlpha(128),
+              borderRadius: BorderRadius.circular(10),
+            ),
+            child: Icon(
+              isBanned
+                  ? Icons.person_off_outlined
+                  : Icons.person_outline,
+              size: 20,
+              color: isBanned
+                  ? colorScheme.error
+                  : colorScheme.onSecondaryContainer,
+            ),
+          ),
+          const SizedBox(width: 12),
+          Expanded(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: <Widget>[
+                Text(
+                  context.ap.applicant,
+                  style: TextStyle(
+                    fontSize: 12,
+                    color: colorScheme.onSurfaceVariant,
+                  ),
+                ),
+                const SizedBox(height: 2),
+                Text(
+                  applicant,
+                  style: TextStyle(
+                    fontSize: 16,
+                    fontWeight: FontWeight.w500,
+                    color: colorScheme.onSurface,
+                  ),
+                ),
+              ],
+            ),
+          ),
+          if (isBanned)
+            Container(
+              margin: const EdgeInsets.only(right: 8),
+              padding: const EdgeInsets.symmetric(
+                horizontal: 8,
+                vertical: 3,
+              ),
+              decoration: BoxDecoration(
+                color: colorScheme.errorContainer,
+                borderRadius: BorderRadius.circular(6),
+              ),
+              child: Text(
+                context.ap.blackList,
+                style: TextStyle(
+                  fontSize: 11,
+                  fontWeight: FontWeight.w600,
+                  color: colorScheme.error,
+                ),
+              ),
+            ),
+          IconButton(
+            onPressed: () {
+              Clipboard.setData(
+                ClipboardData(text: applicant),
+              );
+              ScaffoldMessenger.of(context).showSnackBar(
+                SnackBar(
+                  content: Text(applicant),
+                  behavior: SnackBarBehavior.floating,
+                  duration: const Duration(seconds: 2),
+                ),
+              );
+            },
+            icon: Icon(
+              Icons.copy,
+              size: 20,
+              color: colorScheme.onSurfaceVariant,
+            ),
+            tooltip: applicant,
+          ),
+        ],
       ),
     );
   }

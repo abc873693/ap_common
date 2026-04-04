@@ -8,6 +8,7 @@ import 'package:ap_common_announcement_ui/src/utils/tag_colors.dart';
 import 'package:ap_common_flutter_ui/ap_common_flutter_ui.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:sign_in_with_apple/sign_in_with_apple.dart';
 
@@ -49,6 +50,8 @@ class _AnnouncementHomePageState extends State<AnnouncementHomePage>
       const DataLoading<List<Announcement>>();
 
   bool? onlyShowNotReview = false;
+
+  Set<String> _blackListSet = <String>{};
 
   FocusNode? usernameFocusNode;
   FocusNode? passwordFocusNode;
@@ -145,11 +148,14 @@ class _AnnouncementHomePageState extends State<AnnouncementHomePage>
         IconButton(
           icon: const Icon(Icons.playlist_remove),
           tooltip: context.ap.blackList,
-          onPressed: () {
-            ApUtils.pushCupertinoStyle(
+          onPressed: () async {
+            await Navigator.push(
               context,
-              const BlackListPage(),
+              MaterialPageRoute<void>(
+                builder: (_) => const BlackListPage(),
+              ),
             );
+            _getBlackList();
           },
         ),
       ],
@@ -421,9 +427,8 @@ class _AnnouncementHomePageState extends State<AnnouncementHomePage>
                               ),
                             if (item.applicant != null &&
                                 _isAdmin)
-                              _buildInfoBadge(
+                              _buildApplicantBadge(
                                 colorScheme,
-                                Icons.person_outline,
                                 item.applicant!,
                               ),
                             for (final String? tag
@@ -509,37 +514,66 @@ class _AnnouncementHomePageState extends State<AnnouncementHomePage>
     );
   }
 
-  Widget _buildInfoBadge(
+  Widget _buildApplicantBadge(
     ColorScheme colorScheme,
-    IconData icon,
-    String text,
+    String applicant,
   ) {
-    return Container(
-      padding: const EdgeInsets.symmetric(
-        horizontal: 8,
-        vertical: 3,
-      ),
-      decoration: BoxDecoration(
-        color: colorScheme.secondaryContainer.withAlpha(128),
-        borderRadius: BorderRadius.circular(6),
-      ),
-      child: Row(
-        mainAxisSize: MainAxisSize.min,
-        children: <Widget>[
-          Icon(
-            icon,
-            size: 12,
-            color: colorScheme.onSecondaryContainer,
+    final bool isBanned = _blackListSet.contains(applicant);
+    final Color bgColor = isBanned
+        ? colorScheme.errorContainer.withAlpha(128)
+        : colorScheme.secondaryContainer.withAlpha(128);
+    final Color fgColor = isBanned
+        ? colorScheme.error
+        : colorScheme.onSecondaryContainer;
+
+    return GestureDetector(
+      onTap: () {
+        Clipboard.setData(ClipboardData(text: applicant));
+        if (!context.mounted) return;
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text(applicant),
+            behavior: SnackBarBehavior.floating,
+            duration: const Duration(seconds: 2),
           ),
-          const SizedBox(width: 4),
-          Text(
-            text,
-            style: TextStyle(
-              fontSize: 11,
-              color: colorScheme.onSecondaryContainer,
+        );
+      },
+      child: Container(
+        padding: const EdgeInsets.symmetric(
+          horizontal: 8,
+          vertical: 3,
+        ),
+        decoration: BoxDecoration(
+          color: bgColor,
+          borderRadius: BorderRadius.circular(6),
+        ),
+        child: Row(
+          mainAxisSize: MainAxisSize.min,
+          children: <Widget>[
+            Icon(
+              isBanned
+                  ? Icons.person_off_outlined
+                  : Icons.person_outline,
+              size: 12,
+              color: fgColor,
             ),
-          ),
-        ],
+            const SizedBox(width: 4),
+            Text(
+              applicant,
+              style: TextStyle(
+                fontSize: 11,
+                fontWeight: FontWeight.w600,
+                color: fgColor,
+              ),
+            ),
+            const SizedBox(width: 2),
+            Icon(
+              Icons.copy,
+              size: 10,
+              color: fgColor.withAlpha(128),
+            ),
+          ],
+        ),
       ),
     );
   }
@@ -869,6 +903,7 @@ class _AnnouncementHomePageState extends State<AnnouncementHomePage>
         builder: (_) => AnnouncementEditPage(
           mode: mode,
           announcement: announcement,
+          blackList: _blackListSet,
         ),
       ),
     );
@@ -911,6 +946,18 @@ class _AnnouncementHomePageState extends State<AnnouncementHomePage>
       applicationState =
           const DataLoading<List<Announcement>>();
     });
+  }
+
+  Future<void> _getBlackList() async {
+    final ApiResult<List<String>> result =
+        await AnnouncementHelper.instance.getBlackList();
+    if (!mounted) return;
+    if (result
+        case ApiSuccess<List<String>>(:final List<String> data)) {
+      setState(() {
+        _blackListSet = data.toSet();
+      });
+    }
   }
 
   Future<void> _getAnnouncements() async {
@@ -990,7 +1037,10 @@ class _AnnouncementHomePageState extends State<AnnouncementHomePage>
         AnnouncementHelper.instance
             .setAuthorization(loginData!.key);
         setState(() {
-          if (_isAdmin) _getAnnouncements();
+          if (_isAdmin) {
+            _getAnnouncements();
+            _getBlackList();
+          }
           _getApplications();
         });
       }
@@ -1134,7 +1184,10 @@ class _AnnouncementHomePageState extends State<AnnouncementHomePage>
         );
         if (_isAdmin) _initTabController();
         setState(() {
-          if (_isAdmin) _getAnnouncements();
+          if (_isAdmin) {
+            _getAnnouncements();
+            _getBlackList();
+          }
           _getApplications();
         });
       case ApiError<AnnouncementLoginData>(
