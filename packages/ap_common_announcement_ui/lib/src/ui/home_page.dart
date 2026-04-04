@@ -227,7 +227,7 @@ class _AnnouncementHomePageState extends State<AnnouncementHomePage>
     ColorScheme colorScheme,
     List<Announcement> apps,
   ) {
-    List<Announcement> filtered = switch (_reviewFilter) {
+    final List<Announcement> filtered = switch (_reviewFilter) {
       _ReviewFilter.all => apps,
       _ReviewFilter.pending => apps
           .where((Announcement a) => a.reviewStatus == null)
