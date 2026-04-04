@@ -2,8 +2,6 @@ import 'package:ap_common_announcement_ui/src/api/announcement_helper.dart';
 import 'package:ap_common_flutter_ui/ap_common_flutter_ui.dart';
 import 'package:flutter/material.dart';
 
-enum _State { loading, done, error }
-
 class BlackListPage extends StatefulWidget {
   const BlackListPage({super.key});
 
@@ -12,8 +10,8 @@ class BlackListPage extends StatefulWidget {
 }
 
 class _BlackListPageState extends State<BlackListPage> {
-  _State state = _State.loading;
-  List<String> blackList = <String>[];
+  DataState<List<String>> state =
+      const DataLoading<List<String>>();
 
   @override
   void initState() {
@@ -24,86 +22,109 @@ class _BlackListPageState extends State<BlackListPage> {
   }
 
   @override
-  void dispose() {
-    super.dispose();
-  }
-
-  @override
   Widget build(BuildContext context) {
+    final ColorScheme colorScheme = Theme.of(context).colorScheme;
+
     return Scaffold(
       appBar: AppBar(
         title: Text(context.ap.blackList),
       ),
-      body: _body(),
+      body: switch (state) {
+        DataLoading<List<String>>() => const Center(
+            child: CircularProgressIndicator(),
+          ),
+        DataError<List<String>>() => InkWell(
+            onTap: _getData,
+            child: HintContent(
+              icon: ApIcon.classIcon,
+              content: context.ap.clickToRetry,
+            ),
+          ),
+        DataEmpty<List<String>>() => HintContent(
+            icon: ApIcon.classIcon,
+            content: context.ap.noData,
+          ),
+        DataLoaded<List<String>>(:final List<String> data) =>
+          ListView.separated(
+            itemCount: data.length,
+            itemBuilder: (BuildContext context, int index) {
+              return ListTile(
+                leading: Container(
+                  width: 40,
+                  height: 40,
+                  decoration: BoxDecoration(
+                    color: colorScheme.errorContainer
+                        .withAlpha(128),
+                    borderRadius: BorderRadius.circular(10),
+                  ),
+                  child: Icon(
+                    Icons.person_off_outlined,
+                    size: 20,
+                    color: colorScheme.error,
+                  ),
+                ),
+                title: Text(data[index]),
+                trailing: IconButton(
+                  onPressed: () => _removeFromBlackList(
+                    username: data[index],
+                  ),
+                  icon: Icon(
+                    Icons.delete_forever_outlined,
+                    color: colorScheme.error,
+                  ),
+                ),
+              );
+            },
+            separatorBuilder: (_, __) => Divider(
+              height: 1,
+              color: colorScheme.outlineVariant.withAlpha(77),
+            ),
+          ),
+      },
     );
   }
 
-  Widget _body() {
-    switch (state) {
-      case _State.loading:
-        return Container(
-          alignment: Alignment.center,
-          child: const CircularProgressIndicator(),
-        );
-      case _State.error:
-        return InkWell(
-          onTap: () {
-            _getData();
-          },
-          child: HintContent(
-            icon: ApIcon.classIcon,
-            content: context.ap.clickToRetry,
-          ),
-        );
-      case _State.done:
-        return ListView.separated(
-          itemCount: blackList.length,
-          itemBuilder: (BuildContext context, int index) {
-            return ListTile(
-              title: Text(blackList[index]),
-              trailing: IconButton(
-                onPressed: () =>
-                    _removeFromBlackList(username: blackList[index]),
-                icon: Icon(
-                  Icons.delete_forever_outlined,
-                  color: ApTheme.of(context).red,
-                ),
-              ),
-            );
-          },
-          separatorBuilder: (_, __) => const Divider(),
-        );
-    }
-  }
-
   Future<void> _getData() async {
-    setState(() => state = _State.loading);
+    setState(
+      () => state = const DataLoading<List<String>>(),
+    );
     final ApiResult<List<String>> result =
         await AnnouncementHelper.instance.getBlackList();
     if (!mounted) return;
-    if (result case ApiSuccess<List<String>>(:final List<String> data)) {
-      blackList = data;
-      setState(() => state = _State.done);
-    } else {
-      result.showErrorToast(context);
-      setState(() => state = _State.error);
+    switch (result) {
+      case ApiSuccess<List<String>>(:final List<String> data):
+        setState(() {
+          if (data.isEmpty) {
+            state = const DataEmpty<List<String>>();
+          } else {
+            state = DataLoaded<List<String>>(data);
+          }
+        });
+      case ApiError<List<String>>():
+      case ApiFailure<List<String>>():
+        result.showErrorToast(context);
+        setState(
+          () => state = const DataError<List<String>>(),
+        );
     }
   }
 
   Future<void> _removeFromBlackList({
     required String username,
   }) async {
-    setState(() => state = _State.loading);
     final ApiResult<Response<dynamic>> result =
         await AnnouncementHelper.instance.removeFromBlackList(
       username: username,
     );
     if (!mounted) return;
     if (result.isSuccess) {
-      Toast.show(context.ap.updateSuccess, context);
+      UiUtil.instance.showToast(
+        context,
+        context.ap.updateSuccess,
+      );
+      _getData();
     } else {
       result.showErrorToast(context);
     }
-    setState(() => state = _State.done);
   }
 }

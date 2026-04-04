@@ -1,6 +1,6 @@
 import 'package:ap_common_announcement_ui/src/api/announcement_helper.dart';
 import 'package:ap_common_announcement_ui/src/api/imgbb_helper.dart';
-import 'package:ap_common_announcement_ui/src/ui/home_page.dart';
+import 'package:ap_common_announcement_ui/src/utils/tag_colors.dart';
 import 'package:ap_common_flutter_ui/ap_common_flutter_ui.dart';
 import 'package:flutter/material.dart';
 
@@ -31,7 +31,8 @@ class AnnouncementEditPage extends StatefulWidget {
   final bool needFetch;
 
   @override
-  _AnnouncementEditPageState createState() => _AnnouncementEditPageState();
+  _AnnouncementEditPageState createState() =>
+      _AnnouncementEditPageState();
 }
 
 class _AnnouncementEditPageState extends State<AnnouncementEditPage> {
@@ -44,7 +45,8 @@ class _AnnouncementEditPageState extends State<AnnouncementEditPage> {
   final TextEditingController _imgUrl = TextEditingController();
   final TextEditingController _url = TextEditingController();
   final TextEditingController _weight = TextEditingController();
-  final TextEditingController _reviewDescription = TextEditingController();
+  final TextEditingController _reviewDescription =
+      TextEditingController();
 
   DateFormat formatter = DateFormat('yyyy-MM-ddTHH:mm:ss');
   DateFormat dateFormat = DateFormat('yyyy-MM-dd HH:mm:ss');
@@ -55,11 +57,9 @@ class _AnnouncementEditPageState extends State<AnnouncementEditPage> {
 
   final TextEditingController _newTag = TextEditingController();
 
-  final double dividerHeight = 16.0;
-
   _ImgurUploadState imgurUploadState = _ImgurUploadState.noFile;
 
-  String get title {
+  String get pageTitle {
     switch (widget.mode) {
       case Mode.add:
       case Mode.edit:
@@ -82,35 +82,10 @@ class _AnnouncementEditPageState extends State<AnnouncementEditPage> {
     }
   }
 
-  List<Widget> get _imgurUploadWidget {
-    switch (imgurUploadState) {
-      case _ImgurUploadState.uploading:
-        return <Widget>[
-          const CircularProgressIndicator(),
-          const SizedBox(height: 8.0),
-          Text(context.ap.uploading),
-        ];
-      case _ImgurUploadState.done:
-        return <Widget>[
-          Text(context.ap.imagePreview),
-          const SizedBox(height: 8.0),
-          SizedBox(
-            height: 300,
-            child: ApNetworkImage(url: _imgUrl.text),
-          ),
-          const SizedBox(height: 8.0),
-        ];
-      case _ImgurUploadState.noFile:
-        return <Widget>[
-          Text(context.ap.imgurUploadDescription),
-          const SizedBox(height: 8.0),
-        ];
-    }
-  }
-
   @override
   void initState() {
-    if (widget.mode == Mode.edit || widget.mode == Mode.editApplication) {
+    if (widget.mode == Mode.edit ||
+        widget.mode == Mode.editApplication) {
       announcements = widget.announcement!;
       _mapData();
       if (widget.needFetch) {
@@ -123,15 +98,12 @@ class _AnnouncementEditPageState extends State<AnnouncementEditPage> {
   }
 
   @override
-  void dispose() {
-    super.dispose();
-  }
-
-  @override
   Widget build(BuildContext context) {
+    final ColorScheme colorScheme = Theme.of(context).colorScheme;
+
     return Scaffold(
       appBar: AppBar(
-        title: Text(title),
+        title: Text(pageTitle),
       ),
       body: KeyboardDismissOnTap(
         child: Form(
@@ -139,429 +111,426 @@ class _AnnouncementEditPageState extends State<AnnouncementEditPage> {
           child: ListView(
             padding: const EdgeInsets.symmetric(horizontal: 16.0),
             children: <Widget>[
-              SizedBox(height: dividerHeight),
-              TextFormField(
+              const SizedBox(height: 16),
+              _buildTextField(
                 controller: _title,
-                validator: (String? value) {
-                  if (value!.isEmpty) {
-                    return context.ap.doNotEmpty;
-                  }
-                  return null;
-                },
-                decoration: InputDecoration(
-                  border: const OutlineInputBorder(),
-                  fillColor: ApTheme.of(context).blueAccent,
-                  labelStyle: TextStyle(
-                    color: ApTheme.of(context).grey,
-                  ),
-                  labelText: context.ap.title,
-                ),
+                label: context.ap.title,
+                validator: _requiredValidator,
               ),
-              SizedBox(height: dividerHeight),
+              const SizedBox(height: 16),
               if (widget.mode != Mode.application) ...<Widget>[
-                Text(context.ap.tag),
-                Wrap(
-                  children: <Widget>[
-                    for (final String tag in tags) ...<Widget>[
-                      Chip(
-                        label: Text(tag),
-                        backgroundColor: tag.color,
-                        onDeleted: () {
-                          setState(() => tags.remove(tag));
-                        },
-                      ),
-                      const SizedBox(width: 8.0),
-                    ],
-                    GestureDetector(
-                      onTap: () {
-                        _newTag.clear();
-                        showDialog(
-                          context: context,
-                          builder: (BuildContext context) => DefaultDialog(
-                            title: context.ap.addTag,
-                            contentWidget: TextField(
-                              controller: _newTag,
-                              decoration: InputDecoration(
-                                border: InputBorder.none,
-                                hintText: context.ap.tagName,
-                              ),
-                            ),
-                            actionText: context.ap.confirm,
-                            actionFunction: () {
-                              if (_newTag.text.isEmpty) {
-                                UiUtil.instance
-                                    .showToast(context, context.ap.doNotEmpty);
-                              } else {
-                                final String newTag = _newTag.text;
-                                final int index = tags.indexOf(newTag);
-                                if (index == -1) {
-                                  setState(() => tags.add(newTag));
-                                  Navigator.of(context, rootNavigator: true)
-                                      .pop();
-                                } else {
-                                  UiUtil.instance.showToast(
-                                    context,
-                                    context.ap.tagRepeatHint,
-                                  );
-                                }
-                              }
-                            },
-                          ),
-                        );
-                      },
-                      child: Chip(
-                        label: const Icon(Icons.add),
-                        backgroundColor: ApTheme.of(context).blueAccent,
-                      ),
-                    ),
-                  ],
+                Text(
+                  context.ap.tag,
+                  style: TextStyle(
+                    color: colorScheme.onSurfaceVariant,
+                    fontWeight: FontWeight.w500,
+                  ),
                 ),
-                SizedBox(height: dividerHeight),
-                TextFormField(
+                const SizedBox(height: 8),
+                _buildTagSection(colorScheme),
+                const SizedBox(height: 16),
+                _buildTextField(
                   controller: _weight,
+                  label: context.ap.weight,
+                  keyboardType: TextInputType.number,
                   validator: (String? value) {
-                    if (value!.isEmpty) {
-                      return context.ap.doNotEmpty;
-                    } else {
-                      try {
-                        int.parse(value);
-                      } catch (e) {
-                        return context.ap.formatError;
-                      }
+                    if (value!.isEmpty) return context.ap.doNotEmpty;
+                    try {
+                      int.parse(value);
+                    } catch (e) {
+                      return context.ap.formatError;
                     }
                     return null;
                   },
-                  keyboardType: TextInputType.number,
-                  decoration: InputDecoration(
-                    border: const OutlineInputBorder(),
-                    fillColor: ApTheme.of(context).blueAccent,
-                    labelStyle: TextStyle(
-                      color: ApTheme.of(context).grey,
-                    ),
-                    labelText: context.ap.weight,
-                  ),
                 ),
               ],
-              SizedBox(height: dividerHeight),
-              TextFormField(
+              const SizedBox(height: 16),
+              _buildTextField(
                 controller: _imgUrl,
+                label: context.ap.imageUrl,
                 enabled: false,
-                validator: (String? value) {
-                  if (value!.isEmpty) {
-                    return context.ap.doNotEmpty;
-                  }
-                  return null;
-                },
-                keyboardType: TextInputType.url,
-                decoration: InputDecoration(
-                  border: const OutlineInputBorder(),
-                  fillColor: ApTheme.of(context).blueAccent,
-                  labelStyle: TextStyle(
-                    color: ApTheme.of(context).grey,
-                  ),
-                  labelText: context.ap.imageUrl,
-                ),
+                validator: _requiredValidator,
               ),
-              const SizedBox(height: 8.0),
-              Center(
-                child: Column(
-                  children: _imgurUploadWidget,
-                ),
-              ),
-              FractionallySizedBox(
-                widthFactor: 0.7,
-                child: ElevatedButton(
-                  style: ElevatedButton.styleFrom(
-                    shape: const RoundedRectangleBorder(
-                      borderRadius: BorderRadius.all(
-                        Radius.circular(30.0),
-                      ),
-                    ),
-                    backgroundColor: ApTheme.of(context).blueAccent,
-                    padding: const EdgeInsets.symmetric(
-                      horizontal: 8.0,
-                    ),
-                  ),
-                  onPressed: () async {
-                    final XFile? image = await MediaUtil.instance.pickImage();
-                    if (image != null) {
-                      setState(
-                        () => imgurUploadState = _ImgurUploadState.uploading,
-                      );
-                      final ApiResult<String> result =
-                          await ImgbbHelper.instance!.uploadImage(
-                        file: image,
-                        expireTime: expireTime,
-                      );
-                      if (!mounted) return;
-                      if (result case ApiSuccess<String>(:final String data)) {
-                        _imgUrl.text = data;
-                        setState(
-                          () => imgurUploadState = _ImgurUploadState.done,
-                        );
-                      } else {
-                        // ignore: use_build_context_synchronously
-                        result.showErrorToast(context);
-                        setState(
-                          () => imgurUploadState = _imgUrl.text.isEmpty
-                              ? _ImgurUploadState.noFile
-                              : _ImgurUploadState.done,
-                        );
-                      }
-                    }
-                  },
-                  child: Text(
-                    context.ap.pickAndUploadToImgur,
-                    style: const TextStyle(color: Colors.white),
-                  ),
-                ),
-              ),
-              SizedBox(height: dividerHeight),
-              TextFormField(
+              const SizedBox(height: 8),
+              _buildImageUploadSection(colorScheme),
+              const SizedBox(height: 16),
+              _buildTextField(
                 controller: _url,
-                validator: (String? value) {
-                  return null;
-                },
+                label: context.ap.url,
                 keyboardType: TextInputType.url,
-                decoration: InputDecoration(
-                  border: const OutlineInputBorder(),
-                  fillColor: ApTheme.of(context).blueAccent,
-                  labelStyle: TextStyle(
-                    color: ApTheme.of(context).grey,
-                  ),
-                  labelText: context.ap.url,
-                ),
               ),
-              SizedBox(height: dividerHeight),
-              Container(color: ApTheme.of(context).grey, height: 1),
-              const SizedBox(height: 8.0),
-              FractionallySizedBox(
-                widthFactor: 0.7,
-                child: ElevatedButton(
-                  style: ElevatedButton.styleFrom(
-                    shape: const RoundedRectangleBorder(
-                      borderRadius: BorderRadius.all(
-                        Radius.circular(30.0),
-                      ),
-                    ),
-                    backgroundColor: ApTheme.of(context).blueAccent,
-                    padding: const EdgeInsets.symmetric(
-                      horizontal: 8.0,
-                      vertical: 4.0,
-                    ),
-                  ),
-                  onPressed: () {
-                    setState(() {
-                      expireTime = null;
-                    });
-                  },
-                  child: Text(
-                    context.ap.setNoExpireTime,
-                    style: const TextStyle(color: Colors.white),
-                  ),
-                ),
+              const SizedBox(height: 16),
+              Divider(
+                color: colorScheme.outlineVariant.withAlpha(77),
               ),
-              const SizedBox(height: 8.0),
-              ListTile(
-                onTap: _pickStartDateTime,
-                contentPadding: const EdgeInsets.symmetric(
-                  horizontal: 24,
-                  vertical: 8,
-                ),
-                leading: Icon(
-                  ApIcon.accessTime,
-                  size: 30,
-                  color: ApTheme.of(context).grey,
-                ),
-                trailing: Icon(
-                  ApIcon.keyboardArrowDown,
-                  size: 30,
-                  color: ApTheme.of(context).grey,
-                ),
-                title: Text(
-                  context.ap.expireTime,
-                  style: const TextStyle(fontSize: 20),
-                ),
-                subtitle: Text(
-                  expireTime == null
-                      ? context.ap.newsExpireTimeHint
-                      : dateFormat.format(expireTime!),
-                  style: const TextStyle(fontSize: 20),
-                ),
+              const SizedBox(height: 8),
+              _buildExpireTimeSection(colorScheme),
+              const SizedBox(height: 8),
+              Divider(
+                color: colorScheme.outlineVariant.withAlpha(77),
               ),
-              Container(color: ApTheme.of(context).grey, height: 1),
-              SizedBox(height: dividerHeight),
-              TextFormField(
-                maxLines: 5,
+              const SizedBox(height: 16),
+              _buildTextField(
                 controller: _description,
-                validator: (String? value) {
-                  return null;
-                },
-                decoration: InputDecoration(
-                  border: const OutlineInputBorder(),
-                  fillColor: ApTheme.of(context).blueAccent,
-                  labelStyle: TextStyle(
-                    color: ApTheme.of(context).grey,
-                  ),
-                  labelText: context.ap.description,
-                ),
+                label: context.ap.description,
+                maxLines: 5,
               ),
-              if (widget.mode == Mode.editApplication) ...<Widget>[
-                SizedBox(height: dividerHeight),
-                TextFormField(
+              if (widget.mode ==
+                  Mode.editApplication) ...<Widget>[
+                const SizedBox(height: 16),
+                _buildTextField(
                   controller: TextEditingController(
                     text: announcements.applicant ?? '',
                   ),
+                  label: context.ap.applicant,
                   enabled: false,
-                  decoration: InputDecoration(
-                    border: const OutlineInputBorder(),
-                    fillColor: ApTheme.of(context).blueAccent,
-                    labelStyle: TextStyle(
-                      color: ApTheme.of(context).grey,
-                    ),
-                    labelText: context.ap.applicant,
-                  ),
                 ),
-                SizedBox(height: dividerHeight),
-                TextFormField(
-                  maxLines: 2,
+                const SizedBox(height: 16),
+                _buildTextField(
                   controller: _reviewDescription,
-                  validator: (String? value) {
-                    return null;
-                  },
-                  decoration: InputDecoration(
-                    border: const OutlineInputBorder(),
-                    fillColor: ApTheme.of(context).blueAccent,
-                    labelStyle: TextStyle(
-                      color: ApTheme.of(context).grey,
-                    ),
-                    labelText: context.ap.reviewDescription,
-                  ),
+                  label: context.ap.reviewDescription,
+                  maxLines: 2,
                 ),
               ],
-              const SizedBox(height: 36),
-              FractionallySizedBox(
-                widthFactor: 0.8,
-                child: ElevatedButton(
-                  style: ElevatedButton.styleFrom(
-                    shape: const RoundedRectangleBorder(
-                      borderRadius: BorderRadius.all(
-                        Radius.circular(30.0),
-                      ),
-                    ),
-                    backgroundColor: ApTheme.of(context).blueAccent,
-                    padding: const EdgeInsets.symmetric(
-                      horizontal: 8.0,
-                      vertical: 4.0,
-                    ),
-                  ),
-                  onPressed: () {
-                    _announcementSubmit();
-                  },
-                  child: Text(
-                    buttonText,
-                    style: const TextStyle(
-                      color: Colors.white,
-                      fontSize: 18.0,
-                    ),
-                  ),
-                ),
-              ),
-              if (widget.mode == Mode.editApplication) ...<Widget>[
-                const SizedBox(height: 18),
-                FractionallySizedBox(
-                  widthFactor: 0.8,
-                  child: ElevatedButton(
-                    style: ElevatedButton.styleFrom(
-                      shape: const RoundedRectangleBorder(
-                        borderRadius: BorderRadius.all(
-                          Radius.circular(30.0),
-                        ),
-                      ),
-                      backgroundColor: ApTheme.of(context).yellow,
-                      padding: const EdgeInsets.symmetric(
-                        horizontal: 8.0,
-                        vertical: 4.0,
-                      ),
-                    ),
-                    onPressed: () {
-                      _announcementSubmit(isApproval: true);
-                    },
-                    child: Text(
-                      context.ap.updateAndApprove,
-                      style: const TextStyle(
-                        color: Colors.white,
-                        fontSize: 18.0,
-                      ),
-                    ),
-                  ),
-                ),
-                const SizedBox(height: 18),
-                FractionallySizedBox(
-                  widthFactor: 0.8,
-                  child: ElevatedButton(
-                    style: ElevatedButton.styleFrom(
-                      shape: const RoundedRectangleBorder(
-                        borderRadius: BorderRadius.all(
-                          Radius.circular(30.0),
-                        ),
-                      ),
-                      backgroundColor: ApTheme.of(context).red,
-                      padding: const EdgeInsets.symmetric(
-                        horizontal: 8.0,
-                        vertical: 4.0,
-                      ),
-                    ),
-                    onPressed: () {
-                      _announcementSubmit(isApproval: false);
-                    },
-                    child: Text(
-                      context.ap.updateAndReject,
-                      style: const TextStyle(
-                        color: Colors.white,
-                        fontSize: 18.0,
-                      ),
-                    ),
-                  ),
-                ),
-                const SizedBox(height: 18),
-                FractionallySizedBox(
-                  widthFactor: 0.8,
-                  child: ElevatedButton(
-                    style: ElevatedButton.styleFrom(
-                      shape: const RoundedRectangleBorder(
-                        borderRadius: BorderRadius.all(
-                          Radius.circular(30.0),
-                        ),
-                      ),
-                      backgroundColor: ApTheme.of(context).red,
-                      padding: const EdgeInsets.symmetric(
-                        horizontal: 8.0,
-                        vertical: 4.0,
-                      ),
-                    ),
-                    onPressed: () {
-                      _announcementSubmit(
-                        isApproval: false,
-                        addBlackList: true,
-                      );
-                    },
-                    child: Text(
-                      context.ap.updateRejectAndBan,
-                      style: const TextStyle(
-                        color: Colors.white,
-                        fontSize: 18.0,
-                      ),
-                    ),
-                  ),
-                ),
-              ],
+              const SizedBox(height: 32),
+              _buildActionButtons(colorScheme),
               const SizedBox(height: 36),
             ],
           ),
         ),
       ),
     );
+  }
+
+  Widget _buildTextField({
+    required TextEditingController controller,
+    required String label,
+    String? Function(String?)? validator,
+    TextInputType? keyboardType,
+    bool enabled = true,
+    int? maxLines,
+  }) {
+    return TextFormField(
+      controller: controller,
+      enabled: enabled,
+      maxLines: maxLines,
+      validator: validator,
+      keyboardType: keyboardType,
+      decoration: InputDecoration(
+        labelText: label,
+      ),
+    );
+  }
+
+  Widget _buildTagSection(ColorScheme colorScheme) {
+    return Wrap(
+      spacing: 8,
+      runSpacing: 4,
+      children: <Widget>[
+        for (final String tag in tags)
+          Chip(
+            label: Text(
+              tag,
+              style: TextStyle(
+                color: tagColor(tag, colorScheme),
+                fontWeight: FontWeight.w600,
+                fontSize: 12,
+              ),
+            ),
+            backgroundColor:
+                tagColor(tag, colorScheme).withAlpha(26),
+            side: BorderSide.none,
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(8),
+            ),
+            deleteIconColor: tagColor(tag, colorScheme),
+            onDeleted: () {
+              setState(() => tags.remove(tag));
+            },
+          ),
+        ActionChip(
+          label: Icon(
+            Icons.add,
+            size: 18,
+            color: colorScheme.primary,
+          ),
+          backgroundColor:
+              colorScheme.primaryContainer.withAlpha(128),
+          side: BorderSide.none,
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(8),
+          ),
+          onPressed: _showAddTagDialog,
+        ),
+      ],
+    );
+  }
+
+  Widget _buildImageUploadSection(ColorScheme colorScheme) {
+    return Column(
+      children: <Widget>[
+        switch (imgurUploadState) {
+          _ImgurUploadState.uploading => Column(
+              children: <Widget>[
+                const CircularProgressIndicator(),
+                const SizedBox(height: 8),
+                Text(
+                  context.ap.uploading,
+                  style: TextStyle(
+                    color: colorScheme.onSurfaceVariant,
+                  ),
+                ),
+              ],
+            ),
+          _ImgurUploadState.done => Column(
+              children: <Widget>[
+                Text(
+                  context.ap.imagePreview,
+                  style: TextStyle(
+                    color: colorScheme.onSurfaceVariant,
+                  ),
+                ),
+                const SizedBox(height: 8),
+                ClipRRect(
+                  borderRadius: BorderRadius.circular(12),
+                  child: SizedBox(
+                    height: 300,
+                    child: ApNetworkImage(url: _imgUrl.text),
+                  ),
+                ),
+                const SizedBox(height: 8),
+              ],
+            ),
+          _ImgurUploadState.noFile => Padding(
+              padding: const EdgeInsets.only(bottom: 8),
+              child: Text(
+                context.ap.imgurUploadDescription,
+                style: TextStyle(
+                  color: colorScheme.onSurfaceVariant,
+                  fontSize: 13,
+                ),
+              ),
+            ),
+        },
+        FilledButton.tonal(
+          style: FilledButton.styleFrom(
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(12),
+            ),
+          ),
+          onPressed: _pickAndUploadImage,
+          child: Text(context.ap.pickAndUploadToImgur),
+        ),
+      ],
+    );
+  }
+
+  Widget _buildExpireTimeSection(ColorScheme colorScheme) {
+    return Column(
+      children: <Widget>[
+        OutlinedButton(
+          style: OutlinedButton.styleFrom(
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(12),
+            ),
+            side: BorderSide(
+              color: colorScheme.outline,
+            ),
+          ),
+          onPressed: () => setState(() => expireTime = null),
+          child: Text(context.ap.setNoExpireTime),
+        ),
+        const SizedBox(height: 8),
+        ListTile(
+          onTap: _pickStartDateTime,
+          contentPadding: const EdgeInsets.symmetric(
+            horizontal: 24,
+            vertical: 8,
+          ),
+          leading: Icon(
+            ApIcon.accessTime,
+            size: 24,
+            color: colorScheme.onSurfaceVariant,
+          ),
+          trailing: Icon(
+            ApIcon.keyboardArrowDown,
+            size: 24,
+            color: colorScheme.onSurfaceVariant,
+          ),
+          title: Text(
+            context.ap.expireTime,
+            style: TextStyle(
+              fontSize: 16,
+              fontWeight: FontWeight.w500,
+              color: colorScheme.onSurface,
+            ),
+          ),
+          subtitle: Text(
+            expireTime == null
+                ? context.ap.newsExpireTimeHint
+                : dateFormat.format(expireTime!),
+            style: TextStyle(
+              fontSize: 14,
+              color: colorScheme.onSurfaceVariant,
+            ),
+          ),
+        ),
+      ],
+    );
+  }
+
+  Widget _buildActionButtons(ColorScheme colorScheme) {
+    return Column(
+      children: <Widget>[
+        SizedBox(
+          width: double.infinity,
+          child: FilledButton(
+            style: FilledButton.styleFrom(
+              padding: const EdgeInsets.symmetric(vertical: 16),
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(12),
+              ),
+            ),
+            onPressed: _announcementSubmit,
+            child: Text(
+              buttonText,
+              style: const TextStyle(fontSize: 16),
+            ),
+          ),
+        ),
+        if (widget.mode == Mode.editApplication) ...<Widget>[
+          const SizedBox(height: 12),
+          SizedBox(
+            width: double.infinity,
+            child: FilledButton.tonal(
+              style: FilledButton.styleFrom(
+                padding: const EdgeInsets.symmetric(vertical: 16),
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(12),
+                ),
+              ),
+              onPressed: () =>
+                  _announcementSubmit(isApproval: true),
+              child: Text(
+                context.ap.updateAndApprove,
+                style: const TextStyle(fontSize: 16),
+              ),
+            ),
+          ),
+          const SizedBox(height: 12),
+          SizedBox(
+            width: double.infinity,
+            child: OutlinedButton(
+              style: OutlinedButton.styleFrom(
+                foregroundColor: colorScheme.error,
+                padding: const EdgeInsets.symmetric(vertical: 16),
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(12),
+                ),
+                side: BorderSide(color: colorScheme.error),
+              ),
+              onPressed: () =>
+                  _announcementSubmit(isApproval: false),
+              child: Text(
+                context.ap.updateAndReject,
+                style: const TextStyle(fontSize: 16),
+              ),
+            ),
+          ),
+          const SizedBox(height: 12),
+          SizedBox(
+            width: double.infinity,
+            child: FilledButton(
+              style: FilledButton.styleFrom(
+                backgroundColor: colorScheme.error,
+                foregroundColor: colorScheme.onError,
+                padding: const EdgeInsets.symmetric(vertical: 16),
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(12),
+                ),
+              ),
+              onPressed: () => _announcementSubmit(
+                isApproval: false,
+                addBlackList: true,
+              ),
+              child: Text(
+                context.ap.updateRejectAndBan,
+                style: const TextStyle(fontSize: 16),
+              ),
+            ),
+          ),
+        ],
+      ],
+    );
+  }
+
+  String? _requiredValidator(String? value) {
+    if (value == null || value.isEmpty) return context.ap.doNotEmpty;
+    return null;
+  }
+
+  void _showAddTagDialog() {
+    _newTag.clear();
+    showDialog(
+      context: context,
+      builder: (BuildContext context) => DefaultDialog(
+        title: context.ap.addTag,
+        contentWidget: TextField(
+          controller: _newTag,
+          decoration: InputDecoration(
+            hintText: context.ap.tagName,
+          ),
+        ),
+        actionText: context.ap.confirm,
+        actionFunction: () {
+          if (_newTag.text.isEmpty) {
+            UiUtil.instance
+                .showToast(context, context.ap.doNotEmpty);
+          } else {
+            final String newTag = _newTag.text;
+            final int index = tags.indexOf(newTag);
+            if (index == -1) {
+              setState(() => tags.add(newTag));
+              Navigator.of(context, rootNavigator: true).pop();
+            } else {
+              UiUtil.instance.showToast(
+                context,
+                context.ap.tagRepeatHint,
+              );
+            }
+          }
+        },
+      ),
+    );
+  }
+
+  Future<void> _pickAndUploadImage() async {
+    final XFile? image = await MediaUtil.instance.pickImage();
+    if (image != null) {
+      setState(
+        () => imgurUploadState = _ImgurUploadState.uploading,
+      );
+      final ApiResult<String> result =
+          await ImgbbHelper.instance!.uploadImage(
+        file: image,
+        expireTime: expireTime,
+      );
+      if (!mounted) return;
+      if (result case ApiSuccess<String>(:final String data)) {
+        _imgUrl.text = data;
+        setState(
+          () => imgurUploadState = _ImgurUploadState.done,
+        );
+      } else {
+        // ignore: use_build_context_synchronously
+        result.showErrorToast(context);
+        setState(
+          () => imgurUploadState = _imgUrl.text.isEmpty
+              ? _ImgurUploadState.noFile
+              : _ImgurUploadState.done,
+        );
+      }
+    }
   }
 
   Future<void> _pickStartDateTime() async {
@@ -625,7 +594,8 @@ class _AnnouncementEditPageState extends State<AnnouncementEditPage> {
       return;
     }
     if (!mounted) return;
-    if (result case ApiSuccess<Announcement>(:final Announcement data)) {
+    if (result
+        case ApiSuccess<Announcement>(:final Announcement data)) {
       announcements = data;
       _mapData();
       setState(() {});
@@ -644,8 +614,11 @@ class _AnnouncementEditPageState extends State<AnnouncementEditPage> {
         description: _description.text,
         imgUrl: _imgUrl.text,
         url: _url.text,
-        weight: _weight.text.isNotEmpty ? (int.tryParse(_weight.text) ?? 0) : 0,
-        expireTime: (expireTime == null) ? null : expireTime!.parseToString(),
+        weight: _weight.text.isNotEmpty
+            ? (int.tryParse(_weight.text) ?? 0)
+            : 0,
+        expireTime:
+            (expireTime == null) ? null : expireTime!.parseToString(),
         reviewDescription: _reviewDescription.text,
         tags: tags,
       );
@@ -657,7 +630,8 @@ class _AnnouncementEditPageState extends State<AnnouncementEditPage> {
             data: announcements,
           );
         case Mode.edit:
-          result = await AnnouncementHelper.instance.updateAnnouncement(
+          result =
+              await AnnouncementHelper.instance.updateAnnouncement(
             data: announcements,
           );
         case Mode.application:
@@ -665,7 +639,8 @@ class _AnnouncementEditPageState extends State<AnnouncementEditPage> {
             data: announcements,
           );
         case Mode.editApplication:
-          result = await AnnouncementHelper.instance.updateApplication(
+          result =
+              await AnnouncementHelper.instance.updateApplication(
             data: announcements,
           );
       }
@@ -678,27 +653,34 @@ class _AnnouncementEditPageState extends State<AnnouncementEditPage> {
 
       switch (widget.mode) {
         case Mode.add:
-          UiUtil.instance.showToast(context, context.ap.addSuccess);
-        case Mode.edit:
-          UiUtil.instance.showToast(context, context.ap.updateSuccess);
-        case Mode.application:
           UiUtil.instance
-              .showToast(context, context.ap.applicationSubmitSuccess);
+              .showToast(context, context.ap.addSuccess);
+        case Mode.edit:
+          UiUtil.instance
+              .showToast(context, context.ap.updateSuccess);
+        case Mode.application:
+          UiUtil.instance.showToast(
+            context,
+            context.ap.applicationSubmitSuccess,
+          );
         case Mode.editApplication:
-          UiUtil.instance.showToast(context, context.ap.updateSuccess);
+          UiUtil.instance
+              .showToast(context, context.ap.updateSuccess);
           if (isApproval != null) {
             final ApiResult<Response<dynamic>> reviewResult;
             if (isApproval) {
-              reviewResult =
-                  await AnnouncementHelper.instance.approveApplication(
+              reviewResult = await AnnouncementHelper.instance
+                  .approveApplication(
                 applicationId: announcements.applicationId,
-                reviewDescription: announcements.reviewDescription,
+                reviewDescription:
+                    announcements.reviewDescription,
               );
             } else {
-              reviewResult =
-                  await AnnouncementHelper.instance.rejectApplication(
+              reviewResult = await AnnouncementHelper.instance
+                  .rejectApplication(
                 applicationId: announcements.applicationId,
-                reviewDescription: announcements.reviewDescription,
+                reviewDescription:
+                    announcements.reviewDescription,
               );
             }
             if (!mounted) return;

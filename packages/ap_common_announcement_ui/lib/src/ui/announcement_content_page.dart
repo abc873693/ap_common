@@ -4,8 +4,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_linkify/flutter_linkify.dart';
 import 'package:photo_view/photo_view.dart';
 
-enum _Status { loading, finish, error, empty }
-
 class AnnouncementContentPage extends StatefulWidget {
   const AnnouncementContentPage({
     super.key,
@@ -15,12 +13,12 @@ class AnnouncementContentPage extends StatefulWidget {
   final Announcement announcement;
 
   @override
-  AnnouncementContentPageState createState() => AnnouncementContentPageState();
+  AnnouncementContentPageState createState() =>
+      AnnouncementContentPageState();
 }
 
-class AnnouncementContentPageState extends State<AnnouncementContentPage> {
-  _Status state = _Status.finish;
-
+class AnnouncementContentPageState
+    extends State<AnnouncementContentPage> {
   @override
   void initState() {
     AnalyticsUtil.instance.setCurrentScreen(
@@ -31,58 +29,31 @@ class AnnouncementContentPageState extends State<AnnouncementContentPage> {
   }
 
   @override
-  void dispose() {
-    super.dispose();
-  }
-
-  @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         title: Text(context.ap.announcements),
       ),
-      body: _homebody(),
+      body: OrientationBuilder(
+        builder: (_, Orientation orientation) {
+          return orientation == Orientation.portrait
+              ? SingleChildScrollView(
+                  child: Column(
+                    children: _renderContent(orientation),
+                  ),
+                )
+              : Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: _renderContent(orientation),
+                );
+        },
+      ),
     );
   }
 
-  Widget? _homebody() {
-    switch (state) {
-      case _Status.loading:
-        return const Center(
-          child: CircularProgressIndicator(),
-        );
-      case _Status.finish:
-        return OrientationBuilder(
-          builder: (_, Orientation orientation) {
-            return orientation == Orientation.portrait
-                ? SingleChildScrollView(
-                    child: Flex(
-                      direction: orientation == Orientation.portrait
-                          ? Axis.vertical
-                          : Axis.horizontal,
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: _renderContent(orientation),
-                    ),
-                  )
-                : Flex(
-                    direction: orientation == Orientation.portrait
-                        ? Axis.vertical
-                        : Axis.horizontal,
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: _renderContent(orientation),
-                  );
-          },
-        );
-      case _Status.error:
-      case _Status.empty:
-        return HintContent(
-          icon: ApIcon.error,
-          content: context.ap.somethingError,
-        );
-    }
-  }
-
   List<Widget> _renderContent(Orientation orientation) {
+    final ColorScheme colorScheme = Theme.of(context).colorScheme;
+
     final Widget image = GestureDetector(
       onTap: () {
         ApUtils.pushCupertinoStyle(
@@ -93,16 +64,20 @@ class AnnouncementContentPageState extends State<AnnouncementContentPage> {
             ),
             body: PhotoView(
               imageProvider: (ApUtils.isSupportCacheNetworkImage
-                      ? CachedNetworkImageProvider(widget.announcement.imgUrl)
+                      ? CachedNetworkImageProvider(
+                          widget.announcement.imgUrl,
+                        )
                       : NetworkImage(widget.announcement.imgUrl))
                   as ImageProvider<Object>?,
             ),
           ),
         );
-        AnalyticsUtil.instance.logEvent('announcement_content_image_click');
+        AnalyticsUtil.instance
+            .logEvent('announcement_content_image_click');
       },
       child: AspectRatio(
-        aspectRatio: orientation == Orientation.portrait ? 4 / 3 : 9 / 16,
+        aspectRatio:
+            orientation == Orientation.portrait ? 4 / 3 : 9 / 16,
         child: Hero(
           tag: widget.announcement.hashCode,
           child: ApNetworkImage(
@@ -121,7 +96,7 @@ class AnnouncementContentPageState extends State<AnnouncementContentPage> {
             textAlign: TextAlign.center,
             style: TextStyle(
               fontSize: 20.0,
-              color: ApTheme.of(context).greyText,
+              color: colorScheme.onSurface,
               fontWeight: FontWeight.w500,
             ),
           ),
@@ -129,18 +104,25 @@ class AnnouncementContentPageState extends State<AnnouncementContentPage> {
       ),
       Hero(
         tag: ApConstants.tagAnnouncementIcon,
-        child: Icon(ApIcon.arrowDropDown),
+        child: Icon(
+          ApIcon.arrowDropDown,
+          color: colorScheme.onSurfaceVariant,
+        ),
       ),
       Padding(
         padding: EdgeInsets.symmetric(
-          horizontal: orientation == Orientation.portrait ? 16.0 : 0.0,
+          horizontal:
+              orientation == Orientation.portrait ? 16.0 : 0.0,
         ),
         child: SelectableLinkify(
           text: widget.announcement.description,
           textAlign: TextAlign.center,
           style: TextStyle(
             fontSize: 16.0,
-            color: ApTheme.of(context).greyText,
+            color: colorScheme.onSurfaceVariant,
+          ),
+          linkStyle: TextStyle(
+            color: colorScheme.primary,
           ),
           options: const LinkifyOptions(humanize: false),
           onOpen: (LinkableElement link) =>
@@ -150,27 +132,23 @@ class AnnouncementContentPageState extends State<AnnouncementContentPage> {
       if (widget.announcement.url != null &&
           widget.announcement.url!.isNotEmpty) ...<Widget>[
         const SizedBox(height: 16.0),
-        ElevatedButton(
-          style: ElevatedButton.styleFrom(
-            shape: const RoundedRectangleBorder(
-              borderRadius: BorderRadius.all(
-                Radius.circular(30.0),
-              ),
-            ),
-            backgroundColor: ApTheme.of(context).yellow,
+        FilledButton(
+          style: FilledButton.styleFrom(
             padding: const EdgeInsets.symmetric(
               vertical: 16.0,
-              horizontal: 30.0,
+              horizontal: 32.0,
+            ),
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(12),
             ),
           ),
           onPressed: () {
-            PlatformUtil.instance.launchUrl(widget.announcement.url!);
-            AnalyticsUtil.instance.logEvent('announcement_link_click');
+            PlatformUtil.instance
+                .launchUrl(widget.announcement.url!);
+            AnalyticsUtil.instance
+                .logEvent('announcement_link_click');
           },
-          child: Icon(
-            ApIcon.exitToApp,
-            color: Colors.white,
-          ),
+          child: Icon(ApIcon.exitToApp),
         ),
         const SizedBox(height: 16.0),
       ],
