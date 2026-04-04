@@ -15,6 +15,8 @@ import 'package:sign_in_with_apple/sign_in_with_apple.dart';
 
 enum _DataType { announcement, application }
 
+enum _ReviewFilter { all, pending, approved, rejected }
+
 class AnnouncementHomePage extends StatefulWidget {
   const AnnouncementHomePage({
     super.key,
@@ -50,12 +52,14 @@ class _AnnouncementHomePageState extends State<AnnouncementHomePage>
   DataState<List<Announcement>> applicationState =
       const DataLoading<List<Announcement>>();
 
-  bool? onlyShowNotReview = false;
-
   Set<String> _blackListSet = <String>{};
 
   Map<String, int> _tagsCount = <String, int>{};
   String? _selectedTag;
+
+  /// null = all, true = approved, false = rejected,
+  /// 'pending' uses a separate bool
+  _ReviewFilter _reviewFilter = _ReviewFilter.all;
 
   FocusNode? usernameFocusNode;
   FocusNode? passwordFocusNode;
@@ -132,23 +136,6 @@ class _AnnouncementHomePageState extends State<AnnouncementHomePage>
   List<Widget> _buildAppBarActions(ColorScheme colorScheme) {
     return <Widget>[
       if (_isLoggedIn && _isAdmin) ...<Widget>[
-        IconButton(
-          icon: Icon(
-            onlyShowNotReview!
-                ? Icons.filter_alt
-                : Icons.filter_alt_outlined,
-          ),
-          tooltip: context.ap.onlyShowNotReview,
-          onPressed: () {
-            setState(() {
-              onlyShowNotReview = !onlyShowNotReview!;
-            });
-            PreferenceUtil.instance.setBool(
-              ApConstants.announcementOnlyNotReview,
-              onlyShowNotReview!,
-            );
-          },
-        ),
         IconButton(
           icon: const Icon(Icons.playlist_remove),
           tooltip: context.ap.blackList,
@@ -235,25 +222,33 @@ class _AnnouncementHomePageState extends State<AnnouncementHomePage>
     ColorScheme colorScheme,
     List<Announcement> apps,
   ) {
-    final List<Announcement> filtered = onlyShowNotReview!
-        ? apps
-            .where(
-              (Announcement a) => a.reviewStatus == null,
-            )
-            .toList()
-        : apps;
+    List<Announcement> filtered = switch (_reviewFilter) {
+      _ReviewFilter.all => apps,
+      _ReviewFilter.pending => apps
+          .where((Announcement a) => a.reviewStatus == null)
+          .toList(),
+      _ReviewFilter.approved => apps
+          .where((Announcement a) => a.reviewStatus == true)
+          .toList(),
+      _ReviewFilter.rejected => apps
+          .where((Announcement a) => a.reviewStatus == false)
+          .toList(),
+    };
 
     return ListView.builder(
       padding: const EdgeInsets.all(16),
-      itemCount: filtered.length + 1,
+      itemCount: filtered.length + 2,
       itemBuilder: (BuildContext context, int index) {
         if (index == 0) {
           return _buildRulesHint(colorScheme);
         }
+        if (index == 1) {
+          return _buildReviewFilterChips(colorScheme);
+        }
         return _buildItemCard(
           colorScheme,
           _DataType.application,
-          filtered[index - 1],
+          filtered[index - 2],
         );
       },
     );
@@ -304,6 +299,7 @@ class _AnnouncementHomePageState extends State<AnnouncementHomePage>
           applicationState,
           _DataType.application,
           onRetry: _getApplications,
+          showReviewFilter: true,
         ),
         _buildDataStateList(
           colorScheme,
@@ -322,6 +318,7 @@ class _AnnouncementHomePageState extends State<AnnouncementHomePage>
     _DataType dataType, {
     required VoidCallback onRetry,
     bool showTagFilter = false,
+    bool showReviewFilter = false,
   }) {
     return switch (state) {
       DataLoading<List<Announcement>>() =>
@@ -341,29 +338,48 @@ class _AnnouncementHomePageState extends State<AnnouncementHomePage>
         :final List<Announcement> data,
       ) =>
         () {
-          List<Announcement> filtered = onlyShowNotReview!
-              ? data
+          List<Announcement> filtered = data;
+
+          if (showReviewFilter) {
+            filtered = switch (_reviewFilter) {
+              _ReviewFilter.all => filtered,
+              _ReviewFilter.pending => filtered
                   .where(
-                    (Announcement a) => a.reviewStatus == null,
+                    (Announcement a) =>
+                        a.reviewStatus == null,
                   )
-                  .toList()
-              : data;
+                  .toList(),
+              _ReviewFilter.approved => filtered
+                  .where(
+                    (Announcement a) =>
+                        a.reviewStatus == true,
+                  )
+                  .toList(),
+              _ReviewFilter.rejected => filtered
+                  .where(
+                    (Announcement a) =>
+                        a.reviewStatus == false,
+                  )
+                  .toList(),
+            };
+          }
 
           if (showTagFilter && _selectedTag != null) {
             filtered = filtered
                 .where(
                   (Announcement a) =>
-                      a.tags?.contains(_selectedTag) ?? false,
+                      a.tags?.contains(_selectedTag) ??
+                      false,
                 )
                 .toList();
           }
 
-          final int headerCount = showTagFilter &&
-                  _tagsCount.isNotEmpty
-              ? 1
-              : 0;
+          final bool hasHeader =
+              (showTagFilter && _tagsCount.isNotEmpty) ||
+                  showReviewFilter;
+          final int headerCount = hasHeader ? 1 : 0;
 
-          if (filtered.isEmpty && headerCount == 0) {
+          if (filtered.isEmpty && !hasHeader) {
             return HintContent(
               icon: ApIcon.classIcon,
               content: context.ap.noData,
@@ -375,7 +391,17 @@ class _AnnouncementHomePageState extends State<AnnouncementHomePage>
             itemCount: filtered.length + headerCount,
             itemBuilder: (BuildContext context, int index) {
               if (index < headerCount) {
-                return _buildTagFilterChips(colorScheme);
+                return Column(
+                  children: <Widget>[
+                    if (showReviewFilter)
+                      _buildReviewFilterChips(
+                        colorScheme,
+                      ),
+                    if (showTagFilter &&
+                        _tagsCount.isNotEmpty)
+                      _buildTagFilterChips(colorScheme),
+                  ],
+                );
               }
               return _buildItemCard(
                 colorScheme,
@@ -386,6 +412,66 @@ class _AnnouncementHomePageState extends State<AnnouncementHomePage>
           );
         }(),
     };
+  }
+
+  Widget _buildReviewFilterChips(ColorScheme colorScheme) {
+    return Padding(
+      padding: const EdgeInsets.only(bottom: 12),
+      child: SingleChildScrollView(
+        scrollDirection: Axis.horizontal,
+        child: Row(
+          children: <Widget>[
+            for (final _ReviewFilter filter
+                in _ReviewFilter.values)
+              Padding(
+                padding: const EdgeInsets.only(right: 8),
+                child: FilterChip(
+                  label: Text(
+                    switch (filter) {
+                      _ReviewFilter.all => context.ap.all,
+                      _ReviewFilter.pending =>
+                        context.ap.waitingForReview,
+                      _ReviewFilter.approved =>
+                        context.ap.reviewApproval,
+                      _ReviewFilter.rejected =>
+                        context.ap.reviewReject,
+                    },
+                    style: const TextStyle(fontSize: 12),
+                  ),
+                  avatar: Icon(
+                    switch (filter) {
+                      _ReviewFilter.all => null,
+                      _ReviewFilter.pending =>
+                        Icons.schedule,
+                      _ReviewFilter.approved =>
+                        Icons.check_circle_outline,
+                      _ReviewFilter.rejected =>
+                        Icons.cancel_outlined,
+                    },
+                    size: 16,
+                  ),
+                  selected: _reviewFilter == filter,
+                  selectedColor: switch (filter) {
+                    _ReviewFilter.all => null,
+                    _ReviewFilter.pending =>
+                      colorScheme.tertiary.withAlpha(51),
+                    _ReviewFilter.approved =>
+                      colorScheme.primary.withAlpha(51),
+                    _ReviewFilter.rejected =>
+                      colorScheme.error.withAlpha(51),
+                  },
+                  onSelected: (_) {
+                    setState(
+                      () => _reviewFilter = filter,
+                    );
+                  },
+                  showCheckmark: false,
+                ),
+              ),
+          ],
+        ),
+      ),
+    );
   }
 
   Widget _buildTagFilterChips(ColorScheme colorScheme) {
@@ -1116,8 +1202,6 @@ class _AnnouncementHomePageState extends State<AnnouncementHomePage>
   Future<void> _getPreference() async {
     final bool isLogin = PreferenceUtil.instance
         .getBool(ApConstants.announcementIsLogin, false);
-    onlyShowNotReview = PreferenceUtil.instance
-        .getBool(ApConstants.announcementOnlyNotReview, false);
     _username.text = PreferenceUtil.instance
         .getString(ApConstants.announcementUsername, '');
     _password.text =
