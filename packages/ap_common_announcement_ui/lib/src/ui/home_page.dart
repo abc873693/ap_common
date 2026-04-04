@@ -24,12 +24,17 @@ class AnnouncementHomePage extends StatefulWidget {
     this.reviewDescriptionWidget,
     this.organizationDomain,
     this.enableNormalLogin = false,
+    this.fcmToken,
   });
 
   final Widget? loginDescriptionWidget;
   final Widget? reviewDescriptionWidget;
   final String? organizationDomain;
   final bool enableNormalLogin;
+
+  /// FCM token for push notification when application is
+  /// approved/rejected. Pass from FirebaseMessagingUtils.instance.token.
+  final String? fcmToken;
 
   static const String routerName = '/announcement';
 
@@ -1200,6 +1205,9 @@ class _AnnouncementHomePageState extends State<AnnouncementHomePage>
   }
 
   Future<void> _getPreference() async {
+    if (widget.fcmToken != null) {
+      AnnouncementHelper.instance.fcmToken = widget.fcmToken;
+    }
     final bool isLogin = PreferenceUtil.instance
         .getBool(ApConstants.announcementIsLogin, false);
     _username.text = PreferenceUtil.instance
