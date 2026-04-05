@@ -18,6 +18,7 @@ class ApCoursePage extends StatefulWidget {
     super.key,
     required this.onLoadSemesters,
     required this.onLoadCourse,
+    this.onCourseLoaded,
     this.title,
     this.enableNotifyControl = true,
     this.enableAddToCalendar = true,
@@ -36,6 +37,11 @@ class ApCoursePage extends StatefulWidget {
 
   /// Load course data for the given [Semester].
   final Future<CourseData> Function(Semester semester) onLoadCourse;
+
+  /// Called after course data is successfully loaded and the UI state
+  /// is updated. Useful for syncing data to platform widgets, e.g.
+  /// `ApCommonPlugin.updateCourseWidget(courseData)`.
+  final void Function(CourseData courseData)? onCourseLoaded;
 
   final String? title;
   final bool enableNotifyControl;
@@ -109,10 +115,11 @@ class _ApCoursePageState extends State<ApCoursePage> {
               _customCourseData.courses.isEmpty) {
             _state = const DataEmpty<CourseData>();
           } else {
-            _state = DataLoaded<CourseData>(
-              courseData.mergeCustom(_customCourseData.courses),
-            );
+            final CourseData merged =
+                courseData.mergeCustom(_customCourseData.courses);
+            _state = DataLoaded<CourseData>(merged);
             _notifyData = CourseNotifyData.load(_notifyCacheKey);
+            widget.onCourseLoaded?.call(merged);
           }
         });
       }
