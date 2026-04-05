@@ -280,20 +280,6 @@ class HomePageState extends State<HomePage> {
 
   List<Widget> _buildDashboardWidgets() {
     return <Widget>[
-      QuickInfoRow(
-        items: <QuickInfoItem>[
-          QuickInfoItem(
-            icon: Icons.menu_book_outlined,
-            label: '${courseData?.courses.length ?? 0}',
-            subtitle: context.ap.course,
-          ),
-          QuickInfoItem(
-            icon: Icons.announcement_outlined,
-            label: '${announcements.length}',
-            subtitle: context.ap.announcements,
-          ),
-        ],
-      ),
       if (courseData != null)
         TodayScheduleCard(
           courseData: courseData!,
@@ -305,8 +291,7 @@ class HomePageState extends State<HomePage> {
   }
 
   Future<void> _loadCourseData() async {
-    final String rawString =
-        await rootBundle.loadString(FileAssets.courses);
+    final String rawString = await rootBundle.loadString(FileAssets.courses);
     setState(() {
       courseData = CourseData.fromRawJson(rawString);
     });

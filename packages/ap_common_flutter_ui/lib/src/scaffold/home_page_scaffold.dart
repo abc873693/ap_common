@@ -159,8 +159,7 @@ class HomePageScaffoldState extends State<HomePageScaffold> {
                             ),
                             alignment: Alignment.center,
                             child: AnimatedSwitcher(
-                              duration:
-                                  const Duration(milliseconds: 300),
+                              duration: const Duration(milliseconds: 300),
                               child: KeyedSubtree(
                                 key: ValueKey<HomeState>(widget.state),
                                 child: _homebody(orientation),
@@ -226,15 +225,11 @@ class HomePageScaffoldState extends State<HomePageScaffold> {
           child: _buildPageView(orientation),
         ),
         SizedBox(
-          height: orientation == Orientation.portrait
-              ? 16.0
-              : 4.0,
+          height: orientation == Orientation.portrait ? 16.0 : 4.0,
         ),
         _buildPageIndicator(),
         SizedBox(
-          height: orientation == Orientation.portrait
-              ? 24.0
-              : 0.0,
+          height: orientation == Orientation.portrait ? 24.0 : 0.0,
         ),
       ],
     );
@@ -242,8 +237,7 @@ class HomePageScaffoldState extends State<HomePageScaffold> {
 
   // Dashboard layout: carousel at fixed height + scrollable widgets.
   Widget _buildDashboardLayout(Orientation orientation) {
-    final bool isPortrait =
-        orientation == Orientation.portrait;
+    final bool isPortrait = orientation == Orientation.portrait;
 
     // Compute carousel height responsive to screen size.
     // Target: carousel occupies ~35% of available content height
@@ -266,6 +260,9 @@ class HomePageScaffoldState extends State<HomePageScaffold> {
     return ListView(
       padding: EdgeInsets.zero,
       children: <Widget>[
+        // Dashboard widgets
+        ...widget.dashboardWidgets!,
+        const SizedBox(height: 12),
         // Carousel section
         _buildAnnouncementTitle(),
         const Hero(
@@ -278,9 +275,6 @@ class HomePageScaffoldState extends State<HomePageScaffold> {
         ),
         const SizedBox(height: 4),
         _buildPageIndicator(),
-        const SizedBox(height: 12),
-        // Dashboard widgets
-        ...widget.dashboardWidgets!,
         SizedBox(
           height: isPortrait ? 16.0 : 8.0,
         ),
@@ -411,9 +405,8 @@ class HomePageScaffoldState extends State<HomePageScaffold> {
           child: CircularProgressIndicator(),
         );
       case HomeState.finish:
-        final bool hasDashboard =
-            widget.dashboardWidgets != null &&
-                widget.dashboardWidgets!.isNotEmpty;
+        final bool hasDashboard = widget.dashboardWidgets != null &&
+            widget.dashboardWidgets!.isNotEmpty;
 
         if (hasDashboard) {
           return _buildDashboardLayout(orientation);
