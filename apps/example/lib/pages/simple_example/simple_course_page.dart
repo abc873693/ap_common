@@ -1,5 +1,6 @@
 import 'package:ap_common/ap_common.dart';
 import 'package:ap_common_example/res/assets.dart';
+import 'package:ap_common_plugin/ap_common_plugin.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
@@ -23,6 +24,7 @@ class SimpleCoursePage extends StatelessWidget {
             await rootBundle.loadString(FileAssets.courses);
         return CourseData.fromRawJson(rawString);
       },
+      onCourseLoaded: ApCommonPlugin.updateCourseWidget,
       enableCaptureCourseTable: true,
     );
   }

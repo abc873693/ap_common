@@ -1,6 +1,7 @@
 import 'package:ap_common/ap_common.dart';
 import 'package:ap_common_example/config/constants.dart';
 import 'package:ap_common_example/widgets/share_data_widget.dart';
+import 'package:ap_common_plugin/ap_common_plugin.dart';
 import 'package:flutter/material.dart';
 
 class SettingPage extends StatefulWidget {
@@ -98,9 +99,8 @@ class SettingPageState extends State<SettingPage> {
                       (ThemeColor tc) =>
                           tc.color.toARGB32() == color.toARGB32(),
                     );
-                    final int newIndex = (index != -1)
-                        ? index
-                        : ApTheme.customColorIndex;
+                    final int newIndex =
+                        (index != -1) ? index : ApTheme.customColorIndex;
                     final Color? newCustomColor = (index != -1) ? null : color;
                     ShareDataWidget.of(context)!.data!.loadThemeColor(
                           newIndex,
@@ -133,6 +133,35 @@ class SettingPageState extends State<SettingPage> {
                   text: context.ap.appVersion,
                   icon: Icons.info_outline,
                   value: 'v$appVersion',
+                ),
+              ],
+            ),
+            const SettingTitle(text: 'Debug'),
+            SettingCard(
+              children: <Widget>[
+                SettingItem(
+                  text: '設定測試課表 Widget',
+                  subText: '注入 30 分鐘後的假課程資料',
+                  onTap: () async {
+                    await ApCommonPlugin.setFakeCourseWidget();
+                    if (!context.mounted) return;
+                    UiUtil.instance.showToast(
+                      context,
+                      '已設定測試課表 Widget',
+                    );
+                  },
+                ),
+                SettingItem(
+                  text: '清除課表 Widget',
+                  subText: '移除 Widget 中的課程資料',
+                  onTap: () async {
+                    await ApCommonPlugin.clearCourseWidget();
+                    if (!context.mounted) return;
+                    UiUtil.instance.showToast(
+                      context,
+                      '已清除課表 Widget',
+                    );
+                  },
                 ),
               ],
             ),

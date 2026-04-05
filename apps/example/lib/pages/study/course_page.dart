@@ -1,6 +1,7 @@
 import 'package:ap_common/ap_common.dart';
 import 'package:ap_common_example/config/constants.dart';
 import 'package:ap_common_example/res/assets.dart';
+import 'package:ap_common_plugin/ap_common_plugin.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
@@ -94,6 +95,9 @@ class CoursePageState extends State<CoursePage> {
             notifyData = CourseNotifyData.load(courseNotifyCacheKey);
           }
         });
+        if (courseData.courses.isNotEmpty) {
+          await ApCommonPlugin.updateCourseWidget(courseData);
+        }
       }
     } catch (e) {
       if (mounted) {
