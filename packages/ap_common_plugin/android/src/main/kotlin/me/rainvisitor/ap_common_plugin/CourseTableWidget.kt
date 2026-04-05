@@ -14,6 +14,9 @@ import androidx.glance.appwidget.provideContent
 import androidx.glance.background
 import androidx.glance.layout.Alignment
 import androidx.glance.layout.Box
+import androidx.glance.appwidget.lazy.LazyColumn
+import androidx.glance.appwidget.lazy.items
+import androidx.glance.appwidget.lazy.itemsIndexed
 import androidx.glance.layout.Column
 import androidx.glance.layout.Row
 import androidx.glance.layout.fillMaxSize
@@ -222,48 +225,51 @@ class CourseTableWidget : GlanceAppWidget() {
             }
         }
 
-        Column(modifier = GlanceModifier.fillMaxSize().padding(4.dp)) {
+        LazyColumn(modifier = GlanceModifier.fillMaxSize().padding(4.dp)) {
             // Weekday header row
-            Row(modifier = GlanceModifier.fillMaxWidth()) {
-                // Time column header (empty corner)
-                Box(
-                    modifier = GlanceModifier
-                        .width(TIME_COL_WIDTH.dp)
-                        .height(20.dp),
-                )
-                for (d in 1..weekdayCount) {
+            item {
+                Row(modifier = GlanceModifier.fillMaxWidth()) {
+                    // Time column header (empty corner)
                     Box(
                         modifier = GlanceModifier
-                            .defaultWeight()
+                            .width(TIME_COL_WIDTH.dp)
                             .height(20.dp),
-                        contentAlignment = Alignment.Center,
-                    ) {
-                        val today = getTodayWeekday()
-                        val isToday = d == today
-                        Text(
-                            text = weekdayLabels.getOrElse(d - 1) { "" },
-                            style = TextStyle(
-                                color = if (isToday) {
-                                    ColorProvider(
-                                        Color(0xFF2673FF)
-                                    )
-                                } else {
-                                    timeTextColor
-                                },
-                                fontSize = 10.sp,
-                                fontWeight = if (isToday) {
-                                    FontWeight.Bold
-                                } else {
-                                    FontWeight.Normal
-                                },
-                            ),
-                        )
+                    ) {}
+                    for (d in 1..weekdayCount) {
+                        Box(
+                            modifier = GlanceModifier
+                                .defaultWeight()
+                                .height(20.dp),
+                            contentAlignment = Alignment.Center,
+                        ) {
+                            val today = getTodayWeekday()
+                            val isToday = d == today
+                            Text(
+                                text = weekdayLabels.getOrElse(d - 1) { "" },
+                                style = TextStyle(
+                                    color = if (isToday) {
+                                        ColorProvider(
+                                            Color(0xFF2673FF)
+                                        )
+                                    } else {
+                                        timeTextColor
+                                    },
+                                    fontSize = 10.sp,
+                                    fontWeight = if (isToday) {
+                                        FontWeight.Bold
+                                    } else {
+                                        FontWeight.Normal
+                                    },
+                                ),
+                            )
+                        }
                     }
                 }
             }
 
             // Time slot rows
-            for (t in minIndex..maxIndex) {
+            items(maxIndex - minIndex + 1) { index ->
+                val t = minIndex + index
                 Row(modifier = GlanceModifier.fillMaxWidth()) {
                     // Time label column
                     Box(
