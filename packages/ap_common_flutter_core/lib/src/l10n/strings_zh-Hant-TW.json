@@ -427,5 +427,11 @@
   "summerSessionSpecial": "暑修(特)",
   "currentSemester": "目前",
   "semesterLoading": "載入中",
-  "semesterNoData": "無資料"
+  "semesterNoData": "無資料",
+  "gpa": "GPA",
+  "gpaTitle": "GPA（4.3 等第積分制）",
+  "gpaDisclaimer": "※ GPA 依據等第積分制計算，僅供參考",
+  "gradePoint": "等第積分",
+  "gradeLetter": "等第",
+  "gradeDistribution": "等第分佈"
 }

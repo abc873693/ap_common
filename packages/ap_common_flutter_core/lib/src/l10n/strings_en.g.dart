@@ -1327,6 +1327,24 @@ class ApLocalizations with BaseTranslations<AppLocale, ApLocalizations> {
 
 	/// en: 'No Data'
 	String get semesterNoData => 'No Data';
+
+	/// en: 'GPA'
+	String get gpa => 'GPA';
+
+	/// en: 'GPA (4.3 Scale)'
+	String get gpaTitle => 'GPA (4.3 Scale)';
+
+	/// en: '※ GPA is calculated using the 4.3 grade point scale, for reference only'
+	String get gpaDisclaimer => '※ GPA is calculated using the 4.3 grade point scale, for reference only';
+
+	/// en: 'Grade Point'
+	String get gradePoint => 'Grade Point';
+
+	/// en: 'Grade'
+	String get gradeLetter => 'Grade';
+
+	/// en: 'Grade Distribution'
+	String get gradeDistribution => 'Grade Distribution';
 }
 
 /// The flat map containing all translations for locale <en>.
@@ -1766,6 +1784,12 @@ extension on ApLocalizations {
 			'currentSemester' => 'Current',
 			'semesterLoading' => 'Loading',
 			'semesterNoData' => 'No Data',
+			'gpa' => 'GPA',
+			'gpaTitle' => 'GPA (4.3 Scale)',
+			'gpaDisclaimer' => '※ GPA is calculated using the 4.3 grade point scale, for reference only',
+			'gradePoint' => 'Grade Point',
+			'gradeLetter' => 'Grade',
+			'gradeDistribution' => 'Grade Distribution',
 			_ => null,
 		};
 	}

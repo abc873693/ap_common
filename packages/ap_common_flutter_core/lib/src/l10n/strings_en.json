@@ -427,5 +427,11 @@
   "summerSessionSpecial": "Summer Session (Special)",
   "currentSemester": "Current",
   "semesterLoading": "Loading",
-  "semesterNoData": "No Data"
+  "semesterNoData": "No Data",
+  "gpa": "GPA",
+  "gpaTitle": "GPA (4.3 Scale)",
+  "gpaDisclaimer": "※ GPA is calculated using the 4.3 grade point scale, for reference only",
+  "gradePoint": "Grade Point",
+  "gradeLetter": "Grade",
+  "gradeDistribution": "Grade Distribution"
 }

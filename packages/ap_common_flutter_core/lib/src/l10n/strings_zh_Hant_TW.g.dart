@@ -468,6 +468,12 @@ class ApLocalizationsZhHantTw extends ApLocalizations with BaseTranslations<AppL
 	@override String get currentSemester => '目前';
 	@override String get semesterLoading => '載入中';
 	@override String get semesterNoData => '無資料';
+	@override String get gpa => 'GPA';
+	@override String get gpaTitle => 'GPA（4.3 等第積分制）';
+	@override String get gpaDisclaimer => '※ GPA 依據等第積分制計算，僅供參考';
+	@override String get gradePoint => '等第積分';
+	@override String get gradeLetter => '等第';
+	@override String get gradeDistribution => '等第分佈';
 }
 
 /// The flat map containing all translations for locale <zh-Hant-TW>.
@@ -907,6 +913,12 @@ extension on ApLocalizationsZhHantTw {
 			'currentSemester' => '目前',
 			'semesterLoading' => '載入中',
 			'semesterNoData' => '無資料',
+			'gpa' => 'GPA',
+			'gpaTitle' => 'GPA（4.3 等第積分制）',
+			'gpaDisclaimer' => '※ GPA 依據等第積分制計算，僅供參考',
+			'gradePoint' => '等第積分',
+			'gradeLetter' => '等第',
+			'gradeDistribution' => '等第分佈',
 			_ => null,
 		};
 	}

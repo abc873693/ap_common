@@ -668,6 +668,8 @@ class _ScoreAnalysisTab extends StatelessWidget {
           children: <Widget>[
             _buildMainSummaryCard(colorScheme, context.ap, analysis),
             const SizedBox(height: 16),
+            ScoreGPACard(analysis: analysis),
+            const SizedBox(height: 16),
             ScorePRCard(analysis: analysis),
             const SizedBox(height: 16),
             ScoreStatisticsCard(analysis: analysis),
@@ -943,5 +945,65 @@ class ScoreAnalysis {
       }
     }
     return credits;
+  }
+
+  /// Converts a numeric score (百分制) to a grade point (等第積分)
+  /// based on the NSYSU 4.3 GPA scale.
+  static double scoreToGradePoint(double score) {
+    if (score >= 90) return 4.3;
+    if (score >= 85) return 4.0;
+    if (score >= 80) return 3.7;
+    if (score >= 77) return 3.3;
+    if (score >= 73) return 3.0;
+    if (score >= 70) return 2.7;
+    if (score >= 67) return 2.3;
+    if (score >= 63) return 2.0;
+    if (score >= 60) return 1.7;
+    if (score >= 50) return 1.0;
+    if (score >= 40) return 0.8;
+    return 0;
+  }
+
+  /// Converts a numeric score (百分制) to a letter grade (等第成績).
+  static String scoreToGradeLetter(double score) {
+    if (score >= 90) return 'A+';
+    if (score >= 85) return 'A';
+    if (score >= 80) return 'A-';
+    if (score >= 77) return 'B+';
+    if (score >= 73) return 'B';
+    if (score >= 70) return 'B-';
+    if (score >= 67) return 'C+';
+    if (score >= 63) return 'C';
+    if (score >= 60) return 'C-';
+    if (score >= 50) return 'D';
+    if (score >= 40) return 'E';
+    return 'F';
+  }
+
+  /// Weighted GPA: Σ(grade_point × credits) / Σ(credits)
+  double get gpa {
+    double totalWeighted = 0;
+    double totalUnits = 0;
+    for (final Score score in scoreData.scores) {
+      final double? scoreValue =
+          double.tryParse(score.semesterScore ?? '');
+      final double? unit = double.tryParse(score.units);
+      if (scoreValue != null && unit != null && unit > 0) {
+        totalWeighted += scoreToGradePoint(scoreValue) * unit;
+        totalUnits += unit;
+      }
+    }
+    if (totalUnits == 0) return 0;
+    return totalWeighted / totalUnits;
+  }
+
+  /// Grade distribution by letter grade (等第分佈).
+  Map<String, int> get gradeDistribution {
+    final Map<String, int> dist = <String, int>{};
+    for (final double score in _scores) {
+      final String grade = scoreToGradeLetter(score);
+      dist[grade] = (dist[grade] ?? 0) + 1;
+    }
+    return dist;
   }
 }
