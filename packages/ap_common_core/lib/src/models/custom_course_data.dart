@@ -14,21 +14,8 @@ class CustomCourseData {
     this.tag,
   }) : courses = courses ?? <Course>[];
 
-  /// The list of user-created courses.
-  final List<Course> courses;
-
-  /// Semester tag used for persistence key.
-  final String? tag;
-
-  static const String _prefix = '${ApConstants.packageName}'
-      '.custom_course_data_';
-
-  // ------------------------------------------------------------------
-  // Persistence
-  // ------------------------------------------------------------------
-
   /// Load custom courses for the given semester [tag].
-  static CustomCourseData load(String? tag) {
+  factory CustomCourseData.load(String? tag) {
     final String raw = PreferenceUtil.instance.getString(
       '$_prefix$tag',
       '',
@@ -38,6 +25,41 @@ class CustomCourseData {
     }
     return CustomCourseData._fromRawJson(raw, tag);
   }
+
+  factory CustomCourseData._fromRawJson(
+    String raw,
+    String? tag,
+  ) {
+    final Map<String, dynamic> map =
+        json.decode(raw) as Map<String, dynamic>;
+    final List<dynamic> list =
+        map['courses'] as List<dynamic>? ?? <dynamic>[];
+    return CustomCourseData(
+      courses: list
+          .map(
+            (dynamic e) =>
+                Course.fromJson(e as Map<String, dynamic>),
+          )
+          .toList(),
+      tag: tag,
+    );
+  }
+
+  /// The list of user-created courses.
+  final List<Course> courses;
+
+  /// Semester tag used for persistence key.
+  final String? tag;
+
+  static const String _prefix = '${ApConstants.packageName}'
+      '.custom_course_data_';
+
+  /// Prefix used to identify custom course codes.
+  static const String customCodePrefix = 'custom_';
+
+  // ------------------------------------------------------------------
+  // Persistence
+  // ------------------------------------------------------------------
 
   /// Save to SharedPreferences.
   void save([String? overrideTag]) {
@@ -92,25 +114,6 @@ class CustomCourseData {
               .toList(),
         },
       );
-
-  static CustomCourseData _fromRawJson(String raw, String? tag) {
-    final Map<String, dynamic> map =
-        json.decode(raw) as Map<String, dynamic>;
-    final List<dynamic> list =
-        map['courses'] as List<dynamic>? ?? <dynamic>[];
-    return CustomCourseData(
-      courses: list
-          .map(
-            (dynamic e) =>
-                Course.fromJson(e as Map<String, dynamic>),
-          )
-          .toList(),
-      tag: tag,
-    );
-  }
-
-  /// Prefix used to identify custom course codes.
-  static const String customCodePrefix = 'custom_';
 
   /// Generate a unique course code for a new custom course.
   static String generateCode() =>
