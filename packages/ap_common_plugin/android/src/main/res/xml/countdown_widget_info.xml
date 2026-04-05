@@ -1,5 +1,5 @@
 <appwidget-provider xmlns:android="http://schemas.android.com/apk/res/android"
-    android:initialLayout="@layout/course_appwidget_provider_layout"
+    android:initialLayout="@layout/preview_countdown"
     android:minWidth="110dp"
     android:minHeight="110dp"
     android:targetCellWidth="2"
@@ -9,5 +9,5 @@
     android:resizeMode="horizontal|vertical"
     android:updatePeriodMillis="300000"
     android:widgetCategory="home_screen"
-    android:previewLayout="@layout/course_appwidget_provider_layout"
+    android:previewLayout="@layout/preview_countdown"
     android:description="@string/countdown_description" />

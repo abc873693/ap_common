@@ -1,5 +1,5 @@
 <appwidget-provider xmlns:android="http://schemas.android.com/apk/res/android"
-    android:initialLayout="@layout/course_appwidget_provider_layout"
+    android:initialLayout="@layout/preview_course_table"
     android:minWidth="250dp"
     android:minHeight="180dp"
     android:targetCellWidth="4"
@@ -9,5 +9,5 @@
     android:resizeMode="horizontal|vertical"
     android:updatePeriodMillis="3600000"
     android:widgetCategory="home_screen"
-    android:previewLayout="@layout/course_appwidget_provider_layout"
+    android:previewLayout="@layout/preview_course_table"
     android:description="@string/table_widget_description" />
