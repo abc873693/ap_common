@@ -496,6 +496,7 @@ class ApLocalizationsZhHantTw extends ApLocalizations with BaseTranslations<AppL
 	@override String get untilNextClass => '分鐘後上課';
 	@override String get classesToday => '堂課';
 	@override String get noClassToday => '今天沒有課';
+	@override String get tomorrowScheduleTitle => '明日課表';
 }
 
 /// The flat map containing all translations for locale <zh-Hant-TW>.
@@ -963,6 +964,7 @@ extension on ApLocalizationsZhHantTw {
 			'untilNextClass' => '分鐘後上課',
 			'classesToday' => '堂課',
 			'noClassToday' => '今天沒有課',
+			'tomorrowScheduleTitle' => '明日課表',
 			_ => null,
 		};
 	}

@@ -455,5 +455,6 @@
   "todayScheduleTitle": "Today's Schedule",
   "untilNextClass": "until next class",
   "classesToday": "classes today",
-  "noClassToday": "No class today"
+  "noClassToday": "No class today",
+  "tomorrowScheduleTitle": "Tomorrow's Schedule"
 }
