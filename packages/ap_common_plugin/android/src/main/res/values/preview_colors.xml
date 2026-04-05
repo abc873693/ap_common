@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="preview_surface">#FFF8F9FA</color>
+    <color name="preview_on_surface">#FF212121</color>
+    <color name="preview_secondary">#FF9E9E9E</color>
+    <color name="preview_time_text">#FF757575</color>
+    <color name="preview_header">#FF2673FF</color>
+    <color name="preview_barcode">#FF212121</color>
+
+    <color name="preview_indigo">#FF5C6BC0</color>
+    <color name="preview_teal">#FF26A69A</color>
+    <color name="preview_red">#FFEF5350</color>
+    <color name="preview_purple">#FFAB47BC</color>
+    <color name="preview_blue">#FF42A5F5</color>
+</resources>

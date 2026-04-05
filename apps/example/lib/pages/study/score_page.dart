@@ -21,6 +21,9 @@ class ScorePageState extends State<ScorePage> {
 
   String customStateHint = '';
 
+  final SemesterPickerController _pickerController =
+      SemesterPickerController();
+
   @override
   void initState() {
     _getSemester();
@@ -29,6 +32,7 @@ class ScorePageState extends State<ScorePage> {
 
   @override
   void dispose() {
+    _pickerController.dispose();
     super.dispose();
   }
 
@@ -40,6 +44,7 @@ class ScorePageState extends State<ScorePage> {
       customHint: isOffline ? context.ap.offlineScore : '',
       customStateHint: customStateHint,
       semesterData: semesterData,
+      semesterPickerController: _pickerController,
       onSelect: (int index) {
         semesterData = semesterData!.copyWith(currentIndex: index);
         _getSemesterScore();
@@ -70,19 +75,30 @@ class ScorePageState extends State<ScorePage> {
 
   Future<void> _getSemesterScore() async {
     try {
-      final String rawString = await rootBundle.loadString(FileAssets.scores);
+      // Use GPA data for odd-indexed semesters to demo both types
+      final bool useGpa = (semesterData?.currentIndex ?? 0).isOdd;
+      final String assetPath =
+          useGpa ? FileAssets.scoresGpa : FileAssets.scores;
+      final String rawString = await rootBundle.loadString(assetPath);
       scoreData = ScoreData.fromRawJson(rawString);
       if (mounted) {
+        final Semester semester =
+            semesterData!.data[semesterData!.currentIndex];
         setState(() {
           if (scoreData == null) {
             state = ScoreState.empty;
+            _pickerController.markSemesterEmpty(semester);
           } else {
             state = ScoreState.finish;
+            _pickerController.markSemesterHasData(semester);
           }
         });
       }
     } catch (e) {
       if (mounted) {
+        final Semester semester =
+            semesterData!.data[semesterData!.currentIndex];
+        _pickerController.markSemesterHasData(semester);
         setState(() {
           state = ScoreState.error;
         });

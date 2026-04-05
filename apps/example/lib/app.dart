@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:ap_common/ap_common.dart'
     hide AppLocale, AppLocaleUtils, LocaleSettings, TranslationProvider;
 import 'package:ap_common_example/config/constants.dart';
@@ -164,7 +166,7 @@ class MyAppState extends State<MyApp> with WidgetsBindingObserver {
   }
 
   void loadLocale(Locale locale) {
-    debugPrint('loadLocale $locale');
+    log('loadLocale $locale');
     // Sync ap_common library locale
     setApLocaleFromFlutter(locale);
     // Sync example app locale

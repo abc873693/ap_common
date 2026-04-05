@@ -18,6 +18,14 @@ class ScorePRCard extends StatelessWidget {
     return colorScheme.error;
   }
 
+  String _getLocalizedPRLevel(BuildContext context, int pr) {
+    if (pr >= 90) return context.ap.prLevelTop;
+    if (pr >= 75) return context.ap.prLevelExcellent;
+    if (pr >= 50) return context.ap.prLevelAverage;
+    if (pr >= 25) return context.ap.prLevelBelowAverage;
+    return context.ap.prLevelNeedEffort;
+  }
+
   @override
   Widget build(BuildContext context) {
     final ColorScheme colorScheme = Theme.of(context).colorScheme;
@@ -55,7 +63,7 @@ class ScorePRCard extends StatelessWidget {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: <Widget>[
                       Text(
-                        '估計 PR 值',
+                        context.ap.estimatedPR,
                         style: TextStyle(
                           fontSize: 14,
                           color: colorScheme.onSurfaceVariant,
@@ -83,7 +91,7 @@ class ScorePRCard extends StatelessWidget {
                     borderRadius: BorderRadius.circular(20),
                   ),
                   child: Text(
-                    analysis.prLevel,
+                    _getLocalizedPRLevel(context, pr),
                     style: TextStyle(
                       fontSize: 14,
                       fontWeight: FontWeight.w600,
@@ -117,7 +125,7 @@ class ScorePRCard extends StatelessWidget {
           Padding(
             padding: const EdgeInsets.fromLTRB(16, 0, 16, 16),
             child: Text(
-              '※ PR 值為根據平均成績估算，僅供參考',
+              context.ap.prDisclaimer,
               style: TextStyle(
                 fontSize: 12,
                 color: colorScheme.onSurfaceVariant.withAlpha(179),
@@ -163,7 +171,7 @@ class ScoreStatisticsCard extends StatelessWidget {
                 ),
                 const SizedBox(width: 8),
                 Text(
-                  '成績統計',
+                  context.ap.scoreStatistics,
                   style: TextStyle(
                     fontSize: 16,
                     fontWeight: FontWeight.w600,
@@ -182,7 +190,7 @@ class ScoreStatisticsCard extends StatelessWidget {
                   children: <Widget>[
                     Expanded(
                       child: _ScoreStatItem(
-                        label: '最高分',
+                        label: context.ap.highestScore,
                         value: analysis.maxScore.toStringAsFixed(0),
                         icon: Icons.arrow_upward_rounded,
                         color: const Color(0xFF4CAF50),
@@ -191,7 +199,7 @@ class ScoreStatisticsCard extends StatelessWidget {
                     const SizedBox(width: 12),
                     Expanded(
                       child: _ScoreStatItem(
-                        label: '最低分',
+                        label: context.ap.lowestScore,
                         value: analysis.minScore.toStringAsFixed(0),
                         icon: Icons.arrow_downward_rounded,
                         color: colorScheme.error,
@@ -204,7 +212,7 @@ class ScoreStatisticsCard extends StatelessWidget {
                   children: <Widget>[
                     Expanded(
                       child: _ScoreStatItem(
-                        label: '標準差',
+                        label: context.ap.standardDeviation,
                         value: analysis.standardDeviation.toStringAsFixed(2),
                         icon: Icons.analytics_outlined,
                         color: colorScheme.tertiary,
@@ -213,7 +221,7 @@ class ScoreStatisticsCard extends StatelessWidget {
                     const SizedBox(width: 12),
                     Expanded(
                       child: _ScoreStatItem(
-                        label: '科目數',
+                        label: context.ap.subjectCount,
                         value: analysis.totalSubjects.toString(),
                         icon: Icons.menu_book_rounded,
                         color: colorScheme.secondary,
@@ -326,7 +334,7 @@ class ScoreDistributionCard extends StatelessWidget {
                 ),
                 const SizedBox(width: 8),
                 Text(
-                  '成績分佈',
+                  context.ap.scoreDistribution,
                   style: TextStyle(
                     fontSize: 16,
                     fontWeight: FontWeight.w600,
@@ -342,35 +350,35 @@ class ScoreDistributionCard extends StatelessWidget {
             child: Column(
               children: <Widget>[
                 _DistributionBar(
-                  label: '90-100 (優秀)',
+                  label: context.ap.distributionExcellent,
                   count: analysis.distribution['90-100'] ?? 0,
                   total: analysis.totalSubjects,
                   color: const Color(0xFF4CAF50),
                 ),
                 const SizedBox(height: 10),
                 _DistributionBar(
-                  label: '80-89 (良好)',
+                  label: context.ap.distributionGood,
                   count: analysis.distribution['80-89'] ?? 0,
                   total: analysis.totalSubjects,
                   color: const Color(0xFF8BC34A),
                 ),
                 const SizedBox(height: 10),
                 _DistributionBar(
-                  label: '70-79 (普通)',
+                  label: context.ap.distributionAverage,
                   count: analysis.distribution['70-79'] ?? 0,
                   total: analysis.totalSubjects,
                   color: colorScheme.primary,
                 ),
                 const SizedBox(height: 10),
                 _DistributionBar(
-                  label: '60-69 (及格)',
+                  label: context.ap.distributionPass,
                   count: analysis.distribution['60-69'] ?? 0,
                   total: analysis.totalSubjects,
                   color: const Color(0xFFFF9800),
                 ),
                 const SizedBox(height: 10),
                 _DistributionBar(
-                  label: '0-59 (不及格)',
+                  label: context.ap.distributionFail,
                   count: analysis.distribution['0-59'] ?? 0,
                   total: analysis.totalSubjects,
                   color: colorScheme.error,
@@ -434,7 +442,7 @@ class _DistributionBar extends StatelessWidget {
         SizedBox(
           width: 40,
           child: Text(
-            '$count 科',
+            context.ap.subjectCountUnit(arg1: count),
             style: TextStyle(
               fontSize: 12,
               fontWeight: FontWeight.w500,
@@ -481,7 +489,7 @@ class ScoreCreditSummaryCard extends StatelessWidget {
                 ),
                 const SizedBox(width: 8),
                 Text(
-                  '學分統計',
+                  context.ap.creditStatistics,
                   style: TextStyle(
                     fontSize: 16,
                     fontWeight: FontWeight.w600,
@@ -498,21 +506,21 @@ class ScoreCreditSummaryCard extends StatelessWidget {
               children: <Widget>[
                 Expanded(
                   child: _CreditItem(
-                    label: '修習學分',
+                    label: context.ap.creditsTaken,
                     value: analysis.totalCredits.toStringAsFixed(1),
                     color: colorScheme.primary,
                   ),
                 ),
                 Expanded(
                   child: _CreditItem(
-                    label: '及格學分',
+                    label: context.ap.creditsPassed,
                     value: analysis.passedCredits.toStringAsFixed(1),
                     color: const Color(0xFF4CAF50),
                   ),
                 ),
                 Expanded(
                   child: _CreditItem(
-                    label: '不及格學分',
+                    label: context.ap.creditsFailed,
                     value: analysis.failedCredits.toStringAsFixed(1),
                     color: colorScheme.error,
                   ),
@@ -559,4 +567,280 @@ class _CreditItem extends StatelessWidget {
       ],
     );
   }
+}
+
+/// GPA 卡片（4.3 等第積分制）
+class ScoreGPACard extends StatelessWidget {
+  const ScoreGPACard({
+    super.key,
+    required this.analysis,
+  });
+
+  final ScoreAnalysis analysis;
+
+  Color _getGPAColor(ColorScheme colorScheme, double gpa) {
+    if (gpa >= 3.7) return const Color(0xFF4CAF50);
+    if (gpa >= 3.0) return const Color(0xFF8BC34A);
+    if (gpa >= 2.3) return colorScheme.primary;
+    if (gpa >= 1.7) return const Color(0xFFFF9800);
+    return colorScheme.error;
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final ColorScheme colorScheme = Theme.of(context).colorScheme;
+    final double gpa = analysis.gpa;
+    final Color gpaColor = _getGPAColor(colorScheme, gpa);
+    final String gradeLetter = ScoreAnalysis.scoreToGradeLetter(
+      analysis.average,
+    );
+
+    return DecoratedBox(
+      decoration: BoxDecoration(
+        color: colorScheme.surfaceContainerLowest,
+        borderRadius: BorderRadius.circular(20),
+        border: Border.all(
+          color: colorScheme.outlineVariant.withAlpha(77),
+        ),
+      ),
+      child: Column(
+        children: <Widget>[
+          Padding(
+            padding: const EdgeInsets.all(20),
+            child: Row(
+              children: <Widget>[
+                Container(
+                  width: 56,
+                  height: 56,
+                  decoration: BoxDecoration(
+                    color: gpaColor.withAlpha(26),
+                    borderRadius: BorderRadius.circular(16),
+                  ),
+                  child: Icon(
+                    Icons.grade_rounded,
+                    size: 28,
+                    color: gpaColor,
+                  ),
+                ),
+                const SizedBox(width: 16),
+                Expanded(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: <Widget>[
+                      Text(
+                        context.ap.gpaTitle,
+                        style: TextStyle(
+                          fontSize: 14,
+                          color: colorScheme.onSurfaceVariant,
+                        ),
+                      ),
+                      const SizedBox(height: 4),
+                      Text(
+                        gpa.toStringAsFixed(2),
+                        style: TextStyle(
+                          fontSize: 32,
+                          fontWeight: FontWeight.bold,
+                          color: gpaColor,
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+                Container(
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 12,
+                    vertical: 6,
+                  ),
+                  decoration: BoxDecoration(
+                    color: gpaColor.withAlpha(26),
+                    borderRadius: BorderRadius.circular(20),
+                  ),
+                  child: Text(
+                    gradeLetter,
+                    style: TextStyle(
+                      fontSize: 14,
+                      fontWeight: FontWeight.w600,
+                      color: gpaColor,
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          ),
+          Container(
+            margin: const EdgeInsets.fromLTRB(16, 0, 16, 16),
+            height: 8,
+            decoration: BoxDecoration(
+              color: colorScheme.surfaceContainerHighest,
+              borderRadius: BorderRadius.circular(4),
+            ),
+            child: FractionallySizedBox(
+              alignment: Alignment.centerLeft,
+              widthFactor: (gpa / 4.3).clamp(0.0, 1.0),
+              child: DecoratedBox(
+                decoration: BoxDecoration(
+                  gradient: LinearGradient(
+                    colors: <Color>[
+                      gpaColor.withAlpha(179),
+                      gpaColor,
+                    ],
+                  ),
+                  borderRadius: BorderRadius.circular(4),
+                ),
+              ),
+            ),
+          ),
+          _buildGradeTable(context, colorScheme),
+          Padding(
+            padding: const EdgeInsets.fromLTRB(16, 8, 16, 16),
+            child: Text(
+              context.ap.gpaDisclaimer,
+              style: TextStyle(
+                fontSize: 12,
+                color:
+                    colorScheme.onSurfaceVariant.withAlpha(179),
+              ),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildGradeTable(
+    BuildContext context,
+    ColorScheme colorScheme,
+  ) {
+    final List<_GradeEntry> entries = <_GradeEntry>[];
+    for (final Score score in analysis.scoreData.scores) {
+      final double? value =
+          double.tryParse(score.semesterScore ?? '');
+      if (value == null) continue;
+      entries.add(_GradeEntry(
+        title: score.title,
+        score: value,
+        grade: ScoreAnalysis.scoreToGradeLetter(value),
+        gradePoint: ScoreAnalysis.scoreToGradePoint(value),
+        credits: double.tryParse(score.units) ?? 0,
+      ),);
+    }
+
+    if (entries.isEmpty) return const SizedBox.shrink();
+
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 16),
+      child: Column(
+        children: <Widget>[
+          Divider(
+            height: 1,
+            color: colorScheme.outlineVariant.withAlpha(77),
+          ),
+          const SizedBox(height: 12),
+          Row(
+            children: <Widget>[
+              Expanded(
+                flex: 3,
+                child: Text(
+                  context.ap.subject,
+                  style: TextStyle(
+                    fontSize: 12,
+                    fontWeight: FontWeight.w600,
+                    color: colorScheme.onSurfaceVariant,
+                  ),
+                ),
+              ),
+              SizedBox(
+                width: 40,
+                child: Text(
+                  context.ap.gradeLetter,
+                  style: TextStyle(
+                    fontSize: 12,
+                    fontWeight: FontWeight.w600,
+                    color: colorScheme.onSurfaceVariant,
+                  ),
+                  textAlign: TextAlign.center,
+                ),
+              ),
+              SizedBox(
+                width: 40,
+                child: Text(
+                  context.ap.gradePoint,
+                  style: TextStyle(
+                    fontSize: 12,
+                    fontWeight: FontWeight.w600,
+                    color: colorScheme.onSurfaceVariant,
+                  ),
+                  textAlign: TextAlign.center,
+                ),
+              ),
+            ],
+          ),
+          const SizedBox(height: 8),
+          ...entries.map(
+            (_GradeEntry e) => Padding(
+              padding: const EdgeInsets.symmetric(vertical: 4),
+              child: Row(
+                children: <Widget>[
+                  Expanded(
+                    flex: 3,
+                    child: Text(
+                      e.title,
+                      style: TextStyle(
+                        fontSize: 13,
+                        color: colorScheme.onSurface,
+                      ),
+                      overflow: TextOverflow.ellipsis,
+                    ),
+                  ),
+                  SizedBox(
+                    width: 40,
+                    child: Text(
+                      e.grade,
+                      style: TextStyle(
+                        fontSize: 13,
+                        fontWeight: FontWeight.w600,
+                        color: _getGPAColor(
+                          colorScheme,
+                          e.gradePoint,
+                        ),
+                      ),
+                      textAlign: TextAlign.center,
+                    ),
+                  ),
+                  SizedBox(
+                    width: 40,
+                    child: Text(
+                      e.gradePoint.toStringAsFixed(1),
+                      style: TextStyle(
+                        fontSize: 13,
+                        color: colorScheme.onSurface,
+                      ),
+                      textAlign: TextAlign.center,
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ),
+          const SizedBox(height: 8),
+        ],
+      ),
+    );
+  }
+}
+
+class _GradeEntry {
+  const _GradeEntry({
+    required this.title,
+    required this.score,
+    required this.grade,
+    required this.gradePoint,
+    required this.credits,
+  });
+
+  final String title;
+  final double score;
+  final String grade;
+  final double gradePoint;
+  final double credits;
 }

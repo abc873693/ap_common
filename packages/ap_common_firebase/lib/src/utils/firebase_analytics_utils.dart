@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:developer';
 import 'dart:io';
 
 import 'package:ap_common_firebase/src/utils/firebase_utils.dart';
@@ -33,7 +34,7 @@ class FirebaseAnalyticsUtils extends AnalyticsUtil {
   @override
   Future<void> setUserId(String id) async {
     await analytics?.setUserId(id: id);
-    debugPrint('setUserId succeeded');
+    log('setUserId succeeded');
   }
 
   @override
@@ -45,7 +46,7 @@ class FirebaseAnalyticsUtils extends AnalyticsUtil {
       name: name,
       value: value,
     );
-    debugPrint('setUserProperty $name succeeded');
+    log('setUserProperty $name succeeded');
   }
 
   @override
@@ -87,7 +88,7 @@ class FirebaseAnalyticsUtils extends AnalyticsUtil {
         userInfo.id,
       );
     }
-    debugPrint('logUserInfo succeeded');
+    log('logUserInfo succeeded');
   }
 
   @override
@@ -104,7 +105,7 @@ class FirebaseAnalyticsUtils extends AnalyticsUtil {
         'message': message,
       },
     );
-    debugPrint('logEvent succeeded');
+    log('logEvent succeeded');
   }
 
   Future<void> logCalculateUnits(double seconds) async {
@@ -114,7 +115,7 @@ class FirebaseAnalyticsUtils extends AnalyticsUtil {
         'time': seconds,
       },
     );
-    debugPrint('log CalculateUnits succeeded');
+    log('log CalculateUnits succeeded');
   }
 
   @override
@@ -125,7 +126,7 @@ class FirebaseAnalyticsUtils extends AnalyticsUtil {
         'time': seconds,
       },
     );
-    debugPrint('log TimeEvent succeeded');
+    log('log TimeEvent succeeded');
   }
 
   Future<void> logCaptchaErrorEvent(String tag, int count) async {
@@ -135,7 +136,7 @@ class FirebaseAnalyticsUtils extends AnalyticsUtil {
         'count': count,
       },
     );
-    debugPrint('log CaptchaErrorEvent succeeded');
+    log('log CaptchaErrorEvent succeeded');
   }
 
   Future<void> logLeavesImageSize(File source) async {

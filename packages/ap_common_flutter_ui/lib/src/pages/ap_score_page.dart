@@ -53,11 +53,19 @@ class ApScorePage extends StatefulWidget {
 class _ApScorePageState extends State<ApScorePage> {
   DataState<ScoreData> _state = const DataLoading<ScoreData>();
   SemesterData? _semesterData;
+  final SemesterPickerController _pickerController =
+      SemesterPickerController();
 
   @override
   void initState() {
     super.initState();
     _loadSemesters();
+  }
+
+  @override
+  void dispose() {
+    _pickerController.dispose();
+    super.dispose();
   }
 
   Future<void> _loadSemesters() async {
@@ -73,23 +81,28 @@ class _ApScorePageState extends State<ApScorePage> {
 
   Future<void> _loadScore() async {
     if (_semesterData == null) return;
+    final Semester semester =
+        _semesterData!.data[_semesterData!.currentIndex];
     setState(() => _state = const DataLoading<ScoreData>());
     try {
-      final Semester semester =
-          _semesterData!.data[_semesterData!.currentIndex];
       final ScoreData? scoreData = await widget.onLoadScore(semester);
       if (mounted) {
         setState(() {
           if (scoreData == null) {
             _state = const DataEmpty<ScoreData>();
+            _pickerController.markSemesterEmpty(semester);
           } else {
             _state = DataLoaded<ScoreData>(scoreData);
+            _pickerController.markSemesterHasData(semester);
           }
         });
       }
     } catch (e) {
       if (mounted) {
-        setState(() => _state = DataError<ScoreData>(hint: e.toString()));
+        _pickerController.markSemesterHasData(semester);
+        setState(
+          () => _state = DataError<ScoreData>(hint: e.toString()),
+        );
       }
     }
   }
@@ -120,6 +133,7 @@ class _ApScorePageState extends State<ApScorePage> {
       middleScoreBuilder: widget.middleScoreBuilder,
       finalScoreBuilder: widget.finalScoreBuilder,
       bottom: widget.bottom,
+      semesterPickerController: _pickerController,
       onSelect: (int index) {
         _semesterData = _semesterData!.copyWith(currentIndex: index);
         _loadScore();

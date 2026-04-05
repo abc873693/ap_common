@@ -1,6 +1,7 @@
 import 'package:ap_common/ap_common.dart';
 import 'package:ap_common_example/config/constants.dart';
 import 'package:ap_common_example/res/assets.dart';
+import 'package:ap_common_plugin/ap_common_plugin.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
@@ -18,11 +19,18 @@ class CoursePageState extends State<CoursePage> {
 
   CourseData courseData = CourseData.empty();
 
+  /// API-fetched course data (before merging custom courses).
+  CourseData? _apiCourseData;
+
+  CustomCourseData _customCourseData = CustomCourseData();
+
   CourseNotifyData? notifyData;
 
   bool isOffline = false;
 
   String customStateHint = '';
+
+  final SemesterPickerController _pickerController = SemesterPickerController();
 
   String get courseNotifyCacheKey => PreferenceUtil.instance.getString(
         ApConstants.currentSemesterCode,
@@ -37,6 +45,7 @@ class CoursePageState extends State<CoursePage> {
 
   @override
   void dispose() {
+    _pickerController.dispose();
     super.dispose();
   }
 
@@ -51,7 +60,11 @@ class CoursePageState extends State<CoursePage> {
       courseNotifySaveKey: courseNotifyCacheKey,
       androidResourceIcon: Constants.ANDROID_DEFAULT_NOTIFICATION_NAME,
       enableCaptureCourseTable: true,
+      enableCustomCourse: true,
+      customCourseData: _customCourseData,
+      onCustomCourseChanged: _onCustomCourseChanged,
       semesterData: semesterData,
+      semesterPickerController: _pickerController,
       onSelect: (int index) {
         semesterData = semesterData!.copyWith(currentIndex: index);
         _getCourseTables();
@@ -79,29 +92,61 @@ class CoursePageState extends State<CoursePage> {
   Future<void> _getCourseTables() async {
     final String rawString = await rootBundle.loadString(FileAssets.courses);
     try {
-      courseData = CourseData.fromRawJson(rawString);
+      _apiCourseData = CourseData.fromRawJson(rawString);
       PreferenceUtil.instance.setString(
         ApConstants.currentSemesterCode,
         ApConstants.semesterLatest,
       );
-      courseData.save(courseNotifyCacheKey);
+      _apiCourseData!.save(courseNotifyCacheKey);
+      _customCourseData = CustomCourseData.load(courseNotifyCacheKey);
+      courseData =
+          _apiCourseData!.mergeCustom(_customCourseData.courses);
       if (mounted) {
+        final Semester semester =
+            semesterData!.data[semesterData!.currentIndex];
         setState(() {
           if (courseData.courses.isEmpty) {
             state = CourseState.empty;
+            _pickerController.markSemesterEmpty(semester);
           } else {
             state = CourseState.finish;
             notifyData = CourseNotifyData.load(courseNotifyCacheKey);
+            _pickerController.markSemesterHasData(semester);
           }
         });
+        if (courseData.courses.isNotEmpty) {
+          await ApCommonPlugin.updateCourseWidget(courseData);
+        }
       }
     } catch (e) {
       if (mounted) {
+        final Semester semester =
+            semesterData!.data[semesterData!.currentIndex];
+        _pickerController.markSemesterHasData(semester);
         setState(() {
           state = CourseState.error;
         });
       }
       rethrow;
+    }
+  }
+
+  void _onCustomCourseChanged(CustomCourseData updated) {
+    _customCourseData = CustomCourseData(
+      courses: updated.courses,
+      tag: courseNotifyCacheKey,
+    );
+    _customCourseData.save();
+    if (_apiCourseData != null && mounted) {
+      setState(() {
+        courseData =
+            _apiCourseData!.mergeCustom(_customCourseData.courses);
+        if (courseData.courses.isEmpty) {
+          state = CourseState.empty;
+        } else {
+          state = CourseState.finish;
+        }
+      });
     }
   }
 }

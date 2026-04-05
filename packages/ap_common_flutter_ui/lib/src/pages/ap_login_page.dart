@@ -70,6 +70,8 @@ class _ApLoginPageState extends State<ApLoginPage> {
 
   bool _isRememberPassword = true;
   bool _isAutoLogin = false;
+  String? _usernameError;
+  String? _passwordError;
 
   @override
   void initState() {
@@ -113,6 +115,7 @@ class _ApLoginPageState extends State<ApLoginPage> {
           focusNode: _usernameFocus,
           nextFocusNode: _passwordFocus,
           labelText: ap.studentId,
+          errorText: _usernameError,
           autofillHints: const <String>[AutofillHints.username],
         ),
         ApTextField(
@@ -125,6 +128,7 @@ class _ApLoginPageState extends State<ApLoginPage> {
             _login();
           },
           labelText: ap.password,
+          errorText: _passwordError,
           autofillHints: const <String>[AutofillHints.password],
         ),
         const SizedBox(height: 8.0),
@@ -178,8 +182,9 @@ class _ApLoginPageState extends State<ApLoginPage> {
   }
 
   Future<void> _login() async {
-    if (_username.text.isEmpty || _password.text.isEmpty) {
-      UiUtil.instance.showToast(context, ap.doNotEmpty);
+    final bool hasError = _validateFields();
+    if (hasError) {
+      HapticFeedback.mediumImpact();
       return;
     }
 
@@ -206,8 +211,21 @@ class _ApLoginPageState extends State<ApLoginPage> {
     } catch (e) {
       if (!mounted) return;
       Navigator.of(context, rootNavigator: true).pop(); // dismiss dialog
-      UiUtil.instance.showToast(context, e.toString());
+      HapticFeedback.mediumImpact();
+      UiUtil.instance.showToast(context, ap.somethingError);
     }
+  }
+
+  bool _validateFields() {
+    bool hasError = false;
+    setState(() {
+      _usernameError =
+          _username.text.isEmpty ? ap.enterUsernameHint : null;
+      _passwordError =
+          _password.text.isEmpty ? ap.enterPasswordHint : null;
+      hasError = _usernameError != null || _passwordError != null;
+    });
+    return hasError;
   }
 
   void _saveCredentials() {

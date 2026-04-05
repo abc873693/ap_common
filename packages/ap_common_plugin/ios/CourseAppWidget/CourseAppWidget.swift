@@ -50,7 +50,8 @@ struct Provider: TimelineProvider {
                   CourseData.self, from: data
               )
         else {
-            return ("尚無課程資料", "尚無課程資料")
+            let noData = NSLocalizedString("not_load_course_table", comment: "")
+            return (noData, noData)
         }
 
         let today = Date()
@@ -64,8 +65,8 @@ struct Provider: TimelineProvider {
 
         var todayCount = 0
         var minDiff = Double.greatestFiniteMagnitude
-        var text = "太好了今天已經沒有任何課"
-        var shortText = "今天已經沒有任何課"
+        var text = NSLocalizedString("today_no_course_already", comment: "")
+        var shortText = NSLocalizedString("today_no_course_already", comment: "")
 
         for course in courseData.courses {
             for sectionTime in course.sectionTimes {
@@ -84,17 +85,21 @@ struct Provider: TimelineProvider {
                     let building = course.location?.building ?? ""
                     let room = course.location?.room ?? ""
                     let location = "\(building)\(room)"
-                    text = "下一節課是\(timeCode.startTime)\n"
-                        + "在 \(location) 的 \(course.title)"
-                    shortText = "\(timeCode.startTime)"
-                        + "在 \(location) 的\(course.title)"
+                    text = String(
+                        format: NSLocalizedString(
+                            "course_hint_content_format",
+                            comment: ""
+                        ),
+                        timeCode.startTime, location, course.title
+                    )
+                    shortText = "\(timeCode.startTime) \(location) \(course.title)"
                 }
             }
         }
 
         if todayCount == 0 {
-            text = "太好了今天沒有任何課"
-            shortText = "今天沒有任何課"
+            text = NSLocalizedString("today_no_course", comment: "")
+            shortText = NSLocalizedString("today_no_course", comment: "")
         }
 
         return (text, shortText)
@@ -151,7 +156,7 @@ struct CourseAppWidgetEntryView: View {
     var body: some View {
         GeometryReader { geometry in
             VStack(spacing: 0) {
-                Text("上課提醒")
+                Text(NSLocalizedString("course_hint", comment: ""))
                     .foregroundColor(.white)
                     .frame(width: geometry.size.width, height: 36)
                     .background(titleBackground)
@@ -226,8 +231,7 @@ struct ViewSizeWidgetView: View {
 
 // MARK: - Widget
 
-@main
-struct CourseAppWidget: Widget {
+struct CourseHintWidget: Widget {
     let kind: String = "CourseAppWidget"
 
     var body: some WidgetConfiguration {
@@ -237,10 +241,23 @@ struct CourseAppWidget: Widget {
         ) { entry in
             ViewSizeWidgetView(entry: entry)
         }
-        .configurationDisplayName("上課提醒")
-        .description("提醒本日下一堂課")
+        .configurationDisplayName(NSLocalizedString("course_hint_display", comment: ""))
+        .description(NSLocalizedString("course_hint_description", comment: ""))
         .supportedFamiliesIfNeeded()
         .disableContentMarginsIfNeeded()
+    }
+}
+
+// MARK: - Widget Bundle
+
+@main
+struct CourseWidgetBundle: WidgetBundle {
+    var body: some Widget {
+        CourseHintWidget()
+        CourseTableWidget()
+        TodayScheduleWidget()
+        CountdownCourseWidget()
+        StudentIdCardWidget()
     }
 }
 
@@ -249,9 +266,10 @@ struct CourseAppWidget: Widget {
 extension View {
     func widgetBackground(_ backgroundView: some View) -> some View {
         if #available(iOSApplicationExtension 17.0, *) {
-            return containerBackground(for: .widget) {
-                backgroundView
-            }
+            return background(backgroundView)
+                .containerBackground(for: .widget) {
+                    backgroundView
+                }
         } else {
             return background(backgroundView)
         }
@@ -278,6 +296,21 @@ extension WidgetConfiguration {
             ])
         } else {
             return self
+        }
+    }
+
+    func supportedFamiliesForTable() -> some WidgetConfiguration {
+        if #available(iOSApplicationExtension 15.0, *) {
+            return self.supportedFamilies([
+                .systemMedium,
+                .systemLarge,
+                .systemExtraLarge,
+            ])
+        } else {
+            return self.supportedFamilies([
+                .systemMedium,
+                .systemLarge,
+            ])
         }
     }
 }
