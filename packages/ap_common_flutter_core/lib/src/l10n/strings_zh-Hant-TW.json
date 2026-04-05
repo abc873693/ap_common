@@ -455,5 +455,6 @@
   "todayScheduleTitle": "今日課表",
   "untilNextClass": "分鐘後上課",
   "classesToday": "堂課",
-  "noClassToday": "今天沒有課"
+  "noClassToday": "今天沒有課",
+  "tomorrowScheduleTitle": "明日課表"
 }

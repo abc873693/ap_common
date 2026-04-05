@@ -1411,6 +1411,9 @@ class ApLocalizations with BaseTranslations<AppLocale, ApLocalizations> {
 
 	/// en: 'No class today'
 	String get noClassToday => 'No class today';
+
+	/// en: 'Tomorrow\'s Schedule'
+	String get tomorrowScheduleTitle => 'Tomorrow\'s Schedule';
 }
 
 /// The flat map containing all translations for locale <en>.
@@ -1878,6 +1881,7 @@ extension on ApLocalizations {
 			'untilNextClass' => 'until next class',
 			'classesToday' => 'classes today',
 			'noClassToday' => 'No class today',
+			'tomorrowScheduleTitle' => 'Tomorrow\'s Schedule',
 			_ => null,
 		};
 	}

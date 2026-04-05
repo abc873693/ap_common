@@ -151,9 +151,20 @@ class TodayScheduleCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final ColorScheme colorScheme = Theme.of(context).colorScheme;
-    final List<_TodayItem> items = _getTodayItems();
+    final int todayWeekday = DateTime.now().weekday;
+    final int tomorrowWeekday =
+        todayWeekday == 7 ? 1 : todayWeekday + 1;
+    List<_TodayItem> items = _getItemsForWeekday(todayWeekday);
+    final bool isTomorrow = items.isEmpty;
+    if (isTomorrow) {
+      items = _getItemsForWeekday(tomorrowWeekday);
+    }
 
     if (items.isEmpty) return const SizedBox.shrink();
+
+    final String title = isTomorrow
+        ? context.ap.tomorrowScheduleTitle
+        : context.ap.todayScheduleTitle;
 
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 16),
@@ -181,7 +192,7 @@ class TodayScheduleCard extends StatelessWidget {
                   ),
                   const SizedBox(width: 8),
                   Text(
-                    context.ap.todayScheduleTitle,
+                    title,
                     style: TextStyle(
                       fontSize: 14,
                       fontWeight: FontWeight.w600,
@@ -290,8 +301,7 @@ class TodayScheduleCard extends StatelessWidget {
     );
   }
 
-  List<_TodayItem> _getTodayItems() {
-    final int weekday = DateTime.now().weekday; // ISO 8601
+  List<_TodayItem> _getItemsForWeekday(int weekday) {
     final List<_TodayItem> items = <_TodayItem>[];
     int colorIndex = 0;
     final Map<String, int> colorMap = <String, int>{};
