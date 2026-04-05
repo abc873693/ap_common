@@ -146,11 +146,16 @@ class HomePageScaffoldState extends State<HomePageScaffold> {
                     ? widget.content!
                     : OrientationBuilder(
                         builder: (_, Orientation orientation) {
+                          final bool hasDash =
+                              widget.dashboardWidgets != null &&
+                                  widget.dashboardWidgets!.isNotEmpty;
+                          final double vPad =
+                              orientation == Orientation.portrait
+                                  ? (hasDash ? 12.0 : 32.0)
+                                  : 4.0;
                           return Container(
                             padding: EdgeInsets.symmetric(
-                              vertical: orientation == Orientation.portrait
-                                  ? 32.0
-                                  : 4.0,
+                              vertical: vPad,
                             ),
                             alignment: Alignment.center,
                             child: AnimatedSwitcher(
@@ -239,13 +244,29 @@ class HomePageScaffoldState extends State<HomePageScaffold> {
   Widget _buildDashboardLayout(Orientation orientation) {
     final bool isPortrait =
         orientation == Orientation.portrait;
-    final double carouselH = widget.carouselHeight ??
-        (isPortrait ? 260.0 : 180.0);
+
+    // Compute carousel height responsive to screen size.
+    // Target: carousel occupies ~35% of available content height
+    // so dashboard content is visible on first screen.
+    final double carouselH;
+    if (widget.carouselHeight != null) {
+      carouselH = widget.carouselHeight!;
+    } else {
+      final double screenHeight = MediaQuery.of(context).size.height;
+      // Subtract AppBar(56) + BottomNav(56) + StatusBar(~44)
+      // + padding(32*2) + title+arrow+indicator(~80)
+      final double available = screenHeight - 56 - 56 - 44 - 64 - 80;
+      // Carousel takes ~50% of remaining space, clamp to
+      // reasonable range.
+      carouselH = isPortrait
+          ? (available * 0.5).clamp(150.0, 300.0)
+          : (available * 0.4).clamp(120.0, 200.0);
+    }
 
     return ListView(
       padding: EdgeInsets.zero,
       children: <Widget>[
-        // Carousel section (fixed height)
+        // Carousel section
         _buildAnnouncementTitle(),
         const Hero(
           tag: ApConstants.tagAnnouncementIcon,
@@ -257,11 +278,11 @@ class HomePageScaffoldState extends State<HomePageScaffold> {
         ),
         const SizedBox(height: 4),
         _buildPageIndicator(),
-        const SizedBox(height: 16),
+        const SizedBox(height: 12),
         // Dashboard widgets
         ...widget.dashboardWidgets!,
         SizedBox(
-          height: isPortrait ? 24.0 : 8.0,
+          height: isPortrait ? 16.0 : 8.0,
         ),
       ],
     );
