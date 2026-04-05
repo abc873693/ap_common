@@ -151,35 +151,19 @@ class CourseTableWidget : GlanceAppWidget() {
 
     @Composable
     private fun TitleBar(context: Context) {
-        Row(
+        Box(
             modifier = GlanceModifier.fillMaxWidth()
                 .height(HEADER_HEIGHT.dp)
                 .background(headerBackground),
-            verticalAlignment = Alignment.CenterVertically,
+            contentAlignment = Alignment.Center,
         ) {
-            Box(
-                modifier = GlanceModifier.defaultWeight()
-                    .padding(start = 12.dp),
-                contentAlignment = Alignment.CenterStart,
-            ) {
-                Text(
-                    text = context.getString(R.string.course_table),
-                    style = TextStyle(
-                        color = headerTextColor,
-                        fontSize = 13.sp,
-                        fontWeight = FontWeight.Bold,
-                    ),
-                )
-            }
-            Image(
-                provider = ImageProvider(R.drawable.ic_refresh),
-                contentDescription = "Refresh",
-                modifier = GlanceModifier
-                    .size(HEADER_HEIGHT.dp)
-                    .padding(4.dp)
-                    .clickable(
-                        actionRunCallback<RefreshTableAction>()
-                    ),
+            Text(
+                text = context.getString(R.string.course_table),
+                style = TextStyle(
+                    color = headerTextColor,
+                    fontSize = 13.sp,
+                    fontWeight = FontWeight.Bold,
+                ),
             )
         }
     }
@@ -211,18 +195,52 @@ class CourseTableWidget : GlanceAppWidget() {
 
         // Build lookup: weekday (1-7) → timeIndex → Course
         val lookup = mutableMapOf<Int, MutableMap<Int, Course>>()
-        val colorMap = mutableMapOf<String, Color>()
-        var colorIdx = 0
         for (course in data.courses) {
-            if (course.code !in colorMap) {
-                colorMap[course.code] =
-                    courseColorPalette[colorIdx % courseColorPalette.size]
-                colorIdx++
-            }
             for (t in course.times) {
                 lookup.getOrPut(t.weekday) { mutableMapOf() }[t.index] =
                     course
             }
+        }
+
+        // Assign colors by grid scan order (weekday → timeIndex)
+        // to match Flutter's _getCourseColor iteration order.
+        val colorMap = mutableMapOf<String, Color>()
+        var colorIdx = 0
+        for (d in 1..weekdayCount) {
+            val dayMap = lookup[d] ?: continue
+            for (t in minIndex..maxIndex) {
+                val course = dayMap[t] ?: continue
+                if (course.code !in colorMap) {
+                    colorMap[course.code] =
+                        courseColorPalette[colorIdx % courseColorPalette.size]
+                    colorIdx++
+                }
+            }
+        }
+
+        // Pre-compute span info for merging consecutive same-course slots.
+        // spanStart[weekday][timeIndex] = span length (only at the first slot)
+        val spanStart = mutableMapOf<Int, MutableMap<Int, Int>>()
+        for (d in 1..weekdayCount) {
+            val dayMap = lookup[d] ?: continue
+            val starts = mutableMapOf<Int, Int>()
+            var t = minIndex
+            while (t <= maxIndex) {
+                val course = dayMap[t]
+                if (course != null) {
+                    var span = 1
+                    while (t + span <= maxIndex &&
+                        dayMap[t + span]?.code == course.code
+                    ) {
+                        span++
+                    }
+                    starts[t] = span
+                    t += span
+                } else {
+                    t++
+                }
+            }
+            spanStart[d] = starts
         }
 
         LazyColumn(modifier = GlanceModifier.fillMaxSize().padding(4.dp)) {
@@ -305,18 +323,63 @@ class CourseTableWidget : GlanceAppWidget() {
                     // Course cells
                     for (d in 1..weekdayCount) {
                         val course = lookup[d]?.get(t)
+                        val color = colorMap[course?.code]
+                            ?: courseColorPalette[0]
+                        val daySpans = spanStart[d]
+                        val span = daySpans?.get(t) // non-null = first slot
+                        // Determine position within a merged span
+                        val isFirst = span != null
+                        val isContinuation = !isFirst && course != null
+                        // Check if next slot continues this course
+                        val nextContinues = course != null &&
+                            lookup[d]?.get(t + 1)?.code == course.code &&
+                            daySpans?.get(t + 1) == null
+                        // isLast = continuation slot where next does not continue
+                        val isLast = isContinuation && !nextContinues
+
+                        val topPad = if (isContinuation) 0.dp else 1.dp
+                        val bottomPad = when {
+                            isFirst && span!! > 1 -> 0.dp
+                            isContinuation && !isLast -> 0.dp
+                            else -> 1.dp
+                        }
+
                         Box(
                             modifier = GlanceModifier
                                 .defaultWeight()
                                 .height(CELL_HEIGHT.dp)
-                                .padding(1.dp),
+                                .padding(
+                                    start = 1.dp,
+                                    end = 1.dp,
+                                    top = topPad,
+                                    bottom = bottomPad,
+                                ),
                             contentAlignment = Alignment.Center,
                         ) {
-                            if (course != null) {
-                                CourseCell(
-                                    course = course,
-                                    color = colorMap[course.code]
-                                        ?: courseColorPalette[0],
+                            val isSingle = isFirst && span == 1
+                            val isSpanFirst = isFirst && span!! > 1
+                            when {
+                                isSingle -> CourseCell(
+                                    course = course!!,
+                                    color = color,
+                                    span = 1,
+                                    roundTop = true,
+                                    roundBottom = true,
+                                )
+                                isSpanFirst -> CourseCell(
+                                    course = course!!,
+                                    color = color,
+                                    span = span!!,
+                                    roundTop = true,
+                                    roundBottom = false,
+                                )
+                                isLast -> CourseCellContinuation(
+                                    color = color,
+                                    roundBottom = true,
+                                )
+                                isContinuation -> CourseCellContinuation(
+                                    color = color,
+                                    roundBottom = false,
                                 )
                             }
                         }
@@ -326,47 +389,154 @@ class CourseTableWidget : GlanceAppWidget() {
         }
     }
 
+    /**
+     * Renders a course cell with selective rounded corners.
+     *
+     * Glance only supports [cornerRadius] on all 4 corners.
+     * To simulate per-corner rounding we layer a rounded box
+     * behind a half-height plain rectangle that covers the
+     * corners we want flat.
+     */
     @Composable
-    private fun CourseCell(course: Course, color: Color) {
-        Box(
-            modifier = GlanceModifier
-                .fillMaxSize()
-                .cornerRadius(6.dp)
-                .background(color),
-            contentAlignment = Alignment.Center,
-        ) {
-            Column(
-                modifier = GlanceModifier.padding(2.dp),
-                horizontalAlignment = Alignment.CenterHorizontally,
+    private fun CourseCell(
+        course: Course,
+        color: Color,
+        span: Int,
+        roundTop: Boolean,
+        roundBottom: Boolean,
+    ) {
+        Box(modifier = GlanceModifier.fillMaxSize()) {
+            // Background layers
+            RoundedCellBackground(
+                color = color,
+                roundTop = roundTop,
+                roundBottom = roundBottom,
+            )
+            // Content
+            Box(
+                modifier = GlanceModifier.fillMaxSize(),
+                contentAlignment = Alignment.Center,
             ) {
-                Text(
-                    text = if (course.title.length > 4) {
-                        course.title.take(4)
-                    } else {
-                        course.title
-                    },
-                    style = TextStyle(
-                        color = ColorProvider(Color.White),
-                        fontSize = 9.sp,
-                        fontWeight = FontWeight.Bold,
-                        textAlign = TextAlign.Center,
-                    ),
-                    maxLines = 2,
-                )
-                val loc = course.location?.displayText
-                if (!loc.isNullOrEmpty()) {
+                Column(
+                    modifier = GlanceModifier.padding(2.dp),
+                    horizontalAlignment = Alignment.CenterHorizontally,
+                ) {
+                    val maxChars = if (span > 1) 8 else 4
                     Text(
-                        text = loc,
+                        text = if (course.title.length > maxChars) {
+                            course.title.take(maxChars)
+                        } else {
+                            course.title
+                        },
                         style = TextStyle(
-                            color = ColorProvider(
-                                Color.White.copy(alpha = 0.8f)
-                            ),
-                            fontSize = 7.sp,
+                            color = ColorProvider(Color.White),
+                            fontSize = if (span > 1) 10.sp else 9.sp,
+                            fontWeight = FontWeight.Bold,
                             textAlign = TextAlign.Center,
                         ),
-                        maxLines = 1,
+                        maxLines = if (span > 1) 3 else 2,
                     )
+                    val loc = course.location?.displayText
+                    if (!loc.isNullOrEmpty()) {
+                        Text(
+                            text = loc,
+                            style = TextStyle(
+                                color = ColorProvider(
+                                    Color.White.copy(alpha = 0.8f)
+                                ),
+                                fontSize = 7.sp,
+                                textAlign = TextAlign.Center,
+                            ),
+                            maxLines = 1,
+                        )
+                    }
                 }
+            }
+        }
+    }
+
+    @Composable
+    private fun CourseCellContinuation(
+        color: Color,
+        roundBottom: Boolean,
+    ) {
+        Box(modifier = GlanceModifier.fillMaxSize()) {
+            RoundedCellBackground(
+                color = color,
+                roundTop = false,
+                roundBottom = roundBottom,
+            )
+        }
+    }
+
+    /**
+     * Draws a background with selective rounded corners.
+     *
+     * Uses a fully-rounded box overlaid with a plain rectangle
+     * covering the half we want flat. Glance Box children stack
+     * at TopStart, so a Column is used to push the cover rect
+     * to the bottom when flattening bottom corners.
+     */
+    @Composable
+    private fun RoundedCellBackground(
+        color: Color,
+        roundTop: Boolean,
+        roundBottom: Boolean,
+    ) {
+        when {
+            roundTop && roundBottom -> {
+                // All corners rounded
+                Box(
+                    modifier = GlanceModifier
+                        .fillMaxSize()
+                        .cornerRadius(6.dp)
+                        .background(color),
+                ) {}
+            }
+            roundTop && !roundBottom -> {
+                // Rounded top, flat bottom:
+                // rounded box + rect covering bottom half
+                Box(
+                    modifier = GlanceModifier
+                        .fillMaxSize()
+                        .cornerRadius(6.dp)
+                        .background(color),
+                ) {}
+                Column(modifier = GlanceModifier.fillMaxSize()) {
+                    Box(modifier = GlanceModifier
+                        .fillMaxWidth()
+                        .defaultWeight()) {}
+                    Box(
+                        modifier = GlanceModifier
+                            .fillMaxWidth()
+                            .height((CELL_HEIGHT / 2).dp)
+                            .background(color),
+                    ) {}
+                }
+            }
+            !roundTop && roundBottom -> {
+                // Flat top, rounded bottom:
+                // rounded box + rect covering top half
+                Box(
+                    modifier = GlanceModifier
+                        .fillMaxSize()
+                        .cornerRadius(6.dp)
+                        .background(color),
+                ) {}
+                Box(
+                    modifier = GlanceModifier
+                        .fillMaxWidth()
+                        .height((CELL_HEIGHT / 2).dp)
+                        .background(color),
+                ) {}
+            }
+            else -> {
+                // No rounding — plain rectangle
+                Box(
+                    modifier = GlanceModifier
+                        .fillMaxSize()
+                        .background(color),
+                ) {}
             }
         }
     }

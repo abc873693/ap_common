@@ -58,7 +58,27 @@ struct TodayScheduleProvider: TimelineProvider {
                 ))
             }
         }
-        return items.sorted { $0.startTime < $1.startTime }
+        // Merge consecutive slots of the same course
+        let sorted = items.sorted { $0.startTime < $1.startTime }
+        var merged: [ScheduleItem] = []
+        for item in sorted {
+            if let last = merged.last,
+               last.title == item.title,
+               last.endTime == item.startTime
+            {
+                merged[merged.count - 1] = ScheduleItem(
+                    title: last.title,
+                    startTime: last.startTime,
+                    endTime: item.endTime,
+                    location: last.location,
+                    color: last.color,
+                    isPast: item.isPast
+                )
+            } else {
+                merged.append(item)
+            }
+        }
+        return merged
     }
 
     private func parseTime(_ text: String) -> Date {
@@ -138,16 +158,12 @@ struct TodayScheduleView: View {
     var body: some View {
         VStack(spacing: 0) {
             // Header
-            HStack {
-                let wd = weekdayName()
-                Text("今日課表 (\(wd))")
-                    .font(.system(size: 13, weight: .bold))
-                    .foregroundColor(.white)
-                Spacer()
-            }
-            .padding(.horizontal, 12)
-            .frame(height: 28)
-            .background(headerColor)
+            Text("今日課表 (\(weekdayName()))")
+                .font(.system(size: 13, weight: .bold))
+                .foregroundColor(.white)
+                .frame(maxWidth: .infinity)
+                .frame(height: 28)
+                .background(headerColor)
 
             if entry.items.isEmpty {
                 Spacer()
@@ -156,18 +172,17 @@ struct TodayScheduleView: View {
                     .foregroundColor(.secondary)
                 Spacer()
             } else {
-                ScrollView {
-                    VStack(spacing: 6) {
-                        ForEach(
-                            Array(entry.items.enumerated()),
-                            id: \.offset
-                        ) { _, item in
-                            scheduleRow(item)
-                        }
+                VStack(spacing: 6) {
+                    ForEach(
+                        Array(entry.items.enumerated()),
+                        id: \.offset
+                    ) { _, item in
+                        scheduleRow(item)
                     }
-                    .padding(.horizontal, 12)
-                    .padding(.vertical, 8)
                 }
+                .padding(.horizontal, 12)
+                .padding(.vertical, 8)
+                Spacer(minLength: 0)
             }
         }
         .widgetBackground(bgColor)

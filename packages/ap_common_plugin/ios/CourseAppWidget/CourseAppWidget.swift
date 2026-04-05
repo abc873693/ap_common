@@ -261,9 +261,10 @@ struct CourseWidgetBundle: WidgetBundle {
 extension View {
     func widgetBackground(_ backgroundView: some View) -> some View {
         if #available(iOSApplicationExtension 17.0, *) {
-            return containerBackground(for: .widget) {
-                backgroundView
-            }
+            return background(backgroundView)
+                .containerBackground(for: .widget) {
+                    backgroundView
+                }
         } else {
             return background(backgroundView)
         }
@@ -290,6 +291,21 @@ extension WidgetConfiguration {
             ])
         } else {
             return self
+        }
+    }
+
+    func supportedFamiliesForTable() -> some WidgetConfiguration {
+        if #available(iOSApplicationExtension 15.0, *) {
+            return self.supportedFamilies([
+                .systemMedium,
+                .systemLarge,
+                .systemExtraLarge,
+            ])
+        } else {
+            return self.supportedFamilies([
+                .systemMedium,
+                .systemLarge,
+            ])
         }
     }
 }

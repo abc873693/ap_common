@@ -67,8 +67,8 @@ class ApCommonPlugin {
     final DateTime t1 = now.add(const Duration(minutes: 30));
     final DateTime t2 = now.add(const Duration(minutes: 90));
     final DateTime t3 = now.add(const Duration(minutes: 150));
-    String fmt(DateTime dt) =>
-        '${dt.hour.toString().padLeft(2, '0')}:'
+    final DateTime t4 = now.add(const Duration(minutes: 210));
+    String fmt(DateTime dt) => '${dt.hour.toString().padLeft(2, '0')}:'
         '${dt.minute.toString().padLeft(2, '0')}';
     await updateCourseWidget(
       CourseData(
@@ -84,6 +84,7 @@ class ApCommonPlugin {
             ),
             times: <SectionTime>[
               SectionTime(weekday: now.weekday, index: 0),
+              SectionTime(weekday: now.weekday, index: 1),
             ],
           ),
           Course(
@@ -96,7 +97,7 @@ class ApCommonPlugin {
               room: '4008',
             ),
             times: <SectionTime>[
-              SectionTime(weekday: now.weekday, index: 1),
+              SectionTime(weekday: now.weekday, index: 2),
             ],
           ),
         ],
@@ -110,6 +111,11 @@ class ApCommonPlugin {
             title: 'T2',
             startTime: fmt(t2),
             endTime: fmt(t3),
+          ),
+          TimeCode(
+            title: 'T3',
+            startTime: fmt(t3),
+            endTime: fmt(t4),
           ),
         ],
       ),

@@ -101,42 +101,26 @@ class TodayScheduleWidget : GlanceAppWidget() {
                 ),
         ) {
             // Header
-            Row(
+            Box(
                 modifier = GlanceModifier.fillMaxWidth()
                     .height(32.dp)
                     .background(headerBg),
-                verticalAlignment = Alignment.CenterVertically,
+                contentAlignment = Alignment.Center,
             ) {
-                Box(
-                    modifier = GlanceModifier.defaultWeight()
-                        .padding(start = 12.dp),
-                    contentAlignment = Alignment.CenterStart,
-                ) {
-                    val cal = Calendar.getInstance()
-                    val dayNames = context.resources.getStringArray(
-                        R.array.weekday_labels
-                    )
-                    val raw = cal.get(Calendar.DAY_OF_WEEK)
-                    val wd = if (raw == Calendar.SUNDAY) 6 else raw - 2
-                    val dayName = dayNames.getOrElse(wd) { "" }
-                    Text(
-                        text = "${context.getString(R.string.today_schedule)} ($dayName)",
-                        style = TextStyle(
-                            color = ColorProvider(Color.White),
-                            fontSize = 13.sp,
-                            fontWeight = FontWeight.Bold,
-                        ),
-                    )
-                }
-                Image(
-                    provider = ImageProvider(R.drawable.ic_refresh),
-                    contentDescription = "Refresh",
-                    modifier = GlanceModifier
-                        .size(32.dp)
-                        .padding(6.dp)
-                        .clickable(
-                            actionRunCallback<RefreshTodayAction>()
-                        ),
+                val cal = Calendar.getInstance()
+                val dayNames = context.resources.getStringArray(
+                    R.array.weekday_labels
+                )
+                val raw = cal.get(Calendar.DAY_OF_WEEK)
+                val wd = if (raw == Calendar.SUNDAY) 6 else raw - 2
+                val dayName = dayNames.getOrElse(wd) { "" }
+                Text(
+                    text = "${context.getString(R.string.today_schedule)} ($dayName)",
+                    style = TextStyle(
+                        color = ColorProvider(Color.White),
+                        fontSize = 13.sp,
+                        fontWeight = FontWeight.Bold,
+                    ),
                 )
             }
 
@@ -205,6 +189,8 @@ class TodayScheduleWidget : GlanceAppWidget() {
                     ),
                 )
             }
+            
+            Spacer(modifier = GlanceModifier.width(8.dp))
 
             // Color bar
             Box(
@@ -294,7 +280,24 @@ class TodayScheduleWidget : GlanceAppWidget() {
             }
         }
 
-        return items.sortedBy { it.startTime }
+        // Merge consecutive slots of the same course
+        val sorted = items.sortedBy { it.startTime }
+        val merged = mutableListOf<ScheduleItem>()
+        for (item in sorted) {
+            val last = merged.lastOrNull()
+            if (last != null &&
+                last.course.code == item.course.code &&
+                last.endTime == item.startTime
+            ) {
+                merged[merged.lastIndex] = last.copy(
+                    endTime = item.endTime,
+                    isPast = item.isPast,
+                )
+            } else {
+                merged.add(item)
+            }
+        }
+        return merged
     }
 
     private fun loadData(context: Context): CourseData? {

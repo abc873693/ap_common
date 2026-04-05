@@ -130,7 +130,12 @@ struct CourseTableView: View {
         let weekdayCount = hasHoliday ? 7 : 5
         let (minIdx, maxIdx) = timeRange(data)
         let lookup = buildLookup(data)
-        let colorMap = buildColorMap(data)
+        let colorMap = buildColorMap(
+            lookup: lookup,
+            weekdayCount: weekdayCount,
+            minIdx: minIdx,
+            maxIdx: maxIdx
+        )
         let todayWeekday = currentWeekday()
         let isCompact = family == .systemSmall
 
@@ -170,6 +175,14 @@ struct CourseTableView: View {
                     }
                 }
 
+                // Pre-compute spans for merging consecutive slots
+                let spans = buildSpanMap(
+                    lookup: lookup,
+                    weekdayCount: weekdayCount,
+                    minIdx: minIdx,
+                    maxIdx: maxIdx
+                )
+
                 // Grid rows
                 ForEach(minIdx...maxIdx, id: \.self) { t in
                     HStack(spacing: 0) {
@@ -199,8 +212,23 @@ struct CourseTableView: View {
                         // Course cells
                         ForEach(1...weekdayCount, id: \.self) { d in
                             let course = lookup[d]?[t]
+                            let spanLen = spans[d]?[t] ?? 0
+                            let isFirst = spanLen > 0
+                            let isContinuation =
+                                !isFirst && course != nil
+                            let nextSame = course != nil
+                                && lookup[d]?[t + 1]?.code
+                                    == course!.code
+                                && (spans[d]?[t + 1] ?? 0) == 0
+
                             cellView(
-                                course: course,
+                                course: isFirst ? course : nil,
+                                continuationColor: isContinuation
+                                    ? colorMap[
+                                        course!.code,
+                                        default: courseColorPalette[0]
+                                    ]
+                                    : nil,
                                 color: course != nil
                                     ? colorMap[
                                         course!.code,
@@ -209,7 +237,10 @@ struct CourseTableView: View {
                                     : .clear,
                                 width: cellWidth,
                                 height: cellHeight,
-                                isCompact: isCompact
+                                isCompact: isCompact,
+                                span: isFirst ? spanLen : 1,
+                                hasMore: (isFirst && spanLen > 1)
+                                    || (isContinuation && nextSame)
                             )
                         }
                     }
@@ -221,25 +252,35 @@ struct CourseTableView: View {
     @ViewBuilder
     private func cellView(
         course: Course?,
+        continuationColor: Color?,
         color: Color,
         width: CGFloat,
         height: CGFloat,
-        isCompact: Bool
+        isCompact: Bool,
+        span: Int = 1,
+        hasMore: Bool = false
     ) -> some View {
         if let course = course {
-            let displayTitle = isCompact && course.title.count > 2
-                ? String(course.title.prefix(2))
-                : course.title.count > 4
-                    ? String(course.title.prefix(4))
-                    : course.title
+            // First slot of a (possibly merged) course
+            let maxChars = isCompact
+                ? 2
+                : (span > 1 ? 8 : 4)
+            let displayTitle = course.title.count > maxChars
+                ? String(course.title.prefix(maxChars))
+                : course.title
+            let corners: UIRectCorner = hasMore
+                ? [.topLeft, .topRight]
+                : [.allCorners]
             VStack(spacing: 0) {
                 Text(displayTitle)
                     .font(.system(
-                        size: isCompact ? 7 : 8,
+                        size: isCompact
+                            ? 7
+                            : (span > 1 ? 9 : 8),
                         weight: .bold
                     ))
                     .foregroundColor(.white)
-                    .lineLimit(2)
+                    .lineLimit(span > 1 ? 3 : 2)
                     .multilineTextAlignment(.center)
 
                 if !isCompact,
@@ -254,12 +295,35 @@ struct CourseTableView: View {
                     .lineLimit(1)
                 }
             }
-            .frame(width: width - 2, height: height - 2)
-            .background(
-                RoundedRectangle(cornerRadius: 4)
-                    .fill(color)
+            .frame(
+                width: width - 2,
+                height: height - (hasMore ? 1 : 2)
             )
-            .padding(1)
+            .background(
+                SpecificRoundedRect(
+                    corners: corners,
+                    radius: 4
+                ).fill(color)
+            )
+            .padding(.horizontal, 1)
+            .padding(.top, 1)
+            .padding(.bottom, hasMore ? 0 : 1)
+        } else if let contColor = continuationColor {
+            // Continuation slot (middle/last of merged span)
+            let corners: UIRectCorner = hasMore
+                ? [] : [.bottomLeft, .bottomRight]
+            Rectangle()
+                .fill(Color.clear)
+                .frame(width: width, height: height)
+                .overlay(
+                    SpecificRoundedRect(
+                        corners: corners,
+                        radius: hasMore ? 0 : 4
+                    )
+                    .fill(contColor)
+                    .padding(.horizontal, 1)
+                    .padding(.bottom, hasMore ? 0 : 1)
+                )
         } else {
             Rectangle()
                 .fill(Color.clear)
@@ -303,26 +367,81 @@ struct CourseTableView: View {
         return lookup
     }
 
+    /// Assign colors by grid scan order (weekday → timeIndex)
+    /// to match Flutter's `_getCourseColor` iteration order.
     private func buildColorMap(
-        _ data: CourseData
+        lookup: [Int: [Int: Course]],
+        weekdayCount: Int,
+        minIdx: Int,
+        maxIdx: Int
     ) -> [String: Color] {
         var map: [String: Color] = [:]
         var idx = 0
-        for course in data.courses {
-            if map[course.code] == nil {
-                map[course.code] = courseColorPalette[
-                    idx % courseColorPalette.count
-                ]
-                idx += 1
+        for d in 1...weekdayCount {
+            guard let dayMap = lookup[d] else { continue }
+            for t in minIdx...maxIdx {
+                guard let course = dayMap[t] else { continue }
+                if map[course.code] == nil {
+                    map[course.code] = courseColorPalette[
+                        idx % courseColorPalette.count
+                    ]
+                    idx += 1
+                }
             }
         }
         return map
+    }
+
+    private func buildSpanMap(
+        lookup: [Int: [Int: Course]],
+        weekdayCount: Int,
+        minIdx: Int,
+        maxIdx: Int
+    ) -> [Int: [Int: Int]] {
+        var spans: [Int: [Int: Int]] = [:]
+        for d in 1...weekdayCount {
+            guard let dayMap = lookup[d] else { continue }
+            var starts: [Int: Int] = [:]
+            var t = minIdx
+            while t <= maxIdx {
+                if let course = dayMap[t] {
+                    var span = 1
+                    while t + span <= maxIdx,
+                          dayMap[t + span]?.code == course.code
+                    {
+                        span += 1
+                    }
+                    starts[t] = span
+                    t += span
+                } else {
+                    t += 1
+                }
+            }
+            spans[d] = starts
+        }
+        return spans
     }
 
     private func currentWeekday() -> Int {
         let cal = Calendar.current
         let wd = cal.component(.weekday, from: Date())
         return wd == 1 ? 7 : wd - 1
+    }
+}
+
+// MARK: - Rounded corners helper
+
+private struct SpecificRoundedRect: Shape {
+    let corners: UIRectCorner
+    let radius: CGFloat
+
+    func path(in rect: CGRect) -> Path {
+        let path = UIBezierPath(
+            roundedRect: rect,
+            byRoundingCorners: corners,
+            cornerRadii: CGSize(width: radius, height: radius)
+        )
+        return Path(path.cgPath)
     }
 }
 
@@ -340,11 +459,7 @@ struct CourseTableWidget: Widget {
         }
         .configurationDisplayName("學期課表")
         .description("顯示每週課表")
-        .supportedFamilies([
-            .systemMedium,
-            .systemLarge,
-            .systemExtraLarge,
-        ])
+        .supportedFamiliesForTable()
         .disableContentMarginsIfNeeded()
     }
 }

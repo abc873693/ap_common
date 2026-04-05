@@ -72,15 +72,12 @@ struct StudentIdView: View {
     var body: some View {
         VStack(spacing: 0) {
             // Header
-            HStack {
-                Text("學生證")
-                    .font(.system(size: 13, weight: .bold))
-                    .foregroundColor(.white)
-                Spacer()
-            }
-            .padding(.horizontal, 12)
-            .frame(height: 28)
-            .background(headerColor)
+            Text("學生證")
+                .font(.system(size: 13, weight: .bold))
+                .foregroundColor(.white)
+                .frame(maxWidth: .infinity)
+                .frame(height: 28)
+                .background(headerColor)
 
             if let info = entry.info {
                 infoContent(info)
