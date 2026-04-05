@@ -41,6 +41,7 @@ class HomePageState extends State<HomePage> {
   bool isStudyExpanded = false;
 
   UserInfo? userInfo;
+  CourseData? courseData;
 
   String get drawerIcon {
     switch (ApTheme.of(context).brightness) {
@@ -66,6 +67,7 @@ class HomePageState extends State<HomePage> {
   @override
   void initState() {
     _getAnnouncements();
+    _loadCourseData();
     if (PreferenceUtil.instance.getBool(Constants.PREF_AUTO_LOGIN, false)) {
       _login();
     } else {
@@ -101,6 +103,7 @@ class HomePageState extends State<HomePage> {
       ],
       content: content,
       drawer: _buildDrawer(),
+      dashboardWidgets: _buildDashboardWidgets(),
       onImageTapped: (Announcement announcement) {
         ApUtils.pushCupertinoStyle(
           context,
@@ -271,6 +274,40 @@ class HomePageState extends State<HomePage> {
     } else {
       UiUtil.instance.showToast(context, context.ap.notLogin);
     }
+  }
+
+  List<Widget> _buildDashboardWidgets() {
+    return <Widget>[
+      QuickInfoRow(
+        items: <QuickInfoItem>[
+          QuickInfoItem(
+            icon: Icons.menu_book_outlined,
+            label: '${courseData?.courses.length ?? 0}',
+            subtitle: context.ap.course,
+          ),
+          QuickInfoItem(
+            icon: Icons.announcement_outlined,
+            label: '${announcements.length}',
+            subtitle: context.ap.announcements,
+          ),
+        ],
+      ),
+      if (courseData != null)
+        TodayScheduleCard(
+          courseData: courseData!,
+          onTap: () {
+            ApUtils.pushCupertinoStyle(context, CoursePage());
+          },
+        ),
+    ];
+  }
+
+  Future<void> _loadCourseData() async {
+    final String rawString =
+        await rootBundle.loadString(FileAssets.courses);
+    setState(() {
+      courseData = CourseData.fromRawJson(rawString);
+    });
   }
 
   Future<void> _getAnnouncements() async {
