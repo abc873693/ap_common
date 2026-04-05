@@ -125,11 +125,11 @@ class ApLocalizations with BaseTranslations<AppLocale, ApLocalizations> {
 	/// en: 'Passwords at least $arg1 characters.'
 	String newPasswordLeastCharacter({required Object arg1}) => 'Passwords at least ${arg1} characters.';
 
-	/// en: 'Change sucees, please use new password to login'
-	String get changePasswordSuccessHint1 => 'Change sucees, please use new password to login';
+	/// en: 'Change success, please use new password to login'
+	String get changePasswordSuccessHint1 => 'Change success, please use new password to login';
 
-	/// en: 'Change sucees, app will use new password to login'
-	String get changePasswordSuccessHint2 => 'Change sucees, app will use new password to login';
+	/// en: 'Change success, app will use new password to login'
+	String get changePasswordSuccessHint2 => 'Change success, app will use new password to login';
 
 	/// en: 'Auto login'
 	String get autoLogin => 'Auto login';
@@ -173,11 +173,11 @@ class ApLocalizations with BaseTranslations<AppLocale, ApLocalizations> {
 	/// en: 'Got it'
 	String get iKnow => 'Got it';
 
-	/// en: 'Oops! No any buses now~ Please choose another one.'
-	String get busEmpty => 'Oops! No any buses now~\nPlease choose another one.';
+	/// en: 'Oops! No buses available now~ Please choose another one.'
+	String get busEmpty => 'Oops! No buses available now~\nPlease choose another one.';
 
 	/// en: 'Oops! No any classes in this semester~ Please choose another one. 😋'
-	String get courseEmpty => 'Oops! No any classes in this semester~\n Please choose another one. 😋';
+	String get courseEmpty => 'Oops! No classes in this semester~\nPlease choose another one. 😋';
 
 	/// en: 'OK'
 	String get ok => 'OK';
@@ -1365,8 +1365,8 @@ extension on ApLocalizations {
 			'newPasswordConfirm' => 'Confirm New Password',
 			'newPasswordNotMatchHint' => 'Passwords do not match, please try again !',
 			'newPasswordLeastCharacter' => ({required Object arg1}) => 'Passwords at least ${arg1} characters.',
-			'changePasswordSuccessHint1' => 'Change sucees, please use new password to login',
-			'changePasswordSuccessHint2' => 'Change sucees, app will use new password to login',
+			'changePasswordSuccessHint1' => 'Change success, please use new password to login',
+			'changePasswordSuccessHint2' => 'Change success, app will use new password to login',
 			'autoLogin' => 'Auto login',
 			'version' => ({required Object arg1}) => 'v.${arg1}',
 			'logining' => 'Logging...',
@@ -1381,8 +1381,8 @@ extension on ApLocalizations {
 			'unknown' => 'Unknown',
 			'campus' => ' campus',
 			'iKnow' => 'Got it',
-			'busEmpty' => 'Oops! No any buses now~\nPlease choose another one.',
-			'courseEmpty' => 'Oops! No any classes in this semester~\n Please choose another one. 😋',
+			'busEmpty' => 'Oops! No buses available now~\nPlease choose another one.',
+			'courseEmpty' => 'Oops! No classes in this semester~\nPlease choose another one. 😋',
 			'ok' => 'OK',
 			'courseDialogMessages' => ({required Object arg1, required Object arg2, required Object arg3, required Object arg4}) => 'Class：${arg1}\nProfessor：${arg2}\nLocation：${arg3}\nTime：${arg4}',
 			'courseDialogName' => 'Class',
