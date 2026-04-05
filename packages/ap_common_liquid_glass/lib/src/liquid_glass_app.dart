@@ -6,30 +6,34 @@ import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:liquid_glass_widgets/liquid_glass_widgets.dart';
 
 /// A convenience wrapper around [MaterialApp] that applies both
-/// [ApTheme] and [LiquidGlassWidgets] setup.
+/// [ApTheme] and [GlassTheme] setup.
 ///
 /// This is the glass-enhanced equivalent of [ApApp]. It:
-/// - Calls [LiquidGlassWidgets.initialize] to pre-cache shaders
-/// - Wraps the app with [LiquidGlassWidgets.wrap] for GPU sharing
 /// - Applies [GlassTheme] bridged from [ApTheme] seed colors
+/// - Manages theme mode, locale, and color preferences
+///
+/// **Important:**
+/// - Call [LiquidGlassWidgets.initialize] in `main()` and wrap
+///   with [LiquidGlassWidgets.wrap] at the `runApp` level.
+/// - Do NOT wrap with [TranslationProvider] externally — this
+///   widget already includes one. Nesting two providers of the
+///   same locale type causes a duplicate GlobalKey crash.
 ///
 /// ```dart
 /// void main() async {
 ///   WidgetsFlutterBinding.ensureInitialized();
 ///   await LiquidGlassWidgets.initialize();
-///   runApp(const MyApp());
+///   runApp(LiquidGlassWidgets.wrap(const MyApp()));
 /// }
 ///
-/// class MyApp extends StatefulWidget {
-///   @override
-///   State<MyApp> createState() => _MyAppState();
-/// }
+/// class MyApp extends StatelessWidget {
+///   const MyApp({super.key});
 ///
-/// class _MyAppState extends State<MyApp> {
 ///   @override
 ///   Widget build(BuildContext context) {
+///     // No TranslationProvider needed here.
 ///     return LiquidGlassApApp(
-///       home: GlassHomePage(),
+///       home: const GlassHomePage(),
 ///     );
 ///   }
 /// }
@@ -209,44 +213,49 @@ class LiquidGlassApAppState extends State<LiquidGlassApApp>
         preferences: PreferenceUtil.instance,
         child: Builder(
           builder: (BuildContext context) {
-            final Color seedColor = ApTheme.of(context).seedColor;
+            final Color seedColor =
+                ApTheme.of(context).seedColor;
             final GlassThemeData glassThemeData =
                 GlassThemeBridge.fromContext(context);
             return TranslationProvider(
               child: Builder(
                 builder: (BuildContext context) {
-                  return LiquidGlassWidgets.wrap(
-                    GlassTheme(
-                      data: glassThemeData,
-                      child: MaterialApp(
-                        onGenerateTitle: widget.onGenerateTitle,
-                        debugShowCheckedModeBanner:
-                            widget.debugShowCheckedModeBanner,
-                        routes: <String, WidgetBuilder>{
-                          if (widget.home != null)
-                            Navigator.defaultRouteName:
-                                (_) => widget.home!,
-                          ...widget.routes,
-                        },
-                        onGenerateRoute: widget.onGenerateRoute,
-                        theme: ApTheme.light(seedColor),
-                        darkTheme: ApTheme.dark(seedColor),
-                        themeMode: _themeMode,
-                        locale: TranslationProvider.of(context)
-                            .flutterLocale,
-                        navigatorObservers:
-                            widget.navigatorObservers,
-                        supportedLocales:
-                            AppLocaleUtils.supportedLocales,
-                        localizationsDelegates:
-                            <LocalizationsDelegate<dynamic>>[
-                          ...widget
-                              .additionalLocalizationsDelegates,
-                          GlobalMaterialLocalizations.delegate,
-                          GlobalWidgetsLocalizations.delegate,
-                          GlobalCupertinoLocalizations.delegate,
-                        ],
-                      ),
+                  return GlassTheme(
+                    data: glassThemeData,
+                    child: MaterialApp(
+                      home: widget.home,
+                      onGenerateTitle:
+                          widget.onGenerateTitle,
+                      debugShowCheckedModeBanner: widget
+                          .debugShowCheckedModeBanner,
+                      routes: widget.routes,
+                      onGenerateRoute:
+                          widget.onGenerateRoute,
+                      theme: ApTheme.light(seedColor),
+                      darkTheme:
+                          ApTheme.dark(seedColor),
+                      themeMode: _themeMode,
+                      locale: TranslationProvider.of(
+                        context,
+                      ).flutterLocale,
+                      navigatorObservers:
+                          widget.navigatorObservers,
+                      supportedLocales:
+                          AppLocaleUtils
+                              .supportedLocales,
+                      localizationsDelegates:
+                          <LocalizationsDelegate<
+                            dynamic
+                          >>[
+                        ...widget
+                            .additionalLocalizationsDelegates,
+                        GlobalMaterialLocalizations
+                            .delegate,
+                        GlobalWidgetsLocalizations
+                            .delegate,
+                        GlobalCupertinoLocalizations
+                            .delegate,
+                      ],
                     ),
                   );
                 },

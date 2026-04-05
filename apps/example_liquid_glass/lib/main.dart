@@ -14,5 +14,7 @@ Future<void> main() async {
     key: encrypt.Key.fromUtf8('l9r1W3wcsnJTayxCXwoFt62w1i4sQ5J9'),
     iv: encrypt.IV.fromUtf8('auc9OV5r0nLwjCAH'),
   );
-  runApp(const LiquidGlassExampleApp());
+  runApp(
+    LiquidGlassWidgets.wrap(const LiquidGlassExampleApp()),
+  );
 }

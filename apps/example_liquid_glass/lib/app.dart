@@ -7,11 +7,9 @@ class LiquidGlassExampleApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return TranslationProvider(
-      child: LiquidGlassApApp(
-        home: const GlassHomePage(),
-        onGenerateTitle: (_) => 'Liquid Glass Example',
-      ),
+    return LiquidGlassApApp(
+      home: const GlassHomePage(),
+      onGenerateTitle: (_) => 'Liquid Glass Example',
     );
   }
 }
