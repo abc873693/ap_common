@@ -18,10 +18,13 @@
 		A4CEC6DA25C59EB2002BF55B /* CourseAppWidget.swift in Sources */ = {isa = PBXBuildFile; fileRef = A4CEC6D925C59EB2002BF55B /* CourseAppWidget.swift */; };
 		A4CEC6DD25C59EB5002BF55B /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = A4CEC6DC25C59EB5002BF55B /* Assets.xcassets */; };
 		A4CEC6DF25C59EB5002BF55B /* CourseAppWidget.intentdefinition in Sources */ = {isa = PBXBuildFile; fileRef = A4CEC6DB25C59EB2002BF55B /* CourseAppWidget.intentdefinition */; };
-		A4CEC6E025C59EB5002BF55B /* CourseAppWidget.intentdefinition in Sources */ = {isa = PBXBuildFile; fileRef = A4CEC6DB25C59EB2002BF55B /* CourseAppWidget.intentdefinition */; };
 		A4CEC6E325C59EB5002BF55B /* CourseAppWidgetExtension.appex in Embed App Extensions */ = {isa = PBXBuildFile; fileRef = A4CEC6D325C59EB2002BF55B /* CourseAppWidgetExtension.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
 		A4CEC6EB25C59EED002BF55B /* CourseData.swift in Sources */ = {isa = PBXBuildFile; fileRef = A4CEC6EA25C59EED002BF55B /* CourseData.swift */; };
 		A4CEC6ED25C5A02F002BF55B /* CourseData.swift in Sources */ = {isa = PBXBuildFile; fileRef = A4CEC6EA25C59EED002BF55B /* CourseData.swift */; };
+		A4EE47FB2F8271050060D998 /* StudentIdWidget.swift in Sources */ = {isa = PBXBuildFile; fileRef = A4EE47F92F8271050060D998 /* StudentIdWidget.swift */; };
+		A4EE47FC2F8271050060D998 /* CountdownWidget.swift in Sources */ = {isa = PBXBuildFile; fileRef = A4EE47F62F8271050060D998 /* CountdownWidget.swift */; };
+		A4EE47FD2F8271050060D998 /* TodayScheduleWidget.swift in Sources */ = {isa = PBXBuildFile; fileRef = A4EE47FA2F8271050060D998 /* TodayScheduleWidget.swift */; };
+		A4EE47FF2F8271050060D998 /* CourseTableWidget.swift in Sources */ = {isa = PBXBuildFile; fileRef = A4EE47F82F8271050060D998 /* CourseTableWidget.swift */; };
 		A645A6ABADD053D02121E572 /* Pods_Runner.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 50C194F152AAF516B460DF41 /* Pods_Runner.framework */; };
 /* End PBXBuildFile section */
 
@@ -87,6 +90,10 @@
 		A4CEC6DE25C59EB5002BF55B /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		A4CEC6EA25C59EED002BF55B /* CourseData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CourseData.swift; sourceTree = "<group>"; };
 		A4CEC71125C5ADC4002BF55B /* CourseAppWidgetExtension.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = CourseAppWidgetExtension.entitlements; sourceTree = "<group>"; };
+		A4EE47F62F8271050060D998 /* CountdownWidget.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CountdownWidget.swift; sourceTree = "<group>"; };
+		A4EE47F82F8271050060D998 /* CourseTableWidget.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CourseTableWidget.swift; sourceTree = "<group>"; };
+		A4EE47F92F8271050060D998 /* StudentIdWidget.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StudentIdWidget.swift; sourceTree = "<group>"; };
+		A4EE47FA2F8271050060D998 /* TodayScheduleWidget.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TodayScheduleWidget.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -162,6 +169,10 @@
 		A4CEC6D825C59EB2002BF55B /* CourseAppWidget */ = {
 			isa = PBXGroup;
 			children = (
+				A4EE47F62F8271050060D998 /* CountdownWidget.swift */,
+				A4EE47F82F8271050060D998 /* CourseTableWidget.swift */,
+				A4EE47F92F8271050060D998 /* StudentIdWidget.swift */,
+				A4EE47FA2F8271050060D998 /* TodayScheduleWidget.swift */,
 				A4CEC6D925C59EB2002BF55B /* CourseAppWidget.swift */,
 				A4CEC6DB25C59EB2002BF55B /* CourseAppWidget.intentdefinition */,
 				A4CEC6DC25C59EB5002BF55B /* Assets.xcassets */,
@@ -243,7 +254,7 @@
 		97C146E61CF9000F007C117D /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
-				LastSwiftUpdateCheck = 1230;
+				LastSwiftUpdateCheck = 2600;
 				LastUpgradeCheck = 1510;
 				ORGANIZATIONNAME = "";
 				TargetAttributes = {
@@ -409,7 +420,6 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				A4CEC6E025C59EB5002BF55B /* CourseAppWidget.intentdefinition in Sources */,
 				74858FAF1ED2DC5600515810 /* AppDelegate.swift in Sources */,
 				A4CEC6EB25C59EED002BF55B /* CourseData.swift in Sources */,
 				1498D2341E8E89220040F4C2 /* GeneratedPluginRegistrant.m in Sources */,
@@ -420,6 +430,10 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				A4EE47FB2F8271050060D998 /* StudentIdWidget.swift in Sources */,
+				A4EE47FC2F8271050060D998 /* CountdownWidget.swift in Sources */,
+				A4EE47FD2F8271050060D998 /* TodayScheduleWidget.swift in Sources */,
+				A4EE47FF2F8271050060D998 /* CourseTableWidget.swift in Sources */,
 				A4CEC6DF25C59EB5002BF55B /* CourseAppWidget.intentdefinition in Sources */,
 				A4CEC6DA25C59EB2002BF55B /* CourseAppWidget.swift in Sources */,
 				A4CEC6ED25C5A02F002BF55B /* CourseData.swift in Sources */,
@@ -497,7 +511,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 12.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 13.0;
 				MTL_ENABLE_DEBUG_INFO = NO;
 				SDKROOT = iphoneos;
 				SUPPORTED_PLATFORMS = iphoneos;
@@ -524,7 +538,7 @@
 					"$(PROJECT_DIR)/Flutter",
 				);
 				INFOPLIST_FILE = Runner/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 12.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 14.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -589,7 +603,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 12.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 13.0;
 				MTL_ENABLE_DEBUG_INFO = YES;
 				ONLY_ACTIVE_ARCH = YES;
 				SDKROOT = iphoneos;
@@ -638,7 +652,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 12.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 13.0;
 				MTL_ENABLE_DEBUG_INFO = NO;
 				SDKROOT = iphoneos;
 				SUPPORTED_PLATFORMS = iphoneos;
@@ -667,7 +681,7 @@
 					"$(PROJECT_DIR)/Flutter",
 				);
 				INFOPLIST_FILE = Runner/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 12.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 14.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -704,7 +718,7 @@
 					"$(PROJECT_DIR)/Flutter",
 				);
 				INFOPLIST_FILE = Runner/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 12.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 14.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
