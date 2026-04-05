@@ -50,8 +50,10 @@ struct TodayScheduleProvider: TimelineProvider {
                 let endDate = parseTime(tc.endTime)
                 items.append(ScheduleItem(
                     title: course.title,
+                    code: course.code,
                     startTime: tc.startTime,
                     endTime: tc.endTime,
+                    timeIndex: st.index,
                     location: locationText(course.location),
                     color: courseColor(course.code),
                     isPast: now > endDate
@@ -63,13 +65,15 @@ struct TodayScheduleProvider: TimelineProvider {
         var merged: [ScheduleItem] = []
         for item in sorted {
             if let last = merged.last,
-               last.title == item.title,
-               last.endTime == item.startTime
+               last.code == item.code,
+               item.timeIndex == last.timeIndex + 1
             {
                 merged[merged.count - 1] = ScheduleItem(
                     title: last.title,
+                    code: last.code,
                     startTime: last.startTime,
                     endTime: item.endTime,
+                    timeIndex: item.timeIndex,
                     location: last.location,
                     color: last.color,
                     isPast: item.isPast
@@ -130,8 +134,10 @@ struct TodayScheduleEntry: TimelineEntry {
 
 struct ScheduleItem {
     let title: String
+    let code: String
     let startTime: String
     let endTime: String
+    let timeIndex: Int
     let location: String
     let color: Color
     let isPast: Bool

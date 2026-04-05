@@ -238,6 +238,7 @@ class TodayScheduleWidget : GlanceAppWidget() {
         val course: Course,
         val startTime: String,
         val endTime: String,
+        val timeIndex: Int,
         val isPast: Boolean,
     )
 
@@ -274,6 +275,7 @@ class TodayScheduleWidget : GlanceAppWidget() {
                         course = course,
                         startTime = tc.startTime,
                         endTime = tc.endTime,
+                        timeIndex = st.index,
                         isPast = currentMinutes > endMinutes,
                     )
                 )
@@ -287,7 +289,7 @@ class TodayScheduleWidget : GlanceAppWidget() {
             val last = merged.lastOrNull()
             if (last != null &&
                 last.course.code == item.course.code &&
-                last.endTime == item.startTime
+                item.timeIndex == last.timeIndex + 1
             ) {
                 merged[merged.lastIndex] = last.copy(
                     endTime = item.endTime,

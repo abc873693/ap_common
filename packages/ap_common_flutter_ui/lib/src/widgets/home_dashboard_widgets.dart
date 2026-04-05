@@ -67,8 +67,7 @@ class QuickInfoRow extends StatelessWidget {
             width: 36,
             height: 36,
             decoration: BoxDecoration(
-              color: (item.color ?? colorScheme.primary)
-                  .withAlpha(26),
+              color: (item.color ?? colorScheme.primary).withAlpha(26),
               borderRadius: BorderRadius.circular(10),
             ),
             child: Icon(
@@ -152,8 +151,7 @@ class TodayScheduleCard extends StatelessWidget {
   Widget build(BuildContext context) {
     final ColorScheme colorScheme = Theme.of(context).colorScheme;
     final int todayWeekday = DateTime.now().weekday;
-    final int tomorrowWeekday =
-        todayWeekday == 7 ? 1 : todayWeekday + 1;
+    final int tomorrowWeekday = todayWeekday == 7 ? 1 : todayWeekday + 1;
     List<_TodayItem> items = _getItemsForWeekday(todayWeekday);
     final bool isTomorrow = items.isEmpty;
     if (isTomorrow) {
@@ -235,8 +233,7 @@ class TodayScheduleCard extends StatelessWidget {
   }
 
   Widget _buildRow(ColorScheme colorScheme, _TodayItem item) {
-    final Color barColor =
-        courseColors[item.colorIndex % courseColors.length];
+    final Color barColor = courseColors[item.colorIndex % courseColors.length];
     final DateTime now = DateTime.now();
     final bool isPast = item.endMinutes < now.hour * 60 + now.minute;
 
@@ -245,29 +242,40 @@ class TodayScheduleCard extends StatelessWidget {
         // Time
         SizedBox(
           width: 44,
-          child: Text(
-            item.startTime,
-            style: TextStyle(
-              fontSize: 13,
-              fontWeight: FontWeight.w600,
-              color: isPast
-                  ? colorScheme.onSurfaceVariant
-                  : colorScheme.onSurface,
-            ),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.end,
+            children: <Widget>[
+              Text(
+                item.startTime,
+                style: TextStyle(
+                  fontSize: 13,
+                  fontWeight: FontWeight.w600,
+                  color: isPast
+                      ? colorScheme.onSurfaceVariant
+                      : colorScheme.onSurface,
+                ),
+              ),
+              Text(
+                item.endTime,
+                style: TextStyle(
+                  fontSize: 10,
+                  color: colorScheme.onSurfaceVariant,
+                ),
+              ),
+            ],
           ),
         ),
+        const SizedBox(width: 8),
         // Color bar
         Container(
           width: 3,
           height: 28,
           decoration: BoxDecoration(
-            color: isPast
-                ? colorScheme.outlineVariant
-                : barColor,
+            color: isPast ? colorScheme.outlineVariant : barColor,
             borderRadius: BorderRadius.circular(2),
           ),
         ),
-        const SizedBox(width: 10),
+        const SizedBox(width: 8),
         // Info
         Expanded(
           child: Column(
@@ -322,13 +330,15 @@ class TodayScheduleCard extends StatelessWidget {
                 tc.endTime.substring(0, 2),
                 tc.endTime.substring(2),
               ];
-        final int endMinutes =
-            (int.tryParse(endParts[0]) ?? 0) * 60 +
-                (int.tryParse(endParts[1]) ?? 0);
+        final int endMinutes = (int.tryParse(endParts[0]) ?? 0) * 60 +
+            (int.tryParse(endParts[1]) ?? 0);
 
         items.add(_TodayItem(
           title: course.title,
+          code: course.code,
           startTime: tc.startTime,
+          endTime: tc.endTime,
+          timeIndex: st.index,
           location: course.location?.toString() ?? '',
           endMinutes: endMinutes,
           colorIndex: colorMap[course.code]!,
@@ -336,24 +346,50 @@ class TodayScheduleCard extends StatelessWidget {
       }
     }
     items.sort(
-      (_TodayItem a, _TodayItem b) =>
-          a.startTime.compareTo(b.startTime),
+      (_TodayItem a, _TodayItem b) => a.startTime.compareTo(b.startTime),
     );
-    return items;
+    // Merge consecutive slots of the same course.
+    final List<_TodayItem> merged = <_TodayItem>[];
+    for (final _TodayItem item in items) {
+      if (merged.isNotEmpty &&
+          merged.last.code == item.code &&
+          item.timeIndex == merged.last.timeIndex + 1) {
+        final _TodayItem last = merged.last;
+        merged[merged.length - 1] = _TodayItem(
+          title: last.title,
+          code: last.code,
+          startTime: last.startTime,
+          endTime: item.endTime,
+          timeIndex: item.timeIndex,
+          location: last.location,
+          endMinutes: item.endMinutes,
+          colorIndex: last.colorIndex,
+        );
+      } else {
+        merged.add(item);
+      }
+    }
+    return merged;
   }
 }
 
 class _TodayItem {
   const _TodayItem({
     required this.title,
+    required this.code,
     required this.startTime,
+    required this.endTime,
+    required this.timeIndex,
     required this.location,
     required this.endMinutes,
     required this.colorIndex,
   });
 
   final String title;
+  final String code;
   final String startTime;
+  final String endTime;
+  final int timeIndex;
   final String location;
   final int endMinutes;
   final int colorIndex;
