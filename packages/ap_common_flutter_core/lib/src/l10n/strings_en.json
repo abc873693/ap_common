@@ -456,5 +456,9 @@
   "untilNextClass": "until next class",
   "classesToday": "classes today",
   "noClassToday": "No class today",
-  "tomorrowScheduleTitle": "Tomorrow's Schedule"
+  "tomorrowScheduleTitle": "Tomorrow's Schedule",
+  "schoolYearFormat": "$arg1 Academic Year",
+  "unitCountFormat": "$arg1 Credits",
+  "midtermPrefix": "Midterm: $arg1",
+  "noClassAlready": "No more classes today"
 }

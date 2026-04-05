@@ -456,5 +456,9 @@
   "untilNextClass": "分鐘後上課",
   "classesToday": "堂課",
   "noClassToday": "今天沒有課",
-  "tomorrowScheduleTitle": "明日課表"
+  "tomorrowScheduleTitle": "明日課表",
+  "schoolYearFormat": "$arg1 學年度",
+  "unitCountFormat": "$arg1 學分",
+  "midtermPrefix": "期中: $arg1",
+  "noClassAlready": "今天已經沒有課了"
 }

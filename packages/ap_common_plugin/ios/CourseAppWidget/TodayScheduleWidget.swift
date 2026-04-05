@@ -164,7 +164,7 @@ struct TodayScheduleView: View {
     var body: some View {
         VStack(spacing: 0) {
             // Header
-            Text("今日課表 (\(weekdayName()))")
+            Text("\(NSLocalizedString("today_schedule", comment: "")) (\(weekdayName()))")
                 .font(.system(size: 13, weight: .bold))
                 .foregroundColor(.white)
                 .frame(maxWidth: .infinity)
@@ -173,7 +173,7 @@ struct TodayScheduleView: View {
 
             if entry.items.isEmpty {
                 Spacer()
-                Text("太好了今天沒有任何課")
+                Text(NSLocalizedString("today_no_course", comment: ""))
                     .font(.caption)
                     .foregroundColor(.secondary)
                 Spacer()
@@ -235,7 +235,15 @@ struct TodayScheduleView: View {
     }
 
     private func weekdayName() -> String {
-        let labels = ["日", "一", "二", "三", "四", "五", "六"]
+        let labels = [
+            NSLocalizedString("weekday_sun", comment: ""),
+            NSLocalizedString("weekday_mon", comment: ""),
+            NSLocalizedString("weekday_tue", comment: ""),
+            NSLocalizedString("weekday_wed", comment: ""),
+            NSLocalizedString("weekday_thu", comment: ""),
+            NSLocalizedString("weekday_fri", comment: ""),
+            NSLocalizedString("weekday_sat", comment: ""),
+        ]
         let wd = Calendar.current.component(.weekday, from: Date())
         return labels[wd - 1]
     }
@@ -253,8 +261,8 @@ struct TodayScheduleWidget: Widget {
         ) { entry in
             TodayScheduleView(entry: entry)
         }
-        .configurationDisplayName("今日課表")
-        .description("顯示今天的課程行程")
+        .configurationDisplayName(NSLocalizedString("today_schedule_display", comment: ""))
+        .description(NSLocalizedString("today_schedule_description", comment: ""))
         .supportedFamilies([.systemMedium, .systemLarge])
         .disableContentMarginsIfNeeded()
     }

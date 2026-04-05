@@ -102,7 +102,15 @@ struct CourseTableView: View {
             : Color(red: 0.46, green: 0.46, blue: 0.50)
     }
 
-    private let weekdayLabels = ["一", "二", "三", "四", "五", "六", "日"]
+    private let weekdayLabels = [
+        NSLocalizedString("weekday_mon", comment: ""),
+        NSLocalizedString("weekday_tue", comment: ""),
+        NSLocalizedString("weekday_wed", comment: ""),
+        NSLocalizedString("weekday_thu", comment: ""),
+        NSLocalizedString("weekday_fri", comment: ""),
+        NSLocalizedString("weekday_sat", comment: ""),
+        NSLocalizedString("weekday_sun", comment: ""),
+    ]
     private let weekdayLabelsEn = [
         "Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun",
     ]
@@ -113,7 +121,7 @@ struct CourseTableView: View {
                 .widgetBackground(surfaceColor)
         } else {
             VStack {
-                Text("尚無課程資料")
+                Text(NSLocalizedString("not_load_course_table", comment: ""))
                     .foregroundColor(secondaryText)
                     .font(.caption)
             }
@@ -457,8 +465,8 @@ struct CourseTableWidget: Widget {
         ) { entry in
             CourseTableView(courseData: entry.courseData)
         }
-        .configurationDisplayName("學期課表")
-        .description("顯示每週課表")
+        .configurationDisplayName(NSLocalizedString("course_table_display", comment: ""))
+        .description(NSLocalizedString("course_table_description", comment: ""))
         .supportedFamiliesForTable()
         .disableContentMarginsIfNeeded()
     }

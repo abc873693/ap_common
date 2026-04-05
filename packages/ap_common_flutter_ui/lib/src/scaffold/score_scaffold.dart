@@ -103,7 +103,7 @@ class ScoreScaffoldState extends State<ScoreScaffold> {
   bool get isLandscape =>
       MediaQuery.of(context).orientation == Orientation.landscape;
 
-  bool _isAnalysisView = false;
+  bool _isAnalysisView = true;
   late ScrollController _scrollController;
   bool _showFab = true;
 
@@ -510,13 +510,20 @@ class _ScoreListTab extends StatelessWidget {
         padding: const EdgeInsets.all(16),
         itemCount: scoreData.scores.length,
         itemBuilder: (BuildContext context, int index) {
-          return _buildScoreItem(colorScheme, scoreData.scores[index], index);
+          return _buildScoreItem(
+            context, colorScheme, scoreData.scores[index], index,
+          );
         },
       ),
     );
   }
 
-  Widget _buildScoreItem(ColorScheme colorScheme, Score score, int index) {
+  Widget _buildScoreItem(
+    BuildContext context,
+    ColorScheme colorScheme,
+    Score score,
+    int index,
+  ) {
     final double? scoreValue = _parseScore(score.semesterScore);
     final bool isPassed = scoreValue != null && scoreValue >= 60;
     final Color scoreColor = scoreValue == null
@@ -574,7 +581,9 @@ class _ScoreListTab extends StatelessWidget {
                         ),
                         const SizedBox(width: 8),
                         Text(
-                          '${score.units} 學分',
+                          context.ap.unitCountFormat(
+                            arg1: score.units,
+                          ),
                           style: TextStyle(
                             fontSize: 12,
                             color: colorScheme.onSurfaceVariant,
@@ -601,7 +610,9 @@ class _ScoreListTab extends StatelessWidget {
                       score.middleScore != null &&
                       score.middleScore!.isNotEmpty)
                     Text(
-                      '期中: ${score.middleScore}',
+                      context.ap.midtermPrefix(
+                        arg1: score.middleScore!,
+                      ),
                       style: TextStyle(
                         fontSize: 11,
                         color: colorScheme.onSurfaceVariant,
@@ -676,8 +687,7 @@ class _ScoreListTab extends StatelessWidget {
           ),
         ),
         Text(
-          ScoreAnalysis.scoreToGradePoint(scoreValue)
-              .toStringAsFixed(1),
+          ScoreAnalysis.scoreToGradePoint(scoreValue).toStringAsFixed(1),
           style: TextStyle(
             fontSize: 11,
             color: colorScheme.onSurfaceVariant,
@@ -780,9 +790,9 @@ class _ScoreAnalysisTab extends StatelessWidget {
           children: <Widget>[
             _buildMainSummaryCard(colorScheme, context.ap, analysis),
             const SizedBox(height: 16),
-            ScoreGPACard(analysis: analysis),
-            const SizedBox(height: 16),
             ScorePRCard(analysis: analysis),
+            const SizedBox(height: 16),
+            ScoreGPACard(analysis: analysis),
             const SizedBox(height: 16),
             ScoreStatisticsCard(analysis: analysis),
             const SizedBox(height: 16),
@@ -944,8 +954,7 @@ class ScoreAnalysis {
   ScoreAnalysis(this.scoreData) {
     _scores = <double>[];
     for (final Score score in scoreData.scores) {
-      final double? value =
-          _ScoreListTab._parseScore(score.semesterScore);
+      final double? value = _ScoreListTab._parseScore(score.semesterScore);
       if (value != null) {
         _scores.add(value);
       }
@@ -992,13 +1001,15 @@ class ScoreAnalysis {
     return 5;
   }
 
+  /// Use [ApLocalizations.prLevelTop] etc. for localized values.
+  @Deprecated('Use context.ap.prLevelTop/Excellent/Average instead')
   String get prLevel {
     final int pr = estimatedPR;
-    if (pr >= 90) return '頂尖';
-    if (pr >= 75) return '優秀';
-    if (pr >= 50) return '中等';
-    if (pr >= 25) return '待加強';
-    return '需努力';
+    if (pr >= 90) return 'Top';
+    if (pr >= 75) return 'Excellent';
+    if (pr >= 50) return 'Average';
+    if (pr >= 25) return 'Below Average';
+    return 'Needs Improvement';
   }
 
   Map<String, int> get distribution {
@@ -1039,8 +1050,7 @@ class ScoreAnalysis {
   double get passedCredits {
     double credits = 0;
     for (final Score score in scoreData.scores) {
-      final double? scoreValue =
-          _ScoreListTab._parseScore(score.semesterScore);
+      final double? scoreValue = _ScoreListTab._parseScore(score.semesterScore);
       final double? unit = double.tryParse(score.units);
       if (scoreValue != null && scoreValue >= 60 && unit != null) {
         credits += unit;
@@ -1052,8 +1062,7 @@ class ScoreAnalysis {
   double get failedCredits {
     double credits = 0;
     for (final Score score in scoreData.scores) {
-      final double? scoreValue =
-          _ScoreListTab._parseScore(score.semesterScore);
+      final double? scoreValue = _ScoreListTab._parseScore(score.semesterScore);
       final double? unit = double.tryParse(score.units);
       if (scoreValue != null && scoreValue < 60 && unit != null) {
         credits += unit;
@@ -1100,8 +1109,7 @@ class ScoreAnalysis {
     double totalWeighted = 0;
     double totalUnits = 0;
     for (final Score score in scoreData.scores) {
-      final double? scoreValue =
-          _ScoreListTab._parseScore(score.semesterScore);
+      final double? scoreValue = _ScoreListTab._parseScore(score.semesterScore);
       final double? unit = double.tryParse(score.units);
       if (scoreValue != null && unit != null && unit > 0) {
         totalWeighted += scoreToGradePoint(scoreValue) * unit;

@@ -136,7 +136,7 @@ struct CountdownView: View {
                 Text("\(r.minutesLeft)")
                     .font(.system(size: 40, weight: .bold))
                     .foregroundColor(accent)
-                Text("分鐘後上課")
+                Text(NSLocalizedString("minutes_until", comment: ""))
                     .font(.system(size: 11))
                     .foregroundColor(.secondary)
                 Spacer().frame(height: 4)
@@ -150,7 +150,7 @@ struct CountdownView: View {
             } else {
                 Text("🎉")
                     .font(.system(size: 28))
-                Text("今天已經沒有任何課")
+                Text(NSLocalizedString("today_no_course_already", comment: ""))
                     .font(.system(size: 12))
                     .foregroundColor(.secondary)
                     .multilineTextAlignment(.center)
@@ -192,8 +192,8 @@ struct CountdownCourseWidget: Widget {
         ) { entry in
             CountdownView(entry: entry)
         }
-        .configurationDisplayName("上課倒數")
-        .description("距離下一堂課的倒數計時")
+        .configurationDisplayName(NSLocalizedString("countdown_title", comment: ""))
+        .description(NSLocalizedString("countdown_description", comment: ""))
         .countdownFamilies()
         .disableContentMarginsIfNeeded()
     }

@@ -1,0 +1,40 @@
+/* Course Hint Widget */
+"course_hint" = "Course Hint";
+"today_no_course" = "Good! No class today";
+"today_no_course_already" = "No more classes today";
+"not_load_course_table" = "No course data yet";
+"course_hint_content_format" = "Next class at %@\nin %@ for %@";
+
+/* Course Table Widget */
+"course_table" = "Course Table";
+
+/* Today Schedule Widget */
+"today_schedule" = "Today";
+
+/* Countdown Widget */
+"minutes_until" = "min until next class";
+"countdown_title" = "Countdown";
+"countdown_description" = "Countdown to next class";
+
+/* Student ID Widget */
+"student_id_card" = "Student ID";
+"not_login_hint" = "Please login first";
+"barcode_library_hint" = "Use this barcode for library services";
+"student_id_description" = "Show student ID with barcode";
+
+/* Weekday Labels */
+"weekday_mon" = "Mon";
+"weekday_tue" = "Tue";
+"weekday_wed" = "Wed";
+"weekday_thu" = "Thu";
+"weekday_fri" = "Fri";
+"weekday_sat" = "Sat";
+"weekday_sun" = "Sun";
+
+/* Widget Display Names */
+"course_hint_display" = "Course Hint";
+"course_hint_description" = "Show the next course of today";
+"course_table_display" = "Course Table";
+"course_table_description" = "Show the weekly course table";
+"today_schedule_display" = "Today's Schedule";
+"today_schedule_description" = "Show today's course schedule";

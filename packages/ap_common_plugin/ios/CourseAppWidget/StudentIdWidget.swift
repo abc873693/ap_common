@@ -72,7 +72,7 @@ struct StudentIdView: View {
     var body: some View {
         VStack(spacing: 0) {
             // Header
-            Text("學生證")
+            Text(NSLocalizedString("student_id_card", comment: ""))
                 .font(.system(size: 13, weight: .bold))
                 .foregroundColor(.white)
                 .frame(maxWidth: .infinity)
@@ -83,7 +83,7 @@ struct StudentIdView: View {
                 infoContent(info)
             } else {
                 Spacer()
-                Text("請先登入")
+                Text(NSLocalizedString("not_login_hint", comment: ""))
                     .font(.caption)
                     .foregroundColor(.secondary)
                 Spacer()
@@ -129,7 +129,7 @@ struct StudentIdView: View {
                     .frame(height: 40)
             }
 
-            Text("可持本條碼於圖書館借書")
+            Text(NSLocalizedString("barcode_library_hint", comment: ""))
                 .font(.system(size: 9))
                 .foregroundColor(.secondary)
             Spacer().frame(height: 4)
@@ -165,8 +165,8 @@ struct StudentIdCardWidget: Widget {
         ) { entry in
             StudentIdView(entry: entry)
         }
-        .configurationDisplayName("學生證")
-        .description("顯示學號與條碼")
+        .configurationDisplayName(NSLocalizedString("student_id_card", comment: ""))
+        .description(NSLocalizedString("student_id_description", comment: ""))
         .supportedFamilies([.systemMedium])
         .disableContentMarginsIfNeeded()
     }

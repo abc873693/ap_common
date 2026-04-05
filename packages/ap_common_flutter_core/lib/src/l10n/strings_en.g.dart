@@ -176,7 +176,7 @@ class ApLocalizations with BaseTranslations<AppLocale, ApLocalizations> {
 	/// en: 'Oops! No buses available now~ Please choose another one.'
 	String get busEmpty => 'Oops! No buses available now~\nPlease choose another one.';
 
-	/// en: 'Oops! No any classes in this semester~ Please choose another one. 😋'
+	/// en: 'Oops! No classes in this semester~ Please choose another one. 😋'
 	String get courseEmpty => 'Oops! No classes in this semester~\nPlease choose another one. 😋';
 
 	/// en: 'OK'
@@ -1268,7 +1268,7 @@ class ApLocalizations with BaseTranslations<AppLocale, ApLocalizations> {
 	/// en: '※ PR is estimated based on average score, for reference only'
 	String get prDisclaimer => '※ PR is estimated based on average score, for reference only';
 
-	/// en: '{arg1} subjects'
+	/// en: '$arg1 subjects'
 	String subjectCountUnit({required Object arg1}) => '${arg1} subjects';
 
 	/// en: '90-100 (Excellent)'
@@ -1394,13 +1394,13 @@ class ApLocalizations with BaseTranslations<AppLocale, ApLocalizations> {
 	/// en: 'Please select at least one time slot'
 	String get timeslotRequired => 'Please select at least one time slot';
 
-	/// en: 'This time slot conflicts with: {arg1}'
+	/// en: 'This time slot conflicts with: $arg1'
 	String timeslotConflict({required Object arg1}) => 'This time slot conflicts with: ${arg1}';
 
 	/// en: 'Custom'
 	String get customCourse => 'Custom';
 
-	/// en: 'Today\'s Schedule'
+	/// en: 'Today's Schedule'
 	String get todayScheduleTitle => 'Today\'s Schedule';
 
 	/// en: 'until next class'
@@ -1412,8 +1412,20 @@ class ApLocalizations with BaseTranslations<AppLocale, ApLocalizations> {
 	/// en: 'No class today'
 	String get noClassToday => 'No class today';
 
-	/// en: 'Tomorrow\'s Schedule'
+	/// en: 'Tomorrow's Schedule'
 	String get tomorrowScheduleTitle => 'Tomorrow\'s Schedule';
+
+	/// en: '$arg1 Academic Year'
+	String schoolYearFormat({required Object arg1}) => '${arg1} Academic Year';
+
+	/// en: '$arg1 Credits'
+	String unitCountFormat({required Object arg1}) => '${arg1} Credits';
+
+	/// en: 'Midterm: $arg1'
+	String midtermPrefix({required Object arg1}) => 'Midterm: ${arg1}';
+
+	/// en: 'No more classes today'
+	String get noClassAlready => 'No more classes today';
 }
 
 /// The flat map containing all translations for locale <en>.
@@ -1882,6 +1894,10 @@ extension on ApLocalizations {
 			'classesToday' => 'classes today',
 			'noClassToday' => 'No class today',
 			'tomorrowScheduleTitle' => 'Tomorrow\'s Schedule',
+			'schoolYearFormat' => ({required Object arg1}) => '${arg1} Academic Year',
+			'unitCountFormat' => ({required Object arg1}) => '${arg1} Credits',
+			'midtermPrefix' => ({required Object arg1}) => 'Midterm: ${arg1}',
+			'noClassAlready' => 'No more classes today',
 			_ => null,
 		};
 	}

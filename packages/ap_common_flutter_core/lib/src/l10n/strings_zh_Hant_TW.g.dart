@@ -448,7 +448,7 @@ class ApLocalizationsZhHantTw extends ApLocalizations with BaseTranslations<AppL
 	@override String get prLevelNeedEffort => '需努力';
 	@override String get estimatedPR => '估計 PR 值';
 	@override String get prDisclaimer => '※ PR 值為根據平均成績估算，僅供參考';
-	@override String subjectCountUnit({required Object arg1}) => '$arg1 科';
+	@override String subjectCountUnit({required Object arg1}) => '${arg1} 科';
 	@override String get distributionExcellent => '90-100 (優秀)';
 	@override String get distributionGood => '80-89 (良好)';
 	@override String get distributionAverage => '70-79 (普通)';
@@ -490,13 +490,17 @@ class ApLocalizationsZhHantTw extends ApLocalizations with BaseTranslations<AppL
 	@override String get deleteCourseSuccess => '課程已刪除';
 	@override String get courseNameRequired => '請輸入課程名稱';
 	@override String get timeslotRequired => '請至少選擇一個上課時段';
-	@override String timeslotConflict({required Object arg1}) => '此時段與「$arg1」衝突';
+	@override String timeslotConflict({required Object arg1}) => '此時段與「${arg1}」衝突';
 	@override String get customCourse => '自訂';
 	@override String get todayScheduleTitle => '今日課表';
 	@override String get untilNextClass => '分鐘後上課';
 	@override String get classesToday => '堂課';
 	@override String get noClassToday => '今天沒有課';
 	@override String get tomorrowScheduleTitle => '明日課表';
+	@override String schoolYearFormat({required Object arg1}) => '${arg1} 學年度';
+	@override String unitCountFormat({required Object arg1}) => '${arg1} 學分';
+	@override String midtermPrefix({required Object arg1}) => '期中: ${arg1}';
+	@override String get noClassAlready => '今天已經沒有課了';
 }
 
 /// The flat map containing all translations for locale <zh-Hant-TW>.
@@ -916,7 +920,7 @@ extension on ApLocalizationsZhHantTw {
 			'prLevelNeedEffort' => '需努力',
 			'estimatedPR' => '估計 PR 值',
 			'prDisclaimer' => '※ PR 值為根據平均成績估算，僅供參考',
-			'subjectCountUnit' => ({required Object arg1}) => '$arg1 科',
+			'subjectCountUnit' => ({required Object arg1}) => '${arg1} 科',
 			'distributionExcellent' => '90-100 (優秀)',
 			'distributionGood' => '80-89 (良好)',
 			'distributionAverage' => '70-79 (普通)',
@@ -958,13 +962,17 @@ extension on ApLocalizationsZhHantTw {
 			'deleteCourseSuccess' => '課程已刪除',
 			'courseNameRequired' => '請輸入課程名稱',
 			'timeslotRequired' => '請至少選擇一個上課時段',
-			'timeslotConflict' => ({required Object arg1}) => '此時段與「$arg1」衝突',
+			'timeslotConflict' => ({required Object arg1}) => '此時段與「${arg1}」衝突',
 			'customCourse' => '自訂',
 			'todayScheduleTitle' => '今日課表',
 			'untilNextClass' => '分鐘後上課',
 			'classesToday' => '堂課',
 			'noClassToday' => '今天沒有課',
 			'tomorrowScheduleTitle' => '明日課表',
+			'schoolYearFormat' => ({required Object arg1}) => '${arg1} 學年度',
+			'unitCountFormat' => ({required Object arg1}) => '${arg1} 學分',
+			'midtermPrefix' => ({required Object arg1}) => '期中: ${arg1}',
+			'noClassAlready' => '今天已經沒有課了',
 			_ => null,
 		};
 	}

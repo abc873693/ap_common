@@ -280,7 +280,7 @@ class SemesterPicker extends StatefulWidget {
                   borderRadius: BorderRadius.circular(8),
                 ),
                 child: Text(
-                  '$year 學年度',
+                  context.ap.schoolYearFormat(arg1: year),
                   style: TextStyle(
                     fontSize: 14,
                     fontWeight: FontWeight.bold,
