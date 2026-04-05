@@ -70,7 +70,11 @@ class ScorePageState extends State<ScorePage> {
 
   Future<void> _getSemesterScore() async {
     try {
-      final String rawString = await rootBundle.loadString(FileAssets.scores);
+      // Use GPA data for odd-indexed semesters to demo both types
+      final bool useGpa = (semesterData?.currentIndex ?? 0).isOdd;
+      final String assetPath =
+          useGpa ? FileAssets.scoresGpa : FileAssets.scores;
+      final String rawString = await rootBundle.loadString(assetPath);
       scoreData = ScoreData.fromRawJson(rawString);
       if (mounted) {
         setState(() {

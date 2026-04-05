@@ -1,0 +1,88 @@
+{
+    "scores": [
+        {
+            "title": "Financial Management",
+            "units": "3.0",
+            "hours": "3.0",
+            "required": "【必修】",
+            "at": "【學期】",
+            "middleScore": "B+",
+            "semesterScore": "B",
+            "remark": ""
+        },
+        {
+            "title": "Statistics II",
+            "units": "3.0",
+            "hours": "3.0",
+            "required": "【必修】",
+            "at": "【學期】",
+            "middleScore": "C+",
+            "semesterScore": "C+",
+            "remark": ""
+        },
+        {
+            "title": "Calculus II",
+            "units": "3.0",
+            "hours": "3.0",
+            "required": "【必修】",
+            "at": "【學期】",
+            "middleScore": "C",
+            "semesterScore": "C-",
+            "remark": ""
+        },
+        {
+            "title": "Capstone Project II",
+            "units": "1.0",
+            "hours": "3.0",
+            "required": "【必修】",
+            "at": "【學期】",
+            "middleScore": "A+",
+            "semesterScore": "A+",
+            "remark": ""
+        },
+        {
+            "title": "Management Information Systems",
+            "units": "3.0",
+            "hours": "3.0",
+            "required": "【必修】",
+            "at": "【學期】",
+            "middleScore": "A-",
+            "semesterScore": "A-",
+            "remark": ""
+        },
+        {
+            "title": "Advanced English Speaking",
+            "units": "3.0",
+            "hours": "3.0",
+            "required": "【選修】",
+            "at": "【學期】",
+            "middleScore": "A",
+            "semesterScore": "A",
+            "remark": ""
+        },
+        {
+            "title": "Python Programming",
+            "units": "3.0",
+            "hours": "3.0",
+            "required": "【選修】",
+            "at": "【學期】",
+            "middleScore": "A+",
+            "semesterScore": "A+",
+            "remark": ""
+        },
+        {
+            "title": "Physical Education IV",
+            "units": "0",
+            "hours": "2.0",
+            "required": "【必修】",
+            "at": "【學期】",
+            "middleScore": "",
+            "semesterScore": "B-",
+            "remark": ""
+        }
+    ],
+    "detail": {
+        "conduct": 82.0,
+        "average": null
+    }
+}

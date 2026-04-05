@@ -510,8 +510,7 @@ class _ScoreListTab extends StatelessWidget {
   }
 
   Widget _buildScoreItem(ColorScheme colorScheme, Score score, int index) {
-    final String scoreStr = score.semesterScore ?? '';
-    final double? scoreValue = double.tryParse(scoreStr);
+    final double? scoreValue = _parseScore(score.semesterScore);
     final bool isPassed = scoreValue != null && scoreValue >= 60;
     final Color scoreColor = scoreValue == null
         ? colorScheme.onSurfaceVariant
@@ -583,13 +582,11 @@ class _ScoreListTab extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.end,
                 children: <Widget>[
                   if (finalScoreBuilder == null)
-                    Text(
-                      score.semesterScore ?? '-',
-                      style: TextStyle(
-                        fontSize: 24,
-                        fontWeight: FontWeight.bold,
-                        color: scoreColor,
-                      ),
+                    ..._buildScoreDisplay(
+                      colorScheme,
+                      score,
+                      scoreValue,
+                      scoreColor,
                     ),
                   if (finalScoreBuilder != null) finalScoreBuilder!(index),
                   const SizedBox(height: 4),
@@ -613,12 +610,120 @@ class _ScoreListTab extends StatelessWidget {
     );
   }
 
+  /// Build the score display based on data type.
+  /// - Numeric scores (e.g. "90") → show number + converted letter grade
+  /// - Letter grades (e.g. "A+") → show letter + converted grade point
+  List<Widget> _buildScoreDisplay(
+    ColorScheme colorScheme,
+    Score score,
+    double? scoreValue,
+    Color scoreColor,
+  ) {
+    final String raw = score.semesterScore ?? '-';
+    final bool isNumeric = double.tryParse(raw) != null;
+
+    if (scoreValue == null) {
+      // Cannot parse at all — show raw string
+      return <Widget>[
+        Text(
+          raw,
+          style: TextStyle(
+            fontSize: 24,
+            fontWeight: FontWeight.bold,
+            color: scoreColor,
+          ),
+        ),
+      ];
+    }
+
+    if (isNumeric) {
+      // Data source is numeric → show number as primary,
+      // letter grade as secondary
+      return <Widget>[
+        Text(
+          raw,
+          style: TextStyle(
+            fontSize: 24,
+            fontWeight: FontWeight.bold,
+            color: scoreColor,
+          ),
+        ),
+        Text(
+          ScoreAnalysis.scoreToGradeLetter(scoreValue),
+          style: TextStyle(
+            fontSize: 11,
+            color: colorScheme.onSurfaceVariant,
+          ),
+        ),
+      ];
+    } else {
+      // Data source is letter grade → show letter as primary,
+      // grade point as secondary
+      return <Widget>[
+        Text(
+          raw,
+          style: TextStyle(
+            fontSize: 24,
+            fontWeight: FontWeight.bold,
+            color: scoreColor,
+          ),
+        ),
+        Text(
+          ScoreAnalysis.scoreToGradePoint(scoreValue)
+              .toStringAsFixed(1),
+          style: TextStyle(
+            fontSize: 11,
+            color: colorScheme.onSurfaceVariant,
+          ),
+        ),
+      ];
+    }
+  }
+
   Color _getScoreColor(double score) {
     if (score >= 90) return const Color(0xFF4CAF50);
     if (score >= 80) return const Color(0xFF8BC34A);
     if (score >= 70) return const Color(0xFF2196F3);
     if (score >= 60) return const Color(0xFFFF9800);
     return const Color(0xFFF44336);
+  }
+
+  /// Try to parse a score string as a number. If it's a letter grade
+  /// (A+, A, B+, B, etc.), convert it to an approximate numeric value
+  /// so we can compute color and pass/fail status.
+  static double? _parseScore(String? scoreStr) {
+    if (scoreStr == null || scoreStr.isEmpty) return null;
+    final double? numeric = double.tryParse(scoreStr);
+    if (numeric != null) return numeric;
+    // Letter grade → approximate numeric value
+    switch (scoreStr.trim().toUpperCase()) {
+      case 'A+':
+        return 95;
+      case 'A':
+        return 87;
+      case 'A-':
+        return 82;
+      case 'B+':
+        return 78;
+      case 'B':
+        return 75;
+      case 'B-':
+        return 72;
+      case 'C+':
+        return 68;
+      case 'C':
+        return 65;
+      case 'C-':
+        return 62;
+      case 'D':
+        return 55;
+      case 'E':
+        return 45;
+      case 'F':
+        return 30;
+      default:
+        return null;
+    }
   }
 
   Widget _buildTag(ColorScheme colorScheme, String text, Color color) {
@@ -832,7 +937,8 @@ class ScoreAnalysis {
   ScoreAnalysis(this.scoreData) {
     _scores = <double>[];
     for (final Score score in scoreData.scores) {
-      final double? value = double.tryParse(score.semesterScore ?? '');
+      final double? value =
+          _ScoreListTab._parseScore(score.semesterScore);
       if (value != null) {
         _scores.add(value);
       }
@@ -926,7 +1032,8 @@ class ScoreAnalysis {
   double get passedCredits {
     double credits = 0;
     for (final Score score in scoreData.scores) {
-      final double? scoreValue = double.tryParse(score.semesterScore ?? '');
+      final double? scoreValue =
+          _ScoreListTab._parseScore(score.semesterScore);
       final double? unit = double.tryParse(score.units);
       if (scoreValue != null && scoreValue >= 60 && unit != null) {
         credits += unit;
@@ -938,7 +1045,8 @@ class ScoreAnalysis {
   double get failedCredits {
     double credits = 0;
     for (final Score score in scoreData.scores) {
-      final double? scoreValue = double.tryParse(score.semesterScore ?? '');
+      final double? scoreValue =
+          _ScoreListTab._parseScore(score.semesterScore);
       final double? unit = double.tryParse(score.units);
       if (scoreValue != null && scoreValue < 60 && unit != null) {
         credits += unit;
@@ -986,7 +1094,7 @@ class ScoreAnalysis {
     double totalUnits = 0;
     for (final Score score in scoreData.scores) {
       final double? scoreValue =
-          double.tryParse(score.semesterScore ?? '');
+          _ScoreListTab._parseScore(score.semesterScore);
       final double? unit = double.tryParse(score.units);
       if (scoreValue != null && unit != null && unit > 0) {
         totalWeighted += scoreToGradePoint(scoreValue) * unit;
