@@ -280,6 +280,27 @@ class HomePageState extends State<HomePage> {
 
   List<Widget> _buildDashboardWidgets() {
     return <Widget>[
+      QuickInfoRow(
+        items: <QuickInfoItem>[
+          QuickInfoItem(
+            icon: Icons.bus_alert,
+            label: '已預約校車',
+            subtitle: '建工 -> 燕巢 17:00',
+            onTap: () {
+              ApUtils.pushCupertinoStyle(context, CoursePage());
+            },
+          ),
+          QuickInfoItem(
+            icon: Icons.newspaper_outlined,
+            label: '10',
+            subtitle: context.ap.news,
+            onTap: () {
+              ApUtils.pushCupertinoStyle(context, SchoolInfoPage());
+            },
+          ),
+        ],
+      ),
+      const SizedBox(height: 16),
       if (courseData != null)
         TodayScheduleCard(
           courseData: courseData!,

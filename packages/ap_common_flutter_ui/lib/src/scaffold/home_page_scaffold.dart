@@ -239,42 +239,42 @@ class HomePageScaffoldState extends State<HomePageScaffold> {
   Widget _buildDashboardLayout(Orientation orientation) {
     final bool isPortrait = orientation == Orientation.portrait;
 
-    // Compute carousel height responsive to screen size.
-    // Target: carousel occupies ~35% of available content height
-    // so dashboard content is visible on first screen.
-    final double carouselH;
-    if (widget.carouselHeight != null) {
-      carouselH = widget.carouselHeight!;
-    } else {
-      final double screenHeight = MediaQuery.of(context).size.height;
-      // Subtract AppBar(56) + BottomNav(56) + StatusBar(~44)
-      // + padding(32*2) + title+arrow+indicator(~80)
-      final double available = screenHeight - 56 - 56 - 44 - 64 - 80;
-      // Carousel takes ~50% of remaining space, clamp to
-      // reasonable range.
-      carouselH = isPortrait
-          ? (available * 0.5).clamp(150.0, 300.0)
-          : (available * 0.4).clamp(120.0, 200.0);
-    }
+    // Split available height 1:1 between dashboard widgets
+    // and announcement carousel.
+    final double screenHeight = MediaQuery.of(context).size.height;
+    // Subtract AppBar(56) + BottomNav(56) + StatusBar(~44)
+    // + spacing/indicators(~60)
+    final double available = screenHeight - 56 - 56 - 44 - 60;
+    final double halfH = widget.carouselHeight ??
+        (isPortrait
+            ? (available * 0.5).clamp(180.0, 350.0)
+            : (available * 0.5).clamp(120.0, 200.0));
 
     return ListView(
       padding: EdgeInsets.zero,
       children: <Widget>[
         // Dashboard widgets
-        ...widget.dashboardWidgets!,
-        const SizedBox(height: 12),
-        // Carousel section
-        _buildAnnouncementTitle(),
-        const Hero(
-          tag: ApConstants.tagAnnouncementIcon,
-          child: Icon(Icons.arrow_drop_down),
-        ),
         SizedBox(
-          height: carouselH,
-          child: _buildPageView(orientation),
+          height: halfH,
+          child: ListView(
+            padding: EdgeInsets.zero,
+            children: widget.dashboardWidgets!,
+          ),
         ),
-        const SizedBox(height: 4),
-        _buildPageIndicator(),
+        // Carousel section
+        SizedBox(
+          height: halfH,
+          child: Column(
+            children: <Widget>[
+              Expanded(
+                child: _buildPageView(orientation),
+              ),
+              _buildAnnouncementTitle(),
+              const SizedBox(height: 4),
+              _buildPageIndicator(),
+            ],
+          ),
+        ),
         SizedBox(
           height: isPortrait ? 16.0 : 8.0,
         ),
