@@ -1399,6 +1399,18 @@ class ApLocalizations with BaseTranslations<AppLocale, ApLocalizations> {
 
 	/// en: 'Custom'
 	String get customCourse => 'Custom';
+
+	/// en: 'Today\'s Schedule'
+	String get todayScheduleTitle => 'Today\'s Schedule';
+
+	/// en: 'until next class'
+	String get untilNextClass => 'until next class';
+
+	/// en: 'classes today'
+	String get classesToday => 'classes today';
+
+	/// en: 'No class today'
+	String get noClassToday => 'No class today';
 }
 
 /// The flat map containing all translations for locale <en>.
@@ -1862,6 +1874,10 @@ extension on ApLocalizations {
 			'timeslotRequired' => 'Please select at least one time slot',
 			'timeslotConflict' => ({required Object arg1}) => 'This time slot conflicts with: ${arg1}',
 			'customCourse' => 'Custom',
+			'todayScheduleTitle' => 'Today\'s Schedule',
+			'untilNextClass' => 'until next class',
+			'classesToday' => 'classes today',
+			'noClassToday' => 'No class today',
 			_ => null,
 		};
 	}

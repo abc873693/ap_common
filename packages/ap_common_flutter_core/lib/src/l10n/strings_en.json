@@ -451,5 +451,9 @@
   "courseNameRequired": "Please enter a course name",
   "timeslotRequired": "Please select at least one time slot",
   "timeslotConflict": "This time slot conflicts with: $arg1",
-  "customCourse": "Custom"
+  "customCourse": "Custom",
+  "todayScheduleTitle": "Today's Schedule",
+  "untilNextClass": "until next class",
+  "classesToday": "classes today",
+  "noClassToday": "No class today"
 }

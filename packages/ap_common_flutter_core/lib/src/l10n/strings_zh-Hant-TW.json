@@ -451,5 +451,9 @@
   "courseNameRequired": "請輸入課程名稱",
   "timeslotRequired": "請至少選擇一個上課時段",
   "timeslotConflict": "此時段與「$arg1」衝突",
-  "customCourse": "自訂"
+  "customCourse": "自訂",
+  "todayScheduleTitle": "今日課表",
+  "untilNextClass": "分鐘後上課",
+  "classesToday": "堂課",
+  "noClassToday": "今天沒有課"
 }

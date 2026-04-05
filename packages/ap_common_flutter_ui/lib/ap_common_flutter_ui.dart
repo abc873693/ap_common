@@ -30,6 +30,7 @@ export 'src/widgets/course_edit_sheet.dart';
 export 'src/widgets/default_dialog.dart';
 export 'src/widgets/dialog_option.dart';
 export 'src/widgets/hint_banner.dart';
+export 'src/widgets/home_dashboard_widgets.dart';
 export 'src/widgets/hint_content.dart';
 export 'src/widgets/info_row.dart';
 export 'src/widgets/item_picker.dart';

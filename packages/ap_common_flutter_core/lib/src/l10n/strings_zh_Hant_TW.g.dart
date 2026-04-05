@@ -492,6 +492,10 @@ class ApLocalizationsZhHantTw extends ApLocalizations with BaseTranslations<AppL
 	@override String get timeslotRequired => '請至少選擇一個上課時段';
 	@override String timeslotConflict({required Object arg1}) => '此時段與「$arg1」衝突';
 	@override String get customCourse => '自訂';
+	@override String get todayScheduleTitle => '今日課表';
+	@override String get untilNextClass => '分鐘後上課';
+	@override String get classesToday => '堂課';
+	@override String get noClassToday => '今天沒有課';
 }
 
 /// The flat map containing all translations for locale <zh-Hant-TW>.
@@ -955,6 +959,10 @@ extension on ApLocalizationsZhHantTw {
 			'timeslotRequired' => '請至少選擇一個上課時段',
 			'timeslotConflict' => ({required Object arg1}) => '此時段與「$arg1」衝突',
 			'customCourse' => '自訂',
+			'todayScheduleTitle' => '今日課表',
+			'untilNextClass' => '分鐘後上課',
+			'classesToday' => '堂課',
+			'noClassToday' => '今天沒有課',
 			_ => null,
 		};
 	}
