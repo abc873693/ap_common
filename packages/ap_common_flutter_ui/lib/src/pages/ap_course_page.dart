@@ -66,6 +66,8 @@ class _ApCoursePageState extends State<ApCoursePage> {
   DataState<CourseData> _state = const DataLoading<CourseData>();
   SemesterData? _semesterData;
   CourseNotifyData? _notifyData;
+  final SemesterPickerController _pickerController =
+      SemesterPickerController();
 
   /// API-fetched course data (before merging custom courses).
   CourseData? _apiCourseData;
@@ -86,6 +88,12 @@ class _ApCoursePageState extends State<ApCoursePage> {
     _loadSemesters();
   }
 
+  @override
+  void dispose() {
+    _pickerController.dispose();
+    super.dispose();
+  }
+
   Future<void> _loadSemesters() async {
     try {
       _semesterData = await widget.onLoadSemesters();
@@ -99,10 +107,10 @@ class _ApCoursePageState extends State<ApCoursePage> {
 
   Future<void> _loadCourse() async {
     if (_semesterData == null) return;
+    final Semester semester =
+        _semesterData!.data[_semesterData!.currentIndex];
     setState(() => _state = const DataLoading<CourseData>());
     try {
-      final Semester semester =
-          _semesterData!.data[_semesterData!.currentIndex];
       final CourseData courseData = await widget.onLoadCourse(semester);
       if (mounted) {
         _apiCourseData = courseData;
@@ -114,17 +122,20 @@ class _ApCoursePageState extends State<ApCoursePage> {
           if (courseData.courses.isEmpty &&
               _customCourseData.courses.isEmpty) {
             _state = const DataEmpty<CourseData>();
+            _pickerController.markSemesterEmpty(semester);
           } else {
             final CourseData merged =
                 courseData.mergeCustom(_customCourseData.courses);
             _state = DataLoaded<CourseData>(merged);
             _notifyData = CourseNotifyData.load(_notifyCacheKey);
             widget.onCourseLoaded?.call(merged);
+            _pickerController.markSemesterHasData(semester);
           }
         });
       }
     } catch (e) {
       if (mounted) {
+        _pickerController.markSemesterHasData(semester);
         setState(
           () => _state = DataError<CourseData>(hint: e.toString()),
         );
@@ -182,6 +193,7 @@ class _ApCoursePageState extends State<ApCoursePage> {
       showSectionTime: widget.showSectionTime,
       showInstructors: widget.showInstructors,
       showClassroomLocation: widget.showClassroomLocation,
+      semesterPickerController: _pickerController,
       onSelect: (int index) {
         _semesterData = _semesterData!.copyWith(currentIndex: index);
         _loadCourse();

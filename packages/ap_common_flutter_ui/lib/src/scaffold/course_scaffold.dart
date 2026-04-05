@@ -88,6 +88,7 @@ class CourseScaffold extends StatefulWidget {
     this.enableCustomCourse = false,
     this.customCourseData,
     this.onCustomCourseChanged,
+    this.semesterPickerController,
   });
 
   /// Creates a [CourseScaffold] from a [DataState<CourseData>].
@@ -127,6 +128,7 @@ class CourseScaffold extends StatefulWidget {
     this.enableCustomCourse = false,
     this.customCourseData,
     this.onCustomCourseChanged,
+    this.semesterPickerController,
   })  : state = dataState.when(
           loading: () => CourseState.loading,
           loaded: (_, __) => CourseState.finish,
@@ -178,6 +180,9 @@ class CourseScaffold extends StatefulWidget {
 
   /// Called when custom courses are added, edited, or deleted.
   final ValueChanged<CustomCourseData>? onCustomCourseChanged;
+
+  /// Optional controller for the semester picker.
+  final SemesterPickerController? semesterPickerController;
 
   @override
   CourseScaffoldState createState() => CourseScaffoldState();
@@ -298,6 +303,7 @@ class CourseScaffoldState extends State<CourseScaffold> {
                     widget.onSelect?.call(index);
                   },
                   featureTag: 'course',
+                  controller: widget.semesterPickerController,
                 ),
               ],
             ],
@@ -1127,6 +1133,7 @@ class CourseScaffoldState extends State<CourseScaffold> {
         onSelect: (Semester semester, int index) {
           widget.onSelect?.call(index);
         },
+        controller: widget.semesterPickerController,
       );
     }
     widget.onSearchButtonClick?.call();

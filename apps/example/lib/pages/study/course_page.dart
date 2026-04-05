@@ -25,6 +25,9 @@ class CoursePageState extends State<CoursePage> {
 
   String customStateHint = '';
 
+  final SemesterPickerController _pickerController =
+      SemesterPickerController();
+
   String get courseNotifyCacheKey => PreferenceUtil.instance.getString(
         ApConstants.currentSemesterCode,
         ApConstants.semesterLatest,
@@ -38,6 +41,7 @@ class CoursePageState extends State<CoursePage> {
 
   @override
   void dispose() {
+    _pickerController.dispose();
     super.dispose();
   }
 
@@ -53,6 +57,7 @@ class CoursePageState extends State<CoursePage> {
       androidResourceIcon: Constants.ANDROID_DEFAULT_NOTIFICATION_NAME,
       enableCaptureCourseTable: true,
       semesterData: semesterData,
+      semesterPickerController: _pickerController,
       onSelect: (int index) {
         semesterData = semesterData!.copyWith(currentIndex: index);
         _getCourseTables();
@@ -87,12 +92,16 @@ class CoursePageState extends State<CoursePage> {
       );
       courseData.save(courseNotifyCacheKey);
       if (mounted) {
+        final Semester semester =
+            semesterData!.data[semesterData!.currentIndex];
         setState(() {
           if (courseData.courses.isEmpty) {
             state = CourseState.empty;
+            _pickerController.markSemesterEmpty(semester);
           } else {
             state = CourseState.finish;
             notifyData = CourseNotifyData.load(courseNotifyCacheKey);
+            _pickerController.markSemesterHasData(semester);
           }
         });
         if (courseData.courses.isNotEmpty) {
@@ -101,6 +110,9 @@ class CoursePageState extends State<CoursePage> {
       }
     } catch (e) {
       if (mounted) {
+        final Semester semester =
+            semesterData!.data[semesterData!.currentIndex];
+        _pickerController.markSemesterHasData(semester);
         setState(() {
           state = CourseState.error;
         });

@@ -27,6 +27,7 @@ class ScoreScaffold extends StatefulWidget {
     this.isShowSearchButton = false,
     this.bottom,
     this.customStateHint,
+    this.semesterPickerController,
   });
 
   /// Creates a [ScoreScaffold] from a [DataState<ScoreData>].
@@ -53,6 +54,7 @@ class ScoreScaffold extends StatefulWidget {
     this.finalScoreBuilder,
     this.isShowSearchButton = false,
     this.bottom,
+    this.semesterPickerController,
   })  : state = dataState.when(
           loading: () => ScoreState.loading,
           loaded: (_, __) => ScoreState.finish,
@@ -89,6 +91,9 @@ class ScoreScaffold extends StatefulWidget {
   final String? customHint;
 
   final Widget? bottom;
+
+  /// Optional controller for the semester picker.
+  final SemesterPickerController? semesterPickerController;
 
   @override
   ScoreScaffoldState createState() => ScoreScaffoldState();
@@ -157,6 +162,7 @@ class ScoreScaffoldState extends State<ScoreScaffold> {
                   widget.onSelect?.call(index);
                 },
                 featureTag: 'score',
+                controller: widget.semesterPickerController,
               ),
             ],
           ],
@@ -410,6 +416,7 @@ class ScoreScaffoldState extends State<ScoreScaffold> {
         onSelect: (Semester semester, int index) {
           widget.onSelect?.call(index);
         },
+        controller: widget.semesterPickerController,
       );
     }
     widget.onSearchButtonClick?.call();
