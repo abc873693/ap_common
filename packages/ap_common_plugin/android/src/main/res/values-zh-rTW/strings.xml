@@ -8,6 +8,14 @@
     <string name="widget_description">顯示今天的下一堂課</string>
     <string name="course_table">學期課表</string>
     <string name="table_widget_description">顯示每週課表</string>
+    <string name="today_schedule">今日課表</string>
+    <string name="today_schedule_description">顯示今天的課程行程</string>
+    <string name="minutes_until">分鐘後上課</string>
+    <string name="countdown_description">距離下一堂課的倒數計時</string>
+    <string name="student_id_card">學生證</string>
+    <string name="student_id_description">顯示學號與條碼</string>
+    <string name="not_login_hint">請先登入</string>
+    <string name="barcode_library_hint">可持本條碼於圖書館借書</string>
     <string-array name="weekday_labels">
         <item>一</item>
         <item>二</item>

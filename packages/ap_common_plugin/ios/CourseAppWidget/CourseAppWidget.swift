@@ -250,6 +250,9 @@ struct CourseWidgetBundle: WidgetBundle {
     var body: some Widget {
         CourseHintWidget()
         CourseTableWidget()
+        TodayScheduleWidget()
+        CountdownCourseWidget()
+        StudentIdCardWidget()
     }
 }
 

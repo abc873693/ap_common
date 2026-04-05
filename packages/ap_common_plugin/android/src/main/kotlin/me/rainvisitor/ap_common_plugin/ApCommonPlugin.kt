@@ -61,6 +61,27 @@ class ApCommonPlugin : FlutterPlugin, MethodCallHandler {
                 notifyWidgetUpdate()
                 result.success(null)
             }
+            "updateUserInfoWidget" -> {
+                val json = call.arguments as? String
+                if (json == null) {
+                    result.error("INVALID_ARGUMENT", "User info JSON is required", null)
+                    return
+                }
+                val prefs = context.getSharedPreferences(PREF_NAME, Context.MODE_PRIVATE)
+                prefs.edit().putString(StudentIdWidget.KEY_USER_INFO, json).apply()
+                scope.launch {
+                    StudentIdWidget().updateAll(context)
+                }
+                result.success(null)
+            }
+            "clearUserInfoWidget" -> {
+                val prefs = context.getSharedPreferences(PREF_NAME, Context.MODE_PRIVATE)
+                prefs.edit().remove(StudentIdWidget.KEY_USER_INFO).apply()
+                scope.launch {
+                    StudentIdWidget().updateAll(context)
+                }
+                result.success(null)
+            }
             else -> result.notImplemented()
         }
     }
@@ -69,6 +90,8 @@ class ApCommonPlugin : FlutterPlugin, MethodCallHandler {
         scope.launch {
             CourseAppWidget().updateAll(context)
             CourseTableWidget().updateAll(context)
+            TodayScheduleWidget().updateAll(context)
+            CountdownWidget().updateAll(context)
         }
     }
 
