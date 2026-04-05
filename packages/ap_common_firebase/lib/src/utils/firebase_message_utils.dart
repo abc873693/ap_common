@@ -48,7 +48,7 @@ class FirebaseMessagingUtils {
     }
     FirebaseMessaging.onMessage.listen((RemoteMessage message) {
       if (message.notification != null) {
-        debugPrint('onMessage: $message');
+        log('onMessage: $message');
         NotificationUtil.instance.show(
           id: notifyId,
           androidChannelId: notifyAndroidChannelId,
@@ -66,7 +66,7 @@ class FirebaseMessagingUtils {
       }
     });
     FirebaseMessaging.onMessageOpenedApp.listen((RemoteMessage message) async {
-      debugPrint('onMessageOpenedApp: $message');
+      log('onMessageOpenedApp: $message');
       await navigateToItemDetail(
         message,
         onClick,
@@ -74,7 +74,7 @@ class FirebaseMessagingUtils {
       );
     });
     FirebaseMessaging.onBackgroundMessage((RemoteMessage message) async {
-      debugPrint('onBackgroundMessage: $message');
+      log('onBackgroundMessage: $message');
       await navigateToItemDetail(
         message,
         onClick,

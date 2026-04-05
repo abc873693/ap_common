@@ -722,7 +722,7 @@ class ScoreGPACard extends StatelessWidget {
         grade: ScoreAnalysis.scoreToGradeLetter(value),
         gradePoint: ScoreAnalysis.scoreToGradePoint(value),
         credits: double.tryParse(score.units) ?? 0,
-      ));
+      ),);
     }
 
     if (entries.isEmpty) return const SizedBox.shrink();

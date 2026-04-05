@@ -1,4 +1,3 @@
-import 'package:ap_common_flutter_core/ap_common_flutter_core.dart';
 import 'package:ap_common_flutter_ui/ap_common_flutter_ui.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -64,6 +63,7 @@ class SemesterPickerController extends ChangeNotifier {
 
   /// Called internally by the picker to register the sheet's
   /// navigator for auto-close.
+  // ignore: use_setters_to_change_properties
   void attachSheetNavigator(NavigatorState navigator) {
     _sheetNavigator = navigator;
   }

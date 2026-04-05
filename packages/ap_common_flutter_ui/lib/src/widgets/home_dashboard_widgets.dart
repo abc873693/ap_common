@@ -352,7 +352,7 @@ class TodayScheduleCard extends StatelessWidget {
           location: course.location?.toString() ?? '',
           endMinutes: endMinutes,
           colorIndex: colorMap[course.code]!,
-        ));
+        ),);
       }
     }
     items.sort(

@@ -367,7 +367,7 @@ class _CourseEditSheetState extends State<CourseEditSheet> {
     // Determine visible time range.
     final int startIndex = widget.timeCodes.length > 10 ? 0 : 0;
     final int endIndex = widget.timeCodes.length;
-    final int weekdayCount = 7;
+    const int weekdayCount = 7;
 
     return ClipRRect(
       borderRadius: BorderRadius.circular(12),
@@ -477,7 +477,7 @@ class _CourseEditSheetState extends State<CourseEditSheet> {
         height: 36,
         color: bg,
         child: isSelected
-            ? Icon(
+            ? const Icon(
                 Icons.check_rounded,
                 size: 16,
                 color: Colors.white,

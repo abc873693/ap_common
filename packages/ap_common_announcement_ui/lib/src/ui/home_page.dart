@@ -1,3 +1,4 @@
+import 'dart:developer';
 import 'dart:io';
 
 import 'package:ap_common_announcement_ui/src/api/announcement_helper.dart';
@@ -1220,7 +1221,7 @@ class _AnnouncementHomePageState extends State<AnnouncementHomePage>
     if (isLogin) {
       loginData = AnnouncementLoginData.load();
       if (kDebugMode) {
-        debugPrint(
+        log(
           'token is expire = '
           '${loginData?.isExpired} '
           'level = ${loginData!.level} '
@@ -1281,7 +1282,7 @@ class _AnnouncementHomePageState extends State<AnnouncementHomePage>
           )
         : '';
 
-    debugPrint('$loginType');
+    log('$loginType');
 
     ApiResult<AnnouncementLoginData>? result;
 
@@ -1359,7 +1360,7 @@ class _AnnouncementHomePageState extends State<AnnouncementHomePage>
           ):
         loginData = data;
         loginData!.save();
-        if (kDebugMode) debugPrint(data.key);
+        if (kDebugMode) log(data.key);
         if (isNotLogin) {
           Navigator.of(context, rootNavigator: true).pop();
         }
