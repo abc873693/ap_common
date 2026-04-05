@@ -49,10 +49,11 @@ class GlassUserInfoScaffoldState
     final bool isDark =
         Theme.of(context).brightness == Brightness.dark;
 
-    return Scaffold(
-      extendBodyBehindAppBar: true,
-      appBar: GlassAppBar(
-        actions: <Widget>[
+    return AdaptiveLiquidGlassLayer(
+      child: Scaffold(
+        extendBodyBehindAppBar: true,
+        appBar: GlassAppBar(
+          actions: <Widget>[
           ...widget.actions ?? <Widget>[],
           if (widget.enableBarCode)
             IconButton(
@@ -119,6 +120,7 @@ class GlassUserInfoScaffoldState
             ],
           ),
         ),
+      ),
       ),
     );
   }

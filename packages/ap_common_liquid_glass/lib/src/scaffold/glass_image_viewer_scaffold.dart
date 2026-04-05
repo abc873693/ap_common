@@ -48,10 +48,11 @@ class GlassImageViewerScaffoldState
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      extendBodyBehindAppBar: true,
-      appBar: GlassAppBar(
-        title: Text(widget.title ?? ''),
+    return AdaptiveLiquidGlassLayer(
+      child: Scaffold(
+        extendBodyBehindAppBar: true,
+        appBar: GlassAppBar(
+          title: Text(widget.title ?? ''),
         actions: widget.actions,
       ),
       body: Column(
@@ -83,6 +84,7 @@ class GlassImageViewerScaffoldState
             ),
           ),
         ],
+      ),
       ),
     );
   }

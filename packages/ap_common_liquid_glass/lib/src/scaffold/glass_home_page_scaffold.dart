@@ -102,7 +102,8 @@ class GlassHomePageScaffoldState
 
   @override
   Widget build(BuildContext context) {
-    return PopScope(
+    return AdaptiveLiquidGlassLayer(
+      child: PopScope(
       canPop: false,
       onPopInvokedWithResult: (bool didPop, _) {
         if (Platform.isAndroid) {
@@ -166,6 +167,7 @@ class GlassHomePageScaffoldState
                           .bottomNavigationBarItems!,
                     ),
         ),
+      ),
       ),
     );
   }

@@ -12,8 +12,9 @@ class GlassHomePage extends StatelessWidget {
   Widget build(BuildContext context) {
     final ApLocalizations ap = context.ap;
 
-    return Scaffold(
-      appBar: GlassAppBar(
+    return AdaptiveLiquidGlassLayer(
+      child: Scaffold(
+        appBar: GlassAppBar(
         title: const Text('Liquid Glass Example'),
         actions: <Widget>[
           IconButton(
@@ -70,6 +71,7 @@ class GlassHomePage extends StatelessWidget {
             ),
           ),
         ],
+      ),
       ),
     );
   }

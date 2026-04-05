@@ -39,8 +39,9 @@ class GlassLoginScaffoldState
     final bool isDark =
         Theme.of(context).brightness == Brightness.dark;
 
-    return Scaffold(
-      resizeToAvoidBottomInset:
+    return AdaptiveLiquidGlassLayer(
+      child: Scaffold(
+        resizeToAvoidBottomInset:
           orientation == Orientation.portrait,
       body: DecoratedBox(
         decoration: BoxDecoration(
@@ -96,6 +97,7 @@ class GlassLoginScaffoldState
             ),
           ),
         ),
+      ),
       ),
     );
   }
