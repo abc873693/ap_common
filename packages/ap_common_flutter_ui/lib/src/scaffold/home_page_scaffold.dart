@@ -23,6 +23,8 @@ class HomePageScaffold extends StatefulWidget {
     this.onImageTapped,
     this.autoPlay = true,
     this.autoPlayDuration = const Duration(milliseconds: 5000),
+    this.dashboardWidgets,
+    this.carouselHeight,
   });
 
   /// Creates a [HomePageScaffold] from a [DataState<List<Announcement>>].
@@ -48,6 +50,8 @@ class HomePageScaffold extends StatefulWidget {
     this.onImageTapped,
     this.autoPlay = true,
     this.autoPlayDuration = const Duration(milliseconds: 5000),
+    this.dashboardWidgets,
+    this.carouselHeight,
   })  : state = dataState.when(
           loading: () => HomeState.loading,
           loaded: (_, __) => HomeState.finish,
@@ -72,6 +76,17 @@ class HomePageScaffold extends StatefulWidget {
   final bool isLogin;
   final bool autoPlay;
   final Duration autoPlayDuration;
+
+  /// Additional widgets displayed below the carousel in a scrollable
+  /// dashboard layout. When provided, the carousel is given a fixed
+  /// height and the entire content area becomes scrollable.
+  ///
+  /// When `null`, the original full-screen carousel layout is used.
+  final List<Widget>? dashboardWidgets;
+
+  /// Fixed height for the carousel when [dashboardWidgets] is set.
+  /// Defaults to 260 in portrait and 180 in landscape.
+  final double? carouselHeight;
 
   @override
   HomePageScaffoldState createState() => HomePageScaffoldState();
@@ -131,14 +146,26 @@ class HomePageScaffoldState extends State<HomePageScaffold> {
                     ? widget.content!
                     : OrientationBuilder(
                         builder: (_, Orientation orientation) {
+                          final bool hasDash =
+                              widget.dashboardWidgets != null &&
+                                  widget.dashboardWidgets!.isNotEmpty;
+                          final double vPad =
+                              orientation == Orientation.portrait
+                                  ? (hasDash ? 12.0 : 32.0)
+                                  : 4.0;
                           return Container(
                             padding: EdgeInsets.symmetric(
-                              vertical: orientation == Orientation.portrait
-                                  ? 32.0
-                                  : 4.0,
+                              vertical: vPad,
                             ),
                             alignment: Alignment.center,
-                            child: _homebody(orientation),
+                            child: AnimatedSwitcher(
+                              duration:
+                                  const Duration(milliseconds: 300),
+                              child: KeyedSubtree(
+                                key: ValueKey<HomeState>(widget.state),
+                                child: _homebody(orientation),
+                              ),
+                            ),
                           );
                         },
                       ),
@@ -183,6 +210,147 @@ class HomePageScaffoldState extends State<HomePageScaffold> {
         },
       );
     }
+  }
+
+  // Original full-screen carousel layout (no dashboard).
+  Widget _buildCarouselLayout(Orientation orientation) {
+    return Column(
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: <Widget>[
+        _buildAnnouncementTitle(),
+        const Hero(
+          tag: ApConstants.tagAnnouncementIcon,
+          child: Icon(Icons.arrow_drop_down),
+        ),
+        Expanded(
+          child: _buildPageView(orientation),
+        ),
+        SizedBox(
+          height: orientation == Orientation.portrait
+              ? 16.0
+              : 4.0,
+        ),
+        _buildPageIndicator(),
+        SizedBox(
+          height: orientation == Orientation.portrait
+              ? 24.0
+              : 0.0,
+        ),
+      ],
+    );
+  }
+
+  // Dashboard layout: carousel at fixed height + scrollable widgets.
+  Widget _buildDashboardLayout(Orientation orientation) {
+    final bool isPortrait =
+        orientation == Orientation.portrait;
+
+    // Compute carousel height responsive to screen size.
+    // Target: carousel occupies ~35% of available content height
+    // so dashboard content is visible on first screen.
+    final double carouselH;
+    if (widget.carouselHeight != null) {
+      carouselH = widget.carouselHeight!;
+    } else {
+      final double screenHeight = MediaQuery.of(context).size.height;
+      // Subtract AppBar(56) + BottomNav(56) + StatusBar(~44)
+      // + padding(32*2) + title+arrow+indicator(~80)
+      final double available = screenHeight - 56 - 56 - 44 - 64 - 80;
+      // Carousel takes ~50% of remaining space, clamp to
+      // reasonable range.
+      carouselH = isPortrait
+          ? (available * 0.5).clamp(150.0, 300.0)
+          : (available * 0.4).clamp(120.0, 200.0);
+    }
+
+    return ListView(
+      padding: EdgeInsets.zero,
+      children: <Widget>[
+        // Carousel section
+        _buildAnnouncementTitle(),
+        const Hero(
+          tag: ApConstants.tagAnnouncementIcon,
+          child: Icon(Icons.arrow_drop_down),
+        ),
+        SizedBox(
+          height: carouselH,
+          child: _buildPageView(orientation),
+        ),
+        const SizedBox(height: 4),
+        _buildPageIndicator(),
+        const SizedBox(height: 12),
+        // Dashboard widgets
+        ...widget.dashboardWidgets!,
+        SizedBox(
+          height: isPortrait ? 16.0 : 8.0,
+        ),
+      ],
+    );
+  }
+
+  Widget _buildAnnouncementTitle() {
+    return Hero(
+      tag: ApConstants.tagAnnouncementTitle,
+      child: Material(
+        color: const Color(0x00000000),
+        child: Text(
+          widget.announcements[_currentNewsIndex].title,
+          textAlign: TextAlign.center,
+          style: TextStyle(
+            fontSize: 20.0,
+            color: Theme.of(context).colorScheme.onSurfaceVariant,
+            fontWeight: FontWeight.w500,
+          ),
+        ),
+      ),
+    );
+  }
+
+  Widget _buildPageView(Orientation orientation) {
+    return PageView.builder(
+      controller: pageController,
+      itemCount: widget.announcements.length,
+      itemBuilder: (BuildContext context, int currentIndex) {
+        final bool active = currentIndex == _currentNewsIndex;
+        return _newsImage(
+          widget.announcements[currentIndex],
+          orientation,
+          active,
+        );
+      },
+    );
+  }
+
+  Widget _buildPageIndicator() {
+    return Semantics(
+      liveRegion: true,
+      label:
+          // ignore: lines_longer_than_80_chars
+          '${_currentNewsIndex + 1} / ${widget.announcements.length}',
+      child: RichText(
+        textAlign: TextAlign.center,
+        text: TextSpan(
+          style: TextStyle(
+            color: Theme.of(context).colorScheme.onSurfaceVariant,
+            fontSize: 24.0,
+          ),
+          children: <TextSpan>[
+            TextSpan(
+              text:
+                  // ignore: lines_longer_than_80_chars
+                  '${widget.announcements.length >= 10 && _currentNewsIndex < 9 ? '0' : ''}'
+                  '${_currentNewsIndex + 1}',
+              style: TextStyle(
+                color: Theme.of(context).colorScheme.primary,
+              ),
+            ),
+            TextSpan(
+              text: ' / ${widget.announcements.length}',
+            ),
+          ],
+        ),
+      ),
+    );
   }
 
   Widget _newsImage(
@@ -243,65 +411,14 @@ class HomePageScaffoldState extends State<HomePageScaffold> {
           child: CircularProgressIndicator(),
         );
       case HomeState.finish:
-        return Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: <Widget>[
-            Hero(
-              tag: ApConstants.tagAnnouncementTitle,
-              child: Material(
-                color: const Color(0x00000000),
-                child: Text(
-                  widget.announcements[_currentNewsIndex].title,
-                  textAlign: TextAlign.center,
-                  style: TextStyle(
-                    fontSize: 20.0,
-                    color: Theme.of(context).colorScheme.onSurfaceVariant,
-                    fontWeight: FontWeight.w500,
-                  ),
-                ),
-              ),
-            ),
-            const Hero(
-              tag: ApConstants.tagAnnouncementIcon,
-              child: Icon(Icons.arrow_drop_down),
-            ),
-            Expanded(
-              child: PageView.builder(
-                controller: pageController,
-                itemCount: widget.announcements.length,
-                itemBuilder: (BuildContext context, int currentIndex) {
-                  final bool active = currentIndex == _currentNewsIndex;
-                  return _newsImage(
-                    widget.announcements[currentIndex],
-                    orientation,
-                    active,
-                  );
-                },
-              ),
-            ),
-            SizedBox(height: orientation == Orientation.portrait ? 16.0 : 4.0),
-            RichText(
-              textAlign: TextAlign.center,
-              text: TextSpan(
-                style: TextStyle(
-                    color: Theme.of(context).colorScheme.onSurfaceVariant,
-                    fontSize: 24.0,),
-                children: <TextSpan>[
-                  TextSpan(
-                    text:
-                        // ignore: lines_longer_than_80_chars
-                        '${widget.announcements.length >= 10 && _currentNewsIndex < 9 ? '0' : ''}'
-                        '${_currentNewsIndex + 1}',
-                    style:
-                        TextStyle(color: Theme.of(context).colorScheme.primary),
-                  ),
-                  TextSpan(text: ' / ${widget.announcements.length}'),
-                ],
-              ),
-            ),
-            SizedBox(height: orientation == Orientation.portrait ? 24.0 : 0.0),
-          ],
-        );
+        final bool hasDashboard =
+            widget.dashboardWidgets != null &&
+                widget.dashboardWidgets!.isNotEmpty;
+
+        if (hasDashboard) {
+          return _buildDashboardLayout(orientation);
+        }
+        return _buildCarouselLayout(orientation);
       case HomeState.offline:
         return HintContent(
           icon: ApIcon.offlineBolt,

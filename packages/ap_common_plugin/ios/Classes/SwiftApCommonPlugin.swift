@@ -5,6 +5,7 @@ import WidgetKit
 public class SwiftApCommonPlugin: NSObject, FlutterPlugin {
     private static let keyAppGroupId = "app_group_id"
     private static let keyCourseNotify = "course_notify"
+    private static let keyUserInfo = "user_info"
     private static let prefName = "ap_common_plugin"
 
     public static func register(with registrar: FlutterPluginRegistrar) {
@@ -64,6 +65,40 @@ public class SwiftApCommonPlugin: NSObject, FlutterPlugin {
             if let appGroupId = appGroupId,
                let groupDefaults = UserDefaults(suiteName: appGroupId) {
                 groupDefaults.removeObject(forKey: SwiftApCommonPlugin.keyCourseNotify)
+            }
+            if #available(iOS 14.0, *) {
+                WidgetCenter.shared.reloadAllTimelines()
+            }
+            result(nil)
+        case "updateUserInfoWidget":
+            guard let json = call.arguments as? String else {
+                result(
+                    FlutterError(
+                        code: "INVALID_ARGUMENT",
+                        message: "User info JSON is required",
+                        details: nil
+                    )
+                )
+                return
+            }
+            let appGroupId = UserDefaults.standard.string(
+                forKey: SwiftApCommonPlugin.keyAppGroupId
+            )
+            if let appGroupId = appGroupId,
+               let groupDefaults = UserDefaults(suiteName: appGroupId) {
+                groupDefaults.set(json, forKey: SwiftApCommonPlugin.keyUserInfo)
+            }
+            if #available(iOS 14.0, *) {
+                WidgetCenter.shared.reloadAllTimelines()
+            }
+            result(nil)
+        case "clearUserInfoWidget":
+            let appGroupId = UserDefaults.standard.string(
+                forKey: SwiftApCommonPlugin.keyAppGroupId
+            )
+            if let appGroupId = appGroupId,
+               let groupDefaults = UserDefaults(suiteName: appGroupId) {
+                groupDefaults.removeObject(forKey: SwiftApCommonPlugin.keyUserInfo)
             }
             if #available(iOS 14.0, *) {
                 WidgetCenter.shared.reloadAllTimelines()

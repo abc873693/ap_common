@@ -3,7 +3,26 @@
     <string name="today_no_course">太好了今天沒有任何課</string>
     <string name="not_load_course_table">尚無課程資料</string>
     <string name="course_hint_content_format">下一節課是%s\n在 %s 的 %s</string>
-	<string name="today_no_course_already">太好了今天已經沒有任何課</string>
+    <string name="today_no_course_already">太好了今天已經沒有任何課</string>
     <string name="please_enter_app_reload">請進入App重新載入課表</string>
     <string name="widget_description">顯示今天的下一堂課</string>
+    <string name="course_table">學期課表</string>
+    <string name="table_widget_description">顯示每週課表</string>
+    <string name="today_schedule">今日課表</string>
+    <string name="today_schedule_description">顯示今天的課程行程</string>
+    <string name="minutes_until">分鐘後上課</string>
+    <string name="countdown_description">距離下一堂課的倒數計時</string>
+    <string name="student_id_card">學生證</string>
+    <string name="student_id_description">顯示學號與條碼</string>
+    <string name="not_login_hint">請先登入</string>
+    <string name="barcode_library_hint">可持本條碼於圖書館借書</string>
+    <string-array name="weekday_labels">
+        <item>一</item>
+        <item>二</item>
+        <item>三</item>
+        <item>四</item>
+        <item>五</item>
+        <item>六</item>
+        <item>日</item>
+    </string-array>
 </resources>

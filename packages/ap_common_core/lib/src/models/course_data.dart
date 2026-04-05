@@ -81,6 +81,18 @@ abstract class CourseData with _$CourseData {
     return index < 10 ? 0 : index;
   }
 
+  /// Merge user-created custom courses into this course data.
+  ///
+  /// Returns a new [CourseData] containing both the original API
+  /// courses and the custom courses. [timeCodes] are kept as-is.
+  CourseData mergeCustom(List<Course> customCourses) {
+    if (customCourses.isEmpty) return this;
+    return CourseData(
+      courses: <Course>[...courses, ...customCourses],
+      timeCodes: timeCodes,
+    );
+  }
+
   String toRawJson() => jsonEncode(toJson());
 
   void save(String tag) {

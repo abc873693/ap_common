@@ -226,8 +226,7 @@ struct ViewSizeWidgetView: View {
 
 // MARK: - Widget
 
-@main
-struct CourseAppWidget: Widget {
+struct CourseHintWidget: Widget {
     let kind: String = "CourseAppWidget"
 
     var body: some WidgetConfiguration {
@@ -241,6 +240,19 @@ struct CourseAppWidget: Widget {
         .description("提醒本日下一堂課")
         .supportedFamiliesIfNeeded()
         .disableContentMarginsIfNeeded()
+    }
+}
+
+// MARK: - Widget Bundle
+
+@main
+struct CourseWidgetBundle: WidgetBundle {
+    var body: some Widget {
+        CourseHintWidget()
+        CourseTableWidget()
+        TodayScheduleWidget()
+        CountdownCourseWidget()
+        StudentIdCardWidget()
     }
 }
 

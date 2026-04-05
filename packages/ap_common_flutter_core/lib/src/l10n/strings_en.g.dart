@@ -125,11 +125,11 @@ class ApLocalizations with BaseTranslations<AppLocale, ApLocalizations> {
 	/// en: 'Passwords at least $arg1 characters.'
 	String newPasswordLeastCharacter({required Object arg1}) => 'Passwords at least ${arg1} characters.';
 
-	/// en: 'Change sucees, please use new password to login'
-	String get changePasswordSuccessHint1 => 'Change sucees, please use new password to login';
+	/// en: 'Change success, please use new password to login'
+	String get changePasswordSuccessHint1 => 'Change success, please use new password to login';
 
-	/// en: 'Change sucees, app will use new password to login'
-	String get changePasswordSuccessHint2 => 'Change sucees, app will use new password to login';
+	/// en: 'Change success, app will use new password to login'
+	String get changePasswordSuccessHint2 => 'Change success, app will use new password to login';
 
 	/// en: 'Auto login'
 	String get autoLogin => 'Auto login';
@@ -173,11 +173,11 @@ class ApLocalizations with BaseTranslations<AppLocale, ApLocalizations> {
 	/// en: 'Got it'
 	String get iKnow => 'Got it';
 
-	/// en: 'Oops! No any buses now~ Please choose another one.'
-	String get busEmpty => 'Oops! No any buses now~\nPlease choose another one.';
+	/// en: 'Oops! No buses available now~ Please choose another one.'
+	String get busEmpty => 'Oops! No buses available now~\nPlease choose another one.';
 
 	/// en: 'Oops! No any classes in this semester~ Please choose another one. 😋'
-	String get courseEmpty => 'Oops! No any classes in this semester~\n Please choose another one. 😋';
+	String get courseEmpty => 'Oops! No classes in this semester~\nPlease choose another one. 😋';
 
 	/// en: 'OK'
 	String get ok => 'OK';
@@ -1216,6 +1216,204 @@ class ApLocalizations with BaseTranslations<AppLocale, ApLocalizations> {
 
 	/// en: 'Brown'
 	String get brown => 'Brown';
+
+	/// en: 'Score Statistics'
+	String get scoreStatistics => 'Score Statistics';
+
+	/// en: 'Score Distribution'
+	String get scoreDistribution => 'Score Distribution';
+
+	/// en: 'Credit Statistics'
+	String get creditStatistics => 'Credit Statistics';
+
+	/// en: 'Highest'
+	String get highestScore => 'Highest';
+
+	/// en: 'Lowest'
+	String get lowestScore => 'Lowest';
+
+	/// en: 'Std Dev'
+	String get standardDeviation => 'Std Dev';
+
+	/// en: 'Subjects'
+	String get subjectCount => 'Subjects';
+
+	/// en: 'Credits Taken'
+	String get creditsTaken => 'Credits Taken';
+
+	/// en: 'Credits Passed'
+	String get creditsPassed => 'Credits Passed';
+
+	/// en: 'Credits Failed'
+	String get creditsFailed => 'Credits Failed';
+
+	/// en: 'Top'
+	String get prLevelTop => 'Top';
+
+	/// en: 'Excellent'
+	String get prLevelExcellent => 'Excellent';
+
+	/// en: 'Average'
+	String get prLevelAverage => 'Average';
+
+	/// en: 'Below Average'
+	String get prLevelBelowAverage => 'Below Average';
+
+	/// en: 'Needs Improvement'
+	String get prLevelNeedEffort => 'Needs Improvement';
+
+	/// en: 'Estimated PR'
+	String get estimatedPR => 'Estimated PR';
+
+	/// en: '※ PR is estimated based on average score, for reference only'
+	String get prDisclaimer => '※ PR is estimated based on average score, for reference only';
+
+	/// en: '{arg1} subjects'
+	String subjectCountUnit({required Object arg1}) => '${arg1} subjects';
+
+	/// en: '90-100 (Excellent)'
+	String get distributionExcellent => '90-100 (Excellent)';
+
+	/// en: '80-89 (Good)'
+	String get distributionGood => '80-89 (Good)';
+
+	/// en: '70-79 (Average)'
+	String get distributionAverage => '70-79 (Average)';
+
+	/// en: '60-69 (Pass)'
+	String get distributionPass => '60-69 (Pass)';
+
+	/// en: '0-59 (Fail)'
+	String get distributionFail => '0-59 (Fail)';
+
+	/// en: 'Student ID Barcode'
+	String get studentIdBarcode => 'Student ID Barcode';
+
+	/// en: 'Use this barcode for library services'
+	String get barcodeHint => 'Use this barcode for library services';
+
+	/// en: 'Credits'
+	String get creditCount => 'Credits';
+
+	/// en: 'Merge Courses'
+	String get mergeCourse => 'Merge Courses';
+
+	/// en: 'Fall'
+	String get firstSemester => 'Fall';
+
+	/// en: 'Spring'
+	String get secondSemester => 'Spring';
+
+	/// en: 'Winter Session'
+	String get winterSession => 'Winter Session';
+
+	/// en: 'Summer Session'
+	String get summerSession => 'Summer Session';
+
+	/// en: 'Pre-course'
+	String get preCourse => 'Pre-course';
+
+	/// en: 'Summer Session I'
+	String get summerSessionFirst => 'Summer Session I';
+
+	/// en: 'Summer Session (Special)'
+	String get summerSessionSpecial => 'Summer Session (Special)';
+
+	/// en: 'Current'
+	String get currentSemester => 'Current';
+
+	/// en: 'Loading'
+	String get semesterLoading => 'Loading';
+
+	/// en: 'No Data'
+	String get semesterNoData => 'No Data';
+
+	/// en: 'GPA'
+	String get gpa => 'GPA';
+
+	/// en: 'GPA (4.3 Scale)'
+	String get gpaTitle => 'GPA (4.3 Scale)';
+
+	/// en: '※ GPA is calculated using the 4.3 grade point scale, for reference only'
+	String get gpaDisclaimer => '※ GPA is calculated using the 4.3 grade point scale, for reference only';
+
+	/// en: 'Grade Point'
+	String get gradePoint => 'Grade Point';
+
+	/// en: 'Grade'
+	String get gradeLetter => 'Grade';
+
+	/// en: 'Grade Distribution'
+	String get gradeDistribution => 'Grade Distribution';
+
+	/// en: 'Add Course'
+	String get addCourse => 'Add Course';
+
+	/// en: 'Edit Course'
+	String get editCourse => 'Edit Course';
+
+	/// en: 'Delete Course'
+	String get deleteCourse => 'Delete Course';
+
+	/// en: 'Are you sure you want to delete this custom course?'
+	String get deleteCourseConfirm => 'Are you sure you want to delete this custom course?';
+
+	/// en: 'Course Name'
+	String get courseName => 'Course Name';
+
+	/// en: 'e.g. Study Group, Tutoring'
+	String get courseNameHint => 'e.g. Study Group, Tutoring';
+
+	/// en: 'Instructor'
+	String get instructor => 'Instructor';
+
+	/// en: 'Classroom'
+	String get classroom => 'Classroom';
+
+	/// en: 'Color'
+	String get courseColor => 'Color';
+
+	/// en: 'Time Slots'
+	String get timeslotSelection => 'Time Slots';
+
+	/// en: 'Tap cells to select time slots'
+	String get timeslotSelectionHint => 'Tap cells to select time slots';
+
+	/// en: 'Course added'
+	String get addCourseSuccess => 'Course added';
+
+	/// en: 'Course updated'
+	String get updateCourseSuccess => 'Course updated';
+
+	/// en: 'Course deleted'
+	String get deleteCourseSuccess => 'Course deleted';
+
+	/// en: 'Please enter a course name'
+	String get courseNameRequired => 'Please enter a course name';
+
+	/// en: 'Please select at least one time slot'
+	String get timeslotRequired => 'Please select at least one time slot';
+
+	/// en: 'This time slot conflicts with: {arg1}'
+	String timeslotConflict({required Object arg1}) => 'This time slot conflicts with: ${arg1}';
+
+	/// en: 'Custom'
+	String get customCourse => 'Custom';
+
+	/// en: 'Today\'s Schedule'
+	String get todayScheduleTitle => 'Today\'s Schedule';
+
+	/// en: 'until next class'
+	String get untilNextClass => 'until next class';
+
+	/// en: 'classes today'
+	String get classesToday => 'classes today';
+
+	/// en: 'No class today'
+	String get noClassToday => 'No class today';
+
+	/// en: 'Tomorrow\'s Schedule'
+	String get tomorrowScheduleTitle => 'Tomorrow\'s Schedule';
 }
 
 /// The flat map containing all translations for locale <en>.
@@ -1254,8 +1452,8 @@ extension on ApLocalizations {
 			'newPasswordConfirm' => 'Confirm New Password',
 			'newPasswordNotMatchHint' => 'Passwords do not match, please try again !',
 			'newPasswordLeastCharacter' => ({required Object arg1}) => 'Passwords at least ${arg1} characters.',
-			'changePasswordSuccessHint1' => 'Change sucees, please use new password to login',
-			'changePasswordSuccessHint2' => 'Change sucees, app will use new password to login',
+			'changePasswordSuccessHint1' => 'Change success, please use new password to login',
+			'changePasswordSuccessHint2' => 'Change success, app will use new password to login',
 			'autoLogin' => 'Auto login',
 			'version' => ({required Object arg1}) => 'v.${arg1}',
 			'logining' => 'Logging...',
@@ -1270,8 +1468,8 @@ extension on ApLocalizations {
 			'unknown' => 'Unknown',
 			'campus' => ' campus',
 			'iKnow' => 'Got it',
-			'busEmpty' => 'Oops! No any buses now~\nPlease choose another one.',
-			'courseEmpty' => 'Oops! No any classes in this semester~\n Please choose another one. 😋',
+			'busEmpty' => 'Oops! No buses available now~\nPlease choose another one.',
+			'courseEmpty' => 'Oops! No classes in this semester~\nPlease choose another one. 😋',
 			'ok' => 'OK',
 			'courseDialogMessages' => ({required Object arg1, required Object arg2, required Object arg3, required Object arg4}) => 'Class：${arg1}\nProfessor：${arg2}\nLocation：${arg3}\nTime：${arg4}',
 			'courseDialogName' => 'Class',
@@ -1618,6 +1816,72 @@ extension on ApLocalizations {
 			'amber' => 'Amber',
 			'indigo' => 'Indigo',
 			'brown' => 'Brown',
+			'scoreStatistics' => 'Score Statistics',
+			'scoreDistribution' => 'Score Distribution',
+			'creditStatistics' => 'Credit Statistics',
+			'highestScore' => 'Highest',
+			'lowestScore' => 'Lowest',
+			'standardDeviation' => 'Std Dev',
+			'subjectCount' => 'Subjects',
+			'creditsTaken' => 'Credits Taken',
+			'creditsPassed' => 'Credits Passed',
+			'creditsFailed' => 'Credits Failed',
+			'prLevelTop' => 'Top',
+			'prLevelExcellent' => 'Excellent',
+			'prLevelAverage' => 'Average',
+			'prLevelBelowAverage' => 'Below Average',
+			'prLevelNeedEffort' => 'Needs Improvement',
+			'estimatedPR' => 'Estimated PR',
+			'prDisclaimer' => '※ PR is estimated based on average score, for reference only',
+			'subjectCountUnit' => ({required Object arg1}) => '${arg1} subjects',
+			'distributionExcellent' => '90-100 (Excellent)',
+			'distributionGood' => '80-89 (Good)',
+			'distributionAverage' => '70-79 (Average)',
+			'distributionPass' => '60-69 (Pass)',
+			'distributionFail' => '0-59 (Fail)',
+			'studentIdBarcode' => 'Student ID Barcode',
+			'barcodeHint' => 'Use this barcode for library services',
+			'creditCount' => 'Credits',
+			'mergeCourse' => 'Merge Courses',
+			'firstSemester' => 'Fall',
+			'secondSemester' => 'Spring',
+			'winterSession' => 'Winter Session',
+			'summerSession' => 'Summer Session',
+			'preCourse' => 'Pre-course',
+			'summerSessionFirst' => 'Summer Session I',
+			'summerSessionSpecial' => 'Summer Session (Special)',
+			'currentSemester' => 'Current',
+			'semesterLoading' => 'Loading',
+			'semesterNoData' => 'No Data',
+			'gpa' => 'GPA',
+			'gpaTitle' => 'GPA (4.3 Scale)',
+			'gpaDisclaimer' => '※ GPA is calculated using the 4.3 grade point scale, for reference only',
+			'gradePoint' => 'Grade Point',
+			'gradeLetter' => 'Grade',
+			'gradeDistribution' => 'Grade Distribution',
+			'addCourse' => 'Add Course',
+			'editCourse' => 'Edit Course',
+			'deleteCourse' => 'Delete Course',
+			'deleteCourseConfirm' => 'Are you sure you want to delete this custom course?',
+			'courseName' => 'Course Name',
+			'courseNameHint' => 'e.g. Study Group, Tutoring',
+			'instructor' => 'Instructor',
+			'classroom' => 'Classroom',
+			'courseColor' => 'Color',
+			'timeslotSelection' => 'Time Slots',
+			'timeslotSelectionHint' => 'Tap cells to select time slots',
+			'addCourseSuccess' => 'Course added',
+			'updateCourseSuccess' => 'Course updated',
+			'deleteCourseSuccess' => 'Course deleted',
+			'courseNameRequired' => 'Please enter a course name',
+			'timeslotRequired' => 'Please select at least one time slot',
+			'timeslotConflict' => ({required Object arg1}) => 'This time slot conflicts with: ${arg1}',
+			'customCourse' => 'Custom',
+			'todayScheduleTitle' => 'Today\'s Schedule',
+			'untilNextClass' => 'until next class',
+			'classesToday' => 'classes today',
+			'noClassToday' => 'No class today',
+			'tomorrowScheduleTitle' => 'Tomorrow\'s Schedule',
 			_ => null,
 		};
 	}

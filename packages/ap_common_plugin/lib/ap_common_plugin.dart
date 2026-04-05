@@ -42,6 +42,22 @@ class ApCommonPlugin {
     await _channel.invokeMethod<void>('clearCourseWidget');
   }
 
+  /// Update the student ID widget with user info.
+  ///
+  /// Sends a JSON object with `id`, `name`, `department`, and
+  /// `className` fields to the native widget.
+  static Future<void> updateUserInfoWidget(UserInfo userInfo) async {
+    await _channel.invokeMethod<void>(
+      'updateUserInfoWidget',
+      jsonEncode(userInfo.toJson()),
+    );
+  }
+
+  /// Clear the student ID widget data.
+  static Future<void> clearUserInfoWidget() async {
+    await _channel.invokeMethod<void>('clearUserInfoWidget');
+  }
+
   /// Update the course widget with fake data for testing.
   ///
   /// Injects two courses starting 30 and 90 minutes from now
