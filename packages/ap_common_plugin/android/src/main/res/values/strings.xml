@@ -6,4 +6,15 @@
     <string name="today_no_course_already">Good! No course today already</string>
     <string name="please_enter_app_reload">Please enter app reload Course Data</string>
     <string name="widget_description">Show the next course of today</string>
+    <string name="course_table">Course Table</string>
+    <string name="table_widget_description">Show the weekly course table</string>
+    <string-array name="weekday_labels">
+        <item>Mon</item>
+        <item>Tue</item>
+        <item>Wed</item>
+        <item>Thu</item>
+        <item>Fri</item>
+        <item>Sat</item>
+        <item>Sun</item>
+    </string-array>
 </resources>

@@ -68,6 +68,7 @@ class ApCommonPlugin : FlutterPlugin, MethodCallHandler {
     private fun notifyWidgetUpdate() {
         scope.launch {
             CourseAppWidget().updateAll(context)
+            CourseTableWidget().updateAll(context)
         }
     }
 
