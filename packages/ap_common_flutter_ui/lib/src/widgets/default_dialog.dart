@@ -19,12 +19,12 @@ class DefaultDialog extends StatelessWidget {
   static void showSample(BuildContext context) => showDialog(
         context: context,
         builder: (BuildContext context) => DefaultDialog(
-          title: '預約成功',
-          actionText: '我知道了',
+          title: 'Reservation Success',
+          actionText: 'Got it',
           actionFunction: () =>
               Navigator.of(context, rootNavigator: true).pop('dialog'),
           contentWidget: Text(
-            '預約日期：2017/09/05\n上車地點：燕巢校區\n預約班次：08:20',
+            'Date: 2017/09/05\nPickup: Campus A\nTime: 08:20',
             style: TextStyle(
               color: Theme.of(context).colorScheme.onSurfaceVariant,
               height: 1.3,

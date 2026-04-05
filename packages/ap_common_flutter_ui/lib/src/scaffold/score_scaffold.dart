@@ -3,6 +3,7 @@ import 'dart:math';
 import 'package:ap_common_flutter_ui/ap_common_flutter_ui.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
+import 'package:flutter/services.dart';
 
 enum ScoreState { loading, finish, error, empty, offlineEmpty, custom }
 
@@ -178,6 +179,7 @@ class ScoreScaffoldState extends State<ScoreScaffold> {
                 key: const ValueKey<String>('switch_view_button'),
                 heroTag: 'switch_view_button',
                 onPressed: () {
+                  HapticFeedback.selectionClick();
                   setState(() => _isAnalysisView = !_isAnalysisView);
                 },
                 child: Icon(
@@ -213,7 +215,12 @@ class ScoreScaffoldState extends State<ScoreScaffold> {
               children: <Widget>[
                 if (widget.customHint != null && widget.customHint!.isNotEmpty)
                   _buildHintBanner(),
-                Expanded(child: _buildContent(context, colorScheme)),
+                Expanded(
+                  child: AnimatedSwitcher(
+                    duration: const Duration(milliseconds: 300),
+                    child: _buildContent(context, colorScheme),
+                  ),
+                ),
               ],
             ),
           ),
@@ -268,30 +275,45 @@ class ScoreScaffoldState extends State<ScoreScaffold> {
   ) {
     switch (widget.state) {
       case ScoreState.loading:
-        return _buildLoadingState(colorScheme);
+        return KeyedSubtree(
+          key: const ValueKey<ScoreState>(ScoreState.loading),
+          child: _buildLoadingState(colorScheme),
+        );
       case ScoreState.error:
-        return _buildErrorState(
-          colorScheme,
-          context.ap.clickToRetry,
-          Icons.error_outline_rounded,
+        return KeyedSubtree(
+          key: const ValueKey<ScoreState>(ScoreState.error),
+          child: _buildErrorState(
+            colorScheme,
+            context.ap.clickToRetry,
+            Icons.error_outline_rounded,
+          ),
         );
       case ScoreState.empty:
-        return _buildErrorState(
-          colorScheme,
-          context.ap.scoreEmpty,
-          Icons.assignment_outlined,
+        return KeyedSubtree(
+          key: const ValueKey<ScoreState>(ScoreState.empty),
+          child: _buildErrorState(
+            colorScheme,
+            context.ap.scoreEmpty,
+            Icons.assignment_outlined,
+          ),
         );
       case ScoreState.offlineEmpty:
-        return _buildErrorState(
-          colorScheme,
-          context.ap.noOfflineData,
-          Icons.cloud_off_rounded,
+        return KeyedSubtree(
+          key: const ValueKey<ScoreState>(ScoreState.offlineEmpty),
+          child: _buildErrorState(
+            colorScheme,
+            context.ap.noOfflineData,
+            Icons.cloud_off_rounded,
+          ),
         );
       case ScoreState.custom:
-        return _buildErrorState(
-          colorScheme,
-          widget.customStateHint ?? context.ap.somethingError,
-          Icons.warning_amber_rounded,
+        return KeyedSubtree(
+          key: const ValueKey<ScoreState>(ScoreState.custom),
+          child: _buildErrorState(
+            colorScheme,
+            widget.customStateHint ?? context.ap.somethingError,
+            Icons.warning_amber_rounded,
+          ),
         );
       case ScoreState.finish:
         return ScoreContent(

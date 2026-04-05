@@ -1216,6 +1216,117 @@ class ApLocalizations with BaseTranslations<AppLocale, ApLocalizations> {
 
 	/// en: 'Brown'
 	String get brown => 'Brown';
+
+	/// en: 'Score Statistics'
+	String get scoreStatistics => 'Score Statistics';
+
+	/// en: 'Score Distribution'
+	String get scoreDistribution => 'Score Distribution';
+
+	/// en: 'Credit Statistics'
+	String get creditStatistics => 'Credit Statistics';
+
+	/// en: 'Highest'
+	String get highestScore => 'Highest';
+
+	/// en: 'Lowest'
+	String get lowestScore => 'Lowest';
+
+	/// en: 'Std Dev'
+	String get standardDeviation => 'Std Dev';
+
+	/// en: 'Subjects'
+	String get subjectCount => 'Subjects';
+
+	/// en: 'Credits Taken'
+	String get creditsTaken => 'Credits Taken';
+
+	/// en: 'Credits Passed'
+	String get creditsPassed => 'Credits Passed';
+
+	/// en: 'Credits Failed'
+	String get creditsFailed => 'Credits Failed';
+
+	/// en: 'Top'
+	String get prLevelTop => 'Top';
+
+	/// en: 'Excellent'
+	String get prLevelExcellent => 'Excellent';
+
+	/// en: 'Average'
+	String get prLevelAverage => 'Average';
+
+	/// en: 'Below Average'
+	String get prLevelBelowAverage => 'Below Average';
+
+	/// en: 'Needs Improvement'
+	String get prLevelNeedEffort => 'Needs Improvement';
+
+	/// en: 'Estimated PR'
+	String get estimatedPR => 'Estimated PR';
+
+	/// en: '※ PR is estimated based on average score, for reference only'
+	String get prDisclaimer => '※ PR is estimated based on average score, for reference only';
+
+	/// en: '{arg1} subjects'
+	String subjectCountUnit({required Object arg1}) => '${arg1} subjects';
+
+	/// en: '90-100 (Excellent)'
+	String get distributionExcellent => '90-100 (Excellent)';
+
+	/// en: '80-89 (Good)'
+	String get distributionGood => '80-89 (Good)';
+
+	/// en: '70-79 (Average)'
+	String get distributionAverage => '70-79 (Average)';
+
+	/// en: '60-69 (Pass)'
+	String get distributionPass => '60-69 (Pass)';
+
+	/// en: '0-59 (Fail)'
+	String get distributionFail => '0-59 (Fail)';
+
+	/// en: 'Student ID Barcode'
+	String get studentIdBarcode => 'Student ID Barcode';
+
+	/// en: 'Use this barcode for library services'
+	String get barcodeHint => 'Use this barcode for library services';
+
+	/// en: 'Credits'
+	String get creditCount => 'Credits';
+
+	/// en: 'Merge Courses'
+	String get mergeCourse => 'Merge Courses';
+
+	/// en: 'Fall'
+	String get firstSemester => 'Fall';
+
+	/// en: 'Spring'
+	String get secondSemester => 'Spring';
+
+	/// en: 'Winter Session'
+	String get winterSession => 'Winter Session';
+
+	/// en: 'Summer Session'
+	String get summerSession => 'Summer Session';
+
+	/// en: 'Pre-course'
+	String get preCourse => 'Pre-course';
+
+	/// en: 'Summer Session I'
+	String get summerSessionFirst => 'Summer Session I';
+
+	/// en: 'Summer Session (Special)'
+	String get summerSessionSpecial => 'Summer Session (Special)';
+
+	/// en: 'Current'
+	String get currentSemester => 'Current';
+
+	/// en: 'Loading'
+	String get semesterLoading => 'Loading';
+
+	/// en: 'No Data'
+	String get semesterNoData => 'No Data';
 }
 
 /// The flat map containing all translations for locale <en>.
@@ -1618,6 +1729,43 @@ extension on ApLocalizations {
 			'amber' => 'Amber',
 			'indigo' => 'Indigo',
 			'brown' => 'Brown',
+			'scoreStatistics' => 'Score Statistics',
+			'scoreDistribution' => 'Score Distribution',
+			'creditStatistics' => 'Credit Statistics',
+			'highestScore' => 'Highest',
+			'lowestScore' => 'Lowest',
+			'standardDeviation' => 'Std Dev',
+			'subjectCount' => 'Subjects',
+			'creditsTaken' => 'Credits Taken',
+			'creditsPassed' => 'Credits Passed',
+			'creditsFailed' => 'Credits Failed',
+			'prLevelTop' => 'Top',
+			'prLevelExcellent' => 'Excellent',
+			'prLevelAverage' => 'Average',
+			'prLevelBelowAverage' => 'Below Average',
+			'prLevelNeedEffort' => 'Needs Improvement',
+			'estimatedPR' => 'Estimated PR',
+			'prDisclaimer' => '※ PR is estimated based on average score, for reference only',
+			'subjectCountUnit' => ({required Object arg1}) => '${arg1} subjects',
+			'distributionExcellent' => '90-100 (Excellent)',
+			'distributionGood' => '80-89 (Good)',
+			'distributionAverage' => '70-79 (Average)',
+			'distributionPass' => '60-69 (Pass)',
+			'distributionFail' => '0-59 (Fail)',
+			'studentIdBarcode' => 'Student ID Barcode',
+			'barcodeHint' => 'Use this barcode for library services',
+			'creditCount' => 'Credits',
+			'mergeCourse' => 'Merge Courses',
+			'firstSemester' => 'Fall',
+			'secondSemester' => 'Spring',
+			'winterSession' => 'Winter Session',
+			'summerSession' => 'Summer Session',
+			'preCourse' => 'Pre-course',
+			'summerSessionFirst' => 'Summer Session I',
+			'summerSessionSpecial' => 'Summer Session (Special)',
+			'currentSemester' => 'Current',
+			'semesterLoading' => 'Loading',
+			'semesterNoData' => 'No Data',
 			_ => null,
 		};
 	}

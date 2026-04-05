@@ -267,7 +267,7 @@ class UserInfoScaffoldState extends State<UserInfoScaffold> {
               ),
               const SizedBox(width: 8),
               Text(
-                '學號條碼',
+                context.ap.studentIdBarcode,
                 style: TextStyle(
                   fontSize: 16,
                   fontWeight: FontWeight.w600,
@@ -308,7 +308,7 @@ class UserInfoScaffoldState extends State<UserInfoScaffold> {
                 ),
                 const SizedBox(height: 12),
                 Text(
-                  '可持本條碼於圖書館借書',
+                  context.ap.barcodeHint,
                   style: TextStyle(
                     fontSize: 12,
                     color: colorScheme.onSurfaceVariant,

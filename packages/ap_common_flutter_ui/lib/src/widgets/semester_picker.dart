@@ -1,6 +1,7 @@
 import 'package:ap_common_flutter_core/ap_common_flutter_core.dart';
 import 'package:ap_common_flutter_ui/ap_common_flutter_ui.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 
 typedef SemesterCallback = void Function(Semester semester, int index);
 
@@ -235,7 +236,7 @@ class SemesterPicker extends StatefulWidget {
     final bool isLoading = loadingSemesters?.contains(semester.code) ?? false;
     final bool isDisabled = isEmpty || isLoading;
     final String semesterName = uiConfig?.getName?.call(semester.value) ??
-        SemesterPickerState._getSemesterName(semester.value);
+        SemesterPickerState._getSemesterName(semester.value, context.ap);
     final String displayName =
         semesterName.isNotEmpty ? semesterName : semester.text;
 
@@ -365,7 +366,7 @@ class SemesterPicker extends StatefulWidget {
                                 borderRadius: BorderRadius.circular(4),
                               ),
                               child: Text(
-                                '載入中',
+                                context.ap.semesterLoading,
                                 style: TextStyle(
                                   fontSize: 10,
                                   fontWeight: FontWeight.w500,
@@ -385,7 +386,7 @@ class SemesterPicker extends StatefulWidget {
                                 borderRadius: BorderRadius.circular(4),
                               ),
                               child: Text(
-                                '無資料',
+                                context.ap.semesterNoData,
                                 style: TextStyle(
                                   fontSize: 10,
                                   fontWeight: FontWeight.w500,
@@ -405,7 +406,7 @@ class SemesterPicker extends StatefulWidget {
                                 borderRadius: BorderRadius.circular(4),
                               ),
                               child: Text(
-                                '目前',
+                                context.ap.currentSemester,
                                 style: TextStyle(
                                   fontSize: 10,
                                   fontWeight: FontWeight.w600,
@@ -500,7 +501,7 @@ class SemesterPickerState extends State<SemesterPicker> {
   Widget build(BuildContext context) {
     final ColorScheme colorScheme = Theme.of(context).colorScheme;
     final String displayText = selectSemester != null
-        ? _getShortSemesterText(selectSemester!, widget.uiConfig)
+        ? _getShortSemesterText(selectSemester!, widget.uiConfig, context.ap)
         : '';
 
     return Material(
@@ -549,11 +550,12 @@ class SemesterPickerState extends State<SemesterPicker> {
 
   static String _getShortSemesterText(
     Semester semester,
-    SemesterUIConfig? uiConfig,
-  ) {
+    SemesterUIConfig? uiConfig, [
+    ApLocalizations? ap,
+  ]) {
     final String name =
         uiConfig?.getName?.call(semester.value) ??
-            _getSemesterName(semester.value);
+            _getSemesterName(semester.value, ap);
     if (name.isNotEmpty) {
       return '${semester.year} $name';
     }
@@ -613,22 +615,25 @@ class SemesterPickerState extends State<SemesterPicker> {
     }
   }
 
-  static String _getSemesterName(String value) {
+  static String _getSemesterName(
+    String value, [
+    ApLocalizations? ap,
+  ]) {
     switch (value) {
       case '1':
-        return '上學期';
+        return ap?.firstSemester ?? '上學期';
       case '2':
-        return '下學期';
+        return ap?.secondSemester ?? '下學期';
       case '3':
-        return '寒修';
+        return ap?.winterSession ?? '寒修';
       case '4':
-        return '暑修';
+        return ap?.summerSession ?? '暑修';
       case '5':
-        return '先修';
+        return ap?.preCourse ?? '先修';
       case '6':
-        return '暑修(一)';
+        return ap?.summerSessionFirst ?? '暑修(一)';
       case '7':
-        return '暑修(特)';
+        return ap?.summerSessionSpecial ?? '暑修(特)';
       default:
         return '';
     }
@@ -705,6 +710,7 @@ class SemesterPickerState extends State<SemesterPicker> {
       semesterData: semesterData,
       currentIndex: currentIndex,
       onSelect: (Semester semester, int index) {
+        HapticFeedback.selectionClick();
         markSemesterLoading(semester);
         currentIndex = index;
         selectSemester = semesterData.data[currentIndex];

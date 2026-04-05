@@ -180,36 +180,40 @@ class TextCheckBox extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final ColorScheme colorScheme = Theme.of(context).colorScheme;
-    return InkWell(
-      onTap: (onChanged == null) ? null : () => onChanged?.call(!value),
-      borderRadius: BorderRadius.circular(8),
-      child: Padding(
-        padding: const EdgeInsets.symmetric(vertical: 8),
-        child: Row(
-          mainAxisSize: MainAxisSize.min,
-          children: <Widget>[
-            SizedBox(
-              width: 24,
-              height: 24,
-              child: Checkbox(
-                value: value,
-                onChanged: onChanged,
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(4),
+    return MergeSemantics(
+      child: InkWell(
+        onTap: (onChanged == null)
+            ? null
+            : () => onChanged?.call(!value),
+        borderRadius: BorderRadius.circular(8),
+        child: Padding(
+          padding: const EdgeInsets.symmetric(vertical: 8),
+          child: Row(
+            mainAxisSize: MainAxisSize.min,
+            children: <Widget>[
+              SizedBox(
+                width: 24,
+                height: 24,
+                child: Checkbox(
+                  value: value,
+                  onChanged: onChanged,
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(4),
+                  ),
                 ),
               ),
-            ),
-            const SizedBox(width: 8),
-            Flexible(
-              child: Text(
-                text,
-                style: TextStyle(
-                  color: colorScheme.onSurface,
-                  fontSize: 13,
+              const SizedBox(width: 8),
+              Flexible(
+                child: Text(
+                  text,
+                  style: TextStyle(
+                    color: colorScheme.onSurface,
+                    fontSize: 13,
+                  ),
                 ),
               ),
-            ),
-          ],
+            ],
+          ),
         ),
       ),
     );
@@ -312,6 +316,7 @@ class ApTextField extends StatelessWidget {
     this.nextFocusNode,
     this.onSubmitted,
     this.labelText = '',
+    this.errorText,
     this.textInputAction = TextInputAction.next,
     this.keyboardType = TextInputType.text,
     this.obscureText = false,
@@ -327,6 +332,7 @@ class ApTextField extends StatelessWidget {
   final FocusNode? nextFocusNode;
   final TextInputAction textInputAction;
   final String labelText;
+  final String? errorText;
   final Function(String text)? onSubmitted;
   final Function(String text)? onChanged;
   final bool obscureText;
@@ -359,6 +365,7 @@ class ApTextField extends StatelessWidget {
       decoration: InputDecoration(
         labelText: labelText,
         labelStyle: TextStyle(color: colorScheme.onSurfaceVariant),
+        errorText: errorText,
         counterText: '',
         prefixIcon: prefixIcon != null
             ? Icon(prefixIcon, color: colorScheme.onSurfaceVariant)

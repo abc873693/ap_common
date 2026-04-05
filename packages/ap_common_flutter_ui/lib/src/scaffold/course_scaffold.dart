@@ -368,7 +368,13 @@ class CourseScaffoldState extends State<CourseScaffold> {
                         AnalyticsUtil.instance.logEvent('course_refresh');
                         return;
                       },
-                      child: _body(),
+                      child: AnimatedSwitcher(
+                        duration: const Duration(milliseconds: 300),
+                        child: KeyedSubtree(
+                          key: ValueKey<CourseState>(widget.state),
+                          child: _body(),
+                        ),
+                      ),
                     ),
                   ),
                 ],
@@ -1332,7 +1338,7 @@ class _CourseContentState extends State<CourseContent> {
                 ),
                 _buildDetailRow(
                   Icons.school_outlined,
-                  '學分數',
+                  context.ap.creditCount,
                   '${widget.course.units ?? "-"} ${context.ap.units}',
                   colorScheme,
                 ),
@@ -1668,7 +1674,7 @@ class _CourseScaffoldSettingDialogState
             },
           ),
           CheckboxListTile(
-            title: const Text('連在一起'),
+            title: Text(context.ap.mergeCourse),
             secondary: const Icon(Icons.merge_type_rounded),
             value: mergeCourse,
             onChanged: (bool? value) {

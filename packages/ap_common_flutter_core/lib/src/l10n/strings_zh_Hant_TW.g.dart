@@ -431,6 +431,43 @@ class ApLocalizationsZhHantTw extends ApLocalizations with BaseTranslations<AppL
 	@override String get amber => '琥珀';
 	@override String get indigo => '靛藍';
 	@override String get brown => '棕褐';
+	@override String get scoreStatistics => '成績統計';
+	@override String get scoreDistribution => '成績分佈';
+	@override String get creditStatistics => '學分統計';
+	@override String get highestScore => '最高分';
+	@override String get lowestScore => '最低分';
+	@override String get standardDeviation => '標準差';
+	@override String get subjectCount => '科目數';
+	@override String get creditsTaken => '修習學分';
+	@override String get creditsPassed => '及格學分';
+	@override String get creditsFailed => '不及格學分';
+	@override String get prLevelTop => '頂尖';
+	@override String get prLevelExcellent => '優秀';
+	@override String get prLevelAverage => '中等';
+	@override String get prLevelBelowAverage => '待加強';
+	@override String get prLevelNeedEffort => '需努力';
+	@override String get estimatedPR => '估計 PR 值';
+	@override String get prDisclaimer => '※ PR 值為根據平均成績估算，僅供參考';
+	@override String subjectCountUnit({required Object arg1}) => '$arg1 科';
+	@override String get distributionExcellent => '90-100 (優秀)';
+	@override String get distributionGood => '80-89 (良好)';
+	@override String get distributionAverage => '70-79 (普通)';
+	@override String get distributionPass => '60-69 (及格)';
+	@override String get distributionFail => '0-59 (不及格)';
+	@override String get studentIdBarcode => '學號條碼';
+	@override String get barcodeHint => '可持本條碼於圖書館借書';
+	@override String get creditCount => '學分數';
+	@override String get mergeCourse => '連在一起';
+	@override String get firstSemester => '上學期';
+	@override String get secondSemester => '下學期';
+	@override String get winterSession => '寒修';
+	@override String get summerSession => '暑修';
+	@override String get preCourse => '先修';
+	@override String get summerSessionFirst => '暑修(一)';
+	@override String get summerSessionSpecial => '暑修(特)';
+	@override String get currentSemester => '目前';
+	@override String get semesterLoading => '載入中';
+	@override String get semesterNoData => '無資料';
 }
 
 /// The flat map containing all translations for locale <zh-Hant-TW>.
@@ -833,6 +870,43 @@ extension on ApLocalizationsZhHantTw {
 			'amber' => '琥珀',
 			'indigo' => '靛藍',
 			'brown' => '棕褐',
+			'scoreStatistics' => '成績統計',
+			'scoreDistribution' => '成績分佈',
+			'creditStatistics' => '學分統計',
+			'highestScore' => '最高分',
+			'lowestScore' => '最低分',
+			'standardDeviation' => '標準差',
+			'subjectCount' => '科目數',
+			'creditsTaken' => '修習學分',
+			'creditsPassed' => '及格學分',
+			'creditsFailed' => '不及格學分',
+			'prLevelTop' => '頂尖',
+			'prLevelExcellent' => '優秀',
+			'prLevelAverage' => '中等',
+			'prLevelBelowAverage' => '待加強',
+			'prLevelNeedEffort' => '需努力',
+			'estimatedPR' => '估計 PR 值',
+			'prDisclaimer' => '※ PR 值為根據平均成績估算，僅供參考',
+			'subjectCountUnit' => ({required Object arg1}) => '$arg1 科',
+			'distributionExcellent' => '90-100 (優秀)',
+			'distributionGood' => '80-89 (良好)',
+			'distributionAverage' => '70-79 (普通)',
+			'distributionPass' => '60-69 (及格)',
+			'distributionFail' => '0-59 (不及格)',
+			'studentIdBarcode' => '學號條碼',
+			'barcodeHint' => '可持本條碼於圖書館借書',
+			'creditCount' => '學分數',
+			'mergeCourse' => '連在一起',
+			'firstSemester' => '上學期',
+			'secondSemester' => '下學期',
+			'winterSession' => '寒修',
+			'summerSession' => '暑修',
+			'preCourse' => '先修',
+			'summerSessionFirst' => '暑修(一)',
+			'summerSessionSpecial' => '暑修(特)',
+			'currentSemester' => '目前',
+			'semesterLoading' => '載入中',
+			'semesterNoData' => '無資料',
 			_ => null,
 		};
 	}

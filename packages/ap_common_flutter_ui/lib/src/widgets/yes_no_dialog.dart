@@ -24,16 +24,16 @@ class YesNoDialog extends StatelessWidget {
   static void showSample(BuildContext context) => showDialog(
         context: context,
         builder: (BuildContext context) => YesNoDialog(
-          title: '預約成功',
+          title: 'Reservation Success',
           contentWidget: Text(
-            '預約日期：2017/09/05\n上車地點：燕巢校區\n預約班次：08:20',
+            'Date: 2017/09/05\nPickup: Campus A\nTime: 08:20',
             style: TextStyle(
               color: Theme.of(context).colorScheme.onSurfaceVariant,
               height: 1.3,
             ),
           ),
-          leftActionText: '取消',
-          rightActionText: '預約',
+          leftActionText: context.ap.cancel,
+          rightActionText: context.ap.confirm,
         ),
       );
 

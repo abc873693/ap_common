@@ -1,9 +1,13 @@
 import 'package:flutter/material.dart';
 
 class ProgressDialog extends StatelessWidget {
-  const ProgressDialog(this.content);
+  const ProgressDialog(
+    this.content, {
+    this.onCancel,
+  });
 
   final String content;
+  final VoidCallback? onCancel;
 
   @override
   Widget build(BuildContext context) {
@@ -19,11 +23,21 @@ class ProgressDialog extends StatelessWidget {
           const SizedBox(height: 28.0),
           Text(
             content,
-            style: TextStyle(color: colorScheme.primary),
+            style: TextStyle(color: colorScheme.onSurface),
             textAlign: TextAlign.center,
           ),
         ],
       ),
+      actions: onCancel != null
+          ? <Widget>[
+              TextButton(
+                onPressed: onCancel,
+                child: Text(
+                  MaterialLocalizations.of(context).cancelButtonLabel,
+                ),
+              ),
+            ]
+          : null,
     );
   }
 }

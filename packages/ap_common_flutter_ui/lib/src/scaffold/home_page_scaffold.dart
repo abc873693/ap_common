@@ -138,7 +138,14 @@ class HomePageScaffoldState extends State<HomePageScaffold> {
                                   : 4.0,
                             ),
                             alignment: Alignment.center,
-                            child: _homebody(orientation),
+                            child: AnimatedSwitcher(
+                              duration:
+                                  const Duration(milliseconds: 300),
+                              child: KeyedSubtree(
+                                key: ValueKey<HomeState>(widget.state),
+                                child: _homebody(orientation),
+                              ),
+                            ),
                           );
                         },
                       ),
@@ -280,23 +287,30 @@ class HomePageScaffoldState extends State<HomePageScaffold> {
               ),
             ),
             SizedBox(height: orientation == Orientation.portrait ? 16.0 : 4.0),
-            RichText(
-              textAlign: TextAlign.center,
-              text: TextSpan(
-                style: TextStyle(
-                    color: Theme.of(context).colorScheme.onSurfaceVariant,
-                    fontSize: 24.0,),
-                children: <TextSpan>[
-                  TextSpan(
-                    text:
-                        // ignore: lines_longer_than_80_chars
-                        '${widget.announcements.length >= 10 && _currentNewsIndex < 9 ? '0' : ''}'
-                        '${_currentNewsIndex + 1}',
-                    style:
-                        TextStyle(color: Theme.of(context).colorScheme.primary),
-                  ),
-                  TextSpan(text: ' / ${widget.announcements.length}'),
-                ],
+            Semantics(
+              liveRegion: true,
+              label:
+                  // ignore: lines_longer_than_80_chars
+                  '${_currentNewsIndex + 1} / ${widget.announcements.length}',
+              child: RichText(
+                textAlign: TextAlign.center,
+                text: TextSpan(
+                  style: TextStyle(
+                      color: Theme.of(context).colorScheme.onSurfaceVariant,
+                      fontSize: 24.0,),
+                  children: <TextSpan>[
+                    TextSpan(
+                      text:
+                          // ignore: lines_longer_than_80_chars
+                          '${widget.announcements.length >= 10 && _currentNewsIndex < 9 ? '0' : ''}'
+                          '${_currentNewsIndex + 1}',
+                      style: TextStyle(
+                        color: Theme.of(context).colorScheme.primary,
+                      ),
+                    ),
+                    TextSpan(text: ' / ${widget.announcements.length}'),
+                  ],
+                ),
               ),
             ),
             SizedBox(height: orientation == Orientation.portrait ? 24.0 : 0.0),
