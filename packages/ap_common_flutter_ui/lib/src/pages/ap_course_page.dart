@@ -22,6 +22,7 @@ class ApCoursePage extends StatefulWidget {
     this.enableNotifyControl = true,
     this.enableAddToCalendar = true,
     this.enableCaptureCourseTable = false,
+    this.enableCustomCourse = false,
     this.androidResourceIcon,
     this.actions,
     this.showSectionTime,
@@ -40,6 +41,10 @@ class ApCoursePage extends StatefulWidget {
   final bool enableNotifyControl;
   final bool enableAddToCalendar;
   final bool enableCaptureCourseTable;
+
+  /// Enable the custom course feature (add/edit/delete).
+  final bool enableCustomCourse;
+
   final String? androidResourceIcon;
   final List<Widget>? actions;
   final bool? showSectionTime;
@@ -55,6 +60,12 @@ class _ApCoursePageState extends State<ApCoursePage> {
   DataState<CourseData> _state = const DataLoading<CourseData>();
   SemesterData? _semesterData;
   CourseNotifyData? _notifyData;
+
+  /// API-fetched course data (before merging custom courses).
+  CourseData? _apiCourseData;
+
+  /// User-created custom courses.
+  CustomCourseData _customCourseData = CustomCourseData();
 
   String get _notifyCacheKey =>
       widget.courseNotifySaveKey ??
@@ -88,19 +99,48 @@ class _ApCoursePageState extends State<ApCoursePage> {
           _semesterData!.data[_semesterData!.currentIndex];
       final CourseData courseData = await widget.onLoadCourse(semester);
       if (mounted) {
+        _apiCourseData = courseData;
+        if (widget.enableCustomCourse) {
+          _customCourseData =
+              CustomCourseData.load(_notifyCacheKey);
+        }
         setState(() {
-          if (courseData.courses.isEmpty) {
+          if (courseData.courses.isEmpty &&
+              _customCourseData.courses.isEmpty) {
             _state = const DataEmpty<CourseData>();
           } else {
-            _state = DataLoaded<CourseData>(courseData);
+            _state = DataLoaded<CourseData>(
+              courseData.mergeCustom(_customCourseData.courses),
+            );
             _notifyData = CourseNotifyData.load(_notifyCacheKey);
           }
         });
       }
     } catch (e) {
       if (mounted) {
-        setState(() => _state = DataError<CourseData>(hint: e.toString()));
+        setState(
+          () => _state = DataError<CourseData>(hint: e.toString()),
+        );
       }
+    }
+  }
+
+  void _onCustomCourseChanged(CustomCourseData updated) {
+    _customCourseData = CustomCourseData(
+      courses: updated.courses,
+      tag: _notifyCacheKey,
+    );
+    _customCourseData.save();
+    if (_apiCourseData != null && mounted) {
+      setState(() {
+        final CourseData merged =
+            _apiCourseData!.mergeCustom(_customCourseData.courses);
+        if (merged.courses.isEmpty) {
+          _state = const DataEmpty<CourseData>();
+        } else {
+          _state = DataLoaded<CourseData>(merged);
+        }
+      });
     }
   }
 
@@ -127,6 +167,9 @@ class _ApCoursePageState extends State<ApCoursePage> {
       enableNotifyControl: widget.enableNotifyControl,
       enableAddToCalendar: widget.enableAddToCalendar,
       enableCaptureCourseTable: widget.enableCaptureCourseTable,
+      enableCustomCourse: widget.enableCustomCourse,
+      customCourseData: _customCourseData,
+      onCustomCourseChanged: _onCustomCourseChanged,
       androidResourceIcon: widget.androidResourceIcon,
       actions: widget.actions,
       showSectionTime: widget.showSectionTime,

@@ -1345,6 +1345,60 @@ class ApLocalizations with BaseTranslations<AppLocale, ApLocalizations> {
 
 	/// en: 'Grade Distribution'
 	String get gradeDistribution => 'Grade Distribution';
+
+	/// en: 'Add Course'
+	String get addCourse => 'Add Course';
+
+	/// en: 'Edit Course'
+	String get editCourse => 'Edit Course';
+
+	/// en: 'Delete Course'
+	String get deleteCourse => 'Delete Course';
+
+	/// en: 'Are you sure you want to delete this custom course?'
+	String get deleteCourseConfirm => 'Are you sure you want to delete this custom course?';
+
+	/// en: 'Course Name'
+	String get courseName => 'Course Name';
+
+	/// en: 'e.g. Study Group, Tutoring'
+	String get courseNameHint => 'e.g. Study Group, Tutoring';
+
+	/// en: 'Instructor'
+	String get instructor => 'Instructor';
+
+	/// en: 'Classroom'
+	String get classroom => 'Classroom';
+
+	/// en: 'Color'
+	String get courseColor => 'Color';
+
+	/// en: 'Time Slots'
+	String get timeslotSelection => 'Time Slots';
+
+	/// en: 'Tap cells to select time slots'
+	String get timeslotSelectionHint => 'Tap cells to select time slots';
+
+	/// en: 'Course added'
+	String get addCourseSuccess => 'Course added';
+
+	/// en: 'Course updated'
+	String get updateCourseSuccess => 'Course updated';
+
+	/// en: 'Course deleted'
+	String get deleteCourseSuccess => 'Course deleted';
+
+	/// en: 'Please enter a course name'
+	String get courseNameRequired => 'Please enter a course name';
+
+	/// en: 'Please select at least one time slot'
+	String get timeslotRequired => 'Please select at least one time slot';
+
+	/// en: 'This time slot conflicts with: {arg1}'
+	String timeslotConflict({required Object arg1}) => 'This time slot conflicts with: ${arg1}';
+
+	/// en: 'Custom'
+	String get customCourse => 'Custom';
 }
 
 /// The flat map containing all translations for locale <en>.
@@ -1790,6 +1844,24 @@ extension on ApLocalizations {
 			'gradePoint' => 'Grade Point',
 			'gradeLetter' => 'Grade',
 			'gradeDistribution' => 'Grade Distribution',
+			'addCourse' => 'Add Course',
+			'editCourse' => 'Edit Course',
+			'deleteCourse' => 'Delete Course',
+			'deleteCourseConfirm' => 'Are you sure you want to delete this custom course?',
+			'courseName' => 'Course Name',
+			'courseNameHint' => 'e.g. Study Group, Tutoring',
+			'instructor' => 'Instructor',
+			'classroom' => 'Classroom',
+			'courseColor' => 'Color',
+			'timeslotSelection' => 'Time Slots',
+			'timeslotSelectionHint' => 'Tap cells to select time slots',
+			'addCourseSuccess' => 'Course added',
+			'updateCourseSuccess' => 'Course updated',
+			'deleteCourseSuccess' => 'Course deleted',
+			'courseNameRequired' => 'Please enter a course name',
+			'timeslotRequired' => 'Please select at least one time slot',
+			'timeslotConflict' => ({required Object arg1}) => 'This time slot conflicts with: ${arg1}',
+			'customCourse' => 'Custom',
 			_ => null,
 		};
 	}

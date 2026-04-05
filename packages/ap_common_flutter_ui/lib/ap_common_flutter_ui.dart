@@ -26,6 +26,7 @@ export 'src/widgets/about_info_card.dart';
 export 'src/widgets/ap_drawer.dart';
 export 'src/widgets/ap_network_image.dart';
 export 'src/widgets/color_picker_widgets.dart';
+export 'src/widgets/course_edit_sheet.dart';
 export 'src/widgets/default_dialog.dart';
 export 'src/widgets/dialog_option.dart';
 export 'src/widgets/hint_banner.dart';

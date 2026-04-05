@@ -474,6 +474,24 @@ class ApLocalizationsZhHantTw extends ApLocalizations with BaseTranslations<AppL
 	@override String get gradePoint => '等第積分';
 	@override String get gradeLetter => '等第';
 	@override String get gradeDistribution => '等第分佈';
+	@override String get addCourse => '新增課程';
+	@override String get editCourse => '編輯課程';
+	@override String get deleteCourse => '刪除課程';
+	@override String get deleteCourseConfirm => '確定要刪除此自訂課程嗎？';
+	@override String get courseName => '課程名稱';
+	@override String get courseNameHint => '例：讀書會、家教';
+	@override String get instructor => '教師';
+	@override String get classroom => '教室';
+	@override String get courseColor => '顏色';
+	@override String get timeslotSelection => '上課時段';
+	@override String get timeslotSelectionHint => '點擊格子選擇上課時段';
+	@override String get addCourseSuccess => '課程已新增';
+	@override String get updateCourseSuccess => '課程已更新';
+	@override String get deleteCourseSuccess => '課程已刪除';
+	@override String get courseNameRequired => '請輸入課程名稱';
+	@override String get timeslotRequired => '請至少選擇一個上課時段';
+	@override String timeslotConflict({required Object arg1}) => '此時段與「$arg1」衝突';
+	@override String get customCourse => '自訂';
 }
 
 /// The flat map containing all translations for locale <zh-Hant-TW>.
@@ -919,6 +937,24 @@ extension on ApLocalizationsZhHantTw {
 			'gradePoint' => '等第積分',
 			'gradeLetter' => '等第',
 			'gradeDistribution' => '等第分佈',
+			'addCourse' => '新增課程',
+			'editCourse' => '編輯課程',
+			'deleteCourse' => '刪除課程',
+			'deleteCourseConfirm' => '確定要刪除此自訂課程嗎？',
+			'courseName' => '課程名稱',
+			'courseNameHint' => '例：讀書會、家教',
+			'instructor' => '教師',
+			'classroom' => '教室',
+			'courseColor' => '顏色',
+			'timeslotSelection' => '上課時段',
+			'timeslotSelectionHint' => '點擊格子選擇上課時段',
+			'addCourseSuccess' => '課程已新增',
+			'updateCourseSuccess' => '課程已更新',
+			'deleteCourseSuccess' => '課程已刪除',
+			'courseNameRequired' => '請輸入課程名稱',
+			'timeslotRequired' => '請至少選擇一個上課時段',
+			'timeslotConflict' => ({required Object arg1}) => '此時段與「$arg1」衝突',
+			'customCourse' => '自訂',
 			_ => null,
 		};
 	}

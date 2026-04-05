@@ -85,6 +85,9 @@ class CourseScaffold extends StatefulWidget {
     this.showInstructors,
     this.showClassroomLocation,
     this.showSearchButton,
+    this.enableCustomCourse = false,
+    this.customCourseData,
+    this.onCustomCourseChanged,
   });
 
   /// Creates a [CourseScaffold] from a [DataState<CourseData>].
@@ -121,6 +124,9 @@ class CourseScaffold extends StatefulWidget {
     this.showInstructors,
     this.showClassroomLocation,
     this.showSearchButton,
+    this.enableCustomCourse = false,
+    this.customCourseData,
+    this.onCustomCourseChanged,
   })  : state = dataState.when(
           loading: () => CourseState.loading,
           loaded: (_, __) => CourseState.finish,
@@ -163,6 +169,15 @@ class CourseScaffold extends StatefulWidget {
   final bool? showInstructors;
   final bool? showClassroomLocation;
   final bool? showSearchButton;
+
+  /// Enable the custom course feature (add/edit/delete).
+  final bool enableCustomCourse;
+
+  /// User-created custom courses, managed externally.
+  final CustomCourseData? customCourseData;
+
+  /// Called when custom courses are added, edited, or deleted.
+  final ValueChanged<CustomCourseData>? onCustomCourseChanged;
 
   @override
   CourseScaffoldState createState() => CourseScaffoldState();
@@ -755,6 +770,8 @@ class CourseScaffoldState extends State<CourseScaffold> {
             colorScheme,
             weekday < weekdayCount,
             i == maxIndex,
+            weekday: weekday,
+            timeIndex: i,
           ),
         );
       } else {
@@ -838,25 +855,41 @@ class CourseScaffoldState extends State<CourseScaffold> {
   Widget _buildEmptyCell(
     ColorScheme colorScheme,
     bool showRightBorder,
-    bool isLast,
-  ) {
-    return Container(
-      height: _courseHeight,
-      decoration: BoxDecoration(
-        border: Border(
-          right: showRightBorder
-              ? BorderSide(
-                  color: colorScheme.outlineVariant.withAlpha(51),
-                  width: 0.5,
-                )
-              : BorderSide.none,
-          bottom: isLast
-              ? BorderSide.none
-              : BorderSide(
-                  color: colorScheme.outlineVariant.withAlpha(77),
-                  width: 0.5,
-                ),
+    bool isLast, {
+    required int weekday,
+    required int timeIndex,
+  }) {
+    final bool canAdd = widget.enableCustomCourse;
+
+    return GestureDetector(
+      onTap: canAdd ? () => _addCustomCourse(weekday, timeIndex) : null,
+      child: Container(
+        height: _courseHeight,
+        decoration: BoxDecoration(
+          border: Border(
+            right: showRightBorder
+                ? BorderSide(
+                    color: colorScheme.outlineVariant.withAlpha(51),
+                    width: 0.5,
+                  )
+                : BorderSide.none,
+            bottom: isLast
+                ? BorderSide.none
+                : BorderSide(
+                    color: colorScheme.outlineVariant.withAlpha(77),
+                    width: 0.5,
+                  ),
+          ),
         ),
+        child: canAdd
+            ? Center(
+                child: Icon(
+                  Icons.add_rounded,
+                  size: 16,
+                  color: colorScheme.outlineVariant.withAlpha(77),
+                ),
+              )
+            : null,
       ),
     );
   }
@@ -1011,9 +1044,78 @@ class CourseScaffoldState extends State<CourseScaffold> {
             course: course,
             visibility: visibility,
           ),
+          enableCustomCourseEdit:
+              widget.enableCustomCourse && course.isCustomCourse,
+          onEditCourse: () {
+            Navigator.of(builder).pop();
+            _editCustomCourse(course);
+          },
+          onDeleteCourse: () {
+            Navigator.of(builder).pop();
+            _deleteCustomCourse(course);
+          },
         );
       },
     );
+  }
+
+  Future<void> _addCustomCourse(int weekday, int timeIndex) async {
+    final Course? result = await CourseEditSheet.show(
+      context: context,
+      timeCodes: widget.courseData.timeCodes,
+      existingCourses: widget.courseData.courses,
+      initialWeekday: weekday,
+      initialTimeIndex: timeIndex,
+    );
+    if (result == null || !mounted) return;
+    final CustomCourseData updated =
+        (widget.customCourseData ?? CustomCourseData()).add(result);
+    widget.onCustomCourseChanged?.call(updated);
+    UiUtil.instance.showToast(context, context.ap.addCourseSuccess);
+  }
+
+  Future<void> _editCustomCourse(Course course) async {
+    final Course? result = await CourseEditSheet.show(
+      context: context,
+      timeCodes: widget.courseData.timeCodes,
+      existingCourses: widget.courseData.courses,
+      course: course,
+    );
+    if (result == null || !mounted) return;
+    final CustomCourseData updated =
+        (widget.customCourseData ?? CustomCourseData())
+            .update(course.code, result);
+    widget.onCustomCourseChanged?.call(updated);
+    UiUtil.instance
+        .showToast(context, context.ap.updateCourseSuccess);
+  }
+
+  void _deleteCustomCourse(Course course) {
+    showDialog<bool>(
+      context: context,
+      builder: (BuildContext ctx) => AlertDialog(
+        title: Text(context.ap.deleteCourse),
+        content: Text(context.ap.deleteCourseConfirm),
+        actions: <Widget>[
+          TextButton(
+            onPressed: () => Navigator.of(ctx).pop(false),
+            child: Text(context.ap.cancel),
+          ),
+          FilledButton(
+            onPressed: () => Navigator.of(ctx).pop(true),
+            child: Text(context.ap.confirm),
+          ),
+        ],
+      ),
+    ).then((bool? confirmed) {
+      if (confirmed != true || !mounted) return;
+      final CustomCourseData updated =
+          (widget.customCourseData ?? CustomCourseData())
+              .remove(course.code);
+      widget.onCustomCourseChanged?.call(updated);
+      UiUtil.instance
+          .showToast(context, context.ap.deleteCourseSuccess);
+    });
   }
 
   void _pickSemester() {
@@ -1071,6 +1173,9 @@ class CourseContent extends StatefulWidget {
     this.invisibleCourseCodes = const <String>[],
     this.onVisibilityChanged,
     this.courseColor,
+    this.enableCustomCourseEdit = false,
+    this.onEditCourse,
+    this.onDeleteCourse,
   });
 
   final bool enableNotifyControl;
@@ -1086,6 +1191,9 @@ class CourseContent extends StatefulWidget {
   final List<String> invisibleCourseCodes;
   final ValueChanged<bool>? onVisibilityChanged;
   final Color? courseColor;
+  final bool enableCustomCourseEdit;
+  final VoidCallback? onEditCourse;
+  final VoidCallback? onDeleteCourse;
 
   @override
   _CourseContentState createState() => _CourseContentState();
@@ -1194,6 +1302,24 @@ class _CourseContentState extends State<CourseContent> {
                         });
                       },
                     ),
+                    if (widget.enableCustomCourseEdit) ...<Widget>[
+                      IconButton(
+                        tooltip: context.ap.editCourse,
+                        icon: Icon(
+                          Icons.edit_outlined,
+                          color: onCourseColor,
+                        ),
+                        onPressed: widget.onEditCourse,
+                      ),
+                      IconButton(
+                        tooltip: context.ap.deleteCourse,
+                        icon: Icon(
+                          Icons.delete_outline,
+                          color: onCourseColor,
+                        ),
+                        onPressed: widget.onDeleteCourse,
+                      ),
+                    ],
                     if (widget.enableNotifyControl &&
                         _notifyData != null &&
                         NotificationUtil.instance.isSupport)
