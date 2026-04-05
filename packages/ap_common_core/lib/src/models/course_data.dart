@@ -157,6 +157,7 @@ abstract class Course with _$Course {
     @JsonKey(name: 'sectionTimes') required List<SectionTime> times,
     Location? location,
     required List<String> instructors,
+    int? colorIndex,
   }) = _Course;
   const Course._();
 

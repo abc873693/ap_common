@@ -363,6 +363,7 @@ mixin _$Course {
   List<SectionTime> get times;
   Location? get location;
   List<String> get instructors;
+  int? get colorIndex;
 
   /// Create a copy of Course
   /// with the given fields replaced by the non-null parameter values.
@@ -393,7 +394,9 @@ mixin _$Course {
             (identical(other.location, location) ||
                 other.location == location) &&
             const DeepCollectionEquality()
-                .equals(other.instructors, instructors));
+                .equals(other.instructors, instructors) &&
+            (identical(other.colorIndex, colorIndex) ||
+                other.colorIndex == colorIndex));
   }
 
   @JsonKey(includeFromJson: false, includeToJson: false)
@@ -410,11 +413,12 @@ mixin _$Course {
       at,
       const DeepCollectionEquality().hash(times),
       location,
-      const DeepCollectionEquality().hash(instructors));
+      const DeepCollectionEquality().hash(instructors),
+      colorIndex);
 
   @override
   String toString() {
-    return 'Course(code: $code, title: $title, className: $className, group: $group, units: $units, hours: $hours, required: $required, at: $at, times: $times, location: $location, instructors: $instructors)';
+    return 'Course(code: $code, title: $title, className: $className, group: $group, units: $units, hours: $hours, required: $required, at: $at, times: $times, location: $location, instructors: $instructors, colorIndex: $colorIndex)';
   }
 }
 
@@ -434,7 +438,8 @@ abstract mixin class $CourseCopyWith<$Res> {
       String? at,
       @JsonKey(name: 'sectionTimes') List<SectionTime> times,
       Location? location,
-      List<String> instructors});
+      List<String> instructors,
+      int? colorIndex});
 
   $LocationCopyWith<$Res>? get location;
 }
@@ -462,6 +467,7 @@ class _$CourseCopyWithImpl<$Res> implements $CourseCopyWith<$Res> {
     Object? times = null,
     Object? location = freezed,
     Object? instructors = null,
+    Object? colorIndex = freezed,
   }) {
     return _then(_self.copyWith(
       code: null == code
@@ -508,6 +514,10 @@ class _$CourseCopyWithImpl<$Res> implements $CourseCopyWith<$Res> {
           ? _self.instructors
           : instructors // ignore: cast_nullable_to_non_nullable
               as List<String>,
+      colorIndex: freezed == colorIndex
+          ? _self.colorIndex
+          : colorIndex // ignore: cast_nullable_to_non_nullable
+              as int?,
     ));
   }
 
@@ -630,7 +640,8 @@ extension CoursePatterns on Course {
             String? at,
             @JsonKey(name: 'sectionTimes') List<SectionTime> times,
             Location? location,
-            List<String> instructors)?
+            List<String> instructors,
+            int? colorIndex)?
         $default, {
     required TResult orElse(),
   }) {
@@ -648,7 +659,8 @@ extension CoursePatterns on Course {
             _that.at,
             _that.times,
             _that.location,
-            _that.instructors);
+            _that.instructors,
+            _that.colorIndex);
       case _:
         return orElse();
     }
@@ -680,7 +692,8 @@ extension CoursePatterns on Course {
             String? at,
             @JsonKey(name: 'sectionTimes') List<SectionTime> times,
             Location? location,
-            List<String> instructors)
+            List<String> instructors,
+            int? colorIndex)
         $default,
   ) {
     final _that = this;
@@ -697,7 +710,8 @@ extension CoursePatterns on Course {
             _that.at,
             _that.times,
             _that.location,
-            _that.instructors);
+            _that.instructors,
+            _that.colorIndex);
       case _:
         throw StateError('Unexpected subclass');
     }
@@ -728,7 +742,8 @@ extension CoursePatterns on Course {
             String? at,
             @JsonKey(name: 'sectionTimes') List<SectionTime> times,
             Location? location,
-            List<String> instructors)?
+            List<String> instructors,
+            int? colorIndex)?
         $default,
   ) {
     final _that = this;
@@ -745,7 +760,8 @@ extension CoursePatterns on Course {
             _that.at,
             _that.times,
             _that.location,
-            _that.instructors);
+            _that.instructors,
+            _that.colorIndex);
       case _:
         return null;
     }
@@ -766,7 +782,8 @@ class _Course extends Course {
       this.at,
       @JsonKey(name: 'sectionTimes') required final List<SectionTime> times,
       this.location,
-      required final List<String> instructors})
+      required final List<String> instructors,
+      this.colorIndex})
       : _times = times,
         _instructors = instructors,
         super._();
@@ -807,6 +824,9 @@ class _Course extends Course {
     return EqualUnmodifiableListView(_instructors);
   }
 
+  @override
+  final int? colorIndex;
+
   /// Create a copy of Course
   /// with the given fields replaced by the non-null parameter values.
   @override
@@ -841,7 +861,9 @@ class _Course extends Course {
             (identical(other.location, location) ||
                 other.location == location) &&
             const DeepCollectionEquality()
-                .equals(other._instructors, _instructors));
+                .equals(other._instructors, _instructors) &&
+            (identical(other.colorIndex, colorIndex) ||
+                other.colorIndex == colorIndex));
   }
 
   @JsonKey(includeFromJson: false, includeToJson: false)
@@ -858,11 +880,12 @@ class _Course extends Course {
       at,
       const DeepCollectionEquality().hash(_times),
       location,
-      const DeepCollectionEquality().hash(_instructors));
+      const DeepCollectionEquality().hash(_instructors),
+      colorIndex);
 
   @override
   String toString() {
-    return 'Course(code: $code, title: $title, className: $className, group: $group, units: $units, hours: $hours, required: $required, at: $at, times: $times, location: $location, instructors: $instructors)';
+    return 'Course(code: $code, title: $title, className: $className, group: $group, units: $units, hours: $hours, required: $required, at: $at, times: $times, location: $location, instructors: $instructors, colorIndex: $colorIndex)';
   }
 }
 
@@ -883,7 +906,8 @@ abstract mixin class _$CourseCopyWith<$Res> implements $CourseCopyWith<$Res> {
       String? at,
       @JsonKey(name: 'sectionTimes') List<SectionTime> times,
       Location? location,
-      List<String> instructors});
+      List<String> instructors,
+      int? colorIndex});
 
   @override
   $LocationCopyWith<$Res>? get location;
@@ -912,6 +936,7 @@ class __$CourseCopyWithImpl<$Res> implements _$CourseCopyWith<$Res> {
     Object? times = null,
     Object? location = freezed,
     Object? instructors = null,
+    Object? colorIndex = freezed,
   }) {
     return _then(_Course(
       code: null == code
@@ -958,6 +983,10 @@ class __$CourseCopyWithImpl<$Res> implements _$CourseCopyWith<$Res> {
           ? _self._instructors
           : instructors // ignore: cast_nullable_to_non_nullable
               as List<String>,
+      colorIndex: freezed == colorIndex
+          ? _self.colorIndex
+          : colorIndex // ignore: cast_nullable_to_non_nullable
+              as int?,
     ));
   }
 

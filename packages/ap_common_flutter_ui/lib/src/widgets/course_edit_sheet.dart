@@ -97,7 +97,7 @@ class _CourseEditSheetState extends State<CourseEditSheet> {
       for (final SectionTime t in c.times) {
         _selectedSlots.add((t.weekday, t.index));
       }
-      _colorIndex =
+      _colorIndex = c.colorIndex ??
           c.code.hashCode.abs() % courseColors.length;
     } else if (widget.initialWeekday != null &&
         widget.initialTimeIndex != null) {
@@ -556,6 +556,7 @@ class _CourseEditSheetState extends State<CourseEditSheet> {
           .toList(),
       location: location,
       instructors: instructors,
+      colorIndex: _colorIndex,
     );
 
     Navigator.of(context).pop(course);

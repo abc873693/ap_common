@@ -210,13 +210,18 @@ class CourseScaffoldState extends State<CourseScaffold> {
   final Map<String, Color> _courseColorMap = <String, Color>{};
   int _colorIndex = 0;
 
-  Color _getCourseColor(String courseCode) {
-    if (!_courseColorMap.containsKey(courseCode)) {
-      _courseColorMap[courseCode] =
-          courseColors[_colorIndex % courseColors.length];
-      _colorIndex++;
+  Color _getCourseColor(Course course) {
+    if (!_courseColorMap.containsKey(course.code)) {
+      if (course.colorIndex != null) {
+        _courseColorMap[course.code] =
+            courseColors[course.colorIndex! % courseColors.length];
+      } else {
+        _courseColorMap[course.code] =
+            courseColors[_colorIndex % courseColors.length];
+        _colorIndex++;
+      }
     }
-    return _courseColorMap[courseCode]!;
+    return _courseColorMap[course.code]!;
   }
 
   late ScrollController _scrollController;
@@ -261,6 +266,8 @@ class CourseScaffoldState extends State<CourseScaffold> {
   void didUpdateWidget(covariant CourseScaffold oldWidget) {
     if (widget.courseData != oldWidget.courseData) {
       _buildCourseLookup();
+      _courseColorMap.clear();
+      _colorIndex = 0;
     }
     fetchInvisibleCourseCodes();
     super.didUpdateWidget(oldWidget);
@@ -955,7 +962,7 @@ class CourseScaffoldState extends State<CourseScaffold> {
     Course course,
     int span,
   ) {
-    final Color courseColor = _getCourseColor(course.code);
+    final Color courseColor = _getCourseColor(course);
     final String locationInfo =
         (showClassroomLocation ?? true) && course.location != null
             ? course.location.toString()
@@ -1044,7 +1051,7 @@ class CourseScaffoldState extends State<CourseScaffold> {
           weekday: weekday,
           courseNotifySaveKey: widget.courseNotifySaveKey,
           timeCode: timeCode,
-          courseColor: _getCourseColor(course.code),
+          courseColor: _getCourseColor(course),
           invisibleCourseCodes: invisibleCourseCodes,
           onVisibilityChanged: (bool visibility) => saveInvisibleCourseCodes(
             course: course,
@@ -1442,14 +1449,16 @@ class _CourseContentState extends State<CourseContent> {
                       ),
                   ],
                 ),
-                const SizedBox(height: 8),
-                Text(
-                  widget.course.code,
-                  style: TextStyle(
-                    fontSize: 14,
-                    color: onCourseColor.withAlpha(204),
+                if (!widget.course.isCustomCourse) ...<Widget>[
+                  const SizedBox(height: 8),
+                  Text(
+                    widget.course.code,
+                    style: TextStyle(
+                      fontSize: 14,
+                      color: onCourseColor.withAlpha(204),
+                    ),
                   ),
-                ),
+                ],
               ],
             ),
           ),
