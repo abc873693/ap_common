@@ -145,6 +145,7 @@ class SemesterPicker extends StatefulWidget {
     final Set<String>? effectiveEmpty =
         controller?._emptySemesters ?? emptySemesters;
 
+    VoidCallback? onControllerChanged;
     showModalBottomSheet<void>(
       context: context,
       backgroundColor: const Color(0x00000000),
@@ -155,8 +156,10 @@ class SemesterPicker extends StatefulWidget {
         }
         return StatefulBuilder(
           builder: (BuildContext context, StateSetter setSheetState) {
-            void onControllerChanged() => setSheetState(() {});
-            controller?.addListener(onControllerChanged);
+            if (onControllerChanged == null && controller != null) {
+              onControllerChanged = () => setSheetState(() {});
+              controller.addListener(onControllerChanged!);
+            }
             return DraggableScrollableSheet(
               initialChildSize: 0.6,
               minChildSize: 0.3,
@@ -245,6 +248,9 @@ class SemesterPicker extends StatefulWidget {
         );
       },
     ).whenComplete(() {
+      if (onControllerChanged != null) {
+        controller?.removeListener(onControllerChanged!);
+      }
       controller?.detachSheetNavigator();
     });
   }
