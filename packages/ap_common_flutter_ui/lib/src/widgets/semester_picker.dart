@@ -26,8 +26,7 @@ class SemesterPickerController extends ChangeNotifier {
       Set<String>.unmodifiable(_loadingSemesters);
 
   /// Semester codes marked as empty (no data).
-  Set<String> get emptySemesters =>
-      Set<String>.unmodifiable(_emptySemesters);
+  Set<String> get emptySemesters => Set<String>.unmodifiable(_emptySemesters);
 
   /// Mark a semester as loading. The BottomSheet will show a
   /// spinner on this item.
@@ -82,7 +81,6 @@ class SemesterPickerController extends ChangeNotifier {
 }
 
 class SemesterUIConfig {
-
   const SemesterUIConfig({
     this.getName,
     this.getIcon,
@@ -145,6 +143,7 @@ class SemesterPicker extends StatefulWidget {
     final Set<String>? effectiveEmpty =
         controller?._emptySemesters ?? emptySemesters;
 
+    VoidCallback? onControllerChanged;
     showModalBottomSheet<void>(
       context: context,
       backgroundColor: const Color(0x00000000),
@@ -155,8 +154,10 @@ class SemesterPicker extends StatefulWidget {
         }
         return StatefulBuilder(
           builder: (BuildContext context, StateSetter setSheetState) {
-            void onControllerChanged() => setSheetState(() {});
-            controller?.addListener(onControllerChanged);
+            if (onControllerChanged == null && controller != null) {
+              onControllerChanged = () => setSheetState(() {});
+              controller.addListener(onControllerChanged!);
+            }
             return DraggableScrollableSheet(
               initialChildSize: 0.6,
               minChildSize: 0.3,
@@ -245,6 +246,9 @@ class SemesterPicker extends StatefulWidget {
         );
       },
     ).whenComplete(() {
+      if (onControllerChanged != null) {
+        controller?.removeListener(onControllerChanged!);
+      }
       controller?.detachSheetNavigator();
     });
   }
@@ -652,9 +656,8 @@ class SemesterPickerState extends State<SemesterPicker> {
     SemesterUIConfig? uiConfig, [
     ApLocalizations? ap,
   ]) {
-    final String name =
-        uiConfig?.getName?.call(semester.value) ??
-            _getSemesterName(semester.value, ap);
+    final String name = uiConfig?.getName?.call(semester.value) ??
+        _getSemesterName(semester.value, ap);
     if (name.isNotEmpty) {
       return '${semester.year} $name';
     }

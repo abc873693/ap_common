@@ -136,9 +136,8 @@ class CourseScaffold extends StatefulWidget {
           empty: (_) => CourseState.empty,
         ),
         courseData = dataState.dataOrNull ?? CourseData.empty(),
-        customHint = dataState is DataLoaded<CourseData>
-            ? dataState.hint
-            : null,
+        customHint =
+            dataState is DataLoaded<CourseData> ? dataState.hint : null,
         customStateHint = dataState is DataError<CourseData>
             ? dataState.hint
             : dataState is DataEmpty<CourseData>
@@ -421,6 +420,7 @@ class CourseScaffoldState extends State<CourseScaffold> {
                       courses: widget.courseData.courses,
                       timeCodes: widget.courseData.timeCodes,
                       invisibleCourseCodes: invisibleCourseCodes,
+                      getCourseColor: _getCourseColor,
                       onVisibilityChanged: (
                         Course course,
                         bool visibility,
@@ -622,6 +622,7 @@ class CourseScaffoldState extends State<CourseScaffold> {
             courses: widget.courseData.courses,
             timeCodes: widget.courseData.timeCodes,
             invisibleCourseCodes: invisibleCourseCodes,
+            getCourseColor: _getCourseColor,
             onVisibilityChanged: (
               Course course,
               bool visibility,
@@ -659,8 +660,7 @@ class CourseScaffoldState extends State<CourseScaffold> {
           final String message =
               '${context.ap.exportCourseTableSuccess}\n$filePath';
           Toast.show(message, context);
-          AnalyticsUtil.instance
-              .logEvent('export_course_table_image_success');
+          AnalyticsUtil.instance.logEvent('export_course_table_image_success');
         case SaveImageError(:final String message):
           UiUtil.instance.showToast(context, message);
       }
@@ -942,11 +942,10 @@ class CourseScaffoldState extends State<CourseScaffold> {
     _courseLookup = <int, Map<int, Course>>{};
     for (final Course course in widget.courseData.courses) {
       for (final SectionTime time in course.times) {
-        _courseLookup
-            .putIfAbsent(
-              time.weekday,
-              () => <int, Course>{},
-            )[time.index] = course;
+        _courseLookup.putIfAbsent(
+          time.weekday,
+          () => <int, Course>{},
+        )[time.index] = course;
       }
     }
   }
@@ -982,9 +981,16 @@ class CourseScaffoldState extends State<CourseScaffold> {
 
     return GestureDetector(
       onTap: () {
-        final TimeCode timeCode = timeIndex < widget.courseData.timeCodes.length
-            ? widget.courseData.timeCodes[timeIndex]
+        final List<TimeCode> timeCodes = widget.courseData.timeCodes;
+        final TimeCode startTimeCode = timeIndex < timeCodes.length
+            ? timeCodes[timeIndex]
             : const TimeCode(title: '?', startTime: '?', endTime: '?');
+        final int lastIndex = timeIndex + span - 1;
+        final TimeCode endTimeCode =
+            lastIndex < timeCodes.length ? timeCodes[lastIndex] : startTimeCode;
+        final TimeCode timeCode = startTimeCode.copyWith(
+          endTime: endTimeCode.endTime,
+        );
         _onPressed(weekday, timeCode, course);
       },
       child: Container(
@@ -1099,8 +1105,7 @@ class CourseScaffoldState extends State<CourseScaffold> {
         (widget.customCourseData ?? CustomCourseData())
             .update(course.code, result);
     widget.onCustomCourseChanged?.call(updated);
-    UiUtil.instance
-        .showToast(context, context.ap.updateCourseSuccess);
+    UiUtil.instance.showToast(context, context.ap.updateCourseSuccess);
   }
 
   void _deleteCustomCourse(Course course) {
@@ -1123,11 +1128,9 @@ class CourseScaffoldState extends State<CourseScaffold> {
     ).then((bool? confirmed) {
       if (confirmed != true || !mounted) return;
       final CustomCourseData updated =
-          (widget.customCourseData ?? CustomCourseData())
-              .remove(course.code);
+          (widget.customCourseData ?? CustomCourseData()).remove(course.code);
       widget.onCustomCourseChanged?.call(updated);
-      UiUtil.instance
-          .showToast(context, context.ap.deleteCourseSuccess);
+      UiUtil.instance.showToast(context, context.ap.deleteCourseSuccess);
     });
   }
 
@@ -1233,8 +1236,8 @@ class _CourseContentState extends State<CourseContent> {
   @override
   Widget build(BuildContext context) {
     CourseNotifyState? state;
-    if (widget.enableNotifyControl && widget.notifyData != null) {
-      state = widget.notifyData!.getByCode(
+    if (widget.enableNotifyControl && _notifyData != null) {
+      state = _notifyData!.getByCode(
                 widget.course.code,
                 widget.timeCode.startTime,
                 widget.weekday,
@@ -1577,6 +1580,7 @@ class CourseList extends StatelessWidget {
     this.onVisibilityChanged,
     this.timeCodes,
     this.controller,
+    this.getCourseColor,
   });
 
   final List<Course> courses;
@@ -1584,6 +1588,7 @@ class CourseList extends StatelessWidget {
   final void Function(Course, bool)? onVisibilityChanged;
   final List<TimeCode>? timeCodes;
   final ScrollController? controller;
+  final Color Function(Course)? getCourseColor;
 
   @override
   Widget build(BuildContext context) {
@@ -1593,12 +1598,17 @@ class CourseList extends StatelessWidget {
       controller: controller,
       physics: const AlwaysScrollableScrollPhysics(),
       padding: const EdgeInsets.only(
-          bottom: 80.0, left: 16.0, right: 16.0, top: 16.0,),
+        bottom: 80.0,
+        left: 16.0,
+        right: 16.0,
+        top: 16.0,
+      ),
       itemCount: courses.length,
       itemBuilder: (_, int index) {
         final Course course = courses[index];
         final bool visibility = !invisibleCourseCodes.contains(course.code);
-        final Color courseColor = courseColors[index % courseColors.length];
+        final Color courseColor = getCourseColor?.call(course) ??
+            courseColors[course.code.hashCode % courseColors.length];
         final String instructors = course.getInstructors();
 
         return Container(
