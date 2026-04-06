@@ -894,15 +894,6 @@ class CourseScaffoldState extends State<CourseScaffold> {
                   ),
           ),
         ),
-        child: canAdd
-            ? Center(
-                child: Icon(
-                  Icons.add_rounded,
-                  size: 16,
-                  color: colorScheme.outlineVariant.withAlpha(77),
-                ),
-              )
-            : null,
       ),
     );
   }
