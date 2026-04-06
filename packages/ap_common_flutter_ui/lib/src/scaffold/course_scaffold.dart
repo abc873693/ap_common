@@ -420,6 +420,7 @@ class CourseScaffoldState extends State<CourseScaffold> {
                       courses: widget.courseData.courses,
                       timeCodes: widget.courseData.timeCodes,
                       invisibleCourseCodes: invisibleCourseCodes,
+                      getCourseColor: _getCourseColor,
                       onVisibilityChanged: (
                         Course course,
                         bool visibility,
@@ -621,6 +622,7 @@ class CourseScaffoldState extends State<CourseScaffold> {
             courses: widget.courseData.courses,
             timeCodes: widget.courseData.timeCodes,
             invisibleCourseCodes: invisibleCourseCodes,
+            getCourseColor: _getCourseColor,
             onVisibilityChanged: (
               Course course,
               bool visibility,
@@ -979,9 +981,16 @@ class CourseScaffoldState extends State<CourseScaffold> {
 
     return GestureDetector(
       onTap: () {
-        final TimeCode timeCode = timeIndex < widget.courseData.timeCodes.length
-            ? widget.courseData.timeCodes[timeIndex]
+        final List<TimeCode> timeCodes = widget.courseData.timeCodes;
+        final TimeCode startTimeCode = timeIndex < timeCodes.length
+            ? timeCodes[timeIndex]
             : const TimeCode(title: '?', startTime: '?', endTime: '?');
+        final int lastIndex = timeIndex + span - 1;
+        final TimeCode endTimeCode =
+            lastIndex < timeCodes.length ? timeCodes[lastIndex] : startTimeCode;
+        final TimeCode timeCode = startTimeCode.copyWith(
+          endTime: endTimeCode.endTime,
+        );
         _onPressed(weekday, timeCode, course);
       },
       child: Container(
@@ -1571,6 +1580,7 @@ class CourseList extends StatelessWidget {
     this.onVisibilityChanged,
     this.timeCodes,
     this.controller,
+    this.getCourseColor,
   });
 
   final List<Course> courses;
@@ -1578,6 +1588,7 @@ class CourseList extends StatelessWidget {
   final void Function(Course, bool)? onVisibilityChanged;
   final List<TimeCode>? timeCodes;
   final ScrollController? controller;
+  final Color Function(Course)? getCourseColor;
 
   @override
   Widget build(BuildContext context) {
@@ -1596,7 +1607,8 @@ class CourseList extends StatelessWidget {
       itemBuilder: (_, int index) {
         final Course course = courses[index];
         final bool visibility = !invisibleCourseCodes.contains(course.code);
-        final Color courseColor = courseColors[index % courseColors.length];
+        final Color courseColor = getCourseColor?.call(course) ??
+            courseColors[course.code.hashCode % courseColors.length];
         final String instructors = course.getInstructors();
 
         return Container(
