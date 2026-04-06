@@ -26,8 +26,7 @@ class SemesterPickerController extends ChangeNotifier {
       Set<String>.unmodifiable(_loadingSemesters);
 
   /// Semester codes marked as empty (no data).
-  Set<String> get emptySemesters =>
-      Set<String>.unmodifiable(_emptySemesters);
+  Set<String> get emptySemesters => Set<String>.unmodifiable(_emptySemesters);
 
   /// Mark a semester as loading. The BottomSheet will show a
   /// spinner on this item.
@@ -82,7 +81,6 @@ class SemesterPickerController extends ChangeNotifier {
 }
 
 class SemesterUIConfig {
-
   const SemesterUIConfig({
     this.getName,
     this.getIcon,
@@ -658,9 +656,8 @@ class SemesterPickerState extends State<SemesterPicker> {
     SemesterUIConfig? uiConfig, [
     ApLocalizations? ap,
   ]) {
-    final String name =
-        uiConfig?.getName?.call(semester.value) ??
-            _getSemesterName(semester.value, ap);
+    final String name = uiConfig?.getName?.call(semester.value) ??
+        _getSemesterName(semester.value, ap);
     if (name.isNotEmpty) {
       return '${semester.year} $name';
     }

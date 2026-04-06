@@ -145,8 +145,7 @@ class DialogUtils {
           json['${versionInfo.code}'] as Map<String, dynamic>;
       final Object? localeContent = versionMap[app.locale];
       final String content = switch (localeContent) {
-        final List<dynamic> list =>
-          list.map((Object? e) => '• $e').join('\n'),
+        final List<dynamic> list => list.map((Object? e) => '• $e').join('\n'),
         final String s => s,
         _ => versionInfo.content,
       };
