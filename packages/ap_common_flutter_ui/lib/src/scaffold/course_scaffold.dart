@@ -1233,8 +1233,8 @@ class _CourseContentState extends State<CourseContent> {
   @override
   Widget build(BuildContext context) {
     CourseNotifyState? state;
-    if (widget.enableNotifyControl && widget.notifyData != null) {
-      state = widget.notifyData!.getByCode(
+    if (widget.enableNotifyControl && _notifyData != null) {
+      state = _notifyData!.getByCode(
                 widget.course.code,
                 widget.timeCode.startTime,
                 widget.weekday,
