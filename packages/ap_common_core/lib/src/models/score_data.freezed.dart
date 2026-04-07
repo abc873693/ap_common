@@ -16,6 +16,9 @@ T _$identity<T>(T value) => value;
 mixin _$ScoreData {
   List<Score> get scores;
   Detail get detail;
+  ScoreType get scoreType;
+  double get passingScore;
+  double get passingGradePoint;
 
   /// Create a copy of ScoreData
   /// with the given fields replaced by the non-null parameter values.
@@ -33,17 +36,28 @@ mixin _$ScoreData {
         (other.runtimeType == runtimeType &&
             other is ScoreData &&
             const DeepCollectionEquality().equals(other.scores, scores) &&
-            (identical(other.detail, detail) || other.detail == detail));
+            (identical(other.detail, detail) || other.detail == detail) &&
+            (identical(other.scoreType, scoreType) ||
+                other.scoreType == scoreType) &&
+            (identical(other.passingScore, passingScore) ||
+                other.passingScore == passingScore) &&
+            (identical(other.passingGradePoint, passingGradePoint) ||
+                other.passingGradePoint == passingGradePoint));
   }
 
   @JsonKey(includeFromJson: false, includeToJson: false)
   @override
   int get hashCode => Object.hash(
-      runtimeType, const DeepCollectionEquality().hash(scores), detail);
+      runtimeType,
+      const DeepCollectionEquality().hash(scores),
+      detail,
+      scoreType,
+      passingScore,
+      passingGradePoint);
 
   @override
   String toString() {
-    return 'ScoreData(scores: $scores, detail: $detail)';
+    return 'ScoreData(scores: $scores, detail: $detail, scoreType: $scoreType, passingScore: $passingScore, passingGradePoint: $passingGradePoint)';
   }
 }
 
@@ -52,7 +66,12 @@ abstract mixin class $ScoreDataCopyWith<$Res> {
   factory $ScoreDataCopyWith(ScoreData value, $Res Function(ScoreData) _then) =
       _$ScoreDataCopyWithImpl;
   @useResult
-  $Res call({List<Score> scores, Detail detail});
+  $Res call(
+      {List<Score> scores,
+      Detail detail,
+      ScoreType scoreType,
+      double passingScore,
+      double passingGradePoint});
 
   $DetailCopyWith<$Res> get detail;
 }
@@ -71,6 +90,9 @@ class _$ScoreDataCopyWithImpl<$Res> implements $ScoreDataCopyWith<$Res> {
   $Res call({
     Object? scores = null,
     Object? detail = null,
+    Object? scoreType = null,
+    Object? passingScore = null,
+    Object? passingGradePoint = null,
   }) {
     return _then(_self.copyWith(
       scores: null == scores
@@ -81,6 +103,18 @@ class _$ScoreDataCopyWithImpl<$Res> implements $ScoreDataCopyWith<$Res> {
           ? _self.detail
           : detail // ignore: cast_nullable_to_non_nullable
               as Detail,
+      scoreType: null == scoreType
+          ? _self.scoreType
+          : scoreType // ignore: cast_nullable_to_non_nullable
+              as ScoreType,
+      passingScore: null == passingScore
+          ? _self.passingScore
+          : passingScore // ignore: cast_nullable_to_non_nullable
+              as double,
+      passingGradePoint: null == passingGradePoint
+          ? _self.passingGradePoint
+          : passingGradePoint // ignore: cast_nullable_to_non_nullable
+              as double,
     ));
   }
 
@@ -188,13 +222,16 @@ extension ScoreDataPatterns on ScoreData {
 
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>(
-    TResult Function(List<Score> scores, Detail detail)? $default, {
+    TResult Function(List<Score> scores, Detail detail, ScoreType scoreType,
+            double passingScore, double passingGradePoint)?
+        $default, {
     required TResult orElse(),
   }) {
     final _that = this;
     switch (_that) {
       case _ScoreData() when $default != null:
-        return $default(_that.scores, _that.detail);
+        return $default(_that.scores, _that.detail, _that.scoreType,
+            _that.passingScore, _that.passingGradePoint);
       case _:
         return orElse();
     }
@@ -215,12 +252,15 @@ extension ScoreDataPatterns on ScoreData {
 
   @optionalTypeArgs
   TResult when<TResult extends Object?>(
-    TResult Function(List<Score> scores, Detail detail) $default,
+    TResult Function(List<Score> scores, Detail detail, ScoreType scoreType,
+            double passingScore, double passingGradePoint)
+        $default,
   ) {
     final _that = this;
     switch (_that) {
       case _ScoreData():
-        return $default(_that.scores, _that.detail);
+        return $default(_that.scores, _that.detail, _that.scoreType,
+            _that.passingScore, _that.passingGradePoint);
       case _:
         throw StateError('Unexpected subclass');
     }
@@ -240,12 +280,15 @@ extension ScoreDataPatterns on ScoreData {
 
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>(
-    TResult? Function(List<Score> scores, Detail detail)? $default,
+    TResult? Function(List<Score> scores, Detail detail, ScoreType scoreType,
+            double passingScore, double passingGradePoint)?
+        $default,
   ) {
     final _that = this;
     switch (_that) {
       case _ScoreData() when $default != null:
-        return $default(_that.scores, _that.detail);
+        return $default(_that.scores, _that.detail, _that.scoreType,
+            _that.passingScore, _that.passingGradePoint);
       case _:
         return null;
     }
@@ -255,7 +298,12 @@ extension ScoreDataPatterns on ScoreData {
 /// @nodoc
 @JsonSerializable()
 class _ScoreData extends ScoreData {
-  const _ScoreData({required final List<Score> scores, required this.detail})
+  const _ScoreData(
+      {required final List<Score> scores,
+      required this.detail,
+      this.scoreType = ScoreType.numeric,
+      this.passingScore = 60.0,
+      this.passingGradePoint = 1.7})
       : _scores = scores,
         super._();
   factory _ScoreData.fromJson(Map<String, dynamic> json) =>
@@ -271,6 +319,15 @@ class _ScoreData extends ScoreData {
 
   @override
   final Detail detail;
+  @override
+  @JsonKey()
+  final ScoreType scoreType;
+  @override
+  @JsonKey()
+  final double passingScore;
+  @override
+  @JsonKey()
+  final double passingGradePoint;
 
   /// Create a copy of ScoreData
   /// with the given fields replaced by the non-null parameter values.
@@ -293,17 +350,28 @@ class _ScoreData extends ScoreData {
         (other.runtimeType == runtimeType &&
             other is _ScoreData &&
             const DeepCollectionEquality().equals(other._scores, _scores) &&
-            (identical(other.detail, detail) || other.detail == detail));
+            (identical(other.detail, detail) || other.detail == detail) &&
+            (identical(other.scoreType, scoreType) ||
+                other.scoreType == scoreType) &&
+            (identical(other.passingScore, passingScore) ||
+                other.passingScore == passingScore) &&
+            (identical(other.passingGradePoint, passingGradePoint) ||
+                other.passingGradePoint == passingGradePoint));
   }
 
   @JsonKey(includeFromJson: false, includeToJson: false)
   @override
   int get hashCode => Object.hash(
-      runtimeType, const DeepCollectionEquality().hash(_scores), detail);
+      runtimeType,
+      const DeepCollectionEquality().hash(_scores),
+      detail,
+      scoreType,
+      passingScore,
+      passingGradePoint);
 
   @override
   String toString() {
-    return 'ScoreData(scores: $scores, detail: $detail)';
+    return 'ScoreData(scores: $scores, detail: $detail, scoreType: $scoreType, passingScore: $passingScore, passingGradePoint: $passingGradePoint)';
   }
 }
 
@@ -315,7 +383,12 @@ abstract mixin class _$ScoreDataCopyWith<$Res>
       __$ScoreDataCopyWithImpl;
   @override
   @useResult
-  $Res call({List<Score> scores, Detail detail});
+  $Res call(
+      {List<Score> scores,
+      Detail detail,
+      ScoreType scoreType,
+      double passingScore,
+      double passingGradePoint});
 
   @override
   $DetailCopyWith<$Res> get detail;
@@ -335,6 +408,9 @@ class __$ScoreDataCopyWithImpl<$Res> implements _$ScoreDataCopyWith<$Res> {
   $Res call({
     Object? scores = null,
     Object? detail = null,
+    Object? scoreType = null,
+    Object? passingScore = null,
+    Object? passingGradePoint = null,
   }) {
     return _then(_ScoreData(
       scores: null == scores
@@ -345,6 +421,18 @@ class __$ScoreDataCopyWithImpl<$Res> implements _$ScoreDataCopyWith<$Res> {
           ? _self.detail
           : detail // ignore: cast_nullable_to_non_nullable
               as Detail,
+      scoreType: null == scoreType
+          ? _self.scoreType
+          : scoreType // ignore: cast_nullable_to_non_nullable
+              as ScoreType,
+      passingScore: null == passingScore
+          ? _self.passingScore
+          : passingScore // ignore: cast_nullable_to_non_nullable
+              as double,
+      passingGradePoint: null == passingGradePoint
+          ? _self.passingGradePoint
+          : passingGradePoint // ignore: cast_nullable_to_non_nullable
+              as double,
     ));
   }
 

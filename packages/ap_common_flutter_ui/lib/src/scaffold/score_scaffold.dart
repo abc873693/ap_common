@@ -511,7 +511,10 @@ class _ScoreListTab extends StatelessWidget {
         itemCount: scoreData.scores.length,
         itemBuilder: (BuildContext context, int index) {
           return _buildScoreItem(
-            context, colorScheme, scoreData.scores[index], index,
+            context,
+            colorScheme,
+            scoreData.scores[index],
+            index,
           );
         },
       ),
@@ -524,8 +527,13 @@ class _ScoreListTab extends StatelessWidget {
     Score score,
     int index,
   ) {
-    final double? scoreValue = _parseScore(score.semesterScore);
-    final bool isPassed = scoreValue != null && scoreValue >= 60;
+    final String? effectiveStr = _effectiveScoreStr(score);
+    final double? scoreValue = _parseScore(effectiveStr);
+    final bool isPassed = scoreValue != null &&
+        (scoreData.scoreType == ScoreType.gradePoint
+            ? ScoreAnalysis.scoreToGradePoint(scoreValue) >=
+                scoreData.passingGradePoint
+            : scoreValue >= scoreData.passingScore);
     final Color scoreColor = scoreValue == null
         ? colorScheme.onSurfaceVariant
         : isPassed
@@ -637,8 +645,9 @@ class _ScoreListTab extends StatelessWidget {
     double? scoreValue,
     Color scoreColor,
   ) {
-    final String raw = score.semesterScore ?? '-';
-    final bool isNumeric = double.tryParse(raw) != null;
+    final String raw = _effectiveScoreStr(score) ?? '-';
+    final bool isNumeric =
+        scoreData.scoreType == ScoreType.numeric;
 
     if (scoreValue == null) {
       // Cannot parse at all — show raw string
@@ -705,43 +714,13 @@ class _ScoreListTab extends StatelessWidget {
     return const Color(0xFFF44336);
   }
 
-  /// Try to parse a score string as a number. If it's a letter grade
-  /// (A+, A, B+, B, etc.), convert it to an approximate numeric value
-  /// so we can compute color and pass/fail status.
-  static double? _parseScore(String? scoreStr) {
-    if (scoreStr == null || scoreStr.isEmpty) return null;
-    final double? numeric = double.tryParse(scoreStr);
-    if (numeric != null) return numeric;
-    // Letter grade → approximate numeric value
-    switch (scoreStr.trim().toUpperCase()) {
-      case 'A+':
-        return 95;
-      case 'A':
-        return 87;
-      case 'A-':
-        return 82;
-      case 'B+':
-        return 78;
-      case 'B':
-        return 75;
-      case 'B-':
-        return 72;
-      case 'C+':
-        return 68;
-      case 'C':
-        return 65;
-      case 'C-':
-        return 62;
-      case 'D':
-        return 55;
-      case 'E':
-        return 45;
-      case 'F':
-        return 30;
-      default:
-        return null;
-    }
-  }
+  /// Delegates to [ScoreAnalysis.effectiveScoreStr].
+  static String? _effectiveScoreStr(Score score) =>
+      ScoreAnalysis.effectiveScoreStr(score);
+
+  /// Delegates to [ScoreAnalysis.parseScore].
+  static double? _parseScore(String? scoreStr) =>
+      ScoreAnalysis.parseScore(scoreStr);
 
   Widget _buildTag(ColorScheme colorScheme, String text, Color color) {
     if (text.isEmpty) return const SizedBox.shrink();
@@ -846,54 +825,60 @@ class _ScoreAnalysisTab extends StatelessWidget {
                     detail.average?.toStringAsFixed(2) ?? '-',
                   ),
                 ),
-                Container(
-                  width: 1,
-                  height: 60,
-                  color: colorScheme.onPrimaryContainer.withAlpha(51),
-                ),
-                Expanded(
-                  child: _buildMainItem(
-                    colorScheme,
-                    Icons.school_rounded,
-                    ap.conductScore,
-                    detail.conduct?.toStringAsFixed(0) ?? '-',
+                if (detail.conduct != null) ...<Widget>[
+                  Container(
+                    width: 1,
+                    height: 60,
+                    color: colorScheme.onPrimaryContainer.withAlpha(51),
                   ),
-                ),
+                  Expanded(
+                    child: _buildMainItem(
+                      colorScheme,
+                      Icons.school_rounded,
+                      ap.conductScore,
+                      detail.conduct!.toStringAsFixed(0),
+                    ),
+                  ),
+                ],
               ],
             ),
           ),
-          Container(
-            padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 16),
-            decoration: BoxDecoration(
-              color: colorScheme.surface.withAlpha(179),
-              borderRadius: const BorderRadius.vertical(
-                bottom: Radius.circular(20),
+          if (detail.classRank != null || detail.departmentRank != null)
+            Container(
+              padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 16),
+              decoration: BoxDecoration(
+                color: colorScheme.surface.withAlpha(179),
+                borderRadius: const BorderRadius.vertical(
+                  bottom: Radius.circular(20),
+                ),
+              ),
+              child: Row(
+                children: <Widget>[
+                  if (detail.classRank != null)
+                    Expanded(
+                      child: _buildRankItem(
+                        colorScheme,
+                        ap.classRank,
+                        detail.classRank!,
+                      ),
+                    ),
+                  if (detail.classRank != null && detail.departmentRank != null)
+                    Container(
+                      width: 1,
+                      height: 40,
+                      color: colorScheme.outlineVariant.withAlpha(128),
+                    ),
+                  if (detail.departmentRank != null)
+                    Expanded(
+                      child: _buildRankItem(
+                        colorScheme,
+                        ap.departmentRank,
+                        detail.departmentRank!,
+                      ),
+                    ),
+                ],
               ),
             ),
-            child: Row(
-              children: <Widget>[
-                Expanded(
-                  child: _buildRankItem(
-                    colorScheme,
-                    ap.classRank,
-                    detail.classRank ?? '-',
-                  ),
-                ),
-                Container(
-                  width: 1,
-                  height: 40,
-                  color: colorScheme.outlineVariant.withAlpha(128),
-                ),
-                Expanded(
-                  child: _buildRankItem(
-                    colorScheme,
-                    ap.departmentRank,
-                    detail.departmentRank ?? '-',
-                  ),
-                ),
-              ],
-            ),
-          ),
         ],
       ),
     );
@@ -954,7 +939,9 @@ class ScoreAnalysis {
   ScoreAnalysis(this.scoreData) {
     _scores = <double>[];
     for (final Score score in scoreData.scores) {
-      final double? value = _ScoreListTab._parseScore(score.semesterScore);
+      final double? value = _ScoreListTab._parseScore(
+        _ScoreListTab._effectiveScoreStr(score),
+      );
       if (value != null) {
         _scores.add(value);
       }
@@ -966,6 +953,18 @@ class ScoreAnalysis {
   late List<double> _scores;
   late int _totalSubjects;
 
+  bool get isGradePoint =>
+      scoreData.scoreType == ScoreType.gradePoint;
+
+  /// Whether a numeric score value is considered passing.
+  bool isPassing(double scoreValue) {
+    if (isGradePoint) {
+      return scoreToGradePoint(scoreValue) >=
+          scoreData.passingGradePoint;
+    }
+    return scoreValue >= scoreData.passingScore;
+  }
+
   int get totalSubjects => _totalSubjects;
 
   double get maxScore => _scores.isEmpty ? 0 : _scores.reduce(max);
@@ -973,8 +972,23 @@ class ScoreAnalysis {
   double get minScore => _scores.isEmpty ? 0 : _scores.reduce(min);
 
   double get average {
-    if (_scores.isEmpty) return 0;
-    return _scores.reduce((double a, double b) => a + b) / _scores.length;
+    if (isGradePoint) {
+      return scoreData.detail.average ?? 0;
+    }
+    double totalWeighted = 0;
+    double totalUnits = 0;
+    for (final Score score in scoreData.scores) {
+      final double? value = _ScoreListTab._parseScore(
+        _ScoreListTab._effectiveScoreStr(score),
+      );
+      final double? unit = double.tryParse(score.units);
+      if (value != null && unit != null && unit > 0) {
+        totalWeighted += value * unit;
+        totalUnits += unit;
+      }
+    }
+    if (totalUnits == 0) return 0;
+    return totalWeighted / totalUnits;
   }
 
   double get standardDeviation {
@@ -989,6 +1003,16 @@ class ScoreAnalysis {
 
   int get estimatedPR {
     final double avg = scoreData.detail.average ?? average;
+    if (isGradePoint) {
+      if (avg >= 4.0) return 95;
+      if (avg >= 3.7) return 88;
+      if (avg >= 3.3) return 78;
+      if (avg >= 3.0) return 65;
+      if (avg >= 2.7) return 50;
+      if (avg >= 2.3) return 35;
+      if (avg >= 1.7) return 22;
+      return 5;
+    }
     if (avg >= 95) return 99;
     if (avg >= 90) return 95;
     if (avg >= 85) return 88;
@@ -1013,6 +1037,7 @@ class ScoreAnalysis {
   }
 
   Map<String, int> get distribution {
+    if (isGradePoint) return gradeDistribution;
     final Map<String, int> dist = <String, int>{
       '90-100': 0,
       '80-89': 0,
@@ -1050,9 +1075,13 @@ class ScoreAnalysis {
   double get passedCredits {
     double credits = 0;
     for (final Score score in scoreData.scores) {
-      final double? scoreValue = _ScoreListTab._parseScore(score.semesterScore);
+      final double? scoreValue = _ScoreListTab._parseScore(
+        _ScoreListTab._effectiveScoreStr(score),
+      );
       final double? unit = double.tryParse(score.units);
-      if (scoreValue != null && scoreValue >= 60 && unit != null) {
+      if (scoreValue != null &&
+          isPassing(scoreValue) &&
+          unit != null) {
         credits += unit;
       }
     }
@@ -1062,13 +1091,67 @@ class ScoreAnalysis {
   double get failedCredits {
     double credits = 0;
     for (final Score score in scoreData.scores) {
-      final double? scoreValue = _ScoreListTab._parseScore(score.semesterScore);
+      final double? scoreValue = _ScoreListTab._parseScore(
+        _ScoreListTab._effectiveScoreStr(score),
+      );
       final double? unit = double.tryParse(score.units);
-      if (scoreValue != null && scoreValue < 60 && unit != null) {
+      if (scoreValue != null &&
+          !isPassing(scoreValue) &&
+          unit != null) {
         credits += unit;
       }
     }
     return credits;
+  }
+
+  /// Returns the effective score string for a [Score], preferring
+  /// [Score.semesterScore] and falling back to [Score.finalScore].
+  static String? effectiveScoreStr(Score score) {
+    if (score.semesterScore != null &&
+        score.semesterScore!.isNotEmpty) {
+      return score.semesterScore;
+    }
+    if (score.finalScore != null &&
+        score.finalScore!.isNotEmpty) {
+      return score.finalScore;
+    }
+    return null;
+  }
+
+  /// Try to parse a score string as a number.
+  /// If it's a letter grade, convert to approximate numeric.
+  static double? parseScore(String? scoreStr) {
+    if (scoreStr == null || scoreStr.isEmpty) return null;
+    final double? numeric = double.tryParse(scoreStr);
+    if (numeric != null) return numeric;
+    switch (scoreStr.trim().toUpperCase()) {
+      case 'A+':
+        return 95;
+      case 'A':
+        return 87;
+      case 'A-':
+        return 82;
+      case 'B+':
+        return 78;
+      case 'B':
+        return 75;
+      case 'B-':
+        return 72;
+      case 'C+':
+        return 68;
+      case 'C':
+        return 65;
+      case 'C-':
+        return 62;
+      case 'D':
+        return 55;
+      case 'E':
+        return 45;
+      case 'F':
+        return 30;
+      default:
+        return null;
+    }
   }
 
   /// Converts a numeric score (百分制) to a grade point (等第積分)
@@ -1106,10 +1189,15 @@ class ScoreAnalysis {
 
   /// Weighted GPA: Σ(grade_point × credits) / Σ(credits)
   double get gpa {
+    if (isGradePoint) {
+      return scoreData.detail.average ?? 0;
+    }
     double totalWeighted = 0;
     double totalUnits = 0;
     for (final Score score in scoreData.scores) {
-      final double? scoreValue = _ScoreListTab._parseScore(score.semesterScore);
+      final double? scoreValue = _ScoreListTab._parseScore(
+        _ScoreListTab._effectiveScoreStr(score),
+      );
       final double? unit = double.tryParse(score.units);
       if (scoreValue != null && unit != null && unit > 0) {
         totalWeighted += scoreToGradePoint(scoreValue) * unit;

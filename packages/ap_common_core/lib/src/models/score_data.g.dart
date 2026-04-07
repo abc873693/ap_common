@@ -11,13 +11,25 @@ _ScoreData _$ScoreDataFromJson(Map<String, dynamic> json) => _ScoreData(
           .map((e) => Score.fromJson(e as Map<String, dynamic>))
           .toList(),
       detail: Detail.fromJson(json['detail'] as Map<String, dynamic>),
+      scoreType: $enumDecodeNullable(_$ScoreTypeEnumMap, json['scoreType']) ??
+          ScoreType.numeric,
+      passingScore: (json['passingScore'] as num?)?.toDouble() ?? 60.0,
+      passingGradePoint: (json['passingGradePoint'] as num?)?.toDouble() ?? 1.7,
     );
 
 Map<String, dynamic> _$ScoreDataToJson(_ScoreData instance) =>
     <String, dynamic>{
       'scores': instance.scores.map((e) => e.toJson()).toList(),
       'detail': instance.detail.toJson(),
+      'scoreType': _$ScoreTypeEnumMap[instance.scoreType]!,
+      'passingScore': instance.passingScore,
+      'passingGradePoint': instance.passingGradePoint,
     };
+
+const _$ScoreTypeEnumMap = {
+  ScoreType.numeric: 'numeric',
+  ScoreType.gradePoint: 'gradePoint',
+};
 
 _Detail _$DetailFromJson(Map<String, dynamic> json) => _Detail(
       creditTaken: (json['creditTaken'] as num?)?.toDouble(),

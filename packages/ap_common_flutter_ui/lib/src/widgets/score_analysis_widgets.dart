@@ -191,7 +191,11 @@ class ScoreStatisticsCard extends StatelessWidget {
                     Expanded(
                       child: _ScoreStatItem(
                         label: context.ap.highestScore,
-                        value: analysis.maxScore.toStringAsFixed(0),
+                        value: analysis.isGradePoint
+                            ? ScoreAnalysis.scoreToGradeLetter(
+                                analysis.maxScore,
+                              )
+                            : analysis.maxScore.toStringAsFixed(0),
                         icon: Icons.arrow_upward_rounded,
                         color: const Color(0xFF4CAF50),
                       ),
@@ -200,7 +204,11 @@ class ScoreStatisticsCard extends StatelessWidget {
                     Expanded(
                       child: _ScoreStatItem(
                         label: context.ap.lowestScore,
-                        value: analysis.minScore.toStringAsFixed(0),
+                        value: analysis.isGradePoint
+                            ? ScoreAnalysis.scoreToGradeLetter(
+                                analysis.minScore,
+                              )
+                            : analysis.minScore.toStringAsFixed(0),
                         icon: Icons.arrow_downward_rounded,
                         color: colorScheme.error,
                       ),
@@ -347,48 +355,100 @@ class ScoreDistributionCard extends StatelessWidget {
           Divider(height: 1, color: colorScheme.outlineVariant.withAlpha(77)),
           Padding(
             padding: const EdgeInsets.all(16),
-            child: Column(
-              children: <Widget>[
-                _DistributionBar(
-                  label: context.ap.distributionExcellent,
-                  count: analysis.distribution['90-100'] ?? 0,
-                  total: analysis.totalSubjects,
-                  color: const Color(0xFF4CAF50),
-                ),
-                const SizedBox(height: 10),
-                _DistributionBar(
-                  label: context.ap.distributionGood,
-                  count: analysis.distribution['80-89'] ?? 0,
-                  total: analysis.totalSubjects,
-                  color: const Color(0xFF8BC34A),
-                ),
-                const SizedBox(height: 10),
-                _DistributionBar(
-                  label: context.ap.distributionAverage,
-                  count: analysis.distribution['70-79'] ?? 0,
-                  total: analysis.totalSubjects,
-                  color: colorScheme.primary,
-                ),
-                const SizedBox(height: 10),
-                _DistributionBar(
-                  label: context.ap.distributionPass,
-                  count: analysis.distribution['60-69'] ?? 0,
-                  total: analysis.totalSubjects,
-                  color: const Color(0xFFFF9800),
-                ),
-                const SizedBox(height: 10),
-                _DistributionBar(
-                  label: context.ap.distributionFail,
-                  count: analysis.distribution['0-59'] ?? 0,
-                  total: analysis.totalSubjects,
-                  color: colorScheme.error,
-                ),
-              ],
-            ),
+            child: analysis.isGradePoint
+                ? _buildGradePointDistribution(colorScheme)
+                : _buildNumericDistribution(context, colorScheme),
           ),
         ],
       ),
     );
+  }
+
+  Widget _buildNumericDistribution(
+    BuildContext context,
+    ColorScheme colorScheme,
+  ) {
+    return Column(
+      children: <Widget>[
+        _DistributionBar(
+          label: context.ap.distributionExcellent,
+          count: analysis.distribution['90-100'] ?? 0,
+          total: analysis.totalSubjects,
+          color: const Color(0xFF4CAF50),
+        ),
+        const SizedBox(height: 10),
+        _DistributionBar(
+          label: context.ap.distributionGood,
+          count: analysis.distribution['80-89'] ?? 0,
+          total: analysis.totalSubjects,
+          color: const Color(0xFF8BC34A),
+        ),
+        const SizedBox(height: 10),
+        _DistributionBar(
+          label: context.ap.distributionAverage,
+          count: analysis.distribution['70-79'] ?? 0,
+          total: analysis.totalSubjects,
+          color: colorScheme.primary,
+        ),
+        const SizedBox(height: 10),
+        _DistributionBar(
+          label: context.ap.distributionPass,
+          count: analysis.distribution['60-69'] ?? 0,
+          total: analysis.totalSubjects,
+          color: const Color(0xFFFF9800),
+        ),
+        const SizedBox(height: 10),
+        _DistributionBar(
+          label: context.ap.distributionFail,
+          count: analysis.distribution['0-59'] ?? 0,
+          total: analysis.totalSubjects,
+          color: colorScheme.error,
+        ),
+      ],
+    );
+  }
+
+  static const Map<String, Color> _gradeColors =
+      <String, Color>{
+    'A+': Color(0xFF4CAF50),
+    'A': Color(0xFF4CAF50),
+    'A-': Color(0xFF8BC34A),
+    'B+': Color(0xFF8BC34A),
+    'B': Color(0xFF2196F3),
+    'B-': Color(0xFF2196F3),
+    'C+': Color(0xFFFF9800),
+    'C': Color(0xFFFF9800),
+    'C-': Color(0xFFFF9800),
+    'D': Color(0xFFF44336),
+    'E': Color(0xFFF44336),
+    'F': Color(0xFFF44336),
+  };
+
+  Widget _buildGradePointDistribution(ColorScheme colorScheme) {
+    final Map<String, int> dist = analysis.distribution;
+    final List<String> orderedGrades = <String>[
+      'A+', 'A', 'A-',
+      'B+', 'B', 'B-',
+      'C+', 'C', 'C-',
+      'D', 'E', 'F',
+    ];
+    final List<Widget> bars = <Widget>[];
+    for (final String grade in orderedGrades) {
+      final int count = dist[grade] ?? 0;
+      if (count == 0) continue;
+      if (bars.isNotEmpty) {
+        bars.add(const SizedBox(height: 10));
+      }
+      bars.add(
+        _DistributionBar(
+          label: grade,
+          count: count,
+          total: analysis.totalSubjects,
+          color: _gradeColors[grade] ?? colorScheme.primary,
+        ),
+      );
+    }
+    return Column(children: bars);
   }
 }
 
@@ -712,14 +772,17 @@ class ScoreGPACard extends StatelessWidget {
     ColorScheme colorScheme,
   ) {
     final List<_GradeEntry> entries = <_GradeEntry>[];
+    final bool isGradePoint = analysis.isGradePoint;
     for (final Score score in analysis.scoreData.scores) {
-      final double? value =
-          double.tryParse(score.semesterScore ?? '');
+      final String? raw = ScoreAnalysis.effectiveScoreStr(score);
+      final double? value = ScoreAnalysis.parseScore(raw);
       if (value == null) continue;
       entries.add(_GradeEntry(
         title: score.title,
         score: value,
-        grade: ScoreAnalysis.scoreToGradeLetter(value),
+        grade: isGradePoint
+            ? (raw ?? '')
+            : ScoreAnalysis.scoreToGradeLetter(value),
         gradePoint: ScoreAnalysis.scoreToGradePoint(value),
         credits: double.tryParse(score.units) ?? 0,
       ),);
