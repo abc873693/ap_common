@@ -75,6 +75,21 @@ class ScorePageState extends State<ScorePage> {
 
   Future<void> _getSemesterScore() async {
     try {
+      final Semester semester =
+          semesterData!.data[semesterData!.currentIndex];
+      // Simulate empty state for summer/winter session semesters
+      final bool isEmpty = const <String>{'3', '4', '6', '7'}
+          .contains(semester.value);
+      if (isEmpty) {
+        if (mounted) {
+          setState(() {
+            scoreData = null;
+            state = ScoreState.empty;
+            _pickerController.markSemesterEmpty(semester);
+          });
+        }
+        return;
+      }
       // Use GPA data for odd-indexed semesters to demo both types
       final bool useGpa = (semesterData?.currentIndex ?? 0).isOdd;
       final String assetPath =
@@ -82,8 +97,6 @@ class ScorePageState extends State<ScorePage> {
       final String rawString = await rootBundle.loadString(assetPath);
       scoreData = ScoreData.fromRawJson(rawString);
       if (mounted) {
-        final Semester semester =
-            semesterData!.data[semesterData!.currentIndex];
         setState(() {
           if (scoreData == null) {
             state = ScoreState.empty;
