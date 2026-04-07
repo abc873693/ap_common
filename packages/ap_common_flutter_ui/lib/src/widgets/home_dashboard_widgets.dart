@@ -383,6 +383,73 @@ class TodayScheduleCard extends StatelessWidget {
   }
 }
 
+/// A placeholder card shown when today's schedule is unavailable.
+///
+/// Displays a message and navigates on tap.
+///
+/// ```dart
+/// EmptyScheduleCard(
+///   message: 'Please login to view schedule',
+///   onTap: () => navigateToLogin(),
+/// )
+/// ```
+class EmptyScheduleCard extends StatelessWidget {
+  const EmptyScheduleCard({
+    super.key,
+    required this.message,
+    this.onTap,
+    this.icon = Icons.today_rounded,
+  });
+
+  /// The message to display.
+  final String message;
+
+  /// Called when the card is tapped.
+  final VoidCallback? onTap;
+
+  /// Leading icon. Defaults to [Icons.today_rounded].
+  final IconData icon;
+
+  @override
+  Widget build(BuildContext context) {
+    final ColorScheme colorScheme = Theme.of(context).colorScheme;
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 16),
+      child: Card(
+        child: InkWell(
+          onTap: onTap,
+          borderRadius: BorderRadius.circular(12),
+          child: Padding(
+            padding: const EdgeInsets.all(20),
+            child: Row(
+              children: <Widget>[
+                Icon(
+                  icon,
+                  size: 32,
+                  color: colorScheme.outline,
+                ),
+                const SizedBox(width: 16),
+                Expanded(
+                  child: Text(
+                    message,
+                    style: TextStyle(
+                      color: colorScheme.outline,
+                    ),
+                  ),
+                ),
+                Icon(
+                  Icons.chevron_right,
+                  color: colorScheme.outline,
+                ),
+              ],
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+}
+
 class _TodayItem {
   const _TodayItem({
     required this.title,

@@ -282,14 +282,15 @@ class HomePageState extends State<HomePage> {
     return <Widget>[
       QuickInfoRow(
         items: <QuickInfoItem>[
-          QuickInfoItem(
-            icon: Icons.bus_alert,
-            label: '已預約校車',
-            subtitle: '建工 -> 燕巢 17:00',
-            onTap: () {
-              ApUtils.pushCupertinoStyle(context, CoursePage());
-            },
-          ),
+          if (isLogin)
+            QuickInfoItem(
+              icon: Icons.bus_alert,
+              label: '已預約校車',
+              subtitle: '建工 -> 燕巢 17:00',
+              onTap: () {
+                ApUtils.pushCupertinoStyle(context, CoursePage());
+              },
+            ),
           QuickInfoItem(
             icon: Icons.newspaper_outlined,
             label: '10',
@@ -301,14 +302,31 @@ class HomePageState extends State<HomePage> {
         ],
       ),
       const SizedBox(height: 16),
-      if (courseData != null)
+      if (isLogin && courseData != null)
         TodayScheduleCard(
           courseData: courseData!,
           onTap: () {
             ApUtils.pushCupertinoStyle(context, CoursePage());
           },
-        ),
+        )
+      else
+        _buildEmptyScheduleCard(),
     ];
+  }
+
+  Widget _buildEmptyScheduleCard() {
+    return EmptyScheduleCard(
+      message: isLogin
+          ? context.ap.courseEmpty
+          : context.ap.notLogin,
+      onTap: () {
+        if (isLogin) {
+          ApUtils.pushCupertinoStyle(context, CoursePage());
+        } else {
+          openLoginPage();
+        }
+      },
+    );
   }
 
   Future<void> _loadCourseData() async {
