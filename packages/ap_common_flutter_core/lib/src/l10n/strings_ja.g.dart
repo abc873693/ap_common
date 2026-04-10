@@ -314,7 +314,7 @@ class ApLocalizationsJa extends ApLocalizations with BaseTranslations<AppLocale,
 	@override String get leaveSubmitSuccess => '欠席届の送信が完了しました';
 	@override String get leaveDelayHint => '届出期限を超過しているため、遅延理由を記入してください';
 	@override String get leaveProofHint => '写真を選択してください';
-	@override String imageCompressHint({required Object arg1MB, required Object arg2MB}) => 'ファイルサイズが${arg1MB}を超えたため、自動的に${arg2MB}に圧縮しました';
+	@override String imageCompressHint({required Object arg1MB, required Object arg2}) => 'ファイルサイズが${arg1MB}を超えたため、自動的に${arg2} MBに圧縮しました';
 	@override String imageTooBigHint({required Object arg1MB}) => '画像サイズは${arg1MB}以下にしてください。別の画像を選んでください。';
 	@override String get leaveDateAndSection => '日付とコマ';
 	@override String get none => 'なし';
@@ -786,7 +786,7 @@ extension on ApLocalizationsJa {
 			'leaveSubmitSuccess' => '欠席届の送信が完了しました',
 			'leaveDelayHint' => '届出期限を超過しているため、遅延理由を記入してください',
 			'leaveProofHint' => '写真を選択してください',
-			'imageCompressHint' => ({required Object arg1MB, required Object arg2MB}) => 'ファイルサイズが${arg1MB}を超えたため、自動的に${arg2MB}に圧縮しました',
+			'imageCompressHint' => ({required Object arg1MB, required Object arg2}) => 'ファイルサイズが${arg1MB}を超えたため、自動的に${arg2} MBに圧縮しました',
 			'imageTooBigHint' => ({required Object arg1MB}) => '画像サイズは${arg1MB}以下にしてください。別の画像を選んでください。',
 			'leaveDateAndSection' => '日付とコマ',
 			'none' => 'なし',

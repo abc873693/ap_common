@@ -274,7 +274,7 @@
   "leaveSubmitSuccess": "欠席届の送信が完了しました",
   "leaveDelayHint": "届出期限を超過しているため、遅延理由を記入してください",
   "leaveProofHint": "写真を選択してください",
-  "imageCompressHint": "ファイルサイズが$arg1MBを超えたため、自動的に$arg2MBに圧縮しました",
+  "imageCompressHint": "ファイルサイズが$arg1MBを超えたため、自動的に$arg2 MBに圧縮しました",
   "imageTooBigHint": "画像サイズは$arg1MB以下にしてください。別の画像を選んでください。",
   "leaveDateAndSection": "日付とコマ",
   "none": "なし",
