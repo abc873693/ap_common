@@ -1,16 +1,19 @@
 import 'package:ap_common_flutter_ui/ap_common_flutter_ui.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 
-/// A pure semester picker that opens a bottom sheet.
+/// A semester picker that opens a grouped bottom sheet.
 ///
-/// Unlike [SemesterPicker], this widget does **not** manage
-/// loading / empty states via [SemesterPickerController].
-/// It simply presents all semesters and returns the
-/// selected index.
+/// Unlike [SemesterPicker], this widget does **not**
+/// manage loading / empty states via
+/// [SemesterPickerController].
+/// It simply presents all semesters grouped by year and
+/// returns the selected index.
 ///
-/// Use [SemesterPickerBottomSheet.show] to open the sheet
-/// programmatically without embedding the widget.
+/// The bottom-sheet UI is provided by
+/// [OptionPickerBottomSheet].
+///
+/// Use [SemesterPickerBottomSheet.show] to open the
+/// sheet programmatically without embedding the widget.
 class SemesterPickerBottomSheet extends StatelessWidget {
   const SemesterPickerBottomSheet({
     super.key,
@@ -27,8 +30,8 @@ class SemesterPickerBottomSheet extends StatelessWidget {
   final int currentIndex;
   final SemesterUIConfig? uiConfig;
 
-  /// Opens a semester picker bottom sheet and returns the
-  /// selected index, or `null` if dismissed.
+  /// Opens a semester picker bottom sheet and returns
+  /// the selected index, or `null` if dismissed.
   static Future<int?> show({
     required BuildContext context,
     required SemesterData semesterData,
@@ -37,75 +40,19 @@ class SemesterPickerBottomSheet extends StatelessWidget {
   }) {
     final ColorScheme colorScheme =
         Theme.of(context).colorScheme;
-    final Map<String, List<MapEntry<int, Semester>>>
-        groupedByYear = _groupByYear(
-      _getSortedSemesters(semesterData, uiConfig),
-    );
-
-    return showModalBottomSheet<int>(
+    return OptionPickerBottomSheet.showGrouped(
       context: context,
-      backgroundColor: const Color(0x00000000),
-      isScrollControlled: true,
-      builder: (BuildContext sheetContext) {
-        return DraggableScrollableSheet(
-          initialChildSize: 0.6,
-          minChildSize: 0.3,
-          maxChildSize: 0.9,
-          builder: (
-            BuildContext context,
-            ScrollController scrollController,
-          ) {
-            return Container(
-              decoration: BoxDecoration(
-                color: colorScheme.surface,
-                borderRadius: const BorderRadius.vertical(
-                  top: Radius.circular(24),
-                ),
-              ),
-              child: Column(
-                children: <Widget>[
-                  _buildHandle(colorScheme),
-                  _buildTitle(context, colorScheme),
-                  Divider(
-                    height: 1,
-                    color: colorScheme.outlineVariant
-                        .withAlpha(128),
-                  ),
-                  Expanded(
-                    child: ListView.builder(
-                      controller: scrollController,
-                      padding:
-                          const EdgeInsets.symmetric(
-                        horizontal: 16,
-                        vertical: 8,
-                      ),
-                      itemCount: groupedByYear.length,
-                      itemBuilder: (
-                        BuildContext context,
-                        int groupIndex,
-                      ) {
-                        final String year =
-                            groupedByYear.keys
-                                .elementAt(groupIndex);
-                        return _buildYearGroup(
-                          context: context,
-                          year: year,
-                          semesters:
-                              groupedByYear[year]!,
-                          colorScheme: colorScheme,
-                          currentIndex: currentIndex,
-                          semesterData: semesterData,
-                          uiConfig: uiConfig,
-                        );
-                      },
-                    ),
-                  ),
-                ],
-              ),
-            );
-          },
-        );
-      },
+      title: context.ap.pickSemester,
+      titleIcon: Icons.calendar_month_rounded,
+      groups: _toGroups(
+        semesterData,
+        uiConfig,
+        colorScheme,
+        context.ap,
+      ),
+      selectedValue: currentIndex,
+      defaultValue: semesterData.defaultIndex,
+      defaultLabel: context.ap.currentSemester,
     );
   }
 
@@ -115,11 +62,16 @@ class SemesterPickerBottomSheet extends StatelessWidget {
         Theme.of(context).colorScheme;
     final Semester? current =
         semesterData.data.isNotEmpty &&
-                currentIndex < semesterData.data.length
+                currentIndex <
+                    semesterData.data.length
             ? semesterData.data[currentIndex]
             : null;
     final String displayText = current != null
-        ? _getShortText(current, uiConfig, context.ap)
+        ? _getShortText(
+            current,
+            uiConfig,
+            context.ap,
+          )
         : '';
 
     return Material(
@@ -138,7 +90,8 @@ class SemesterPickerBottomSheet extends StatelessWidget {
             currentIndex: currentIndex,
             uiConfig: uiConfig,
           );
-          if (selected != null && onSelect != null) {
+          if (selected != null &&
+              onSelect != null) {
             onSelect!(
               semesterData.data[selected],
               selected,
@@ -157,13 +110,15 @@ class SemesterPickerBottomSheet extends StatelessWidget {
               Icon(
                 Icons.calendar_month_rounded,
                 size: 16,
-                color: colorScheme.onPrimaryContainer,
+                color:
+                    colorScheme.onPrimaryContainer,
               ),
               const SizedBox(width: 6),
               Text(
                 displayText,
                 style: TextStyle(
-                  color: colorScheme.onPrimaryContainer,
+                  color: colorScheme
+                      .onPrimaryContainer,
                   fontSize: 13,
                   fontWeight: FontWeight.w600,
                 ),
@@ -172,7 +127,8 @@ class SemesterPickerBottomSheet extends StatelessWidget {
               Icon(
                 Icons.arrow_drop_down_rounded,
                 size: 20,
-                color: colorScheme.onPrimaryContainer,
+                color:
+                    colorScheme.onPrimaryContainer,
               ),
             ],
           ),
@@ -181,297 +137,97 @@ class SemesterPickerBottomSheet extends StatelessWidget {
     );
   }
 
-  // ── Bottom-sheet sub-widgets ───────────────────────
+  // ── Data conversion ────────────────────────────
 
-  static Widget _buildHandle(ColorScheme colorScheme) {
-    return Container(
-      margin: const EdgeInsets.only(top: 12),
-      width: 40,
-      height: 4,
-      decoration: BoxDecoration(
-        color: colorScheme.outlineVariant,
-        borderRadius: BorderRadius.circular(2),
-      ),
-    );
-  }
-
-  static Widget _buildTitle(
-    BuildContext context,
+  static List<PickerOptionGroup> _toGroups(
+    SemesterData semesterData,
+    SemesterUIConfig? uiConfig,
     ColorScheme colorScheme,
+    ApLocalizations ap,
   ) {
-    return Padding(
-      padding: const EdgeInsets.all(20),
-      child: Row(
-        children: <Widget>[
-          Icon(
-            Icons.calendar_month_rounded,
-            color: colorScheme.primary,
-          ),
-          const SizedBox(width: 12),
-          Text(
-            context.ap.pickSemester,
-            style: TextStyle(
-              fontSize: 20,
-              fontWeight: FontWeight.bold,
-              color: colorScheme.onSurface,
-            ),
-          ),
-        ],
-      ),
-    );
-  }
+    final List<MapEntry<int, Semester>> sorted =
+        _getSortedSemesters(semesterData, uiConfig);
 
-  static Widget _buildYearGroup({
-    required BuildContext context,
-    required String year,
-    required List<MapEntry<int, Semester>> semesters,
-    required ColorScheme colorScheme,
-    required int currentIndex,
-    required SemesterData semesterData,
-    SemesterUIConfig? uiConfig,
-  }) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: <Widget>[
-        Padding(
-          padding:
-              const EdgeInsets.fromLTRB(8, 16, 8, 8),
-          child: Row(
-            children: <Widget>[
-              Container(
-                padding: const EdgeInsets.symmetric(
-                  horizontal: 12,
-                  vertical: 6,
-                ),
-                decoration: BoxDecoration(
-                  color: colorScheme.primaryContainer,
-                  borderRadius:
-                      BorderRadius.circular(8),
-                ),
-                child: Text(
-                  context.ap.schoolYearFormat(
-                    arg1: year,
-                  ),
-                  style: TextStyle(
-                    fontSize: 14,
-                    fontWeight: FontWeight.bold,
-                    color: colorScheme
-                        .onPrimaryContainer,
-                  ),
-                ),
-              ),
-              const Expanded(child: SizedBox()),
-            ],
-          ),
-        ),
-        ...semesters.map(
-          (MapEntry<int, Semester> e) =>
-              _buildSemesterItem(
-            context: context,
-            originalIndex: e.key,
-            semester: e.value,
-            colorScheme: colorScheme,
-            currentIndex: currentIndex,
-            semesterData: semesterData,
-            uiConfig: uiConfig,
-          ),
-        ),
-      ],
-    );
-  }
-
-  static Widget _buildSemesterItem({
-    required BuildContext context,
-    required int originalIndex,
-    required Semester semester,
-    required ColorScheme colorScheme,
-    required int currentIndex,
-    required SemesterData semesterData,
-    SemesterUIConfig? uiConfig,
-  }) {
-    final bool isSelected = originalIndex == currentIndex;
-    final bool isDefault =
-        originalIndex == semesterData.defaultIndex;
-    final String name =
-        uiConfig?.getName?.call(semester.value) ??
-            _getSemesterName(semester.value, context.ap);
-    final String displayName =
-        name.isNotEmpty ? name : semester.text;
-
-    return Container(
-      margin: const EdgeInsets.symmetric(vertical: 4),
-      decoration: BoxDecoration(
-        color: isSelected
-            ? colorScheme.primaryContainer
-            : colorScheme.surfaceContainerLowest,
-        borderRadius: BorderRadius.circular(12),
-        border: Border.all(
-          color: isSelected
-              ? colorScheme.primary
-              : colorScheme.outlineVariant.withAlpha(77),
-          width: isSelected ? 2 : 1,
-        ),
-      ),
-      child: InkWell(
-        onTap: () {
-          HapticFeedback.selectionClick();
-          Navigator.of(context).pop(originalIndex);
-        },
-        borderRadius: BorderRadius.circular(12),
-        child: Padding(
-          padding: const EdgeInsets.symmetric(
-            horizontal: 16,
-            vertical: 14,
-          ),
-          child: Row(
-            children: <Widget>[
-              _buildIcon(
-                semester: semester,
-                colorScheme: colorScheme,
-                isSelected: isSelected,
-                uiConfig: uiConfig,
-              ),
-              const SizedBox(width: 16),
-              Expanded(
-                child: _buildLabel(
-                  context: context,
-                  displayName: displayName,
-                  semester: semester,
-                  colorScheme: colorScheme,
-                  isSelected: isSelected,
-                  isDefault: isDefault,
-                ),
-              ),
-              Icon(
-                isSelected
-                    ? Icons.check_circle_rounded
-                    : Icons.circle_outlined,
-                color: isSelected
-                    ? colorScheme.primary
-                    : colorScheme.outlineVariant,
-              ),
-            ],
-          ),
-        ),
-      ),
-    );
-  }
-
-  static Widget _buildIcon({
-    required Semester semester,
-    required ColorScheme colorScheme,
-    required bool isSelected,
-    SemesterUIConfig? uiConfig,
-  }) {
-    return Container(
-      width: 44,
-      height: 44,
-      decoration: BoxDecoration(
-        color: isSelected
-            ? colorScheme.primary
-            : (uiConfig?.getColor?.call(
-                    semester.value,
-                    colorScheme,
-                  ) ??
-                _getSemesterColor(
-                  semester.value,
-                  colorScheme,
-                )),
-        borderRadius: BorderRadius.circular(10),
-      ),
-      child: Center(
-        child: Icon(
-          uiConfig?.getIcon?.call(semester.value) ??
-              _getSemesterIcon(semester.value),
-          size: 22,
-          color: isSelected
-              ? colorScheme.onPrimary
-              : colorScheme.onPrimaryContainer,
-        ),
-      ),
-    );
-  }
-
-  static Widget _buildLabel({
-    required BuildContext context,
-    required String displayName,
-    required Semester semester,
-    required ColorScheme colorScheme,
-    required bool isSelected,
-    required bool isDefault,
-  }) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: <Widget>[
-        Row(
-          children: <Widget>[
-            Flexible(
-              child: Text(
-                displayName,
-                style: TextStyle(
-                  fontSize: 16,
-                  fontWeight: FontWeight.w600,
-                  color: isSelected
-                      ? colorScheme.primary
-                      : colorScheme.onSurface,
-                ),
-                overflow: TextOverflow.ellipsis,
-              ),
-            ),
-            if (isDefault) ...<Widget>[
-              const SizedBox(width: 8),
-              Container(
-                padding: const EdgeInsets.symmetric(
-                  horizontal: 8,
-                  vertical: 2,
-                ),
-                decoration: BoxDecoration(
-                  color: colorScheme.tertiary,
-                  borderRadius:
-                      BorderRadius.circular(4),
-                ),
-                child: Text(
-                  context.ap.currentSemester,
-                  style: TextStyle(
-                    fontSize: 10,
-                    fontWeight: FontWeight.w600,
-                    color: colorScheme.onTertiary,
-                  ),
-                ),
-              ),
-            ],
-          ],
-        ),
-        const SizedBox(height: 2),
-        Text(
-          semester.text,
-          style: TextStyle(
-            fontSize: 12,
-            color: colorScheme.onSurfaceVariant,
-          ),
-        ),
-      ],
-    );
-  }
-
-  // ── Semester helpers ────────────────────────────────
-
-  static Map<String, List<MapEntry<int, Semester>>>
-      _groupByYear(
-    List<MapEntry<int, Semester>> sorted,
-  ) {
-    final Map<String, List<MapEntry<int, Semester>>>
-        result =
-        <String, List<MapEntry<int, Semester>>>{};
-    for (final MapEntry<int, Semester> entry in sorted) {
-      result
+    final Map<String,
+            List<MapEntry<int, Semester>>>
+        byYear = <String,
+            List<MapEntry<int, Semester>>>{};
+    for (final MapEntry<int, Semester> e in sorted) {
+      byYear
           .putIfAbsent(
-            entry.value.year,
+            e.value.year,
             () => <MapEntry<int, Semester>>[],
           )
-          .add(entry);
+          .add(e);
     }
-    return result;
+
+    return byYear.entries
+        .map(
+          (MapEntry<String,
+                  List<MapEntry<int, Semester>>>
+              entry) =>
+              PickerOptionGroup(
+            title: ap.schoolYearFormat(
+              arg1: entry.key,
+            ),
+            options: entry.value
+                .map(
+                  (MapEntry<int, Semester> e) =>
+                      _toPickerOption(
+                    e.key,
+                    e.value,
+                    uiConfig,
+                    colorScheme,
+                    ap,
+                  ),
+                )
+                .toList(),
+          ),
+        )
+        .toList();
+  }
+
+  static PickerOption _toPickerOption(
+    int index,
+    Semester semester,
+    SemesterUIConfig? uiConfig,
+    ColorScheme colorScheme,
+    ApLocalizations ap,
+  ) {
+    final String name =
+        uiConfig?.getName?.call(semester.value) ??
+            _getSemesterName(semester.value, ap);
+    return PickerOption(
+      value: index,
+      label:
+          name.isNotEmpty ? name : semester.text,
+      subtitle: semester.text,
+      icon: uiConfig?.getIcon
+              ?.call(semester.value) ??
+          _getSemesterIcon(semester.value),
+      iconBackgroundColor: uiConfig?.getColor
+              ?.call(semester.value, colorScheme) ??
+          _getSemesterColor(
+            semester.value,
+            colorScheme,
+          ),
+    );
+  }
+
+  // ── Semester helpers ───────────────────────────
+
+  static String _getShortText(
+    Semester semester,
+    SemesterUIConfig? uiConfig, [
+    ApLocalizations? ap,
+  ]) {
+    final String name =
+        uiConfig?.getName?.call(semester.value) ??
+            _getSemesterName(semester.value, ap);
+    if (name.isNotEmpty) {
+      return '${semester.year} $name';
+    }
+    return semester.text;
   }
 
   static List<MapEntry<int, Semester>>
@@ -481,9 +237,14 @@ class SemesterPickerBottomSheet extends StatelessWidget {
   ) {
     final List<MapEntry<int, Semester>> indexed =
         <MapEntry<int, Semester>>[];
-    for (int i = 0; i < semesterData.data.length; i++) {
+    for (int i = 0;
+        i < semesterData.data.length;
+        i++) {
       indexed.add(
-        MapEntry<int, Semester>(i, semesterData.data[i]),
+        MapEntry<int, Semester>(
+          i,
+          semesterData.data[i],
+        ),
       );
     }
     indexed.sort(
@@ -508,20 +269,6 @@ class SemesterPickerBottomSheet extends StatelessWidget {
       },
     );
     return indexed;
-  }
-
-  static String _getShortText(
-    Semester semester,
-    SemesterUIConfig? uiConfig, [
-    ApLocalizations? ap,
-  ]) {
-    final String name =
-        uiConfig?.getName?.call(semester.value) ??
-            _getSemesterName(semester.value, ap);
-    if (name.isNotEmpty) {
-      return '${semester.year} $name';
-    }
-    return semester.text;
   }
 
   static int _getSemesterSortValue(String value) {
