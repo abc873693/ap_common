@@ -686,6 +686,9 @@ class ApLocalizations with BaseTranslations<AppLocale, ApLocalizations> {
 	/// en: 'English'
 	String get english => 'English';
 
+	/// en: '日本語'
+	String get japanese => '日本語';
+
 	/// en: 'Rate This APP'
 	String get ratingDialogTitle => 'Rate This APP';
 
@@ -1651,6 +1654,7 @@ extension on ApLocalizations {
 			'systemLanguage' => 'System Language',
 			'traditionalChinese' => '繁體中文',
 			'english' => 'English',
+			'japanese' => '日本語',
 			'ratingDialogTitle' => 'Rate This APP',
 			'ratingDialogContent' => 'Do you like this APP?\nPlease write a comment and rate on the App Store or Google Play.\nYour comments is our motivation!',
 			'later' => 'LATER',

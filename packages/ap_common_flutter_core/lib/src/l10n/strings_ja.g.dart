@@ -254,6 +254,7 @@ class ApLocalizationsJa extends ApLocalizations with BaseTranslations<AppLocale,
 	@override String get systemLanguage => 'システム言語';
 	@override String get traditionalChinese => '繁體中文';
 	@override String get english => 'English';
+	@override String get japanese => '日本語';
 	@override String get ratingDialogTitle => 'アプリを評価';
 	@override String get ratingDialogContent => 'このアプリを気に入っていただけましたか？\nストアでレビューと評価をお願いします。\nあなたのコメントが私たちの原動力です！';
 	@override String get later => '後で';
@@ -726,6 +727,7 @@ extension on ApLocalizationsJa {
 			'systemLanguage' => 'システム言語',
 			'traditionalChinese' => '繁體中文',
 			'english' => 'English',
+			'japanese' => '日本語',
 			'ratingDialogTitle' => 'アプリを評価',
 			'ratingDialogContent' => 'このアプリを気に入っていただけましたか？\nストアでレビューと評価をお願いします。\nあなたのコメントが私たちの原動力です！',
 			'later' => '後で',

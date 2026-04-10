@@ -254,6 +254,7 @@ class ApLocalizationsZhHantTw extends ApLocalizations with BaseTranslations<AppL
 	@override String get systemLanguage => '系統語言';
 	@override String get traditionalChinese => '繁體中文';
 	@override String get english => 'English';
+	@override String get japanese => '日本語';
 	@override String get ratingDialogTitle => '評分';
 	@override String get ratingDialogContent => '喜歡校務通嗎？\n前往商店給予我們評論\n是我們最大的動力！';
 	@override String get later => '稍後再說';
@@ -726,6 +727,7 @@ extension on ApLocalizationsZhHantTw {
 			'systemLanguage' => '系統語言',
 			'traditionalChinese' => '繁體中文',
 			'english' => 'English',
+			'japanese' => '日本語',
 			'ratingDialogTitle' => '評分',
 			'ratingDialogContent' => '喜歡校務通嗎？\n前往商店給予我們評論\n是我們最大的動力！',
 			'later' => '稍後再說',

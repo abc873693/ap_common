@@ -2,6 +2,7 @@ enum ApSupportLanguage {
   system,
   zh,
   en,
+  ja,
 }
 
 extension ApSupportLanguageExtension on ApSupportLanguage {
@@ -11,6 +12,8 @@ extension ApSupportLanguageExtension on ApSupportLanguage {
         return ApSupportLanguageConstants.zh;
       case 2:
         return ApSupportLanguageConstants.en;
+      case 3:
+        return ApSupportLanguageConstants.ja;
       case 0:
       default:
         return ApSupportLanguageConstants.system;
@@ -23,6 +26,8 @@ extension ApSupportLanguageExtension on ApSupportLanguage {
         return 1;
       case ApSupportLanguageConstants.en:
         return 2;
+      case ApSupportLanguageConstants.ja:
+        return 3;
       case ApSupportLanguageConstants.system:
       default:
         return 0;
@@ -34,4 +39,5 @@ class ApSupportLanguageConstants {
   static const String system = 'system';
   static const String zh = 'zh';
   static const String en = 'en';
+  static const String ja = 'ja';
 }
