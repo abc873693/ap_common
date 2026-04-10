@@ -36,6 +36,7 @@ export 'src/widgets/info_row.dart';
 export 'src/widgets/item_picker.dart';
 export 'src/widgets/notification_item.dart';
 export 'src/widgets/option_dialog.dart';
+export 'src/widgets/option_picker_bottom_sheet.dart';
 export 'src/widgets/phone_list_item.dart';
 export 'src/widgets/progress_dialog.dart';
 export 'src/widgets/score_analysis_widgets.dart';
