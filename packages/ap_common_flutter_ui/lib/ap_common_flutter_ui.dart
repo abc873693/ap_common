@@ -41,6 +41,5 @@ export 'src/widgets/phone_list_item.dart';
 export 'src/widgets/progress_dialog.dart';
 export 'src/widgets/score_analysis_widgets.dart';
 export 'src/widgets/semester_picker.dart';
-export 'src/widgets/semester_picker_bottom_sheet.dart';
 export 'src/widgets/setting_page_widgets.dart';
 export 'src/widgets/yes_no_dialog.dart';

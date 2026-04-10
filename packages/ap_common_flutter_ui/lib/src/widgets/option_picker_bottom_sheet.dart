@@ -106,7 +106,7 @@ class OptionPickerBottomSheet extends StatelessWidget {
 
   /// Convenience constructor for a flat list.
   OptionPickerBottomSheet.fromOptions({
-    Key? key,
+    super.key,
     required List<PickerOption> options,
     required this.title,
     this.titleIcon,
@@ -118,8 +118,7 @@ class OptionPickerBottomSheet extends StatelessWidget {
     this.featureTag,
   })  : groups = <PickerOptionGroup>[
           PickerOptionGroup(options: options),
-        ],
-        super(key: key);
+        ];
 
   /// Option groups to display.
   final List<PickerOptionGroup> groups;
