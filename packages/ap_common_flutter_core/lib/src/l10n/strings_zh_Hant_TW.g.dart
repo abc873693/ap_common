@@ -165,7 +165,7 @@ class ApLocalizationsZhHantTw extends ApLocalizations with BaseTranslations<AppL
 	@override String get feedbackViaFacebook => '私訊給粉絲專頁';
 	@override String get appVersion => 'App 版本';
 	@override String get aboutAuthorTitle => '作者群';
-	@override String get aboutAuthorContent => '高科校務通v1 & v2\n呂紹榕(Louie Lu), 姜尚德(JohnThunder), \nregisterAutumn, 詹濬鍵(Evans), \n陳建霖(HearSilent), 陳冠蓁, 徐羽柔\n高科校務通v3\n房志剛(Rainvisitor),林義翔(takidog),\n林鈺軒(Lin YuHsuan),周鈺禮(Gary),\n高科校務通v4\n黃昱翔(Marco), YuYu1015, 梁晨恩(ryan940618), 李庭宇(yappy2000)\n中山校務通\n房志剛(Rainvisitor),胡智強（JohnHuCC),\n張栢瑄(Ryan Chang), 蔡明軒(Yukimura), 高聖傑(JasonZzz)\n中山校務通v2\n陳展皝(David), 吳楷鈞（Kai)\n台科校務通\n房志剛(Rainvisitor),林義翔(takidog)\n文藻校務通\n林義翔(takidog),房志剛(Rainvisitor)';
+	@override String get aboutAuthorContent => '高科校務通v1 & v2\n呂紹榕(Louie Lu), 姜尚德(JohnThunder), \nregisterAutumn, 詹濬鍵(Evans), \n陳建霖(HearSilent), 陳冠蓁, 徐羽柔\n高科校務通v3\n房志剛(Rainvisitor),林義翔(takidog),\n林鈺軒(Lin YuHsuan),周鈺禮(Gary),\nTreeHD\n高科校務通v4\n黃昱翔(Marco), YuYu1015, 梁晨恩(ryan940618), 李庭宇(yappy2000)\n中山校務通\n房志剛(Rainvisitor),胡智強（JohnHuCC),\n張栢瑄(Ryan Chang), 蔡明軒(Yukimura), 高聖傑(JasonZzz)\n中山校務通v2\n陳展皝(David), 吳楷鈞（Kai)\n台科校務通\n房志剛(Rainvisitor),林義翔(takidog)\n文藻校務通\n林義翔(takidog),房志剛(Rainvisitor)';
 	@override String get aboutUsContent => '「不要問為何沒有人做這個，\n先承認你就是『沒有人』」。\n因為，「沒有人」是萬能的。\n\n因為沒有人做這些，所以我們跳下來做。\n先後完成了高應無線通、高應校務通，到後來的高應美食通、模擬選課等等.......\n無非是希望帶給大家更便利的校園生活！';
 	@override String get aboutRecruitTitle => 'We Need You !';
 	@override String get aboutRecruitContent => '如果你是 Objective-C、Swift 高手，或是 Java、Kotlin、Dart 神手，又或是對 Coding充滿著熱誠！\n\n歡迎私訊我們粉絲專頁！\n你的程式碼將有機會出現在周遭同學的手中～';
@@ -637,7 +637,7 @@ extension on ApLocalizationsZhHantTw {
 			'feedbackViaFacebook' => '私訊給粉絲專頁',
 			'appVersion' => 'App 版本',
 			'aboutAuthorTitle' => '作者群',
-			'aboutAuthorContent' => '高科校務通v1 & v2\n呂紹榕(Louie Lu), 姜尚德(JohnThunder), \nregisterAutumn, 詹濬鍵(Evans), \n陳建霖(HearSilent), 陳冠蓁, 徐羽柔\n高科校務通v3\n房志剛(Rainvisitor),林義翔(takidog),\n林鈺軒(Lin YuHsuan),周鈺禮(Gary),\n高科校務通v4\n黃昱翔(Marco), YuYu1015, 梁晨恩(ryan940618), 李庭宇(yappy2000)\n中山校務通\n房志剛(Rainvisitor),胡智強（JohnHuCC),\n張栢瑄(Ryan Chang), 蔡明軒(Yukimura), 高聖傑(JasonZzz)\n中山校務通v2\n陳展皝(David), 吳楷鈞（Kai)\n台科校務通\n房志剛(Rainvisitor),林義翔(takidog)\n文藻校務通\n林義翔(takidog),房志剛(Rainvisitor)',
+			'aboutAuthorContent' => '高科校務通v1 & v2\n呂紹榕(Louie Lu), 姜尚德(JohnThunder), \nregisterAutumn, 詹濬鍵(Evans), \n陳建霖(HearSilent), 陳冠蓁, 徐羽柔\n高科校務通v3\n房志剛(Rainvisitor),林義翔(takidog),\n林鈺軒(Lin YuHsuan),周鈺禮(Gary),\nTreeHD\n高科校務通v4\n黃昱翔(Marco), YuYu1015, 梁晨恩(ryan940618), 李庭宇(yappy2000)\n中山校務通\n房志剛(Rainvisitor),胡智強（JohnHuCC),\n張栢瑄(Ryan Chang), 蔡明軒(Yukimura), 高聖傑(JasonZzz)\n中山校務通v2\n陳展皝(David), 吳楷鈞（Kai)\n台科校務通\n房志剛(Rainvisitor),林義翔(takidog)\n文藻校務通\n林義翔(takidog),房志剛(Rainvisitor)',
 			'aboutUsContent' => '「不要問為何沒有人做這個，\n先承認你就是『沒有人』」。\n因為，「沒有人」是萬能的。\n\n因為沒有人做這些，所以我們跳下來做。\n先後完成了高應無線通、高應校務通，到後來的高應美食通、模擬選課等等.......\n無非是希望帶給大家更便利的校園生活！',
 			'aboutRecruitTitle' => 'We Need You !',
 			'aboutRecruitContent' => '如果你是 Objective-C、Swift 高手，或是 Java、Kotlin、Dart 神手，又或是對 Coding充滿著熱誠！\n\n歡迎私訊我們粉絲專頁！\n你的程式碼將有機會出現在周遭同學的手中～',
