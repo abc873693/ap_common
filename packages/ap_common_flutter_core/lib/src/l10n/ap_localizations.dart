@@ -35,19 +35,25 @@ Future<AppLocale> useApDeviceLocale() async {
 extension ApExtension on ApLocalizations {
   String get dateTimeLocale {
     final AppLocale current = LocaleSettings.currentLocale;
-    if (current == AppLocale.zhHantTw) {
-      return 'zh-TW';
-    } else {
-      return 'en-US';
+    switch (current) {
+      case AppLocale.zhHantTw:
+        return 'zh-TW';
+      case AppLocale.ja:
+        return 'ja';
+      case AppLocale.en:
+        return 'en-US';
     }
   }
 
   String get locale {
     final AppLocale current = LocaleSettings.currentLocale;
-    if (current == AppLocale.zhHantTw) {
-      return 'zh-TW';
-    } else {
-      return 'en-US';
+    switch (current) {
+      case AppLocale.zhHantTw:
+        return 'zh-TW';
+      case AppLocale.ja:
+        return 'ja';
+      case AppLocale.en:
+        return 'en-US';
     }
   }
 
