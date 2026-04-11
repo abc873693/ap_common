@@ -644,7 +644,10 @@ class CourseScaffoldState extends State<CourseScaffold> {
       UiUtil.instance.showToast(context, context.ap.unknownError);
       return;
     }
-    final ui.Image image = await boundary.toImage(pixelRatio: 3.0);
+    final double pixelRatio =
+        MediaQuery.devicePixelRatioOf(context).clamp(2.0, 4.0);
+    final ui.Image image =
+        await boundary.toImage(pixelRatio: pixelRatio);
     final ByteData? byteData =
         await image.toByteData(format: ui.ImageByteFormat.png);
     final DateTime now = DateTime.now();

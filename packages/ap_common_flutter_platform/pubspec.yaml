@@ -32,7 +32,7 @@ dependencies:
   path: ^1.7.0
   path_provider: ^2.1.2
   image_picker: ^1.0.7
-  photo_manager: ^3.6.0
+  gal: ^2.3.2
   file_saver: ^0.2.12
 
 dev_dependencies:
