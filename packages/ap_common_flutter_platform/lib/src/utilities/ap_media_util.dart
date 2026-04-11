@@ -30,14 +30,24 @@ class ApMediaUtil extends MediaUtil {
               Platform.isIOS ||
               Platform.isMacOS ||
               Platform.isWindows)) {
+        if (!await Gal.hasAccess(toAlbum: true)) {
+          if (!await Gal.requestAccess(toAlbum: true)) {
+            return const SaveImageError(
+              'permission_denied',
+            );
+          }
+        }
         final String tempPath = path.join(
-          (await getApplicationDocumentsDirectory()).path,
+          (await getTemporaryDirectory()).path,
           filePath,
         );
         final File file =
             await File(tempPath).writeAsBytes(pngBytes);
-        await Gal.putImage(file.path, album: 'AP');
-        await file.delete();
+        try {
+          await Gal.putImage(file.path, album: 'AP');
+        } finally {
+          await file.delete();
+        }
         return SaveImageSuccess(filePath);
       } else {
         final String savedPath =
@@ -49,7 +59,7 @@ class ApMediaUtil extends MediaUtil {
       }
     } on GalException catch (e, s) {
       CrashlyticsUtil.instance.recordError(e, s);
-      return SaveImageError(e.type.message);
+      return SaveImageError(e.type.name);
     } catch (e, s) {
       CrashlyticsUtil.instance.recordError(e, s);
       return SaveImageError(e.toString());
