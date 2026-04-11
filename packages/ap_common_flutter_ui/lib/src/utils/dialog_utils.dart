@@ -143,9 +143,13 @@ class DialogUtils {
           jsonDecode(response.data as String) as Map<String, dynamic>;
       final Map<String, dynamic> versionMap =
           json['${versionInfo.code}'] as Map<String, dynamic>;
-      versionInfo = versionInfo.copyWith(
-        content: versionMap[app.locale] as String,
-      );
+      final Object? localeContent = versionMap[app.locale];
+      final String content = switch (localeContent) {
+        final List<dynamic> list => list.map((Object? e) => '• $e').join('\n'),
+        final String s => s,
+        _ => versionInfo.content,
+      };
+      versionInfo = versionInfo.copyWith(content: content);
     }
     if (!context.mounted) return;
     final String versionContent = '${'\n$versionName\n'}${versionInfo.content}';

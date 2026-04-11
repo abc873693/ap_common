@@ -1,11 +1,86 @@
-import 'package:ap_common_flutter_core/ap_common_flutter_core.dart';
 import 'package:ap_common_flutter_ui/ap_common_flutter_ui.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 
 typedef SemesterCallback = void Function(Semester semester, int index);
 
-class SemesterUIConfig {
+/// Controls the loading/empty state of semesters in a [SemesterPicker].
+///
+/// Attach this controller to both [SemesterPicker] and
+/// [SemesterPicker.show] so the BottomSheet can reflect
+/// asynchronous data-loading progress.
+///
+/// Typical usage in [ApCoursePage] or [ApScorePage]:
+/// ```dart
+/// final controller = SemesterPickerController();
+/// // after data loads:
+/// controller.markSemesterHasData(semester); // auto-closes sheet
+/// ```
+class SemesterPickerController extends ChangeNotifier {
+  final Set<String> _loadingSemesters = <String>{};
+  final Set<String> _emptySemesters = <String>{};
+  NavigatorState? _sheetNavigator;
 
+  /// Semester codes currently loading.
+  Set<String> get loadingSemesters =>
+      Set<String>.unmodifiable(_loadingSemesters);
+
+  /// Semester codes marked as empty (no data).
+  Set<String> get emptySemesters => Set<String>.unmodifiable(_emptySemesters);
+
+  /// Mark a semester as loading. The BottomSheet will show a
+  /// spinner on this item.
+  void markSemesterLoading(Semester semester) {
+    _loadingSemesters.add(semester.code);
+    notifyListeners();
+  }
+
+  /// Mark a semester as having data. Clears loading/empty state
+  /// and **auto-closes** the BottomSheet if it is still open.
+  void markSemesterHasData(Semester semester) {
+    _loadingSemesters.remove(semester.code);
+    _emptySemesters.remove(semester.code);
+    _tryPopSheet();
+    notifyListeners();
+  }
+
+  /// Mark a semester as empty (no data). Clears loading state.
+  /// The BottomSheet stays open so the user can pick another.
+  void markSemesterEmpty(Semester semester) {
+    _loadingSemesters.remove(semester.code);
+    _emptySemesters.add(semester.code);
+    notifyListeners();
+  }
+
+  /// Whether the given semester is currently loading.
+  bool isSemesterLoading(Semester semester) =>
+      _loadingSemesters.contains(semester.code);
+
+  /// Whether the given semester is marked empty.
+  bool isSemesterEmpty(Semester semester) =>
+      _emptySemesters.contains(semester.code);
+
+  /// Called internally by the picker to register the sheet's
+  /// navigator for auto-close.
+  // ignore: use_setters_to_change_properties
+  void attachSheetNavigator(NavigatorState navigator) {
+    _sheetNavigator = navigator;
+  }
+
+  /// Called internally when the sheet is dismissed.
+  void detachSheetNavigator() {
+    _sheetNavigator = null;
+  }
+
+  void _tryPopSheet() {
+    if (_sheetNavigator != null && _sheetNavigator!.canPop()) {
+      _sheetNavigator!.pop();
+      _sheetNavigator = null;
+    }
+  }
+}
+
+class SemesterUIConfig {
   const SemesterUIConfig({
     this.getName,
     this.getIcon,
@@ -26,6 +101,7 @@ class SemesterPicker extends StatefulWidget {
     this.featureTag,
     this.currentIndex = 0,
     this.uiConfig,
+    this.controller,
   });
 
   final SemesterData semesterData;
@@ -33,6 +109,7 @@ class SemesterPicker extends StatefulWidget {
   final String? featureTag;
   final int currentIndex;
   final SemesterUIConfig? uiConfig;
+  final SemesterPickerController? controller;
 
   @override
   SemesterPickerState createState() => SemesterPickerState();
@@ -46,6 +123,7 @@ class SemesterPicker extends StatefulWidget {
     Set<String>? loadingSemesters,
     Set<String>? emptySemesters,
     SemesterUIConfig? uiConfig,
+    SemesterPickerController? controller,
   }) {
     final ColorScheme colorScheme = Theme.of(context).colorScheme;
     final List<MapEntry<int, Semester>> sortedSemesters =
@@ -59,13 +137,27 @@ class SemesterPicker extends StatefulWidget {
       groupedByYear[year]!.add(entry);
     }
 
+    // Prefer controller's sets; fall back to explicit parameters.
+    final Set<String>? effectiveLoading =
+        controller?._loadingSemesters ?? loadingSemesters;
+    final Set<String>? effectiveEmpty =
+        controller?._emptySemesters ?? emptySemesters;
+
+    VoidCallback? onControllerChanged;
     showModalBottomSheet<void>(
       context: context,
       backgroundColor: const Color(0x00000000),
       isScrollControlled: true,
       builder: (BuildContext sheetContext) {
+        if (controller != null) {
+          controller.attachSheetNavigator(Navigator.of(sheetContext));
+        }
         return StatefulBuilder(
           builder: (BuildContext context, StateSetter setSheetState) {
+            if (onControllerChanged == null && controller != null) {
+              onControllerChanged = () => setSheetState(() {});
+              controller.addListener(onControllerChanged!);
+            }
             return DraggableScrollableSheet(
               initialChildSize: 0.6,
               minChildSize: 0.3,
@@ -136,10 +228,11 @@ class SemesterPicker extends StatefulWidget {
                               currentIndex: currentIndex,
                               semesterData: semesterData,
                               onSelect: onSelect,
-                              loadingSemesters: loadingSemesters,
-                              emptySemesters: emptySemesters,
+                              loadingSemesters: effectiveLoading,
+                              emptySemesters: effectiveEmpty,
                               setSheetState: setSheetState,
                               uiConfig: uiConfig,
+                              controller: controller,
                             );
                           },
                         ),
@@ -152,7 +245,12 @@ class SemesterPicker extends StatefulWidget {
           },
         );
       },
-    );
+    ).whenComplete(() {
+      if (onControllerChanged != null) {
+        controller?.removeListener(onControllerChanged!);
+      }
+      controller?.detachSheetNavigator();
+    });
   }
 
   static Widget _buildYearGroup({
@@ -167,6 +265,7 @@ class SemesterPicker extends StatefulWidget {
     Set<String>? emptySemesters,
     required StateSetter setSheetState,
     SemesterUIConfig? uiConfig,
+    SemesterPickerController? controller,
   }) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -185,7 +284,7 @@ class SemesterPicker extends StatefulWidget {
                   borderRadius: BorderRadius.circular(8),
                 ),
                 child: Text(
-                  '$year 學年度',
+                  context.ap.schoolYearFormat(arg1: year),
                   style: TextStyle(
                     fontSize: 14,
                     fontWeight: FontWeight.bold,
@@ -210,6 +309,7 @@ class SemesterPicker extends StatefulWidget {
             emptySemesters: emptySemesters,
             setSheetState: setSheetState,
             uiConfig: uiConfig,
+            controller: controller,
           ),
         ),
       ],
@@ -228,6 +328,7 @@ class SemesterPicker extends StatefulWidget {
     Set<String>? emptySemesters,
     required StateSetter setSheetState,
     SemesterUIConfig? uiConfig,
+    SemesterPickerController? controller,
   }) {
     final bool isSelected = originalIndex == currentIndex;
     final bool isDefault = originalIndex == semesterData.defaultIndex;
@@ -235,7 +336,7 @@ class SemesterPicker extends StatefulWidget {
     final bool isLoading = loadingSemesters?.contains(semester.code) ?? false;
     final bool isDisabled = isEmpty || isLoading;
     final String semesterName = uiConfig?.getName?.call(semester.value) ??
-        SemesterPickerState._getSemesterName(semester.value);
+        SemesterPickerState._getSemesterName(semester.value, context.ap);
     final String displayName =
         semesterName.isNotEmpty ? semesterName : semester.text;
 
@@ -268,7 +369,10 @@ class SemesterPicker extends StatefulWidget {
               ? null
               : () {
                   if (onSelect != null) {
-                    if (loadingSemesters != null) {
+                    if (controller != null) {
+                      controller.markSemesterLoading(semester);
+                      onSelect(semester, originalIndex);
+                    } else if (loadingSemesters != null) {
                       loadingSemesters.add(semester.code);
                       setSheetState(() {});
                       onSelect(semester, originalIndex);
@@ -365,7 +469,7 @@ class SemesterPicker extends StatefulWidget {
                                 borderRadius: BorderRadius.circular(4),
                               ),
                               child: Text(
-                                '載入中',
+                                context.ap.semesterLoading,
                                 style: TextStyle(
                                   fontSize: 10,
                                   fontWeight: FontWeight.w500,
@@ -385,7 +489,7 @@ class SemesterPicker extends StatefulWidget {
                                 borderRadius: BorderRadius.circular(4),
                               ),
                               child: Text(
-                                '無資料',
+                                context.ap.semesterNoData,
                                 style: TextStyle(
                                   fontSize: 10,
                                   fontWeight: FontWeight.w500,
@@ -405,7 +509,7 @@ class SemesterPicker extends StatefulWidget {
                                 borderRadius: BorderRadius.circular(4),
                               ),
                               child: Text(
-                                '目前',
+                                context.ap.currentSemester,
                                 style: TextStyle(
                                   fontSize: 10,
                                   fontWeight: FontWeight.w600,
@@ -500,7 +604,7 @@ class SemesterPickerState extends State<SemesterPicker> {
   Widget build(BuildContext context) {
     final ColorScheme colorScheme = Theme.of(context).colorScheme;
     final String displayText = selectSemester != null
-        ? _getShortSemesterText(selectSemester!, widget.uiConfig)
+        ? _getShortSemesterText(selectSemester!, widget.uiConfig, context.ap)
         : '';
 
     return Material(
@@ -549,11 +653,11 @@ class SemesterPickerState extends State<SemesterPicker> {
 
   static String _getShortSemesterText(
     Semester semester,
-    SemesterUIConfig? uiConfig,
-  ) {
-    final String name =
-        uiConfig?.getName?.call(semester.value) ??
-            _getSemesterName(semester.value);
+    SemesterUIConfig? uiConfig, [
+    ApLocalizations? ap,
+  ]) {
+    final String name = uiConfig?.getName?.call(semester.value) ??
+        _getSemesterName(semester.value, ap);
     if (name.isNotEmpty) {
       return '${semester.year} $name';
     }
@@ -613,22 +717,25 @@ class SemesterPickerState extends State<SemesterPicker> {
     }
   }
 
-  static String _getSemesterName(String value) {
+  static String _getSemesterName(
+    String value, [
+    ApLocalizations? ap,
+  ]) {
     switch (value) {
       case '1':
-        return '上學期';
+        return ap?.firstSemester ?? '上學期';
       case '2':
-        return '下學期';
+        return ap?.secondSemester ?? '下學期';
       case '3':
-        return '寒修';
+        return ap?.winterSession ?? '寒修';
       case '4':
-        return '暑修';
+        return ap?.summerSession ?? '暑修';
       case '5':
-        return '先修';
+        return ap?.preCourse ?? '先修';
       case '6':
-        return '暑修(一)';
+        return ap?.summerSessionFirst ?? '暑修(一)';
       case '7':
-        return '暑修(特)';
+        return ap?.summerSessionSpecial ?? '暑修(特)';
       default:
         return '';
     }
@@ -700,21 +807,31 @@ class SemesterPickerState extends State<SemesterPicker> {
   }
 
   void pickSemester() {
+    final SemesterPickerController? ctrl = widget.controller;
     SemesterPicker.show(
       context: context,
       semesterData: semesterData,
       currentIndex: currentIndex,
       onSelect: (Semester semester, int index) {
-        markSemesterLoading(semester);
+        HapticFeedback.selectionClick();
+        if (ctrl != null) {
+          ctrl.markSemesterLoading(semester);
+        } else {
+          markSemesterLoading(semester);
+        }
         currentIndex = index;
         selectSemester = semesterData.data[currentIndex];
-        widget.onSelect?.call(semesterData.data[currentIndex], currentIndex);
+        widget.onSelect?.call(
+          semesterData.data[currentIndex],
+          currentIndex,
+        );
         if (mounted) setState(() {});
       },
       featureTag: widget.featureTag,
-      loadingSemesters: _loadingSemesters,
-      emptySemesters: _emptySemesters,
+      loadingSemesters: ctrl != null ? null : _loadingSemesters,
+      emptySemesters: ctrl != null ? null : _emptySemesters,
       uiConfig: widget.uiConfig,
+      controller: ctrl,
     );
   }
 }

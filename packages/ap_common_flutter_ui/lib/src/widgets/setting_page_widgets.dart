@@ -393,6 +393,7 @@ class ChangeLanguageItem extends StatelessWidget {
           context.ap.systemLanguage,
           context.ap.traditionalChinese,
           context.ap.english,
+          context.ap.japanese,
         ];
     final String code = PreferenceUtil.instance.getString(
       ApConstants.prefLanguageCode,

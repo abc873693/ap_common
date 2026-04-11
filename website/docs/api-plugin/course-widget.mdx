@@ -97,7 +97,7 @@ if (kDebugMode) ...[
 
 ## Android 整合
 
-Plugin 已包含完整的 `CourseAppWidgetProvider` 實作與 `AndroidManifest.xml` 註冊，**App 端不需要額外撰寫原生程式碼或修改 manifest**。
+Plugin 已包含完整的 Widget 實作與 `AndroidManifest.xml` 註冊，**App 端不需要額外撰寫原生程式碼或修改 manifest**。
 
 Plugin 內部的 manifest 已自動註冊以下 receiver，會在建置時合併至 App 的 manifest：
 
@@ -113,6 +113,38 @@ Plugin 內部的 manifest 已自動註冊以下 receiver，會在建置時合併
         android:resource="@xml/course_appwidget_info" />
 </receiver>
 ```
+
+### 停用特定小工具
+
+Plugin 預設註冊了 5 個小工具。如果 App 不需要某些小工具，可以在 **App 的 `AndroidManifest.xml`** 中使用 Android manifest merger 的 `tools:node="remove"` 將其移除，該小工具就不會出現在桌面小工具選擇器中：
+
+```xml title="app/src/main/AndroidManifest.xml（App 端）"
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <application>
+        <!-- 移除不需要的小工具 -->
+        <receiver
+            android:name="me.rainvisitor.ap_common_plugin.StudentIdWidgetProvider"
+            tools:node="remove" />
+        <receiver
+            android:name="me.rainvisitor.ap_common_plugin.CountdownWidgetProvider"
+            tools:node="remove" />
+    </application>
+</manifest>
+```
+
+:::info 可用的 Provider 名稱
+
+| 小工具 | Provider |
+|--------|----------|
+| 上課提醒 | `me.rainvisitor.ap_common_plugin.CourseAppWidgetProvider` |
+| 學期課表 | `me.rainvisitor.ap_common_plugin.CourseTableWidgetProvider` |
+| 今日課表 | `me.rainvisitor.ap_common_plugin.TodayScheduleWidgetProvider` |
+| 倒數計時 | `me.rainvisitor.ap_common_plugin.CountdownWidgetProvider` |
+| 學生證 | `me.rainvisitor.ap_common_plugin.StudentIdWidgetProvider` |
+
+:::
 
 ### Widget 規格
 

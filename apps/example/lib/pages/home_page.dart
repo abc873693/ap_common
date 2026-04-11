@@ -11,6 +11,7 @@ import 'package:ap_common_example/pages/study/score_page.dart';
 import 'package:ap_common_example/pages/user_info_page.dart';
 import 'package:ap_common_example/res/assets.dart';
 import 'package:ap_common_example/utils/app_localizations.dart';
+import 'package:ap_common_plugin/ap_common_plugin.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:http/http.dart' as http;
@@ -41,6 +42,7 @@ class HomePageState extends State<HomePage> {
   bool isStudyExpanded = false;
 
   UserInfo? userInfo;
+  CourseData? courseData;
 
   String get drawerIcon {
     switch (ApTheme.of(context).brightness) {
@@ -66,6 +68,7 @@ class HomePageState extends State<HomePage> {
   @override
   void initState() {
     _getAnnouncements();
+    _loadCourseData();
     if (PreferenceUtil.instance.getBool(Constants.PREF_AUTO_LOGIN, false)) {
       _login();
     } else {
@@ -101,6 +104,7 @@ class HomePageState extends State<HomePage> {
       ],
       content: content,
       drawer: _buildDrawer(),
+      dashboardWidgets: _buildDashboardWidgets(),
       onImageTapped: (Announcement announcement) {
         ApUtils.pushCupertinoStyle(
           context,
@@ -208,6 +212,7 @@ class HomePageState extends State<HomePage> {
             onTap: () async {
               await PreferenceUtil.instance
                   .setBool(Constants.PREF_AUTO_LOGIN, false);
+              await ApCommonPlugin.clearUserInfoWidget();
               isLogin = false;
               userInfo = null;
               content = null;
@@ -273,6 +278,64 @@ class HomePageState extends State<HomePage> {
     }
   }
 
+  List<Widget> _buildDashboardWidgets() {
+    return <Widget>[
+      QuickInfoRow(
+        items: <QuickInfoItem>[
+          if (isLogin)
+            QuickInfoItem(
+              icon: Icons.bus_alert,
+              label: '已預約校車',
+              subtitle: '建工 -> 燕巢 17:00',
+              onTap: () {
+                ApUtils.pushCupertinoStyle(context, CoursePage());
+              },
+            ),
+          QuickInfoItem(
+            icon: Icons.newspaper_outlined,
+            label: '10',
+            subtitle: context.ap.news,
+            onTap: () {
+              ApUtils.pushCupertinoStyle(context, SchoolInfoPage());
+            },
+          ),
+        ],
+      ),
+      const SizedBox(height: 16),
+      if (isLogin && courseData != null)
+        TodayScheduleCard(
+          courseData: courseData!,
+          onTap: () {
+            ApUtils.pushCupertinoStyle(context, CoursePage());
+          },
+        )
+      else
+        _buildEmptyScheduleCard(),
+    ];
+  }
+
+  Widget _buildEmptyScheduleCard() {
+    return EmptyScheduleCard(
+      message: isLogin
+          ? context.ap.courseEmpty
+          : context.ap.notLogin,
+      onTap: () {
+        if (isLogin) {
+          ApUtils.pushCupertinoStyle(context, CoursePage());
+        } else {
+          openLoginPage();
+        }
+      },
+    );
+  }
+
+  Future<void> _loadCourseData() async {
+    final String rawString = await rootBundle.loadString(FileAssets.courses);
+    setState(() {
+      courseData = CourseData.fromRawJson(rawString);
+    });
+  }
+
   Future<void> _getAnnouncements() async {
     final ApiResult<List<Announcement>> result =
         await AnnouncementHelper.instance.getAnnouncements(tags: <String>[]);
@@ -298,6 +361,7 @@ class HomePageState extends State<HomePage> {
     setState(() {
       this.userInfo = userInfo;
     });
+    await ApCommonPlugin.updateUserInfoWidget(userInfo);
     if (PreferenceUtil.instance.getBool(Constants.PREF_DISPLAY_PICTURE, true)) {
       _getUserPicture();
     }

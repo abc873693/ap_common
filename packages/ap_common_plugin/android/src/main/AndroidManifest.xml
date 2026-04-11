@@ -12,5 +12,45 @@
                 android:name="android.appwidget.provider"
                 android:resource="@xml/course_appwidget_info" />
         </receiver>
+        <receiver
+            android:name=".CourseTableWidgetProvider"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
+            </intent-filter>
+            <meta-data
+                android:name="android.appwidget.provider"
+                android:resource="@xml/course_table_widget_info" />
+        </receiver>
+        <receiver
+            android:name=".TodayScheduleWidgetProvider"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
+            </intent-filter>
+            <meta-data
+                android:name="android.appwidget.provider"
+                android:resource="@xml/today_schedule_widget_info" />
+        </receiver>
+        <receiver
+            android:name=".CountdownWidgetProvider"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
+            </intent-filter>
+            <meta-data
+                android:name="android.appwidget.provider"
+                android:resource="@xml/countdown_widget_info" />
+        </receiver>
+        <receiver
+            android:name=".StudentIdWidgetProvider"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
+            </intent-filter>
+            <meta-data
+                android:name="android.appwidget.provider"
+                android:resource="@xml/student_id_widget_info" />
+        </receiver>
     </application>
 </manifest>

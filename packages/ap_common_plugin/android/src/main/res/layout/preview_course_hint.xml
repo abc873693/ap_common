@@ -1,0 +1,26 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/preview_surface"
+    android:orientation="vertical">
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="36dp"
+        android:background="@color/preview_header"
+        android:gravity="center"
+        android:text="@string/course_hint"
+        android:textColor="#ffffff"
+        android:textSize="18sp"
+        android:textStyle="bold" />
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:gravity="center"
+        android:lineSpacingExtra="4dp"
+        android:text="下一節課是 09:00\n在 EC5012 的 演算法"
+        android:textColor="@color/preview_on_surface"
+        android:textSize="14sp" />
+
+</LinearLayout>

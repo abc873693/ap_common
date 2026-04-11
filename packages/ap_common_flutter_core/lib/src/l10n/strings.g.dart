@@ -3,10 +3,10 @@
 /// Source: lib/src/l10n
 /// To regenerate, run: `dart run slang`
 ///
-/// Locales: 2
-/// Strings: 784 (392 per locale)
+/// Locales: 3
+/// Strings: 1389 (463 per locale)
 ///
-/// Built on 2026-04-04 at 09:09 UTC
+/// Built on 2026-04-10 at 17:56 UTC
 
 // coverage:ignore-file
 // ignore_for_file: type=lint, unused_import
@@ -18,6 +18,7 @@ import 'package:slang/generated.dart';
 import 'package:slang_flutter/slang_flutter.dart';
 export 'package:slang_flutter/slang_flutter.dart';
 
+import 'strings_ja.g.dart' deferred as l_ja;
 import 'strings_zh_Hant_TW.g.dart' deferred as l_zh_Hant_TW;
 part 'strings_en.g.dart';
 
@@ -29,6 +30,7 @@ part 'strings_en.g.dart';
 /// - if (LocaleSettings.currentLocale == AppLocale.en) // locale check
 enum AppLocale with BaseAppLocale<AppLocale, ApLocalizations> {
 	en(languageCode: 'en'),
+	ja(languageCode: 'ja'),
 	zhHantTw(languageCode: 'zh', scriptCode: 'Hant', countryCode: 'TW');
 
 	const AppLocale({
@@ -54,6 +56,13 @@ enum AppLocale with BaseAppLocale<AppLocale, ApLocalizations> {
 					cardinalResolver: cardinalResolver,
 					ordinalResolver: ordinalResolver,
 				);
+			case AppLocale.ja:
+				await l_ja.loadLibrary();
+				return l_ja.ApLocalizationsJa(
+					overrides: overrides,
+					cardinalResolver: cardinalResolver,
+					ordinalResolver: ordinalResolver,
+				);
 			case AppLocale.zhHantTw:
 				await l_zh_Hant_TW.loadLibrary();
 				return l_zh_Hant_TW.ApLocalizationsZhHantTw(
@@ -73,6 +82,12 @@ enum AppLocale with BaseAppLocale<AppLocale, ApLocalizations> {
 		switch (this) {
 			case AppLocale.en:
 				return ApLocalizationsEn(
+					overrides: overrides,
+					cardinalResolver: cardinalResolver,
+					ordinalResolver: ordinalResolver,
+				);
+			case AppLocale.ja:
+				return l_ja.ApLocalizationsJa(
 					overrides: overrides,
 					cardinalResolver: cardinalResolver,
 					ordinalResolver: ordinalResolver,

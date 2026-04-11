@@ -57,6 +57,8 @@ class AboutUsPageState extends State<AboutUsPage> {
   @override
   Widget build(BuildContext context) {
     final double expandedHeight = MediaQuery.of(context).size.height * 0.25;
+    final Color iconColor =
+        Theme.of(context).colorScheme.onSurface;
     return Scaffold(
       body: CustomScrollView(
         slivers: <Widget>[
@@ -177,7 +179,10 @@ class AboutUsPageState extends State<AboutUsPage> {
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: <Widget>[
                               IconButton(
-                                icon: Image.asset(ApImageAssets.fb),
+                                icon: Image.asset(
+                                  ApImageAssets.fb,
+                                  color: iconColor,
+                                ),
                                 onPressed: () {
                                   PlatformUtil.instance.launchUrl(
                                     'https://m.me/${widget.fbFanPageId}',
@@ -200,7 +205,10 @@ class AboutUsPageState extends State<AboutUsPage> {
                                   iconSize: 48.0,
                                 ),
                               IconButton(
-                                icon: Image.asset(ApImageAssets.github),
+                                icon: Image.asset(
+                                  ApImageAssets.github,
+                                  color: iconColor,
+                                ),
                                 onPressed: () {
                                   PlatformUtil.instance
                                       .launchUrl(widget.githubUrl)
@@ -219,7 +227,10 @@ class AboutUsPageState extends State<AboutUsPage> {
                                 iconSize: 48.0,
                               ),
                               IconButton(
-                                icon: Image.asset(ApImageAssets.email),
+                                icon: Image.asset(
+                                  ApImageAssets.email,
+                                  color: iconColor,
+                                ),
                                 onPressed: () {
                                   PlatformUtil.instance
                                       .launchUrl('mailto:${widget.email}')

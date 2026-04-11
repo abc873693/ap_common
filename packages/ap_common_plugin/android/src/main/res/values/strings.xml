@@ -6,4 +6,23 @@
     <string name="today_no_course_already">Good! No course today already</string>
     <string name="please_enter_app_reload">Please enter app reload Course Data</string>
     <string name="widget_description">Show the next course of today</string>
+    <string name="course_table">Course Table</string>
+    <string name="table_widget_description">Show the weekly course table</string>
+    <string name="today_schedule">Today</string>
+    <string name="today_schedule_description">Show today\'s course schedule</string>
+    <string name="minutes_until">min until next class</string>
+    <string name="countdown_description">Countdown to next class</string>
+    <string name="student_id_card">Student ID</string>
+    <string name="student_id_description">Show student ID with barcode</string>
+    <string name="not_login_hint">Please login first</string>
+    <string name="barcode_library_hint">Use this barcode for library services</string>
+    <string-array name="weekday_labels">
+        <item>Mon</item>
+        <item>Tue</item>
+        <item>Wed</item>
+        <item>Thu</item>
+        <item>Fri</item>
+        <item>Sat</item>
+        <item>Sun</item>
+    </string-array>
 </resources>

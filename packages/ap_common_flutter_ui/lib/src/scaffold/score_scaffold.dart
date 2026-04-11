@@ -3,6 +3,7 @@ import 'dart:math';
 import 'package:ap_common_flutter_ui/ap_common_flutter_ui.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
+import 'package:flutter/services.dart';
 
 enum ScoreState { loading, finish, error, empty, offlineEmpty, custom }
 
@@ -26,6 +27,7 @@ class ScoreScaffold extends StatefulWidget {
     this.isShowSearchButton = false,
     this.bottom,
     this.customStateHint,
+    this.semesterPickerController,
   });
 
   /// Creates a [ScoreScaffold] from a [DataState<ScoreData>].
@@ -52,6 +54,7 @@ class ScoreScaffold extends StatefulWidget {
     this.finalScoreBuilder,
     this.isShowSearchButton = false,
     this.bottom,
+    this.semesterPickerController,
   })  : state = dataState.when(
           loading: () => ScoreState.loading,
           loaded: (_, __) => ScoreState.finish,
@@ -89,6 +92,9 @@ class ScoreScaffold extends StatefulWidget {
 
   final Widget? bottom;
 
+  /// Optional controller for the semester picker.
+  final SemesterPickerController? semesterPickerController;
+
   @override
   ScoreScaffoldState createState() => ScoreScaffoldState();
 }
@@ -97,7 +103,7 @@ class ScoreScaffoldState extends State<ScoreScaffold> {
   bool get isLandscape =>
       MediaQuery.of(context).orientation == Orientation.landscape;
 
-  bool _isAnalysisView = false;
+  bool _isAnalysisView = true;
   late ScrollController _scrollController;
   bool _showFab = true;
 
@@ -156,6 +162,7 @@ class ScoreScaffoldState extends State<ScoreScaffold> {
                   widget.onSelect?.call(index);
                 },
                 featureTag: 'score',
+                controller: widget.semesterPickerController,
               ),
             ],
           ],
@@ -178,6 +185,7 @@ class ScoreScaffoldState extends State<ScoreScaffold> {
                 key: const ValueKey<String>('switch_view_button'),
                 heroTag: 'switch_view_button',
                 onPressed: () {
+                  HapticFeedback.selectionClick();
                   setState(() => _isAnalysisView = !_isAnalysisView);
                 },
                 child: Icon(
@@ -213,7 +221,12 @@ class ScoreScaffoldState extends State<ScoreScaffold> {
               children: <Widget>[
                 if (widget.customHint != null && widget.customHint!.isNotEmpty)
                   _buildHintBanner(),
-                Expanded(child: _buildContent(context, colorScheme)),
+                Expanded(
+                  child: AnimatedSwitcher(
+                    duration: const Duration(milliseconds: 300),
+                    child: _buildContent(context, colorScheme),
+                  ),
+                ),
               ],
             ),
           ),
@@ -268,30 +281,45 @@ class ScoreScaffoldState extends State<ScoreScaffold> {
   ) {
     switch (widget.state) {
       case ScoreState.loading:
-        return _buildLoadingState(colorScheme);
+        return KeyedSubtree(
+          key: const ValueKey<ScoreState>(ScoreState.loading),
+          child: _buildLoadingState(colorScheme),
+        );
       case ScoreState.error:
-        return _buildErrorState(
-          colorScheme,
-          context.ap.clickToRetry,
-          Icons.error_outline_rounded,
+        return KeyedSubtree(
+          key: const ValueKey<ScoreState>(ScoreState.error),
+          child: _buildErrorState(
+            colorScheme,
+            context.ap.clickToRetry,
+            Icons.error_outline_rounded,
+          ),
         );
       case ScoreState.empty:
-        return _buildErrorState(
-          colorScheme,
-          context.ap.scoreEmpty,
-          Icons.assignment_outlined,
+        return KeyedSubtree(
+          key: const ValueKey<ScoreState>(ScoreState.empty),
+          child: _buildErrorState(
+            colorScheme,
+            context.ap.scoreEmpty,
+            Icons.assignment_outlined,
+          ),
         );
       case ScoreState.offlineEmpty:
-        return _buildErrorState(
-          colorScheme,
-          context.ap.noOfflineData,
-          Icons.cloud_off_rounded,
+        return KeyedSubtree(
+          key: const ValueKey<ScoreState>(ScoreState.offlineEmpty),
+          child: _buildErrorState(
+            colorScheme,
+            context.ap.noOfflineData,
+            Icons.cloud_off_rounded,
+          ),
         );
       case ScoreState.custom:
-        return _buildErrorState(
-          colorScheme,
-          widget.customStateHint ?? context.ap.somethingError,
-          Icons.warning_amber_rounded,
+        return KeyedSubtree(
+          key: const ValueKey<ScoreState>(ScoreState.custom),
+          child: _buildErrorState(
+            colorScheme,
+            widget.customStateHint ?? context.ap.somethingError,
+            Icons.warning_amber_rounded,
+          ),
         );
       case ScoreState.finish:
         return ScoreContent(
@@ -388,6 +416,7 @@ class ScoreScaffoldState extends State<ScoreScaffold> {
         onSelect: (Semester semester, int index) {
           widget.onSelect?.call(index);
         },
+        controller: widget.semesterPickerController,
       );
     }
     widget.onSearchButtonClick?.call();
@@ -452,7 +481,9 @@ class ScoreAnalysis {
   ScoreAnalysis(this.scoreData) {
     _scores = <double>[];
     for (final Score score in scoreData.scores) {
-      final double? value = double.tryParse(score.semesterScore ?? '');
+      final double? value = ScoreAnalysis.parseScore(
+        ScoreAnalysis.effectiveScoreStr(score),
+      );
       if (value != null) {
         _scores.add(value);
       }
@@ -464,6 +495,18 @@ class ScoreAnalysis {
   late List<double> _scores;
   late int _totalSubjects;
 
+  bool get isGradePoint =>
+      scoreData.scoreType == ScoreType.gradePoint;
+
+  /// Whether a numeric score value is considered passing.
+  bool isPassing(double scoreValue) {
+    if (isGradePoint) {
+      return scoreToGradePoint(scoreValue) >=
+          scoreData.passingGradePoint;
+    }
+    return scoreValue >= scoreData.passingScore;
+  }
+
   int get totalSubjects => _totalSubjects;
 
   double get maxScore => _scores.isEmpty ? 0 : _scores.reduce(max);
@@ -471,8 +514,23 @@ class ScoreAnalysis {
   double get minScore => _scores.isEmpty ? 0 : _scores.reduce(min);
 
   double get average {
-    if (_scores.isEmpty) return 0;
-    return _scores.reduce((double a, double b) => a + b) / _scores.length;
+    if (isGradePoint) {
+      return scoreData.detail.average ?? 0;
+    }
+    double totalWeighted = 0;
+    double totalUnits = 0;
+    for (final Score score in scoreData.scores) {
+      final double? value = ScoreAnalysis.parseScore(
+        ScoreAnalysis.effectiveScoreStr(score),
+      );
+      final double? unit = double.tryParse(score.units);
+      if (value != null && unit != null && unit > 0) {
+        totalWeighted += value * unit;
+        totalUnits += unit;
+      }
+    }
+    if (totalUnits == 0) return 0;
+    return totalWeighted / totalUnits;
   }
 
   double get standardDeviation {
@@ -487,6 +545,16 @@ class ScoreAnalysis {
 
   int get estimatedPR {
     final double avg = scoreData.detail.average ?? average;
+    if (isGradePoint) {
+      if (avg >= 4.0) return 95;
+      if (avg >= 3.7) return 88;
+      if (avg >= 3.3) return 78;
+      if (avg >= 3.0) return 65;
+      if (avg >= 2.7) return 50;
+      if (avg >= 2.3) return 35;
+      if (avg >= 1.7) return 22;
+      return 5;
+    }
     if (avg >= 95) return 99;
     if (avg >= 90) return 95;
     if (avg >= 85) return 88;
@@ -499,16 +567,19 @@ class ScoreAnalysis {
     return 5;
   }
 
+  /// Use [ApLocalizations.prLevelTop] etc. for localized values.
+  @Deprecated('Use context.ap.prLevelTop/Excellent/Average instead')
   String get prLevel {
     final int pr = estimatedPR;
-    if (pr >= 90) return '頂尖';
-    if (pr >= 75) return '優秀';
-    if (pr >= 50) return '中等';
-    if (pr >= 25) return '待加強';
-    return '需努力';
+    if (pr >= 90) return 'Top';
+    if (pr >= 75) return 'Excellent';
+    if (pr >= 50) return 'Average';
+    if (pr >= 25) return 'Below Average';
+    return 'Needs Improvement';
   }
 
   Map<String, int> get distribution {
+    if (isGradePoint) return gradeDistribution;
     final Map<String, int> dist = <String, int>{
       '90-100': 0,
       '80-89': 0,
@@ -546,9 +617,13 @@ class ScoreAnalysis {
   double get passedCredits {
     double credits = 0;
     for (final Score score in scoreData.scores) {
-      final double? scoreValue = double.tryParse(score.semesterScore ?? '');
+      final double? scoreValue = ScoreAnalysis.parseScore(
+        ScoreAnalysis.effectiveScoreStr(score),
+      );
       final double? unit = double.tryParse(score.units);
-      if (scoreValue != null && scoreValue >= 60 && unit != null) {
+      if (scoreValue != null &&
+          isPassing(scoreValue) &&
+          unit != null) {
         credits += unit;
       }
     }
@@ -558,12 +633,130 @@ class ScoreAnalysis {
   double get failedCredits {
     double credits = 0;
     for (final Score score in scoreData.scores) {
-      final double? scoreValue = double.tryParse(score.semesterScore ?? '');
+      final double? scoreValue = ScoreAnalysis.parseScore(
+        ScoreAnalysis.effectiveScoreStr(score),
+      );
       final double? unit = double.tryParse(score.units);
-      if (scoreValue != null && scoreValue < 60 && unit != null) {
+      if (scoreValue != null &&
+          !isPassing(scoreValue) &&
+          unit != null) {
         credits += unit;
       }
     }
     return credits;
+  }
+
+  /// Returns the effective score string for a [Score], preferring
+  /// [Score.semesterScore] and falling back to [Score.finalScore].
+  static String? effectiveScoreStr(Score score) {
+    if (score.semesterScore != null &&
+        score.semesterScore!.isNotEmpty) {
+      return score.semesterScore;
+    }
+    if (score.finalScore != null &&
+        score.finalScore!.isNotEmpty) {
+      return score.finalScore;
+    }
+    return null;
+  }
+
+  /// Try to parse a score string as a number.
+  /// If it's a letter grade, convert to approximate numeric.
+  static double? parseScore(String? scoreStr) {
+    if (scoreStr == null || scoreStr.isEmpty) return null;
+    final double? numeric = double.tryParse(scoreStr);
+    if (numeric != null) return numeric;
+    switch (scoreStr.trim().toUpperCase()) {
+      case 'A+':
+        return 95;
+      case 'A':
+        return 87;
+      case 'A-':
+        return 82;
+      case 'B+':
+        return 78;
+      case 'B':
+        return 75;
+      case 'B-':
+        return 72;
+      case 'C+':
+        return 68;
+      case 'C':
+        return 65;
+      case 'C-':
+        return 62;
+      case 'D':
+        return 55;
+      case 'E':
+        return 45;
+      case 'F':
+        return 30;
+      default:
+        return null;
+    }
+  }
+
+  /// Converts a numeric score (百分制) to a grade point (等第積分)
+  /// based on the NSYSU 4.3 GPA scale.
+  static double scoreToGradePoint(double score) {
+    if (score >= 90) return 4.3;
+    if (score >= 85) return 4.0;
+    if (score >= 80) return 3.7;
+    if (score >= 77) return 3.3;
+    if (score >= 73) return 3.0;
+    if (score >= 70) return 2.7;
+    if (score >= 67) return 2.3;
+    if (score >= 63) return 2.0;
+    if (score >= 60) return 1.7;
+    if (score >= 50) return 1.0;
+    if (score >= 40) return 0.8;
+    return 0;
+  }
+
+  /// Converts a numeric score (百分制) to a letter grade (等第成績).
+  static String scoreToGradeLetter(double score) {
+    if (score >= 90) return 'A+';
+    if (score >= 85) return 'A';
+    if (score >= 80) return 'A-';
+    if (score >= 77) return 'B+';
+    if (score >= 73) return 'B';
+    if (score >= 70) return 'B-';
+    if (score >= 67) return 'C+';
+    if (score >= 63) return 'C';
+    if (score >= 60) return 'C-';
+    if (score >= 50) return 'D';
+    if (score >= 40) return 'E';
+    return 'F';
+  }
+
+  /// Weighted GPA: Σ(grade_point × credits) / Σ(credits)
+  double get gpa {
+    if (isGradePoint) {
+      return scoreData.detail.average ?? 0;
+    }
+    double totalWeighted = 0;
+    double totalUnits = 0;
+    for (final Score score in scoreData.scores) {
+      final double? scoreValue = ScoreAnalysis.parseScore(
+        ScoreAnalysis.effectiveScoreStr(score),
+      );
+      final double? unit = double.tryParse(score.units);
+      if (scoreValue != null && unit != null && unit > 0) {
+        totalWeighted += scoreToGradePoint(scoreValue) * unit;
+        totalUnits += unit;
+      }
+    }
+    if (totalUnits == 0) return 0;
+    return totalWeighted / totalUnits;
+  }
+
+  /// Grade distribution by letter grade (等第分佈).
+  Map<String, int> get gradeDistribution {
+    final Map<String, int> dist = <String, int>{};
+    for (final double score in _scores) {
+      final String grade = scoreToGradeLetter(score);
+      dist[grade] = (dist[grade] ?? 0) + 1;
+    }
+    return dist;
   }
 }

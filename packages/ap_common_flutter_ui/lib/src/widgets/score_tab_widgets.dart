@@ -36,6 +36,7 @@ class ScoreListTab extends StatelessWidget {
         itemCount: scoreData.scores.length,
         itemBuilder: (BuildContext context, int index) {
           return _buildScoreItem(
+            context,
             colorScheme,
             scoreData.scores[index],
             index,
@@ -46,13 +47,20 @@ class ScoreListTab extends StatelessWidget {
   }
 
   Widget _buildScoreItem(
+    BuildContext context,
     ColorScheme colorScheme,
     Score score,
     int index,
   ) {
-    final String scoreStr = score.semesterScore ?? '';
-    final double? scoreValue = double.tryParse(scoreStr);
-    final bool isPassed = scoreValue != null && scoreValue >= 60;
+    final String? effectiveStr =
+        ScoreAnalysis.effectiveScoreStr(score);
+    final double? scoreValue =
+        ScoreAnalysis.parseScore(effectiveStr);
+    final bool isPassed = scoreValue != null &&
+        (scoreData.scoreType == ScoreType.gradePoint
+            ? ScoreAnalysis.scoreToGradePoint(scoreValue) >=
+                scoreData.passingGradePoint
+            : scoreValue >= scoreData.passingScore);
     final Color scoreColor = scoreValue == null
         ? colorScheme.onSurfaceVariant
         : isPassed
@@ -112,7 +120,9 @@ class ScoreListTab extends StatelessWidget {
                         ),
                         const SizedBox(width: 8),
                         Text(
-                          '${score.units} 學分',
+                          context.ap.unitCountFormat(
+                            arg1: score.units,
+                          ),
                           style: TextStyle(
                             fontSize: 12,
                             color:
@@ -128,13 +138,11 @@ class ScoreListTab extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.end,
                 children: <Widget>[
                   if (finalScoreBuilder == null)
-                    Text(
-                      score.semesterScore ?? '-',
-                      style: TextStyle(
-                        fontSize: 24,
-                        fontWeight: FontWeight.bold,
-                        color: scoreColor,
-                      ),
+                    ..._buildScoreDisplay(
+                      colorScheme,
+                      score,
+                      scoreValue,
+                      scoreColor,
                     ),
                   if (finalScoreBuilder != null)
                     finalScoreBuilder!(index),
@@ -143,7 +151,9 @@ class ScoreListTab extends StatelessWidget {
                       score.middleScore != null &&
                       score.middleScore!.isNotEmpty)
                     Text(
-                      '期中: ${score.middleScore}',
+                      context.ap.midtermPrefix(
+                        arg1: score.middleScore!,
+                      ),
                       style: TextStyle(
                         fontSize: 11,
                         color: colorScheme.onSurfaceVariant,
@@ -158,6 +168,75 @@ class ScoreListTab extends StatelessWidget {
         ),
       ),
     );
+  }
+
+  /// Build the score display based on data type.
+  /// - Numeric scores (e.g. "90") -> show number +
+  ///   converted letter grade
+  /// - Letter grades (e.g. "A+") -> show letter +
+  ///   converted grade point
+  List<Widget> _buildScoreDisplay(
+    ColorScheme colorScheme,
+    Score score,
+    double? scoreValue,
+    Color scoreColor,
+  ) {
+    final String raw =
+        ScoreAnalysis.effectiveScoreStr(score) ?? '-';
+    final bool isNumeric =
+        scoreData.scoreType == ScoreType.numeric;
+
+    if (scoreValue == null) {
+      return <Widget>[
+        Text(
+          raw,
+          style: TextStyle(
+            fontSize: 24,
+            fontWeight: FontWeight.bold,
+            color: scoreColor,
+          ),
+        ),
+      ];
+    }
+
+    if (isNumeric) {
+      return <Widget>[
+        Text(
+          raw,
+          style: TextStyle(
+            fontSize: 24,
+            fontWeight: FontWeight.bold,
+            color: scoreColor,
+          ),
+        ),
+        Text(
+          ScoreAnalysis.scoreToGradeLetter(scoreValue),
+          style: TextStyle(
+            fontSize: 11,
+            color: colorScheme.onSurfaceVariant,
+          ),
+        ),
+      ];
+    } else {
+      return <Widget>[
+        Text(
+          raw,
+          style: TextStyle(
+            fontSize: 24,
+            fontWeight: FontWeight.bold,
+            color: scoreColor,
+          ),
+        ),
+        Text(
+          ScoreAnalysis.scoreToGradePoint(scoreValue)
+              .toStringAsFixed(1),
+          style: TextStyle(
+            fontSize: 11,
+            color: colorScheme.onSurfaceVariant,
+          ),
+        ),
+      ];
+    }
   }
 
   Color _getScoreColor(double score) {
@@ -230,6 +309,8 @@ class ScoreAnalysisTab extends StatelessWidget {
             const SizedBox(height: 16),
             ScorePRCard(analysis: analysis),
             const SizedBox(height: 16),
+            ScoreGPACard(analysis: analysis),
+            const SizedBox(height: 16),
             ScoreStatisticsCard(analysis: analysis),
             const SizedBox(height: 16),
             ScoreDistributionCard(analysis: analysis),
@@ -283,60 +364,67 @@ class ScoreAnalysisTab extends StatelessWidget {
                         '-',
                   ),
                 ),
-                Container(
-                  width: 1,
-                  height: 60,
-                  color: colorScheme.onPrimaryContainer
-                      .withAlpha(51),
-                ),
-                Expanded(
-                  child: _buildMainItem(
-                    colorScheme,
-                    Icons.school_rounded,
-                    ap.conductScore,
-                    detail.conduct?.toStringAsFixed(0) ??
-                        '-',
+                if (detail.conduct != null) ...<Widget>[
+                  Container(
+                    width: 1,
+                    height: 60,
+                    color: colorScheme.onPrimaryContainer
+                        .withAlpha(51),
                   ),
-                ),
+                  Expanded(
+                    child: _buildMainItem(
+                      colorScheme,
+                      Icons.school_rounded,
+                      ap.conductScore,
+                      detail.conduct!.toStringAsFixed(0),
+                    ),
+                  ),
+                ],
               ],
             ),
           ),
-          Container(
-            padding: const EdgeInsets.symmetric(
-              horizontal: 20,
-              vertical: 16,
-            ),
-            decoration: BoxDecoration(
-              color: colorScheme.surface.withAlpha(179),
-              borderRadius: const BorderRadius.vertical(
-                bottom: Radius.circular(20),
+          if (detail.classRank != null ||
+              detail.departmentRank != null)
+            Container(
+              padding: const EdgeInsets.symmetric(
+                horizontal: 20,
+                vertical: 16,
+              ),
+              decoration: BoxDecoration(
+                color: colorScheme.surface.withAlpha(179),
+                borderRadius: const BorderRadius.vertical(
+                  bottom: Radius.circular(20),
+                ),
+              ),
+              child: Row(
+                children: <Widget>[
+                  if (detail.classRank != null)
+                    Expanded(
+                      child: _buildRankItem(
+                        colorScheme,
+                        ap.classRank,
+                        detail.classRank!,
+                      ),
+                    ),
+                  if (detail.classRank != null &&
+                      detail.departmentRank != null)
+                    Container(
+                      width: 1,
+                      height: 40,
+                      color: colorScheme.outlineVariant
+                          .withAlpha(128),
+                    ),
+                  if (detail.departmentRank != null)
+                    Expanded(
+                      child: _buildRankItem(
+                        colorScheme,
+                        ap.departmentRank,
+                        detail.departmentRank!,
+                      ),
+                    ),
+                ],
               ),
             ),
-            child: Row(
-              children: <Widget>[
-                Expanded(
-                  child: _buildRankItem(
-                    colorScheme,
-                    ap.classRank,
-                    detail.classRank ?? '-',
-                  ),
-                ),
-                Container(
-                  width: 1,
-                  height: 40,
-                  color: colorScheme.outlineVariant
-                      .withAlpha(128),
-                ),
-                Expanded(
-                  child: _buildRankItem(
-                    colorScheme,
-                    ap.departmentRank,
-                    detail.departmentRank ?? '-',
-                  ),
-                ),
-              ],
-            ),
-          ),
         ],
       ),
     );

@@ -1,3 +1,4 @@
+import 'dart:developer';
 import 'dart:io';
 
 import 'package:ap_common_flutter_core/ap_common_flutter_core.dart';
@@ -45,7 +46,7 @@ class ApMediaUtil extends MediaUtil {
             title: fileName,
           );
           file.delete();
-          if (kDebugMode) debugPrint(imageEntity.title);
+          if (kDebugMode) log(imageEntity.title ?? '');
         } else {
           filePath = await FileSaver.instance.saveFile(
             name: '$fileName.png',

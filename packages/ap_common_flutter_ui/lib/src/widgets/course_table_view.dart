@@ -41,6 +41,7 @@ class CourseTableView extends StatelessWidget {
     required this.invisibleCourseCodes,
     this.controller,
     this.onCoursePressed,
+    this.onEmptyCellPressed,
     required this.courseColorResolver,
     this.repaintBoundaryKey,
     this.mergeCourse,
@@ -65,8 +66,13 @@ class CourseTableView extends StatelessWidget {
     int weekday,
   )? onCoursePressed;
 
-  /// Resolves a course code to its display color.
-  final Color Function(String courseCode) courseColorResolver;
+  /// Callback when an empty cell is tapped (e.g. for adding
+  /// a custom course).
+  final void Function(int weekday, int timeIndex)?
+      onEmptyCellPressed;
+
+  /// Resolves a [Course] to its display color.
+  final Color Function(Course course) courseColorResolver;
 
   /// Key for the [RepaintBoundary] used for screenshot capture.
   final GlobalKey? repaintBoundaryKey;
@@ -254,6 +260,8 @@ class CourseTableView extends StatelessWidget {
             colorScheme,
             weekday < weekdayCount,
             i == maxIndex,
+            weekday: weekday,
+            timeIndex: i,
           ),
         );
       } else {
@@ -346,26 +354,33 @@ class CourseTableView extends StatelessWidget {
   Widget _buildEmptyCell(
     ColorScheme colorScheme,
     bool showRightBorder,
-    bool isLast,
-  ) {
-    return Container(
-      height: courseHeight,
-      decoration: BoxDecoration(
-        border: Border(
-          right: showRightBorder
-              ? BorderSide(
-                  color: colorScheme.outlineVariant
-                      .withAlpha(51),
-                  width: 0.5,
-                )
-              : BorderSide.none,
-          bottom: isLast
-              ? BorderSide.none
-              : BorderSide(
-                  color: colorScheme.outlineVariant
-                      .withAlpha(77),
-                  width: 0.5,
-                ),
+    bool isLast, {
+    required int weekday,
+    required int timeIndex,
+  }) {
+    return GestureDetector(
+      onTap: onEmptyCellPressed != null
+          ? () => onEmptyCellPressed!(weekday, timeIndex)
+          : null,
+      child: Container(
+        height: courseHeight,
+        decoration: BoxDecoration(
+          border: Border(
+            right: showRightBorder
+                ? BorderSide(
+                    color: colorScheme.outlineVariant
+                        .withAlpha(51),
+                    width: 0.5,
+                  )
+                : BorderSide.none,
+            bottom: isLast
+                ? BorderSide.none
+                : BorderSide(
+                    color: colorScheme.outlineVariant
+                        .withAlpha(77),
+                    width: 0.5,
+                  ),
+          ),
         ),
       ),
     );
@@ -418,7 +433,7 @@ class CourseTableView extends StatelessWidget {
     int span,
   ) {
     final Color courseColor =
-        courseColorResolver(course.code);
+        courseColorResolver(course);
     final String locationInfo =
         (showClassroomLocation ?? true) &&
                 course.location != null

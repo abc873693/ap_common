@@ -67,7 +67,37 @@ if (kDebugMode) {
 
 ### Android
 
-Plugin 已包含完整的 `CourseAppWidgetProvider` 實作與 `AndroidManifest.xml` 註冊，App 端**不需要額外修改 manifest**。建置時會自動合併。
+Plugin 已包含完整的 Widget 實作與 `AndroidManifest.xml` 註冊，App 端**不需要額外修改 manifest**。建置時會自動合併。
+
+#### 停用特定小工具
+
+Plugin 預設註冊了 5 個小工具，如果 App 不需要某些小工具，可以在 **App 的 `AndroidManifest.xml`** 中使用 `tools:node="remove"` 移除：
+
+```xml
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <application>
+        <!-- 移除不需要的小工具 -->
+        <receiver
+            android:name="me.rainvisitor.ap_common_plugin.StudentIdWidgetProvider"
+            tools:node="remove" />
+        <receiver
+            android:name="me.rainvisitor.ap_common_plugin.CountdownWidgetProvider"
+            tools:node="remove" />
+    </application>
+</manifest>
+```
+
+可用的 Provider 名稱：
+
+| 小工具 | Provider |
+|--------|----------|
+| 上課提醒 | `CourseAppWidgetProvider` |
+| 學期課表 | `CourseTableWidgetProvider` |
+| 今日課表 | `TodayScheduleWidgetProvider` |
+| 倒數計時 | `CountdownWidgetProvider` |
+| 學生證 | `StudentIdWidgetProvider` |
 
 ### iOS
 

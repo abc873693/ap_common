@@ -77,35 +77,19 @@ class CourseAppWidget : GlanceAppWidget() {
                 .background(contentBackground),
         ) {
             // Title bar
-            Row(
+            Box(
                 modifier = GlanceModifier.fillMaxWidth()
                     .height(36.dp)
                     .background(titleBackground),
-                verticalAlignment = Alignment.CenterVertically,
+                contentAlignment = Alignment.Center,
             ) {
-                Box(
-                    modifier = GlanceModifier.defaultWeight()
-                        .padding(start = 8.dp),
-                    contentAlignment = Alignment.Center,
-                ) {
-                    Text(
-                        text = context.getString(R.string.course_hint),
-                        style = TextStyle(
-                            color = titleTextColor,
-                            fontSize = 18.sp,
-                            fontWeight = FontWeight.Bold,
-                        ),
-                    )
-                }
-                Image(
-                    provider = ImageProvider(R.drawable.ic_refresh),
-                    contentDescription = "Refresh",
-                    modifier = GlanceModifier
-                        .size(36.dp)
-                        .padding(8.dp)
-                        .clickable(
-                            actionRunCallback<RefreshAction>()
-                        ),
+                Text(
+                    text = context.getString(R.string.course_hint),
+                    style = TextStyle(
+                        color = titleTextColor,
+                        fontSize = 18.sp,
+                        fontWeight = FontWeight.Bold,
+                    ),
                 )
             }
 

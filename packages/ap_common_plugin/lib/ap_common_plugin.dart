@@ -42,6 +42,22 @@ class ApCommonPlugin {
     await _channel.invokeMethod<void>('clearCourseWidget');
   }
 
+  /// Update the student ID widget with user info.
+  ///
+  /// Sends a JSON object with `id`, `name`, `department`, and
+  /// `className` fields to the native widget.
+  static Future<void> updateUserInfoWidget(UserInfo userInfo) async {
+    await _channel.invokeMethod<void>(
+      'updateUserInfoWidget',
+      jsonEncode(userInfo.toJson()),
+    );
+  }
+
+  /// Clear the student ID widget data.
+  static Future<void> clearUserInfoWidget() async {
+    await _channel.invokeMethod<void>('clearUserInfoWidget');
+  }
+
   /// Update the course widget with fake data for testing.
   ///
   /// Injects two courses starting 30 and 90 minutes from now
@@ -51,8 +67,8 @@ class ApCommonPlugin {
     final DateTime t1 = now.add(const Duration(minutes: 30));
     final DateTime t2 = now.add(const Duration(minutes: 90));
     final DateTime t3 = now.add(const Duration(minutes: 150));
-    String fmt(DateTime dt) =>
-        '${dt.hour.toString().padLeft(2, '0')}:'
+    final DateTime t4 = now.add(const Duration(minutes: 210));
+    String fmt(DateTime dt) => '${dt.hour.toString().padLeft(2, '0')}:'
         '${dt.minute.toString().padLeft(2, '0')}';
     await updateCourseWidget(
       CourseData(
@@ -68,6 +84,7 @@ class ApCommonPlugin {
             ),
             times: <SectionTime>[
               SectionTime(weekday: now.weekday, index: 0),
+              SectionTime(weekday: now.weekday, index: 1),
             ],
           ),
           Course(
@@ -80,7 +97,7 @@ class ApCommonPlugin {
               room: '4008',
             ),
             times: <SectionTime>[
-              SectionTime(weekday: now.weekday, index: 1),
+              SectionTime(weekday: now.weekday, index: 2),
             ],
           ),
         ],
@@ -94,6 +111,11 @@ class ApCommonPlugin {
             title: 'T2',
             startTime: fmt(t2),
             endTime: fmt(t3),
+          ),
+          TimeCode(
+            title: 'T3',
+            startTime: fmt(t3),
+            endTime: fmt(t4),
           ),
         ],
       ),

@@ -1,0 +1,40 @@
+/* Course Hint Widget */
+"course_hint" = "上課提醒";
+"today_no_course" = "太好了今天沒有任何課";
+"today_no_course_already" = "今天已經沒有課了";
+"not_load_course_table" = "尚無課程資料";
+"course_hint_content_format" = "下一節課是%@\n在 %@ 的 %@";
+
+/* Course Table Widget */
+"course_table" = "學期課表";
+
+/* Today Schedule Widget */
+"today_schedule" = "今日課表";
+
+/* Countdown Widget */
+"minutes_until" = "分鐘後上課";
+"countdown_title" = "上課倒數";
+"countdown_description" = "距離下一堂課的倒數計時";
+
+/* Student ID Widget */
+"student_id_card" = "學生證";
+"not_login_hint" = "請先登入";
+"barcode_library_hint" = "可持本條碼於圖書館借書";
+"student_id_description" = "顯示學號與條碼";
+
+/* Weekday Labels */
+"weekday_mon" = "一";
+"weekday_tue" = "二";
+"weekday_wed" = "三";
+"weekday_thu" = "四";
+"weekday_fri" = "五";
+"weekday_sat" = "六";
+"weekday_sun" = "日";
+
+/* Widget Display Names */
+"course_hint_display" = "上課提醒";
+"course_hint_description" = "提醒本日下一堂課";
+"course_table_display" = "學期課表";
+"course_table_description" = "顯示每週課表";
+"today_schedule_display" = "今日課表";
+"today_schedule_description" = "顯示今天的課程行程";

@@ -18,10 +18,12 @@ class ApCoursePage extends StatefulWidget {
     super.key,
     required this.onLoadSemesters,
     required this.onLoadCourse,
+    this.onCourseLoaded,
     this.title,
     this.enableNotifyControl = true,
     this.enableAddToCalendar = true,
     this.enableCaptureCourseTable = false,
+    this.enableCustomCourse = false,
     this.androidResourceIcon,
     this.actions,
     this.showSectionTime,
@@ -36,10 +38,19 @@ class ApCoursePage extends StatefulWidget {
   /// Load course data for the given [Semester].
   final Future<CourseData> Function(Semester semester) onLoadCourse;
 
+  /// Called after course data is successfully loaded and the UI state
+  /// is updated. Useful for syncing data to platform widgets, e.g.
+  /// `ApCommonPlugin.updateCourseWidget(courseData)`.
+  final void Function(CourseData courseData)? onCourseLoaded;
+
   final String? title;
   final bool enableNotifyControl;
   final bool enableAddToCalendar;
   final bool enableCaptureCourseTable;
+
+  /// Enable the custom course feature (add/edit/delete).
+  final bool enableCustomCourse;
+
   final String? androidResourceIcon;
   final List<Widget>? actions;
   final bool? showSectionTime;
@@ -55,6 +66,14 @@ class _ApCoursePageState extends State<ApCoursePage> {
   DataState<CourseData> _state = const DataLoading<CourseData>();
   SemesterData? _semesterData;
   CourseNotifyData? _notifyData;
+  final SemesterPickerController _pickerController =
+      SemesterPickerController();
+
+  /// API-fetched course data (before merging custom courses).
+  CourseData? _apiCourseData;
+
+  /// User-created custom courses.
+  CustomCourseData _customCourseData = CustomCourseData();
 
   String get _notifyCacheKey =>
       widget.courseNotifySaveKey ??
@@ -67,6 +86,12 @@ class _ApCoursePageState extends State<ApCoursePage> {
   void initState() {
     super.initState();
     _loadSemesters();
+  }
+
+  @override
+  void dispose() {
+    _pickerController.dispose();
+    super.dispose();
   }
 
   Future<void> _loadSemesters() async {
@@ -82,25 +107,58 @@ class _ApCoursePageState extends State<ApCoursePage> {
 
   Future<void> _loadCourse() async {
     if (_semesterData == null) return;
+    final Semester semester =
+        _semesterData!.data[_semesterData!.currentIndex];
     setState(() => _state = const DataLoading<CourseData>());
     try {
-      final Semester semester =
-          _semesterData!.data[_semesterData!.currentIndex];
       final CourseData courseData = await widget.onLoadCourse(semester);
       if (mounted) {
+        _apiCourseData = courseData;
+        if (widget.enableCustomCourse) {
+          _customCourseData =
+              CustomCourseData.load(_notifyCacheKey);
+        }
         setState(() {
-          if (courseData.courses.isEmpty) {
+          if (courseData.courses.isEmpty &&
+              _customCourseData.courses.isEmpty) {
             _state = const DataEmpty<CourseData>();
+            _pickerController.markSemesterEmpty(semester);
           } else {
-            _state = DataLoaded<CourseData>(courseData);
+            final CourseData merged =
+                courseData.mergeCustom(_customCourseData.courses);
+            _state = DataLoaded<CourseData>(merged);
             _notifyData = CourseNotifyData.load(_notifyCacheKey);
+            widget.onCourseLoaded?.call(merged);
+            _pickerController.markSemesterHasData(semester);
           }
         });
       }
     } catch (e) {
       if (mounted) {
-        setState(() => _state = DataError<CourseData>(hint: e.toString()));
+        _pickerController.markSemesterHasData(semester);
+        setState(
+          () => _state = DataError<CourseData>(hint: e.toString()),
+        );
       }
+    }
+  }
+
+  void _onCustomCourseChanged(CustomCourseData updated) {
+    _customCourseData = CustomCourseData(
+      courses: updated.courses,
+      tag: _notifyCacheKey,
+    );
+    _customCourseData.save();
+    if (_apiCourseData != null && mounted) {
+      setState(() {
+        final CourseData merged =
+            _apiCourseData!.mergeCustom(_customCourseData.courses);
+        if (merged.courses.isEmpty) {
+          _state = const DataEmpty<CourseData>();
+        } else {
+          _state = DataLoaded<CourseData>(merged);
+        }
+      });
     }
   }
 
@@ -127,11 +185,15 @@ class _ApCoursePageState extends State<ApCoursePage> {
       enableNotifyControl: widget.enableNotifyControl,
       enableAddToCalendar: widget.enableAddToCalendar,
       enableCaptureCourseTable: widget.enableCaptureCourseTable,
+      enableCustomCourse: widget.enableCustomCourse,
+      customCourseData: _customCourseData,
+      onCustomCourseChanged: _onCustomCourseChanged,
       androidResourceIcon: widget.androidResourceIcon,
       actions: widget.actions,
       showSectionTime: widget.showSectionTime,
       showInstructors: widget.showInstructors,
       showClassroomLocation: widget.showClassroomLocation,
+      semesterPickerController: _pickerController,
       onSelect: (int index) {
         _semesterData = _semesterData!.copyWith(currentIndex: index);
         _loadCourse();

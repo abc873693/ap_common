@@ -39,6 +39,7 @@ _Course _$CourseFromJson(Map<String, dynamic> json) => _Course(
       instructors: (json['instructors'] as List<dynamic>)
           .map((e) => e as String)
           .toList(),
+      colorIndex: (json['colorIndex'] as num?)?.toInt(),
     );
 
 Map<String, dynamic> _$CourseToJson(_Course instance) => <String, dynamic>{
@@ -53,6 +54,7 @@ Map<String, dynamic> _$CourseToJson(_Course instance) => <String, dynamic>{
       'sectionTimes': instance.times.map((e) => e.toJson()).toList(),
       'location': instance.location?.toJson(),
       'instructors': instance.instructors,
+      'colorIndex': instance.colorIndex,
     };
 
 _Location _$LocationFromJson(Map<String, dynamic> json) => _Location(

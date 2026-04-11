@@ -7,12 +7,17 @@ import 'package:freezed_annotation/freezed_annotation.dart';
 part 'score_data.freezed.dart';
 part 'score_data.g.dart';
 
+enum ScoreType { numeric, gradePoint }
+
 @freezed
 abstract class ScoreData with _$ScoreData {
 
   const factory ScoreData({
     required List<Score> scores,
     required Detail detail,
+    @Default(ScoreType.numeric) ScoreType scoreType,
+    @Default(60.0) double passingScore,
+    @Default(1.7) double passingGradePoint,
   }) = _ScoreData;
   const ScoreData._();
 

@@ -23,6 +23,7 @@ class FileAssets {
 
   static String courses = '$basePath/coursetable.json';
   static String scores = '$basePath/scores.json';
+  static String scoresGpa = '$basePath/scores_gpa.json';
   static String semesters = '$basePath/semesters.json';
 
   static String userInfo = '$basePath/user_info.json';
