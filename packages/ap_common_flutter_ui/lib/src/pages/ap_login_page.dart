@@ -21,6 +21,7 @@ class ApLoginPage extends StatefulWidget {
     required this.logoSource,
     required this.onLogin,
     this.logoMode = LogoMode.text,
+    this.logoSubtitle,
     this.enableOfflineLogin = false,
     this.onOfflineLogin,
     this.extraForms,
@@ -35,6 +36,9 @@ class ApLoginPage extends StatefulWidget {
 
   /// Logo source: text string or asset path.
   final String logoSource;
+
+  /// Optional subtitle displayed below the logo.
+  final String? logoSubtitle;
 
   /// Called when the user taps login. Return `true` for success, `false` for
   /// failure. Throw to show an error message.
@@ -70,6 +74,8 @@ class _ApLoginPageState extends State<ApLoginPage> {
 
   bool _isRememberPassword = true;
   bool _isAutoLogin = false;
+  bool _isLoading = false;
+  bool _obscurePassword = true;
   String? _usernameError;
   String? _passwordError;
 
@@ -108,6 +114,7 @@ class _ApLoginPageState extends State<ApLoginPage> {
     return LoginScaffold(
       logoMode: widget.logoMode,
       logoSource: widget.logoSource,
+      logoSubtitle: widget.logoSubtitle,
       forms: <Widget>[
         ApTextField(
           controller: _username,
@@ -116,10 +123,12 @@ class _ApLoginPageState extends State<ApLoginPage> {
           nextFocusNode: _passwordFocus,
           labelText: ap.studentId,
           errorText: _usernameError,
+          prefixIcon: Icons.person_outline_rounded,
           autofillHints: const <String>[AutofillHints.username],
         ),
+        const SizedBox(height: 12.0),
         ApTextField(
-          obscureText: true,
+          obscureText: _obscurePassword,
           textInputAction: TextInputAction.send,
           controller: _password,
           focusNode: _passwordFocus,
@@ -129,6 +138,16 @@ class _ApLoginPageState extends State<ApLoginPage> {
           },
           labelText: ap.password,
           errorText: _passwordError,
+          prefixIcon: Icons.lock_outline_rounded,
+          suffixIcon: IconButton(
+            icon: Icon(
+              _obscurePassword
+                  ? Icons.visibility_outlined
+                  : Icons.visibility_off_outlined,
+            ),
+            onPressed: () =>
+                setState(() => _obscurePassword = !_obscurePassword),
+          ),
           autofillHints: const <String>[AutofillHints.password],
         ),
         const SizedBox(height: 8.0),
@@ -163,6 +182,7 @@ class _ApLoginPageState extends State<ApLoginPage> {
         const SizedBox(height: 8.0),
         ApButton(
           text: ap.login,
+          isLoading: _isLoading,
           onPressed: _login,
         ),
         if (widget.enableOfflineLogin)
@@ -188,20 +208,12 @@ class _ApLoginPageState extends State<ApLoginPage> {
       return;
     }
 
-    showDialog(
-      context: context,
-      builder: (BuildContext context) => PopScope(
-        canPop: false,
-        child: ProgressDialog(ap.logining),
-      ),
-      barrierDismissible: false,
-    );
+    setState(() => _isLoading = true);
 
     try {
       final bool success =
           await widget.onLogin(_username.text, _password.text);
       if (!mounted) return;
-      Navigator.of(context, rootNavigator: true).pop(); // dismiss dialog
 
       if (success) {
         _saveCredentials();
@@ -210,9 +222,10 @@ class _ApLoginPageState extends State<ApLoginPage> {
       }
     } catch (e) {
       if (!mounted) return;
-      Navigator.of(context, rootNavigator: true).pop(); // dismiss dialog
       HapticFeedback.mediumImpact();
       UiUtil.instance.showToast(context, ap.somethingError);
+    } finally {
+      if (mounted) setState(() => _isLoading = false);
     }
   }
 
