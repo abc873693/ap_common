@@ -11,10 +11,12 @@ class LoginScaffold extends StatefulWidget {
     required this.logoSource,
     required this.forms,
     this.logoMode = LogoMode.text,
+    this.logoSubtitle,
   });
 
   final LogoMode logoMode;
   final String logoSource;
+  final String? logoSubtitle;
   final List<Widget> forms;
 
   static const String routerName = '/login';
@@ -82,9 +84,8 @@ class LoginScaffoldState extends State<LoginScaffold> {
   }
 
   Widget logo(ColorScheme colorScheme, bool isDark) {
-    switch (widget.logoMode) {
-      case LogoMode.image:
-        return Container(
+    final Widget logoWidget = switch (widget.logoMode) {
+      LogoMode.image => Container(
           width: 100,
           height: 100,
           decoration: BoxDecoration(
@@ -107,14 +108,30 @@ class LoginScaffoldState extends State<LoginScaffold> {
               fit: BoxFit.contain,
             ),
           ),
-        );
-      case LogoMode.text:
-        return TextLogo(
+        ),
+      LogoMode.text => TextLogo(
           text: widget.logoSource,
           isDark: isDark,
           colorScheme: colorScheme,
-        );
-    }
+        ),
+    };
+    if (widget.logoSubtitle == null) return logoWidget;
+    return Column(
+      mainAxisSize: MainAxisSize.min,
+      children: <Widget>[
+        logoWidget,
+        const SizedBox(height: 16),
+        Text(
+          widget.logoSubtitle!,
+          style: TextStyle(
+            fontSize: 28,
+            fontWeight: FontWeight.bold,
+            color: isDark ? colorScheme.onSurface : colorScheme.onPrimary,
+            letterSpacing: 2,
+          ),
+        ),
+      ],
+    );
   }
 
   List<Widget> _renderContent(
@@ -225,10 +242,12 @@ class ApButton extends StatelessWidget {
     super.key,
     required this.text,
     this.onPressed,
+    this.isLoading = false,
   });
 
   final String text;
   final Function()? onPressed;
+  final bool isLoading;
 
   @override
   Widget build(BuildContext context) {
@@ -241,14 +260,23 @@ class ApButton extends StatelessWidget {
             borderRadius: BorderRadius.circular(12),
           ),
         ),
-        onPressed: onPressed,
-        child: Text(
-          text,
-          style: const TextStyle(
-            fontSize: 16,
-            fontWeight: FontWeight.w600,
-          ),
-        ),
+        onPressed: isLoading ? null : onPressed,
+        child: isLoading
+            ? SizedBox(
+                height: 20,
+                width: 20,
+                child: CircularProgressIndicator(
+                  strokeWidth: 2,
+                  color: Theme.of(context).colorScheme.onPrimary,
+                ),
+              )
+            : Text(
+                text,
+                style: const TextStyle(
+                  fontSize: 16,
+                  fontWeight: FontWeight.w600,
+                ),
+              ),
       ),
     );
   }
