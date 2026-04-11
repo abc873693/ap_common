@@ -24,7 +24,14 @@ class SimpleCoursePage extends StatelessWidget {
             await rootBundle.loadString(FileAssets.courses);
         return CourseData.fromRawJson(rawString);
       },
-      onCourseLoaded: ApCommonPlugin.updateCourseWidget,
+      onCourseLoaded: (
+        CourseData courseData,
+        bool isDefaultSemester,
+      ) {
+        if (isDefaultSemester) {
+          ApCommonPlugin.updateCourseWidget(courseData);
+        }
+      },
       enableCaptureCourseTable: true,
     );
   }
