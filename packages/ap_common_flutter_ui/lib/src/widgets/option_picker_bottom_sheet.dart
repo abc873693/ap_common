@@ -1,3 +1,4 @@
+import 'package:ap_common_flutter_ui/ap_common_flutter_ui.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
@@ -283,6 +284,11 @@ class OptionPickerBottomSheet extends StatelessWidget {
       borderRadius: BorderRadius.circular(20),
       child: InkWell(
         onTap: () async {
+          if (featureTag != null) {
+            AnalyticsUtil.instance.logEvent(
+              '${featureTag}_item_picker_click',
+            );
+          }
           final int? v = await showGrouped(
             context: context,
             groups: groups,
@@ -349,7 +355,10 @@ class OptionPickerBottomSheet extends StatelessWidget {
         flat++;
       }
     }
-    return '';
+    return groups.isNotEmpty &&
+            groups.first.options.isNotEmpty
+        ? groups.first.options.first.label
+        : '';
   }
 
   static double _sheetSize(int count) {
