@@ -495,102 +495,9 @@ class HomePageScaffoldState extends State<HomePageScaffold> {
       extendBody: true,
       body: _buildTabBody(),
       bottomNavigationBar: Padding(
-        padding: const EdgeInsets.fromLTRB(
-          12,
-          0,
-          12,
-          8,
-        ),
-        child: ClipRRect(
-          borderRadius: BorderRadius.circular(24),
-          child: BackdropFilter(
-            filter: ImageFilter.blur(
-              sigmaX: 24,
-              sigmaY: 24,
-            ),
-            child: DecoratedBox(
-              decoration: BoxDecoration(
-                color: colors.surfaceContainerHighest
-                    .withValues(alpha: 0.85),
-                borderRadius:
-                    BorderRadius.circular(24),
-              ),
-              child: Theme(
-                data: Theme.of(context).copyWith(
-                  navigationBarTheme:
-                      NavigationBarThemeData(
-                    labelTextStyle:
-                        WidgetStateProperty
-                            .resolveWith(
-                      (Set<WidgetState> states) {
-                        final bool selected =
-                            states.contains(
-                          WidgetState.selected,
-                        );
-                        return TextStyle(
-                          fontSize: 12,
-                          fontWeight: selected
-                              ? FontWeight.w600
-                              : FontWeight.normal,
-                          color: selected
-                              ? colors.primary
-                              : colors
-                                  .onSurfaceVariant,
-                        );
-                      },
-                    ),
-                    iconTheme:
-                        WidgetStateProperty
-                            .resolveWith(
-                      (Set<WidgetState> states) {
-                        final bool selected =
-                            states.contains(
-                          WidgetState.selected,
-                        );
-                        return IconThemeData(
-                          size: 24,
-                          color: selected
-                              ? colors.primary
-                              : colors
-                                  .onSurfaceVariant,
-                        );
-                      },
-                    ),
-                  ),
-                ),
-                child: NavigationBar(
-                  elevation: 0,
-                  height: 64,
-                  backgroundColor:
-                      Colors.transparent,
-                  indicatorColor:
-                      Colors.transparent,
-                  surfaceTintColor:
-                      Colors.transparent,
-                  selectedIndex:
-                      _currentTabIndex,
-                  onDestinationSelected:
-                      (int index) {
-                    setState(
-                      () =>
-                          _currentTabIndex = index,
-                    );
-                  },
-                  destinations: widget.tabs!
-                      .map(
-                        (HomeTab tab) =>
-                            NavigationDestination(
-                          icon: tab.icon,
-                          selectedIcon:
-                              tab.activeIcon,
-                          label: tab.label,
-                        ),
-                      )
-                      .toList(),
-                ),
-              ),
-            ),
-          ),
+        padding: const EdgeInsets.only(bottom: 8),
+        child: Center(
+          child: _buildFloatingNavBar(colors),
         ),
       ),
     );
@@ -626,6 +533,96 @@ class HomePageScaffoldState extends State<HomePageScaffold> {
         ],
       ),
     );
+  }
+
+  Widget _buildFloatingNavBar(ColorScheme colors) {
+    return ClipRRect(
+      borderRadius: BorderRadius.circular(20),
+      child: BackdropFilter(
+        filter: ImageFilter.blur(
+          sigmaX: 24,
+          sigmaY: 24,
+        ),
+        child: Container(
+          padding: const EdgeInsets.symmetric(
+            horizontal: 4,
+            vertical: 6,
+          ),
+          decoration: BoxDecoration(
+            color: colors.surfaceContainerHighest
+                .withValues(alpha: 0.85),
+            borderRadius:
+                BorderRadius.circular(20),
+          ),
+          child: Row(
+            mainAxisSize: MainAxisSize.min,
+            children: _buildNavItems(colors),
+          ),
+        ),
+      ),
+    );
+  }
+
+  List<Widget> _buildNavItems(
+    ColorScheme colors,
+  ) {
+    return widget.tabs!
+        .asMap()
+        .entries
+        .map(
+          (MapEntry<int, HomeTab> entry) {
+            final int index = entry.key;
+            final HomeTab tab = entry.value;
+            final bool selected =
+                index == _currentTabIndex;
+            return GestureDetector(
+              onTap: () => setState(
+                () => _currentTabIndex = index,
+              ),
+              behavior: HitTestBehavior.opaque,
+              child: Padding(
+                padding:
+                    const EdgeInsets.symmetric(
+                  horizontal: 16,
+                  vertical: 4,
+                ),
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: <Widget>[
+                    IconTheme(
+                      data: IconThemeData(
+                        size: 24,
+                        color: selected
+                            ? colors.primary
+                            : colors
+                                .onSurfaceVariant,
+                      ),
+                      child: selected
+                          ? (tab.activeIcon ??
+                              tab.icon)
+                          : tab.icon,
+                    ),
+                    const SizedBox(height: 2),
+                    Text(
+                      tab.label,
+                      style: TextStyle(
+                        fontSize: 11,
+                        fontWeight: selected
+                            ? FontWeight.w600
+                            : FontWeight.normal,
+                        color: selected
+                            ? colors.primary
+                            : colors
+                                .onSurfaceVariant,
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            );
+          },
+        )
+        .toList();
   }
 
   Widget _buildTabBody() {
