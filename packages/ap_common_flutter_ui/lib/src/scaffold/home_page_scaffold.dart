@@ -486,17 +486,39 @@ class HomePageScaffoldState extends State<HomePageScaffold> {
   }
 
   Widget _buildMobileTabScaffold() {
+    final ColorScheme colors =
+        Theme.of(context).colorScheme;
     return Scaffold(
       drawer: widget.drawer,
       floatingActionButton: widget.floatingActionButton,
+      extendBody: true,
       body: _buildTabBody(),
-      bottomNavigationBar: Column(
-        mainAxisSize: MainAxisSize.min,
-        children: <Widget>[
-          const Divider(height: 1, thickness: 0.5),
-          NavigationBar(
+      bottomNavigationBar: Container(
+        margin: const EdgeInsets.fromLTRB(
+          16,
+          0,
+          16,
+          12,
+        ),
+        decoration: BoxDecoration(
+          color: colors.surfaceContainerHighest,
+          borderRadius: BorderRadius.circular(28),
+          boxShadow: <BoxShadow>[
+            BoxShadow(
+              color: colors.shadow.withValues(
+                alpha: 0.08,
+              ),
+              blurRadius: 8,
+              offset: const Offset(0, 2),
+            ),
+          ],
+        ),
+        child: ClipRRect(
+          borderRadius: BorderRadius.circular(28),
+          child: NavigationBar(
             elevation: 0,
             height: 56,
+            backgroundColor: Colors.transparent,
             indicatorColor: Colors.transparent,
             surfaceTintColor: Colors.transparent,
             selectedIndex: _currentTabIndex,
@@ -516,7 +538,7 @@ class HomePageScaffoldState extends State<HomePageScaffold> {
                 )
                 .toList(),
           ),
-        ],
+        ),
       ),
     );
   }
