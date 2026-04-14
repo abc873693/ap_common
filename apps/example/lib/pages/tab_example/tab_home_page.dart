@@ -14,22 +14,22 @@ class TabHomePage extends StatelessWidget {
     return HomePageScaffold(
       tabs: <HomeTab>[
         HomeTab(
-          icon: const Icon(ApIcon.home),
+          icon: Icon(ApIcon.home),
           label: context.ap.home,
           builder: (_) => const _HomeTabContent(),
         ),
         HomeTab(
-          icon: const Icon(ApIcon.classIcon),
+          icon: Icon(ApIcon.classIcon),
           label: context.ap.course,
           builder: (_) => CoursePage(),
         ),
         HomeTab(
-          icon: const Icon(ApIcon.assignment),
+          icon: Icon(ApIcon.assignment),
           label: context.ap.score,
           builder: (_) => ScorePage(),
         ),
         HomeTab(
-          icon: const Icon(ApIcon.settings),
+          icon: Icon(ApIcon.settings),
           label: context.ap.settings,
           builder: (_) => SettingPage(),
         ),
