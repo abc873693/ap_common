@@ -1,0 +1,37 @@
+name: ap_common_example_liquid_glass
+description: Liquid Glass example for ap_common.
+
+publish_to: 'none'
+
+version: 1.0.0+1
+
+environment:
+  sdk: ^3.9.0
+
+resolution: workspace
+
+dependencies:
+  ap_common:
+    path: ../../packages/ap_common
+  ap_common_announcement_ui:
+    path: ../../packages/ap_common_announcement_ui
+  ap_common_liquid_glass:
+    path: ../../packages/ap_common_liquid_glass
+  encrypt: any
+  flutter:
+    sdk: flutter
+  flutter_localizations:
+    sdk: flutter
+  slang: ^4.14.0
+  slang_flutter: ^4.14.0
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+  lint: ^2.1.2
+
+flutter:
+  uses-material-design: true
+  assets:
+    - assets/images/
+    - assets/

@@ -15,7 +15,9 @@ workspace:
   - packages/ap_common_announcement_ui
   - packages/ap_common_plugin
   - packages/ap_common_firebase
+  - packages/ap_common_liquid_glass
   - apps/example
+  - apps/example_liquid_glass
 
 dev_dependencies:
   melos: ^7.5.0

@@ -3,6 +3,7 @@ on:
   pull_request:
     paths:
       - "apps/example/**"
+      - "apps/example_liquid_glass/**"
       - "packages/**"
 jobs:
   example_preview:
@@ -17,16 +18,43 @@ jobs:
           channel: 'stable'
           cache: true
           cache-key: 'flutter-:os:-:channel:-:version:-:arch:-:hash:'
-      - name: Run Build
+      - name: Build Example
         working-directory: ./apps/example
         run: |
           flutter pub get
           flutter build web --release
-      - uses: FirebaseExtended/action-hosting-deploy@v0
+      - name: Deploy Example Preview
+        uses: FirebaseExtended/action-hosting-deploy@v0
         with:
           repoToken: '${{ secrets.GITHUB_TOKEN }}'
           firebaseServiceAccount: '${{ secrets.FIREBASE_SERVICE_ACCOUNT_AP_COMMON }}'
           projectId: ap-common
           entryPoint: "apps/example"
           channelId: "example-preview"
+          expires: 7d
+  liquid_glass_preview:
+    if: '${{ github.event.pull_request.head.repo.full_name == github.repository }}'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - name: Setup Flutter
+        uses: subosito/flutter-action@v2
+        with:
+          flutter-version: '3.38.x'
+          channel: 'stable'
+          cache: true
+          cache-key: 'flutter-:os:-:channel:-:version:-:arch:-:hash:'
+      - name: Build Liquid Glass Example
+        working-directory: ./apps/example_liquid_glass
+        run: |
+          flutter pub get
+          flutter build web --release
+      - name: Deploy Liquid Glass Preview
+        uses: FirebaseExtended/action-hosting-deploy@v0
+        with:
+          repoToken: '${{ secrets.GITHUB_TOKEN }}'
+          firebaseServiceAccount: '${{ secrets.FIREBASE_SERVICE_ACCOUNT_AP_COMMON }}'
+          projectId: ap-common
+          entryPoint: "apps/example_liquid_glass"
+          channelId: "liquid-glass-preview"
           expires: 7d

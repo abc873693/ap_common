@@ -1,0 +1,29 @@
+name: ap_common_liquid_glass
+description: >
+  Liquid Glass design language for AP series apps. Provides glass-effect
+  scaffold variants and widgets powered by liquid_glass_widgets.
+version: 0.1.0-dev.1
+homepage: https://github.com/abc873693/ap_common
+repository: https://github.com/abc873693/ap_common/tree/master/packages/ap_common_liquid_glass
+
+environment:
+  sdk: ^3.9.0
+  flutter: ">=3.24.0 <4.0.0"
+
+resolution: workspace
+
+dependencies:
+  flutter:
+    sdk: flutter
+  flutter_localizations:
+    sdk: flutter
+  ap_common_flutter_ui: ^1.1.0-dev.6
+  liquid_glass_widgets: ^0.7.0
+  barcode_widget: ^2.0.1
+  cached_network_image: ^3.2.3
+  flutter_linkify: ^6.0.0
+  photo_view: ^0.15.0
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter

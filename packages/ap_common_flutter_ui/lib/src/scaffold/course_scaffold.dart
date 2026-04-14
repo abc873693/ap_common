@@ -15,10 +15,6 @@ enum CourseState { loading, finish, error, empty, offlineEmpty, custom }
 
 enum CourseNotifyState { schedule, cancel }
 
-enum _ContentStyle { list, table }
-
-const double _courseHeight = 64.0;
-
 const String _kCourseInvisibleKey =
     '${ApConstants.packageName}.course_invisible_';
 
@@ -190,7 +186,7 @@ class CourseScaffold extends StatefulWidget {
 class CourseScaffoldState extends State<CourseScaffold> {
   final GlobalKey _repaintBoundaryGlobalKey = GlobalKey();
 
-  _ContentStyle _contentStyle = _ContentStyle.table;
+  ContentStyle _contentStyle = ContentStyle.table;
 
   bool? showSectionTime;
   bool? showInstructors;
@@ -203,8 +199,6 @@ class CourseScaffoldState extends State<CourseScaffold> {
       MediaQuery.of(context).orientation == Orientation.landscape;
 
   List<String> invisibleCourseCodes = <String>[];
-
-  late Map<int, Map<int, Course>> _courseLookup;
 
   final Map<String, Color> _courseColorMap = <String, Color>{};
   int _colorIndex = 0;
@@ -228,7 +222,6 @@ class CourseScaffoldState extends State<CourseScaffold> {
 
   @override
   void initState() {
-    _buildCourseLookup();
     showSectionTime = widget.showSectionTime ??
         PreferenceUtil.instance.getBool(ApConstants.showSectionTime, true);
     showInstructors = widget.showInstructors ??
@@ -264,7 +257,6 @@ class CourseScaffoldState extends State<CourseScaffold> {
   @override
   void didUpdateWidget(covariant CourseScaffold oldWidget) {
     if (widget.courseData != oldWidget.courseData) {
-      _buildCourseLookup();
       _courseColorMap.clear();
       _colorIndex = 0;
     }
@@ -450,13 +442,13 @@ class CourseScaffoldState extends State<CourseScaffold> {
                   onPressed: () {
                     setState(
                       () => _contentStyle =
-                          (_contentStyle == _ContentStyle.table)
-                              ? _ContentStyle.list
-                              : _ContentStyle.table,
+                          (_contentStyle == ContentStyle.table)
+                              ? ContentStyle.list
+                              : ContentStyle.table,
                     );
                   },
                   child: Icon(
-                    _contentStyle == _ContentStyle.table
+                    _contentStyle == ContentStyle.table
                         ? Icons.list_rounded
                         : Icons.grid_view_rounded,
                   ),
@@ -590,31 +582,26 @@ class CourseScaffoldState extends State<CourseScaffold> {
           Icons.warning_amber_rounded,
         );
       default:
-        if (isLandscape || _contentStyle == _ContentStyle.table) {
-          final int weekdayCount = widget.courseData.hasHoliday ? 7 : 5;
-          return SingleChildScrollView(
+        if (isLandscape || _contentStyle == ContentStyle.table) {
+          return CourseTableView(
+            courseData: widget.courseData,
+            invisibleCourseCodes: invisibleCourseCodes,
             controller: _scrollController,
-            physics: const AlwaysScrollableScrollPhysics(),
-            padding: const EdgeInsets.only(
-              top: 8.0,
-              bottom: 80.0,
-            ),
-            child: RepaintBoundary(
-              key: _repaintBoundaryGlobalKey,
-              child: ColoredBox(
-                color: Theme.of(context).scaffoldBackgroundColor,
-                child: Column(
-                  children: <Widget>[
-                    _buildWeekdayHeader(colorScheme, weekdayCount),
-                    _buildCourseGrid(
-                      colorScheme,
-                      weekdayCount,
-                      widget.courseData.timeCodes,
-                    ),
-                  ],
-                ),
-              ),
-            ),
+            onCoursePressed: (
+              Course course,
+              TimeCode timeCode,
+              int weekday,
+            ) =>
+                _onPressed(weekday, timeCode, course),
+            onEmptyCellPressed: widget.enableCustomCourse
+                ? _addCustomCourse
+                : null,
+            courseColorResolver: _getCourseColor,
+            repaintBoundaryKey: _repaintBoundaryGlobalKey,
+            mergeCourse: mergeCourse,
+            showSectionTime: showSectionTime,
+            showInstructors: showInstructors,
+            showClassroomLocation: showClassroomLocation,
           );
         } else {
           return CourseList(
@@ -671,371 +658,6 @@ class CourseScaffoldState extends State<CourseScaffold> {
       if (!mounted) return;
       UiUtil.instance.showToast(context, context.ap.unknownError);
     }
-  }
-
-  Widget _buildWeekdayHeader(ColorScheme colorScheme, int weekdayCount) {
-    return Container(
-      decoration: BoxDecoration(
-        color: colorScheme.primaryContainer.withAlpha(77),
-        border: Border(
-          bottom: BorderSide(
-            color: colorScheme.outlineVariant.withAlpha(128),
-          ),
-        ),
-      ),
-      child: Row(
-        children: <Widget>[
-          _buildTimeSlotHeader(colorScheme),
-          for (int i = 0; i < weekdayCount; i++)
-            Expanded(
-              child: Container(
-                padding: const EdgeInsets.symmetric(vertical: 12),
-                child: Text(
-                  context.ap.weekdaysCourse[i],
-                  textAlign: TextAlign.center,
-                  style: TextStyle(
-                    fontSize: 14,
-                    fontWeight: FontWeight.w600,
-                    color: colorScheme.primary,
-                  ),
-                ),
-              ),
-            ),
-        ],
-      ),
-    );
-  }
-
-  Widget _buildTimeSlotHeader(ColorScheme colorScheme) {
-    return Container(
-      width: 48,
-      padding: const EdgeInsets.symmetric(vertical: 12),
-      child: Text(
-        '',
-        textAlign: TextAlign.center,
-        style: TextStyle(
-          fontSize: 12,
-          fontWeight: FontWeight.w600,
-          color: colorScheme.primary,
-        ),
-      ),
-    );
-  }
-
-  Widget _buildCourseGrid(
-    ColorScheme colorScheme,
-    int weekdayCount,
-    List<TimeCode> timeCodes,
-  ) {
-    final int minIndex = widget.courseData.minTimeCodeIndex;
-    final int maxIndex = widget.courseData.maxTimeCodeIndex;
-
-    return Row(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: <Widget>[
-        _buildTimeColumn(colorScheme, timeCodes, minIndex, maxIndex),
-        for (int weekday = 1; weekday <= weekdayCount; weekday++)
-          Expanded(
-            child: _buildWeekdayColumn(
-              colorScheme,
-              weekday,
-              weekdayCount,
-              minIndex,
-              maxIndex,
-            ),
-          ),
-      ],
-    );
-  }
-
-  Widget _buildTimeColumn(
-    ColorScheme colorScheme,
-    List<TimeCode> timeCodes,
-    int minIndex,
-    int maxIndex,
-  ) {
-    return Column(
-      children: <Widget>[
-        for (int i = minIndex; i <= maxIndex; i++)
-          _buildTimeSlot(
-            colorScheme,
-            i < timeCodes.length ? timeCodes[i] : null,
-            i,
-            i == maxIndex,
-          ),
-      ],
-    );
-  }
-
-  Widget _buildWeekdayColumn(
-    ColorScheme colorScheme,
-    int weekday,
-    int weekdayCount,
-    int minIndex,
-    int maxIndex,
-  ) {
-    final List<Widget> children = <Widget>[];
-    for (int i = minIndex; i <= maxIndex; i++) {
-      final Course? course = _getCourseAt(weekday, i);
-      final bool isInvisible =
-          course != null && invisibleCourseCodes.contains(course.code);
-
-      if (course == null || isInvisible) {
-        children.add(
-          _buildEmptyCell(
-            colorScheme,
-            weekday < weekdayCount,
-            i == maxIndex,
-            weekday: weekday,
-            timeIndex: i,
-          ),
-        );
-      } else {
-        int span = 1;
-        if (mergeCourse ?? true) {
-          while (i + span <= maxIndex &&
-              _getCourseAt(weekday, i + span) == course) {
-            span++;
-          }
-        }
-        children.add(
-          _buildCourseCell(
-            colorScheme,
-            weekday,
-            i,
-            course,
-            span,
-            weekday < weekdayCount,
-            i + span - 1 == maxIndex,
-          ),
-        );
-        i += span - 1;
-      }
-    }
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.stretch,
-      children: children,
-    );
-  }
-
-  Widget _buildTimeSlot(
-    ColorScheme colorScheme,
-    TimeCode? timeCode,
-    int timeIndex,
-    bool isLast,
-  ) {
-    return Container(
-      width: 48,
-      height: _courseHeight,
-      padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 4),
-      decoration: BoxDecoration(
-        color: colorScheme.surfaceContainerHighest.withAlpha(77),
-        border: Border(
-          right: BorderSide(
-            color: colorScheme.outlineVariant.withAlpha(128),
-          ),
-          bottom: isLast
-              ? BorderSide.none
-              : BorderSide(
-                  color: colorScheme.outlineVariant.withAlpha(77),
-                  width: 0.5,
-                ),
-        ),
-      ),
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: <Widget>[
-          Text(
-            timeCode?.title ?? '${timeIndex + 1}',
-            style: TextStyle(
-              fontSize: 13,
-              fontWeight: FontWeight.w600,
-              color: colorScheme.onSurfaceVariant,
-            ),
-          ),
-          if (timeCode != null && (showSectionTime ?? true)) ...<Widget>[
-            const SizedBox(height: 2),
-            Text(
-              timeCode.startTime,
-              style: TextStyle(
-                fontSize: 9,
-                color: colorScheme.onSurfaceVariant.withAlpha(179),
-              ),
-            ),
-          ],
-        ],
-      ),
-    );
-  }
-
-  Widget _buildEmptyCell(
-    ColorScheme colorScheme,
-    bool showRightBorder,
-    bool isLast, {
-    required int weekday,
-    required int timeIndex,
-  }) {
-    final bool canAdd = widget.enableCustomCourse;
-
-    return GestureDetector(
-      onTap: canAdd ? () => _addCustomCourse(weekday, timeIndex) : null,
-      child: Container(
-        height: _courseHeight,
-        decoration: BoxDecoration(
-          border: Border(
-            right: showRightBorder
-                ? BorderSide(
-                    color: colorScheme.outlineVariant.withAlpha(51),
-                    width: 0.5,
-                  )
-                : BorderSide.none,
-            bottom: isLast
-                ? BorderSide.none
-                : BorderSide(
-                    color: colorScheme.outlineVariant.withAlpha(77),
-                    width: 0.5,
-                  ),
-          ),
-        ),
-      ),
-    );
-  }
-
-  Widget _buildCourseCell(
-    ColorScheme colorScheme,
-    int weekday,
-    int timeIndex,
-    Course course,
-    int span,
-    bool showRightBorder,
-    bool isLast,
-  ) {
-    return Container(
-      height: _courseHeight * span,
-      decoration: BoxDecoration(
-        border: Border(
-          right: showRightBorder
-              ? BorderSide(
-                  color: colorScheme.outlineVariant.withAlpha(51),
-                  width: 0.5,
-                )
-              : BorderSide.none,
-          bottom: isLast
-              ? BorderSide.none
-              : BorderSide(
-                  color: colorScheme.outlineVariant.withAlpha(77),
-                  width: 0.5,
-                ),
-        ),
-      ),
-      child: _buildCourseCard(colorScheme, weekday, timeIndex, course, span),
-    );
-  }
-
-  void _buildCourseLookup() {
-    _courseLookup = <int, Map<int, Course>>{};
-    for (final Course course in widget.courseData.courses) {
-      for (final SectionTime time in course.times) {
-        _courseLookup.putIfAbsent(
-          time.weekday,
-          () => <int, Course>{},
-        )[time.index] = course;
-      }
-    }
-  }
-
-  Course? _getCourseAt(int weekday, int timeIndex) {
-    return _courseLookup[weekday]?[timeIndex];
-  }
-
-  Widget _buildCourseCard(
-    ColorScheme colorScheme,
-    int weekday,
-    int timeIndex,
-    Course course,
-    int span,
-  ) {
-    final Color courseColor = _getCourseColor(course);
-    final String locationInfo =
-        (showClassroomLocation ?? true) && course.location != null
-            ? course.location.toString()
-            : '';
-    final String instructorInfo =
-        (showInstructors ?? true) ? course.getInstructors() : '';
-
-    final Color onCourseColor =
-        ThemeData.estimateBrightnessForColor(courseColor) == Brightness.dark
-            ? Colors.white
-            : Colors.black;
-
-    final String displayInfo = <String>[
-      if (instructorInfo.isNotEmpty) instructorInfo,
-      if (locationInfo.isNotEmpty) locationInfo,
-    ].join('\n');
-
-    return GestureDetector(
-      onTap: () {
-        final List<TimeCode> timeCodes = widget.courseData.timeCodes;
-        final TimeCode startTimeCode = timeIndex < timeCodes.length
-            ? timeCodes[timeIndex]
-            : const TimeCode(title: '?', startTime: '?', endTime: '?');
-        final int lastIndex = timeIndex + span - 1;
-        final TimeCode endTimeCode =
-            lastIndex < timeCodes.length ? timeCodes[lastIndex] : startTimeCode;
-        final TimeCode timeCode = startTimeCode.copyWith(
-          endTime: endTimeCode.endTime,
-        );
-        _onPressed(weekday, timeCode, course);
-      },
-      child: Container(
-        width: double.infinity,
-        height: double.infinity,
-        margin: const EdgeInsets.all(2),
-        padding: const EdgeInsets.symmetric(horizontal: 4, vertical: 6),
-        decoration: BoxDecoration(
-          color: courseColor.withAlpha(230),
-          borderRadius: BorderRadius.circular(8),
-          boxShadow: <BoxShadow>[
-            BoxShadow(
-              color: courseColor.withAlpha(77),
-              blurRadius: 4,
-              offset: const Offset(0, 2),
-            ),
-          ],
-        ),
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: <Widget>[
-            Text(
-              course.title,
-              textAlign: TextAlign.center,
-              maxLines: span > 1 ? 4 : 2,
-              overflow: TextOverflow.ellipsis,
-              style: TextStyle(
-                fontSize: span > 1 ? 14 : 9.5,
-                fontWeight: FontWeight.w600,
-                color: onCourseColor,
-                height: 1.1,
-              ),
-            ),
-            if (displayInfo.isNotEmpty) ...<Widget>[
-              SizedBox(height: span > 1 ? 4 : 2),
-              Text(
-                displayInfo,
-                textAlign: TextAlign.center,
-                maxLines: span > 1 ? 4 : 2,
-                overflow: TextOverflow.ellipsis,
-                style: TextStyle(
-                  fontSize: span > 1 ? 12 : 8.5,
-                  color: onCourseColor.withAlpha(217),
-                  height: 1.0,
-                ),
-              ),
-            ],
-          ],
-        ),
-      ),
-    );
   }
 
   void _onPressed(int weekday, TimeCode timeCode, Course course) {
