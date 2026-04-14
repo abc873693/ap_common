@@ -480,12 +480,14 @@ class _ScoreContentState extends State<ScoreContent> {
 class ScoreAnalysis {
   ScoreAnalysis(this.scoreData) {
     _scores = <double>[];
+    _gradePoints = <double>[];
     for (final Score score in scoreData.scores) {
       final double? value = ScoreAnalysis.parseScore(
         ScoreAnalysis.effectiveScoreStr(score),
       );
       if (value != null) {
         _scores.add(value);
+        _gradePoints.add(scoreToGradePoint(value));
       }
     }
     _totalSubjects = _scores.length;
@@ -493,6 +495,7 @@ class ScoreAnalysis {
 
   final ScoreData scoreData;
   late List<double> _scores;
+  late List<double> _gradePoints;
   late int _totalSubjects;
 
   bool get isGradePoint =>
@@ -535,12 +538,13 @@ class ScoreAnalysis {
 
   double get standardDeviation {
     if (_scores.isEmpty) return 0;
+    final List<double> values = isGradePoint ? _gradePoints : _scores;
     final double avg = average;
-    final double sumSquares = _scores.fold<double>(
+    final double sumSquares = values.fold<double>(
       0,
-      (double sum, double score) => sum + (score - avg) * (score - avg),
+      (double sum, double v) => sum + (v - avg) * (v - avg),
     );
-    return sqrt(sumSquares / _scores.length);
+    return sqrt(sumSquares / values.length);
   }
 
   int get estimatedPR {
@@ -606,6 +610,8 @@ class ScoreAnalysis {
   }
 
   double get totalCredits {
+    final double? detailCredits = scoreData.detail.creditTaken;
+    if (detailCredits != null && detailCredits > 0) return detailCredits;
     double credits = 0;
     for (final Score score in scoreData.scores) {
       final double? unit = double.tryParse(score.units);
@@ -615,6 +621,8 @@ class ScoreAnalysis {
   }
 
   double get passedCredits {
+    final double? detailCredits = scoreData.detail.creditEarned;
+    if (detailCredits != null && detailCredits > 0) return detailCredits;
     double credits = 0;
     for (final Score score in scoreData.scores) {
       final double? scoreValue = ScoreAnalysis.parseScore(
@@ -630,21 +638,7 @@ class ScoreAnalysis {
     return credits;
   }
 
-  double get failedCredits {
-    double credits = 0;
-    for (final Score score in scoreData.scores) {
-      final double? scoreValue = ScoreAnalysis.parseScore(
-        ScoreAnalysis.effectiveScoreStr(score),
-      );
-      final double? unit = double.tryParse(score.units);
-      if (scoreValue != null &&
-          !isPassing(scoreValue) &&
-          unit != null) {
-        credits += unit;
-      }
-    }
-    return credits;
-  }
+  double get failedCredits => totalCredits - passedCredits;
 
   /// Returns the effective score string for a [Score], preferring
   /// [Score.semesterScore] and falling back to [Score.finalScore].
@@ -726,6 +720,22 @@ class ScoreAnalysis {
     if (score >= 60) return 'C-';
     if (score >= 50) return 'D';
     if (score >= 40) return 'E';
+    return 'F';
+  }
+
+  /// Converts a grade point (等第積分) to a letter grade (等第成績).
+  static String gradePointToGradeLetter(double gpa) {
+    if (gpa >= 4.3) return 'A+';
+    if (gpa >= 4.0) return 'A';
+    if (gpa >= 3.7) return 'A-';
+    if (gpa >= 3.3) return 'B+';
+    if (gpa >= 3.0) return 'B';
+    if (gpa >= 2.7) return 'B-';
+    if (gpa >= 2.3) return 'C+';
+    if (gpa >= 2.0) return 'C';
+    if (gpa >= 1.7) return 'C-';
+    if (gpa >= 1.0) return 'D';
+    if (gpa >= 0.8) return 'E';
     return 'F';
   }
 

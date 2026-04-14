@@ -39,9 +39,15 @@ class ApCoursePage extends StatefulWidget {
   final Future<CourseData> Function(Semester semester) onLoadCourse;
 
   /// Called after course data is successfully loaded and the UI state
-  /// is updated. Useful for syncing data to platform widgets, e.g.
-  /// `ApCommonPlugin.updateCourseWidget(courseData)`.
-  final void Function(CourseData courseData)? onCourseLoaded;
+  /// is updated. [isDefaultSemester] is `true` when the loaded
+  /// semester matches [SemesterData.defaultIndex].
+  /// Only update platform widgets (e.g.
+  /// `ApCommonPlugin.updateCourseWidget`) when `isDefaultSemester`
+  /// is `true` to avoid overwriting with old semester data.
+  final void Function(
+    CourseData courseData,
+    bool isDefaultSemester,
+  )? onCourseLoaded;
 
   final String? title;
   final bool enableNotifyControl;
@@ -128,7 +134,9 @@ class _ApCoursePageState extends State<ApCoursePage> {
                 courseData.mergeCustom(_customCourseData.courses);
             _state = DataLoaded<CourseData>(merged);
             _notifyData = CourseNotifyData.load(_notifyCacheKey);
-            widget.onCourseLoaded?.call(merged);
+            final bool isDefault = _semesterData!.currentIndex ==
+                _semesterData!.defaultIndex;
+            widget.onCourseLoaded?.call(merged, isDefault);
             _pickerController.markSemesterHasData(semester);
           }
         });
