@@ -651,9 +651,9 @@ class ScoreGPACard extends StatelessWidget {
     final ColorScheme colorScheme = Theme.of(context).colorScheme;
     final double gpa = analysis.gpa;
     final Color gpaColor = _getGPAColor(colorScheme, gpa);
-    final String gradeLetter = ScoreAnalysis.scoreToGradeLetter(
-      analysis.average,
-    );
+    final String gradeLetter = analysis.isGradePoint
+        ? ScoreAnalysis.gradePointToGradeLetter(gpa)
+        : ScoreAnalysis.scoreToGradeLetter(analysis.average);
 
     return DecoratedBox(
       decoration: BoxDecoration(
