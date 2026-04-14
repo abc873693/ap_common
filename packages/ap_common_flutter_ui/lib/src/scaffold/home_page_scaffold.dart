@@ -490,23 +490,33 @@ class HomePageScaffoldState extends State<HomePageScaffold> {
       drawer: widget.drawer,
       floatingActionButton: widget.floatingActionButton,
       body: _buildTabBody(),
-      bottomNavigationBar: NavigationBar(
-        elevation: 12.0,
-        height: 56,
-        indicatorColor: const Color(0x00000000),
-        selectedIndex: _currentTabIndex,
-        onDestinationSelected: (int index) {
-          setState(() => _currentTabIndex = index);
-        },
-        destinations: widget.tabs!
-            .map(
-              (HomeTab tab) => NavigationDestination(
-                icon: tab.icon,
-                selectedIcon: tab.activeIcon,
-                label: tab.label,
-              ),
-            )
-            .toList(),
+      bottomNavigationBar: Column(
+        mainAxisSize: MainAxisSize.min,
+        children: <Widget>[
+          const Divider(height: 1, thickness: 0.5),
+          NavigationBar(
+            elevation: 0,
+            height: 56,
+            indicatorColor: Colors.transparent,
+            surfaceTintColor: Colors.transparent,
+            selectedIndex: _currentTabIndex,
+            onDestinationSelected: (int index) {
+              setState(
+                () => _currentTabIndex = index,
+              );
+            },
+            destinations: widget.tabs!
+                .map(
+                  (HomeTab tab) =>
+                      NavigationDestination(
+                    icon: tab.icon,
+                    selectedIcon: tab.activeIcon,
+                    label: tab.label,
+                  ),
+                )
+                .toList(),
+          ),
+        ],
       ),
     );
   }
