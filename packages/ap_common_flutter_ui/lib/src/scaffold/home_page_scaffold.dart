@@ -10,9 +10,9 @@ enum HomeState { loading, finish, error, empty, offline }
 class HomePageScaffold extends StatefulWidget {
   const HomePageScaffold({
     super.key,
-    required this.state,
-    required this.announcements,
-    required this.isLogin,
+    this.state = HomeState.loading,
+    this.announcements = const <Announcement>[],
+    this.isLogin = false,
     this.actions,
     this.onTabTapped,
     this.bottomNavigationBarItems,
@@ -25,6 +25,7 @@ class HomePageScaffold extends StatefulWidget {
     this.autoPlayDuration = const Duration(milliseconds: 5000),
     this.dashboardWidgets,
     this.carouselHeight,
+    this.tabs,
   });
 
   /// Creates a [HomePageScaffold] from a [DataState<List<Announcement>>].
@@ -52,6 +53,7 @@ class HomePageScaffold extends StatefulWidget {
     this.autoPlayDuration = const Duration(milliseconds: 5000),
     this.dashboardWidgets,
     this.carouselHeight,
+    this.tabs,
   })  : state = dataState.when(
           loading: () => HomeState.loading,
           loaded: (_, __) => HomeState.finish,
@@ -88,6 +90,12 @@ class HomePageScaffold extends StatefulWidget {
   /// Defaults to 260 in portrait and 180 in landscape.
   final double? carouselHeight;
 
+  /// Tab definitions for bottom tab navigation mode.
+  ///
+  /// When non-null, the scaffold uses [IndexedStack] with per-tab
+  /// [Navigator]s instead of the default drawer-based layout.
+  final List<HomeTab>? tabs;
+
   @override
   HomePageScaffoldState createState() => HomePageScaffoldState();
 }
@@ -102,10 +110,22 @@ class HomePageScaffoldState extends State<HomePageScaffold> {
 
   Timer? _timer;
 
-  bool get isTablet => MediaQuery.of(context).size.shortestSide >= 680;
+  int _currentTabIndex = 0;
+  List<GlobalKey<NavigatorState>> _tabNavigatorKeys =
+      <GlobalKey<NavigatorState>>[];
+
+  bool get isTablet =>
+      MediaQuery.of(context).size.shortestSide >= 680;
 
   @override
   void initState() {
+    if (widget.tabs != null) {
+      _tabNavigatorKeys =
+          List<GlobalKey<NavigatorState>>.generate(
+        widget.tabs!.length,
+        (_) => GlobalKey<NavigatorState>(),
+      );
+    }
     setTimer();
     super.initState();
   }
@@ -118,6 +138,9 @@ class HomePageScaffoldState extends State<HomePageScaffold> {
 
   @override
   Widget build(BuildContext context) {
+    if (widget.tabs != null && widget.tabs!.isNotEmpty) {
+      return _buildTabMode();
+    }
     return PopScope(
       canPop: false,
       onPopInvokedWithResult: (bool didPop, _) {
@@ -428,6 +451,114 @@ class HomePageScaffoldState extends State<HomePageScaffold> {
           content: context.ap.somethingError,
         );
     }
+  }
+
+  // ─── Tab navigation mode ────────────────────────────────
+
+  Widget _buildTabMode() {
+    return PopScope(
+      canPop: false,
+      onPopInvokedWithResult: (bool didPop, _) {
+        final NavigatorState? navigator =
+            _tabNavigatorKeys[_currentTabIndex]
+                .currentState;
+        if (navigator != null && navigator.canPop()) {
+          navigator.pop();
+          return;
+        }
+        if (_currentTabIndex != 0) {
+          setState(() => _currentTabIndex = 0);
+          return;
+        }
+        if (Platform.isAndroid) {
+          _showLogoutDialog();
+        } else {
+          SystemNavigator.pop();
+        }
+      },
+      child: ScaffoldMessenger(
+        key: _scaffoldMessengerKey,
+        child: isTablet
+            ? _buildTabletTabScaffold()
+            : _buildMobileTabScaffold(),
+      ),
+    );
+  }
+
+  Widget _buildMobileTabScaffold() {
+    return Scaffold(
+      drawer: widget.drawer,
+      floatingActionButton: widget.floatingActionButton,
+      body: _buildTabBody(),
+      bottomNavigationBar: NavigationBar(
+        elevation: 12.0,
+        height: 56,
+        indicatorColor: const Color(0x00000000),
+        selectedIndex: _currentTabIndex,
+        onDestinationSelected: (int index) {
+          setState(() => _currentTabIndex = index);
+        },
+        destinations: widget.tabs!
+            .map(
+              (HomeTab tab) => NavigationDestination(
+                icon: tab.icon,
+                selectedIcon: tab.activeIcon,
+                label: tab.label,
+              ),
+            )
+            .toList(),
+      ),
+    );
+  }
+
+  Widget _buildTabletTabScaffold() {
+    return Scaffold(
+      floatingActionButton: widget.floatingActionButton,
+      body: Row(
+        children: <Widget>[
+          NavigationRail(
+            selectedIndex: _currentTabIndex,
+            onDestinationSelected: (int index) {
+              setState(() => _currentTabIndex = index);
+            },
+            labelType: NavigationRailLabelType.all,
+            destinations: widget.tabs!
+                .map(
+                  (HomeTab tab) =>
+                      NavigationRailDestination(
+                    icon: tab.icon,
+                    selectedIcon: tab.activeIcon,
+                    label: Text(tab.label),
+                  ),
+                )
+                .toList(),
+          ),
+          const VerticalDivider(
+            thickness: 1,
+            width: 1,
+          ),
+          Expanded(child: _buildTabBody()),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildTabBody() {
+    return IndexedStack(
+      index: _currentTabIndex,
+      children: List<Widget>.generate(
+        widget.tabs!.length,
+        (int index) => Navigator(
+          key: _tabNavigatorKeys[index],
+          onGenerateRoute: (RouteSettings settings) {
+            return MaterialPageRoute<void>(
+              builder: widget.tabs![index].builder,
+              settings: settings,
+            );
+          },
+        ),
+      ),
+    );
   }
 
   void _showLogoutDialog() {

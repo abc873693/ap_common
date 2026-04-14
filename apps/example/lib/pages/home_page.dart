@@ -6,6 +6,7 @@ import 'package:ap_common_example/pages/notification_utils_page.dart';
 import 'package:ap_common_example/pages/school_info_page.dart';
 import 'package:ap_common_example/pages/setting_page.dart';
 import 'package:ap_common_example/pages/simple_example/simple_home_page.dart';
+import 'package:ap_common_example/pages/tab_example/tab_home_page.dart';
 import 'package:ap_common_example/pages/study/course_page.dart';
 import 'package:ap_common_example/pages/study/score_page.dart';
 import 'package:ap_common_example/pages/user_info_page.dart';
@@ -201,6 +202,13 @@ class HomePageState extends State<HomePage> {
           title: 'Simple Example',
           onTap: () => _openPage(
             const SimpleHomePage(),
+          ),
+        ),
+        DrawerMenuItem(
+          icon: Icons.tab,
+          title: 'Tab Navigation Example',
+          onTap: () => _openPage(
+            const TabHomePage(),
           ),
         ),
         if (isLogin) ...<Widget>[
