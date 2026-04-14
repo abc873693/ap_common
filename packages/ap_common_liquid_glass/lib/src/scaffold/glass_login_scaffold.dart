@@ -105,17 +105,13 @@ class GlassLoginScaffoldState
   Widget _logo(ColorScheme colorScheme, bool isDark) {
     switch (widget.logoMode) {
       case LogoMode.image:
-        return GlassCard(
-          child: SizedBox(
-            width: 100,
-            height: 100,
-            child: ClipRRect(
-              borderRadius: BorderRadius.circular(24),
-              child: Image.asset(
-                widget.logoSource,
-                fit: BoxFit.contain,
-              ),
-            ),
+        return ClipRRect(
+          borderRadius: BorderRadius.circular(16),
+          child: Image.asset(
+            widget.logoSource,
+            width: 80,
+            height: 80,
+            fit: BoxFit.contain,
           ),
         );
       case LogoMode.text:
@@ -134,16 +130,19 @@ class GlassLoginScaffoldState
   ) {
     final Widget logoWidget =
         _logo(colorScheme, isDark);
-    final Widget formCard = GlassCard(
-      child: ConstrainedBox(
-        constraints: const BoxConstraints(maxWidth: 400),
-        child: Padding(
-          padding: const EdgeInsets.all(24),
-          child: Column(
-            crossAxisAlignment:
-                CrossAxisAlignment.stretch,
-            children: widget.forms,
-          ),
+    final Widget formCard = ConstrainedBox(
+      constraints:
+          const BoxConstraints(maxWidth: 400),
+      child: GlassCard(
+        useOwnLayer: true,
+        padding: const EdgeInsets.symmetric(
+          horizontal: 20,
+          vertical: 24,
+        ),
+        child: Column(
+          crossAxisAlignment:
+              CrossAxisAlignment.stretch,
+          children: widget.forms,
         ),
       ),
     );

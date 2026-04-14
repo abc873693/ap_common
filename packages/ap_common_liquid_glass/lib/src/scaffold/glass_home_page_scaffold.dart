@@ -2,6 +2,8 @@ import 'dart:async';
 import 'dart:io';
 
 import 'package:ap_common_flutter_ui/ap_common_flutter_ui.dart';
+import 'package:ap_common_liquid_glass/src/widgets/glass_dialog.dart';
+import 'package:ap_common_liquid_glass/src/widgets/glass_floating_toolbar.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:liquid_glass_widgets/liquid_glass_widgets.dart';
@@ -21,6 +23,7 @@ class GlassHomePageScaffold extends StatefulWidget {
     this.actions,
     this.onTabTapped,
     this.bottomNavigationBarItems,
+    this.selectedIndex = 0,
     this.drawer,
     this.content,
     this.floatingActionButton,
@@ -29,6 +32,7 @@ class GlassHomePageScaffold extends StatefulWidget {
     this.autoPlay = true,
     this.autoPlayDuration =
         const Duration(milliseconds: 5000),
+    this.bottomPadding = 0,
   });
 
   /// Creates from a [DataState<List<Announcement>>].
@@ -39,6 +43,7 @@ class GlassHomePageScaffold extends StatefulWidget {
     this.actions,
     this.onTabTapped,
     this.bottomNavigationBarItems,
+    this.selectedIndex = 0,
     this.drawer,
     this.content,
     this.floatingActionButton,
@@ -47,6 +52,7 @@ class GlassHomePageScaffold extends StatefulWidget {
     this.autoPlay = true,
     this.autoPlayDuration =
         const Duration(milliseconds: 5000),
+    this.bottomPadding = 0,
   })  : state = dataState.when(
           loading: () => HomeState.loading,
           loaded: (_, __) => HomeState.finish,
@@ -60,7 +66,8 @@ class GlassHomePageScaffold extends StatefulWidget {
   final String? title;
   final List<Announcement> announcements;
   final List<Widget>? actions;
-  final List<Widget>? bottomNavigationBarItems;
+  final List<GlassBottomBarTab>? bottomNavigationBarItems;
+  final int selectedIndex;
   final Function(int index)? onTabTapped;
   final Function(Announcement announcement)? onImageTapped;
   final Widget? drawer;
@@ -68,6 +75,11 @@ class GlassHomePageScaffold extends StatefulWidget {
   final Widget? floatingActionButton;
   final bool isLogin;
   final bool autoPlay;
+
+  /// Extra bottom padding for the content area.
+  /// Use when the scaffold is embedded inside
+  /// another layout with a floating bottom bar.
+  final double bottomPadding;
   final Duration autoPlayDuration;
 
   @override
@@ -115,57 +127,116 @@ class GlassHomePageScaffoldState
       child: ScaffoldMessenger(
         key: _scaffoldMessengerKey,
         child: Scaffold(
-          extendBodyBehindAppBar: true,
-          appBar: isTablet
-              ? null
-              : GlassAppBar(
-                  title: Text(widget.title ?? ''),
-                  actions: widget.actions,
-                ),
           drawer: isTablet ? null : widget.drawer,
           floatingActionButton:
               widget.floatingActionButton,
-          body: Row(
+          body: Stack(
             children: <Widget>[
-              if (isTablet) widget.drawer!,
-              Expanded(
-                child: (isTablet &&
-                        widget.content != null)
-                    ? widget.content!
-                    : OrientationBuilder(
-                        builder:
-                            (_, Orientation orientation) {
-                          return Container(
-                            padding:
-                                EdgeInsets.symmetric(
-                              vertical: orientation ==
-                                      Orientation.portrait
-                                  ? 32.0
-                                  : 4.0,
-                            ),
-                            alignment: Alignment.center,
-                            child:
-                                _homeBody(orientation),
-                          );
-                        },
-                      ),
+              Row(
+                children: <Widget>[
+                  if (isTablet) widget.drawer!,
+                  Expanded(
+                    child: (isTablet &&
+                            widget.content != null)
+                        ? widget.content!
+                        : OrientationBuilder(
+                            builder: (
+                              _,
+                              Orientation orientation,
+                            ) {
+                              return Container(
+                                padding:
+                                    EdgeInsets.only(
+                                  top: MediaQuery.of(
+                                            context,
+                                          ).padding.top +
+                                      60 +
+                                      (orientation ==
+                                              Orientation
+                                                  .portrait
+                                          ? 8.0
+                                          : 4.0),
+                                  bottom: widget
+                                              .bottomNavigationBarItems !=
+                                          null
+                                      ? 72.0
+                                      : widget
+                                          .bottomPadding,
+                                ),
+                                alignment:
+                                    Alignment.center,
+                                child: _homeBody(
+                                  orientation,
+                                ),
+                              );
+                            },
+                          ),
+                  ),
+                ],
               ),
+              if (!isTablet)
+                GlassFloatingToolbar(
+                  leading: <Widget>[
+                    Text(
+                      widget.title ?? '',
+                      style: const TextStyle(
+                        fontSize: 16,
+                        fontWeight: FontWeight.w600,
+                      ),
+                    ),
+                  ],
+                  trailing: widget.actions ??
+                      const <Widget>[],
+                ),
+              if (widget.bottomNavigationBarItems !=
+                      null &&
+                  !isTablet)
+                Positioned(
+                  left: 16,
+                  right: MediaQuery.of(context)
+                          .size
+                          .width *
+                      0.2,
+                  bottom: MediaQuery.of(context)
+                          .padding
+                          .bottom +
+                      8,
+                  child: Builder(
+                    builder: (BuildContext ctx) {
+                      final bool isDark =
+                          Theme.of(ctx).brightness ==
+                              Brightness.dark;
+                      final Color iconColor = isDark
+                          ? Colors.white
+                          : Colors.black;
+                      return GlassBottomBar(
+                        tabs: widget
+                            .bottomNavigationBarItems!,
+                        selectedIndex:
+                            widget.selectedIndex,
+                        onTabSelected: (int index) {
+                          widget.onTabTapped
+                              ?.call(index);
+                        },
+                        barHeight: 52,
+                        barBorderRadius: 26,
+                        horizontalPadding: 10,
+                        verticalPadding: 10,
+                        iconSize: 20,
+                        selectedIconColor: iconColor,
+                        unselectedIconColor:
+                            iconColor.withAlpha(153),
+                        textStyle: TextStyle(
+                          fontSize: 11,
+                          fontWeight: FontWeight.w500,
+                          color: iconColor,
+                        ),
+                      );
+                    },
+                  ),
+                ),
             ],
           ),
-          bottomNavigationBar:
-              (widget.bottomNavigationBarItems == null ||
-                      isTablet)
-                  ? null
-                  : NavigationBar(
-                      elevation: 12.0,
-                      height: 56,
-                      indicatorColor:
-                          const Color(0x00000000),
-                      onDestinationSelected:
-                          widget.onTabTapped,
-                      destinations: widget
-                          .bottomNavigationBarItems!,
-                    ),
         ),
       ),
       ),
@@ -257,7 +328,7 @@ class GlassHomePageScaffoldState
     switch (widget.state) {
       case HomeState.loading:
         return const Center(
-          child: CircularProgressIndicator(),
+          child: GlassProgressIndicator.circular(),
         );
       case HomeState.finish:
         return Column(
@@ -265,20 +336,17 @@ class GlassHomePageScaffoldState
           children: <Widget>[
             Hero(
               tag: ApConstants.tagAnnouncementTitle,
-              child: Material(
-                color: const Color(0x00000000),
-                child: Text(
-                  widget
-                      .announcements[_currentNewsIndex]
-                      .title,
-                  textAlign: TextAlign.center,
-                  style: TextStyle(
-                    fontSize: 20.0,
-                    color: Theme.of(context)
-                        .colorScheme
-                        .onSurfaceVariant,
-                    fontWeight: FontWeight.w500,
-                  ),
+              child: Text(
+                widget
+                    .announcements[_currentNewsIndex]
+                    .title,
+                textAlign: TextAlign.center,
+                style: TextStyle(
+                  fontSize: 20.0,
+                  color: Theme.of(context)
+                      .colorScheme
+                      .onSurfaceVariant,
+                  fontWeight: FontWeight.w500,
                 ),
               ),
             ),
@@ -321,8 +389,12 @@ class GlassHomePageScaffoldState
                 ),
                 children: <TextSpan>[
                   TextSpan(
-                    text:
-                        '${widget.announcements.length >= 10 && _currentNewsIndex < 9 ? '0' : ''}'
+                    text: '${widget.announcements
+                                .length >=
+                            10 &&
+                        _currentNewsIndex < 9
+                        ? '0'
+                        : ''}'
                         '${_currentNewsIndex + 1}',
                     style: TextStyle(
                       color: Theme.of(context)
@@ -365,27 +437,25 @@ class GlassHomePageScaffoldState
 
   void _showLogoutDialog() {
     final ApLocalizations l10n = context.ap;
-    showDialog(
+    showGlassYesNoDialog(
       context: context,
-      builder: (BuildContext context) => YesNoDialog(
-        title: l10n.closeAppTitle,
-        contentWidget: Text(
-          l10n.closeAppHint,
-          textAlign: TextAlign.center,
-          style: TextStyle(
-            color: Theme.of(context)
-                .colorScheme
-                .onSurfaceVariant,
-          ),
+      title: l10n.closeAppTitle,
+      contentWidget: Text(
+        l10n.closeAppHint,
+        textAlign: TextAlign.center,
+        style: TextStyle(
+          color: Theme.of(context)
+              .colorScheme
+              .onSurfaceVariant,
         ),
-        leftActionText: l10n.cancel,
-        rightActionText: l10n.confirm,
-        rightActionFunction: () {
-          AnalyticsUtil.instance
-              .logEvent('logout_dialog_confirm');
-          SystemNavigator.pop();
-        },
       ),
+      leftActionText: l10n.cancel,
+      rightActionText: l10n.confirm,
+      rightActionFunction: () {
+        AnalyticsUtil.instance
+            .logEvent('logout_dialog_confirm');
+        SystemNavigator.pop();
+      },
     );
     AnalyticsUtil.instance
         .logEvent('logout_dialog_open');

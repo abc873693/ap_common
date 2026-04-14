@@ -4,6 +4,9 @@ import 'package:ap_common_flutter_ui/ap_common_flutter_ui.dart';
 import 'package:ap_common_liquid_glass/src/widgets/glass_course_content.dart';
 import 'package:ap_common_liquid_glass/src/widgets/glass_course_list.dart';
 import 'package:ap_common_liquid_glass/src/widgets/glass_course_table_view.dart';
+import 'package:ap_common_liquid_glass/src/widgets/glass_dialog.dart';
+import 'package:ap_common_liquid_glass/src/widgets/glass_floating_toolbar.dart';
+import 'package:ap_common_liquid_glass/src/widgets/glass_semester_picker.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
@@ -69,24 +72,19 @@ class GlassCourseScaffold extends StatefulWidget {
     this.showInstructors,
     this.showClassroomLocation,
     this.showSearchButton,
-  })  : state = dataState.when(
-          loading: () => CourseState.loading,
-          loaded: (_, __) => CourseState.finish,
-          error: (_) => CourseState.error,
-          empty: (_) => CourseState.empty,
-        ),
-        courseData =
-            dataState.dataOrNull ?? CourseData.empty(),
-        customHint =
-            dataState is DataLoaded<CourseData>
-                ? dataState.hint
-                : null,
-        customStateHint =
-            dataState is DataError<CourseData>
-                ? dataState.hint
-                : dataState is DataEmpty<CourseData>
-                    ? dataState.hint
-                    : null;
+  }) : state = dataState.when(
+         loading: () => CourseState.loading,
+         loaded: (_, __) => CourseState.finish,
+         error: (_) => CourseState.error,
+         empty: (_) => CourseState.empty,
+       ),
+       courseData = dataState.dataOrNull ?? CourseData.empty(),
+       customHint = dataState is DataLoaded<CourseData> ? dataState.hint : null,
+       customStateHint = dataState is DataError<CourseData>
+           ? dataState.hint
+           : dataState is DataEmpty<CourseData>
+           ? dataState.hint
+           : null;
 
   final CourseState state;
   final CourseData courseData;
@@ -113,12 +111,10 @@ class GlassCourseScaffold extends StatefulWidget {
   final bool? showSearchButton;
 
   @override
-  GlassCourseScaffoldState createState() =>
-      GlassCourseScaffoldState();
+  GlassCourseScaffoldState createState() => GlassCourseScaffoldState();
 }
 
-class GlassCourseScaffoldState
-    extends State<GlassCourseScaffold> {
+class GlassCourseScaffoldState extends State<GlassCourseScaffold> {
   final GlobalKey _repaintBoundaryGlobalKey = GlobalKey();
 
   ContentStyle _contentStyle = ContentStyle.table;
@@ -130,19 +126,17 @@ class GlassCourseScaffoldState
   bool? mergeCourse;
 
   bool get isLandscape =>
-      MediaQuery.of(context).orientation ==
-      Orientation.landscape;
+      MediaQuery.of(context).orientation == Orientation.landscape;
 
   List<String> invisibleCourseCodes = <String>[];
 
-  final Map<String, Color> _courseColorMap =
-      <String, Color>{};
+  final Map<String, Color> _courseColorMap = <String, Color>{};
   int _colorIndex = 0;
 
   Color _getCourseColor(String courseCode) {
     if (!_courseColorMap.containsKey(courseCode)) {
       _courseColorMap[courseCode] =
-          courseColors[_colorIndex % courseColors.length];
+          glassCourseColors[_colorIndex % glassCourseColors.length];
       _colorIndex++;
     }
     return _courseColorMap[courseCode]!;
@@ -153,23 +147,20 @@ class GlassCourseScaffoldState
 
   @override
   void initState() {
-    showSectionTime = widget.showSectionTime ??
-        PreferenceUtil.instance.getBool(
-          ApConstants.showSectionTime,
-          true,
-        );
-    showInstructors = widget.showInstructors ??
-        PreferenceUtil.instance.getBool(
-          ApConstants.showInstructors,
-          true,
-        );
+    showSectionTime =
+        widget.showSectionTime ??
+        PreferenceUtil.instance.getBool(ApConstants.showSectionTime, true);
+    showInstructors =
+        widget.showInstructors ??
+        PreferenceUtil.instance.getBool(ApConstants.showInstructors, true);
     showClassroomLocation =
         widget.showClassroomLocation ??
-            PreferenceUtil.instance.getBool(
-              ApConstants.showClassroomLocation,
-              true,
-            );
-    showSearchButton = widget.showSearchButton ??
+        PreferenceUtil.instance.getBool(
+          ApConstants.showClassroomLocation,
+          true,
+        );
+    showSearchButton =
+        widget.showSearchButton ??
         PreferenceUtil.instance.getBool(
           ApConstants.showCourseSearchButton,
           true,
@@ -186,8 +177,7 @@ class GlassCourseScaffoldState
         if (_showFab) {
           setState(() => _showFab = false);
         }
-      } else if (_scrollController
-              .position.userScrollDirection ==
+      } else if (_scrollController.position.userScrollDirection ==
           ScrollDirection.forward) {
         if (!_showFab) {
           setState(() => _showFab = true);
@@ -198,9 +188,7 @@ class GlassCourseScaffoldState
   }
 
   @override
-  void didUpdateWidget(
-    covariant GlassCourseScaffold oldWidget,
-  ) {
+  void didUpdateWidget(covariant GlassCourseScaffold oldWidget) {
     fetchInvisibleCourseCodes();
     super.didUpdateWidget(oldWidget);
   }
@@ -215,176 +203,154 @@ class GlassCourseScaffoldState
   Widget build(BuildContext context) {
     return AdaptiveLiquidGlassLayer(
       child: CourseConfig(
-      showSectionTime: showSectionTime,
-      showInstructors: showInstructors,
-      showClassroomLocation: showClassroomLocation,
-      child: Scaffold(
-        extendBodyBehindAppBar: true,
-        appBar: GlassAppBar(
-          title: Row(
+        showSectionTime: showSectionTime,
+        showInstructors: showInstructors,
+        showClassroomLocation: showClassroomLocation,
+        child: Scaffold(
+          body: Stack(
             children: <Widget>[
-              Flexible(
-                child: Text(
-                  widget.title ?? context.ap.course,
-                  overflow: TextOverflow.ellipsis,
+              Padding(
+                padding: EdgeInsets.only(
+                  top: MediaQuery.of(context).padding.top + 50,
                 ),
-              ),
-              if (widget.itemPicker !=
-                  null) ...<Widget>[
-                const SizedBox(width: 8),
-                widget.itemPicker!,
-              ],
-              if (widget.semesterData != null &&
-                  widget.itemPicker ==
-                      null) ...<Widget>[
-                const SizedBox(width: 8),
-                SemesterPicker(
-                  semesterData:
-                      widget.semesterData!,
-                  currentIndex: widget
-                      .semesterData!.currentIndex,
-                  onSelect: (
-                    Semester semester,
-                    int index,
-                  ) {
-                    widget.onSelect?.call(index);
-                  },
-                  featureTag: 'course',
-                ),
-              ],
-            ],
-          ),
-          actions: <Widget>[
-            ...widget.actions ?? <Widget>[],
-            if (widget.enableCaptureCourseTable)
-              IconButton(
-                icon: Icon(ApIcon.download),
-                onPressed: _captureCourseTable,
-                tooltip:
-                    context.ap.exportCourseTable,
-              ),
-            IconButton(
-              icon: Icon(ApIcon.settings),
-              onPressed: _openSettings,
-              tooltip:
-                  context.ap.courseScaffoldSetting,
-            ),
-          ],
-        ),
-        body: Row(
-          children: <Widget>[
-            Expanded(
-              flex: 3,
-              child: Flex(
-                direction: Axis.vertical,
-                mainAxisSize: MainAxisSize.min,
-                mainAxisAlignment:
-                    MainAxisAlignment.spaceEvenly,
-                children: <Widget>[
-                  if (widget.customHint != null &&
-                      widget.customHint!.isNotEmpty)
-                    HintBanner(
-                      text: widget.customHint!,
+                child: Row(
+                  children: <Widget>[
+                    Expanded(
+                      flex: 3,
+                      child: Flex(
+                        direction: Axis.vertical,
+                        mainAxisSize: MainAxisSize.min,
+                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                        children: <Widget>[
+                          if (widget.customHint != null &&
+                              widget.customHint!.isNotEmpty)
+                            HintBanner(text: widget.customHint!),
+                          Expanded(
+                            child: RefreshIndicator(
+                              onRefresh: () async {
+                                await widget.onRefresh!();
+                                AnalyticsUtil.instance.logEvent(
+                                  'course_refresh',
+                                );
+                                return;
+                              },
+                              child: _body(),
+                            ),
+                          ),
+                        ],
+                      ),
                     ),
-                  Expanded(
-                    child: RefreshIndicator(
-                      onRefresh: () async {
-                        await widget.onRefresh!();
-                        AnalyticsUtil.instance
-                            .logEvent(
-                          'course_refresh',
-                        );
-                        return;
+                    if (widget.state == CourseState.finish &&
+                        isLandscape) ...<Widget>[
+                      const SizedBox(width: 16.0),
+                      Expanded(
+                        flex: 2,
+                        child: GlassCard(
+                          useOwnLayer: true,
+                          padding: EdgeInsets.zero,
+                          child: GlassCourseList(
+                            courses: widget.courseData.courses,
+                            timeCodes: widget.courseData.timeCodes,
+                            invisibleCourseCodes: invisibleCourseCodes,
+                            onVisibilityChanged:
+                                (Course course, bool visibility) =>
+                                    saveInvisibleCourseCodes(
+                                      course: course,
+                                      visibility: visibility,
+                                    ),
+                          ),
+                        ),
+                      ),
+                    ],
+                  ],
+                ),
+              ),
+              GlassFloatingToolbar(
+                leading: <Widget>[
+                  if (widget.semesterData != null && widget.itemPicker == null)
+                    GlassSemesterPicker(
+                      semesterData: widget.semesterData!,
+                      currentIndex: widget.semesterData!.currentIndex,
+                      onSelect: (Semester semester, int index) {
+                        widget.onSelect?.call(index);
                       },
-                      child: _body(),
+                      featureTag: 'course',
+                    )
+                  else if (widget.itemPicker != null)
+                    widget.itemPicker!,
+                ],
+                trailing: <Widget>[
+                  ...widget.actions ?? <Widget>[],
+                  if (widget.enableCaptureCourseTable)
+                    IconButton(
+                      icon: Icon(ApIcon.download),
+                      onPressed: _captureCourseTable,
+                      iconSize: 22,
+                      padding: EdgeInsets.zero,
+                      constraints:
+                          const BoxConstraints(
+                        minWidth: 36,
+                        minHeight: 36,
+                      ),
+                    ),
+                  IconButton(
+                    icon: Icon(ApIcon.settings),
+                    onPressed: _openSettings,
+                    iconSize: 22,
+                    padding: EdgeInsets.zero,
+                    constraints:
+                        const BoxConstraints(
+                      minWidth: 36,
+                      minHeight: 36,
                     ),
                   ),
                 ],
               ),
-            ),
-            if (widget.state ==
-                    CourseState.finish &&
-                isLandscape) ...<Widget>[
-              const SizedBox(width: 16.0),
-              Expanded(
-                flex: 2,
-                child: GlassCard(
-                  useOwnLayer: true,
-                  padding: EdgeInsets.zero,
-                  child: GlassCourseList(
-                    courses:
-                        widget.courseData.courses,
-                    timeCodes:
-                        widget.courseData.timeCodes,
-                    invisibleCourseCodes:
-                        invisibleCourseCodes,
-                    onVisibilityChanged: (
-                      Course course,
-                      bool visibility,
-                    ) =>
-                        saveInvisibleCourseCodes(
-                      course: course,
-                      visibility: visibility,
-                    ),
-                  ),
-                ),
-              ),
-            ],
-          ],
-        ),
-        floatingActionButton: AnimatedScale(
-          scale: _showFab ? 1.0 : 0.0,
-          duration:
-              const Duration(milliseconds: 250),
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            crossAxisAlignment:
-                CrossAxisAlignment.end,
-            children: <Widget>[
-              if (!isLandscape)
-                GlassButton(
-                  key: const ValueKey<String>(
-                    'switch_content_style_button',
-                  ),
-                  icon: Icon(
-                    _contentStyle ==
-                            ContentStyle.table
-                        ? Icons.list_rounded
-                        : Icons.grid_view_rounded,
-                  ),
-                  onTap: () {
-                    setState(
-                      () => _contentStyle =
-                          (_contentStyle ==
-                                  ContentStyle.table)
-                              ? ContentStyle.list
-                              : ContentStyle.table,
-                    );
-                  },
-                  useOwnLayer: true,
-                ),
-              if (showSearchButton ??
-                  true) ...<Widget>[
-                if (!isLandscape)
-                  const SizedBox(height: 8),
-                GlassButton(
-                  key: const ValueKey<String>(
-                    'search_button',
-                  ),
-                  icon: const Icon(Icons.search),
-                  onTap: () {
-                    _pickSemester();
-                    AnalyticsUtil.instance.logEvent(
-                      'course_search_button_click',
-                    );
-                  },
-                  useOwnLayer: true,
-                ),
-              ],
             ],
           ),
+          floatingActionButton: AnimatedScale(
+            scale: _showFab ? 1.0 : 0.0,
+            duration: const Duration(milliseconds: 250),
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              crossAxisAlignment: CrossAxisAlignment.end,
+              children: <Widget>[
+                if (!isLandscape)
+                  GlassButton(
+                    key: const ValueKey<String>('switch_content_style_button'),
+                    icon: Icon(
+                      _contentStyle == ContentStyle.table
+                          ? Icons.list_rounded
+                          : Icons.grid_view_rounded,
+                    ),
+                    onTap: () {
+                      setState(
+                        () => _contentStyle =
+                            (_contentStyle == ContentStyle.table)
+                            ? ContentStyle.list
+                            : ContentStyle.table,
+                      );
+                    },
+                    useOwnLayer: true,
+                  ),
+                if (showSearchButton ?? true) ...<Widget>[
+                  if (!isLandscape) const SizedBox(height: 8),
+                  GlassButton(
+                    key: const ValueKey<String>('search_button'),
+                    icon: const Icon(Icons.search),
+                    onTap: () {
+                      _pickSemester();
+                      AnalyticsUtil.instance.logEvent(
+                        'course_search_button_click',
+                      );
+                    },
+                    useOwnLayer: true,
+                  ),
+                ],
+              ],
+            ),
+          ),
         ),
-      ),
       ),
     );
   }
@@ -411,16 +377,9 @@ class GlassCourseScaffoldState
               width: 80,
               height: 80,
               padding: EdgeInsets.zero,
-              shape:
-                  const LiquidRoundedSuperellipse(
-                borderRadius: 20,
-              ),
+              shape: const LiquidRoundedSuperellipse(borderRadius: 20),
               child: Center(
-                child: Icon(
-                  icon,
-                  size: 40,
-                  color: colorScheme.primary,
-                ),
+                child: Icon(icon, size: 40, color: colorScheme.primary),
               ),
             ),
             const SizedBox(height: 16),
@@ -435,10 +394,7 @@ class GlassCourseScaffoldState
             const SizedBox(height: 8),
             Text(
               context.ap.clickToRetry,
-              style: TextStyle(
-                fontSize: 14,
-                color: colorScheme.primary,
-              ),
+              style: TextStyle(fontSize: 14, color: colorScheme.primary),
             ),
           ],
         ),
@@ -447,25 +403,10 @@ class GlassCourseScaffoldState
   }
 
   Widget _body() {
-    final ColorScheme colorScheme =
-        Theme.of(context).colorScheme;
+    final ColorScheme colorScheme = Theme.of(context).colorScheme;
     switch (widget.state) {
       case CourseState.loading:
-        return Center(
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: <Widget>[
-              SizedBox(
-                width: 48,
-                height: 48,
-                child: CircularProgressIndicator(
-                  strokeWidth: 3,
-                  color: colorScheme.primary,
-                ),
-              ),
-            ],
-          ),
-        );
+        return const Center(child: GlassProgressIndicator.circular());
       case CourseState.error:
         return _buildErrorState(
           colorScheme,
@@ -487,48 +428,35 @@ class GlassCourseScaffoldState
       case CourseState.custom:
         return _buildErrorState(
           colorScheme,
-          widget.customStateHint ??
-              context.ap.unknownError,
+          widget.customStateHint ?? context.ap.unknownError,
           Icons.warning_amber_rounded,
         );
       default:
-        if (isLandscape ||
-            _contentStyle == ContentStyle.table) {
+        if (isLandscape || _contentStyle == ContentStyle.table) {
           return GlassCourseTableView(
             courseData: widget.courseData,
-            invisibleCourseCodes:
-                invisibleCourseCodes,
+            invisibleCourseCodes: invisibleCourseCodes,
             controller: _scrollController,
-            onCoursePressed: (
-              Course course,
-              TimeCode timeCode,
-              int weekday,
-            ) =>
+            onCoursePressed: (Course course, TimeCode timeCode, int weekday) =>
                 _onPressed(weekday, timeCode, course),
             courseColorResolver: _getCourseColor,
-            repaintBoundaryKey:
-                _repaintBoundaryGlobalKey,
+            repaintBoundaryKey: _repaintBoundaryGlobalKey,
             mergeCourse: mergeCourse,
             showSectionTime: showSectionTime,
             showInstructors: showInstructors,
-            showClassroomLocation:
-                showClassroomLocation,
+            showClassroomLocation: showClassroomLocation,
           );
         } else {
           return GlassCourseList(
             controller: _scrollController,
             courses: widget.courseData.courses,
             timeCodes: widget.courseData.timeCodes,
-            invisibleCourseCodes:
-                invisibleCourseCodes,
-            onVisibilityChanged: (
-              Course course,
-              bool visibility,
-            ) =>
+            invisibleCourseCodes: invisibleCourseCodes,
+            onVisibilityChanged: (Course course, bool visibility) =>
                 saveInvisibleCourseCodes(
-              course: course,
-              visibility: visibility,
-            ),
+                  course: course,
+                  visibility: visibility,
+                ),
           );
         }
     }
@@ -536,27 +464,20 @@ class GlassCourseScaffoldState
 
   Future<void> _captureCourseTable() async {
     final RenderRepaintBoundary? boundary =
-        _repaintBoundaryGlobalKey.currentContext!
-                .findRenderObject()
+        _repaintBoundaryGlobalKey.currentContext!.findRenderObject()
             as RenderRepaintBoundary?;
     if (boundary == null) {
-      UiUtil.instance.showToast(
-        context,
-        context.ap.unknownError,
-      );
+      UiUtil.instance.showToast(context, context.ap.unknownError);
       return;
     }
-    final ui.Image image =
-        await boundary.toImage(pixelRatio: 3.0);
+    final ui.Image image = await boundary.toImage(pixelRatio: 3.0);
     final ByteData? byteData = await image.toByteData(
       format: ui.ImageByteFormat.png,
     );
     final DateTime now = DateTime.now();
-    final String formattedDate =
-        DateFormat('yyyyMMdd_hhmmss').format(now);
+    final String formattedDate = DateFormat('yyyyMMdd_hhmmss').format(now);
     if (byteData != null) {
-      final SaveImageResult result =
-          await MediaUtil.instance.saveImage(
+      final SaveImageResult result = await MediaUtil.instance.saveImage(
         byteData: byteData,
         fileName: 'course_table_$formattedDate',
       );
@@ -567,47 +488,32 @@ class GlassCourseScaffoldState
               '${context.ap.exportCourseTableSuccess}'
               '\n$filePath';
           Toast.show(message, context);
-          AnalyticsUtil.instance.logEvent(
-            'export_course_table_image_success',
-          );
+          AnalyticsUtil.instance.logEvent('export_course_table_image_success');
         case SaveImageError(:final String message):
           UiUtil.instance.showToast(context, message);
       }
     } else {
       if (!mounted) return;
-      UiUtil.instance.showToast(
-        context,
-        context.ap.unknownError,
-      );
+      UiUtil.instance.showToast(context, context.ap.unknownError);
     }
   }
 
-  void _onPressed(
-    int weekday,
-    TimeCode timeCode,
-    Course course,
-  ) {
-    showModalBottomSheet<void>(
+  void _onPressed(int weekday, TimeCode timeCode, Course course) {
+    GlassSheet.show<void>(
       context: context,
-      backgroundColor: const Color(0x00000000),
       isScrollControlled: true,
       builder: (BuildContext builder) {
         return GlassCourseContent(
-          enableNotifyControl:
-              widget.enableNotifyControl,
+          enableNotifyControl: widget.enableNotifyControl,
           course: course,
           notifyData: widget.notifyData,
           weekday: weekday,
-          courseNotifySaveKey:
-              widget.courseNotifySaveKey,
+          courseNotifySaveKey: widget.courseNotifySaveKey,
           timeCode: timeCode,
           courseColor: _getCourseColor(course.code),
           invisibleCourseCodes: invisibleCourseCodes,
           onVisibilityChanged: (bool visibility) =>
-              saveInvisibleCourseCodes(
-            course: course,
-            visibility: visibility,
-          ),
+              saveInvisibleCourseCodes(course: course, visibility: visibility),
         );
       },
     );
@@ -615,11 +521,10 @@ class GlassCourseScaffoldState
 
   void _pickSemester() {
     if (widget.semesterData != null) {
-      SemesterPicker.show(
+      GlassSemesterPicker.show(
         context: context,
         semesterData: widget.semesterData!,
-        currentIndex:
-            widget.semesterData!.currentIndex,
+        currentIndex: widget.semesterData!.currentIndex,
         onSelect: (Semester semester, int index) {
           widget.onSelect?.call(index);
         },
@@ -629,56 +534,81 @@ class GlassCourseScaffoldState
   }
 
   void _openSettings() {
-    showDialog(
+    showGlassDefaultDialog(
       context: context,
-      builder: (_) => CourseScaffoldSettingDialog(
-        showSectionTime: showSectionTime,
-        showInstructors: showInstructors,
-        showClassroomLocation: showClassroomLocation,
-        showSearchButton: showSearchButton,
-        mergeCourse: mergeCourse,
-        showSectionTimeOnChanged: (bool? value) {
-          setState(() => showSectionTime = value);
-          PreferenceUtil.instance.setBool(
-            ApConstants.showSectionTime,
-            showSectionTime!,
-          );
-        },
-        showInstructorsOnChanged: (bool? value) {
-          setState(() => showInstructors = value);
-          PreferenceUtil.instance.setBool(
-            ApConstants.showInstructors,
-            showInstructors!,
-          );
-        },
-        showClassroomLocationOnChanged:
-            (bool? value) {
-          setState(
-            () => showClassroomLocation = value,
-          );
-          PreferenceUtil.instance.setBool(
-            ApConstants.showClassroomLocation,
-            showClassroomLocation!,
-          );
-        },
-        showSearchButtonOnChanged: (bool? value) {
-          setState(() => showSearchButton = value);
-          PreferenceUtil.instance.setBool(
-            ApConstants.showCourseSearchButton,
-            showSearchButton!,
-          );
-        },
-        mergeCourseOnChanged: (bool? value) {
-          setState(() => mergeCourse = value);
-          PreferenceUtil.instance.setBool(
-            '${ApConstants.packageName}.merge_course',
-            mergeCourse!,
-          );
-        },
+      title: context.ap.courseScaffoldSetting,
+      actionText: context.ap.confirm,
+      actionFunction: () {
+        Navigator.of(context, rootNavigator: true).pop();
+      },
+      contentWidget: Column(
+        mainAxisSize: MainAxisSize.min,
+        children: <Widget>[
+          CheckboxListTile(
+            title: Text(context.ap.showSectionTime),
+            secondary: Icon(ApIcon.accessTime),
+            value: showSectionTime,
+            onChanged: (bool? value) {
+              setState(() => showSectionTime = value);
+              PreferenceUtil.instance.setBool(
+                ApConstants.showSectionTime,
+                showSectionTime!,
+              );
+            },
+          ),
+          CheckboxListTile(
+            title: Text(context.ap.showInstructors),
+            secondary: Icon(ApIcon.person),
+            value: showInstructors,
+            onChanged: (bool? value) {
+              setState(() => showInstructors = value);
+              PreferenceUtil.instance.setBool(
+                ApConstants.showInstructors,
+                showInstructors!,
+              );
+            },
+          ),
+          CheckboxListTile(
+            title: Text(context.ap.showClassroomLocation),
+            secondary: Icon(ApIcon.locationOn),
+            value: showClassroomLocation,
+            onChanged: (bool? value) {
+              setState(() => showClassroomLocation = value);
+              PreferenceUtil.instance.setBool(
+                ApConstants.showClassroomLocation,
+                showClassroomLocation!,
+              );
+            },
+          ),
+          CheckboxListTile(
+            title: Text(context.ap.showSearchButton),
+            secondary: const Icon(Icons.search),
+            value: showSearchButton,
+            onChanged: (bool? value) {
+              setState(() => showSearchButton = value);
+              PreferenceUtil.instance.setBool(
+                ApConstants.showCourseSearchButton,
+                showSearchButton!,
+              );
+            },
+          ),
+          CheckboxListTile(
+            title: Text(context.ap.mergeCourse),
+            secondary: const Icon(Icons.merge_type_rounded),
+            value: mergeCourse,
+            onChanged: (bool? value) {
+              setState(() => mergeCourse = value);
+              PreferenceUtil.instance.setBool(
+                '${ApConstants.packageName}'
+                '.merge_course',
+                mergeCourse!,
+              );
+            },
+          ),
+        ],
       ),
     );
-    AnalyticsUtil.instance
-        .logEvent('course_setting_click');
+    AnalyticsUtil.instance.logEvent('course_setting_click');
   }
 
   void saveInvisibleCourseCodes({
@@ -699,8 +629,7 @@ class GlassCourseScaffoldState
   }
 
   void fetchInvisibleCourseCodes() {
-    invisibleCourseCodes =
-        PreferenceUtil.instance.getStringList(
+    invisibleCourseCodes = PreferenceUtil.instance.getStringList(
       '$_kCourseInvisibleKey'
       '${widget.courseNotifySaveKey}',
       <String>[],

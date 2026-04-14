@@ -1,4 +1,5 @@
 import 'package:ap_common_flutter_ui/ap_common_flutter_ui.dart';
+import 'package:ap_common_liquid_glass/src/widgets/glass_floating_toolbar.dart';
 import 'package:barcode_widget/barcode_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:liquid_glass_widgets/liquid_glass_widgets.dart';
@@ -51,46 +52,9 @@ class GlassUserInfoScaffoldState
 
     return AdaptiveLiquidGlassLayer(
       child: Scaffold(
-        extendBodyBehindAppBar: true,
-        appBar: GlassAppBar(
-          actions: <Widget>[
-          ...widget.actions ?? <Widget>[],
-          if (widget.enableBarCode)
-            IconButton(
-              icon: Image.asset(
-                iconName,
-                height: 24.0,
-                width: 24.0,
-              ),
-              onPressed: () {
-                setState(
-                  () => codeMode = BarCodeMode.values[
-                      (codeMode.index + 1) %
-                          BarCodeMode.values.length],
-                );
-                AnalyticsUtil.instance
-                    .logEvent('user_info_barcode_switch');
-              },
-            ),
-          IconButton(
-            icon: _isRefreshing
-                ? SizedBox(
-                    width: 20,
-                    height: 20,
-                    child: CircularProgressIndicator(
-                      strokeWidth: 2,
-                      color: isDark
-                          ? colorScheme.onSurface
-                          : colorScheme.onPrimary,
-                    ),
-                  )
-                : const Icon(Icons.refresh_rounded),
-            onPressed:
-                _isRefreshing ? null : _handleRefresh,
-          ),
-        ],
-      ),
-      body: RefreshIndicator(
+        body: Stack(
+          children: <Widget>[
+            RefreshIndicator(
         onRefresh: () async {
           await _handleRefresh();
           AnalyticsUtil.instance
@@ -120,7 +84,68 @@ class GlassUserInfoScaffoldState
             ],
           ),
         ),
-      ),
+            ),
+            GlassFloatingToolbar(
+              trailing: <Widget>[
+                ...widget.actions ?? <Widget>[],
+                if (widget.enableBarCode)
+                  IconButton(
+                    icon: Image.asset(
+                      iconName,
+                      height: 20.0,
+                      width: 20.0,
+                    ),
+                    onPressed: () {
+                      setState(
+                        () => codeMode =
+                            BarCodeMode.values[
+                                (codeMode.index +
+                                        1) %
+                                    BarCodeMode
+                                        .values
+                                        .length],
+                      );
+                      AnalyticsUtil.instance
+                          .logEvent(
+                        'user_info_barcode_switch',
+                      );
+                    },
+                    iconSize: 22,
+                    padding: EdgeInsets.zero,
+                    constraints:
+                        const BoxConstraints(
+                      minWidth: 36,
+                      minHeight: 36,
+                    ),
+                  ),
+                IconButton(
+                  icon: _isRefreshing
+                      ? const SizedBox(
+                          width: 20,
+                          height: 20,
+                          child:
+                              CircularProgressIndicator(
+                            strokeWidth: 2,
+                          ),
+                        )
+                      : const Icon(
+                          Icons.refresh_rounded,
+                        ),
+                  onPressed: _isRefreshing
+                      ? null
+                      : _handleRefresh,
+                  iconSize: 22,
+                  padding: EdgeInsets.zero,
+                  constraints:
+                      const BoxConstraints(
+                    minWidth: 36,
+                    minHeight: 36,
+                  ),
+                ),
+              ],
+            ),
+          ],
+        ),
       ),
     );
   }
@@ -278,17 +303,11 @@ class GlassUserInfoScaffoldState
               ],
             ),
             const SizedBox(height: 16),
-            Container(
+            GlassContainer(
               width: double.infinity,
               padding: const EdgeInsets.symmetric(
                 vertical: 24,
                 horizontal: 16,
-              ),
-              decoration: BoxDecoration(
-                color: colorScheme
-                    .surfaceContainerHighest,
-                borderRadius:
-                    BorderRadius.circular(12),
               ),
               child: Column(
                 children: <Widget>[
@@ -338,11 +357,8 @@ class GlassUserInfoScaffoldState
   }
 
   Widget _buildDivider(ColorScheme colorScheme) {
-    return Divider(
-      height: 1,
+    return const GlassDivider(
       indent: 72,
-      color:
-          colorScheme.outlineVariant.withAlpha(77),
     );
   }
 

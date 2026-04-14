@@ -1,6 +1,8 @@
 import 'package:ap_common_flutter_ui/ap_common_flutter_ui.dart';
+import 'package:ap_common_liquid_glass/src/widgets/glass_floating_toolbar.dart';
 import 'package:ap_common_liquid_glass/src/widgets/glass_score_analysis_tab.dart';
 import 'package:ap_common_liquid_glass/src/widgets/glass_score_list_tab.dart';
+import 'package:ap_common_liquid_glass/src/widgets/glass_semester_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:liquid_glass_widgets/liquid_glass_widgets.dart';
@@ -50,23 +52,19 @@ class GlassScoreScaffold extends StatefulWidget {
     this.finalScoreBuilder,
     this.isShowSearchButton = false,
     this.bottom,
-  })  : state = dataState.when(
-          loading: () => ScoreState.loading,
-          loaded: (_, __) => ScoreState.finish,
-          error: (_) => ScoreState.error,
-          empty: (_) => ScoreState.empty,
-        ),
-        scoreData = dataState.dataOrNull,
-        customHint =
-            dataState is DataLoaded<ScoreData?>
-                ? dataState.hint
-                : null,
-        customStateHint =
-            dataState is DataError<ScoreData?>
-                ? dataState.hint
-                : dataState is DataEmpty<ScoreData?>
-                    ? dataState.hint
-                    : null;
+  }) : state = dataState.when(
+         loading: () => ScoreState.loading,
+         loaded: (_, __) => ScoreState.finish,
+         error: (_) => ScoreState.error,
+         empty: (_) => ScoreState.empty,
+       ),
+       scoreData = dataState.dataOrNull,
+       customHint = dataState is DataLoaded<ScoreData?> ? dataState.hint : null,
+       customStateHint = dataState is DataError<ScoreData?>
+           ? dataState.hint
+           : dataState is DataEmpty<ScoreData?>
+           ? dataState.hint
+           : null;
 
   final ScoreState state;
   final String? customStateHint;
@@ -87,17 +85,14 @@ class GlassScoreScaffold extends StatefulWidget {
   final Widget? bottom;
 
   @override
-  GlassScoreScaffoldState createState() =>
-      GlassScoreScaffoldState();
+  GlassScoreScaffoldState createState() => GlassScoreScaffoldState();
 }
 
-class GlassScoreScaffoldState
-    extends State<GlassScoreScaffold> {
+class GlassScoreScaffoldState extends State<GlassScoreScaffold> {
   bool get isLandscape =>
-      MediaQuery.of(context).orientation ==
-      Orientation.landscape;
+      MediaQuery.of(context).orientation == Orientation.landscape;
 
-  bool _isAnalysisView = false;
+  bool _isAnalysisView = true;
   late ScrollController _scrollController;
   bool _showFab = true;
 
@@ -111,9 +106,7 @@ class GlassScoreScaffoldState
         if (_showFab) {
           setState(() => _showFab = false);
         }
-      } else if (_scrollController
-              .position
-              .userScrollDirection ==
+      } else if (_scrollController.position.userScrollDirection ==
           ScrollDirection.forward) {
         if (!_showFab) {
           setState(() => _showFab = true);
@@ -130,159 +123,123 @@ class GlassScoreScaffoldState
 
   @override
   Widget build(BuildContext context) {
-    final ColorScheme colorScheme =
-        Theme.of(context).colorScheme;
+    final ColorScheme colorScheme = Theme.of(context).colorScheme;
 
     return AdaptiveLiquidGlassLayer(
       child: Scaffold(
-        extendBodyBehindAppBar: true,
-        appBar: GlassAppBar(
-          title: Row(
+        floatingActionButton: AnimatedScale(
+          scale: _showFab ? 1.0 : 0.0,
+          duration: const Duration(milliseconds: 250),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            crossAxisAlignment: CrossAxisAlignment.end,
             children: <Widget>[
-              Flexible(
-                child: Text(
-                  widget.title ?? context.ap.score,
-                overflow: TextOverflow.ellipsis,
-              ),
-            ),
-            if (widget.itemPicker != null) ...<Widget>[
-              const SizedBox(width: 12),
-              widget.itemPicker!,
-            ],
-            if (widget.semesterData != null &&
-                widget.itemPicker ==
-                    null) ...<Widget>[
-              const SizedBox(width: 12),
-              SemesterPicker(
-                semesterData: widget.semesterData!,
-                currentIndex:
-                    widget.semesterData!.currentIndex,
-                onSelect:
-                    (Semester semester, int index) {
-                  widget.onSelect?.call(index);
-                },
-                featureTag: 'score',
-              ),
-            ],
-          ],
-        ),
-        actions: const <Widget>[],
-      ),
-      floatingActionButton: AnimatedScale(
-        scale: _showFab ? 1.0 : 0.0,
-        duration: const Duration(milliseconds: 250),
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          crossAxisAlignment: CrossAxisAlignment.end,
-          children: <Widget>[
-            if (widget.state == ScoreState.finish &&
-                widget.scoreData != null &&
-                widget.scoreData!.scores.isNotEmpty &&
-                !isLandscape)
-              GlassButton(
-                key: const ValueKey<String>(
-                  'switch_view_button',
-                ),
-                icon: Icon(
-                  _isAnalysisView
-                      ? Icons.list_alt_rounded
-                      : Icons.analytics_outlined,
-                ),
-                onTap: () {
-                  setState(
-                    () => _isAnalysisView =
-                        !_isAnalysisView,
-                  );
-                },
-              ),
-            if (widget
-                .isShowSearchButton) ...<Widget>[
               if (widget.state == ScoreState.finish &&
                   widget.scoreData != null &&
                   widget.scoreData!.scores.isNotEmpty &&
                   !isLandscape)
-                const SizedBox(height: 8),
-              GlassButton(
-                key: const ValueKey<String>(
-                  'search_button',
-                ),
-                icon: const Icon(Icons.search),
-                onTap: () {
-                  _pickSemester();
-                  AnalyticsUtil.instance.logEvent(
-                    'score_search_button_click',
-                  );
-                },
-              ),
-            ],
-          ],
-        ),
-      ),
-      body: Row(
-        children: <Widget>[
-          Expanded(
-            flex: 3,
-            child: Column(
-              children: <Widget>[
-                if (widget.customHint != null &&
-                    widget.customHint!.isNotEmpty)
-                  HintBanner(text: widget.customHint!),
-                Expanded(
-                  child: _buildContent(
-                    context,
-                    colorScheme,
+                GlassButton(
+                  key: const ValueKey<String>('switch_view_button'),
+                  icon: Icon(
+                    _isAnalysisView
+                        ? Icons.list_alt_rounded
+                        : Icons.analytics_outlined,
                   ),
+                  onTap: () {
+                    setState(() => _isAnalysisView = !_isAnalysisView);
+                  },
+                ),
+              if (widget.isShowSearchButton) ...<Widget>[
+                if (widget.state == ScoreState.finish &&
+                    widget.scoreData != null &&
+                    widget.scoreData!.scores.isNotEmpty &&
+                    !isLandscape)
+                  const SizedBox(height: 8),
+                GlassButton(
+                  key: const ValueKey<String>('search_button'),
+                  icon: const Icon(Icons.search),
+                  onTap: () {
+                    _pickSemester();
+                    AnalyticsUtil.instance.logEvent(
+                      'score_search_button_click',
+                    );
+                  },
                 ),
               ],
-            ),
+            ],
           ),
-          if (widget.state == ScoreState.finish &&
-              isLandscape) ...<Widget>[
-            const SizedBox(width: 16.0),
-            Expanded(
-              flex: 2,
-              child: GlassCard(
-                useOwnLayer: true,
-                padding: EdgeInsets.zero,
-                child: GlassScoreListTab(
-                  scoreData: widget.scoreData!,
-                  onRefresh: widget.onRefresh,
-                  middleTitle: widget.middleTitle,
-                  finalTitle: widget.finalTitle,
-                  onScoreSelect:
-                      widget.onScoreSelect,
-                  middleScoreBuilder:
-                      widget.middleScoreBuilder,
-                  finalScoreBuilder:
-                      widget.finalScoreBuilder,
-                ),
+        ),
+        body: Stack(
+          children: <Widget>[
+            Padding(
+              padding: EdgeInsets.only(
+                top: MediaQuery.of(context).padding.top + 60,
+              ),
+              child: Row(
+                children: <Widget>[
+                  Expanded(
+                    flex: 3,
+                    child: Column(
+                      children: <Widget>[
+                        if (widget.customHint != null &&
+                            widget.customHint!.isNotEmpty)
+                          HintBanner(text: widget.customHint!),
+                        Expanded(child: _buildContent(context, colorScheme)),
+                      ],
+                    ),
+                  ),
+                  if (widget.state == ScoreState.finish &&
+                      isLandscape) ...<Widget>[
+                    const SizedBox(width: 16.0),
+                    Expanded(
+                      flex: 2,
+                      child: GlassCard(
+                        useOwnLayer: true,
+                        padding: EdgeInsets.zero,
+                        child: GlassScoreListTab(
+                          scoreData: widget.scoreData!,
+                          onRefresh: widget.onRefresh,
+                          middleTitle: widget.middleTitle,
+                          finalTitle: widget.finalTitle,
+                          onScoreSelect: widget.onScoreSelect,
+                          middleScoreBuilder: widget.middleScoreBuilder,
+                          finalScoreBuilder: widget.finalScoreBuilder,
+                        ),
+                      ),
+                    ),
+                  ],
+                ],
               ),
             ),
+            GlassFloatingToolbar(
+              leading: <Widget>[
+                if (widget.semesterData != null && widget.itemPicker == null)
+                  GlassSemesterPicker(
+                    semesterData: widget.semesterData!,
+                    currentIndex: widget.semesterData!.currentIndex,
+                    onSelect: (Semester semester, int index) {
+                      widget.onSelect?.call(index);
+                    },
+                    featureTag: 'score',
+                  )
+                else if (widget.itemPicker != null)
+                  widget.itemPicker!,
+              ],
+            ),
           ],
-        ],
-      ),
+        ),
       ),
     );
   }
 
-  Widget _buildContent(
-    BuildContext context,
-    ColorScheme colorScheme,
-  ) {
+  Widget _buildContent(BuildContext context, ColorScheme colorScheme) {
     switch (widget.state) {
       case ScoreState.loading:
         return Center(
           child: Column(
             mainAxisSize: MainAxisSize.min,
             children: <Widget>[
-              SizedBox(
-                width: 48,
-                height: 48,
-                child: CircularProgressIndicator(
-                  strokeWidth: 3,
-                  color: colorScheme.primary,
-                ),
-              ),
+              const GlassProgressIndicator.circular(),
               const SizedBox(height: 16),
               Text(
                 context.ap.loading,
@@ -315,8 +272,7 @@ class GlassScoreScaffoldState
       case ScoreState.custom:
         return _buildErrorState(
           colorScheme,
-          widget.customStateHint ??
-              context.ap.somethingError,
+          widget.customStateHint ?? context.ap.somethingError,
           Icons.warning_amber_rounded,
         );
       case ScoreState.finish:
@@ -336,10 +292,8 @@ class GlassScoreScaffoldState
           middleTitle: widget.middleTitle,
           finalTitle: widget.finalTitle,
           onScoreSelect: widget.onScoreSelect,
-          middleScoreBuilder:
-              widget.middleScoreBuilder,
-          finalScoreBuilder:
-              widget.finalScoreBuilder,
+          middleScoreBuilder: widget.middleScoreBuilder,
+          finalScoreBuilder: widget.finalScoreBuilder,
           controller: _scrollController,
         );
     }
@@ -366,11 +320,7 @@ class GlassScoreScaffoldState
               useOwnLayer: true,
               width: 80,
               height: 80,
-              child: Icon(
-                icon,
-                size: 40,
-                color: colorScheme.primary,
-              ),
+              child: Icon(icon, size: 40, color: colorScheme.primary),
             ),
             const SizedBox(height: 16),
             Text(
@@ -381,15 +331,11 @@ class GlassScoreScaffoldState
               ),
               textAlign: TextAlign.center,
             ),
-            if (widget.state !=
-                ScoreState.empty) ...<Widget>[
+            if (widget.state != ScoreState.empty) ...<Widget>[
               const SizedBox(height: 8),
               Text(
                 context.ap.clickToRetry,
-                style: TextStyle(
-                  fontSize: 14,
-                  color: colorScheme.primary,
-                ),
+                style: TextStyle(fontSize: 14, color: colorScheme.primary),
               ),
             ],
           ],
@@ -400,11 +346,10 @@ class GlassScoreScaffoldState
 
   void _pickSemester() {
     if (widget.semesterData != null) {
-      SemesterPicker.show(
+      GlassSemesterPicker.show(
         context: context,
         semesterData: widget.semesterData!,
-        currentIndex:
-            widget.semesterData!.currentIndex,
+        currentIndex: widget.semesterData!.currentIndex,
         onSelect: (Semester semester, int index) {
           widget.onSelect?.call(index);
         },

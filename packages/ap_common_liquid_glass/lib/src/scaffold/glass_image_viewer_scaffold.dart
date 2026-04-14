@@ -1,4 +1,5 @@
 import 'package:ap_common_flutter_ui/ap_common_flutter_ui.dart';
+import 'package:ap_common_liquid_glass/src/widgets/glass_floating_toolbar.dart';
 import 'package:flutter/material.dart';
 import 'package:liquid_glass_widgets/liquid_glass_widgets.dart';
 import 'package:photo_view/photo_view.dart';
@@ -50,41 +51,57 @@ class GlassImageViewerScaffoldState
   Widget build(BuildContext context) {
     return AdaptiveLiquidGlassLayer(
       child: Scaffold(
-        extendBodyBehindAppBar: true,
-        appBar: GlassAppBar(
-          title: Text(widget.title ?? ''),
-        actions: widget.actions,
-      ),
-      body: Column(
-        children: <Widget>[
-          SizedBox(
-            height: MediaQuery.of(context).padding.top +
-                44,
-          ),
-          if (widget.imageViewers.length > 1)
-            TabBar(
-              controller: _tabController,
-              tabs: <Tab>[
-                for (final ImageViewer image
-                    in widget.imageViewers)
-                  Tab(text: image.title),
-              ],
-            ),
-          Expanded(
-            child: TabBarView(
-              controller: _tabController,
-              children: <Widget>[
-                for (final ImageViewer image
-                    in widget.imageViewers)
-                  PhotoView(
-                    imageProvider:
-                        AssetImage(image.assetName),
+        body: Stack(
+          children: <Widget>[
+            Padding(
+              padding: EdgeInsets.only(
+                top:
+                    MediaQuery.of(context).padding.top +
+                        60,
+              ),
+              child: Column(
+                children: <Widget>[
+                  if (widget.imageViewers.length > 1)
+                    TabBar(
+                      controller: _tabController,
+                      tabs: <Tab>[
+                        for (final ImageViewer image
+                            in widget.imageViewers)
+                          Tab(text: image.title),
+                      ],
+                    ),
+                  Expanded(
+                    child: TabBarView(
+                      controller: _tabController,
+                      children: <Widget>[
+                        for (final ImageViewer image
+                            in widget.imageViewers)
+                          PhotoView(
+                            imageProvider: AssetImage(
+                              image.assetName,
+                            ),
+                          ),
+                      ],
+                    ),
                   ),
-              ],
+                ],
+              ),
             ),
-          ),
-        ],
-      ),
+            GlassFloatingToolbar(
+              leading: <Widget>[
+                Text(
+                  widget.title ?? '',
+                  style: const TextStyle(
+                    fontSize: 16,
+                    fontWeight: FontWeight.w600,
+                  ),
+                ),
+              ],
+              trailing:
+                  widget.actions ?? const <Widget>[],
+            ),
+          ],
+        ),
       ),
     );
   }
