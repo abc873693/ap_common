@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'dart:io';
+import 'dart:ui';
 
 import 'package:ap_common_flutter_ui/ap_common_flutter_ui.dart';
 import 'package:flutter/material.dart';
@@ -493,50 +494,102 @@ class HomePageScaffoldState extends State<HomePageScaffold> {
       floatingActionButton: widget.floatingActionButton,
       extendBody: true,
       body: _buildTabBody(),
-      bottomNavigationBar: Container(
-        margin: const EdgeInsets.fromLTRB(
-          16,
-          0,
-          16,
+      bottomNavigationBar: Padding(
+        padding: const EdgeInsets.fromLTRB(
           12,
-        ),
-        decoration: BoxDecoration(
-          color: colors.surfaceContainerHighest,
-          borderRadius: BorderRadius.circular(28),
-          boxShadow: <BoxShadow>[
-            BoxShadow(
-              color: colors.shadow.withValues(
-                alpha: 0.08,
-              ),
-              blurRadius: 8,
-              offset: const Offset(0, 2),
-            ),
-          ],
+          0,
+          12,
+          8,
         ),
         child: ClipRRect(
-          borderRadius: BorderRadius.circular(28),
-          child: NavigationBar(
-            elevation: 0,
-            height: 56,
-            backgroundColor: Colors.transparent,
-            indicatorColor: Colors.transparent,
-            surfaceTintColor: Colors.transparent,
-            selectedIndex: _currentTabIndex,
-            onDestinationSelected: (int index) {
-              setState(
-                () => _currentTabIndex = index,
-              );
-            },
-            destinations: widget.tabs!
-                .map(
-                  (HomeTab tab) =>
-                      NavigationDestination(
-                    icon: tab.icon,
-                    selectedIcon: tab.activeIcon,
-                    label: tab.label,
+          borderRadius: BorderRadius.circular(24),
+          child: BackdropFilter(
+            filter: ImageFilter.blur(
+              sigmaX: 24,
+              sigmaY: 24,
+            ),
+            child: DecoratedBox(
+              decoration: BoxDecoration(
+                color: colors.surfaceContainerHighest
+                    .withValues(alpha: 0.85),
+                borderRadius:
+                    BorderRadius.circular(24),
+              ),
+              child: Theme(
+                data: Theme.of(context).copyWith(
+                  navigationBarTheme:
+                      NavigationBarThemeData(
+                    labelTextStyle:
+                        WidgetStateProperty
+                            .resolveWith(
+                      (Set<WidgetState> states) {
+                        final bool selected =
+                            states.contains(
+                          WidgetState.selected,
+                        );
+                        return TextStyle(
+                          fontSize: 12,
+                          fontWeight: selected
+                              ? FontWeight.w600
+                              : FontWeight.normal,
+                          color: selected
+                              ? colors.primary
+                              : colors
+                                  .onSurfaceVariant,
+                        );
+                      },
+                    ),
+                    iconTheme:
+                        WidgetStateProperty
+                            .resolveWith(
+                      (Set<WidgetState> states) {
+                        final bool selected =
+                            states.contains(
+                          WidgetState.selected,
+                        );
+                        return IconThemeData(
+                          size: 24,
+                          color: selected
+                              ? colors.primary
+                              : colors
+                                  .onSurfaceVariant,
+                        );
+                      },
+                    ),
                   ),
-                )
-                .toList(),
+                ),
+                child: NavigationBar(
+                  elevation: 0,
+                  height: 64,
+                  backgroundColor:
+                      Colors.transparent,
+                  indicatorColor:
+                      Colors.transparent,
+                  surfaceTintColor:
+                      Colors.transparent,
+                  selectedIndex:
+                      _currentTabIndex,
+                  onDestinationSelected:
+                      (int index) {
+                    setState(
+                      () =>
+                          _currentTabIndex = index,
+                    );
+                  },
+                  destinations: widget.tabs!
+                      .map(
+                        (HomeTab tab) =>
+                            NavigationDestination(
+                          icon: tab.icon,
+                          selectedIcon:
+                              tab.activeIcon,
+                          label: tab.label,
+                        ),
+                      )
+                      .toList(),
+                ),
+              ),
+            ),
           ),
         ),
       ),
