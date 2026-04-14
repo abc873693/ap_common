@@ -122,6 +122,8 @@ class ApLocalizationsZhHantTw extends ApLocalizations with BaseTranslations<AppL
 	@override String updateIosContent({required Object arg1}) => '${arg1} 在 Apple store 有新版本喲！';
 	@override String get updateTitle => '版本更新';
 	@override String get update => '更新';
+	@override String get updateDownloadedContent => '更新已下載完成，重新啟動即可套用。';
+	@override String get restart => '重新啟動';
 	@override String get functionNotOpen => '功能尚未開放\n私密粉絲團 小編會告訴你何時開放！';
 	@override String get betaFunction => '此功能為測試版本，如有問題請立即回報！';
 	@override String busNotPick({required Object arg1}) => '您尚未選擇日期！\n請先選擇日期 ${arg1}';
@@ -595,6 +597,8 @@ extension on ApLocalizationsZhHantTw {
 			'updateIosContent' => ({required Object arg1}) => '${arg1} 在 Apple store 有新版本喲！',
 			'updateTitle' => '版本更新',
 			'update' => '更新',
+			'updateDownloadedContent' => '更新已下載完成，重新啟動即可套用。',
+			'restart' => '重新啟動',
 			'functionNotOpen' => '功能尚未開放\n私密粉絲團 小編會告訴你何時開放！',
 			'betaFunction' => '此功能為測試版本，如有問題請立即回報！',
 			'busNotPick' => ({required Object arg1}) => '您尚未選擇日期！\n請先選擇日期 ${arg1}',

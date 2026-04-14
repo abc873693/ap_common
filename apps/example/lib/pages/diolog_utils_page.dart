@@ -54,7 +54,35 @@ class _DialogUtilsTestPageState extends State<DialogUtilsTestPage> {
               );
             },
             title: const Text('版本內容對話框'),
-            subtitle: const Text('DialogUtils.showNewVersionContent'),
+            subtitle: const Text('DialogUtils.showUpdateContent'),
+          ),
+          ListTile(
+            onTap: () async {
+              final InAppUpdateInfo? info =
+                  await AppStoreUtil.instance.checkForInAppUpdate();
+              if (!context.mounted) return;
+              if (info == null) {
+                ScaffoldMessenger.of(context).showSnackBar(
+                  const SnackBar(
+                    content: Text('In-app update not supported'),
+                  ),
+                );
+                return;
+              }
+              ScaffoldMessenger.of(context).showSnackBar(
+                SnackBar(
+                  content: Text(
+                    'availability: ${info.updateAvailability}, '
+                    'immediate: ${info.immediateUpdateAllowed}, '
+                    'flexible: ${info.flexibleUpdateAllowed}',
+                  ),
+                ),
+              );
+            },
+            title: const Text('檢查 In-App Update'),
+            subtitle: const Text(
+              'AppStoreUtil.checkForInAppUpdate',
+            ),
           ),
           ListTile(
             onTap: () {

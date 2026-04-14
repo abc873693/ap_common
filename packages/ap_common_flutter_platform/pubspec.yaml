@@ -29,6 +29,7 @@ dependencies:
   package_info_plus: ^8.3.0
   add_2_calendar: ^3.0.1
   in_app_review: ^2.0.3
+  in_app_update: ^4.2.5
   path: ^1.7.0
   path_provider: ^2.1.2
   image_picker: ^1.0.7
