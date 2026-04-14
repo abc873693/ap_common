@@ -33,7 +33,7 @@ class TabHomePage extends StatelessWidget {
           builder: (_) => ScorePage(),
         ),
         HomeTab(
-          icon: Icon(Icons.more_horiz),
+          icon: const Icon(Icons.more_horiz),
           label: context.ap.otherInfo,
           builder: (_) => const _MoreTab(),
         ),
@@ -245,7 +245,7 @@ class _MoreTab extends StatelessWidget {
             onTap: () {
               ApUtils.pushCupertinoStyle(
                 context,
-                HomePage.aboutPage(context),
+                HomePageState.aboutPage(context),
               );
             },
           ),
