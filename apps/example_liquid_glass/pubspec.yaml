@@ -13,6 +13,8 @@ resolution: workspace
 dependencies:
   ap_common:
     path: ../../packages/ap_common
+  ap_common_announcement_ui:
+    path: ../../packages/ap_common_announcement_ui
   ap_common_liquid_glass:
     path: ../../packages/ap_common_liquid_glass
   encrypt: any
