@@ -12,11 +12,11 @@ class GlassScorePRCard extends StatelessWidget {
   final ScoreAnalysis analysis;
 
   Color _getPRColor(ColorScheme colorScheme, int pr) {
-    if (pr >= 90) return const Color(0xFF4CAF50);
-    if (pr >= 75) return const Color(0xFF8BC34A);
-    if (pr >= 50) return colorScheme.primary;
-    if (pr >= 25) return const Color(0xFFFF9800);
-    return colorScheme.error;
+    if (pr >= 90) return const Color(0xFF34C759);
+    if (pr >= 75) return const Color(0xFF00C7BE);
+    if (pr >= 50) return const Color(0xFF007AFF);
+    if (pr >= 25) return const Color(0xFFFF9500);
+    return const Color(0xFFFF3B30);
   }
 
   @override
@@ -186,11 +186,7 @@ class GlassScoreStatisticsCard extends StatelessWidget {
               ],
             ),
           ),
-          Divider(
-            height: 1,
-            color: colorScheme.outlineVariant
-                .withAlpha(77),
-          ),
+          const GlassDivider(),
           Padding(
             padding: const EdgeInsets.all(16),
             child: Column(
@@ -204,7 +200,7 @@ class GlassScoreStatisticsCard extends StatelessWidget {
                             .toStringAsFixed(0),
                         icon:
                             Icons.arrow_upward_rounded,
-                        color: const Color(0xFF4CAF50),
+                        color: const Color(0xFF34C759),
                       ),
                     ),
                     const SizedBox(width: 12),
@@ -363,11 +359,7 @@ class GlassScoreDistributionCard
               ],
             ),
           ),
-          Divider(
-            height: 1,
-            color: colorScheme.outlineVariant
-                .withAlpha(77),
-          ),
+          const GlassDivider(),
           Padding(
             padding: const EdgeInsets.all(16),
             child: Column(
@@ -379,7 +371,7 @@ class GlassScoreDistributionCard
                           .distribution['90-100'] ??
                       0,
                   total: analysis.totalSubjects,
-                  color: const Color(0xFF4CAF50),
+                  color: const Color(0xFF34C759),
                 ),
                 const SizedBox(height: 10),
                 _GlassDistributionBar(
@@ -389,7 +381,7 @@ class GlassScoreDistributionCard
                           .distribution['80-89'] ??
                       0,
                   total: analysis.totalSubjects,
-                  color: const Color(0xFF8BC34A),
+                  color: const Color(0xFF00C7BE),
                 ),
                 const SizedBox(height: 10),
                 _GlassDistributionBar(
@@ -399,7 +391,7 @@ class GlassScoreDistributionCard
                           .distribution['70-79'] ??
                       0,
                   total: analysis.totalSubjects,
-                  color: colorScheme.primary,
+                  color: const Color(0xFF007AFF),
                 ),
                 const SizedBox(height: 10),
                 _GlassDistributionBar(
@@ -409,7 +401,7 @@ class GlassScoreDistributionCard
                           .distribution['60-69'] ??
                       0,
                   total: analysis.totalSubjects,
-                  color: const Color(0xFFFF9800),
+                  color: const Color(0xFFFF9500),
                 ),
                 const SizedBox(height: 10),
                 _GlassDistributionBar(
@@ -419,7 +411,7 @@ class GlassScoreDistributionCard
                           .distribution['0-59'] ??
                       0,
                   total: analysis.totalSubjects,
-                  color: colorScheme.error,
+                  color: const Color(0xFFFF3B30),
                 ),
               ],
             ),
@@ -543,11 +535,7 @@ class GlassScoreCreditSummaryCard
               ],
             ),
           ),
-          Divider(
-            height: 1,
-            color: colorScheme.outlineVariant
-                .withAlpha(77),
-          ),
+          const GlassDivider(),
           Padding(
             padding: const EdgeInsets.all(16),
             child: Row(
@@ -565,7 +553,7 @@ class GlassScoreCreditSummaryCard
                     label: '\u53ca\u683c\u5b78\u5206',
                     value: analysis.passedCredits
                         .toStringAsFixed(1),
-                    color: const Color(0xFF4CAF50),
+                    color: const Color(0xFF34C759),
                   ),
                 ),
                 Expanded(

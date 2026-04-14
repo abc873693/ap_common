@@ -35,7 +35,12 @@ class GlassScoreListTab extends StatelessWidget {
         controller: controller,
         physics:
             const AlwaysScrollableScrollPhysics(),
-        padding: const EdgeInsets.all(16),
+        padding: const EdgeInsets.only(
+          left: 16,
+          right: 16,
+          top: 16,
+          bottom: 80,
+        ),
         itemCount: scoreData.scores.length,
         itemBuilder:
             (BuildContext context, int index) {
@@ -167,11 +172,11 @@ class GlassScoreListTab extends StatelessWidget {
   }
 
   Color _getScoreColor(double score) {
-    if (score >= 90) return const Color(0xFF4CAF50);
-    if (score >= 80) return const Color(0xFF8BC34A);
-    if (score >= 70) return const Color(0xFF2196F3);
-    if (score >= 60) return const Color(0xFFFF9800);
-    return const Color(0xFFF44336);
+    if (score >= 90) return const Color(0xFF34C759);
+    if (score >= 80) return const Color(0xFF00C7BE);
+    if (score >= 70) return const Color(0xFF007AFF);
+    if (score >= 60) return const Color(0xFFFF9500);
+    return const Color(0xFFFF3B30);
   }
 
   Widget _buildTag(

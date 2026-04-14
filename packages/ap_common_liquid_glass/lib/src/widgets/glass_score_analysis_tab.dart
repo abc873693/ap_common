@@ -32,7 +32,12 @@ class GlassScoreAnalysisTab extends StatelessWidget {
         controller: controller,
         physics:
             const AlwaysScrollableScrollPhysics(),
-        padding: const EdgeInsets.all(16),
+        padding: const EdgeInsets.only(
+          left: 16,
+          right: 16,
+          top: 16,
+          bottom: 80,
+        ),
         child: Column(
           children: <Widget>[
             _buildMainSummaryCard(
@@ -107,18 +112,13 @@ class GlassScoreAnalysisTab extends StatelessWidget {
               ],
             ),
           ),
-          Container(
+          GlassContainer(
             padding: const EdgeInsets.symmetric(
               horizontal: 20,
               vertical: 16,
             ),
-            decoration: BoxDecoration(
-              color:
-                  colorScheme.surface.withAlpha(179),
-              borderRadius:
-                  const BorderRadius.vertical(
-                bottom: Radius.circular(20),
-              ),
+            shape: const LiquidRoundedSuperellipse(
+              borderRadius: 20,
             ),
             child: Row(
               children: <Widget>[
@@ -170,7 +170,7 @@ class GlassScoreAnalysisTab extends StatelessWidget {
             fontSize: 28,
             fontWeight: FontWeight.bold,
             color:
-                colorScheme.onPrimaryContainer,
+                colorScheme.onSurface,
           ),
         ),
         const SizedBox(height: 4),

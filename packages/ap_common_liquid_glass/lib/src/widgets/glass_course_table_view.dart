@@ -1,11 +1,31 @@
 import 'package:ap_common_flutter_ui/ap_common_flutter_ui.dart';
 import 'package:flutter/material.dart';
-import 'package:liquid_glass_widgets/liquid_glass_widgets.dart';
+
+/// iOS-style pastel colors for course cells.
+///
+/// These are softer, semi-transparent tones inspired by
+/// Apple Calendar and iOS 26 Liquid Glass aesthetics,
+/// designed to let the glass backdrop show through.
+const List<Color> glassCourseColors = <Color>[
+  Color(0xCC007AFF), // iOS Blue
+  Color(0xCC34C759), // iOS Green
+  Color(0xCCFF9500), // iOS Orange
+  Color(0xCCAF52DE), // iOS Purple
+  Color(0xCCFF3B30), // iOS Red
+  Color(0xCC5AC8FA), // iOS Light Blue
+  Color(0xCCFF2D55), // iOS Pink
+  Color(0xCC30D158), // iOS Mint Green
+  Color(0xCCFFCC00), // iOS Yellow
+  Color(0xCC5856D6), // iOS Indigo
+  Color(0xCC00C7BE), // iOS Teal
+  Color(0xFFA2845E), // iOS Brown
+];
 
 /// A glass-enhanced version of [CourseTableView].
 ///
-/// Replaces Material surfaces with translucent glass-style
-/// backgrounds while keeping the dense grid layout readable.
+/// Uses iOS-style pastel colors with translucent glass
+/// backgrounds, rounded corners, and subtle frosted
+/// effects for a Liquid Glass aesthetic.
 class GlassCourseTableView extends StatelessWidget {
   /// Creates a [GlassCourseTableView].
   const GlassCourseTableView({
@@ -70,7 +90,6 @@ class GlassCourseTableView extends StatelessWidget {
       controller: controller,
       physics: const AlwaysScrollableScrollPhysics(),
       padding: const EdgeInsets.only(
-        top: 8.0,
         bottom: 80.0,
       ),
       child: RepaintBoundary(
@@ -100,22 +119,16 @@ class GlassCourseTableView extends StatelessWidget {
     ColorScheme colorScheme,
     int weekdayCount,
   ) {
-    return GlassContainer(
-      useOwnLayer: true,
-      padding: EdgeInsets.zero,
-      shape: const LiquidRoundedSuperellipse(
-        borderRadius: 0,
-      ),
-      child: Container(
-        decoration: BoxDecoration(
-          border: Border(
-            bottom: BorderSide(
-              color: colorScheme.outlineVariant
-                  .withAlpha(128),
-            ),
+    return Container(
+      decoration: BoxDecoration(
+        border: Border(
+          bottom: BorderSide(
+            color: colorScheme.outlineVariant
+                .withAlpha(128),
           ),
         ),
-        child: Row(
+      ),
+      child: Row(
           children: <Widget>[
             _buildTimeSlotHeader(colorScheme),
             for (int i = 0; i < weekdayCount; i++)
@@ -130,30 +143,20 @@ class GlassCourseTableView extends StatelessWidget {
                     style: TextStyle(
                       fontSize: 14,
                       fontWeight: FontWeight.w600,
-                      color: colorScheme.primary,
+                      color: colorScheme.onSurface,
                     ),
                   ),
                 ),
               ),
           ],
         ),
-      ),
     );
   }
 
   Widget _buildTimeSlotHeader(ColorScheme colorScheme) {
-    return Container(
+    return SizedBox(
       width: 48,
-      padding: const EdgeInsets.symmetric(vertical: 12),
-      child: Text(
-        '',
-        textAlign: TextAlign.center,
-        style: TextStyle(
-          fontSize: 12,
-          fontWeight: FontWeight.w600,
-          color: colorScheme.primary,
-        ),
-      ),
+      height: 40,
     );
   }
 
@@ -279,7 +282,7 @@ class GlassCourseTableView extends StatelessWidget {
       ),
       decoration: BoxDecoration(
         color: colorScheme.surfaceContainerHighest
-            .withAlpha(51),
+            .withAlpha(26),
         border: Border(
           right: BorderSide(
             color: colorScheme.outlineVariant
@@ -398,6 +401,7 @@ class GlassCourseTableView extends StatelessWidget {
   ) {
     final Color courseColor =
         courseColorResolver(course.code);
+    const Color onCourseColor = Colors.white;
     final String locationInfo =
         (showClassroomLocation ?? true) &&
                 course.location != null
@@ -407,13 +411,6 @@ class GlassCourseTableView extends StatelessWidget {
         (showInstructors ?? true)
             ? course.getInstructors()
             : '';
-
-    final Color onCourseColor =
-        ThemeData.estimateBrightnessForColor(
-                    courseColor) ==
-                Brightness.dark
-            ? Colors.white
-            : Colors.black;
 
     final String displayInfo = <String>[
       if (instructorInfo.isNotEmpty) instructorInfo,
@@ -439,25 +436,18 @@ class GlassCourseTableView extends StatelessWidget {
       child: Container(
         width: double.infinity,
         height: double.infinity,
-        margin: const EdgeInsets.all(2),
+        margin: const EdgeInsets.all(1.5),
         padding: const EdgeInsets.symmetric(
           horizontal: 4,
-          vertical: 6,
+          vertical: 4,
         ),
         decoration: BoxDecoration(
-          color: courseColor.withAlpha(200),
-          borderRadius: BorderRadius.circular(8),
+          color: courseColor.withAlpha(179),
+          borderRadius: BorderRadius.circular(10),
           border: Border.all(
-            color: Colors.white.withAlpha(51),
+            color: onCourseColor.withAlpha(51),
             width: 0.5,
           ),
-          boxShadow: <BoxShadow>[
-            BoxShadow(
-              color: courseColor.withAlpha(51),
-              blurRadius: 6,
-              offset: const Offset(0, 2),
-            ),
-          ],
         ),
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
@@ -468,23 +458,22 @@ class GlassCourseTableView extends StatelessWidget {
               maxLines: span > 1 ? 4 : 2,
               overflow: TextOverflow.ellipsis,
               style: TextStyle(
-                fontSize: span > 1 ? 14 : 9.5,
+                fontSize: span > 1 ? 13 : 9.5,
                 fontWeight: FontWeight.w600,
                 color: onCourseColor,
                 height: 1.1,
               ),
             ),
             if (displayInfo.isNotEmpty) ...<Widget>[
-              SizedBox(height: span > 1 ? 4 : 2),
+              SizedBox(height: span > 1 ? 3 : 1),
               Text(
                 displayInfo,
                 textAlign: TextAlign.center,
                 maxLines: span > 1 ? 4 : 2,
                 overflow: TextOverflow.ellipsis,
                 style: TextStyle(
-                  fontSize: span > 1 ? 12 : 8.5,
-                  color:
-                      onCourseColor.withAlpha(217),
+                  fontSize: span > 1 ? 11 : 8,
+                  color: onCourseColor.withAlpha(204),
                   height: 1.0,
                 ),
               ),

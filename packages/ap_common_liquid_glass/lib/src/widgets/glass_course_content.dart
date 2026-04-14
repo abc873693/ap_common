@@ -281,8 +281,7 @@ class _GlassCourseContentState
                 (Platform.isAndroid ||
                     Platform.isIOS)) &&
             widget.enableAddToCalendar)
-          IconButton(
-            tooltip: context.ap.addToCalendar,
+          GlassIconButton(
             icon: Image.asset(
               ApImageIcons.calendarImport,
               color: onCourseColor,
@@ -317,7 +316,7 @@ class _GlassCourseContentState
               );
             },
           ),
-        IconButton(
+        GlassIconButton(
           icon: Icon(
             visibility
                 ? Icons.visibility_outlined
@@ -334,7 +333,7 @@ class _GlassCourseContentState
         if (widget.enableNotifyControl &&
             _notifyData != null &&
             NotificationUtil.instance.isSupport)
-          IconButton(
+          GlassIconButton(
             icon: Icon(
               state == CourseNotifyState.schedule
                   ? Icons.alarm_on

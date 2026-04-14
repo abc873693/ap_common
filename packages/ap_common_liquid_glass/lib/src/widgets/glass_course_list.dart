@@ -1,5 +1,6 @@
 import 'package:ap_common_flutter_ui/ap_common_flutter_ui.dart';
 import 'package:ap_common_liquid_glass/src/widgets/glass_course_content.dart';
+import 'package:ap_common_liquid_glass/src/widgets/glass_course_table_view.dart';
 import 'package:flutter/material.dart';
 import 'package:liquid_glass_widgets/liquid_glass_widgets.dart';
 
@@ -56,7 +57,7 @@ class GlassCourseList extends StatelessWidget {
             !invisibleCourseCodes
                 .contains(course.code);
         final Color courseColor =
-            courseColors[index % courseColors.length];
+            glassCourseColors[index % glassCourseColors.length];
         final String instructors =
             course.getInstructors();
 
@@ -67,10 +68,8 @@ class GlassCourseList extends StatelessWidget {
             padding: EdgeInsets.zero,
             child: InkWell(
               onTap: () {
-                showModalBottomSheet<void>(
+                GlassSheet.show<void>(
                   context: context,
-                  backgroundColor:
-                      const Color(0x00000000),
                   isScrollControlled: true,
                   builder:
                       (BuildContext context) =>
@@ -160,12 +159,8 @@ class GlassCourseList extends StatelessWidget {
                       crossAxisAlignment:
                           CrossAxisAlignment.end,
                       children: <Widget>[
-                        IconButton(
-                          visualDensity:
-                              VisualDensity.compact,
-                          padding: EdgeInsets.zero,
-                          constraints:
-                              const BoxConstraints(),
+                        GlassIconButton(
+                          size: 32,
                           icon: Icon(
                             visibility
                                 ? Icons
