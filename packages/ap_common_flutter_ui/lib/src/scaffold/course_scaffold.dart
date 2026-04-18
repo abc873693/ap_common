@@ -206,21 +206,15 @@ class CourseScaffoldState extends State<CourseScaffold> {
 
   late Map<int, Map<int, Course>> _courseLookup;
 
-  final Map<String, Color> _courseColorMap = <String, Color>{};
+  final Map<String, int> _courseColorIndexMap = <String, int>{};
   int _colorIndex = 0;
 
-  Color _getCourseColor(Course course) {
-    if (!_courseColorMap.containsKey(course.code)) {
-      if (course.colorIndex != null) {
-        _courseColorMap[course.code] =
-            courseColors[course.colorIndex! % courseColors.length];
-      } else {
-        _courseColorMap[course.code] =
-            courseColors[_colorIndex % courseColors.length];
-        _colorIndex++;
-      }
-    }
-    return _courseColorMap[course.code]!;
+  Color _getCourseColor(Course course, CoursePaletteTheme palette) {
+    final int index = _courseColorIndexMap.putIfAbsent(course.code, () {
+      if (course.colorIndex != null) return course.colorIndex!;
+      return _colorIndex++;
+    });
+    return palette.colorAt(index);
   }
 
   late ScrollController _scrollController;
@@ -955,7 +949,8 @@ class CourseScaffoldState extends State<CourseScaffold> {
     Course course,
     int span,
   ) {
-    final Color courseColor = _getCourseColor(course);
+    final CoursePaletteTheme palette = CoursePaletteTheme.of(context);
+    final Color courseColor = _getCourseColor(course, palette);
     final String locationInfo =
         (showClassroomLocation ?? true) && course.location != null
             ? course.location.toString()
@@ -963,10 +958,7 @@ class CourseScaffoldState extends State<CourseScaffold> {
     final String instructorInfo =
         (showInstructors ?? true) ? course.getInstructors() : '';
 
-    final Color onCourseColor =
-        ThemeData.estimateBrightnessForColor(courseColor) == Brightness.dark
-            ? Colors.white
-            : Colors.black;
+    final Color onCourseColor = palette.foregroundColor;
 
     final String displayInfo = <String>[
       if (instructorInfo.isNotEmpty) instructorInfo,
@@ -1243,12 +1235,10 @@ class _CourseContentState extends State<CourseContent> {
     final bool visibility =
         !widget.invisibleCourseCodes.contains(widget.course.code);
     final ColorScheme colorScheme = Theme.of(context).colorScheme;
+    final CoursePaletteTheme palette = CoursePaletteTheme.of(context);
     final Color courseColor = widget.courseColor ??
-        courseColors[widget.course.code.hashCode % courseColors.length];
-    final Color onCourseColor =
-        ThemeData.estimateBrightnessForColor(courseColor) == Brightness.dark
-            ? Colors.white
-            : Colors.black;
+        palette.colorAt(widget.course.code.hashCode);
+    final Color onCourseColor = palette.foregroundColor;
     return Container(
       decoration: BoxDecoration(
         color: colorScheme.surface,
@@ -1587,6 +1577,7 @@ class CourseList extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final ColorScheme colorScheme = Theme.of(context).colorScheme;
+    final CoursePaletteTheme palette = CoursePaletteTheme.of(context);
 
     return ListView.builder(
       controller: controller,
@@ -1602,7 +1593,7 @@ class CourseList extends StatelessWidget {
         final Course course = courses[index];
         final bool visibility = !invisibleCourseCodes.contains(course.code);
         final Color courseColor = getCourseColor?.call(course) ??
-            courseColors[course.code.hashCode % courseColors.length];
+            palette.colorAt(course.code.hashCode);
         final String instructors = course.getInstructors();
 
         return Container(

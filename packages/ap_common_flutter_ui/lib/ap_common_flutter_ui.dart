@@ -14,6 +14,7 @@ export 'src/scaffold/image_viewer_scaffold.dart';
 export 'src/scaffold/login_scaffold.dart';
 export 'src/scaffold/score_scaffold.dart';
 export 'src/scaffold/user_info_scaffold.dart';
+export 'src/theme/course_palette_theme.dart';
 export 'src/utils/ap_ui_util.dart';
 export 'src/utils/ap_utils.dart';
 export 'src/utils/app_tracking_utils.dart';

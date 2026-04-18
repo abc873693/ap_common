@@ -72,7 +72,7 @@ class _CourseEditSheetState extends State<CourseEditSheet> {
   /// Selected time slots: set of (weekday, timeIndex) pairs.
   final Set<(int, int)> _selectedSlots = <(int, int)>{};
 
-  /// Selected color index into [courseColors].
+  /// Selected color index into the active [CoursePaletteTheme].
   int _colorIndex = 0;
 
   /// Lookup: (weekday, timeIndex) → course title, for conflict
@@ -98,7 +98,7 @@ class _CourseEditSheetState extends State<CourseEditSheet> {
         _selectedSlots.add((t.weekday, t.index));
       }
       _colorIndex = c.colorIndex ??
-          c.code.hashCode.abs() % courseColors.length;
+          c.code.hashCode.abs() % CoursePaletteTheme.paletteLength;
     } else if (widget.initialWeekday != null &&
         widget.initialTimeIndex != null) {
       _selectedSlots.add(
@@ -317,11 +317,12 @@ class _CourseEditSheetState extends State<CourseEditSheet> {
   }
 
   Widget _buildColorPicker(ColorScheme colorScheme) {
+    final CoursePaletteTheme palette = CoursePaletteTheme.of(context);
     return Wrap(
       spacing: 10,
       runSpacing: 10,
       children: List<Widget>.generate(
-        courseColors.length,
+        palette.colors.length,
         (int i) {
           final bool selected = i == _colorIndex;
           return GestureDetector(
@@ -330,7 +331,7 @@ class _CourseEditSheetState extends State<CourseEditSheet> {
               width: 36,
               height: 36,
               decoration: BoxDecoration(
-                color: courseColors[i],
+                color: palette.colors[i],
                 shape: BoxShape.circle,
                 border: selected
                     ? Border.all(
@@ -340,9 +341,9 @@ class _CourseEditSheetState extends State<CourseEditSheet> {
                     : null,
               ),
               child: selected
-                  ? const Icon(
+                  ? Icon(
                       Icons.check,
-                      color: Colors.white,
+                      color: palette.foregroundColor,
                       size: 20,
                     )
                   : null,
@@ -445,9 +446,10 @@ class _CourseEditSheetState extends State<CourseEditSheet> {
     final String? occupiedBy = _occupiedSlots[key];
     final bool isOccupied = occupiedBy != null;
 
+    final CoursePaletteTheme palette = CoursePaletteTheme.of(context);
     Color bg;
     if (isSelected) {
-      bg = courseColors[_colorIndex].withAlpha(179);
+      bg = palette.colorAt(_colorIndex).withAlpha(179);
     } else if (isOccupied) {
       bg = colorScheme.surfaceContainerHighest;
     } else {
@@ -477,10 +479,10 @@ class _CourseEditSheetState extends State<CourseEditSheet> {
         height: 36,
         color: bg,
         child: isSelected
-            ? const Icon(
+            ? Icon(
                 Icons.check_rounded,
                 size: 16,
-                color: Colors.white,
+                color: palette.foregroundColor,
               )
             : isOccupied
                 ? Center(

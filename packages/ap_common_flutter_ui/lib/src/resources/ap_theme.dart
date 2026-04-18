@@ -1,6 +1,7 @@
 import 'package:ap_common_flutter_core/ap_common_flutter_core.dart';
 import 'package:ap_common_flutter_ui/src/resources/ap_colors.dart';
 import 'package:ap_common_flutter_ui/src/resources/resources.dart';
+import 'package:ap_common_flutter_ui/src/theme/course_palette_theme.dart';
 import 'package:flutter/material.dart';
 
 export 'package:cupertino_back_gesture/cupertino_back_gesture.dart';
@@ -364,22 +365,31 @@ class ApTheme extends InheritedWidget {
     }
   }
 
-  static ThemeData light(Color seedColor) {
+  static ThemeData light(
+    Color seedColor, {
+    CoursePaletteTheme coursePalette = CoursePaletteTheme.material,
+  }) {
     final ColorScheme colorScheme = ColorScheme.fromSeed(
       seedColor: seedColor,
     );
-    return _buildTheme(colorScheme);
+    return _buildTheme(colorScheme, coursePalette);
   }
 
-  static ThemeData dark(Color seedColor) {
+  static ThemeData dark(
+    Color seedColor, {
+    CoursePaletteTheme coursePalette = CoursePaletteTheme.material,
+  }) {
     final ColorScheme colorScheme = ColorScheme.fromSeed(
       seedColor: seedColor,
       brightness: Brightness.dark,
     );
-    return _buildTheme(colorScheme);
+    return _buildTheme(colorScheme, coursePalette);
   }
 
-  static ThemeData _buildTheme(ColorScheme colorScheme) {
+  static ThemeData _buildTheme(
+    ColorScheme colorScheme,
+    CoursePaletteTheme coursePalette,
+  ) {
     final bool isLight = colorScheme.brightness == Brightness.light;
 
     return ThemeData(
@@ -388,6 +398,7 @@ class ApTheme extends InheritedWidget {
       scaffoldBackgroundColor: colorScheme.surface,
       pageTransitionsTheme: _pageTransitionsTheme,
       visualDensity: VisualDensity.adaptivePlatformDensity,
+      extensions: <ThemeExtension<dynamic>>[coursePalette],
       appBarTheme: AppBarTheme(
         centerTitle: true,
         elevation: 0,
