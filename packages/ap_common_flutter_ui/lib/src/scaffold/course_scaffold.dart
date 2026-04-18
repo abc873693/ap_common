@@ -1,3 +1,5 @@
+import 'dart:async';
+import 'dart:developer';
 import 'dart:io';
 import 'dart:ui' as ui;
 
@@ -5,6 +7,7 @@ import 'package:ap_common_flutter_ui/ap_common_flutter_ui.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
+import 'package:flutter/services.dart';
 
 typedef CourseNotifyCallback = Function(
   CourseNotify? courseNotify,
@@ -197,24 +200,10 @@ class CourseScaffold extends StatefulWidget {
   /// Apps can use this to update their app-level theme extensions so
   /// the new palette applies to other surfaces (home dashboard, etc.).
   ///
-  /// If the app uses `ap_common_plugin` for native AppWidgets, also
-  /// forward the palette to native so the home-screen widget stays
-  /// in sync:
-  ///
-  /// ```dart
-  /// onCoursePaletteChanged: (CoursePaletteTheme palette) {
-  ///   ApCommonPlugin.setCoursePalette(
-  ///     id: palette.id,
-  ///     colors: palette.colors
-  ///         .map((Color c) => c.toARGB32()).toList(),
-  ///     foregroundColor: palette.foregroundColor.toARGB32(),
-  ///     darkColors: palette.dark?.colors
-  ///         .map((Color c) => c.toARGB32()).toList(),
-  ///     darkForegroundColor:
-  ///         palette.dark?.foregroundColor.toARGB32(),
-  ///   );
-  /// }
-  /// ```
+  /// Native AppWidget sync via `ap_common_plugin` is handled
+  /// automatically — the scaffold invokes the plugin's
+  /// `setCoursePalette` channel after persisting the choice, and
+  /// silently no-ops when the plugin isn't registered.
   final ValueChanged<CoursePaletteTheme>? onCoursePaletteChanged;
 
   @override
@@ -284,7 +273,10 @@ class CourseScaffoldState extends State<CourseScaffold> {
     final String savedPaletteId =
         PreferenceUtil.instance.getString(CoursePaletteTheme.preferenceKey, '');
     if (savedPaletteId.isNotEmpty) {
-      _overridePalette = CoursePaletteTheme.fromId(savedPaletteId);
+      final CoursePaletteTheme persisted =
+          CoursePaletteTheme.fromId(savedPaletteId);
+      _overridePalette = persisted;
+      unawaited(_syncCoursePaletteToNative(persisted));
     }
     fetchInvisibleCourseCodes();
     _scrollController = ScrollController();
@@ -339,6 +331,46 @@ class CourseScaffoldState extends State<CourseScaffold> {
     );
   }
 
+  /// Push the active palette to `ap_common_plugin`'s native handler
+  /// so Android / iOS home-screen widgets render with the same colors
+  /// the user just picked. Opens the channel directly to avoid making
+  /// `ap_common_flutter_ui` depend on the plugin package; when the
+  /// plugin isn't registered (web, or app not using the plugin) the
+  /// resulting [MissingPluginException] is swallowed.
+  static const MethodChannel _nativePaletteChannel =
+      MethodChannel('ap_common_plugin');
+
+  Future<void> _syncCoursePaletteToNative(
+    CoursePaletteTheme palette,
+  ) async {
+    final CoursePaletteTheme? darkVariant = palette.dark;
+    final Map<String, Object?> args = <String, Object?>{
+      'id': palette.id,
+      'colors': <int>[
+        for (final Color c in palette.colors) c.toARGB32(),
+      ],
+      'foregroundColor': palette.foregroundColor.toARGB32(),
+      if (darkVariant != null) ...<String, Object?>{
+        'darkColors': <int>[
+          for (final Color c in darkVariant.colors) c.toARGB32(),
+        ],
+        'darkForegroundColor': darkVariant.foregroundColor.toARGB32(),
+      },
+    };
+    try {
+      await _nativePaletteChannel.invokeMethod<void>(
+        'setCoursePalette',
+        args,
+      );
+    } on MissingPluginException catch (e) {
+      log(
+        'CourseScaffold: native palette sync unavailable '
+        '(${e.message}); home widget will keep its previous colors.',
+        name: 'CourseScaffold',
+      );
+    }
+  }
+
   Future<void> _showPalettePicker() async {
     final CoursePaletteTheme current = _activePalette(context);
     final CoursePaletteTheme? picked = await CoursePalettePickerSheet.show(
@@ -349,6 +381,7 @@ class CourseScaffoldState extends State<CourseScaffold> {
     if (picked == null || picked.id == current.id) return;
     await PreferenceUtil.instance
         .setString(CoursePaletteTheme.preferenceKey, picked.id);
+    unawaited(_syncCoursePaletteToNative(picked));
     if (!mounted) return;
     setState(() => _overridePalette = picked);
     widget.onCoursePaletteChanged?.call(picked);
