@@ -356,7 +356,8 @@ class _CourseEditSheetState extends State<CourseEditSheet> {
               width: 36,
               height: 36,
               decoration: BoxDecoration(
-                color: palette.colors[i],
+                color: palette.colors[i]
+                    .withAlpha(CoursePaletteTheme.cardAlpha),
                 shape: BoxShape.circle,
                 border: selected
                     ? Border.all(

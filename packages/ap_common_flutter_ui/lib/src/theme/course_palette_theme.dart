@@ -42,6 +42,11 @@ class CoursePaletteTheme extends ThemeExtension<CoursePaletteTheme> {
   /// [colorAt] wraps with modulo so a shorter list still renders.
   static const int paletteLength = 12;
 
+  /// Alpha applied to the rendered course card background. The color
+  /// picker in `CourseEditSheet` applies the same alpha to its preview
+  /// swatches so "what you pick" matches "what you see" on the table.
+  static const int cardAlpha = 230;
+
   /// Preference key used by [CourseScaffold]'s built-in palette picker
   /// to persist the user's choice across app launches.
   static const String preferenceKey = 'ap_common.course_palette_id';

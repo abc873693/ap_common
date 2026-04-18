@@ -1109,7 +1109,7 @@ class CourseScaffoldState extends State<CourseScaffold> {
         margin: const EdgeInsets.all(2),
         padding: const EdgeInsets.symmetric(horizontal: 4, vertical: 6),
         decoration: BoxDecoration(
-          color: courseColor,
+          color: courseColor.withAlpha(CoursePaletteTheme.cardAlpha),
           borderRadius: BorderRadius.circular(8),
           boxShadow: <BoxShadow>[
             BoxShadow(
