@@ -28,13 +28,12 @@ class CoursePaletteTheme extends ThemeExtension<CoursePaletteTheme> {
     required this.id,
     required this.colors,
     required this.foregroundColor,
-  }) : assert(
-          colors.length == paletteLength,
-          'CoursePaletteTheme.colors must have exactly $paletteLength '
-          'entries so existing Course.colorIndex values stay stable.',
-        );
+  });
 
-  /// The expected length of [colors]. All built-in palettes honor this.
+  /// The expected length of [colors]. All built-in palettes honor this
+  /// so existing `Course.colorIndex` values stay visually stable when
+  /// apps swap palettes. Custom palettes should match this length, but
+  /// [colorAt] wraps with modulo so a shorter list still renders.
   static const int paletteLength = 12;
 
   /// A stable identifier, useful for persisting the active palette
