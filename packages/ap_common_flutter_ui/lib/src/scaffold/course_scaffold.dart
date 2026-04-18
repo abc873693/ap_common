@@ -307,14 +307,12 @@ class CourseScaffoldState extends State<CourseScaffold> {
     final CoursePaletteTheme? override = _overridePalette;
     if (override == null) return child;
     final ThemeData theme = Theme.of(context);
+    final List<ThemeExtension<dynamic>> merged = theme.extensions.values
+        .where((ThemeExtension<dynamic> ext) => ext is! CoursePaletteTheme)
+        .toList()
+      ..add(override);
     return Theme(
-      data: theme.copyWith(
-        extensions: <ThemeExtension<dynamic>>[
-          for (final ThemeExtension<dynamic> ext in theme.extensions.values)
-            if (ext is! CoursePaletteTheme) ext,
-          override,
-        ],
-      ),
+      data: theme.copyWith(extensions: merged),
       child: child,
     );
   }
@@ -1685,16 +1683,19 @@ class CourseList extends StatelessWidget {
                 context: context,
                 backgroundColor: const Color(0x00000000),
                 isScrollControlled: true,
-                builder: (BuildContext sheetCtx) => Theme(
-                  data: Theme.of(sheetCtx).copyWith(
-                    extensions: <ThemeExtension<dynamic>>[
-                      for (final ThemeExtension<dynamic> ext
-                          in Theme.of(sheetCtx).extensions.values)
-                        if (ext is! CoursePaletteTheme) ext,
-                      palette,
-                    ],
-                  ),
-                  child: CourseContent(
+                builder: (BuildContext sheetCtx) {
+                  final ThemeData sheetTheme = Theme.of(sheetCtx);
+                  final List<ThemeExtension<dynamic>> merged = sheetTheme
+                      .extensions.values
+                      .where(
+                        (ThemeExtension<dynamic> ext) =>
+                            ext is! CoursePaletteTheme,
+                      )
+                      .toList()
+                    ..add(palette);
+                  return Theme(
+                    data: sheetTheme.copyWith(extensions: merged),
+                    child: CourseContent(
                     course: course,
                     invisibleCourseCodes: invisibleCourseCodes,
                     onVisibilityChanged: (bool visible) =>
@@ -1711,8 +1712,9 @@ class CourseList extends StatelessWidget {
                         : 1,
                     courseColor: courseColor,
                     enableNotifyControl: false,
-                  ),
-                ),
+                    ),
+                  );
+                },
               );
             },
             borderRadius: BorderRadius.circular(16),
