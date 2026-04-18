@@ -95,6 +95,77 @@ class CoursePalettePickerSheet extends StatelessWidget {
   }
 }
 
+class _ModeBadge extends StatelessWidget {
+  const _ModeBadge({required this.label, required this.colorScheme});
+
+  final String label;
+  final ColorScheme colorScheme;
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 2),
+      decoration: BoxDecoration(
+        color: colorScheme.secondaryContainer,
+        borderRadius: BorderRadius.circular(10),
+      ),
+      child: Text(
+        label,
+        style: TextStyle(
+          fontSize: 10,
+          fontWeight: FontWeight.w600,
+          color: colorScheme.onSecondaryContainer,
+        ),
+      ),
+    );
+  }
+}
+
+class _SwatchRow extends StatelessWidget {
+  const _SwatchRow({required this.colors, required this.label});
+
+  final List<Color> colors;
+  final String label;
+
+  @override
+  Widget build(BuildContext context) {
+    final ColorScheme colorScheme = Theme.of(context).colorScheme;
+    return Row(
+      crossAxisAlignment: CrossAxisAlignment.center,
+      children: <Widget>[
+        SizedBox(
+          width: 36,
+          child: Text(
+            label,
+            style: TextStyle(
+              fontSize: 11,
+              fontWeight: FontWeight.w500,
+              color: colorScheme.onSurfaceVariant,
+            ),
+          ),
+        ),
+        Expanded(
+          child: Wrap(
+            spacing: 6,
+            runSpacing: 6,
+            children: <Widget>[
+              for (final Color color in colors)
+                Container(
+                  width: 18,
+                  height: 18,
+                  decoration: BoxDecoration(
+                    color: color,
+                    shape: BoxShape.circle,
+                  ),
+                ),
+            ],
+          ),
+        ),
+      ],
+    );
+  }
+}
+
 class _PaletteRow extends StatelessWidget {
   const _PaletteRow({
     required this.palette,
@@ -109,6 +180,7 @@ class _PaletteRow extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final ColorScheme colorScheme = Theme.of(context).colorScheme;
+    final CoursePaletteTheme? darkVariant = palette.dark;
 
     return InkWell(
       onTap: onTap,
@@ -129,30 +201,24 @@ class _PaletteRow extends StatelessWidget {
                     ),
                   ),
                 ),
-                if (selected)
+                if (darkVariant != null)
+                  _ModeBadge(label: 'Auto dark', colorScheme: colorScheme),
+                if (selected) ...<Widget>[
+                  const SizedBox(width: 6),
                   Icon(
                     Icons.check_rounded,
                     size: 20,
                     color: colorScheme.primary,
                   ),
+                ],
               ],
             ),
             const SizedBox(height: 8),
-            Wrap(
-              spacing: 6,
-              runSpacing: 6,
-              children: <Widget>[
-                for (final Color color in palette.colors)
-                  Container(
-                    width: 20,
-                    height: 20,
-                    decoration: BoxDecoration(
-                      color: color,
-                      shape: BoxShape.circle,
-                    ),
-                  ),
-              ],
-            ),
+            _SwatchRow(colors: palette.colors, label: 'Light'),
+            if (darkVariant != null) ...<Widget>[
+              const SizedBox(height: 6),
+              _SwatchRow(colors: darkVariant.colors, label: 'Dark'),
+            ],
           ],
         ),
       ),
