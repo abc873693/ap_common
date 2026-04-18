@@ -474,6 +474,9 @@ class CourseScaffoldState extends State<CourseScaffold> {
                   child: const Icon(Icons.search),
                 ),
               ],
+              SizedBox(
+                height: MediaQuery.of(context).viewPadding.bottom + 28.0,
+              ),
             ],
           ),
         ),
@@ -646,8 +649,7 @@ class CourseScaffoldState extends State<CourseScaffold> {
     }
     final double pixelRatio =
         MediaQuery.devicePixelRatioOf(context).clamp(2.0, 4.0);
-    final ui.Image image =
-        await boundary.toImage(pixelRatio: pixelRatio);
+    final ui.Image image = await boundary.toImage(pixelRatio: pixelRatio);
     final ByteData? byteData =
         await image.toByteData(format: ui.ImageByteFormat.png);
     final DateTime now = DateTime.now();

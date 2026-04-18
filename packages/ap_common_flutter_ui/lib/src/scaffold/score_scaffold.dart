@@ -210,6 +210,7 @@ class ScoreScaffoldState extends State<ScoreScaffold> {
                 child: const Icon(Icons.search),
               ),
             ],
+            SizedBox(height: MediaQuery.of(context).viewPadding.bottom + 28.0),
           ],
         ),
       ),
@@ -646,8 +647,7 @@ class _ScoreListTab extends StatelessWidget {
     Color scoreColor,
   ) {
     final String raw = _effectiveScoreStr(score) ?? '-';
-    final bool isNumeric =
-        scoreData.scoreType == ScoreType.numeric;
+    final bool isNumeric = scoreData.scoreType == ScoreType.numeric;
 
     if (scoreValue == null) {
       // Cannot parse at all — show raw string
@@ -956,14 +956,12 @@ class ScoreAnalysis {
   late List<double> _gradePoints;
   late int _totalSubjects;
 
-  bool get isGradePoint =>
-      scoreData.scoreType == ScoreType.gradePoint;
+  bool get isGradePoint => scoreData.scoreType == ScoreType.gradePoint;
 
   /// Whether a numeric score value is considered passing.
   bool isPassing(double scoreValue) {
     if (isGradePoint) {
-      return scoreToGradePoint(scoreValue) >=
-          scoreData.passingGradePoint;
+      return scoreToGradePoint(scoreValue) >= scoreData.passingGradePoint;
     }
     return scoreValue >= scoreData.passingScore;
   }
@@ -1087,9 +1085,7 @@ class ScoreAnalysis {
         _ScoreListTab._effectiveScoreStr(score),
       );
       final double? unit = double.tryParse(score.units);
-      if (scoreValue != null &&
-          isPassing(scoreValue) &&
-          unit != null) {
+      if (scoreValue != null && isPassing(scoreValue) && unit != null) {
         credits += unit;
       }
     }
@@ -1101,12 +1097,10 @@ class ScoreAnalysis {
   /// Returns the effective score string for a [Score], preferring
   /// [Score.semesterScore] and falling back to [Score.finalScore].
   static String? effectiveScoreStr(Score score) {
-    if (score.semesterScore != null &&
-        score.semesterScore!.isNotEmpty) {
+    if (score.semesterScore != null && score.semesterScore!.isNotEmpty) {
       return score.semesterScore;
     }
-    if (score.finalScore != null &&
-        score.finalScore!.isNotEmpty) {
+    if (score.finalScore != null && score.finalScore!.isNotEmpty) {
       return score.finalScore;
     }
     return null;
