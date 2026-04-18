@@ -1,25 +1,53 @@
 import 'dart:async';
 import 'dart:convert';
+import 'dart:developer';
 
 import 'package:ap_common_core/ap_common_core.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/services.dart';
 
 class ApCommonPlugin {
   static const MethodChannel _channel = MethodChannel('ap_common_plugin');
 
+  /// Platforms that ship a native implementation of this plugin.
+  /// On any other platform (web, desktop, tests) channel calls are
+  /// silently skipped so callers don't have to guard every invocation.
+  static bool get _isSupported =>
+      !kIsWeb &&
+      (defaultTargetPlatform == TargetPlatform.android ||
+          defaultTargetPlatform == TargetPlatform.iOS);
+
+  /// Invoke [method] on the plugin channel, swallowing the
+  /// [MissingPluginException] that gets thrown on platforms without a
+  /// native implementation (e.g. Flutter Web).
+  static Future<T?> _invoke<T>(
+    String method, [
+    Object? arguments,
+  ]) async {
+    if (!_isSupported) return null;
+    try {
+      return await _channel.invokeMethod<T>(method, arguments);
+    } on MissingPluginException catch (e) {
+      log(
+        'ap_common_plugin: "$method" not available on this platform — '
+        'skipping. ${e.message}',
+        name: 'ap_common_plugin',
+      );
+      return null;
+    }
+  }
+
   static Future<String?> get platformVersion async {
-    final String? version =
-        await _channel.invokeMethod<String>('getPlatformVersion');
-    return version;
+    return _invoke<String>('getPlatformVersion');
   }
 
   /// Configure the plugin with platform-specific settings.
   ///
   /// [appGroupId] is required on iOS for sharing data with the
   /// WidgetKit extension via App Group UserDefaults.
-  /// It is ignored on Android.
+  /// It is ignored on Android, and the call is a no-op on web/desktop.
   static Future<void> configure({required String appGroupId}) async {
-    await _channel.invokeMethod<void>('configure', <String, String>{
+    await _invoke<void>('configure', <String, String>{
       'appGroupId': appGroupId,
     });
   }
@@ -30,8 +58,9 @@ class ApCommonPlugin {
   /// refresh.
   /// On iOS, writes to App Group UserDefaults so the WidgetKit
   /// extension can read it.
+  /// On web/desktop this is a no-op.
   static Future<void> updateCourseWidget(CourseData courseData) async {
-    await _channel.invokeMethod<void>(
+    await _invoke<void>(
       'updateCourseWidget',
       jsonEncode(courseData.toJson()),
     );
@@ -39,7 +68,7 @@ class ApCommonPlugin {
 
   /// Clear the course widget data.
   static Future<void> clearCourseWidget() async {
-    await _channel.invokeMethod<void>('clearCourseWidget');
+    await _invoke<void>('clearCourseWidget');
   }
 
   /// Update the student ID widget with user info.
@@ -47,7 +76,7 @@ class ApCommonPlugin {
   /// Sends a JSON object with `id`, `name`, `department`, and
   /// `className` fields to the native widget.
   static Future<void> updateUserInfoWidget(UserInfo userInfo) async {
-    await _channel.invokeMethod<void>(
+    await _invoke<void>(
       'updateUserInfoWidget',
       jsonEncode(userInfo.toJson()),
     );
@@ -55,7 +84,7 @@ class ApCommonPlugin {
 
   /// Clear the student ID widget data.
   static Future<void> clearUserInfoWidget() async {
-    await _channel.invokeMethod<void>('clearUserInfoWidget');
+    await _invoke<void>('clearUserInfoWidget');
   }
 
   /// Update the course widget with fake data for testing.
