@@ -209,12 +209,12 @@ class CourseScaffoldState extends State<CourseScaffold> {
   final Map<String, int> _courseColorIndexMap = <String, int>{};
   int _colorIndex = 0;
 
-  Color _getCourseColor(Course course, CoursePaletteTheme palette) {
+  Color _getCourseColor(Course course) {
     final int index = _courseColorIndexMap.putIfAbsent(course.code, () {
       if (course.colorIndex != null) return course.colorIndex!;
       return _colorIndex++;
     });
-    return palette.colorAt(index);
+    return CoursePaletteTheme.of(context).colorAt(index);
   }
 
   late ScrollController _scrollController;
@@ -259,7 +259,7 @@ class CourseScaffoldState extends State<CourseScaffold> {
   void didUpdateWidget(covariant CourseScaffold oldWidget) {
     if (widget.courseData != oldWidget.courseData) {
       _buildCourseLookup();
-      _courseColorMap.clear();
+      _courseColorIndexMap.clear();
       _colorIndex = 0;
     }
     fetchInvisibleCourseCodes();
@@ -949,8 +949,7 @@ class CourseScaffoldState extends State<CourseScaffold> {
     Course course,
     int span,
   ) {
-    final CoursePaletteTheme palette = CoursePaletteTheme.of(context);
-    final Color courseColor = _getCourseColor(course, palette);
+    final Color courseColor = _getCourseColor(course);
     final String locationInfo =
         (showClassroomLocation ?? true) && course.location != null
             ? course.location.toString()
@@ -958,7 +957,7 @@ class CourseScaffoldState extends State<CourseScaffold> {
     final String instructorInfo =
         (showInstructors ?? true) ? course.getInstructors() : '';
 
-    final Color onCourseColor = palette.foregroundColor;
+    final Color onCourseColor = CoursePaletteTheme.of(context).foregroundColor;
 
     final String displayInfo = <String>[
       if (instructorInfo.isNotEmpty) instructorInfo,
