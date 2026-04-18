@@ -131,7 +131,6 @@ class _SwatchRow extends StatelessWidget {
   Widget build(BuildContext context) {
     final ColorScheme colorScheme = Theme.of(context).colorScheme;
     return Row(
-      crossAxisAlignment: CrossAxisAlignment.center,
       children: <Widget>[
         SizedBox(
           width: 36,
