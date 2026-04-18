@@ -38,9 +38,9 @@ class CourseEditSheet extends StatefulWidget {
   /// The sheet opens via the root navigator, so any
   /// [CoursePaletteTheme] override installed locally on the caller's
   /// subtree (e.g. via [CourseScaffold]'s palette picker) is not
-  /// inherited. To keep the color picker consistent with the
-  /// surrounding scaffold, capture the palette from [context] up front
-  /// and re-inject it into the sheet's builder.
+  /// inherited. Pass [coursePalette] explicitly so the color picker
+  /// stays in sync with the surrounding scaffold; when omitted, the
+  /// sheet falls back to the palette resolved from [context].
   static Future<Course?> show({
     required BuildContext context,
     required List<TimeCode> timeCodes,
@@ -48,8 +48,9 @@ class CourseEditSheet extends StatefulWidget {
     Course? course,
     int? initialWeekday,
     int? initialTimeIndex,
+    CoursePaletteTheme? coursePalette,
   }) {
-    final CoursePaletteTheme? palette =
+    final CoursePaletteTheme? palette = coursePalette ??
         Theme.of(context).extension<CoursePaletteTheme>();
     return showModalBottomSheet<Course>(
       context: context,

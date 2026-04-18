@@ -1198,6 +1198,7 @@ class CourseScaffoldState extends State<CourseScaffold> {
       existingCourses: widget.courseData.courses,
       initialWeekday: weekday,
       initialTimeIndex: timeIndex,
+      coursePalette: _activePalette(context),
     );
     if (result == null || !mounted) return;
     final CustomCourseData updated =
@@ -1212,6 +1213,7 @@ class CourseScaffoldState extends State<CourseScaffold> {
       timeCodes: widget.courseData.timeCodes,
       existingCourses: widget.courseData.courses,
       course: course,
+      coursePalette: _activePalette(context),
     );
     if (result == null || !mounted) return;
     final CustomCourseData updated =
