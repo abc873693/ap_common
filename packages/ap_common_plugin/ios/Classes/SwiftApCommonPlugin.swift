@@ -6,6 +6,14 @@ public class SwiftApCommonPlugin: NSObject, FlutterPlugin {
     private static let keyAppGroupId = "app_group_id"
     private static let keyCourseNotify = "course_notify"
     private static let keyUserInfo = "user_info"
+    private static let keyCoursePaletteId = "course_palette_id"
+    private static let keyCoursePaletteColors = "course_palette_colors"
+    private static let keyCoursePaletteForeground =
+        "course_palette_foreground"
+    private static let keyCoursePaletteDarkColors =
+        "course_palette_dark_colors"
+    private static let keyCoursePaletteDarkForeground =
+        "course_palette_dark_foreground"
     private static let prefName = "ap_common_plugin"
 
     public static func register(with registrar: FlutterPluginRegistrar) {
@@ -99,6 +107,67 @@ public class SwiftApCommonPlugin: NSObject, FlutterPlugin {
             if let appGroupId = appGroupId,
                let groupDefaults = UserDefaults(suiteName: appGroupId) {
                 groupDefaults.removeObject(forKey: SwiftApCommonPlugin.keyUserInfo)
+            }
+            if #available(iOS 14.0, *) {
+                WidgetCenter.shared.reloadAllTimelines()
+            }
+            result(nil)
+        case "setCoursePalette":
+            guard let args = call.arguments as? [String: Any],
+                  let id = args["id"] as? String,
+                  let colors = args["colors"] as? [Int64],
+                  let foreground = args["foregroundColor"] as? Int64 else {
+                result(
+                    FlutterError(
+                        code: "INVALID_ARGUMENT",
+                        message: "id, colors, foregroundColor are required",
+                        details: nil
+                    )
+                )
+                return
+            }
+            let appGroupId = UserDefaults.standard.string(
+                forKey: SwiftApCommonPlugin.keyAppGroupId
+            )
+            if let appGroupId = appGroupId,
+               let groupDefaults = UserDefaults(suiteName: appGroupId) {
+                groupDefaults.set(
+                    id,
+                    forKey: SwiftApCommonPlugin.keyCoursePaletteId
+                )
+                groupDefaults.set(
+                    colors,
+                    forKey: SwiftApCommonPlugin.keyCoursePaletteColors
+                )
+                groupDefaults.set(
+                    foreground,
+                    forKey: SwiftApCommonPlugin.keyCoursePaletteForeground
+                )
+                if let darkColors = args["darkColors"] as? [Int64],
+                   let darkForeground =
+                    args["darkForegroundColor"] as? Int64 {
+                    groupDefaults.set(
+                        darkColors,
+                        forKey:
+                            SwiftApCommonPlugin.keyCoursePaletteDarkColors
+                    )
+                    groupDefaults.set(
+                        darkForeground,
+                        forKey:
+                            SwiftApCommonPlugin
+                            .keyCoursePaletteDarkForeground
+                    )
+                } else {
+                    groupDefaults.removeObject(
+                        forKey:
+                            SwiftApCommonPlugin.keyCoursePaletteDarkColors
+                    )
+                    groupDefaults.removeObject(
+                        forKey:
+                            SwiftApCommonPlugin
+                            .keyCoursePaletteDarkForeground
+                    )
+                }
             }
             if #available(iOS 14.0, *) {
                 WidgetCenter.shared.reloadAllTimelines()

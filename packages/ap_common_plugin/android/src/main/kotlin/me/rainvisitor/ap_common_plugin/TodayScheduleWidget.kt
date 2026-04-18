@@ -44,13 +44,6 @@ class TodayScheduleWidget : GlanceAppWidget() {
     companion object {
         private val json = Json { ignoreUnknownKeys = true }
 
-        private val courseColorPalette = listOf(
-            Color(0xFF5C6BC0), Color(0xFF26A69A), Color(0xFFEF5350),
-            Color(0xFFAB47BC), Color(0xFF42A5F5), Color(0xFFFF7043),
-            Color(0xFF66BB6A), Color(0xFFFFCA28), Color(0xFF8D6E63),
-            Color(0xFF78909C), Color(0xFFEC407A), Color(0xFF7E57C2),
-        )
-
         private val headerBg = androidx.glance.color.ColorProvider(
             day = Color(0xFF2673FF),
             night = Color(0xFF1A1C2E),
@@ -85,6 +78,7 @@ class TodayScheduleWidget : GlanceAppWidget() {
         context: Context,
         courses: List<ScheduleItem>,
     ) {
+        val palette = CoursePalette.resolve(context).colors
         val launchIntent = context.packageManager
             .getLaunchIntentForPackage(context.packageName)
 
@@ -144,7 +138,7 @@ class TodayScheduleWidget : GlanceAppWidget() {
                         .padding(horizontal = 12.dp, vertical = 8.dp),
                 ) {
                     for ((index, item) in courses.withIndex()) {
-                        ScheduleRow(item, index)
+                        ScheduleRow(item, index, palette)
                         if (index < courses.size - 1) {
                             Spacer(modifier = GlanceModifier.height(6.dp))
                         }
@@ -155,11 +149,14 @@ class TodayScheduleWidget : GlanceAppWidget() {
     }
 
     @Composable
-    private fun ScheduleRow(item: ScheduleItem, index: Int) {
-        val color = courseColorPalette[
+    private fun ScheduleRow(
+        item: ScheduleItem,
+        index: Int,
+        palette: List<Color>,
+    ) {
+        val color = palette[
             item.course.code.hashCode().let {
-                ((it % courseColorPalette.size) + courseColorPalette.size) %
-                    courseColorPalette.size
+                ((it % palette.size) + palette.size) % palette.size
             }
         ]
 

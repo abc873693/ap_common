@@ -1,3 +1,5 @@
+import 'dart:async';
+import 'dart:developer';
 import 'dart:io';
 import 'dart:ui' as ui;
 
@@ -5,6 +7,7 @@ import 'package:ap_common_flutter_ui/ap_common_flutter_ui.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
+import 'package:flutter/services.dart';
 
 typedef CourseNotifyCallback = Function(
   CourseNotify? courseNotify,
@@ -89,6 +92,8 @@ class CourseScaffold extends StatefulWidget {
     this.customCourseData,
     this.onCustomCourseChanged,
     this.semesterPickerController,
+    this.enablePaletteSelector = true,
+    this.onCoursePaletteChanged,
   });
 
   /// Creates a [CourseScaffold] from a [DataState<CourseData>].
@@ -129,6 +134,8 @@ class CourseScaffold extends StatefulWidget {
     this.customCourseData,
     this.onCustomCourseChanged,
     this.semesterPickerController,
+    this.enablePaletteSelector = true,
+    this.onCoursePaletteChanged,
   })  : state = dataState.when(
           loading: () => CourseState.loading,
           loaded: (_, __) => CourseState.finish,
@@ -183,6 +190,22 @@ class CourseScaffold extends StatefulWidget {
   /// Optional controller for the semester picker.
   final SemesterPickerController? semesterPickerController;
 
+  /// When true (default), the setting dialog shows a palette selector
+  /// that lets the user switch between built-in [CoursePaletteTheme]s.
+  /// The choice is persisted under [CoursePaletteTheme.preferenceKey]
+  /// so it survives app restarts.
+  final bool enablePaletteSelector;
+
+  /// Called whenever the user picks a new palette from the selector.
+  /// Apps can use this to update their app-level theme extensions so
+  /// the new palette applies to other surfaces (home dashboard, etc.).
+  ///
+  /// Native AppWidget sync via `ap_common_plugin` is handled
+  /// automatically — the scaffold invokes the plugin's
+  /// `setCoursePalette` channel after persisting the choice, and
+  /// silently no-ops when the plugin isn't registered.
+  final ValueChanged<CoursePaletteTheme>? onCoursePaletteChanged;
+
   @override
   CourseScaffoldState createState() => CourseScaffoldState();
 }
@@ -206,21 +229,25 @@ class CourseScaffoldState extends State<CourseScaffold> {
 
   late Map<int, Map<int, Course>> _courseLookup;
 
-  final Map<String, Color> _courseColorMap = <String, Color>{};
+  final Map<String, int> _courseColorIndexMap = <String, int>{};
   int _colorIndex = 0;
 
+  /// User-selected palette that overrides the app-level one for this
+  /// scaffold's subtree. `null` means "inherit from Theme".
+  CoursePaletteTheme? _overridePalette;
+
+  CoursePaletteTheme _activePalette(BuildContext context) {
+    final CoursePaletteTheme? override = _overridePalette;
+    if (override != null) return override.resolvedFor(context);
+    return CoursePaletteTheme.of(context);
+  }
+
   Color _getCourseColor(Course course) {
-    if (!_courseColorMap.containsKey(course.code)) {
-      if (course.colorIndex != null) {
-        _courseColorMap[course.code] =
-            courseColors[course.colorIndex! % courseColors.length];
-      } else {
-        _courseColorMap[course.code] =
-            courseColors[_colorIndex % courseColors.length];
-        _colorIndex++;
-      }
-    }
-    return _courseColorMap[course.code]!;
+    final int index = _courseColorIndexMap.putIfAbsent(course.code, () {
+      if (course.colorIndex != null) return course.colorIndex!;
+      return _colorIndex++;
+    });
+    return _activePalette(context).colorAt(index);
   }
 
   late ScrollController _scrollController;
@@ -243,6 +270,14 @@ class CourseScaffoldState extends State<CourseScaffold> {
       '${ApConstants.packageName}.merge_course',
       true,
     );
+    final String savedPaletteId =
+        PreferenceUtil.instance.getString(CoursePaletteTheme.preferenceKey, '');
+    if (savedPaletteId.isNotEmpty) {
+      final CoursePaletteTheme persisted =
+          CoursePaletteTheme.fromId(savedPaletteId);
+      _overridePalette = persisted;
+      unawaited(_syncCoursePaletteToNative(persisted));
+    }
     fetchInvisibleCourseCodes();
     _scrollController = ScrollController();
     _scrollController.addListener(() {
@@ -265,7 +300,7 @@ class CourseScaffoldState extends State<CourseScaffold> {
   void didUpdateWidget(covariant CourseScaffold oldWidget) {
     if (widget.courseData != oldWidget.courseData) {
       _buildCourseLookup();
-      _courseColorMap.clear();
+      _courseColorIndexMap.clear();
       _colorIndex = 0;
     }
     fetchInvisibleCourseCodes();
@@ -278,9 +313,86 @@ class CourseScaffoldState extends State<CourseScaffold> {
     super.dispose();
   }
 
+  /// Wrap [child] in a [Theme] that injects [_overridePalette] as a
+  /// [CoursePaletteTheme] extension, so descendants (including modal
+  /// sheets launched via [showModalBottomSheet] with this context) see
+  /// the user-selected palette instead of the app-level one.
+  Widget _withPaletteOverride(BuildContext context, Widget child) {
+    final CoursePaletteTheme? override = _overridePalette;
+    if (override == null) return child;
+    final ThemeData theme = Theme.of(context);
+    final List<ThemeExtension<dynamic>> merged = theme.extensions.values
+        .where((ThemeExtension<dynamic> ext) => ext is! CoursePaletteTheme)
+        .toList()
+      ..add(override);
+    return Theme(
+      data: theme.copyWith(extensions: merged),
+      child: child,
+    );
+  }
+
+  /// Push the active palette to `ap_common_plugin`'s native handler
+  /// so Android / iOS home-screen widgets render with the same colors
+  /// the user just picked. Opens the channel directly to avoid making
+  /// `ap_common_flutter_ui` depend on the plugin package; when the
+  /// plugin isn't registered (web, or app not using the plugin) the
+  /// resulting [MissingPluginException] is swallowed.
+  static const MethodChannel _nativePaletteChannel =
+      MethodChannel('ap_common_plugin');
+
+  Future<void> _syncCoursePaletteToNative(
+    CoursePaletteTheme palette,
+  ) async {
+    final CoursePaletteTheme? darkVariant = palette.dark;
+    final Map<String, Object?> args = <String, Object?>{
+      'id': palette.id,
+      'colors': <int>[
+        for (final Color c in palette.colors) c.toARGB32(),
+      ],
+      'foregroundColor': palette.foregroundColor.toARGB32(),
+      if (darkVariant != null) ...<String, Object?>{
+        'darkColors': <int>[
+          for (final Color c in darkVariant.colors) c.toARGB32(),
+        ],
+        'darkForegroundColor': darkVariant.foregroundColor.toARGB32(),
+      },
+    };
+    try {
+      await _nativePaletteChannel.invokeMethod<void>(
+        'setCoursePalette',
+        args,
+      );
+    } on MissingPluginException catch (e) {
+      log(
+        'CourseScaffold: native palette sync unavailable '
+        '(${e.message}); home widget will keep its previous colors.',
+        name: 'CourseScaffold',
+      );
+    }
+  }
+
+  Future<void> _showPalettePicker() async {
+    final CoursePaletteTheme current = _activePalette(context);
+    final CoursePaletteTheme? picked = await CoursePalettePickerSheet.show(
+      context: context,
+      currentId: current.id,
+      title: context.ap.courseColor,
+    );
+    if (picked == null || picked.id == current.id) return;
+    await PreferenceUtil.instance
+        .setString(CoursePaletteTheme.preferenceKey, picked.id);
+    unawaited(_syncCoursePaletteToNative(picked));
+    if (!mounted) return;
+    setState(() => _overridePalette = picked);
+    widget.onCoursePaletteChanged?.call(picked);
+    AnalyticsUtil.instance.logEvent('course_palette_change');
+  }
+
   @override
   Widget build(BuildContext context) {
-    return CourseConfig(
+    return _withPaletteOverride(
+      context,
+      CourseConfig(
       showSectionTime: showSectionTime,
       showInstructors: showInstructors,
       showClassroomLocation: showClassroomLocation,
@@ -321,6 +433,12 @@ class CourseScaffoldState extends State<CourseScaffold> {
                 icon: Icon(ApIcon.download),
                 onPressed: _captureCourseTable,
                 tooltip: context.ap.exportCourseTable,
+              ),
+            if (widget.enablePaletteSelector)
+              IconButton(
+                icon: const Icon(Icons.palette_outlined),
+                onPressed: _showPalettePicker,
+                tooltip: context.ap.courseColor,
               ),
             IconButton(
               icon: Icon(ApIcon.settings),
@@ -477,6 +595,7 @@ class CourseScaffoldState extends State<CourseScaffold> {
             ],
           ),
         ),
+      ),
       ),
     );
   }
@@ -963,10 +1082,7 @@ class CourseScaffoldState extends State<CourseScaffold> {
     final String instructorInfo =
         (showInstructors ?? true) ? course.getInstructors() : '';
 
-    final Color onCourseColor =
-        ThemeData.estimateBrightnessForColor(courseColor) == Brightness.dark
-            ? Colors.white
-            : Colors.black;
+    final Color onCourseColor = CoursePaletteTheme.of(context).foregroundColor;
 
     final String displayInfo = <String>[
       if (instructorInfo.isNotEmpty) instructorInfo,
@@ -993,7 +1109,7 @@ class CourseScaffoldState extends State<CourseScaffold> {
         margin: const EdgeInsets.all(2),
         padding: const EdgeInsets.symmetric(horizontal: 4, vertical: 6),
         decoration: BoxDecoration(
-          color: courseColor.withAlpha(230),
+          color: courseColor.withAlpha(CoursePaletteTheme.cardAlpha),
           borderRadius: BorderRadius.circular(8),
           boxShadow: <BoxShadow>[
             BoxShadow(
@@ -1044,7 +1160,9 @@ class CourseScaffoldState extends State<CourseScaffold> {
       backgroundColor: const Color(0x00000000),
       isScrollControlled: true,
       builder: (BuildContext builder) {
-        return CourseContent(
+        return _withPaletteOverride(
+          builder,
+          CourseContent(
           enableNotifyControl: widget.enableNotifyControl,
           course: course,
           notifyData: widget.notifyData,
@@ -1067,6 +1185,7 @@ class CourseScaffoldState extends State<CourseScaffold> {
             Navigator.of(builder).pop();
             _deleteCustomCourse(course);
           },
+          ),
         );
       },
     );
@@ -1079,6 +1198,7 @@ class CourseScaffoldState extends State<CourseScaffold> {
       existingCourses: widget.courseData.courses,
       initialWeekday: weekday,
       initialTimeIndex: timeIndex,
+      coursePalette: _activePalette(context),
     );
     if (result == null || !mounted) return;
     final CustomCourseData updated =
@@ -1093,6 +1213,7 @@ class CourseScaffoldState extends State<CourseScaffold> {
       timeCodes: widget.courseData.timeCodes,
       existingCourses: widget.courseData.courses,
       course: course,
+      coursePalette: _activePalette(context),
     );
     if (result == null || !mounted) return;
     final CustomCourseData updated =
@@ -1243,12 +1364,10 @@ class _CourseContentState extends State<CourseContent> {
     final bool visibility =
         !widget.invisibleCourseCodes.contains(widget.course.code);
     final ColorScheme colorScheme = Theme.of(context).colorScheme;
+    final CoursePaletteTheme palette = CoursePaletteTheme.of(context);
     final Color courseColor = widget.courseColor ??
-        courseColors[widget.course.code.hashCode % courseColors.length];
-    final Color onCourseColor =
-        ThemeData.estimateBrightnessForColor(courseColor) == Brightness.dark
-            ? Colors.white
-            : Colors.black;
+        palette.colorAt(widget.course.code.hashCode);
+    final Color onCourseColor = palette.foregroundColor;
     return Container(
       decoration: BoxDecoration(
         color: colorScheme.surface,
@@ -1587,6 +1706,7 @@ class CourseList extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final ColorScheme colorScheme = Theme.of(context).colorScheme;
+    final CoursePaletteTheme palette = CoursePaletteTheme.of(context);
 
     return ListView.builder(
       controller: controller,
@@ -1602,7 +1722,7 @@ class CourseList extends StatelessWidget {
         final Course course = courses[index];
         final bool visibility = !invisibleCourseCodes.contains(course.code);
         final Color courseColor = getCourseColor?.call(course) ??
-            courseColors[course.code.hashCode % courseColors.length];
+            palette.colorAt(course.code.hashCode);
         final String instructors = course.getInstructors();
 
         return Container(
@@ -1620,23 +1740,38 @@ class CourseList extends StatelessWidget {
                 context: context,
                 backgroundColor: const Color(0x00000000),
                 isScrollControlled: true,
-                builder: (BuildContext context) => CourseContent(
-                  course: course,
-                  invisibleCourseCodes: invisibleCourseCodes,
-                  onVisibilityChanged: (bool visible) =>
-                      onVisibilityChanged?.call(course, visible),
-                  timeCode: timeCodes != null && timeCodes!.isNotEmpty
-                      ? timeCodes![0]
-                      : const TimeCode(
-                          title: '',
-                          startTime: '',
-                          endTime: '',
-                        ),
-                  weekday:
-                      course.times.isNotEmpty ? course.times.first.weekday : 1,
-                  courseColor: courseColor,
-                  enableNotifyControl: false,
-                ),
+                builder: (BuildContext sheetCtx) {
+                  final ThemeData sheetTheme = Theme.of(sheetCtx);
+                  final List<ThemeExtension<dynamic>> merged = sheetTheme
+                      .extensions.values
+                      .where(
+                        (ThemeExtension<dynamic> ext) =>
+                            ext is! CoursePaletteTheme,
+                      )
+                      .toList()
+                    ..add(palette);
+                  return Theme(
+                    data: sheetTheme.copyWith(extensions: merged),
+                    child: CourseContent(
+                    course: course,
+                    invisibleCourseCodes: invisibleCourseCodes,
+                    onVisibilityChanged: (bool visible) =>
+                        onVisibilityChanged?.call(course, visible),
+                    timeCode: timeCodes != null && timeCodes!.isNotEmpty
+                        ? timeCodes![0]
+                        : const TimeCode(
+                            title: '',
+                            startTime: '',
+                            endTime: '',
+                          ),
+                    weekday: course.times.isNotEmpty
+                        ? course.times.first.weekday
+                        : 1,
+                    courseColor: courseColor,
+                    enableNotifyControl: false,
+                    ),
+                  );
+                },
               );
             },
             borderRadius: BorderRadius.circular(16),

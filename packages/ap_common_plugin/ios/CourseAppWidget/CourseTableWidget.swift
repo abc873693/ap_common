@@ -54,23 +54,6 @@ struct CourseTableEntry: TimelineEntry {
     let courseData: CourseData?
 }
 
-// MARK: - Color Palette (matching Flutter)
-
-private let courseColorPalette: [Color] = [
-    Color(red: 0.36, green: 0.42, blue: 0.75), // Indigo
-    Color(red: 0.15, green: 0.65, blue: 0.60), // Teal
-    Color(red: 0.94, green: 0.33, blue: 0.31), // Red
-    Color(red: 0.67, green: 0.28, blue: 0.74), // Purple
-    Color(red: 0.26, green: 0.65, blue: 0.96), // Blue
-    Color(red: 1.00, green: 0.44, blue: 0.26), // Deep Orange
-    Color(red: 0.40, green: 0.73, blue: 0.42), // Green
-    Color(red: 1.00, green: 0.79, blue: 0.16), // Amber
-    Color(red: 0.55, green: 0.43, blue: 0.39), // Brown
-    Color(red: 0.47, green: 0.56, blue: 0.61), // Blue Grey
-    Color(red: 0.93, green: 0.25, blue: 0.48), // Pink
-    Color(red: 0.49, green: 0.34, blue: 0.76), // Deep Purple
-]
-
 // MARK: - Course Table View
 
 struct CourseTableView: View {
@@ -138,11 +121,13 @@ struct CourseTableView: View {
         let weekdayCount = hasHoliday ? 7 : 5
         let (minIdx, maxIdx) = timeRange(data)
         let lookup = buildLookup(data)
+        let palette = CoursePalette.resolve(for: colorScheme).colors
         let colorMap = buildColorMap(
             lookup: lookup,
             weekdayCount: weekdayCount,
             minIdx: minIdx,
-            maxIdx: maxIdx
+            maxIdx: maxIdx,
+            palette: palette
         )
         let todayWeekday = currentWeekday()
         let isCompact = family == .systemSmall
@@ -234,13 +219,13 @@ struct CourseTableView: View {
                                 continuationColor: isContinuation
                                     ? colorMap[
                                         course!.code,
-                                        default: courseColorPalette[0]
+                                        default: palette[0]
                                     ]
                                     : nil,
                                 color: course != nil
                                     ? colorMap[
                                         course!.code,
-                                        default: courseColorPalette[0]
+                                        default: palette[0]
                                     ]
                                     : .clear,
                                 width: cellWidth,
@@ -381,7 +366,8 @@ struct CourseTableView: View {
         lookup: [Int: [Int: Course]],
         weekdayCount: Int,
         minIdx: Int,
-        maxIdx: Int
+        maxIdx: Int,
+        palette: [Color]
     ) -> [String: Color] {
         var map: [String: Color] = [:]
         var idx = 0
@@ -390,9 +376,7 @@ struct CourseTableView: View {
             for t in minIdx...maxIdx {
                 guard let course = dayMap[t] else { continue }
                 if map[course.code] == nil {
-                    map[course.code] = courseColorPalette[
-                        idx % courseColorPalette.count
-                    ]
+                    map[course.code] = palette[idx % palette.count]
                     idx += 1
                 }
             }

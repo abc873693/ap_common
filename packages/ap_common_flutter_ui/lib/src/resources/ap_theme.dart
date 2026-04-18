@@ -1,6 +1,7 @@
 import 'package:ap_common_flutter_core/ap_common_flutter_core.dart';
 import 'package:ap_common_flutter_ui/src/resources/ap_colors.dart';
 import 'package:ap_common_flutter_ui/src/resources/resources.dart';
+import 'package:ap_common_flutter_ui/src/theme/course_palette_theme.dart';
 import 'package:flutter/material.dart';
 
 export 'package:cupertino_back_gesture/cupertino_back_gesture.dart';
@@ -66,6 +67,27 @@ class ApTheme extends InheritedWidget {
     ThemeColor(name: '琥珀', color: Color(0xFFFF8F00)),
     ThemeColor(name: '靛藍', color: Color(0xFF303F9F)),
     ThemeColor(name: '棕褐', color: Color(0xFF5D4037)),
+  ];
+
+  /// iOS System Colors (light variant) packaged as seed colors so apps
+  /// can opt into an iOS-flavoured tonal palette via
+  /// `ColorScheme.fromSeed`. Same length as [themeColors], so it is a
+  /// drop-in replacement wherever [currentColorIndex] is used — pass
+  /// the chosen entry's color into [ApTheme.light] / [ApTheme.dark] or
+  /// store it under [PREF_CUSTOM_COLOR].
+  ///
+  /// The values are stable from iOS 13 through iOS 26.
+  static const List<ThemeColor> iOSThemeColors = <ThemeColor>[
+    ThemeColor(name: 'iOS 藍', color: Color(0xFF007AFF)),
+    ThemeColor(name: 'iOS 靛', color: Color(0xFF5856D6)),
+    ThemeColor(name: 'iOS 綠', color: Color(0xFF34C759)),
+    ThemeColor(name: 'iOS 橙', color: Color(0xFFFF9500)),
+    ThemeColor(name: 'iOS 紫', color: Color(0xFFAF52DE)),
+    ThemeColor(name: 'iOS 粉紅', color: Color(0xFFFF2D55)),
+    ThemeColor(name: 'iOS 青', color: Color(0xFF30B0C7)),
+    ThemeColor(name: 'iOS 黃', color: Color(0xFFFFCC00)),
+    ThemeColor(name: 'iOS 紅', color: Color(0xFFFF3B30)),
+    ThemeColor(name: 'iOS 棕', color: Color(0xFFA2845E)),
   ];
 
   static const int customColorIndex = -1;
@@ -364,22 +386,31 @@ class ApTheme extends InheritedWidget {
     }
   }
 
-  static ThemeData light(Color seedColor) {
+  static ThemeData light(
+    Color seedColor, {
+    CoursePaletteTheme coursePalette = CoursePaletteTheme.material,
+  }) {
     final ColorScheme colorScheme = ColorScheme.fromSeed(
       seedColor: seedColor,
     );
-    return _buildTheme(colorScheme);
+    return _buildTheme(colorScheme, coursePalette);
   }
 
-  static ThemeData dark(Color seedColor) {
+  static ThemeData dark(
+    Color seedColor, {
+    CoursePaletteTheme coursePalette = CoursePaletteTheme.material,
+  }) {
     final ColorScheme colorScheme = ColorScheme.fromSeed(
       seedColor: seedColor,
       brightness: Brightness.dark,
     );
-    return _buildTheme(colorScheme);
+    return _buildTheme(colorScheme, coursePalette);
   }
 
-  static ThemeData _buildTheme(ColorScheme colorScheme) {
+  static ThemeData _buildTheme(
+    ColorScheme colorScheme,
+    CoursePaletteTheme coursePalette,
+  ) {
     final bool isLight = colorScheme.brightness == Brightness.light;
 
     return ThemeData(
@@ -388,6 +419,7 @@ class ApTheme extends InheritedWidget {
       scaffoldBackgroundColor: colorScheme.surface,
       pageTransitionsTheme: _pageTransitionsTheme,
       visualDensity: VisualDensity.adaptivePlatformDensity,
+      extensions: <ThemeExtension<dynamic>>[coursePalette],
       appBarTheme: AppBarTheme(
         centerTitle: true,
         elevation: 0,

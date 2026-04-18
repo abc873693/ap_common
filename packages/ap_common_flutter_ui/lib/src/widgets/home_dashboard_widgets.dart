@@ -160,6 +160,7 @@ class TodayScheduleCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final ColorScheme colorScheme = Theme.of(context).colorScheme;
+    final CoursePaletteTheme palette = CoursePaletteTheme.of(context);
     final int todayWeekday = DateTime.now().weekday;
     final int tomorrowWeekday = todayWeekday == 7 ? 1 : todayWeekday + 1;
     List<_TodayItem> items = _getItemsForWeekday(todayWeekday);
@@ -219,7 +220,7 @@ class TodayScheduleCard extends StatelessWidget {
               for (int i = 0;
                   i < items.length && i < maxItems;
                   i++) ...<Widget>[
-                _buildRow(colorScheme, items[i]),
+                _buildRow(colorScheme, palette, items[i]),
                 if (i < items.length - 1 && i < maxItems - 1)
                   const SizedBox(height: 8),
               ],
@@ -242,8 +243,12 @@ class TodayScheduleCard extends StatelessWidget {
     );
   }
 
-  Widget _buildRow(ColorScheme colorScheme, _TodayItem item) {
-    final Color barColor = courseColors[item.colorIndex % courseColors.length];
+  Widget _buildRow(
+    ColorScheme colorScheme,
+    CoursePaletteTheme palette,
+    _TodayItem item,
+  ) {
+    final Color barColor = palette.colorAt(item.colorIndex);
     final DateTime now = DateTime.now();
     final bool isPast = item.endMinutes < now.hour * 60 + now.minute;
 

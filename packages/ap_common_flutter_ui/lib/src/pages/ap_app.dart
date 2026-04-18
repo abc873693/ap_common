@@ -55,6 +55,7 @@ class ApApp extends StatefulWidget {
     this.debugShowCheckedModeBanner = false,
     this.navigatorObservers = const <NavigatorObserver>[],
     this.onGenerateRoute,
+    this.coursePalette = CoursePaletteTheme.material,
   });
 
   /// The default route widget.
@@ -86,6 +87,11 @@ class ApApp extends StatefulWidget {
 
   /// Custom route generation.
   final RouteFactory? onGenerateRoute;
+
+  /// Palette used by course-related widgets (CourseScaffold, list,
+  /// CourseContent, CourseEditSheet, home dashboard). Defaults to
+  /// [CoursePaletteTheme.material] so existing apps keep their look.
+  final CoursePaletteTheme coursePalette;
 
   /// Find the nearest [ApAppState] in the widget tree.
   static ApAppState of(BuildContext context) {
@@ -215,8 +221,14 @@ class ApAppState extends State<ApApp> with WidgetsBindingObserver {
                       ...widget.routes,
                     },
                     onGenerateRoute: widget.onGenerateRoute,
-                    theme: ApTheme.light(seedColor),
-                    darkTheme: ApTheme.dark(seedColor),
+                    theme: ApTheme.light(
+                      seedColor,
+                      coursePalette: widget.coursePalette,
+                    ),
+                    darkTheme: ApTheme.dark(
+                      seedColor,
+                      coursePalette: widget.coursePalette,
+                    ),
                     themeMode: _themeMode,
                     locale: TranslationProvider.of(context).flutterLocale,
                     navigatorObservers: widget.navigatorObservers,

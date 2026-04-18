@@ -34,6 +34,13 @@ class CourseEditSheet extends StatefulWidget {
   bool get isEditing => course != null;
 
   /// Show this sheet as a modal bottom sheet.
+  ///
+  /// The sheet opens via the root navigator, so any
+  /// [CoursePaletteTheme] override installed locally on the caller's
+  /// subtree (e.g. via [CourseScaffold]'s palette picker) is not
+  /// inherited. Pass [coursePalette] explicitly so the color picker
+  /// stays in sync with the surrounding scaffold; when omitted, the
+  /// sheet falls back to the palette resolved from [context].
   static Future<Course?> show({
     required BuildContext context,
     required List<TimeCode> timeCodes,
@@ -41,18 +48,37 @@ class CourseEditSheet extends StatefulWidget {
     Course? course,
     int? initialWeekday,
     int? initialTimeIndex,
+    CoursePaletteTheme? coursePalette,
   }) {
+    final CoursePaletteTheme? palette = coursePalette ??
+        Theme.of(context).extension<CoursePaletteTheme>();
     return showModalBottomSheet<Course>(
       context: context,
       isScrollControlled: true,
       useSafeArea: true,
-      builder: (_) => CourseEditSheet(
-        timeCodes: timeCodes,
-        existingCourses: existingCourses,
-        course: course,
-        initialWeekday: initialWeekday,
-        initialTimeIndex: initialTimeIndex,
-      ),
+      builder: (BuildContext sheetCtx) {
+        final CourseEditSheet sheet = CourseEditSheet(
+          timeCodes: timeCodes,
+          existingCourses: existingCourses,
+          course: course,
+          initialWeekday: initialWeekday,
+          initialTimeIndex: initialTimeIndex,
+        );
+        if (palette == null) return sheet;
+        final ThemeData sheetTheme = Theme.of(sheetCtx);
+        final List<ThemeExtension<dynamic>> merged = sheetTheme
+            .extensions.values
+            .where(
+              (ThemeExtension<dynamic> ext) =>
+                  ext is! CoursePaletteTheme,
+            )
+            .toList()
+          ..add(palette);
+        return Theme(
+          data: sheetTheme.copyWith(extensions: merged),
+          child: sheet,
+        );
+      },
     );
   }
 
@@ -72,7 +98,7 @@ class _CourseEditSheetState extends State<CourseEditSheet> {
   /// Selected time slots: set of (weekday, timeIndex) pairs.
   final Set<(int, int)> _selectedSlots = <(int, int)>{};
 
-  /// Selected color index into [courseColors].
+  /// Selected color index into the active [CoursePaletteTheme].
   int _colorIndex = 0;
 
   /// Lookup: (weekday, timeIndex) → course title, for conflict
@@ -98,7 +124,7 @@ class _CourseEditSheetState extends State<CourseEditSheet> {
         _selectedSlots.add((t.weekday, t.index));
       }
       _colorIndex = c.colorIndex ??
-          c.code.hashCode.abs() % courseColors.length;
+          c.code.hashCode.abs() % CoursePaletteTheme.paletteLength;
     } else if (widget.initialWeekday != null &&
         widget.initialTimeIndex != null) {
       _selectedSlots.add(
@@ -317,11 +343,12 @@ class _CourseEditSheetState extends State<CourseEditSheet> {
   }
 
   Widget _buildColorPicker(ColorScheme colorScheme) {
+    final CoursePaletteTheme palette = CoursePaletteTheme.of(context);
     return Wrap(
       spacing: 10,
       runSpacing: 10,
       children: List<Widget>.generate(
-        courseColors.length,
+        palette.colors.length,
         (int i) {
           final bool selected = i == _colorIndex;
           return GestureDetector(
@@ -330,7 +357,8 @@ class _CourseEditSheetState extends State<CourseEditSheet> {
               width: 36,
               height: 36,
               decoration: BoxDecoration(
-                color: courseColors[i],
+                color: palette.colors[i]
+                    .withAlpha(CoursePaletteTheme.cardAlpha),
                 shape: BoxShape.circle,
                 border: selected
                     ? Border.all(
@@ -340,9 +368,9 @@ class _CourseEditSheetState extends State<CourseEditSheet> {
                     : null,
               ),
               child: selected
-                  ? const Icon(
+                  ? Icon(
                       Icons.check,
-                      color: Colors.white,
+                      color: palette.foregroundColor,
                       size: 20,
                     )
                   : null,
@@ -445,9 +473,10 @@ class _CourseEditSheetState extends State<CourseEditSheet> {
     final String? occupiedBy = _occupiedSlots[key];
     final bool isOccupied = occupiedBy != null;
 
+    final CoursePaletteTheme palette = CoursePaletteTheme.of(context);
     Color bg;
     if (isSelected) {
-      bg = courseColors[_colorIndex].withAlpha(179);
+      bg = palette.colorAt(_colorIndex).withAlpha(179);
     } else if (isOccupied) {
       bg = colorScheme.surfaceContainerHighest;
     } else {
@@ -477,10 +506,10 @@ class _CourseEditSheetState extends State<CourseEditSheet> {
         height: 36,
         color: bg,
         child: isSelected
-            ? const Icon(
+            ? Icon(
                 Icons.check_rounded,
                 size: 16,
-                color: Colors.white,
+                color: palette.foregroundColor,
               )
             : isOccupied
                 ? Center(
