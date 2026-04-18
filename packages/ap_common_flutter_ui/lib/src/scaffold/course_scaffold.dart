@@ -228,8 +228,11 @@ class CourseScaffoldState extends State<CourseScaffold> {
   /// scaffold's subtree. `null` means "inherit from Theme".
   CoursePaletteTheme? _overridePalette;
 
-  CoursePaletteTheme _activePalette(BuildContext context) =>
-      _overridePalette ?? CoursePaletteTheme.of(context);
+  CoursePaletteTheme _activePalette(BuildContext context) {
+    final CoursePaletteTheme? override = _overridePalette;
+    if (override != null) return override.resolvedFor(context);
+    return CoursePaletteTheme.of(context);
+  }
 
   Color _getCourseColor(Course course) {
     final int index = _courseColorIndexMap.putIfAbsent(course.code, () {

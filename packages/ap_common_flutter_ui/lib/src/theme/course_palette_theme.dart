@@ -22,6 +22,10 @@ import 'package:flutter/material.dart';
 /// ```
 ///
 /// Or via [ApApp] / [ApTheme] which accept a [coursePalette] argument.
+///
+/// Palettes can carry an optional [dark] counterpart. When the app is
+/// rendered in [Brightness.dark], [of] auto-resolves to that variant so
+/// apps only need to register the light palette once.
 @immutable
 class CoursePaletteTheme extends ThemeExtension<CoursePaletteTheme> {
   const CoursePaletteTheme({
@@ -29,6 +33,7 @@ class CoursePaletteTheme extends ThemeExtension<CoursePaletteTheme> {
     required this.name,
     required this.colors,
     required this.foregroundColor,
+    this.dark,
   });
 
   /// The expected length of [colors]. All built-in palettes honor this
@@ -54,10 +59,19 @@ class CoursePaletteTheme extends ThemeExtension<CoursePaletteTheme> {
   /// Text / icon color drawn on top of any course card.
   final Color foregroundColor;
 
+  /// Optional dark-mode counterpart. When provided and the ambient
+  /// [Brightness] is dark, [of] / [resolvedFor] return this variant
+  /// instead of the light colors. The dark variant itself should not
+  /// set [dark] — only the light palette does.
+  final CoursePaletteTheme? dark;
+
   /// Resolve the palette from [BuildContext], falling back to
-  /// [material] when no [CoursePaletteTheme] is registered.
+  /// [material] when no [CoursePaletteTheme] is registered. Honors the
+  /// ambient [Brightness] by returning the [dark] variant when set.
   static CoursePaletteTheme of(BuildContext context) {
-    return Theme.of(context).extension<CoursePaletteTheme>() ?? material;
+    final CoursePaletteTheme ext =
+        Theme.of(context).extension<CoursePaletteTheme>() ?? material;
+    return ext.resolvedFor(context);
   }
 
   /// Look up a built-in palette by [id]. Returns [material] if no
@@ -68,6 +82,17 @@ class CoursePaletteTheme extends ThemeExtension<CoursePaletteTheme> {
       if (p.id == id) return p;
     }
     return material;
+  }
+
+  /// Return [dark] when the ambient brightness is dark and a dark
+  /// variant exists; otherwise return this palette unchanged.
+  CoursePaletteTheme resolvedFor(BuildContext context) {
+    final CoursePaletteTheme? darkVariant = dark;
+    if (darkVariant != null &&
+        Theme.of(context).brightness == Brightness.dark) {
+      return darkVariant;
+    }
+    return this;
   }
 
   /// Pick the color at [index], wrapping around if out of range.
@@ -97,7 +122,8 @@ class CoursePaletteTheme extends ThemeExtension<CoursePaletteTheme> {
   );
 
   /// iOS System Colors (light variant) — higher saturation, feels
-  /// native on Apple platforms.
+  /// native on Apple platforms. Pairs with [_appleSystemDark] in dark
+  /// mode via the [dark] field.
   static const CoursePaletteTheme appleSystem = CoursePaletteTheme(
     id: 'appleSystem',
     name: 'Apple System',
@@ -114,6 +140,30 @@ class CoursePaletteTheme extends ThemeExtension<CoursePaletteTheme> {
       Color(0xFFAF52DE), // Purple
       Color(0xFFFF2D55), // Pink
       Color(0xFFA2845E), // Brown
+    ],
+    foregroundColor: Colors.white,
+    dark: _appleSystemDark,
+  );
+
+  /// iOS System Colors dark-mode hex values (stable from iOS 13
+  /// through iOS 26). Registered as the [dark] counterpart of
+  /// [appleSystem]; not meant to be used on its own.
+  static const CoursePaletteTheme _appleSystemDark = CoursePaletteTheme(
+    id: 'appleSystemDark',
+    name: 'Apple System (Dark)',
+    colors: <Color>[
+      Color(0xFFFF453A), // Red
+      Color(0xFFFF9F0A), // Orange
+      Color(0xFFFFD60A), // Yellow
+      Color(0xFF30D158), // Green
+      Color(0xFF63E6E2), // Mint
+      Color(0xFF40CBE0), // Teal
+      Color(0xFF64D2FF), // Cyan
+      Color(0xFF0A84FF), // Blue
+      Color(0xFF5E5CE6), // Indigo
+      Color(0xFFBF5AF2), // Purple
+      Color(0xFFFF375F), // Pink
+      Color(0xFFAC8E68), // Brown
     ],
     foregroundColor: Colors.white,
   );
@@ -140,7 +190,9 @@ class CoursePaletteTheme extends ThemeExtension<CoursePaletteTheme> {
     foregroundColor: Colors.white,
   );
 
-  /// All built-in palettes, in display order.
+  /// All built-in palettes shown in pickers, in display order. Dark
+  /// variants are intentionally omitted — they are surfaced only via
+  /// the [dark] field on their light parent.
   static const List<CoursePaletteTheme> builtIn = <CoursePaletteTheme>[
     material,
     appleSystem,
@@ -153,12 +205,14 @@ class CoursePaletteTheme extends ThemeExtension<CoursePaletteTheme> {
     String? name,
     List<Color>? colors,
     Color? foregroundColor,
+    CoursePaletteTheme? dark,
   }) {
     return CoursePaletteTheme(
       id: id ?? this.id,
       name: name ?? this.name,
       colors: colors ?? this.colors,
       foregroundColor: foregroundColor ?? this.foregroundColor,
+      dark: dark ?? this.dark,
     );
   }
 
@@ -182,6 +236,7 @@ class CoursePaletteTheme extends ThemeExtension<CoursePaletteTheme> {
       foregroundColor:
           Color.lerp(foregroundColor, other.foregroundColor, t) ??
               foregroundColor,
+      dark: pickOther ? other.dark : dark,
     );
   }
 }
