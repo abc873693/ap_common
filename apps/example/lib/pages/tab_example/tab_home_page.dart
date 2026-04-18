@@ -123,9 +123,7 @@ class _HomeTabState extends State<_HomeTab> {
           ),
           child: Text(
             context.ap.announcements,
-            style: Theme.of(context)
-                .textTheme
-                .titleMedium,
+            style: Theme.of(context).textTheme.titleMedium,
           ),
         ),
         const SizedBox(height: 8),
@@ -166,17 +164,14 @@ class _HomeTabState extends State<_HomeTab> {
 
   Future<void> _getAnnouncements() async {
     final ApiResult<List<Announcement>> result =
-        await AnnouncementHelper.instance
-            .getAnnouncements(tags: <String>[]);
+        await AnnouncementHelper.instance.getAnnouncements(tags: <String>[]);
     switch (result) {
       case ApiSuccess<List<Announcement>>(
-        :final List<Announcement> data,
-      ):
+          :final List<Announcement> data,
+        ):
         announcements = data;
         setState(() {
-          state = announcements.isEmpty
-              ? HomeState.empty
-              : HomeState.finish;
+          state = announcements.isEmpty ? HomeState.empty : HomeState.finish;
         });
       case ApiFailure<List<Announcement>>():
       case ApiError<List<Announcement>>():
@@ -185,13 +180,11 @@ class _HomeTabState extends State<_HomeTab> {
   }
 
   Future<void> _loadCourseData() async {
-    final String rawString =
-        await rootBundle.loadString(
+    final String rawString = await rootBundle.loadString(
       FileAssets.courses,
     );
     setState(() {
-      courseData =
-          CourseData.fromRawJson(rawString);
+      courseData = CourseData.fromRawJson(rawString);
     });
   }
 }

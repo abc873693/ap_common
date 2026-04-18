@@ -8,6 +8,10 @@ import 'package:flutter/services.dart';
 
 enum HomeState { loading, finish, error, empty, offline }
 
+/// Equal width per tab item in the floating tab bar. Sized to fit
+/// 4-character CJK labels comfortably.
+const double _kTabItemWidth = 64.0;
+
 class HomePageScaffold extends StatefulWidget {
   const HomePageScaffold({
     super.key,
@@ -27,6 +31,9 @@ class HomePageScaffold extends StatefulWidget {
     this.dashboardWidgets,
     this.carouselHeight,
     this.tabs,
+    this.enableHaptics = true,
+    this.showDrawerOnMobileWhenTabbed = false,
+    this.minimizeTabBarOnScroll = true,
   });
 
   /// Creates a [HomePageScaffold] from a [DataState<List<Announcement>>].
@@ -55,6 +62,9 @@ class HomePageScaffold extends StatefulWidget {
     this.dashboardWidgets,
     this.carouselHeight,
     this.tabs,
+    this.enableHaptics = true,
+    this.showDrawerOnMobileWhenTabbed = false,
+    this.minimizeTabBarOnScroll = true,
   })  : state = dataState.when(
           loading: () => HomeState.loading,
           loaded: (_, __) => HomeState.finish,
@@ -97,6 +107,21 @@ class HomePageScaffold extends StatefulWidget {
   /// [Navigator]s instead of the default drawer-based layout.
   final List<HomeTab>? tabs;
 
+  /// Play a haptic tick when switching tabs. Default: true.
+  final bool enableHaptics;
+
+  /// Show the drawer on mobile while in tabs mode.
+  ///
+  /// Default: false. Modern tabbed apps (Telegram, Instagram) hide
+  /// the drawer on mobile in favour of tab-only navigation; the drawer
+  /// is still shown on tablet as a sidebar.
+  final bool showDrawerOnMobileWhenTabbed;
+
+  /// Slide the floating tab bar out of view on downward scroll and
+  /// bring it back on upward scroll (iOS 26 tab bar minimize).
+  /// Default: true.
+  final bool minimizeTabBarOnScroll;
+
   @override
   HomePageScaffoldState createState() => HomePageScaffoldState();
 }
@@ -114,26 +139,70 @@ class HomePageScaffoldState extends State<HomePageScaffold> {
   int _currentTabIndex = 0;
   List<GlobalKey<NavigatorState>> _tabNavigatorKeys =
       <GlobalKey<NavigatorState>>[];
+  List<ScrollController> _tabScrollControllers = <ScrollController>[];
+  List<NavigatorObserver> _tabNavigatorObservers = <NavigatorObserver>[];
 
-  bool get isTablet =>
-      MediaQuery.of(context).size.shortestSide >= 680;
+  bool _navBarVisible = true;
+  double _scrollBuffer = 0.0;
+
+  /// Incremented when any tab's Navigator has an active [PopupRoute]
+  /// (modal bottom sheet, dialog, popup menu). Hides the floating tab
+  /// bar so it doesn't overlap the modal content.
+  int _popupRouteDepth = 0;
+
+  /// Null means follow the adaptive default (expanded when width >= 1200).
+  bool? _railExtendedOverride;
+
+  bool get isTablet => MediaQuery.of(context).size.shortestSide >= 680;
+
+  bool get _isRailExtended {
+    if (_railExtendedOverride != null) return _railExtendedOverride!;
+    return MediaQuery.of(context).size.width >= 1200;
+  }
+
+  bool get _navBarEffectivelyVisible => _navBarVisible && _popupRouteDepth == 0;
 
   @override
   void initState() {
     if (widget.tabs != null) {
-      _tabNavigatorKeys =
-          List<GlobalKey<NavigatorState>>.generate(
+      _tabNavigatorKeys = List<GlobalKey<NavigatorState>>.generate(
         widget.tabs!.length,
         (_) => GlobalKey<NavigatorState>(),
+      );
+      _tabScrollControllers = List<ScrollController>.generate(
+        widget.tabs!.length,
+        (_) => ScrollController(),
+      );
+      _tabNavigatorObservers = List<NavigatorObserver>.generate(
+        widget.tabs!.length,
+        (_) => _PopupRouteAwareObserver(
+          onPopupPushed: _onPopupPushed,
+          onPopupRemoved: _onPopupRemoved,
+        ),
       );
     }
     setTimer();
     super.initState();
   }
 
+  void _onPopupPushed() {
+    if (!mounted) return;
+    setState(() => _popupRouteDepth++);
+  }
+
+  void _onPopupRemoved() {
+    if (!mounted) return;
+    setState(() {
+      _popupRouteDepth = (_popupRouteDepth - 1).clamp(0, 1 << 20);
+    });
+  }
+
   @override
   void dispose() {
     _timer?.cancel();
+    for (final ScrollController controller in _tabScrollControllers) {
+      controller.dispose();
+    }
     super.dispose();
   }
 
@@ -461,8 +530,7 @@ class HomePageScaffoldState extends State<HomePageScaffold> {
       canPop: false,
       onPopInvokedWithResult: (bool didPop, _) {
         final NavigatorState? navigator =
-            _tabNavigatorKeys[_currentTabIndex]
-                .currentState;
+            _tabNavigatorKeys[_currentTabIndex].currentState;
         if (navigator != null && navigator.canPop()) {
           navigator.pop();
           return;
@@ -479,45 +547,80 @@ class HomePageScaffoldState extends State<HomePageScaffold> {
       },
       child: ScaffoldMessenger(
         key: _scaffoldMessengerKey,
-        child: isTablet
-            ? _buildTabletTabScaffold()
-            : _buildMobileTabScaffold(),
+        child: isTablet ? _buildTabletTabScaffold() : _buildMobileTabScaffold(),
       ),
     );
   }
 
   Widget _buildMobileTabScaffold() {
-    final ColorScheme colors =
-        Theme.of(context).colorScheme;
+    final ColorScheme colors = Theme.of(context).colorScheme;
     return Scaffold(
-      drawer: widget.drawer,
+      drawer: widget.showDrawerOnMobileWhenTabbed ? widget.drawer : null,
       floatingActionButton: widget.floatingActionButton,
       extendBody: true,
-      body: _buildTabBody(),
-      bottomNavigationBar: Padding(
-        padding: const EdgeInsets.only(bottom: 8),
-        child: Center(
-          child: _buildFloatingNavBar(colors),
+      // Body keeps the original MediaQuery so an inner Scaffold's
+      // FloatingActionButton stays at the screen's bottom-right, sitting
+      // beside the tab bar at roughly the same baseline. This mirrors the
+      // iOS 26 Liquid Glass pattern of two floating pills (navigation +
+      // trailing action) side-by-side. Modal sheets are handled
+      // separately by the PopupRoute observer below.
+      body: Stack(
+        children: <Widget>[
+          _buildTabBody(),
+          _buildBottomScrim(colors),
+        ],
+      ),
+      bottomNavigationBar: AnimatedSlide(
+        offset: _navBarEffectivelyVisible ? Offset.zero : const Offset(0, 2),
+        duration: const Duration(milliseconds: 250),
+        curve: Curves.easeOutCubic,
+        child: AnimatedOpacity(
+          opacity: _navBarEffectivelyVisible ? 1.0 : 0.0,
+          duration: const Duration(milliseconds: 200),
+          child: SafeArea(
+            top: false,
+            // Match the inner Scaffold's FloatingActionButton baseline
+            // (kFloatingActionButtonMargin = 16) so the tab bar pill and
+            // the trailing FAB sit on the same horizontal line.
+            child: Padding(
+              padding: const EdgeInsets.fromLTRB(16, 0, 16, 16),
+              child: Align(
+                alignment: AlignmentDirectional.bottomStart,
+                heightFactor: 1,
+                child: _buildFloatingNavBar(colors),
+              ),
+            ),
+          ),
         ),
       ),
     );
   }
 
   Widget _buildTabletTabScaffold() {
+    final bool extended = _isRailExtended;
     return Scaffold(
       floatingActionButton: widget.floatingActionButton,
       body: Row(
         children: <Widget>[
           NavigationRail(
             selectedIndex: _currentTabIndex,
-            onDestinationSelected: (int index) {
-              setState(() => _currentTabIndex = index);
-            },
-            labelType: NavigationRailLabelType.all,
+            onDestinationSelected: _onTabSelected,
+            extended: extended,
+            labelType: extended
+                ? NavigationRailLabelType.none
+                : NavigationRailLabelType.all,
+            leading: IconButton(
+              tooltip: extended ? 'Collapse sidebar' : 'Expand sidebar',
+              icon: Icon(
+                extended ? Icons.menu_open : Icons.menu,
+              ),
+              onPressed: () {
+                setState(() => _railExtendedOverride = !extended);
+              },
+            ),
             destinations: widget.tabs!
                 .map(
-                  (HomeTab tab) =>
-                      NavigationRailDestination(
+                  (HomeTab tab) => NavigationRailDestination(
                     icon: tab.icon,
                     selectedIcon: tab.activeIcon,
                     label: Text(tab.label),
@@ -535,24 +638,47 @@ class HomePageScaffoldState extends State<HomePageScaffold> {
     );
   }
 
+  /// A gradient scrim layered behind the floating tab bar (and any
+  /// trailing FAB) so they remain readable over scrolling content.
+  /// Mirrors the iOS Music / Maps pattern where the tab area fades to
+  /// a darker tone at the bottom of the screen.
+  Widget _buildBottomScrim(ColorScheme colors) {
+    return Positioned(
+      left: 0,
+      right: 0,
+      bottom: 0,
+      height: 160,
+      child: IgnorePointer(
+        child: AnimatedOpacity(
+          opacity: _navBarEffectivelyVisible ? 1.0 : 0.0,
+          duration: const Duration(milliseconds: 250),
+          child: DecoratedBox(
+            decoration: BoxDecoration(
+              gradient: LinearGradient(
+                begin: Alignment.topCenter,
+                end: Alignment.bottomCenter,
+                colors: <Color>[
+                  colors.surface.withValues(alpha: 0),
+                  colors.surface.withValues(alpha: 0.55),
+                ],
+              ),
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+
   Widget _buildFloatingNavBar(ColorScheme colors) {
     return ClipRRect(
-      borderRadius: BorderRadius.circular(20),
+      borderRadius: BorderRadius.circular(22),
       child: BackdropFilter(
-        filter: ImageFilter.blur(
-          sigmaX: 24,
-          sigmaY: 24,
-        ),
+        filter: ImageFilter.blur(sigmaX: 24, sigmaY: 24),
         child: Container(
-          padding: const EdgeInsets.symmetric(
-            horizontal: 4,
-            vertical: 6,
-          ),
+          padding: const EdgeInsets.symmetric(horizontal: 3, vertical: 7),
           decoration: BoxDecoration(
-            color: colors.surfaceContainerHighest
-                .withValues(alpha: 0.85),
-            borderRadius:
-                BorderRadius.circular(20),
+            color: colors.surfaceContainerHighest.withValues(alpha: 0.85),
+            borderRadius: BorderRadius.circular(22),
           ),
           child: Row(
             mainAxisSize: MainAxisSize.min,
@@ -566,81 +692,165 @@ class HomePageScaffoldState extends State<HomePageScaffold> {
   List<Widget> _buildNavItems(
     ColorScheme colors,
   ) {
-    return widget.tabs!
-        .asMap()
-        .entries
-        .map(
-          (MapEntry<int, HomeTab> entry) {
-            final int index = entry.key;
-            final HomeTab tab = entry.value;
-            final bool selected =
-                index == _currentTabIndex;
-            return GestureDetector(
-              onTap: () => setState(
-                () => _currentTabIndex = index,
-              ),
-              behavior: HitTestBehavior.opaque,
-              child: Padding(
-                padding:
-                    const EdgeInsets.symmetric(
-                  horizontal: 16,
-                  vertical: 4,
-                ),
-                child: Column(
-                  mainAxisSize: MainAxisSize.min,
-                  children: <Widget>[
-                    IconTheme(
-                      data: IconThemeData(
-                        size: 24,
-                        color: selected
-                            ? colors.primary
-                            : colors
-                                .onSurfaceVariant,
-                      ),
-                      child: selected
-                          ? (tab.activeIcon ??
-                              tab.icon)
-                          : tab.icon,
-                    ),
-                    const SizedBox(height: 2),
-                    Text(
-                      tab.label,
-                      style: TextStyle(
-                        fontSize: 11,
-                        fontWeight: selected
-                            ? FontWeight.w600
-                            : FontWeight.normal,
-                        color: selected
-                            ? colors.primary
-                            : colors
-                                .onSurfaceVariant,
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-            );
-          },
-        )
-        .toList();
+    return widget.tabs!.asMap().entries.map(
+      (MapEntry<int, HomeTab> entry) {
+        final int index = entry.key;
+        final HomeTab tab = entry.value;
+        final bool selected = index == _currentTabIndex;
+        return GestureDetector(
+          onTap: () => _onTabSelected(index),
+          behavior: HitTestBehavior.opaque,
+          child: tab.role == HomeTabRole.search
+              ? _buildSearchNavItem(tab, selected, colors)
+              : _buildStandardNavItem(tab, selected, colors),
+        );
+      },
+    ).toList();
   }
 
-  Widget _buildTabBody() {
-    return IndexedStack(
-      index: _currentTabIndex,
-      children: List<Widget>.generate(
-        widget.tabs!.length,
-        (int index) => Navigator(
-          key: _tabNavigatorKeys[index],
-          onGenerateRoute: (RouteSettings settings) {
-            return MaterialPageRoute<void>(
-              builder: widget.tabs![index].builder,
-              settings: settings,
-            );
-          },
+  Widget _buildStandardNavItem(
+    HomeTab tab,
+    bool selected,
+    ColorScheme colors,
+  ) {
+    return SizedBox(
+      width: _kTabItemWidth,
+      child: Padding(
+        padding: const EdgeInsets.symmetric(vertical: 3),
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: <Widget>[
+            IconTheme(
+              data: IconThemeData(
+                size: 22,
+                color: selected ? colors.primary : colors.onSurfaceVariant,
+              ),
+              child: selected ? (tab.activeIcon ?? tab.icon) : tab.icon,
+            ),
+            const SizedBox(height: 2),
+            Text(
+              tab.label,
+              maxLines: 1,
+              overflow: TextOverflow.ellipsis,
+              textAlign: TextAlign.center,
+              style: TextStyle(
+                fontSize: 11,
+                fontWeight: selected ? FontWeight.w600 : FontWeight.normal,
+                color: selected ? colors.primary : colors.onSurfaceVariant,
+              ),
+            ),
+          ],
         ),
       ),
     );
+  }
+
+  Widget _buildSearchNavItem(
+    HomeTab tab,
+    bool selected,
+    ColorScheme colors,
+  ) {
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+      child: Container(
+        padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+        decoration: BoxDecoration(
+          color: (selected ? colors.primary : colors.onSurfaceVariant)
+              .withValues(alpha: selected ? 0.15 : 0.08),
+          borderRadius: BorderRadius.circular(20),
+        ),
+        child: Row(
+          mainAxisSize: MainAxisSize.min,
+          children: <Widget>[
+            IconTheme(
+              data: IconThemeData(
+                size: 18,
+                color: selected ? colors.primary : colors.onSurfaceVariant,
+              ),
+              child: selected ? (tab.activeIcon ?? tab.icon) : tab.icon,
+            ),
+            const SizedBox(width: 6),
+            Text(
+              tab.label,
+              style: TextStyle(
+                fontSize: 12,
+                fontWeight: FontWeight.w500,
+                color: selected ? colors.primary : colors.onSurfaceVariant,
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  Widget _buildTabBody() {
+    return NotificationListener<ScrollNotification>(
+      onNotification: _onScrollNotification,
+      child: IndexedStack(
+        index: _currentTabIndex,
+        children: List<Widget>.generate(
+          widget.tabs!.length,
+          (int index) => PrimaryScrollController(
+            controller: _tabScrollControllers[index],
+            child: Navigator(
+              key: _tabNavigatorKeys[index],
+              observers: <NavigatorObserver>[_tabNavigatorObservers[index]],
+              onGenerateRoute: (RouteSettings settings) {
+                return MaterialPageRoute<void>(
+                  builder: widget.tabs![index].builder,
+                  settings: settings,
+                );
+              },
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+
+  Future<void> _onTabSelected(int index) async {
+    if (widget.enableHaptics) {
+      unawaited(HapticFeedback.selectionClick());
+    }
+    if (index == _currentTabIndex) {
+      final NavigatorState? nav = _tabNavigatorKeys[index].currentState;
+      if (nav != null && nav.canPop()) {
+        nav.popUntil((Route<dynamic> route) => route.isFirst);
+        return;
+      }
+      final ScrollController controller = _tabScrollControllers[index];
+      if (controller.hasClients && controller.offset > 0) {
+        unawaited(
+          controller.animateTo(
+            0,
+            duration: const Duration(milliseconds: 300),
+            curve: Curves.easeOutCubic,
+          ),
+        );
+      }
+      return;
+    }
+    setState(() => _currentTabIndex = index);
+  }
+
+  bool _onScrollNotification(ScrollNotification notification) {
+    if (!widget.minimizeTabBarOnScroll) return false;
+    if (notification.metrics.axis != Axis.vertical) return false;
+    if (notification is ScrollUpdateNotification) {
+      final double delta = notification.scrollDelta ?? 0.0;
+      _scrollBuffer += delta;
+      if (_scrollBuffer > 24 && _navBarVisible) {
+        setState(() => _navBarVisible = false);
+        _scrollBuffer = 0;
+      } else if (_scrollBuffer < -24 && !_navBarVisible) {
+        setState(() => _navBarVisible = true);
+        _scrollBuffer = 0;
+      }
+    } else if (notification is ScrollEndNotification) {
+      _scrollBuffer = 0;
+    }
+    return false;
   }
 
   void _showLogoutDialog() {
@@ -695,5 +905,39 @@ class HomePageScaffoldState extends State<HomePageScaffold> {
               ),
       ),
     );
+  }
+}
+
+/// Notifies [HomePageScaffold] when a [PopupRoute] (modal bottom sheet,
+/// dialog, popup menu) is pushed onto or removed from a tab's Navigator,
+/// so the floating tab bar can be hidden while the modal is visible.
+class _PopupRouteAwareObserver extends NavigatorObserver {
+  _PopupRouteAwareObserver({
+    required this.onPopupPushed,
+    required this.onPopupRemoved,
+  });
+
+  final VoidCallback onPopupPushed;
+  final VoidCallback onPopupRemoved;
+
+  @override
+  void didPush(Route<dynamic> route, Route<dynamic>? previousRoute) {
+    if (route is PopupRoute) {
+      onPopupPushed();
+    }
+  }
+
+  @override
+  void didPop(Route<dynamic> route, Route<dynamic>? previousRoute) {
+    if (route is PopupRoute) {
+      onPopupRemoved();
+    }
+  }
+
+  @override
+  void didRemove(Route<dynamic> route, Route<dynamic>? previousRoute) {
+    if (route is PopupRoute) {
+      onPopupRemoved();
+    }
   }
 }
