@@ -168,6 +168,72 @@ class CoursePaletteTheme extends ThemeExtension<CoursePaletteTheme> {
     foregroundColor: Colors.white,
   );
 
+  /// Material Design 600 shade — punchier, higher-contrast cousin of
+  /// [material] that works well on light backgrounds.
+  static const CoursePaletteTheme materialBold = CoursePaletteTheme(
+    id: 'materialBold',
+    name: 'Material Bold',
+    colors: <Color>[
+      Color(0xFF3949AB), // Indigo 600
+      Color(0xFF00897B), // Teal 600
+      Color(0xFFE53935), // Red 600
+      Color(0xFF8E24AA), // Purple 600
+      Color(0xFF1E88E5), // Blue 600
+      Color(0xFFF4511E), // Deep Orange 600
+      Color(0xFF43A047), // Green 600
+      Color(0xFFFFB300), // Amber 600
+      Color(0xFF6D4C41), // Brown 600
+      Color(0xFF546E7A), // Blue Grey 600
+      Color(0xFFD81B60), // Pink 600
+      Color(0xFF5E35B1), // Deep Purple 600
+    ],
+    foregroundColor: Colors.white,
+  );
+
+  /// Nord — the popular cool-toned designer palette. Uses a black
+  /// foreground because several Nord colors are pale.
+  static const CoursePaletteTheme nord = CoursePaletteTheme(
+    id: 'nord',
+    name: 'Nord',
+    colors: <Color>[
+      Color(0xFFBF616A), // nord11 red
+      Color(0xFFD08770), // nord12 orange
+      Color(0xFFEBCB8B), // nord13 yellow
+      Color(0xFFA3BE8C), // nord14 green
+      Color(0xFF8FBCBB), // nord7 mint
+      Color(0xFF88C0D0), // nord8 cyan
+      Color(0xFF81A1C1), // nord9 light blue
+      Color(0xFF5E81AC), // nord10 deep blue
+      Color(0xFFB48EAD), // nord15 purple
+      Color(0xFF4C566A), // nord3 slate
+      Color(0xFFD8A8C0), // soft pink (Nord-flavored)
+      Color(0xFF9E8A76), // warm brown (Nord-flavored)
+    ],
+    foregroundColor: Colors.black,
+  );
+
+  /// Vibrant — high-saturation Material Accent (A400 / A700) selection
+  /// for users who want bold, energetic course cards.
+  static const CoursePaletteTheme vibrant = CoursePaletteTheme(
+    id: 'vibrant',
+    name: 'Vibrant',
+    colors: <Color>[
+      Color(0xFFFF1744), // Red A400
+      Color(0xFFFF3D00), // Deep Orange A400
+      Color(0xFFFF9100), // Orange A400
+      Color(0xFFFFD600), // Yellow A700
+      Color(0xFF00C853), // Green A700
+      Color(0xFF1DE9B6), // Teal A400
+      Color(0xFF00B0FF), // Light Blue A400
+      Color(0xFF2962FF), // Blue A700
+      Color(0xFF304FFE), // Indigo A700
+      Color(0xFF6200EA), // Deep Purple A700
+      Color(0xFFAA00FF), // Purple A700
+      Color(0xFFC51162), // Pink A700
+    ],
+    foregroundColor: Colors.white,
+  );
+
   /// Muted pastel palette inspired by Google Calendar — softer on
   /// the eyes for long-form schedule reading.
   static const CoursePaletteTheme pastel = CoursePaletteTheme(
@@ -195,7 +261,10 @@ class CoursePaletteTheme extends ThemeExtension<CoursePaletteTheme> {
   /// the [dark] field on their light parent.
   static const List<CoursePaletteTheme> builtIn = <CoursePaletteTheme>[
     material,
+    materialBold,
     appleSystem,
+    nord,
+    vibrant,
     pastel,
   ];
 
