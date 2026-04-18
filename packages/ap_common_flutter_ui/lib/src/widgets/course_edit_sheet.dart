@@ -34,6 +34,13 @@ class CourseEditSheet extends StatefulWidget {
   bool get isEditing => course != null;
 
   /// Show this sheet as a modal bottom sheet.
+  ///
+  /// The sheet opens via the root navigator, so any
+  /// [CoursePaletteTheme] override installed locally on the caller's
+  /// subtree (e.g. via [CourseScaffold]'s palette picker) is not
+  /// inherited. To keep the color picker consistent with the
+  /// surrounding scaffold, capture the palette from [context] up front
+  /// and re-inject it into the sheet's builder.
   static Future<Course?> show({
     required BuildContext context,
     required List<TimeCode> timeCodes,
@@ -42,17 +49,35 @@ class CourseEditSheet extends StatefulWidget {
     int? initialWeekday,
     int? initialTimeIndex,
   }) {
+    final CoursePaletteTheme? palette =
+        Theme.of(context).extension<CoursePaletteTheme>();
     return showModalBottomSheet<Course>(
       context: context,
       isScrollControlled: true,
       useSafeArea: true,
-      builder: (_) => CourseEditSheet(
-        timeCodes: timeCodes,
-        existingCourses: existingCourses,
-        course: course,
-        initialWeekday: initialWeekday,
-        initialTimeIndex: initialTimeIndex,
-      ),
+      builder: (BuildContext sheetCtx) {
+        final CourseEditSheet sheet = CourseEditSheet(
+          timeCodes: timeCodes,
+          existingCourses: existingCourses,
+          course: course,
+          initialWeekday: initialWeekday,
+          initialTimeIndex: initialTimeIndex,
+        );
+        if (palette == null) return sheet;
+        final ThemeData sheetTheme = Theme.of(sheetCtx);
+        final List<ThemeExtension<dynamic>> merged = sheetTheme
+            .extensions.values
+            .where(
+              (ThemeExtension<dynamic> ext) =>
+                  ext is! CoursePaletteTheme,
+            )
+            .toList()
+          ..add(palette);
+        return Theme(
+          data: sheetTheme.copyWith(extensions: merged),
+          child: sheet,
+        );
+      },
     );
   }
 
