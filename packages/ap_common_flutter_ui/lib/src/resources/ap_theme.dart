@@ -69,6 +69,27 @@ class ApTheme extends InheritedWidget {
     ThemeColor(name: '棕褐', color: Color(0xFF5D4037)),
   ];
 
+  /// iOS System Colors (light variant) packaged as seed colors so apps
+  /// can opt into an iOS-flavoured tonal palette via
+  /// `ColorScheme.fromSeed`. Same length as [themeColors], so it is a
+  /// drop-in replacement wherever [currentColorIndex] is used — pass
+  /// the chosen entry's color into [ApTheme.light] / [ApTheme.dark] or
+  /// store it under [PREF_CUSTOM_COLOR].
+  ///
+  /// The values are stable from iOS 13 through iOS 26.
+  static const List<ThemeColor> iOSThemeColors = <ThemeColor>[
+    ThemeColor(name: 'iOS 藍', color: Color(0xFF007AFF)),
+    ThemeColor(name: 'iOS 靛', color: Color(0xFF5856D6)),
+    ThemeColor(name: 'iOS 綠', color: Color(0xFF34C759)),
+    ThemeColor(name: 'iOS 橙', color: Color(0xFFFF9500)),
+    ThemeColor(name: 'iOS 紫', color: Color(0xFFAF52DE)),
+    ThemeColor(name: 'iOS 粉紅', color: Color(0xFFFF2D55)),
+    ThemeColor(name: 'iOS 青', color: Color(0xFF30B0C7)),
+    ThemeColor(name: 'iOS 黃', color: Color(0xFFFFCC00)),
+    ThemeColor(name: 'iOS 紅', color: Color(0xFFFF3B30)),
+    ThemeColor(name: 'iOS 棕', color: Color(0xFFA2845E)),
+  ];
+
   static const int customColorIndex = -1;
 
   // ignore: constant_identifier_names
