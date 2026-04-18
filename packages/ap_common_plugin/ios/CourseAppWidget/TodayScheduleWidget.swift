@@ -106,20 +106,11 @@ struct TodayScheduleProvider: TimelineProvider {
     }
 
     private func courseColor(_ code: String) -> Color {
-        let colors: [Color] = [
-            Color(red: 0.36, green: 0.42, blue: 0.75),
-            Color(red: 0.15, green: 0.65, blue: 0.60),
-            Color(red: 0.94, green: 0.33, blue: 0.31),
-            Color(red: 0.67, green: 0.28, blue: 0.74),
-            Color(red: 0.26, green: 0.65, blue: 0.96),
-            Color(red: 1.00, green: 0.44, blue: 0.26),
-            Color(red: 0.40, green: 0.73, blue: 0.42),
-            Color(red: 1.00, green: 0.79, blue: 0.16),
-            Color(red: 0.55, green: 0.43, blue: 0.39),
-            Color(red: 0.47, green: 0.56, blue: 0.61),
-            Color(red: 0.93, green: 0.25, blue: 0.48),
-            Color(red: 0.49, green: 0.34, blue: 0.76),
-        ]
+        // Timeline providers don't have an Environment, so resolve for
+        // the light palette here. Dark-mode swap for this widget can
+        // follow in a later pass if the view switches to inline color
+        // resolution.
+        let colors = CoursePalette.resolve(for: .light).colors
         let idx = abs(code.hashValue) % colors.count
         return colors[idx]
     }

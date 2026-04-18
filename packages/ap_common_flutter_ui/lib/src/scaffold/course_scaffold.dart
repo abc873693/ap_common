@@ -196,6 +196,25 @@ class CourseScaffold extends StatefulWidget {
   /// Called whenever the user picks a new palette from the selector.
   /// Apps can use this to update their app-level theme extensions so
   /// the new palette applies to other surfaces (home dashboard, etc.).
+  ///
+  /// If the app uses `ap_common_plugin` for native AppWidgets, also
+  /// forward the palette to native so the home-screen widget stays
+  /// in sync:
+  ///
+  /// ```dart
+  /// onCoursePaletteChanged: (CoursePaletteTheme palette) {
+  ///   ApCommonPlugin.setCoursePalette(
+  ///     id: palette.id,
+  ///     colors: palette.colors
+  ///         .map((Color c) => c.toARGB32()).toList(),
+  ///     foregroundColor: palette.foregroundColor.toARGB32(),
+  ///     darkColors: palette.dark?.colors
+  ///         .map((Color c) => c.toARGB32()).toList(),
+  ///     darkForegroundColor:
+  ///         palette.dark?.foregroundColor.toARGB32(),
+  ///   );
+  /// }
+  /// ```
   final ValueChanged<CoursePaletteTheme>? onCoursePaletteChanged;
 
   @override

@@ -87,6 +87,33 @@ class ApCommonPlugin {
     await _invoke<void>('clearUserInfoWidget');
   }
 
+  /// Push the active course palette to native widgets so the Android
+  /// AppWidget / iOS WidgetKit extension can render course cards with
+  /// the same colors the user picked in-app.
+  ///
+  /// [id] is the palette identifier (e.g. `material400`, `appleSystem`).
+  /// [colors] and [foregroundColor] are ARGB ints (same encoding as
+  /// `Color.toARGB32()` on Flutter side).
+  /// When the palette carries a dark variant, pass [darkColors] and
+  /// [darkForegroundColor] so the native widget can switch with the
+  /// system appearance. Otherwise leave them null.
+  static Future<void> setCoursePalette({
+    required String id,
+    required List<int> colors,
+    required int foregroundColor,
+    List<int>? darkColors,
+    int? darkForegroundColor,
+  }) async {
+    await _invoke<void>('setCoursePalette', <String, Object?>{
+      'id': id,
+      'colors': colors,
+      'foregroundColor': foregroundColor,
+      if (darkColors != null) 'darkColors': darkColors,
+      if (darkForegroundColor != null)
+        'darkForegroundColor': darkForegroundColor,
+    });
+  }
+
   /// Update the course widget with fake data for testing.
   ///
   /// Injects two courses starting 30 and 90 minutes from now
