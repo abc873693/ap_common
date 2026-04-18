@@ -26,6 +26,7 @@ import 'package:flutter/material.dart';
 class CoursePaletteTheme extends ThemeExtension<CoursePaletteTheme> {
   const CoursePaletteTheme({
     required this.id,
+    required this.name,
     required this.colors,
     required this.foregroundColor,
   });
@@ -36,9 +37,16 @@ class CoursePaletteTheme extends ThemeExtension<CoursePaletteTheme> {
   /// [colorAt] wraps with modulo so a shorter list still renders.
   static const int paletteLength = 12;
 
+  /// Preference key used by [CourseScaffold]'s built-in palette picker
+  /// to persist the user's choice across app launches.
+  static const String preferenceKey = 'ap_common.course_palette_id';
+
   /// A stable identifier, useful for persisting the active palette
   /// or bridging to native widgets via SharedPreferences.
   final String id;
+
+  /// Human-readable display name shown in palette pickers.
+  final String name;
 
   /// The 12 course colors.
   final List<Color> colors;
@@ -52,6 +60,16 @@ class CoursePaletteTheme extends ThemeExtension<CoursePaletteTheme> {
     return Theme.of(context).extension<CoursePaletteTheme>() ?? material;
   }
 
+  /// Look up a built-in palette by [id]. Returns [material] if no
+  /// match, so callers can safely pass persisted ids that may have
+  /// been removed between app versions.
+  static CoursePaletteTheme fromId(String? id) {
+    for (final CoursePaletteTheme p in builtIn) {
+      if (p.id == id) return p;
+    }
+    return material;
+  }
+
   /// Pick the color at [index], wrapping around if out of range.
   Color colorAt(int index) => colors[index.abs() % colors.length];
 
@@ -60,6 +78,7 @@ class CoursePaletteTheme extends ThemeExtension<CoursePaletteTheme> {
   /// visual when no palette is injected.
   static const CoursePaletteTheme material = CoursePaletteTheme(
     id: 'material400',
+    name: 'Material',
     colors: <Color>[
       Color(0xFF5C6BC0), // Indigo
       Color(0xFF26A69A), // Teal
@@ -81,6 +100,7 @@ class CoursePaletteTheme extends ThemeExtension<CoursePaletteTheme> {
   /// native on Apple platforms.
   static const CoursePaletteTheme appleSystem = CoursePaletteTheme(
     id: 'appleSystem',
+    name: 'Apple System',
     colors: <Color>[
       Color(0xFFFF3B30), // Red
       Color(0xFFFF9500), // Orange
@@ -102,6 +122,7 @@ class CoursePaletteTheme extends ThemeExtension<CoursePaletteTheme> {
   /// the eyes for long-form schedule reading.
   static const CoursePaletteTheme pastel = CoursePaletteTheme(
     id: 'pastel',
+    name: 'Pastel',
     colors: <Color>[
       Color(0xFFD94F4C), // Tomato
       Color(0xFFE68C3E), // Tangerine
@@ -129,11 +150,13 @@ class CoursePaletteTheme extends ThemeExtension<CoursePaletteTheme> {
   @override
   CoursePaletteTheme copyWith({
     String? id,
+    String? name,
     List<Color>? colors,
     Color? foregroundColor,
   }) {
     return CoursePaletteTheme(
       id: id ?? this.id,
+      name: name ?? this.name,
       colors: colors ?? this.colors,
       foregroundColor: foregroundColor ?? this.foregroundColor,
     );
@@ -142,13 +165,18 @@ class CoursePaletteTheme extends ThemeExtension<CoursePaletteTheme> {
   @override
   CoursePaletteTheme lerp(CoursePaletteTheme? other, double t) {
     if (other == null) return this;
-    // Palettes always have the same length (paletteLength).
+    // Both palettes are expected to be length [paletteLength] — use the
+    // shorter of the two as a safety net if a custom palette violates that.
+    final int len =
+        colors.length < other.colors.length ? colors.length : other.colors.length;
     final List<Color> lerped = <Color>[
-      for (int i = 0; i < colors.length; i++)
+      for (int i = 0; i < len; i++)
         Color.lerp(colors[i], other.colors[i], t) ?? colors[i],
     ];
+    final bool pickOther = t >= 0.5;
     return CoursePaletteTheme(
-      id: t < 0.5 ? id : other.id,
+      id: pickOther ? other.id : id,
+      name: pickOther ? other.name : name,
       colors: lerped,
       foregroundColor:
           Color.lerp(foregroundColor, other.foregroundColor, t) ??

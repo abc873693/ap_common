@@ -89,6 +89,8 @@ class CourseScaffold extends StatefulWidget {
     this.customCourseData,
     this.onCustomCourseChanged,
     this.semesterPickerController,
+    this.enablePaletteSelector = true,
+    this.onCoursePaletteChanged,
   });
 
   /// Creates a [CourseScaffold] from a [DataState<CourseData>].
@@ -129,6 +131,8 @@ class CourseScaffold extends StatefulWidget {
     this.customCourseData,
     this.onCustomCourseChanged,
     this.semesterPickerController,
+    this.enablePaletteSelector = true,
+    this.onCoursePaletteChanged,
   })  : state = dataState.when(
           loading: () => CourseState.loading,
           loaded: (_, __) => CourseState.finish,
@@ -183,6 +187,17 @@ class CourseScaffold extends StatefulWidget {
   /// Optional controller for the semester picker.
   final SemesterPickerController? semesterPickerController;
 
+  /// When true (default), the setting dialog shows a palette selector
+  /// that lets the user switch between built-in [CoursePaletteTheme]s.
+  /// The choice is persisted under [CoursePaletteTheme.preferenceKey]
+  /// so it survives app restarts.
+  final bool enablePaletteSelector;
+
+  /// Called whenever the user picks a new palette from the selector.
+  /// Apps can use this to update their app-level theme extensions so
+  /// the new palette applies to other surfaces (home dashboard, etc.).
+  final ValueChanged<CoursePaletteTheme>? onCoursePaletteChanged;
+
   @override
   CourseScaffoldState createState() => CourseScaffoldState();
 }
@@ -209,12 +224,19 @@ class CourseScaffoldState extends State<CourseScaffold> {
   final Map<String, int> _courseColorIndexMap = <String, int>{};
   int _colorIndex = 0;
 
+  /// User-selected palette that overrides the app-level one for this
+  /// scaffold's subtree. `null` means "inherit from Theme".
+  CoursePaletteTheme? _overridePalette;
+
+  CoursePaletteTheme _activePalette(BuildContext context) =>
+      _overridePalette ?? CoursePaletteTheme.of(context);
+
   Color _getCourseColor(Course course) {
     final int index = _courseColorIndexMap.putIfAbsent(course.code, () {
       if (course.colorIndex != null) return course.colorIndex!;
       return _colorIndex++;
     });
-    return CoursePaletteTheme.of(context).colorAt(index);
+    return _activePalette(context).colorAt(index);
   }
 
   late ScrollController _scrollController;
@@ -237,6 +259,11 @@ class CourseScaffoldState extends State<CourseScaffold> {
       '${ApConstants.packageName}.merge_course',
       true,
     );
+    final String savedPaletteId =
+        PreferenceUtil.instance.getString(CoursePaletteTheme.preferenceKey, '');
+    if (savedPaletteId.isNotEmpty) {
+      _overridePalette = CoursePaletteTheme.fromId(savedPaletteId);
+    }
     fetchInvisibleCourseCodes();
     _scrollController = ScrollController();
     _scrollController.addListener(() {
@@ -272,9 +299,47 @@ class CourseScaffoldState extends State<CourseScaffold> {
     super.dispose();
   }
 
+  /// Wrap [child] in a [Theme] that injects [_overridePalette] as a
+  /// [CoursePaletteTheme] extension, so descendants (including modal
+  /// sheets launched via [showModalBottomSheet] with this context) see
+  /// the user-selected palette instead of the app-level one.
+  Widget _withPaletteOverride(BuildContext context, Widget child) {
+    final CoursePaletteTheme? override = _overridePalette;
+    if (override == null) return child;
+    final ThemeData theme = Theme.of(context);
+    return Theme(
+      data: theme.copyWith(
+        extensions: <ThemeExtension<dynamic>>[
+          for (final ThemeExtension<dynamic> ext in theme.extensions.values)
+            if (ext is! CoursePaletteTheme) ext,
+          override,
+        ],
+      ),
+      child: child,
+    );
+  }
+
+  Future<void> _showPalettePicker() async {
+    final CoursePaletteTheme current = _activePalette(context);
+    final CoursePaletteTheme? picked = await CoursePalettePickerSheet.show(
+      context: context,
+      currentId: current.id,
+      title: context.ap.courseColor,
+    );
+    if (picked == null || picked.id == current.id) return;
+    await PreferenceUtil.instance
+        .setString(CoursePaletteTheme.preferenceKey, picked.id);
+    if (!mounted) return;
+    setState(() => _overridePalette = picked);
+    widget.onCoursePaletteChanged?.call(picked);
+    AnalyticsUtil.instance.logEvent('course_palette_change');
+  }
+
   @override
   Widget build(BuildContext context) {
-    return CourseConfig(
+    return _withPaletteOverride(
+      context,
+      CourseConfig(
       showSectionTime: showSectionTime,
       showInstructors: showInstructors,
       showClassroomLocation: showClassroomLocation,
@@ -315,6 +380,12 @@ class CourseScaffoldState extends State<CourseScaffold> {
                 icon: Icon(ApIcon.download),
                 onPressed: _captureCourseTable,
                 tooltip: context.ap.exportCourseTable,
+              ),
+            if (widget.enablePaletteSelector)
+              IconButton(
+                icon: const Icon(Icons.palette_outlined),
+                onPressed: _showPalettePicker,
+                tooltip: context.ap.courseColor,
               ),
             IconButton(
               icon: Icon(ApIcon.settings),
@@ -471,6 +542,7 @@ class CourseScaffoldState extends State<CourseScaffold> {
             ],
           ),
         ),
+      ),
       ),
     );
   }
@@ -1035,7 +1107,9 @@ class CourseScaffoldState extends State<CourseScaffold> {
       backgroundColor: const Color(0x00000000),
       isScrollControlled: true,
       builder: (BuildContext builder) {
-        return CourseContent(
+        return _withPaletteOverride(
+          builder,
+          CourseContent(
           enableNotifyControl: widget.enableNotifyControl,
           course: course,
           notifyData: widget.notifyData,
@@ -1058,6 +1132,7 @@ class CourseScaffoldState extends State<CourseScaffold> {
             Navigator.of(builder).pop();
             _deleteCustomCourse(course);
           },
+          ),
         );
       },
     );
@@ -1610,22 +1685,33 @@ class CourseList extends StatelessWidget {
                 context: context,
                 backgroundColor: const Color(0x00000000),
                 isScrollControlled: true,
-                builder: (BuildContext context) => CourseContent(
-                  course: course,
-                  invisibleCourseCodes: invisibleCourseCodes,
-                  onVisibilityChanged: (bool visible) =>
-                      onVisibilityChanged?.call(course, visible),
-                  timeCode: timeCodes != null && timeCodes!.isNotEmpty
-                      ? timeCodes![0]
-                      : const TimeCode(
-                          title: '',
-                          startTime: '',
-                          endTime: '',
-                        ),
-                  weekday:
-                      course.times.isNotEmpty ? course.times.first.weekday : 1,
-                  courseColor: courseColor,
-                  enableNotifyControl: false,
+                builder: (BuildContext sheetCtx) => Theme(
+                  data: Theme.of(sheetCtx).copyWith(
+                    extensions: <ThemeExtension<dynamic>>[
+                      for (final ThemeExtension<dynamic> ext
+                          in Theme.of(sheetCtx).extensions.values)
+                        if (ext is! CoursePaletteTheme) ext,
+                      palette,
+                    ],
+                  ),
+                  child: CourseContent(
+                    course: course,
+                    invisibleCourseCodes: invisibleCourseCodes,
+                    onVisibilityChanged: (bool visible) =>
+                        onVisibilityChanged?.call(course, visible),
+                    timeCode: timeCodes != null && timeCodes!.isNotEmpty
+                        ? timeCodes![0]
+                        : const TimeCode(
+                            title: '',
+                            startTime: '',
+                            endTime: '',
+                          ),
+                    weekday: course.times.isNotEmpty
+                        ? course.times.first.weekday
+                        : 1,
+                    courseColor: courseColor,
+                    enableNotifyControl: false,
+                  ),
                 ),
               );
             },
