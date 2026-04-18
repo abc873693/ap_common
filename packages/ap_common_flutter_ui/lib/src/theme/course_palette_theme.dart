@@ -167,8 +167,9 @@ class CoursePaletteTheme extends ThemeExtension<CoursePaletteTheme> {
     if (other == null) return this;
     // Both palettes are expected to be length [paletteLength] — use the
     // shorter of the two as a safety net if a custom palette violates that.
-    final int len =
-        colors.length < other.colors.length ? colors.length : other.colors.length;
+    final int len = colors.length < other.colors.length
+        ? colors.length
+        : other.colors.length;
     final List<Color> lerped = <Color>[
       for (int i = 0; i < len; i++)
         Color.lerp(colors[i], other.colors[i], t) ?? colors[i],
