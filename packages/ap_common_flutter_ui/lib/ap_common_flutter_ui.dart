@@ -10,6 +10,7 @@ export 'src/resources/ap_theme.dart';
 export 'src/resources/resources.dart';
 export 'src/scaffold/course_scaffold.dart';
 export 'src/scaffold/home_page_scaffold.dart';
+export 'src/scaffold/home_tab.dart';
 export 'src/scaffold/image_viewer_scaffold.dart';
 export 'src/scaffold/login_scaffold.dart';
 export 'src/scaffold/score_scaffold.dart';
