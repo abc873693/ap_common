@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'dart:io';
 
 import 'package:ap_common_flutter_ui/ap_common_flutter_ui.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:package_info_plus/package_info_plus.dart';
 import 'package:sprintf/sprintf.dart';
@@ -172,6 +173,49 @@ class DialogUtils {
       ),
     );
     if (versionDiff > 0) {
+      // Try Android in-app update via Google Play API
+      if (!kIsWeb && Platform.isAndroid) {
+        try {
+          final InAppUpdateInfo? updateInfo =
+              await AppStoreUtil.instance.checkForInAppUpdate();
+          if (updateInfo?.updateAvailability ==
+              InAppUpdateAvailability.updateAvailable) {
+            if (versionInfo.isForceUpdate &&
+                updateInfo!.immediateUpdateAllowed) {
+              await AppStoreUtil.instance.performImmediateUpdate();
+              return;
+            } else if (updateInfo!.flexibleUpdateAllowed) {
+              await AppStoreUtil.instance.startFlexibleUpdate();
+              if (!context.mounted) return;
+              showDialog(
+                context: context,
+                builder: (BuildContext context) => DefaultDialog(
+                  title: app.updateTitle,
+                  contentWidget: Text(
+                    app.updateDownloadedContent,
+                    textAlign: TextAlign.center,
+                    style: TextStyle(
+                      color: Theme.of(context)
+                          .colorScheme
+                          .onSurfaceVariant,
+                      height: 1.3,
+                      fontSize: 16.0,
+                    ),
+                  ),
+                  actionText: app.restart,
+                  actionFunction: () {
+                    AppStoreUtil.instance.completeFlexibleUpdate();
+                  },
+                ),
+              );
+              return;
+            }
+          }
+          // ignore: avoid_catches_without_on_clauses
+        } catch (_) {
+          // Fall through to default dialog behavior
+        }
+      }
       if (versionInfo.isForceUpdate) {
         //ignore: use_build_context_synchronously
         if (!context.mounted) return;

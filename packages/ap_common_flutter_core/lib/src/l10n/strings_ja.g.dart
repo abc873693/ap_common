@@ -122,6 +122,8 @@ class ApLocalizationsJa extends ApLocalizations with BaseTranslations<AppLocale,
 	@override String updateIosContent({required Object arg1}) => '${arg1}のApp Storeに新しいバージョンがあります！';
 	@override String get updateTitle => 'アップデート';
 	@override String get update => '更新';
+	@override String get updateDownloadedContent => 'アップデートのダウンロードが完了しました。アプリを再起動して適用してください。';
+	@override String get restart => '再起動';
 	@override String get functionNotOpen => 'この機能はまだ開放されていません～\nファンページで開放時期をお知らせします！';
 	@override String get betaFunction => 'この機能はベータ版です。問題があればすぐにご報告ください！';
 	@override String busNotPick({required Object arg1}) => '日付が選択されていません！\n先に日付を選んでください ${arg1}';
@@ -595,6 +597,8 @@ extension on ApLocalizationsJa {
 			'updateIosContent' => ({required Object arg1}) => '${arg1}のApp Storeに新しいバージョンがあります！',
 			'updateTitle' => 'アップデート',
 			'update' => '更新',
+			'updateDownloadedContent' => 'アップデートのダウンロードが完了しました。アプリを再起動して適用してください。',
+			'restart' => '再起動',
 			'functionNotOpen' => 'この機能はまだ開放されていません～\nファンページで開放時期をお知らせします！',
 			'betaFunction' => 'この機能はベータ版です。問題があればすぐにご報告ください！',
 			'busNotPick' => ({required Object arg1}) => '日付が選択されていません！\n先に日付を選んでください ${arg1}',

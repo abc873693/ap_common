@@ -7,6 +7,7 @@ export 'package:dio/dio.dart';
 
 export 'src/l10n/ap_localizations.dart';
 export 'src/models/general_permission_status.dart';
+export 'src/models/in_app_update_info.dart';
 export 'src/ui/ap_icon.dart';
 export 'src/utilities/app_store_util.dart';
 export 'src/utilities/media_util.dart';

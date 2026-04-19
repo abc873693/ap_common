@@ -290,6 +290,12 @@ class ApLocalizations with BaseTranslations<AppLocale, ApLocalizations> {
 	/// en: 'Update'
 	String get update => 'Update';
 
+	/// en: 'The update has been downloaded. Restart the app to apply.'
+	String get updateDownloadedContent => 'The update has been downloaded. Restart the app to apply.';
+
+	/// en: 'Restart'
+	String get restart => 'Restart';
+
 	/// en: 'Coming Soon~ Donate us to unlock this feature now!'
 	String get functionNotOpen => 'Coming Soon~\nDonate us to unlock this feature now!';
 
@@ -1522,6 +1528,8 @@ extension on ApLocalizations {
 			'updateIosContent' => ({required Object arg1}) => 'An update is available for ${arg1}!',
 			'updateTitle' => 'Updated',
 			'update' => 'Update',
+			'updateDownloadedContent' => 'The update has been downloaded. Restart the app to apply.',
+			'restart' => 'Restart',
 			'functionNotOpen' => 'Coming Soon~\nDonate us to unlock this feature now!',
 			'betaFunction' => 'This is a beta version. Please report any bugs when encountering an error!',
 			'busNotPick' => ({required Object arg1}) => 'Date has not been chosen.\nPlease choose a date first ${arg1}',

@@ -82,6 +82,8 @@
   "updateIosContent": "An update is available for $arg1!",
   "updateTitle": "Updated",
   "update": "Update",
+  "updateDownloadedContent": "The update has been downloaded. Restart the app to apply.",
+  "restart": "Restart",
   "functionNotOpen": "Coming Soon~\nDonate us to unlock this feature now!",
   "betaFunction": "This is a beta version. Please report any bugs when encountering an error!",
   "busNotPick": "Date has not been chosen.\nPlease choose a date first $arg1",
