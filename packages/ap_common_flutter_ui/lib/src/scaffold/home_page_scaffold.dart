@@ -213,6 +213,20 @@ class HomePageScaffoldState extends State<HomePageScaffold> {
 
   // Original full-screen carousel layout (no dashboard).
   Widget _buildCarouselLayout(Orientation orientation) {
+    if (orientation == Orientation.landscape && !isTablet) {
+      return Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: <Widget>[
+          Expanded(
+            child: _buildLandscapePhonePageView(orientation),
+          ),
+          const SizedBox(height: 8.0),
+          _buildPageIndicator(),
+          const SizedBox(height: 16.0),
+        ],
+      );
+    }
+
     return Column(
       mainAxisAlignment: MainAxisAlignment.center,
       children: <Widget>[
@@ -239,44 +253,57 @@ class HomePageScaffoldState extends State<HomePageScaffold> {
   Widget _buildDashboardLayout(Orientation orientation) {
     final bool isPortrait = orientation == Orientation.portrait;
 
-    // Split available height 1:1 between dashboard widgets
-    // and announcement carousel.
-    final double screenHeight = MediaQuery.of(context).size.height;
-    // Subtract AppBar(56) + BottomNav(56) + StatusBar(~44)
-    // + spacing/indicators(~60)
-    final double available = screenHeight - 56 - 56 - 44 - 60;
-    final double halfH = widget.carouselHeight ??
-        (isPortrait
-            ? (available * 0.5).clamp(180.0, 350.0)
-            : (available * 0.5).clamp(120.0, 200.0));
+    if (!isPortrait && !isTablet) {
+      return Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: <Widget>[
+          Expanded(
+            child: _buildLandscapePhonePageView(orientation),
+          ),
+          const SizedBox(height: 8.0),
+          _buildPageIndicator(),
+          const SizedBox(height: 16.0),
+        ],
+      );
+    }
 
-    return ListView(
-      padding: EdgeInsets.zero,
-      children: <Widget>[
-        // Dashboard widgets
-        SizedBox(
-          height: halfH,
-          child: ListView(
-            padding: EdgeInsets.zero,
-            children: widget.dashboardWidgets!,
+    final double screenHeight = MediaQuery.of(context).size.height;
+    final double available = screenHeight - 56 - 56 - 44 - 60;
+    final double carouselH =
+        widget.carouselHeight ?? (available * 0.6).clamp(240.0, 600.0);
+
+    return CustomScrollView(
+      slivers: <Widget>[
+        SliverList(
+          delegate: SliverChildBuilderDelegate(
+            (BuildContext context, int index) {
+              return widget.dashboardWidgets![index];
+            },
+            childCount: widget.dashboardWidgets!.length,
           ),
         ),
-        // Carousel section
-        SizedBox(
-          height: halfH,
+        SliverFillRemaining(
+          hasScrollBody: false,
           child: Column(
+            mainAxisAlignment:
+                isTablet ? MainAxisAlignment.center : MainAxisAlignment.end,
             children: <Widget>[
-              Expanded(
-                child: _buildPageView(orientation),
+              const SizedBox(height: 8.0),
+              SizedBox(
+                height: carouselH,
+                child: Column(
+                  children: <Widget>[
+                    Expanded(
+                      child: _buildPageView(orientation),
+                    ),
+                    _buildAnnouncementTitle(),
+                    const SizedBox(height: 4),
+                    _buildPageIndicator(),
+                  ],
+                ),
               ),
-              _buildAnnouncementTitle(),
-              const SizedBox(height: 4),
-              _buildPageIndicator(),
             ],
           ),
-        ),
-        SizedBox(
-          height: isPortrait ? 16.0 : 8.0,
         ),
       ],
     );
@@ -297,6 +324,60 @@ class HomePageScaffoldState extends State<HomePageScaffold> {
           ),
         ),
       ),
+    );
+  }
+
+  Widget _buildLandscapePhonePageView(Orientation orientation) {
+    return PageView.builder(
+      controller: pageController,
+      itemCount: widget.announcements.length,
+      itemBuilder: (BuildContext context, int currentIndex) {
+        final bool active = currentIndex == _currentNewsIndex;
+        final Announcement announcement = widget.announcements[currentIndex];
+
+        Widget titleWidget = Text(
+          announcement.title,
+          textAlign: TextAlign.center,
+          style: TextStyle(
+            fontSize: 20.0,
+            color: Theme.of(context).colorScheme.onSurfaceVariant,
+            fontWeight: FontWeight.w500,
+          ),
+        );
+
+        if (active) {
+          titleWidget = Hero(
+            tag: ApConstants.tagAnnouncementTitle,
+            child: Material(
+              color: const Color(0x00000000),
+              child: titleWidget,
+            ),
+          );
+        }
+
+        return Row(
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          children: <Widget>[
+            Expanded(
+              flex: 1,
+              child: _newsImage(
+                announcement,
+                orientation,
+                active,
+              ),
+            ),
+            Expanded(
+              flex: 1,
+              child: Center(
+                child: Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 16.0),
+                  child: titleWidget,
+                ),
+              ),
+            ),
+          ],
+        );
+      },
     );
   }
 
@@ -370,7 +451,8 @@ class HomePageScaffoldState extends State<HomePageScaffold> {
         duration: const Duration(milliseconds: 500),
         curve: Curves.easeOutQuint,
         margin: EdgeInsets.symmetric(
-          vertical: MediaQuery.of(context).size.height * (active ? 0.05 : 0.15),
+          vertical: MediaQuery.of(context).size.height *
+              (isTablet ? (active ? 0.02 : 0.08) : (active ? 0.05 : 0.15)),
           horizontal: MediaQuery.of(context).size.width * 0.02,
         ),
         child: Hero(
@@ -386,9 +468,9 @@ class HomePageScaffoldState extends State<HomePageScaffold> {
   Widget _homebody(Orientation orientation) {
     double viewportFraction = 0.65;
     if (orientation == Orientation.portrait) {
-      viewportFraction = 0.65;
+      viewportFraction = isTablet ? 0.8 : 0.65;
     } else if (orientation == Orientation.landscape) {
-      viewportFraction = 0.5;
+      viewportFraction = isTablet ? 0.7 : 0.95;
     }
     pageController = PageController(viewportFraction: viewportFraction);
     pageController!.addListener(() {
