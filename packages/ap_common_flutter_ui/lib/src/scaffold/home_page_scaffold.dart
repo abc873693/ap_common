@@ -5,9 +5,13 @@ import 'package:ap_common_flutter_ui/ap_common_flutter_ui.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
+/// Represents the current loading state of the [HomePageScaffold].
 enum HomeState { loading, finish, error, empty, offline }
 
+/// A scaffold widget designed for the home page of an app, featuring a carousel of announcements, optional dashboard widgets, and responsive layouts for mobile and tablet devices.
+
 class HomePageScaffold extends StatefulWidget {
+  /// Creates a new instance of [HomePageScaffold].
   const HomePageScaffold({
     super.key,
     required this.state,
@@ -60,21 +64,43 @@ class HomePageScaffold extends StatefulWidget {
         ),
         announcements = dataState.dataOrNull ?? <Announcement>[];
 
+  /// The current state of the home page (e.g., loading, finish, error).
   final HomeState state;
+
+  /// The text displayed in the AppBar.
   final String? title;
+
+  /// The list of announcements to display in the carousel.
   final List<Announcement> announcements;
+
+  /// A list of Widgets to display in a row after the title in the AppBar.
   final List<Widget>? actions;
+
+  /// The interactive items displayed in the BottomNavigationBar.
   final List<Widget>? bottomNavigationBarItems;
 
+  /// Callback invoked when a tab in the bottom navigation bar is tapped.
   final Function(int index)? onTabTapped;
+
+  /// Callback invoked when an announcement image is tapped.
   final Function(Announcement announcement)? onImageTapped;
 
+  /// A panel displayed to the side of the body, often hidden on mobile devices.
   final Widget? drawer;
+
+  /// The primary content of the scaffold, typically replacing the carousel on tablet layouts.
   final Widget? content;
+
+  /// A button displayed floating above the body.
   final Widget? floatingActionButton;
 
+  /// Indicates whether the user is currently logged in.
   final bool isLogin;
+
+  /// Whether the announcement carousel should automatically cycle through images.
   final bool autoPlay;
+
+  /// The duration between automatic transitions in the carousel.
   final Duration autoPlayDuration;
 
   /// Additional widgets displayed below the carousel in a scrollable
@@ -92,6 +118,7 @@ class HomePageScaffold extends StatefulWidget {
   HomePageScaffoldState createState() => HomePageScaffoldState();
 }
 
+/// State for [HomePageScaffold].
 class HomePageScaffoldState extends State<HomePageScaffold> {
   final GlobalKey<ScaffoldMessengerState> _scaffoldMessengerKey =
       GlobalKey<ScaffoldMessengerState>();
@@ -102,6 +129,7 @@ class HomePageScaffoldState extends State<HomePageScaffold> {
 
   Timer? _timer;
 
+  /// Returns true if the device is considered a tablet based on screen width.
   bool get isTablet => MediaQuery.of(context).size.shortestSide >= 680;
 
   @override
@@ -186,6 +214,7 @@ class HomePageScaffoldState extends State<HomePageScaffold> {
     );
   }
 
+  /// Sets up the timer for automatically switching carousel pages.
   void setTimer() {
     if (widget.autoPlay) {
       _timer = Timer.periodic(
@@ -211,7 +240,11 @@ class HomePageScaffoldState extends State<HomePageScaffold> {
     }
   }
 
-  // Original full-screen carousel layout (no dashboard).
+  /// Builds the original full-screen carousel layout (without dashboard widgets).
+  ///
+  /// Layout Separation:
+  /// - Mobile Landscape: Uses a horizontal side-by-side layout (left: image, right: title).
+  /// - Mobile Portrait & Tablet: Uses a vertical stacked layout (title above/below the image).
   Widget _buildCarouselLayout(Orientation orientation) {
     if (orientation == Orientation.landscape && !isTablet) {
       return Column(
@@ -249,7 +282,14 @@ class HomePageScaffoldState extends State<HomePageScaffold> {
     );
   }
 
-  // Dashboard layout: carousel at fixed height + scrollable widgets.
+  /// Builds the dashboard layout where the top section is a fixed-height carousel
+  /// and the bottom section contains scrollable [dashboardWidgets].
+  ///
+  /// Layout Separation:
+  /// - Mobile Landscape: Due to limited vertical space, it falls back to
+  ///   the [_buildLandscapePhonePageView] side-by-side layout.
+  /// - Mobile Portrait & Tablet: Uses a [CustomScrollView] to display
+  ///   a fixed-height carousel at the top and scrollable [dashboardWidgets] below.
   Widget _buildDashboardLayout(Orientation orientation) {
     final bool isPortrait = orientation == Orientation.portrait;
 
@@ -268,7 +308,13 @@ class HomePageScaffoldState extends State<HomePageScaffold> {
     }
 
     final double screenHeight = MediaQuery.of(context).size.height;
+    
+    // Calculate available height by subtracting common fixed UI heights:
+    // 56 (AppBar) - 56 (BottomNavigationBar) - 44 (Status bar/SafeArea) - 60 (Extra margin/padding)
     final double available = screenHeight - 56 - 56 - 44 - 60;
+    
+    // Allocate 60% of available height to the carousel, bounded between 240 and 600
+    // to ensure a reasonable visual proportion across different device sizes.
     final double carouselH =
         widget.carouselHeight ?? (available * 0.6).clamp(240.0, 600.0);
 
@@ -309,6 +355,10 @@ class HomePageScaffoldState extends State<HomePageScaffold> {
     );
   }
 
+  /// Builds the title text widget for the currently displayed announcement.
+  /// 
+  /// Wraps the text in a [Hero] widget using [ApConstants.tagAnnouncementTitle]
+  /// to support smooth transition animations when navigating to a detail page.
   Widget _buildAnnouncementTitle() {
     return Hero(
       tag: ApConstants.tagAnnouncementTitle,
@@ -327,6 +377,12 @@ class HomePageScaffoldState extends State<HomePageScaffold> {
     );
   }
 
+  /// Builds the specialized PageView for mobile devices in landscape mode.
+  ///
+  /// Designed specifically for mobile landscape where vertical height is limited.
+  /// It uses a [Row] to split the screen into two halves:
+  /// - `Flex 1` (Left): Displays the announcement image.
+  /// - `Flex 1` (Right): Displays the centered announcement title.
   Widget _buildLandscapePhonePageView(Orientation orientation) {
     return PageView.builder(
       controller: pageController,
@@ -381,6 +437,11 @@ class HomePageScaffoldState extends State<HomePageScaffold> {
     );
   }
 
+  /// Builds the standard PageView for mobile portrait and tablet layouts.
+  ///
+  /// Designed for mobile portrait and tablet (both orientations).
+  /// The image takes up the full width of its container, while the title
+  /// is usually arranged vertically by an external Column.
   Widget _buildPageView(Orientation orientation) {
     return PageView.builder(
       controller: pageController,
@@ -464,7 +525,13 @@ class HomePageScaffoldState extends State<HomePageScaffold> {
       ),
     );
   }
-
+Determines which main body layout to render based on current state and orientation.
+  ///
+  /// Viewport Fraction Logic:**
+  /// - Mobile Portrait: `0.65` (Shows edges of adjacent cards).
+  /// - Mobile Landscape: `0.95` (Nearly full screen due to side-by-side layout).
+  /// - Tablet Portrait: `0.8` (Larger screen balance).
+  /// - Tablet Landscape: `0.7` (Optimized for wide screen aspect ratios).
   Widget _homebody(Orientation orientation) {
     double viewportFraction = 0.65;
     if (orientation == Orientation.portrait) {
@@ -512,6 +579,7 @@ class HomePageScaffoldState extends State<HomePageScaffold> {
     }
   }
 
+  /// Displays a dialog asking the user to confirm exiting/closing the app.
   void _showLogoutDialog() {
     final ApLocalizations l10n = context.ap;
     showDialog(
@@ -535,10 +603,12 @@ class HomePageScaffoldState extends State<HomePageScaffold> {
     AnalyticsUtil.instance.logEvent('logout_dialog_open');
   }
 
+  /// Hides the currently visible SnackBar, if any.
   void hideSnackBar() {
     _scaffoldMessengerKey.currentState?.hideCurrentSnackBar();
   }
 
+  /// Shows a brief hint via SnackBar with a standard 2-second duration.
   void showBasicHint({required String text}) {
     showSnackBar(
       text: text,
@@ -546,6 +616,7 @@ class HomePageScaffoldState extends State<HomePageScaffold> {
     );
   }
 
+  /// Displays a customizable SnackBar.
   ScaffoldFeatureController<SnackBar, SnackBarClosedReason>? showSnackBar({
     required String text,
     String? actionText,
