@@ -467,8 +467,8 @@ class ApLocalizations with BaseTranslations<AppLocale, ApLocalizations> {
 	/// en: 'Course Info'
 	String get courseInfo => 'Course Info';
 
-	/// en: 'Class Schedule'
-	String get course => 'Class Schedule';
+	/// en: 'Schedule'
+	String get course => 'Schedule';
 
 	/// en: 'Transcript'
 	String get score => 'Transcript';
@@ -1313,6 +1313,18 @@ class ApLocalizations with BaseTranslations<AppLocale, ApLocalizations> {
 	/// en: 'Summer Session'
 	String get summerSession => 'Summer Session';
 
+	/// en: 'Fall'
+	String get firstSemesterShort => 'Fall';
+
+	/// en: 'Spring'
+	String get secondSemesterShort => 'Spring';
+
+	/// en: 'Winter'
+	String get winterSessionShort => 'Winter';
+
+	/// en: 'Summer'
+	String get summerSessionShort => 'Summer';
+
 	/// en: 'Pre-course'
 	String get preCourse => 'Pre-course';
 
@@ -1581,7 +1593,7 @@ extension on ApLocalizations {
 			'announcementEmpty' => 'Oops！There is no latest news. 😋',
 			'offlineCourse' => 'Offline Class Schedule',
 			'courseInfo' => 'Course Info',
-			'course' => 'Class Schedule',
+			'course' => 'Schedule',
 			'score' => 'Transcript',
 			'leave' => 'Absence Records System',
 			'bus' => 'Campus Bus System',
@@ -1863,6 +1875,10 @@ extension on ApLocalizations {
 			'secondSemester' => 'Spring',
 			'winterSession' => 'Winter Session',
 			'summerSession' => 'Summer Session',
+			'firstSemesterShort' => 'Fall',
+			'secondSemesterShort' => 'Spring',
+			'winterSessionShort' => 'Winter',
+			'summerSessionShort' => 'Summer',
 			'preCourse' => 'Pre-course',
 			'summerSessionFirst' => 'Summer Session I',
 			'summerSessionSpecial' => 'Summer Session (Special)',

@@ -181,7 +181,7 @@ class ApLocalizationsZhHantTw extends ApLocalizations with BaseTranslations<AppL
 	@override String get announcementEmpty => 'Oops！沒有任何最新消息 😋';
 	@override String get offlineCourse => '離線課表';
 	@override String get courseInfo => '課程學習';
-	@override String get course => '學期課表';
+	@override String get course => '課表';
 	@override String get score => '學期成績';
 	@override String get leave => '缺曠系統';
 	@override String get bus => '校車系統';
@@ -463,6 +463,10 @@ class ApLocalizationsZhHantTw extends ApLocalizations with BaseTranslations<AppL
 	@override String get secondSemester => '下學期';
 	@override String get winterSession => '寒修';
 	@override String get summerSession => '暑修';
+	@override String get firstSemesterShort => '上';
+	@override String get secondSemesterShort => '下';
+	@override String get winterSessionShort => '寒';
+	@override String get summerSessionShort => '暑';
 	@override String get preCourse => '先修';
 	@override String get summerSessionFirst => '暑修(一)';
 	@override String get summerSessionSpecial => '暑修(特)';
@@ -654,7 +658,7 @@ extension on ApLocalizationsZhHantTw {
 			'announcementEmpty' => 'Oops！沒有任何最新消息 😋',
 			'offlineCourse' => '離線課表',
 			'courseInfo' => '課程學習',
-			'course' => '學期課表',
+			'course' => '課表',
 			'score' => '學期成績',
 			'leave' => '缺曠系統',
 			'bus' => '校車系統',
@@ -936,6 +940,10 @@ extension on ApLocalizationsZhHantTw {
 			'secondSemester' => '下學期',
 			'winterSession' => '寒修',
 			'summerSession' => '暑修',
+			'firstSemesterShort' => '上',
+			'secondSemesterShort' => '下',
+			'winterSessionShort' => '寒',
+			'summerSessionShort' => '暑',
 			'preCourse' => '先修',
 			'summerSessionFirst' => '暑修(一)',
 			'summerSessionSpecial' => '暑修(特)',
