@@ -776,29 +776,20 @@ class ScoreGPACard extends StatelessWidget {
     for (final Score score in analysis.scoreData.scores) {
       final String? raw = ScoreAnalysis.effectiveScoreStr(score);
       final double? value = ScoreAnalysis.parseScore(raw);
-      if (value == null) {
-        entries.add(
-          _GradeEntry(
-            title: score.title,
-            score: 0,
-            grade: '-',
-            gradePoint: ScoreAnalysis.scoreToGradePoint(-1.0),
-            credits: double.tryParse(score.units) ?? 0,
-          ),
-        );
-      } else {
-        entries.add(
-          _GradeEntry(
-            title: score.title,
-            score: value,
-            grade: isGradePoint
-                ? (raw ?? '')
-                : ScoreAnalysis.scoreToGradeLetter(value),
-            gradePoint: ScoreAnalysis.scoreToGradePoint(value),
-            credits: double.tryParse(score.units) ?? 0,
-          ),
-        );
-      }
+      final bool isInvalid = value == null;
+      entries.add(
+        _GradeEntry(
+          title: score.title,
+          score: value ?? 0,
+          grade: isInvalid
+              ? '-'
+              : (isGradePoint
+                  ? (raw ?? '')
+                  : ScoreAnalysis.scoreToGradeLetter(value)),
+          gradePoint: isInvalid ? 0.0 : ScoreAnalysis.scoreToGradePoint(value),
+          credits: double.tryParse(score.units) ?? 0,
+        ),
+      );
     }
 
     if (entries.isEmpty) return const SizedBox.shrink();
@@ -886,7 +877,7 @@ class ScoreGPACard extends StatelessWidget {
                   SizedBox(
                     width: 50,
                     child: Text(
-                      e.gradePoint > 0 ? e.gradePoint.toStringAsFixed(1) : '-',
+                      e.grade != '-' ? e.gradePoint.toStringAsFixed(1) : '-',
                       style: TextStyle(
                         fontSize: 13,
                         color: colorScheme.onSurface,
