@@ -525,8 +525,7 @@ class HomePageScaffoldState extends State<HomePageScaffold> {
       ),
     );
   }
-Determines which main body layout to render based on current state and orientation.
-  ///
+  /// Determines which main body layout to render based on current state and orientation.
   /// Viewport Fraction Logic:**
   /// - Mobile Portrait: `0.65` (Shows edges of adjacent cards).
   /// - Mobile Landscape: `0.95` (Nearly full screen due to side-by-side layout).
