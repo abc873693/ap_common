@@ -128,7 +128,7 @@ class _CourseSettingsState extends State<CourseSettings> {
     final ColorScheme colorScheme = Theme.of(context).colorScheme;
 
     return DraggableScrollableSheet(
-      initialChildSize: widget.showPaletteSelector == true ? 0.67 : 0.4,
+      initialChildSize: (widget.showPaletteSelector ?? true) ? 0.67 : 0.4,
       minChildSize: 0.3,
       maxChildSize: 0.9,
       expand: false,
