@@ -454,4 +454,14 @@ class ApIcon {
         return Icons.home_outlined;
     }
   }
+
+  static IconData get menu {
+    switch (ApIcon.code) {
+      case ApIcon.filled:
+        return Icons.menu;
+      case ApIcon.outlined:
+      default:
+        return Icons.menu_outlined;
+    }
+  }
 }

@@ -83,11 +83,13 @@ class SemesterPickerController extends ChangeNotifier {
 class SemesterUIConfig {
   const SemesterUIConfig({
     this.getName,
+    this.getShortName,
     this.getIcon,
     this.getColor,
     this.getSortValue,
   });
   final String Function(String value)? getName;
+  final String Function(String value)? getShortName;
   final IconData Function(String value)? getIcon;
   final Color Function(String value, ColorScheme colorScheme)? getColor;
   final int Function(String value)? getSortValue;
@@ -335,8 +337,11 @@ class SemesterPicker extends StatefulWidget {
     final bool isEmpty = emptySemesters?.contains(semester.code) ?? false;
     final bool isLoading = loadingSemesters?.contains(semester.code) ?? false;
     final bool isDisabled = isEmpty || isLoading;
-    final String semesterName = uiConfig?.getName?.call(semester.value) ??
-        SemesterPickerState._getSemesterName(semester.value, context.ap);
+    final String semesterName = SemesterPickerState._getSemesterName(
+      semester.value,
+      context.ap,
+      uiConfig,
+    );
     final String displayName =
         semesterName.isNotEmpty ? semesterName : semester.text;
 
@@ -656,8 +661,11 @@ class SemesterPickerState extends State<SemesterPicker> {
     SemesterUIConfig? uiConfig, [
     ApLocalizations? ap,
   ]) {
-    final String name = uiConfig?.getName?.call(semester.value) ??
-        _getSemesterName(semester.value, ap);
+    final String name = _getShortSemesterName(
+      semester.value,
+      ap,
+      uiConfig,
+    );
     if (name.isNotEmpty) {
       return '${semester.year} $name';
     }
@@ -720,7 +728,12 @@ class SemesterPickerState extends State<SemesterPicker> {
   static String _getSemesterName(
     String value, [
     ApLocalizations? ap,
+    SemesterUIConfig? uiConfig,
   ]) {
+    final String? customName = uiConfig?.getName?.call(value);
+    if (customName != null) {
+      return customName;
+    }
     switch (value) {
       case '1':
         return ap?.firstSemester ?? '上學期';
@@ -730,6 +743,36 @@ class SemesterPickerState extends State<SemesterPicker> {
         return ap?.winterSession ?? '寒修';
       case '4':
         return ap?.summerSession ?? '暑修';
+      case '5':
+        return ap?.preCourse ?? '先修';
+      case '6':
+        return ap?.summerSessionFirst ?? '暑修(一)';
+      case '7':
+        return ap?.summerSessionSpecial ?? '暑修(特)';
+      default:
+        return '';
+    }
+  }
+
+  static String _getShortSemesterName(
+    String value, [
+    ApLocalizations? ap,
+    SemesterUIConfig? uiConfig,
+  ]) {
+    final String? customName =
+        uiConfig?.getShortName?.call(value) ?? uiConfig?.getName?.call(value);
+    if (customName != null) {
+      return customName;
+    }
+    switch (value) {
+      case '1':
+        return ap?.firstSemesterShort ?? '上';
+      case '2':
+        return ap?.secondSemesterShort ?? '下';
+      case '3':
+        return ap?.winterSessionShort ?? '寒';
+      case '4':
+        return ap?.summerSessionShort ?? '暑';
       case '5':
         return ap?.preCourse ?? '先修';
       case '6':

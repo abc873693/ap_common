@@ -45,12 +45,14 @@ class CourseConfig extends InheritedWidget {
     this.showSectionTime,
     this.showInstructors,
     this.showClassroomLocation,
+    this.showSearchButton,
     required super.child,
   });
 
   final bool? showSectionTime;
   final bool? showInstructors;
   final bool? showClassroomLocation;
+  final bool? showSearchButton;
 
   static CourseConfig of(BuildContext context) {
     return context.dependOnInheritedWidgetOfExactType()!;
@@ -92,6 +94,7 @@ class CourseScaffold extends StatefulWidget {
     this.customCourseData,
     this.onCustomCourseChanged,
     this.semesterPickerController,
+    this.semesterPickerUiConfig,
     this.enablePaletteSelector = true,
     this.onCoursePaletteChanged,
   });
@@ -134,6 +137,7 @@ class CourseScaffold extends StatefulWidget {
     this.customCourseData,
     this.onCustomCourseChanged,
     this.semesterPickerController,
+    this.semesterPickerUiConfig,
     this.enablePaletteSelector = true,
     this.onCoursePaletteChanged,
   })  : state = dataState.when(
@@ -189,6 +193,9 @@ class CourseScaffold extends StatefulWidget {
 
   /// Optional controller for the semester picker.
   final SemesterPickerController? semesterPickerController;
+
+  /// Optional UI configuration for the semester picker.
+  final SemesterUIConfig? semesterPickerUiConfig;
 
   /// When true (default), the setting dialog shows a palette selector
   /// that lets the user switch between built-in [CoursePaletteTheme]s.
@@ -371,14 +378,7 @@ class CourseScaffoldState extends State<CourseScaffold> {
     }
   }
 
-  Future<void> _showPalettePicker() async {
-    final CoursePaletteTheme current = _activePalette(context);
-    final CoursePaletteTheme? picked = await CoursePalettePickerSheet.show(
-      context: context,
-      currentId: current.id,
-      title: context.ap.courseColor,
-    );
-    if (picked == null || picked.id == current.id) return;
+  Future<void> _applyPickedPalette(CoursePaletteTheme picked) async {
     await PreferenceUtil.instance
         .setString(CoursePaletteTheme.preferenceKey, picked.id);
     unawaited(_syncCoursePaletteToNative(picked));
@@ -393,27 +393,25 @@ class CourseScaffoldState extends State<CourseScaffold> {
     return _withPaletteOverride(
       context,
       CourseConfig(
-      showSectionTime: showSectionTime,
-      showInstructors: showInstructors,
-      showClassroomLocation: showClassroomLocation,
-      child: Scaffold(
-        appBar: AppBar(
-          titleSpacing: 0,
-          title: Row(
-            children: <Widget>[
-              Flexible(
-                child: Text(
-                  widget.title ?? context.ap.course,
-                  overflow: TextOverflow.ellipsis,
-                ),
-              ),
+        showSectionTime: showSectionTime,
+        showInstructors: showInstructors,
+        showClassroomLocation: showClassroomLocation,
+        child: Scaffold(
+          appBar: AppBar(
+            centerTitle: false,
+            titleSpacing: 0,
+            title: Text(
+              widget.title ?? context.ap.course,
+              overflow: TextOverflow.ellipsis,
+            ),
+            actions: <Widget>[
+              ...widget.actions ?? <Widget>[],
               if (widget.itemPicker != null) ...<Widget>[
-                const SizedBox(width: 8),
                 widget.itemPicker!,
+                const SizedBox(width: 8),
               ],
               if (widget.semesterData != null &&
                   widget.itemPicker == null) ...<Widget>[
-                const SizedBox(width: 8),
                 SemesterPicker(
                   semesterData: widget.semesterData!,
                   currentIndex: widget.semesterData!.currentIndex,
@@ -422,180 +420,187 @@ class CourseScaffoldState extends State<CourseScaffold> {
                   },
                   featureTag: 'course',
                   controller: widget.semesterPickerController,
+                  uiConfig: widget.semesterPickerUiConfig,
                 ),
+                const SizedBox(width: 8),
               ],
-            ],
-          ),
-          actions: <Widget>[
-            ...widget.actions ?? <Widget>[],
-            if (widget.enableCaptureCourseTable)
+              if (widget.enableCaptureCourseTable)
+                IconButton(
+                  icon: Icon(ApIcon.download),
+                  onPressed: _captureCourseTable,
+                  tooltip: context.ap.exportCourseTable,
+                ),
               IconButton(
-                icon: Icon(ApIcon.download),
-                onPressed: _captureCourseTable,
-                tooltip: context.ap.exportCourseTable,
-              ),
-            if (widget.enablePaletteSelector)
-              IconButton(
-                icon: const Icon(Icons.palette_outlined),
-                onPressed: _showPalettePicker,
-                tooltip: context.ap.courseColor,
-              ),
-            IconButton(
-              icon: Icon(ApIcon.settings),
-              onPressed: () {
-                showDialog(
-                  context: context,
-                  builder: (_) => CourseScaffoldSettingDialog(
+                icon: Icon(ApIcon.menu),
+                onPressed: () async {
+                  final String currentId = _overridePalette?.id ??
+                      Theme.of(context).extension<CoursePaletteTheme>()?.id ??
+                      CoursePaletteTheme.material.id;
+                  final CoursePaletteTheme? picked = await CourseSettings.show(
+                    context: context,
+                    currentId: currentId,
+                    title: context.ap.courseColor,
+                    settingsTitle: context.ap.courseScaffoldSetting,
+                    showPaletteSelector: widget.enablePaletteSelector,
+                    showSettings: true,
                     showSectionTime: showSectionTime,
                     showInstructors: showInstructors,
                     showClassroomLocation: showClassroomLocation,
                     showSearchButton: showSearchButton,
                     mergeCourse: mergeCourse,
                     showSectionTimeOnChanged: (bool? value) {
-                      setState(() => showSectionTime = value);
+                      final bool next = value ?? false;
+                      setState(() => showSectionTime = next);
                       PreferenceUtil.instance.setBool(
                         ApConstants.showSectionTime,
-                        showSectionTime!,
+                        next,
                       );
                     },
                     showInstructorsOnChanged: (bool? value) {
-                      setState(() => showInstructors = value);
+                      final bool next = value ?? false;
+                      setState(() => showInstructors = next);
                       PreferenceUtil.instance.setBool(
                         ApConstants.showInstructors,
-                        showInstructors!,
+                        next,
                       );
                     },
                     showClassroomLocationOnChanged: (bool? value) {
-                      setState(() => showClassroomLocation = value);
+                      final bool next = value ?? false;
+                      setState(() => showClassroomLocation = next);
                       PreferenceUtil.instance.setBool(
                         ApConstants.showClassroomLocation,
-                        showClassroomLocation!,
+                        next,
                       );
                     },
                     showSearchButtonOnChanged: (bool? value) {
-                      setState(() => showSearchButton = value);
+                      final bool next = value ?? false;
+                      setState(() => showSearchButton = next);
                       PreferenceUtil.instance.setBool(
                         ApConstants.showCourseSearchButton,
-                        showSearchButton!,
+                        next,
                       );
                     },
                     mergeCourseOnChanged: (bool? value) {
-                      setState(() => mergeCourse = value);
+                      final bool next = value ?? false;
+                      setState(() => mergeCourse = next);
                       PreferenceUtil.instance.setBool(
                         '${ApConstants.packageName}.merge_course',
-                        mergeCourse!,
+                        next,
                       );
                     },
-                  ),
-                );
-                AnalyticsUtil.instance.logEvent('course_setting_click');
-              },
-              tooltip: context.ap.courseScaffoldSetting,
-            ),
-          ],
-        ),
-        body: Row(
-          children: <Widget>[
-            Expanded(
-              flex: 3,
-              child: Flex(
-                direction: Axis.vertical,
-                mainAxisSize: MainAxisSize.min,
-                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                children: <Widget>[
-                  if (widget.customHint != null &&
-                      widget.customHint!.isNotEmpty)
-                    _buildHintBanner(),
-                  Expanded(
-                    child: RefreshIndicator(
-                      onRefresh: () async {
-                        await widget.onRefresh!();
-                        AnalyticsUtil.instance.logEvent('course_refresh');
-                        return;
-                      },
-                      child: AnimatedSwitcher(
-                        duration: const Duration(milliseconds: 300),
-                        child: KeyedSubtree(
-                          key: ValueKey<CourseState>(widget.state),
-                          child: _body(),
+                  );
+                  if (picked != null && picked.id != currentId) {
+                    await _applyPickedPalette(picked);
+                  }
+                  AnalyticsUtil.instance.logEvent('course_setting_click');
+                },
+                tooltip: context.ap.courseScaffoldSetting,
+              ),
+            ],
+          ),
+          body: Row(
+            children: <Widget>[
+              Expanded(
+                flex: 3,
+                child: Flex(
+                  direction: Axis.vertical,
+                  mainAxisSize: MainAxisSize.min,
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  children: <Widget>[
+                    if (widget.customHint != null &&
+                        widget.customHint!.isNotEmpty)
+                      _buildHintBanner(),
+                    Expanded(
+                      child: RefreshIndicator(
+                        onRefresh: () async {
+                          await widget.onRefresh!();
+                          AnalyticsUtil.instance.logEvent('course_refresh');
+                          return;
+                        },
+                        child: AnimatedSwitcher(
+                          duration: const Duration(milliseconds: 300),
+                          child: KeyedSubtree(
+                            key: ValueKey<CourseState>(widget.state),
+                            child: _body(),
+                          ),
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+              if (widget.state == CourseState.finish &&
+                  isLandscape) ...<Widget>[
+                const SizedBox(width: 16.0),
+                Expanded(
+                  flex: 2,
+                  child: Material(
+                    elevation: 12.0,
+                    child: ColoredBox(
+                      color:
+                          Theme.of(context).colorScheme.surfaceContainerHighest,
+                      child: CourseList(
+                        courses: widget.courseData.courses,
+                        timeCodes: widget.courseData.timeCodes,
+                        invisibleCourseCodes: invisibleCourseCodes,
+                        getCourseColor: _getCourseColor,
+                        onVisibilityChanged: (
+                          Course course,
+                          bool visibility,
+                        ) =>
+                            saveInvisibleCourseCodes(
+                          course: course,
+                          visibility: visibility,
                         ),
                       ),
                     ),
                   ),
-                ],
-              ),
-            ),
-            if (widget.state == CourseState.finish && isLandscape) ...<Widget>[
-              const SizedBox(width: 16.0),
-              Expanded(
-                flex: 2,
-                child: Material(
-                  elevation: 12.0,
-                  child: ColoredBox(
-                    color:
-                        Theme.of(context).colorScheme.surfaceContainerHighest,
-                    child: CourseList(
-                      courses: widget.courseData.courses,
-                      timeCodes: widget.courseData.timeCodes,
-                      invisibleCourseCodes: invisibleCourseCodes,
-                      getCourseColor: _getCourseColor,
-                      onVisibilityChanged: (
-                        Course course,
-                        bool visibility,
-                      ) =>
-                          saveInvisibleCourseCodes(
-                        course: course,
-                        visibility: visibility,
-                      ),
-                    ),
-                  ),
-                ),
-              ),
-            ],
-          ],
-        ),
-        floatingActionButton: AnimatedScale(
-          scale: _showFab ? 1.0 : 0.0,
-          duration: const Duration(milliseconds: 250),
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            crossAxisAlignment: CrossAxisAlignment.end,
-            children: <Widget>[
-              if (!isLandscape)
-                FloatingActionButton(
-                  key: const ValueKey<String>('switch_content_style_button'),
-                  heroTag: 'switch_content_style_button',
-                  onPressed: () {
-                    setState(
-                      () => _contentStyle =
-                          (_contentStyle == _ContentStyle.table)
-                              ? _ContentStyle.list
-                              : _ContentStyle.table,
-                    );
-                  },
-                  child: Icon(
-                    _contentStyle == _ContentStyle.table
-                        ? Icons.list_rounded
-                        : Icons.grid_view_rounded,
-                  ),
-                ),
-              if (showSearchButton ?? true) ...<Widget>[
-                if (!isLandscape) const SizedBox(height: 8),
-                FloatingActionButton(
-                  key: const ValueKey<String>('search_button'),
-                  heroTag: 'search_button',
-                  onPressed: () {
-                    _pickSemester();
-                    AnalyticsUtil.instance
-                        .logEvent('course_search_button_click');
-                  },
-                  child: const Icon(Icons.search),
                 ),
               ],
             ],
           ),
+          floatingActionButton: AnimatedScale(
+            scale: _showFab ? 1.0 : 0.0,
+            duration: const Duration(milliseconds: 250),
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              crossAxisAlignment: CrossAxisAlignment.end,
+              children: <Widget>[
+                if (!isLandscape)
+                  FloatingActionButton(
+                    key: const ValueKey<String>('switch_content_style_button'),
+                    heroTag: 'switch_content_style_button',
+                    onPressed: () {
+                      setState(
+                        () => _contentStyle =
+                            (_contentStyle == _ContentStyle.table)
+                                ? _ContentStyle.list
+                                : _ContentStyle.table,
+                      );
+                    },
+                    child: Icon(
+                      _contentStyle == _ContentStyle.table
+                          ? Icons.list_rounded
+                          : Icons.grid_view_rounded,
+                    ),
+                  ),
+                if (showSearchButton ?? true) ...<Widget>[
+                  if (!isLandscape) const SizedBox(height: 8),
+                  FloatingActionButton(
+                    key: const ValueKey<String>('search_button'),
+                    heroTag: 'search_button',
+                    onPressed: () {
+                      _pickSemester();
+                      AnalyticsUtil.instance
+                          .logEvent('course_search_button_click');
+                    },
+                    child: const Icon(Icons.search),
+                  ),
+                ],
+              ],
+            ),
+          ),
         ),
-      ),
       ),
     );
   }
@@ -765,8 +770,7 @@ class CourseScaffoldState extends State<CourseScaffold> {
     }
     final double pixelRatio =
         MediaQuery.devicePixelRatioOf(context).clamp(2.0, 4.0);
-    final ui.Image image =
-        await boundary.toImage(pixelRatio: pixelRatio);
+    final ui.Image image = await boundary.toImage(pixelRatio: pixelRatio);
     final ByteData? byteData =
         await image.toByteData(format: ui.ImageByteFormat.png);
     final DateTime now = DateTime.now();
@@ -1082,7 +1086,7 @@ class CourseScaffoldState extends State<CourseScaffold> {
     final String instructorInfo =
         (showInstructors ?? true) ? course.getInstructors() : '';
 
-    final Color onCourseColor = CoursePaletteTheme.of(context).foregroundColor;
+    final Color onCourseColor = _activePalette(context).foregroundColor;
 
     final String displayInfo = <String>[
       if (instructorInfo.isNotEmpty) instructorInfo,
@@ -1163,28 +1167,28 @@ class CourseScaffoldState extends State<CourseScaffold> {
         return _withPaletteOverride(
           builder,
           CourseContent(
-          enableNotifyControl: widget.enableNotifyControl,
-          course: course,
-          notifyData: widget.notifyData,
-          weekday: weekday,
-          courseNotifySaveKey: widget.courseNotifySaveKey,
-          timeCode: timeCode,
-          courseColor: _getCourseColor(course),
-          invisibleCourseCodes: invisibleCourseCodes,
-          onVisibilityChanged: (bool visibility) => saveInvisibleCourseCodes(
+            enableNotifyControl: widget.enableNotifyControl,
             course: course,
-            visibility: visibility,
-          ),
-          enableCustomCourseEdit:
-              widget.enableCustomCourse && course.isCustomCourse,
-          onEditCourse: () {
-            Navigator.of(builder).pop();
-            _editCustomCourse(course);
-          },
-          onDeleteCourse: () {
-            Navigator.of(builder).pop();
-            _deleteCustomCourse(course);
-          },
+            notifyData: widget.notifyData,
+            weekday: weekday,
+            courseNotifySaveKey: widget.courseNotifySaveKey,
+            timeCode: timeCode,
+            courseColor: _getCourseColor(course),
+            invisibleCourseCodes: invisibleCourseCodes,
+            onVisibilityChanged: (bool visibility) => saveInvisibleCourseCodes(
+              course: course,
+              visibility: visibility,
+            ),
+            enableCustomCourseEdit:
+                widget.enableCustomCourse && course.isCustomCourse,
+            onEditCourse: () {
+              Navigator.of(builder).pop();
+              _editCustomCourse(course);
+            },
+            onDeleteCourse: () {
+              Navigator.of(builder).pop();
+              _deleteCustomCourse(course);
+            },
           ),
         );
       },
@@ -1365,8 +1369,8 @@ class _CourseContentState extends State<CourseContent> {
         !widget.invisibleCourseCodes.contains(widget.course.code);
     final ColorScheme colorScheme = Theme.of(context).colorScheme;
     final CoursePaletteTheme palette = CoursePaletteTheme.of(context);
-    final Color courseColor = widget.courseColor ??
-        palette.colorAt(widget.course.code.hashCode);
+    final Color courseColor =
+        widget.courseColor ?? palette.colorAt(widget.course.code.hashCode);
     final Color onCourseColor = palette.foregroundColor;
     return Container(
       decoration: BoxDecoration(
@@ -1742,33 +1746,33 @@ class CourseList extends StatelessWidget {
                 isScrollControlled: true,
                 builder: (BuildContext sheetCtx) {
                   final ThemeData sheetTheme = Theme.of(sheetCtx);
-                  final List<ThemeExtension<dynamic>> merged = sheetTheme
-                      .extensions.values
-                      .where(
-                        (ThemeExtension<dynamic> ext) =>
-                            ext is! CoursePaletteTheme,
-                      )
-                      .toList()
-                    ..add(palette);
+                  final List<ThemeExtension<dynamic>> merged =
+                      sheetTheme.extensions.values
+                          .where(
+                            (ThemeExtension<dynamic> ext) =>
+                                ext is! CoursePaletteTheme,
+                          )
+                          .toList()
+                        ..add(palette);
                   return Theme(
                     data: sheetTheme.copyWith(extensions: merged),
                     child: CourseContent(
-                    course: course,
-                    invisibleCourseCodes: invisibleCourseCodes,
-                    onVisibilityChanged: (bool visible) =>
-                        onVisibilityChanged?.call(course, visible),
-                    timeCode: timeCodes != null && timeCodes!.isNotEmpty
-                        ? timeCodes![0]
-                        : const TimeCode(
-                            title: '',
-                            startTime: '',
-                            endTime: '',
-                          ),
-                    weekday: course.times.isNotEmpty
-                        ? course.times.first.weekday
-                        : 1,
-                    courseColor: courseColor,
-                    enableNotifyControl: false,
+                      course: course,
+                      invisibleCourseCodes: invisibleCourseCodes,
+                      onVisibilityChanged: (bool visible) =>
+                          onVisibilityChanged?.call(course, visible),
+                      timeCode: timeCodes != null && timeCodes!.isNotEmpty
+                          ? timeCodes![0]
+                          : const TimeCode(
+                              title: '',
+                              startTime: '',
+                              endTime: '',
+                            ),
+                      weekday: course.times.isNotEmpty
+                          ? course.times.first.weekday
+                          : 1,
+                      courseColor: courseColor,
+                      enableNotifyControl: false,
                     ),
                   );
                 },
@@ -1864,107 +1868,6 @@ class CourseList extends StatelessWidget {
           ),
         );
       },
-    );
-  }
-}
-
-class CourseScaffoldSettingDialog extends StatefulWidget {
-  const CourseScaffoldSettingDialog({
-    super.key,
-    required this.showSectionTime,
-    required this.showInstructors,
-    required this.showClassroomLocation,
-    required this.showSearchButton,
-    required this.mergeCourse,
-    this.showSectionTimeOnChanged,
-    this.showInstructorsOnChanged,
-    this.showClassroomLocationOnChanged,
-    this.showSearchButtonOnChanged,
-    this.mergeCourseOnChanged,
-  });
-
-  final bool? showSectionTime;
-  final bool? showInstructors;
-  final bool? showClassroomLocation;
-  final bool? showSearchButton;
-  final bool? mergeCourse;
-  final Function(bool?)? showSectionTimeOnChanged;
-  final Function(bool?)? showInstructorsOnChanged;
-  final Function(bool?)? showClassroomLocationOnChanged;
-  final Function(bool?)? showSearchButtonOnChanged;
-  final Function(bool?)? mergeCourseOnChanged;
-
-  @override
-  _CourseScaffoldSettingDialogState createState() =>
-      _CourseScaffoldSettingDialogState();
-}
-
-class _CourseScaffoldSettingDialogState
-    extends State<CourseScaffoldSettingDialog> {
-  bool? showSectionTime;
-  bool? showInstructors;
-  bool? showClassroomLocation;
-  bool? showSearchButton;
-  bool? mergeCourse;
-
-  @override
-  void initState() {
-    showSectionTime = widget.showSectionTime;
-    showInstructors = widget.showInstructors;
-    showClassroomLocation = widget.showClassroomLocation;
-    showSearchButton = widget.showSearchButton;
-    mergeCourse = widget.mergeCourse;
-    super.initState();
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return DefaultDialog(
-      title: context.ap.courseScaffoldSetting,
-      actionText: context.ap.confirm,
-      actionFunction: () => Navigator.of(context, rootNavigator: true).pop(),
-      contentPadding: EdgeInsets.zero,
-      contentWidget: Column(
-        mainAxisSize: MainAxisSize.min,
-        children: <Widget>[
-          CheckboxListTile(
-            title: Text(context.ap.showSectionTime),
-            secondary: Icon(ApIcon.accessTime),
-            value: showSectionTime,
-            onChanged: (bool? value) {
-              setState(() => showSectionTime = value);
-              widget.showSectionTimeOnChanged?.call(value);
-            },
-          ),
-          CheckboxListTile(
-            title: Text(context.ap.showInstructors),
-            secondary: Icon(ApIcon.person),
-            value: showInstructors,
-            onChanged: (bool? value) {
-              setState(() => showInstructors = value);
-              widget.showInstructorsOnChanged?.call(value);
-            },
-          ),
-          CheckboxListTile(
-            title: Text(context.ap.showClassroomLocation),
-            secondary: Icon(ApIcon.locationOn),
-            value: showClassroomLocation,
-            onChanged: (bool? value) {
-              setState(() => showClassroomLocation = value);
-              widget.showClassroomLocationOnChanged?.call(value);
-            },
-          ),
-          CheckboxListTile(
-            title: Text(context.ap.mergeCourse),
-            secondary: const Icon(Icons.merge_type_rounded),
-            value: mergeCourse,
-            onChanged: (bool? value) {
-              setState(() => mergeCourse = value);
-              widget.mergeCourseOnChanged?.call(value);
-            },
-          ),
-        ],
-      ),
     );
   }
 }

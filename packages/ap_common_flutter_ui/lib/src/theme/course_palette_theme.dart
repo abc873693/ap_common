@@ -261,6 +261,41 @@ class CoursePaletteTheme extends ThemeExtension<CoursePaletteTheme> {
     foregroundColor: Colors.white,
   );
 
+  static const CoursePaletteTheme luster = CoursePaletteTheme(
+    id: 'luster',
+    name: 'Luster',
+    colors: <Color>[
+      // https://coolors.co/e3425d-e39959-e0b852-58c36e-56adc0-3d7dff-674fff-e762ff
+      Color(0xFFE3425D), // Ruby
+      Color(0xFFE39959), // Amber
+      Color(0xFFE0B852), // Topaz
+      Color(0xFF58C36E), // Emerald
+      Color(0xFF56ADC0), // Aquamarine
+      Color(0xFF3D7DFF), // Sapphire
+      Color(0xFF674FFF), // Amethyst
+      Color(0xFFE762FF), // Opal
+    ],
+    foregroundColor: Colors.white,
+    dark: _lusterDark,
+  );
+
+  static const CoursePaletteTheme _lusterDark = CoursePaletteTheme(
+    id: 'lusterDark',
+    name: 'Luster Dark',
+    colors: <Color>[
+      //https://coolors.co/ff5c5c-ffb65c-fecf34-73d377-73bdbf-5c9aff-8670ff-ff85ff
+      Color(0xFFFF7070), // Tomato
+      Color(0xFFFFB65C), // Tangerine
+      Color(0xFFFFCF34), // Banana
+      Color(0xFF73D377), // Sage
+      Color(0xFF73BDBF), // Basil
+      Color(0xFF5C9AFF), // Peacock
+      Color(0xFF8670FF), // Blueberry
+      Color(0xFFFF85FF), // Lavender
+    ],
+    foregroundColor: Colors.black,
+  );
+
   /// All built-in palettes shown in pickers, in display order. Dark
   /// variants are intentionally omitted — they are surfaced only via
   /// the [dark] field on their light parent.
@@ -271,6 +306,7 @@ class CoursePaletteTheme extends ThemeExtension<CoursePaletteTheme> {
     nord,
     vibrant,
     pastel,
+    luster,
   ];
 
   @override
@@ -307,9 +343,8 @@ class CoursePaletteTheme extends ThemeExtension<CoursePaletteTheme> {
       id: pickOther ? other.id : id,
       name: pickOther ? other.name : name,
       colors: lerped,
-      foregroundColor:
-          Color.lerp(foregroundColor, other.foregroundColor, t) ??
-              foregroundColor,
+      foregroundColor: Color.lerp(foregroundColor, other.foregroundColor, t) ??
+          foregroundColor,
       dark: pickOther ? other.dark : dark,
     );
   }
