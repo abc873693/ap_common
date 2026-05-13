@@ -25,9 +25,11 @@ class ScoreScaffold extends StatefulWidget {
     this.finalScoreBuilder,
     this.customHint,
     this.isShowSearchButton = false,
+    this.showPRCard,
     this.bottom,
     this.customStateHint,
     this.semesterPickerController,
+    this.semesterPickerUiConfig,
   });
 
   /// Creates a [ScoreScaffold] from a [DataState<ScoreData>].
@@ -53,8 +55,10 @@ class ScoreScaffold extends StatefulWidget {
     this.middleScoreBuilder,
     this.finalScoreBuilder,
     this.isShowSearchButton = false,
+    this.showPRCard = true,
     this.bottom,
     this.semesterPickerController,
+    this.semesterPickerUiConfig,
   })  : state = dataState.when(
           loading: () => ScoreState.loading,
           loaded: (_, __) => ScoreState.finish,
@@ -87,6 +91,7 @@ class ScoreScaffold extends StatefulWidget {
   final Widget Function(int index)? finalScoreBuilder;
 
   final bool isShowSearchButton;
+  final bool? showPRCard;
 
   final String? customHint;
 
@@ -94,6 +99,9 @@ class ScoreScaffold extends StatefulWidget {
 
   /// Optional controller for the semester picker.
   final SemesterPickerController? semesterPickerController;
+
+  /// Optional UI config for the semester picker.
+  final SemesterUIConfig? semesterPickerUiConfig;
 
   @override
   ScoreScaffoldState createState() => ScoreScaffoldState();
@@ -139,36 +147,33 @@ class ScoreScaffoldState extends State<ScoreScaffold> {
     return Scaffold(
       backgroundColor: colorScheme.surface,
       appBar: AppBar(
+        centerTitle: false,
         titleSpacing: 0,
-        title: Row(
-          children: <Widget>[
-            Flexible(
-              child: Text(
-                widget.title ?? context.ap.score,
-                overflow: TextOverflow.ellipsis,
-              ),
-            ),
-            if (widget.itemPicker != null) ...<Widget>[
-              const SizedBox(width: 12),
-              widget.itemPicker!,
-            ],
-            if (widget.semesterData != null &&
-                widget.itemPicker == null) ...<Widget>[
-              const SizedBox(width: 12),
-              SemesterPicker(
-                semesterData: widget.semesterData!,
-                currentIndex: widget.semesterData!.currentIndex,
-                onSelect: (Semester semester, int index) {
-                  widget.onSelect?.call(index);
-                },
-                featureTag: 'score',
-                controller: widget.semesterPickerController,
-              ),
-            ],
-          ],
+        title: Text(
+          widget.title ?? context.ap.score,
+          overflow: TextOverflow.ellipsis,
         ),
         bottom: widget.bottom as PreferredSizeWidget?,
-        actions: const <Widget>[],
+        actions: <Widget>[
+          if (widget.itemPicker != null) ...<Widget>[
+            widget.itemPicker!,
+            const SizedBox(width: 12),
+          ],
+          if (widget.semesterData != null &&
+              widget.itemPicker == null) ...<Widget>[
+            SemesterPicker(
+              semesterData: widget.semesterData!,
+              currentIndex: widget.semesterData!.currentIndex,
+              onSelect: (Semester semester, int index) {
+                widget.onSelect?.call(index);
+              },
+              featureTag: 'score',
+              controller: widget.semesterPickerController,
+              uiConfig: widget.semesterPickerUiConfig,
+            ),
+            const SizedBox(width: 12),
+          ],
+        ],
       ),
       floatingActionButton: AnimatedScale(
         scale: _showFab ? 1.0 : 0.0,
@@ -332,6 +337,7 @@ class ScoreScaffoldState extends State<ScoreScaffold> {
           finalScoreBuilder: widget.finalScoreBuilder,
           isAnalysisView: isLandscape || _isAnalysisView,
           scrollController: _scrollController,
+          showPRCard: widget.showPRCard,
         );
     }
   }
@@ -435,6 +441,7 @@ class ScoreContent extends StatefulWidget {
     this.finalScoreBuilder,
     required this.isAnalysisView,
     this.scrollController,
+    this.showPRCard,
   });
 
   final ScoreData? scoreData;
@@ -446,6 +453,7 @@ class ScoreContent extends StatefulWidget {
   final Widget Function(int index)? finalScoreBuilder;
   final bool isAnalysisView;
   final ScrollController? scrollController;
+  final bool? showPRCard;
 
   @override
   _ScoreContentState createState() => _ScoreContentState();
@@ -461,6 +469,7 @@ class _ScoreContentState extends State<ScoreContent> {
         scoreData: widget.scoreData!,
         onRefresh: widget.onRefresh,
         controller: widget.scrollController,
+        showPRCard: widget.showPRCard,
       );
     } else {
       return _ScoreListTab(
@@ -646,8 +655,7 @@ class _ScoreListTab extends StatelessWidget {
     Color scoreColor,
   ) {
     final String raw = _effectiveScoreStr(score) ?? '-';
-    final bool isNumeric =
-        scoreData.scoreType == ScoreType.numeric;
+    final bool isNumeric = scoreData.scoreType == ScoreType.numeric;
 
     if (scoreValue == null) {
       // Cannot parse at all — show raw string
@@ -748,11 +756,13 @@ class _ScoreAnalysisTab extends StatelessWidget {
     required this.scoreData,
     this.onRefresh,
     this.controller,
+    this.showPRCard,
   });
 
   final ScoreData scoreData;
   final VoidCallback? onRefresh;
   final ScrollController? controller;
+  final bool? showPRCard;
 
   @override
   Widget build(BuildContext context) {
@@ -769,8 +779,10 @@ class _ScoreAnalysisTab extends StatelessWidget {
           children: <Widget>[
             _buildMainSummaryCard(colorScheme, context.ap, analysis),
             const SizedBox(height: 16),
-            ScorePRCard(analysis: analysis),
-            const SizedBox(height: 16),
+            if (showPRCard != false) ...<Widget>[
+              ScorePRCard(analysis: analysis),
+              const SizedBox(height: 16),
+            ],
             ScoreGPACard(analysis: analysis),
             const SizedBox(height: 16),
             ScoreStatisticsCard(analysis: analysis),
@@ -956,14 +968,12 @@ class ScoreAnalysis {
   late List<double> _gradePoints;
   late int _totalSubjects;
 
-  bool get isGradePoint =>
-      scoreData.scoreType == ScoreType.gradePoint;
+  bool get isGradePoint => scoreData.scoreType == ScoreType.gradePoint;
 
   /// Whether a numeric score value is considered passing.
   bool isPassing(double scoreValue) {
     if (isGradePoint) {
-      return scoreToGradePoint(scoreValue) >=
-          scoreData.passingGradePoint;
+      return scoreToGradePoint(scoreValue) >= scoreData.passingGradePoint;
     }
     return scoreValue >= scoreData.passingScore;
   }
@@ -1087,9 +1097,7 @@ class ScoreAnalysis {
         _ScoreListTab._effectiveScoreStr(score),
       );
       final double? unit = double.tryParse(score.units);
-      if (scoreValue != null &&
-          isPassing(scoreValue) &&
-          unit != null) {
+      if (scoreValue != null && isPassing(scoreValue) && unit != null) {
         credits += unit;
       }
     }
@@ -1101,12 +1109,10 @@ class ScoreAnalysis {
   /// Returns the effective score string for a [Score], preferring
   /// [Score.semesterScore] and falling back to [Score.finalScore].
   static String? effectiveScoreStr(Score score) {
-    if (score.semesterScore != null &&
-        score.semesterScore!.isNotEmpty) {
+    if (score.semesterScore != null && score.semesterScore!.isNotEmpty) {
       return score.semesterScore;
     }
-    if (score.finalScore != null &&
-        score.finalScore!.isNotEmpty) {
+    if (score.finalScore != null && score.finalScore!.isNotEmpty) {
       return score.finalScore;
     }
     return null;
