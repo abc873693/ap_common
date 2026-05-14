@@ -8,7 +8,10 @@ import 'package:flutter/services.dart';
 /// Represents the current loading state of the [HomePageScaffold].
 enum HomeState { loading, finish, error, empty, offline }
 
-/// A scaffold widget designed for the home page of an app, featuring a carousel of announcements, optional dashboard widgets, and responsive layouts for mobile and tablet devices.
+/// A scaffold widget designed for the home page of an app.
+///
+/// Features a carousel of announcements, optional dashboard widgets,
+/// and responsive layouts for mobile and tablet devices.
 
 class HomePageScaffold extends StatefulWidget {
   /// Creates a new instance of [HomePageScaffold].
@@ -88,7 +91,6 @@ class HomePageScaffold extends StatefulWidget {
   /// A panel displayed to the side of the body, often hidden on mobile devices.
   final Widget? drawer;
 
-  /// The primary content of the scaffold, typically replacing the carousel on tablet layouts.
   final Widget? content;
 
   /// A button displayed floating above the body.
@@ -97,7 +99,7 @@ class HomePageScaffold extends StatefulWidget {
   /// Indicates whether the user is currently logged in.
   final bool isLogin;
 
-  /// Whether the announcement carousel should automatically cycle through images.
+  /// auto cycle for announcement carousel 
   final bool autoPlay;
 
   /// The duration between automatic transitions in the carousel.
@@ -240,11 +242,15 @@ class HomePageScaffoldState extends State<HomePageScaffold> {
     }
   }
 
-  /// Builds the original full-screen carousel layout (without dashboard widgets).
+  /// Builds the original full-screen carousel layout.
+  ///
+  /// This layout is used when [dashboardWidgets] is not provided.
   ///
   /// Layout Separation:
-  /// - Mobile Landscape: Uses a horizontal side-by-side layout (left: image, right: title).
-  /// - Mobile Portrait & Tablet: Uses a vertical stacked layout (title above/below the image).
+  /// - Mobile Landscape: Uses a side-by-side layout with image
+  ///   on the left and title on the right.
+  /// - Mobile Portrait & Tablet: Uses a vertical layout with title
+  ///   above or below the image.
   Widget _buildCarouselLayout(Orientation orientation) {
     if (orientation == Orientation.landscape && !isTablet) {
       return Column(
@@ -282,14 +288,16 @@ class HomePageScaffoldState extends State<HomePageScaffold> {
     );
   }
 
-  /// Builds the dashboard layout where the top section is a fixed-height carousel
-  /// and the bottom section contains scrollable [dashboardWidgets].
+  /// Builds the dashboard layout with carousel and widgets.
+  ///
+  /// The top section is a fixed-height carousel and the bottom
+  /// section contains scrollable [dashboardWidgets].
   ///
   /// Layout Separation:
-  /// - Mobile Landscape: Due to limited vertical space, it falls back to
-  ///   the [_buildLandscapePhonePageView] side-by-side layout.
-  /// - Mobile Portrait & Tablet: Uses a [CustomScrollView] to display
-  ///   a fixed-height carousel at the top and scrollable [dashboardWidgets] below.
+  /// - Mobile Landscape: Falls back to side-by-side layout due to
+  ///   limited vertical space.
+  /// - Mobile Portrait & Tablet: Uses [CustomScrollView] with
+  ///   fixed-height carousel at top and scrollable widgets below.
   Widget _buildDashboardLayout(Orientation orientation) {
     final bool isPortrait = orientation == Orientation.portrait;
 
@@ -309,12 +317,13 @@ class HomePageScaffoldState extends State<HomePageScaffold> {
 
     final double screenHeight = MediaQuery.of(context).size.height;
     
-    // Calculate available height by subtracting common fixed UI heights:
-    // 56 (AppBar) - 56 (BottomNavigationBar) - 44 (Status bar/SafeArea) - 60 (Extra margin/padding)
+    // Calculate available height by subtracting fixed UI heights:
+    // - AppBar: 56, BottomNavigationBar: 56
+    // - Status bar/SafeArea: 44, Extra margin/padding: 60
     final double available = screenHeight - 56 - 56 - 44 - 60;
     
-    // Allocate 60% of available height to the carousel, bounded between 240 and 600
-    // to ensure a reasonable visual proportion across different device sizes.
+    // Allocate 60% of available height to carousel, bounded
+    // between 240 and 600 for reasonable visual proportion.
     final double carouselH =
         widget.carouselHeight ?? (available * 0.6).clamp(240.0, 600.0);
 
@@ -355,10 +364,11 @@ class HomePageScaffoldState extends State<HomePageScaffold> {
     );
   }
 
-  /// Builds the title text widget for the currently displayed announcement.
+  /// Builds the title widget for the current announcement.
   /// 
-  /// Wraps the text in a [Hero] widget using [ApConstants.tagAnnouncementTitle]
-  /// to support smooth transition animations when navigating to a detail page.
+  /// Wraps the text in a [Hero] widget using
+  /// [ApConstants.tagAnnouncementTitle] to support smooth
+  /// transition animations when navigating to a detail page.
   Widget _buildAnnouncementTitle() {
     return Hero(
       tag: ApConstants.tagAnnouncementTitle,
@@ -377,12 +387,12 @@ class HomePageScaffoldState extends State<HomePageScaffold> {
     );
   }
 
-  /// Builds the specialized PageView for mobile devices in landscape mode.
+  /// Builds the specialized PageView for mobile landscape.
   ///
-  /// Designed specifically for mobile landscape where vertical height is limited.
-  /// It uses a [Row] to split the screen into two halves:
-  /// - `Flex 1` (Left): Displays the announcement image.
-  /// - `Flex 1` (Right): Displays the centered announcement title.
+  /// Designed for mobile landscape where vertical height is
+  /// limited. Uses a [Row] to split the screen into two halves:
+  /// - `Flex 1` (Left): Announcement image.
+  /// - `Flex 1` (Right): Centered announcement title.
   Widget _buildLandscapePhonePageView(Orientation orientation) {
     return PageView.builder(
       controller: pageController,
@@ -415,7 +425,6 @@ class HomePageScaffoldState extends State<HomePageScaffold> {
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: <Widget>[
             Expanded(
-              flex: 1,
               child: _newsImage(
                 announcement,
                 orientation,
@@ -423,7 +432,6 @@ class HomePageScaffoldState extends State<HomePageScaffold> {
               ),
             ),
             Expanded(
-              flex: 1,
               child: Center(
                 child: Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 16.0),
@@ -525,12 +533,14 @@ class HomePageScaffoldState extends State<HomePageScaffold> {
       ),
     );
   }
-  /// Determines which main body layout to render based on current state and orientation.
-  /// Viewport Fraction Logic:**
+  /// Determines which layout to render based on state and orientation.
+  ///
+  /// Viewport Fraction Logic:
   /// - Mobile Portrait: `0.65` (Shows edges of adjacent cards).
-  /// - Mobile Landscape: `0.95` (Nearly full screen due to side-by-side layout).
+  /// - Mobile Landscape: `0.95` (Nearly full screen due to
+  ///   side-by-side layout).
   /// - Tablet Portrait: `0.8` (Larger screen balance).
-  /// - Tablet Landscape: `0.7` (Optimized for wide screen aspect ratios).
+  /// - Tablet Landscape: `0.7` (Optimized for wide aspect ratios).
   Widget _homebody(Orientation orientation) {
     double viewportFraction = 0.65;
     if (orientation == Orientation.portrait) {
